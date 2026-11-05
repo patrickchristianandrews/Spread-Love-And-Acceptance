@@ -1,0 +1,481 @@
+// Studio: create and edit photos and videos, locally or through a connected API.
+'use strict';
+
+let studioTab = 'create';
+let gallery = [];
+let galleryFilter = 'all';
+const mediaJobs = {};          // jobId -> { status, progress, item, error, kind }
+let lastResults = [];          // gallery ids from the latest run on each tab
+const ed = { id: null, img: null, rot: 0, flipH: false, flipV: false, crop: 'original', adj: { brightness: 100, contrast: 100, saturate: 100, warmth: 0, blur: 0 }, scale: 100, maskOn: false, brush: 40 };
+let vid = { id: null, info: null };
+
+async function refreshGallery() { gallery = await qs.call('media:gallery'); }
+
+views.studio = {
+  html() {
+    const tabs = { create: '🎨 Create image', edit: '🪄 Edit photo', video: '🎬 Create video', vedit: '✂️ Edit video', gallery: `🖼️ Gallery (${gallery.length})` };
+    return `<div class="page">
+      <div class="page-head"><h1>Studio</h1><label class="btn">⬆ Upload photo or video<input type="file" id="upload" accept="image/*,video/*" multiple hidden></label></div>
+      <div class="tabs">${Object.entries(tabs).map(([k, l]) => `<button class="tab ${studioTab === k ? 'active' : ''}" data-stab="${k}">${l}</button>`).join('')}</div>
+      ${({ create: createHTML, edit: editHTML, video: videoHTML, vedit: veditHTML, gallery: galleryHTML })[studioTab]()}
+    </div>`;
+  },
+  bind() {
+    if (!gallery.length) refreshGallery().then(() => { if (gallery.length && S.route.view === 'studio') render(); });
+    if (!S.est) refreshEstimates().then(() => S.route.view === 'studio' && render());
+    $$('[data-stab]').forEach((b) => b.addEventListener('click', () => { studioTab = b.dataset.stab; render(); }));
+    $('#upload').addEventListener('change', async (e) => {
+      let last = null;
+      for (const f of e.target.files) last = await importFile(f);
+      e.target.value = '';
+      await refreshGallery();
+      if (last) { if (last.kind === 'video') { vid = { id: last.id, info: null }; studioTab = 'vedit'; } else { await loadEditor(last.id); studioTab = 'edit'; } }
+      render();
+    });
+    $$('[data-get]').forEach((b) => b.addEventListener('click', async () => { const m = S.catalog.media.find((x) => x.id === b.dataset.get); await download({ catalogId: m.id }, m.name); render(); }));
+    ({ create: bindCreate, edit: bindEdit, video: bindVideo, vedit: bindVedit, gallery: bindGallery })[studioTab]?.();
+  },
+};
+
+async function importFile(f) {
+  const p = qs.pathForFile(f);
+  if (p) return call('media:importPath', p);
+  if (f.type.startsWith('image/')) return call('media:saveDataUrl', await readDataUrl(f), { title: f.name });
+  toast('Could not read that file.'); return null;
+}
+
+// ---------- shared pieces ----------
+
+function mediaModelOptions(kinds, filter = () => true) {
+  const local = S.installed.filter((m) => kinds.includes(m.kind) && filter(S.catalog.media.find((c) => c.id === m.catalogId) || {}));
+  const api = kinds.includes('image') ? S.providers.flatMap((p) => (p.imageModels || []).map((m) => ({ value: `api:${p.id}:${m}`, label: `${m} (${p.name})` }))) : [];
+  return [...local.map((m) => ({ value: `local:${m.id}`, label: `${m.name} (on this PC)` })), ...api];
+}
+
+function suggestHTML(category, title) {
+  const list = S.catalog.media.filter((m) => m.category === category).map((m) => ({ m, e: S.est?.media[m.id] })).sort((a, b) => ({ great: 0, good: 1, ok: 2, slow: 3, wont: 4 }[a.e?.rating] ?? 5) - ({ great: 0, good: 1, ok: 2, slow: 3, wont: 4 }[b.e?.rating] ?? 5));
+  return `<div class="notice info" style="margin-bottom:14px"><b>${esc(title)}</b> Download one below; ratings show how fast each runs on your PC. You can also connect an image API (OpenAI, Together) under Models → Connect an API.</div>
+    <div class="cards">${list.map(({ m, e }) => `<div class="card"><div class="row"><h3 class="grow">${esc(m.name)}</h3><b class="small">${m.sizeGB.toFixed(1)} GB</b></div><p class="desc">${esc(m.blurb)}</p><div class="row" style="margin-bottom:10px">${rateBadge(e, 'media')}</div>${S.downloads[m.id] ? downloadBox(m.id) : S.installed.some((x) => x.catalogId === m.id) ? '<span class="badge b-mint">✓ Installed</span>' : `<button class="btn small primary" data-get="${m.id}">Download</button>`}</div>`).join('')}</div>`;
+}
+
+function jobBox(jobId) {
+  const j = mediaJobs[jobId];
+  if (!j) return '';
+  const pct = Math.round((j.progress || 0) * 100);
+  return `<div class="progress-box" data-job="${jobId}"><div class="row"><span class="grow jt">${esc(j.error || j.status || 'Starting…')}</span>${!j.done && !j.error ? `<button class="btn small" data-stop-job="${jobId}">Stop</button>` : ''}</div><div class="bar"><i style="width:${pct}%"></i></div></div>`;
+}
+
+function paintJob(jobId) {
+  const el = document.querySelector(`[data-job="${jobId}"]`);
+  const j = mediaJobs[jobId];
+  if (!el || !j) return;
+  el.querySelector('.jt').textContent = j.error || j.status || '';
+  el.querySelector('i').style.width = `${Math.round((j.progress || 0) * 100)}%`;
+}
+
+qs.onMedia(async (ev) => {
+  const j = mediaJobs[ev.jobId];
+  if (!j) return;
+  if (ev.type === 'progress') { j.progress = ev.value; j.status = `${j.label}… ${Math.round(ev.value * 100)}%`; }
+  if (ev.type === 'status') j.status = ev.text;
+  if (ev.type === 'done') { j.done = true; j.item = ev.item; j.status = `Done in ${fmtSec(ev.item.seconds || 0)}.`; lastResults.unshift(ev.item.id); await refreshGallery(); if (S.route.view === 'studio') render(); j.resolve?.(ev.item); return; }
+  if (ev.type === 'error') { j.error = ev.message; j.done = true; if (S.route.view === 'studio') render(); j.resolve?.(null); return; }
+  paintJob(ev.jobId);
+});
+document.addEventListener('click', (e) => { const b = e.target.closest('[data-stop-job]'); if (b) qs.call('media:stop', b.dataset.stopJob); });
+
+function startJob(req, label) {
+  const jobId = uid();
+  return new Promise((resolve) => {
+    mediaJobs[jobId] = { status: 'Starting…', progress: 0, label, resolve };
+    qs.call('media:generate', jobId, req).catch((err) => { mediaJobs[jobId].error = err.message; resolve(null); });
+    if (S.route.view === 'studio') render();
+  });
+}
+
+function resultsHTML(kind) {
+  const items = lastResults.map((id) => gallery.find((g) => g.id === id)).filter((g) => g && (kind === 'any' || g.kind === kind)).slice(0, 8);
+  if (!items.length) return '';
+  return `<div class="section"><h2>Results</h2></div><div class="gallery">${items.map(gitemHTML).join('')}</div>`;
+}
+
+const gitemHTML = (g) => `<button class="gitem" data-gopen="${g.id}">${g.kind === 'video' ? `<video src="${g.url}" muted preload="metadata"></video>` : `<img src="${g.url}" alt="" loading="lazy">`}<div class="cap">${g.kind === 'video' ? '🎬 ' : ''}${esc(g.prompt || g.title || 'Untitled')}</div></button>`;
+
+const SIZES = { square: ['Square', 1, 1], portrait: ['Portrait', 3, 4], landscape: ['Landscape', 4, 3], wide: ['Wide 16:9', 16, 9], tall: ['Tall 9:16', 9, 16] };
+function sizeFor(spec, preset) {
+  const base = spec?.defaults?.width || 1024;
+  const [, w, h] = SIZES[preset];
+  const area = base * base;
+  const r64 = (x) => Math.max(256, Math.round(x / 64) * 64);
+  return [r64(Math.sqrt((area * w) / h)), r64(Math.sqrt((area * h) / w))];
+}
+
+// ---------- create image ----------
+
+function createHTML() {
+  const opts = mediaModelOptions(['image'], (c) => c.edit !== 'instruct');
+  if (!opts.length) return suggestHTML('image', 'Get an image model first.');
+  const jobs = Object.entries(mediaJobs).filter(([, j]) => j.label === 'Creating' && !j.done);
+  return `<div class="studio">
+    <div class="card stack-v">
+      <div class="field"><label for="ci-model">Model</label><select id="ci-model">${opts.map((o) => `<option value="${esc(o.value)}" ${o.value === S.data.prefs.imageModel ? 'selected' : ''}>${esc(o.label)}</option>`).join('')}</select></div>
+      <div class="field"><label for="ci-prompt">Describe the picture</label><textarea id="ci-prompt" rows="5" placeholder="A cozy reading nook by a rainy window, warm lamp light, watercolor style">${esc(S.data.prefs.lastPrompt || '')}</textarea></div>
+      <div class="field" id="ci-neg-f"><label for="ci-neg">Avoid (optional)</label><input id="ci-neg" placeholder="blurry, text, watermark"></div>
+      <div class="field"><label>Shape</label><div class="row">${Object.entries(SIZES).map(([k, [l]], i) => `<label class="btn small"><input type="radio" name="ci-size" value="${k}" ${i === 0 ? 'checked' : ''}> ${l}</label>`).join('')}</div></div>
+      <details><summary class="label" style="cursor:pointer">Advanced</summary><div class="grid2" style="margin-top:10px">
+        <div class="field"><label for="ci-steps">Steps</label><input id="ci-steps" type="number" min="1" max="80" placeholder="auto"></div>
+        <div class="field"><label for="ci-cfg">Guidance</label><input id="ci-cfg" type="number" step="0.5" min="0" max="20" placeholder="auto"></div>
+        <div class="field"><label for="ci-seed">Seed</label><input id="ci-seed" type="number" placeholder="random"></div>
+        <div class="field"><label for="ci-count">How many</label><select id="ci-count"><option>1</option><option>2</option><option>3</option><option>4</option></select></div>
+      </div></details>
+      <button class="btn primary" id="ci-go">🎨 Create</button>
+    </div>
+    <div class="stack-v">${jobs.map(([id]) => jobBox(id)).join('')}${resultsHTML('image') || '<div class="canvas-wrap"><div class="empty">Your pictures will appear here.</div></div>'}</div>
+  </div>`;
+}
+
+function bindCreate() {
+  $('#ci-go')?.addEventListener('click', async () => {
+    const model = $('#ci-model').value;
+    const prompt = $('#ci-prompt').value.trim();
+    if (!prompt) { toast('Describe the picture first.'); return; }
+    S.data.prefs.imageModel = model; S.data.prefs.lastPrompt = prompt; save();
+    const preset = document.querySelector('input[name="ci-size"]:checked').value;
+    const count = Number($('#ci-count').value);
+    if (model.startsWith('api:')) {
+      const [, pid, ...rest] = model.split(':');
+      const [w, h] = preset === 'square' ? [1024, 1024] : ['portrait', 'tall'].includes(preset) ? [1024, 1536] : [1536, 1024];
+      toast('Creating with the API…');
+      for (let i = 0; i < count; i++) { const item = await call('media:apiImage', pid, rest.join(':'), { prompt, size: `${w}x${h}` }); lastResults.unshift(item.id); }
+      await refreshGallery(); render(); return;
+    }
+    const inst = S.installed.find((m) => `local:${m.id}` === model);
+    const spec = S.catalog.media.find((c) => c.id === inst.catalogId);
+    const [width, height] = sizeFor(spec, preset);
+    const seed = $('#ci-seed').value;
+    for (let i = 0; i < count; i++) {
+      await startJob({ modelId: inst.id, mode: 'generate', prompt, negative: $('#ci-neg').value, width, height, steps: Number($('#ci-steps').value) || undefined, cfg: $('#ci-cfg').value === '' ? undefined : Number($('#ci-cfg').value), seed: seed === '' ? '' : Number(seed) + i }, 'Creating');
+    }
+  });
+}
+
+// ---------- edit photo ----------
+
+async function loadEditor(id) {
+  const dataUrl = await qs.call('media:dataUrl', id);
+  const img = new Image();
+  await new Promise((r, j) => { img.onload = r; img.onerror = j; img.src = dataUrl; });
+  Object.assign(ed, { id, img, rot: 0, flipH: false, flipV: false, crop: 'original', adj: { brightness: 100, contrast: 100, saturate: 100, warmth: 0, blur: 0 }, scale: 100 });
+}
+
+const FILTERS = {
+  none: ['Original', {}],
+  vivid: ['Vivid', { contrast: 112, saturate: 135 }],
+  warm: ['Warm', { warmth: 30, saturate: 110 }],
+  cool: ['Cool', { warmth: -25, brightness: 104 }],
+  bw: ['Black & white', { saturate: 0, contrast: 115 }],
+  vintage: ['Vintage', { warmth: 40, contrast: 90, saturate: 80, brightness: 105 }],
+  soft: ['Soft', { contrast: 90, brightness: 106, blur: 0.6 }],
+};
+const CROPS = { original: 'Original', '1:1': 'Square', '4:5': '4:5', '3:2': '3:2', '16:9': '16:9', '9:16': '9:16' };
+
+// Draws the photo with every edit applied, at full resolution.
+function renderEdited() {
+  const { img } = ed;
+  const turned = ed.rot % 180 !== 0;
+  let w = turned ? img.height : img.width;
+  let h = turned ? img.width : img.height;
+  const base = document.createElement('canvas');
+  base.width = w; base.height = h;
+  const b = base.getContext('2d');
+  const a = ed.adj;
+  b.filter = `brightness(${a.brightness}%) contrast(${a.contrast}%) saturate(${a.saturate}%) ${a.warmth > 0 ? `sepia(${a.warmth}%)` : a.warmth < 0 ? `hue-rotate(${a.warmth * 0.6}deg)` : ''} blur(${a.blur}px)`;
+  b.translate(w / 2, h / 2);
+  b.rotate((ed.rot * Math.PI) / 180);
+  b.scale(ed.flipH ? -1 : 1, ed.flipV ? -1 : 1);
+  b.drawImage(img, -img.width / 2, -img.height / 2);
+  let sx = 0; let sy = 0; let sw = w; let sh = h;
+  if (ed.crop !== 'original') {
+    const [cw, ch] = ed.crop.split(':').map(Number);
+    if (w / h > cw / ch) { sw = Math.round((h * cw) / ch); sx = Math.round((w - sw) / 2); } else { sh = Math.round((w * ch) / cw); sy = Math.round((h - sh) / 2); }
+  }
+  const out = document.createElement('canvas');
+  out.width = Math.max(1, Math.round((sw * ed.scale) / 100));
+  out.height = Math.max(1, Math.round((sh * ed.scale) / 100));
+  out.getContext('2d').drawImage(base, sx, sy, sw, sh, 0, 0, out.width, out.height);
+  return out;
+}
+
+function editHTML() {
+  if (!ed.img) {
+    const imgs = gallery.filter((g) => g.kind === 'image');
+    return `<div class="notice info" style="margin-bottom:14px">Pick a photo to edit, or upload one with the button above.</div>${imgs.length ? `<div class="gallery">${imgs.map((g) => `<button class="gitem" data-pick-edit="${g.id}"><img src="${g.url}" alt="" loading="lazy"><div class="cap">${esc(g.prompt || g.title || 'Photo')}</div></button>`).join('')}</div>` : ''}`;
+  }
+  const aiOpts = mediaModelOptions(['image'], (c) => Boolean(c.edit));
+  const slider = (k, label, min, max, step = 1) => `<div class="field"><label for="adj-${k}">${label}: <span id="adj-${k}-v">${ed.adj[k]}</span></label><input type="range" id="adj-${k}" data-adj="${k}" min="${min}" max="${max}" step="${step}" value="${ed.adj[k]}"></div>`;
+  const jobs = Object.entries(mediaJobs).filter(([, j]) => j.label === 'Editing' && !j.done);
+  return `<div class="studio">
+    <div class="stack-v">
+      <div class="card stack-v">
+        <h3>🪄 Edit with AI</h3>
+        ${aiOpts.length ? `<div class="field"><label for="ai-model">Model</label><select id="ai-model">${aiOpts.map((o) => `<option value="${esc(o.value)}">${esc(o.label)}</option>`).join('')}</select></div>
+          <div class="field"><label for="ai-prompt">What should change?</label><textarea id="ai-prompt" rows="3" placeholder="Make it a sunset · Remove the car · Turn it into an oil painting · Add snow"></textarea></div>
+          <div class="field" id="ai-str-f"><label for="ai-str">How much to change: <span id="ai-str-v">0.6</span></label><input type="range" id="ai-str" min="0.1" max="1" step="0.05" value="0.6"></div>
+          <label class="row"><input type="checkbox" id="mask-on" ${ed.maskOn ? 'checked' : ''}> <b>Only change the area I paint</b></label>
+          ${ed.maskOn ? `<div class="row"><span class="small">Brush</span><input type="range" id="brush" min="8" max="160" value="${ed.brush}" class="grow"><button class="btn small" id="mask-clear">Clear</button></div>` : ''}
+          <button class="btn primary" id="ai-go">🪄 Apply AI edit</button>` : `<p class="small muted" style="font-weight:600">Download an editing model (FLUX.1 Kontext is best, or any image model for style changes) under Models → Images & video.</p><button class="btn small" data-goto-media>Get an editing model</button>`}
+      </div>
+      <div class="card stack-v">
+        <h3>🛠 Adjust</h3>
+        <div class="row"><button class="btn small" data-rot="-90">⟲ Rotate</button><button class="btn small" data-rot="90">⟳ Rotate</button><button class="btn small" data-flip="h">⇆ Flip</button><button class="btn small" data-flip="v">⇅ Flip</button></div>
+        <div class="field"><label>Crop</label><div class="row">${Object.entries(CROPS).map(([k, l]) => `<button class="btn small ${ed.crop === k ? 'on' : ''}" data-crop="${k}">${l}</button>`).join('')}</div></div>
+        <div class="field"><label>Looks</label><div class="row">${Object.entries(FILTERS).map(([k, [l]]) => `<button class="btn small" data-filter="${k}">${l}</button>`).join('')}</div></div>
+        ${slider('brightness', 'Brightness', 40, 160)}${slider('contrast', 'Contrast', 40, 160)}${slider('saturate', 'Color', 0, 200)}${slider('warmth', 'Warmth', -60, 60)}${slider('blur', 'Softness', 0, 6, 0.2)}
+        <div class="field"><label for="scale">Size: <span id="scale-v">${ed.scale}%</span></label><input type="range" id="scale" min="10" max="100" value="${ed.scale}"></div>
+        <div class="row"><button class="btn primary" id="ed-save">Save as new photo</button><button class="btn" id="ed-reset">Reset</button><button class="btn ghost" id="ed-close">Choose another</button></div>
+      </div>
+    </div>
+    <div class="stack-v">${jobs.map(([id]) => jobBox(id)).join('')}<div class="canvas-wrap" id="ed-wrap"><canvas id="ed-canvas"></canvas>${ed.maskOn ? '<canvas id="mask" class="mask-layer"></canvas>' : ''}</div>${resultsHTML('image')}</div>
+  </div>`;
+}
+
+let maskCanvas = null; // full-resolution mask: white = change
+function drawPreview() {
+  const c = $('#ed-canvas');
+  if (!c || !ed.img) return;
+  const full = renderEdited();
+  c.width = full.width; c.height = full.height;
+  c.getContext('2d').drawImage(full, 0, 0);
+  const m = $('#mask');
+  if (m) {
+    if (!maskCanvas || maskCanvas.width !== full.width || maskCanvas.height !== full.height) { maskCanvas = document.createElement('canvas'); maskCanvas.width = full.width; maskCanvas.height = full.height; }
+    const r = c.getBoundingClientRect();
+    const wr = $('#ed-wrap').getBoundingClientRect();
+    m.width = full.width; m.height = full.height;
+    Object.assign(m.style, { width: `${r.width}px`, height: `${r.height}px`, left: `${r.left - wr.left}px`, top: `${r.top - wr.top}px` });
+    const mx = m.getContext('2d');
+    mx.clearRect(0, 0, m.width, m.height);
+    mx.globalAlpha = 1;
+    mx.drawImage(maskCanvas, 0, 0);
+    mx.globalCompositeOperation = 'source-in';
+    mx.fillStyle = '#7b5cff';
+    mx.fillRect(0, 0, m.width, m.height);
+    mx.globalCompositeOperation = 'source-over';
+  }
+}
+
+function bindEdit() {
+  $$('[data-pick-edit]').forEach((b) => b.addEventListener('click', async () => { await loadEditor(b.dataset.pickEdit); render(); }));
+  $('[data-goto-media]')?.addEventListener('click', () => { modelsTab = 'media'; go({ view: 'models' }); });
+  if (!ed.img) return;
+  drawPreview();
+  $$('[data-adj]').forEach((r) => r.addEventListener('input', () => { ed.adj[r.dataset.adj] = Number(r.value); $(`#adj-${r.dataset.adj}-v`).textContent = r.value; drawPreview(); }));
+  $('#scale').addEventListener('input', (e) => { ed.scale = Number(e.target.value); $('#scale-v').textContent = `${ed.scale}%`; });
+  $$('[data-rot]').forEach((b) => b.addEventListener('click', () => { ed.rot = (ed.rot + Number(b.dataset.rot) + 360) % 360; maskCanvas = null; drawPreview(); }));
+  $$('[data-flip]').forEach((b) => b.addEventListener('click', () => { if (b.dataset.flip === 'h') ed.flipH = !ed.flipH; else ed.flipV = !ed.flipV; drawPreview(); }));
+  $$('[data-crop]').forEach((b) => b.addEventListener('click', () => { ed.crop = b.dataset.crop; maskCanvas = null; render(); }));
+  $$('[data-filter]').forEach((b) => b.addEventListener('click', () => { ed.adj = { brightness: 100, contrast: 100, saturate: 100, warmth: 0, blur: 0, ...FILTERS[b.dataset.filter][1] }; render(); }));
+  $('#ed-reset').addEventListener('click', async () => { await loadEditor(ed.id); render(); });
+  $('#ed-close').addEventListener('click', () => { ed.img = null; ed.id = null; render(); });
+  $('#ed-save').addEventListener('click', async () => {
+    const item = await call('media:saveDataUrl', renderEdited().toDataURL('image/png'), { title: 'Edited photo', parent: ed.id });
+    lastResults.unshift(item.id); await refreshGallery(); await loadEditor(item.id); render(); toast('Saved to the gallery.');
+  });
+  $('#ai-str')?.addEventListener('input', (e) => { $('#ai-str-v').textContent = e.target.value; });
+  $('#mask-on')?.addEventListener('change', (e) => { ed.maskOn = e.target.checked; render(); });
+  $('#brush')?.addEventListener('input', (e) => { ed.brush = Number(e.target.value); });
+  $('#mask-clear')?.addEventListener('click', () => { maskCanvas = null; drawPreview(); });
+  const syncStrength = () => {
+    const v = $('#ai-model')?.value || '';
+    const inst = S.installed.find((m) => `local:${m.id}` === v);
+    const spec = S.catalog.media.find((c) => c.id === inst?.catalogId);
+    const f = $('#ai-str-f'); if (f) f.hidden = spec?.edit === 'instruct' || v.startsWith('api:');
+  };
+  $('#ai-model')?.addEventListener('change', syncStrength);
+  syncStrength();
+  const m = $('#mask');
+  if (m) {
+    let down = false;
+    const paint = (e) => {
+      if (!down) return;
+      const r = m.getBoundingClientRect();
+      const x = ((e.clientX - r.left) / r.width) * m.width;
+      const y = ((e.clientY - r.top) / r.height) * m.height;
+      const mx = maskCanvas.getContext('2d');
+      mx.fillStyle = '#fff';
+      mx.beginPath(); mx.arc(x, y, (ed.brush * m.width) / r.width / 2, 0, Math.PI * 2); mx.fill();
+      drawPreview();
+    };
+    m.addEventListener('pointerdown', (e) => { down = true; m.setPointerCapture(e.pointerId); paint(e); });
+    m.addEventListener('pointermove', paint);
+    m.addEventListener('pointerup', () => { down = false; });
+  }
+  $('#ai-go')?.addEventListener('click', async () => {
+    const prompt = $('#ai-prompt').value.trim();
+    if (!prompt) { toast('Describe the change first.'); return; }
+    // Save the current look first so the AI edits exactly what you see.
+    const full = renderEdited();
+    const base = await call('media:saveDataUrl', full.toDataURL('image/png'), { title: 'Before AI edit', parent: ed.id });
+    let maskDataUrl;
+    if (ed.maskOn && maskCanvas) {
+      const mk = document.createElement('canvas'); mk.width = full.width; mk.height = full.height;
+      const x = mk.getContext('2d'); x.fillStyle = '#000'; x.fillRect(0, 0, mk.width, mk.height); x.drawImage(maskCanvas, 0, 0);
+      maskDataUrl = mk.toDataURL('image/png');
+    }
+    const model = $('#ai-model').value;
+    if (model.startsWith('api:')) {
+      const [, pid, ...rest] = model.split(':');
+      toast('Editing with the API…');
+      const item = await call('media:apiImage', pid, rest.join(':'), { prompt, imageId: base.id, maskDataUrl, size: '1024x1024' });
+      lastResults.unshift(item.id); await refreshGallery(); await loadEditor(item.id); render(); return;
+    }
+    const inst = S.installed.find((x) => `local:${x.id}` === model);
+    const r64 = (v) => Math.max(256, Math.round(Math.min(v, 1536) / 64) * 64);
+    const k = Math.min(1, 1280 / Math.max(full.width, full.height));
+    const item = await startJob({ modelId: inst.id, mode: 'edit', prompt, imageId: base.id, strength: Number($('#ai-str').value), maskDataUrl, width: r64(full.width * k), height: r64(full.height * k) }, 'Editing');
+    if (item) { await loadEditor(item.id); render(); }
+  });
+}
+
+// ---------- create video ----------
+
+function videoHTML() {
+  const opts = mediaModelOptions(['video']);
+  if (!opts.length) return suggestHTML('video', 'Get a video model first.');
+  const imgs = gallery.filter((g) => g.kind === 'image');
+  const jobs = Object.entries(mediaJobs).filter(([, j]) => j.label === 'Animating' && !j.done);
+  return `<div class="studio">
+    <div class="card stack-v">
+      <div class="field"><label for="cv-model">Model</label><select id="cv-model">${opts.map((o) => `<option value="${esc(o.value)}">${esc(o.label)}</option>`).join('')}</select></div>
+      <div class="field"><label for="cv-prompt">Describe the video</label><textarea id="cv-prompt" rows="5" placeholder="Gentle waves rolling onto a sunny beach, slow camera pan"></textarea></div>
+      <div class="field" id="cv-from-f"><label for="cv-from">Start from a photo (optional)</label><select id="cv-from"><option value="">No, create from the description</option>${imgs.slice(0, 60).map((g) => `<option value="${g.id}">${esc(g.prompt || g.title || 'Photo')}</option>`).join('')}</select></div>
+      <div class="grid2">
+        <div class="field"><label for="cv-shape">Shape</label><select id="cv-shape"><option value="landscape">Landscape</option><option value="tall">Vertical</option><option value="square">Square</option></select></div>
+        <div class="field"><label for="cv-len">Length</label><select id="cv-len"><option value="17">About 1 second</option><option value="33" selected>About 2 seconds</option><option value="49">About 3 seconds</option><option value="81">About 5 seconds</option></select></div>
+      </div>
+      <details><summary class="label" style="cursor:pointer">Advanced</summary><div class="grid2" style="margin-top:10px">
+        <div class="field"><label for="cv-steps">Steps</label><input id="cv-steps" type="number" min="4" max="60" placeholder="auto"></div>
+        <div class="field"><label for="cv-seed">Seed</label><input id="cv-seed" type="number" placeholder="random"></div>
+      </div></details>
+      <p class="small muted" style="font-weight:600">Video takes several minutes even on a strong graphics card. See <a href="#" data-goto-pc>Your PC</a> for an estimate.</p>
+      <button class="btn primary" id="cv-go">🎬 Create video</button>
+    </div>
+    <div class="stack-v">${jobs.map(([id]) => jobBox(id)).join('')}${resultsHTML('video') || '<div class="canvas-wrap"><div class="empty">Your videos will appear here.</div></div>'}</div>
+  </div>`;
+}
+
+function bindVideo() {
+  $('#cv-go')?.addEventListener('click', async () => {
+    const prompt = $('#cv-prompt').value.trim();
+    if (!prompt) { toast('Describe the video first.'); return; }
+    const inst = S.installed.find((m) => `local:${m.id}` === $('#cv-model').value);
+    const spec = S.catalog.media.find((c) => c.id === inst.catalogId);
+    const from = $('#cv-from').value;
+    if (from && !spec.animate) { toast(`${spec.name} can't start from a photo. Use Wan 2.2, or clear "Start from a photo".`, 6000); return; }
+    const d = spec.defaults;
+    const shape = $('#cv-shape').value;
+    const [width, height] = shape === 'tall' ? [d.height, d.width] : shape === 'square' ? [d.height, d.height] : [d.width, d.height];
+    await startJob({ modelId: inst.id, mode: from ? 'animate' : 'generate', prompt, imageId: from || undefined, width, height, frames: Number($('#cv-len').value), steps: Number($('#cv-steps').value) || undefined, seed: $('#cv-seed').value === '' ? '' : Number($('#cv-seed').value) }, 'Animating');
+  });
+}
+
+// ---------- edit video ----------
+
+function veditHTML() {
+  const videos = gallery.filter((g) => g.kind === 'video');
+  const g = gallery.find((x) => x.id === vid.id);
+  if (!g) return `<div class="notice info" style="margin-bottom:14px">Pick a video to edit, or upload one with the button above.</div>${videos.length ? `<div class="gallery">${videos.map((x) => `<button class="gitem" data-pick-video="${x.id}"><video src="${x.url}" muted preload="metadata"></video><div class="cap">${esc(x.prompt || x.title || 'Video')}</div></button>`).join('')}</div>` : ''}`;
+  const jobs = Object.entries(mediaJobs).filter(([, j]) => j.label === 'Exporting' && !j.done);
+  return `<div class="studio">
+    <div class="card stack-v">
+      <div class="grid2">
+        <div class="field"><label for="ve-start">Start (seconds)</label><div class="row"><input id="ve-start" type="number" step="0.1" min="0" value="0" class="grow"><button class="btn small" data-set="start">Use current</button></div></div>
+        <div class="field"><label for="ve-end">End (seconds)</label><div class="row"><input id="ve-end" type="number" step="0.1" min="0" placeholder="end" class="grow"><button class="btn small" data-set="end">Use current</button></div></div>
+        <div class="field"><label for="ve-crop">Crop</label><select id="ve-crop"><option value="">Keep</option><option value="square">Square 1:1</option><option value="vertical">Vertical 9:16</option><option value="horizontal">Horizontal 16:9</option></select></div>
+        <div class="field"><label for="ve-height">Resolution</label><select id="ve-height"><option value="">Keep</option><option>2160</option><option>1080</option><option>720</option><option>480</option></select></div>
+        <div class="field"><label for="ve-speed">Speed</label><select id="ve-speed"><option value="0.5">0.5× slow motion</option><option value="1" selected>1× normal</option><option value="1.5">1.5×</option><option value="2">2× fast</option><option value="4">4× time-lapse</option></select></div>
+        <div class="field"><label for="ve-format">Save as</label><select id="ve-format"><option value="mp4">MP4 (plays everywhere)</option><option value="webm">WebM</option><option value="gif">GIF (no sound)</option></select></div>
+        <div class="field"><label for="ve-bright">Brightness</label><input id="ve-bright" type="range" min="-40" max="40" value="0"></div>
+        <div class="field"><label for="ve-contrast">Contrast</label><input id="ve-contrast" type="range" min="-50" max="50" value="0"></div>
+        <div class="field"><label for="ve-sat">Color</label><input id="ve-sat" type="range" min="-100" max="100" value="0"></div>
+        <div class="field"><label for="ve-fade">Fade in & out (seconds)</label><input id="ve-fade" type="number" min="0" max="5" step="0.5" value="0"></div>
+      </div>
+      <div class="row"><label class="row"><input type="checkbox" id="ve-mute"> Remove sound</label><label class="row"><input type="checkbox" id="ve-rev"> Play backwards</label></div>
+      <div class="row"><button class="btn primary" id="ve-go">✂️ Export edited video</button><button class="btn" id="ve-frame">📸 Save this frame as a photo</button><button class="btn" id="ve-ask">💬 Ask AI about this video</button><button class="btn ghost" id="ve-close">Choose another</button></div>
+    </div>
+    <div class="stack-v">${jobs.map(([id]) => jobBox(id)).join('')}<div class="canvas-wrap"><video id="ve-player" src="${g.url}" controls></video></div>${resultsHTML('video')}</div>
+  </div>`;
+}
+
+function bindVedit() {
+  $$('[data-pick-video]').forEach((b) => b.addEventListener('click', () => { vid = { id: b.dataset.pickVideo, info: null }; render(); }));
+  const player = $('#ve-player');
+  if (!player) return;
+  $$('[data-set]').forEach((b) => b.addEventListener('click', () => { $(`#ve-${b.dataset.set}`).value = player.currentTime.toFixed(1); }));
+  $('#ve-close').addEventListener('click', () => { vid = { id: null }; render(); });
+  $('#ve-frame').addEventListener('click', async () => { const item = await call('media:frame', vid.id, player.currentTime); await refreshGallery(); await loadEditor(item.id); studioTab = 'edit'; render(); toast('Frame saved. You can edit it now.'); });
+  $('#ve-ask').addEventListener('click', async () => {
+    toast('Reading frames…');
+    const r = await call('media:videoFrames', vid.id, 8);
+    const g = gallery.find((x) => x.id === vid.id);
+    chatWithAttachment({ type: 'video', name: g.title || 'video', duration: r.duration, frames: r.frames }, 'What happens in this video?', S.data.assistants.find((a) => a.job === 'vision')?.id);
+  });
+  $('#ve-go').addEventListener('click', async () => {
+    const fade = Number($('#ve-fade').value) || 0;
+    const ops = { start: $('#ve-start').value, end: $('#ve-end').value, crop: $('#ve-crop').value, height: $('#ve-height').value, speed: $('#ve-speed').value, format: $('#ve-format').value, brightness: $('#ve-bright').value, contrast: $('#ve-contrast').value, saturation: $('#ve-sat').value, fadeIn: fade, fadeOut: fade, mute: $('#ve-mute').checked, reverse: $('#ve-rev').checked };
+    const jobId = uid();
+    mediaJobs[jobId] = { status: 'Exporting…', progress: 0, label: 'Exporting' };
+    render();
+    try {
+      const item = await qs.call('media:editVideo', vid.id, ops, jobId);
+      mediaJobs[jobId].done = true;
+      lastResults.unshift(item.id); await refreshGallery(); toast('Edited video saved to the gallery.');
+    } catch (err) { mediaJobs[jobId].error = err.message; }
+    render();
+  });
+}
+
+// ---------- gallery ----------
+
+function galleryHTML() {
+  const list = gallery.filter((g) => galleryFilter === 'all' || g.kind === galleryFilter);
+  return `<div class="row" style="margin-bottom:14px">${[['all', 'All'], ['image', 'Photos'], ['video', 'Videos']].map(([k, l]) => `<button class="btn small ${galleryFilter === k ? 'on' : ''}" data-gfilter="${k}">${l}</button>`).join('')}</div>
+    ${list.length ? `<div class="gallery">${list.map(gitemHTML).join('')}</div>` : '<div class="empty">Nothing here yet. Create or upload something.</div>'}`;
+}
+
+function bindGallery() {
+  $$('[data-gfilter]').forEach((b) => b.addEventListener('click', () => { galleryFilter = b.dataset.gfilter; render(); }));
+}
+
+document.addEventListener('click', (e) => {
+  const b = e.target.closest('[data-gopen]');
+  if (!b) return;
+  const g = gallery.find((x) => x.id === b.dataset.gopen);
+  if (!g) return;
+  const animators = S.installed.filter((m) => S.catalog.media.find((c) => c.id === m.catalogId)?.animate);
+  const box = openModal(`<div class="row" style="margin-bottom:10px"><h2 class="grow" style="margin:0">${esc(g.prompt || g.title || 'Untitled')}</h2><button class="btn small" data-close>Close</button></div>
+    <div class="canvas-wrap">${g.kind === 'video' ? `<video src="${g.url}" controls autoplay></video>` : `<img src="${g.url}" alt="">`}</div>
+    <p class="small muted" style="font-weight:600">${[g.model, g.width && `${g.width}×${g.height}`, g.seed !== undefined && g.seed !== '' && `seed ${g.seed}`, g.seconds && `made in ${fmtSec(g.seconds)}`, new Date(g.created).toLocaleString()].filter(Boolean).map(esc).join(' · ')}</p>
+    <div class="modal-actions" style="justify-content:flex-start">
+      ${g.kind === 'image' ? '<button class="btn primary" data-g="edit">🪄 Edit</button>' : '<button class="btn primary" data-g="vedit">✂️ Edit</button>'}
+      ${g.kind === 'image' && animators.length ? '<button class="btn" data-g="animate">🎬 Animate</button>' : ''}
+      <button class="btn" data-g="chat">💬 Ask AI about it</button>
+      <button class="btn" data-g="export">⬇ Save as…</button><button class="btn" data-g="reveal">📁 Show in folder</button>
+      <button class="btn danger" data-g="delete">🗑 Delete</button>
+    </div>`, { wide: true });
+  box.addEventListener('click', async (ev) => {
+    const act = ev.target.closest('[data-g]')?.dataset.g;
+    if (!act) return;
+    if (act === 'edit') { closeModal(); await loadEditor(g.id); studioTab = 'edit'; go({ view: 'studio' }); }
+    if (act === 'vedit') { closeModal(); vid = { id: g.id }; studioTab = 'vedit'; go({ view: 'studio' }); }
+    if (act === 'animate') { closeModal(); studioTab = 'video'; go({ view: 'studio' }); setTimeout(() => { const s = $('#cv-from'); if (s) s.value = g.id; }, 50); }
+    if (act === 'chat') {
+      closeModal();
+      if (g.kind === 'video') { const r = await call('media:videoFrames', g.id, 8); chatWithAttachment({ type: 'video', name: g.title || 'video', duration: r.duration, frames: r.frames }, 'What happens in this video?', S.data.assistants.find((a) => a.job === 'vision')?.id); }
+      else chatWithAttachment({ type: 'image', name: g.title || g.prompt || 'image', dataUrl: await shrinkImage(await qs.call('media:dataUrl', g.id)) }, 'What do you see in this picture?', S.data.assistants.find((a) => a.job === 'vision')?.id);
+    }
+    if (act === 'export' && await call('media:export', g.id)) toast('Saved.');
+    if (act === 'reveal') call('media:reveal', g.id);
+    if (act === 'delete' && await confirmBox('Delete this from the gallery?')) { await call('media:remove', g.id); await refreshGallery(); render(); }
+  });
+});

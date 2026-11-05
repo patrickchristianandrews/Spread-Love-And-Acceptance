@@ -1,0 +1,159 @@
+// Settings: you, appearance, chat defaults, fact checking, web search, the API server, engines, accounts.
+'use strict';
+
+let setTab = 'general';
+let engineInfo = null;
+const engineProg = {};
+
+views.settings = {
+  html() {
+    const tabs = { general: 'General', chat: 'Chat & accuracy', web: 'Web search', api: 'API server', engines: 'Engines', accounts: 'Accounts' };
+    return `<div class="page"><div class="page-head"><h1>Settings</h1></div>
+      <div class="tabs">${Object.entries(tabs).map(([k, l]) => `<button class="tab ${setTab === k ? 'active' : ''}" data-set-tab="${k}">${l}</button>`).join('')}</div>
+      <div style="max-width:860px">${({ general: generalHTML, chat: chatSetHTML, web: webHTML, api: apiSrvHTML, engines: enginesHTML, accounts: accountsHTML })[setTab]()}</div></div>`;
+  },
+  bind() {
+    $$('[data-set-tab]').forEach((b) => b.addEventListener('click', () => { setTab = b.dataset.setTab; render(); }));
+    ({ general: bindGeneral, chat: bindChatSet, web: bindWeb, api: bindApiSrv, engines: bindEngines, accounts: bindAccounts })[setTab]();
+  },
+};
+
+const P = () => S.data.prefs;
+
+function generalHTML() {
+  return `<div class="stack-v">
+    <div class="field"><label for="g-name">Your name</label><input id="g-name" value="${esc(P().userName)}" placeholder="Optional"></div>
+    <div class="field"><label for="g-about">About you</label><span class="help">Optional. Shared with your assistants so answers fit you (for example your role, company or preferences).</span><textarea id="g-about" rows="3">${esc(P().about)}</textarea></div>
+    <div class="field"><label>Text size</label><div class="row">${[['normal', 'Normal'], ['large', 'Large'], ['xl', 'Extra large']].map(([k, l]) => `<button class="btn small ${P().textSize === k ? 'on' : ''}" data-textsize="${k}">${l}</button>`).join('')}</div></div>
+    <div><button class="btn primary" id="g-save">Save</button></div>
+  </div>`;
+}
+function bindGeneral() {
+  $$('[data-textsize]').forEach((b) => b.addEventListener('click', () => { P().textSize = b.dataset.textsize; applyPrefs(); save(); render(); }));
+  $('#g-save').addEventListener('click', () => { P().userName = $('#g-name').value.trim(); P().about = $('#g-about').value.trim(); save(); toast('Saved.'); });
+}
+
+function chatSetHTML() {
+  const p = P();
+  return `<div class="stack-v">
+    <div class="field"><label for="c-default">Default model or stack</label><select id="c-default">${targetOptions(p.defaultTarget, { includeNone: true, noneLabel: 'Automatic' })}</select></div>
+    <div class="field"><label for="c-effort">Default effort</label><span class="help">Quick uses one model with no thinking; Max runs the whole stack and always fact checks.</span><select id="c-effort">${Object.entries(EFFORTS).map(([k, l]) => `<option value="${k}" ${k === (p.effortLevel || 'thorough') ? 'selected' : ''}>${l}</option>`).join('')}</select></div>
+    <label class="row"><input type="checkbox" id="c-fact" ${p.factCheck ? 'checked' : ''}> <span><b>✅ Fact check every answer</b> <span class="help">in all chats (you can still turn it off per chat)</span></span></label>
+    <div class="field"><label for="c-checker">Fact checker</label><span class="help">Automatic picks the strongest model that didn't write the answer, so the check is independent.</span><select id="c-checker">${targetOptions(p.factChecker, { includeNone: true, noneLabel: 'Automatic (recommended)' })}</select></div>
+    <div class="field"><label for="c-src">Sources per answer</label><span class="help">How many passages from your knowledge and live sources each answer can use. More sources = better grounding, but longer prompts.</span><select id="c-src">${[4, 8, 12, 16, 20, 30].map((n) => `<option ${Number(p.sourcesPerAnswer || 8) === n ? 'selected' : ''}>${n}</option>`).join('')}</select></div>
+    <div class="field"><label for="c-temp">Creativity: <span id="c-temp-v">${p.temperature}</span></label><span class="help">Used when an assistant doesn't set its own.</span><input id="c-temp" type="range" min="0" max="1.2" step="0.05" value="${p.temperature}"></div>
+    <div class="grid2">
+      <div class="field"><label for="c-ctx">Conversation memory (tokens)</label><select id="c-ctx">${[4096, 8192, 16384, 32768, 65536, 131072].map((n) => `<option value="${n}" ${Number(p.contextSize) === n ? 'selected' : ''}>${n.toLocaleString()}</option>`).join('')}</select><span class="help">How much text a model can consider at once. Bigger handles longer documents but uses more memory.</span></div>
+      <div class="field"><label for="c-max">Longest answer (tokens)</label><input id="c-max" type="number" min="256" max="65536" step="256" value="${p.maxTokens}"></div>
+    </div>
+    <div class="field"><label for="c-gpu">Graphics card use</label><select id="c-gpu"><option value="auto" ${p.gpu !== 0 ? 'selected' : ''}>Automatic (recommended)</option><option value="0" ${p.gpu === 0 ? 'selected' : ''}>Processor only (most compatible)</option></select><span class="help">Choose "Processor only" if models fail to load or crash on your graphics card.</span></div>
+    <div><button class="btn primary" id="c-save">Save</button></div>
+  </div>`;
+}
+function bindChatSet() {
+  $('#c-temp').addEventListener('input', (e) => { $('#c-temp-v').textContent = e.target.value; });
+  $('#c-save').addEventListener('click', () => {
+    Object.assign(P(), {
+      defaultTarget: $('#c-default').value, effortLevel: $('#c-effort').value, factCheck: $('#c-fact').checked, factChecker: $('#c-checker').value,
+      temperature: Number($('#c-temp').value), contextSize: Number($('#c-ctx').value), maxTokens: Math.max(256, Number($('#c-max').value) || 4096),
+      gpu: $('#c-gpu').value === '0' ? 0 : 'auto', sourcesPerAnswer: Number($('#c-src').value),
+    });
+    save(); toast('Saved.');
+  });
+}
+
+function webHTML() {
+  const w = S.config.web;
+  return `<div class="stack-v">
+    <p class="muted">Web search lets assistants look things up and cite current sources. Pick a service; Brave and Tavily have free tiers.</p>
+    <div class="field"><label for="w-prov">Search service</label><select id="w-prov">${[['none', 'Off'], ['brave', 'Brave Search (free tier, key)'], ['tavily', 'Tavily (free tier, key; built for AI)'], ['searxng', 'SearXNG (your own server, no key)']].map(([k, l]) => `<option value="${k}" ${w.provider === k ? 'selected' : ''}>${l}</option>`).join('')}</select></div>
+    <div class="field" data-w="brave"><label for="w-brave">Brave Search key</label><span class="help">${S.config.secrets['web:brave'] ? 'A key is saved.' : 'Get one at <a href="https://api-dashboard.search.brave.com">api-dashboard.search.brave.com</a>.'}</span><input id="w-brave" type="password" placeholder="Paste key"></div>
+    <div class="field" data-w="tavily"><label for="w-tavily">Tavily key</label><span class="help">${S.config.secrets['web:tavily'] ? 'A key is saved.' : 'Get one at <a href="https://app.tavily.com">app.tavily.com</a>.'}</span><input id="w-tavily" type="password" placeholder="Paste key"></div>
+    <div class="field" data-w="searxng"><label for="w-sx">SearXNG address</label><input id="w-sx" value="${esc(w.searxngUrl)}" placeholder="http://localhost:8888"></div>
+    <div class="row"><button class="btn primary" id="w-save">Save</button><button class="btn" id="w-test">Test a search</button></div>
+  </div>`;
+}
+function bindWeb() {
+  const sync = () => $$('[data-w]').forEach((el) => { el.hidden = el.dataset.w !== $('#w-prov').value; });
+  sync();
+  $('#w-prov').addEventListener('change', sync);
+  const saveWeb = async () => {
+    if ($('#w-brave').value) await call('secret:set', 'web:brave', $('#w-brave').value.trim());
+    if ($('#w-tavily').value) await call('secret:set', 'web:tavily', $('#w-tavily').value.trim());
+    S.config = await call('config:set', { web: { provider: $('#w-prov').value, searxngUrl: $('#w-sx').value.trim() } });
+  };
+  $('#w-save').addEventListener('click', async () => { await saveWeb(); toast('Saved.'); render(); });
+  $('#w-test').addEventListener('click', async () => { await saveWeb(); const r = await call('web:search', 'latest news about renewable energy'); toast(`Found ${r.length} results. First: ${r[0]?.title || 'none'}`, 6000); });
+}
+
+function apiSrvHTML() {
+  const a = S.config.apiServer;
+  const st = S.apiStatus || {};
+  const base = `http://127.0.0.1:${a.port}/v1`;
+  return `<div class="stack-v">
+    <p class="muted">Quicksilver can act as an <b>OpenAI-compatible API</b> on this computer, so other apps, scripts and tools (VS Code extensions, automation, your own code) can use your local models and stacks. It only listens on this PC.</p>
+    <label class="row"><input type="checkbox" id="a-on" ${a.enabled ? 'checked' : ''}> <b>Turn on the API server</b></label>
+    <div class="grid2"><div class="field"><label for="a-port">Port</label><input id="a-port" type="number" min="1024" max="65535" value="${a.port}"></div>
+    <div class="field"><label>Status</label><div style="padding-top:8px">${st.running ? `<span class="badge b-mint">● Running at ${esc(base)}</span>` : st.error ? `<span class="badge b-pink">${esc(st.error)}</span>` : '<span class="badge b-lemon">Off</span>'}</div></div></div>
+    <label class="row"><input type="checkbox" id="a-key" ${a.requireKey ? 'checked' : ''}> <span><b>Require an access key</b> <span class="help">recommended if other people use this PC</span></span></label>
+    <div class="row"><button class="btn primary" id="a-save">Save</button><button class="btn" id="a-newkey">Create a new key</button><button class="btn" id="a-showkey" ${S.config.secrets.apiServerKey ? '' : 'disabled'}>Copy key</button></div>
+    <div class="card"><h3>Try it</h3><p class="small muted" style="font-weight:600">Model names come from <code>${esc(base)}/models</code>: any local model, any stack (by name) or any connected API model.</p>
+<pre style="background:#1d1838;color:#f1eeff;padding:12px;border-radius:10px;overflow-x:auto;white-space:pre-wrap">curl ${esc(base)}/chat/completions \\
+  -H "Content-Type: application/json"${a.requireKey ? ' \\\n  -H "Authorization: Bearer YOUR_KEY"' : ''} \\
+  -d '{"model": "${esc(S.stacks[0]?.name || 'local:qwen3-8b')}", "messages": [{"role": "user", "content": "Hello"}], "stream": true}'</pre>
+      <p class="small muted" style="font-weight:600">Also: <code>POST /v1/images/generations</code> with a local image model.</p></div>
+  </div>`;
+}
+function bindApiSrv() {
+  qs.call('apiserver:status').then((s) => { const changed = JSON.stringify(s) !== JSON.stringify(S.apiStatus); S.apiStatus = s; if (changed && setTab === 'api' && S.route.view === 'settings') render(); });
+  $('#a-save').addEventListener('click', async () => {
+    S.config = await call('config:set', { apiServer: { enabled: $('#a-on').checked, port: Number($('#a-port').value) || 1337, requireKey: $('#a-key').checked } });
+    S.apiStatus = await qs.call('apiserver:status'); render(); toast(S.apiStatus.running ? 'API server running.' : S.apiStatus.error || 'API server off.');
+  });
+  $('#a-newkey').addEventListener('click', async () => { const k = await call('apiserver:newKey'); navigator.clipboard?.writeText(k); S.config = await call('config:get'); render(); toast('New key created and copied.'); });
+  $('#a-showkey').addEventListener('click', async () => { navigator.clipboard?.writeText(await call('apiserver:revealKey')); toast('Key copied.'); });
+}
+
+function enginesHTML() {
+  if (!engineInfo) return '<div class="empty">Checking engines…</div>';
+  const block = (kind, title, about) => {
+    const e = engineInfo[kind];
+    return `<div class="card stack-v"><h3>${title}</h3><p class="small muted" style="font-weight:600;margin:0">${about}</p>
+      <div class="field"><label for="eng-${kind}">Use</label><select id="eng-${kind}" data-eng-choice="${kind}"><option value="auto" ${e.choice === 'auto' ? 'selected' : ''}>Automatic${e.active ? ` (now: ${esc(e.active)})` : ''}</option>${e.installed.map((x) => `<option value="${esc(x.variant)}" ${e.choice === x.variant ? 'selected' : ''}>${esc(x.label)}${x.version ? ` · ${esc(x.version)}` : ''}</option>`).join('')}</select></div>
+      ${e.installed.length ? '' : '<div class="notice">No engine installed. Download one below.</div>'}
+      <table class="list"><tbody>${e.available.map((v) => { const have = e.installed.find((x) => x.variant === v.variant && x.source === 'downloaded'); const pr = engineProg[`${kind}-${v.variant}`]; return `<tr><td><b>${esc(v.label)}</b>${v.nvidiaOnly ? ' <span class="small muted">(NVIDIA cards only)</span>' : ''}</td><td>${pr ? `<div class="bar" style="width:160px"><i style="width:${pr.total ? Math.round((pr.downloaded / pr.total) * 100) : 0}%"></i></div>` : have ? `<span class="badge b-mint">✓ ${esc(have.version || 'installed')}</span>` : e.installed.some((x) => x.variant === v.variant) ? '<span class="badge b-sky">included</span>' : ''}</td>
+        <td style="text-align:right">${pr ? '' : have ? `<button class="btn small" data-eng-get="${kind}:${v.variant}">Update</button> <button class="btn small danger" data-eng-del="${kind}:${v.variant}">Remove</button>` : `<button class="btn small" data-eng-get="${kind}:${v.variant}">Download</button>`}</td></tr>`; }).join('')}</tbody></table></div>`;
+  };
+  return `<div class="stack-v">
+    <p class="muted">Engines are the programs that run models. Quicksilver includes engines that work on most PCs; on an NVIDIA card, the CUDA engine is usually faster. Downloads come straight from the official llama.cpp and stable-diffusion.cpp releases.</p>
+    ${block('llama', '💬 Text & vision engine (llama.cpp)', 'Runs chat, reasoning and vision models.')}
+    ${block('sd', '🎨 Image & video engine (stable-diffusion.cpp)', 'Runs image and video generation and AI photo editing.')}
+  </div>`;
+}
+function bindEngines() {
+  if (!engineInfo) { qs.call('engines:list').then((e) => { engineInfo = e; if (setTab === 'engines') render(); }); return; }
+  $$('[data-eng-choice]').forEach((s) => s.addEventListener('change', async () => {
+    S.config = await call('config:set', { engine: { ...S.config.engine, [s.dataset.engChoice]: s.value } });
+    engineInfo = await qs.call('engines:list'); render(); toast('Engine choice saved.');
+  }));
+  $$('[data-eng-get]').forEach((b) => b.addEventListener('click', async () => {
+    const [kind, variant] = b.dataset.engGet.split(':');
+    engineProg[`${kind}-${variant}`] = { downloaded: 0, total: 0 }; render();
+    try { const r = await call('engines:install', kind, variant); toast(`Engine ${r.version} installed.`); } finally { delete engineProg[`${kind}-${variant}`]; engineInfo = await qs.call('engines:list'); render(); }
+  }));
+  $$('[data-eng-del]').forEach((b) => b.addEventListener('click', async () => { const [kind, variant] = b.dataset.engDel.split(':'); await call('engines:remove', kind, variant); engineInfo = await qs.call('engines:list'); render(); }));
+}
+qs.onEngine((p) => { engineProg[`${p.kind}-${p.variant}`] = p; if (setTab === 'engines' && S.route.view === 'settings') { const bars = $$('.bar i'); if (bars.length) render(); } });
+
+function accountsHTML() {
+  return `<div class="stack-v">
+    <div class="field"><label for="hf-token">Hugging Face token (optional)</label><span class="help">Only needed for models that require accepting a license on huggingface.co (some Llama, Gemma and FLUX models). ${S.config.secrets.huggingface ? '<b>A token is saved.</b>' : 'Create a read token at <a href="https://huggingface.co/settings/tokens">huggingface.co/settings/tokens</a>.'}</span><input id="hf-token" type="password" placeholder="hf_…"></div>
+    <div class="row"><button class="btn primary" id="hf-save">Save</button>${S.config.secrets.huggingface ? '<button class="btn danger" id="hf-del">Remove token</button>' : ''}</div>
+    <p class="muted">Cloud AI keys (Claude, OpenAI, Gemini and others) are managed under <a href="#" id="to-apis">Models → Connect an API</a>.</p>
+  </div>`;
+}
+function bindAccounts() {
+  $('#hf-save').addEventListener('click', async () => { await call('secret:set', 'huggingface', $('#hf-token').value.trim()); S.config = await call('config:get'); render(); toast('Saved.'); });
+  $('#hf-del')?.addEventListener('click', async () => { await call('secret:set', 'huggingface', ''); S.config = await call('config:get'); render(); });
+  $('#to-apis').addEventListener('click', (e) => { e.preventDefault(); modelsTab = 'api'; go({ view: 'models' }); });
+}

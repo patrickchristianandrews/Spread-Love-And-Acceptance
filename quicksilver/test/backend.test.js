@@ -1,0 +1,211 @@
+// Back-end test: runs the real main-process modules against stand-in engines (test/fakes).
+// Run: node test/backend.test.js
+const path = require('node:path');
+const fs = require('node:fs');
+const os = require('node:os');
+const assert = require('node:assert');
+
+const HOME = fs.mkdtempSync(path.join(os.tmpdir(), 'qs-test-'));
+process.env.QUICKSILVER_HOME = HOME;
+process.env.QS_LLAMA_SERVER = path.join(__dirname, 'fakes', 'llama-server');
+process.env.QS_SD_BIN = path.join(__dirname, 'fakes', 'sd');
+const TINY = path.join(__dirname, 'fixtures', 'tiny.gguf');
+
+const store = require('../src/main/store');
+const hardware = require('../src/main/hardware');
+const models = require('../src/main/models');
+const llama = require('../src/main/llama');
+const complete = require('../src/main/complete');
+const providers = require('../src/main/providers');
+const docs = require('../src/main/docs');
+const knowledge = require('../src/main/knowledge');
+const media = require('../src/main/media');
+const apiserver = require('../src/main/apiserver');
+const catalog = require('../src/shared/catalog');
+const oai = require('../src/main/oai');
+
+async function collect(gen) {
+  const out = { text: '', reasoning: '', steps: [], status: [], stats: null };
+  for await (const ev of gen) {
+    if (ev.type === 'text') out.text += ev.text;
+    if (ev.type === 'reasoning') out.reasoning += ev.text;
+    if (ev.type === 'step') out.steps.push(ev.step);
+    if (ev.type === 'status') out.status.push(ev.text);
+    if (ev.type === 'stats') out.stats = ev;
+  }
+  return out;
+}
+
+(async () => {
+  // Hardware: GPU found through the engine's device list.
+  const hw = await hardware.detect({ fresh: true });
+  assert.equal(hw.gpuName, 'Fake GPU 8GB');
+  assert.ok(Math.abs(hw.vramGB - 8) < 0.01);
+  console.log('✓ hardware', hw.ramGB.toFixed(0), 'GB RAM,', hw.gpuName);
+
+  // GGUF reader.
+  const info = await llama.readGguf(TINY);
+  assert.equal(info.name, 'Tiny Test Model'); assert.equal(info.layers, 2); assert.equal(info.architecture, 'llama');
+  console.log('✓ gguf reader');
+
+  // Register models: two text models from different "families" and one vision model.
+  const dir = store.dir('models');
+  const copy = (n) => { const p = path.join(dir, n); fs.copyFileSync(TINY, p); return p; };
+  models.add({ id: 'qwen3-8b', name: 'Qwen3 8B', kind: 'text', catalogId: 'qwen3-8b', files: { model: copy('qwen.gguf') }, size: 5e9 });
+  models.add({ id: 'phi-4', name: 'Phi-4 14B', kind: 'text', catalogId: 'phi-4', files: { model: copy('phi.gguf') }, size: 9e9 });
+  models.add({ id: 'gemma-3-4b', name: 'Gemma 3 4B', kind: 'text', catalogId: 'gemma-3-4b', files: { model: copy('gemma.gguf'), mmproj: copy('mmproj-gemma.gguf') }, size: 3e9, vision: true });
+  assert.equal(models.list().length, 3);
+
+  // Single local model with reasoning split and stats.
+  const r1 = await collect(complete.run('local:qwen3-8b', { messages: [{ role: 'user', content: 'Hello there' }], temperature: 0.5, maxTokens: 100, contextSize: 4096 }));
+  assert.match(r1.text, /Answer from qwen\.gguf: you said "Hello there"/);
+  assert.match(r1.reasoning, /thinking/);
+  assert.equal(r1.stats.tps, 42.5);
+  console.log('✓ local chat:', r1.text);
+
+  // A text-only model refuses images clearly.
+  const img = { type: 'image_url', image_url: { url: 'data:image/png;base64,iVBORw0KGgo=' } };
+  await assert.rejects(collect(complete.run('local:qwen3-8b', { messages: [{ role: 'user', content: [{ type: 'text', text: 'What is this?' }, img] }] })), /can't see images/);
+  console.log('✓ text-only model rejects images with a clear message');
+
+  // Powerhouse stack: vision describes, two drafters, lead combines.
+  complete.saveStack({ id: 'office-power', name: 'Office Powerhouse', emoji: '📊', members: { vision: 'local:gemma-3-4b', drafters: ['local:qwen3-8b', 'local:phi-4'], judge: 'local:phi-4' } });
+  const live = [];
+  const r2 = await collect(complete.run('stack:office-power', { messages: [{ role: 'system', content: 'Be an analyst.' }, { role: 'user', content: [{ type: 'text', text: 'Summarise this chart' }, img] }], temperature: 0.4, maxTokens: 500, contextSize: 4096, onStep: (s) => live.push(s.role) }));
+  const uniq = (steps) => [...new Map(steps.map((s) => [s.index, s])).values()];
+  const roles = uniq(r2.steps).map((s) => s.role);
+  assert.deepEqual(roles, ['vision', 'draft', 'draft', 'lead']);
+  assert.match(r2.steps.find((s) => s.role === 'vision' && s.done).text, /chart showing sales/);
+  assert.match(r2.steps.filter((s) => s.role === 'draft' && s.done)[0].text, /saw image description/);
+  assert.match(r2.text, /^FINAL from phi\.gguf combining 2 drafts\.$/);
+  assert.ok(live.includes('draft'));
+  console.log('✓ powerhouse stack:', roles.join(' → '), '→', r2.text);
+
+  // Balanced stack (one drafter + reviewer) and memory pool.
+  complete.saveStack({ id: 'bal', name: 'Balanced', members: { drafters: ['local:qwen3-8b'], judge: 'local:phi-4' } });
+  const r3 = await collect(complete.run('stack:bal', { messages: [{ role: 'user', content: 'Plan my week' }], maxTokens: 200, contextSize: 4096 }));
+  assert.equal(uniq(r3.steps).map((s) => s.role).join(','), 'draft,lead');
+  console.log('✓ balanced stack; running servers:', llama.status().length);
+
+  // Providers: an OpenAI-compatible API (the fake server stands in for one).
+  const s = await llama.ensure({ file: path.join(dir, 'qwen.gguf'), name: 'x' }, { contextSize: 4096 });
+  const p = providers.upsert({ preset: 'custom', name: 'Test API', baseUrl: `http://127.0.0.1:${s.port}/v1`, models: ['test-model'] }, 'sk-test');
+  const r4 = await collect(complete.run(`api:${p.id}:test-model`, { messages: [{ role: 'user', content: 'Hi API' }], maxTokens: 50 }));
+  assert.match(r4.text, /you said "Hi API"/);
+  assert.ok(complete.targets().some((t) => t.target === `api:${p.id}:test-model`));
+  console.log('✓ OpenAI-compatible API provider');
+
+  // Think-tag splitting for models that write <think> inline.
+  const split = oai.thinkSplitter();
+  const parts = [...split('<thi'), ...split('nk>plan</th'), ...split('ink>Answer')];
+  assert.equal(parts.filter((x) => x.type === 'reasoning').map((x) => x.text).join(''), 'plan');
+  assert.equal(parts.filter((x) => x.type === 'text').map((x) => x.text).join(''), 'Answer');
+  console.log('✓ <think> splitting');
+
+  // Documents: CSV profile, XLSX, PPTX-ish text, HTML.
+  const csv = 'Region,Revenue,Date\nNorth,"1,200",2025-01-03\nSouth,800,2025-02-10\nNorth,1000,2025-03-15\n';
+  const d1 = await docs.extract('sales.csv', Buffer.from(csv));
+  assert.equal(d1.kind, 'spreadsheet');
+  assert.match(d1.text, /Revenue \(number\): count 3, sum 3,000, mean 1,000, min 800, max 1,200/);
+  assert.match(d1.text, /Date \(date\): 3 values from 2025-01-03 to 2025-03-15/);
+  const ExcelJS = require('exceljs');
+  const wb = new ExcelJS.Workbook(); const ws = wb.addWorksheet('Q1');
+  ws.addRow(['Item', 'Units']); ws.addRow(['Pens', 10]); ws.addRow(['Paper', 32]);
+  const d2 = await docs.extract('q1.xlsx', Buffer.from(await wb.xlsx.writeBuffer()));
+  assert.match(d2.text, /Units \(number\): count 2, sum 42/);
+  const d3 = await docs.extract('page.html', Buffer.from('<html><script>x()</script><h1>Title</h1><p>Body &amp; more</p></html>'));
+  assert.equal(d3.text.includes('x()'), false); assert.match(d3.text, /Body & more/);
+  console.log('✓ documents (CSV, Excel, HTML)');
+
+  // Knowledge bases: isolated collections, files and a website.
+  const libDir = fs.mkdtempSync(path.join(os.tmpdir(), 'qs-lib-'));
+  fs.writeFileSync(path.join(libDir, 'policy.md'), '# Travel policy\n\nEmployees may claim mileage at 45 pence per mile for business trips.\n\nHotels must be booked through the travel portal.');
+  fs.writeFileSync(path.join(libDir, 'menu.txt'), 'The cafeteria serves soup on Mondays and pasta on Fridays.');
+  const hr = knowledge.createCollection({ name: 'HR', emoji: '🗂️' });
+  const med = knowledge.createCollection({ name: 'Clinical', emoji: '🩺' });
+  const added = await knowledge.addPaths(hr.id, [libDir]);
+  assert.equal(added.added, 2);
+  const http = require('node:http');
+  const site = http.createServer((q, r) => {
+    r.writeHead(200, { 'Content-Type': 'text/html' });
+    if (q.url === '/docs/') r.end('<html><title>Guide home</title><nav>menu</nav><main><p>' + 'Welcome to the dosage guide. '.repeat(20) + '</p><a href="/docs/aspirin">Aspirin</a><a href="/other">Other</a></main></html>');
+    else if (q.url === '/docs/aspirin') r.end('<html><title>Aspirin dosing</title><main><p>' + 'Adult aspirin dosing for pain is 300 to 1000 milligrams every four to six hours. '.repeat(5) + '</p></main></html>');
+    else r.end('<html><title>Off-site</title><main>' + 'unrelated '.repeat(100) + '</main></html>');
+  }).listen(0);
+  await new Promise((r) => site.once('listening', r));
+  const web = await knowledge.addWebsite(med.id, `http://127.0.0.1:${site.address().port}/docs/`, { maxPages: 10 });
+  site.close();
+  assert.equal(web.added, 2, 'crawls the site section only');
+  const hits = await knowledge.search('mileage rate business trip', { collectionIds: [hr.id] });
+  assert.equal(hits[0].title, 'policy.md');
+  const isolated = await knowledge.search('mileage rate business trip', { collectionIds: [med.id] });
+  assert.ok(!isolated.some((h) => h.title === 'policy.md'), 'collections are isolated');
+  const medHits = await knowledge.search('aspirin dose milligrams', { collectionIds: [med.id] });
+  assert.equal(medHits[0].title, 'Aspirin dosing');
+  assert.equal(knowledge.collections().find((c) => c.id === med.id).docs, 2);
+  console.log('✓ knowledge bases: files, website crawl, isolation');
+
+  // Studio: image generation, AI edit, video generation and video editing.
+  const sdModel = models.add({ id: 'sdxl-turbo', name: 'SDXL Turbo', kind: 'image', catalogId: 'sdxl-turbo', files: { model: copy('sdxl.safetensors') }, size: 7e9 });
+  let progress = 0;
+  const g1 = await media.generate('job1', { modelId: sdModel.id, mode: 'generate', prompt: 'a pastel droplet', width: 64, height: 64 }, { onProgress: (v) => { progress = v; } });
+  assert.ok(fs.existsSync(g1.file)); assert.equal(progress, 1);
+  const g2 = await media.generate('job2', { modelId: sdModel.id, mode: 'edit', prompt: 'make it blue', image: g1.file, strength: 0.5, width: 64, height: 64 });
+  assert.ok(fs.statSync(g2.file).size > 0);
+  models.add({ id: 'wan2.1-1.3b', name: 'Wan', kind: 'video', catalogId: 'wan2.1-1.3b', files: { diffusion: copy('wan.safetensors'), vae: copy('wanvae.safetensors'), t5xxl: copy('umt5.gguf') }, size: 7e9 });
+  const v1 = await media.generate('job3', { modelId: 'wan2.1-1.3b', mode: 'generate', prompt: 'waves', width: 160, height: 96, frames: 8 });
+  assert.match(v1.file, /\.mp4$/);
+  const info2 = await media.probe(v1.file);
+  assert.ok(info2.duration > 0.5);
+  const e1 = await media.editVideo(v1.file, { start: 0.2, end: 0.9, speed: 2, crop: 'square', format: 'mp4' });
+  const info3 = await media.probe(e1.file);
+  assert.ok(info3.width === info3.height, 'square crop');
+  const gif = await media.editVideo(v1.file, { format: 'gif' });
+  assert.match(gif.file, /\.gif$/);
+  const frame = await media.extractFrame(v1.file, 0.5);
+  assert.ok(fs.existsSync(frame.file));
+  assert.ok(media.gallery().length >= 6);
+  console.log('✓ studio: image, AI edit, video, trim/speed/crop, GIF, frame');
+
+  // API server, streaming and not.
+  store.saveConfig({ apiServer: { enabled: true, port: 18337, requireKey: true } });
+  store.setSecret('apiServerKey', 'qs-secret');
+  const st = await apiserver.start();
+  assert.ok(st.running);
+  const base = 'http://127.0.0.1:18337/v1';
+  const unauth = await fetch(`${base}/models`);
+  assert.equal(unauth.status, 401);
+  const auth = { Authorization: 'Bearer qs-secret', 'Content-Type': 'application/json' };
+  const ml = await (await fetch(`${base}/models`, { headers: auth })).json();
+  assert.ok(ml.data.some((m) => m.id === 'stack:office-power'));
+  assert.ok(ml.data.some((m) => m.id === 'image:sdxl-turbo'));
+  const nonStream = await (await fetch(`${base}/chat/completions`, { method: 'POST', headers: auth, body: JSON.stringify({ model: 'local:qwen3-8b', messages: [{ role: 'user', content: 'via api' }] }) })).json();
+  assert.match(nonStream.choices[0].message.content, /you said "via api"/);
+  const streamed = [];
+  for await (const ev of oai.streamChat({ baseUrl: base, apiKey: 'qs-secret', body: { model: 'Office Powerhouse', messages: [{ role: 'user', content: 'stack via api' }] } })) if (ev.type === 'text') streamed.push(ev.text);
+  assert.match(streamed.join(''), /FINAL from phi\.gguf combining 2 drafts/);
+  const imgRes = await (await fetch(`${base}/images/generations`, { method: 'POST', headers: auth, body: JSON.stringify({ model: 'image:sdxl-turbo', prompt: 'a cat', size: '64x64' }) })).json();
+  assert.ok(imgRes.data[0].b64_json.length > 50);
+  apiserver.stop();
+  console.log('✓ API server: auth, models, chat (stream + not), stacks by name, images');
+
+  // Catalog: advisor builds three tiers on a mid-range PC; estimates are sane.
+  const mid = { ramGB: 32, vramGB: 12, vramFreeGB: 11.5 };
+  const adv = catalog.advise('office', mid);
+  assert.deepEqual(adv.stacks.map((x) => x.tier), ['fast', 'balanced', 'powerhouse']);
+  const power = adv.stacks[2];
+  assert.equal(power.members.drafters.length, 2);
+  assert.ok([power.members.vision, ...power.members.drafters].filter(Boolean).some((id) => catalog.TEXT_MODELS.find((m) => m.id === id).vision), 'office powerhouse can see images');
+  const low = catalog.advise('general', { ramGB: 8, vramGB: 0 });
+  assert.ok(low.stacks[0].members.drafters.every((id) => catalog.TEXT_MODELS.find((m) => m.id === id).sizeGB < 4));
+  const est = catalog.estimateText(catalog.TEXT_MODELS.find((m) => m.id === 'qwen3-8b'), mid);
+  assert.equal(est.fit, 'gpu'); assert.ok(est.tps > 20);
+  const moe = catalog.estimateText(catalog.TEXT_MODELS.find((m) => m.id === 'qwen3-30b-a3b'), mid);
+  assert.equal(moe.fit, 'split'); assert.ok(moe.tps > 5, 'MoE runs usefully even when split');
+  console.log('✓ advisor tiers:', adv.stacks.map((x) => `${x.name}[${[x.members.vision, ...x.members.drafters, x.members.judge].filter(Boolean).join(', ')}]`).join('  '));
+
+  llama.stopAll();
+  fs.rmSync(HOME, { recursive: true, force: true });
+  console.log('\nBACKEND TESTS PASSED');
+  process.exit(0);
+})().catch((e) => { console.error('FAIL', e); llama.stopAll(); process.exit(1); });

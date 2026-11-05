@@ -1,0 +1,38 @@
+#!/usr/bin/env node
+// Stand-in for llama.cpp's llama-server, for tests. Same flags, same HTTP API, canned replies.
+const http = require('http');
+const args = process.argv.slice(2);
+const arg = (f) => { const i = args.indexOf(f); return i >= 0 ? args[i + 1] : null; };
+if (args.includes('--list-devices')) { console.log('Available devices:\n  Vulkan0: Fake GPU 8GB (8192 MiB, 7800 MiB free)'); process.exit(0); }
+const port = Number(arg('--port'));
+const model = require('path').basename(arg('-m') || 'model');
+const vision = Boolean(arg('--mmproj'));
+const server = http.createServer((req, res) => {
+  if (req.url === '/health') { res.writeHead(200); return res.end('{"status":"ok"}'); }
+  let body = '';
+  req.on('data', (c) => (body += c));
+  req.on('end', () => {
+    const j = JSON.parse(body || '{}');
+    const msgs = j.messages || [];
+    const imgs = msgs.flatMap((m) => (Array.isArray(m.content) ? m.content.filter((p) => p.type === 'image_url') : []));
+    if (imgs.length && !vision) { res.writeHead(400, { 'Content-Type': 'application/json' }); return res.end(JSON.stringify({ error: { message: 'image input is not supported by this model' } })); }
+    const last = msgs[msgs.length - 1];
+    const lastText = typeof last?.content === 'string' ? last.content : (last?.content || []).filter((p) => p.type === 'text').map((p) => p.text).join(' ');
+    let reply;
+    if (/Describe each image/.test(lastText)) reply = imgs.map((_, i) => `### Image ${i + 1}\nA chart showing sales rising, described by ${model}.`).join('\n\n');
+    else if (/<draft number/.test(lastText)) reply = `FINAL from ${model} combining ${(lastText.match(/<draft number/g) || []).length} drafts.`;
+    else reply = `Answer from ${model}: you said "${lastText.slice(0, 40)}"${msgs.some((m) => typeof m.content === 'string' && m.content.includes('[Image 1:')) ? ' (saw image description)' : ''}${imgs.length ? ' (saw real image)' : ''}.`;
+    const words = reply.split(/(?<= )/);
+    if (!j.stream) { res.writeHead(200, { 'Content-Type': 'application/json' }); return res.end(JSON.stringify({ choices: [{ message: { content: reply } }] })); }
+    res.writeHead(200, { 'Content-Type': 'text/event-stream' });
+    res.write(`data: ${JSON.stringify({ choices: [{ delta: { reasoning_content: 'thinking… ' } }] })}\n\n`);
+    let i = 0;
+    const t = setInterval(() => {
+      if (i < words.length) return res.write(`data: ${JSON.stringify({ choices: [{ delta: { content: words[i++] } }] })}\n\n`);
+      clearInterval(t);
+      res.write(`data: ${JSON.stringify({ choices: [{ delta: {}, finish_reason: 'stop' }], timings: { predicted_per_second: 42.5, predicted_n: words.length } })}\n\n`);
+      res.end('data: [DONE]\n\n');
+    }, 5);
+  });
+});
+setTimeout(() => server.listen(port, '127.0.0.1'), 150);

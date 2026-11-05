@@ -1,6 +1,9 @@
 # Builds the Quicksilver Windows installer (Quicksilver-Setup-x.y.z.exe).
+#  1. tests:   the back-end and end-to-end tests (Linux, with stand-in engines)
+#  2. windows: downloads the official llama.cpp and stable-diffusion.cpp builds, proves the real
+#              text engine loads a model and answers, then builds and uploads the installer.
 # Runs on every push that changes quicksilver/, and on demand from the Actions tab.
-# Pushing a tag like quicksilver-v1.0.0 also publishes the installer as a GitHub release.
+# Pushing a tag like quicksilver-v2.0.0 also publishes the installer as a GitHub release.
 name: Quicksilver Windows installer
 
 on:
@@ -13,14 +16,38 @@ permissions:
   contents: write
 
 jobs:
-  windows:
-    runs-on: windows-latest
+  tests:
+    runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: quicksilver
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: quicksilver/package-lock.json
+      - name: Install
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg xvfb
+          npm ci
+        env:
+          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: '1'
+      - name: Back-end tests
+        run: node test/backend.test.js
+      - name: End-to-end tests
+        run: xvfb-run -a node test/ui.test.js
 
+  windows:
+    needs: tests
+    runs-on: windows-latest
+    defaults:
+      run:
+        working-directory: quicksilver
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 22
@@ -29,16 +56,36 @@ jobs:
 
       - name: Install
         run: npm ci
+        env:
+          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: '1'
+
+      - name: Download the engines (llama.cpp + stable-diffusion.cpp)
+        run: node scripts/fetch-engines.js --platform win32
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Prove the real text engine loads a model and answers
+        run: |
+          SERVER=$(find engine/llama -name llama-server.exe | head -1)
+          echo "engine: $SERVER ($(cat engine/llama/VERSION.txt))"
+          "$SERVER" --list-devices || true
+          "$SERVER" -m test/fixtures/tiny.gguf --host 127.0.0.1 --port 8099 -c 512 -ngl 0 --jinja > llama.log 2>&1 &
+          for i in $(seq 1 60); do curl -sf http://127.0.0.1:8099/health && break; sleep 1; done
+          RESPONSE=$(curl -sf http://127.0.0.1:8099/v1/chat/completions -H "Content-Type: application/json" -d '{"messages":[{"role":"user","content":"Hello"}],"max_tokens":8}')
+          echo "$RESPONSE"
+          echo "$RESPONSE" | grep -q '"choices"' || { cat llama.log; exit 1; }
+          taskkill //F //IM llama-server.exe || true
+
+      - name: Check the image engine starts
+        run: |
+          SD=$(find engine/sd \( -name sd-cli.exe -o -name sd.exe \) | head -1)
+          echo "engine: $SD ($(cat engine/sd/VERSION.txt))"
+          "$SD" --help | head -5
 
       - name: Build installer
         run: npx electron-builder --win --publish never
         env:
           CSC_IDENTITY_AUTO_DISCOVERY: 'false'
-
-      - name: Check the local engine loads on Windows
-        shell: bash
-        run: |
-          node -e "import('node-llama-cpp').then(async (m) => { const l = await m.getLlama({ gpu: 'auto', build: 'never' }); console.log('engine ok, gpu:', l.gpu); process.exit(0); })"
 
       - uses: actions/upload-artifact@v4
         with:

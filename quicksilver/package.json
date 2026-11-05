@@ -1,15 +1,16 @@
 {
   "name": "quicksilver",
   "productName": "Quicksilver",
-  "version": "1.0.0",
-  "description": "Quicksilver: private AI that takes any shape. Run free AI models on your own PC (no account, no key), with characters, assistants and a Stack Advisor that picks the best model for the job.",
-  "main": "main.js",
+  "version": "2.0.0",
+  "description": "Quicksilver: forms to fit your work. Private AI on your own PC: multi-model stacks, fact checking, knowledge bases, a photo & video studio and an OpenAI-compatible API.",
+  "main": "src/main/main.js",
   "author": "Patrick Christian Andrews",
   "license": "UNLICENSED",
   "private": true,
   "scripts": {
     "start": "electron .",
-    "test": "node test/ui.test.js",
+    "test": "node test/backend.test.js && node test/ui.test.js",
+    "fetch-engines": "node scripts/fetch-engines.js",
     "dist": "electron-builder",
     "dist:win": "electron-builder --win",
     "dist:mac": "electron-builder --mac",
@@ -17,11 +18,16 @@
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^1.5.0",
-    "node-llama-cpp": "^3.22.2"
+    "adm-zip": "^0.6.1",
+    "exceljs": "^4.4.0",
+    "ffmpeg-static": "^5.3.0",
+    "mammoth": "^1.13.0",
+    "unpdf": "^1.9.1"
   },
   "devDependencies": {
     "electron": "^45.2.3",
-    "electron-builder": "^26.0.12"
+    "electron-builder": "^26.0.12",
+    "playwright": "^1.63.0"
   },
   "build": {
     "appId": "com.liquid.quicksilver",
@@ -32,21 +38,12 @@
       "buildResources": "build"
     },
     "files": [
-      "main.js",
-      "preload.js",
-      "engine.js",
-      "catalog.js",
-      "renderer/**/*",
+      "src/**/*",
       "build/icon.png",
-      "package.json",
-      "!node_modules/@node-llama-cpp/*cuda*/**",
-      "!node_modules/node-llama-cpp/llama/llama.cpp/**",
-      "!node_modules/node-llama-cpp/llama/gitRelease.bundle"
+      "package.json"
     ],
     "asarUnpack": [
-      "node_modules/node-llama-cpp/bins/**",
-      "node_modules/node-llama-cpp/llama/**",
-      "node_modules/@node-llama-cpp/**"
+      "node_modules/ffmpeg-static/**"
     ],
     "win": {
       "target": [
@@ -78,7 +75,16 @@
       "target": "AppImage",
       "icon": "build/icon.png",
       "category": "Utility"
-    }
+    },
+    "extraResources": [
+      {
+        "from": "engine",
+        "to": "engine",
+        "filter": [
+          "**/*"
+        ]
+      }
+    ]
   },
   "homepage": "https://github.com/patrickchristianandrews/Spread-Love-And-Acceptance"
 }

@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: qsmedia:; media-src 'self' data: blob: qsmedia:; connect-src 'self' qsmedia:">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Quicksilver</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="brand">
+        <svg viewBox="0 0 32 32" width="36" height="36" aria-hidden="true">
+          <defs><linearGradient id="qsdrop" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#c9b8ff"/><stop offset=".5" stop-color="#9fd0ff"/><stop offset="1" stop-color="#8ee6c4"/></linearGradient></defs>
+          <path d="M16 2.5C16 2.5 6 13.6 6 20a10 10 0 0 0 20 0c0-6.4-10-17.5-10-17.5z" fill="url(#qsdrop)" stroke="#3b2a8f" stroke-width="1.6"/>
+          <path d="M11.5 20.5a4.5 4.5 0 0 0 4.5 4.5" stroke="#fff" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+        </svg>
+        <div><div class="brand-name">Quicksilver</div><div class="brand-tag">Forms to fit your work.</div></div>
+      </div>
+      <button class="nav-item nav-new" data-nav="newchat"><span class="ic">＋</span>New chat</button>
+      <button class="nav-item" data-nav="home"><span class="ic">🏠</span>Home</button>
+      <button class="nav-item" data-nav="assistants"><span class="ic">🧑‍💼</span>Assistants</button>
+      <button class="nav-item" data-nav="stacks"><span class="ic">🧩</span>Stacks</button>
+      <button class="nav-item" data-nav="studio"><span class="ic">🎨</span>Studio</button>
+      <button class="nav-item" data-nav="library"><span class="ic">📚</span>Knowledge</button>
+      <button class="nav-item" data-nav="models"><span class="ic">📦</span>Models</button>
+      <button class="nav-item" data-nav="pc"><span class="ic">🖥️</span>Your PC</button>
+      <button class="nav-item" data-nav="settings"><span class="ic">⚙️</span>Settings</button>
+      <div class="dl-mini" id="dl-mini" hidden></div>
+      <div class="side-label">Chats</div>
+      <input class="side-search" id="chat-search" type="search" placeholder="Search chats" aria-label="Search chats">
+      <div class="chat-list" id="chat-list"></div>
+    </aside>
+    <main class="main" id="main"></main>
+  </div>
+  <div class="modal-backdrop" id="modal" hidden><div class="modal" role="dialog" aria-modal="true" id="modal-body"></div></div>
+  <div class="toast" id="toast" role="status" hidden></div>
+  <script src="js/core.js"></script>
+  <script src="js/chat.js"></script>
+  <script src="js/assistants.js"></script>
+  <script src="js/stacks.js"></script>
+  <script src="js/models.js"></script>
+  <script src="js/pc.js"></script>
+  <script src="js/studio.js"></script>
+  <script src="js/library.js"></script>
+  <script src="js/settings.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
