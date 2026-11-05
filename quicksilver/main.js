@@ -1,141 +1,228 @@
 // Quicksilver — main process.
-// Owns the window, the saved data (characters, chats, settings), the encrypted API key,
-// and every call to the Claude API. The page (renderer) never sees the key.
+// Owns the window, saved data, the local model engine and model downloads.
+// Local models need no account or key. Claude in the cloud is an optional extra.
 
 const { app, BrowserWindow, ipcMain, dialog, safeStorage, shell } = require('electron');
 const path = require('node:path');
 const fs = require('node:fs');
-const Anthropic = require('@anthropic-ai/sdk').default;
+const engine = require('./engine');
+const catalog = require('./catalog');
 
-const DATA_FILE = () => path.join(app.getPath('userData'), 'quicksilver-data.json');
-const KEY_FILE = () => path.join(app.getPath('userData'), 'quicksilver-key.bin');
+const USER = () => app.getPath('userData');
+const DATA_FILE = () => path.join(USER(), 'quicksilver-data.json');
+const KEY_FILE = () => path.join(USER(), 'quicksilver-key.bin');
+const MODELS_FILE = () => path.join(USER(), 'models.json');
+const MODELS_DIR = () => path.join(USER(), 'models');
 
-// ---------- saved data ----------
+// ---------- small JSON helpers ----------
 
-function loadData() {
-  try {
-    return JSON.parse(fs.readFileSync(DATA_FILE(), 'utf8'));
-  } catch {
-    return null; // first run: the renderer seeds defaults
-  }
+function readJSON(file, fallback) {
+  try { return JSON.parse(fs.readFileSync(file, 'utf8')); } catch { return fallback; }
 }
-
-function saveData(data) {
-  const file = DATA_FILE();
+function writeJSON(file, value) {
   const tmp = file + '.tmp';
-  fs.writeFileSync(tmp, JSON.stringify(data));
-  fs.renameSync(tmp, file); // atomic replace, so a crash never leaves half a file
+  fs.writeFileSync(tmp, JSON.stringify(value));
+  fs.renameSync(tmp, file); // atomic replace
 }
 
-// ---------- API key (encrypted with the OS keychain when available) ----------
+// ---------- installed models ----------
+// [{ id, name, file, size, catalogId?, source }]
+
+function installedModels() {
+  return readJSON(MODELS_FILE(), []).filter((m) => fs.existsSync(m.file));
+}
+function saveModels(list) { writeJSON(MODELS_FILE(), list); }
+function addModel(entry) {
+  const list = installedModels().filter((m) => m.file !== entry.file);
+  list.push(entry);
+  saveModels(list);
+  return entry;
+}
+
+// ---------- optional Claude key ----------
 
 function readKey() {
   if (process.env.ANTHROPIC_API_KEY) return process.env.ANTHROPIC_API_KEY;
   try {
     const buf = fs.readFileSync(KEY_FILE());
-    if (safeStorage.isEncryptionAvailable()) return safeStorage.decryptString(buf);
-    return buf.toString('utf8');
-  } catch {
-    return '';
-  }
+    return safeStorage.isEncryptionAvailable() ? safeStorage.decryptString(buf) : buf.toString('utf8');
+  } catch { return ''; }
 }
-
 function writeKey(key) {
-  if (!key) {
-    try { fs.unlinkSync(KEY_FILE()); } catch {}
-    return;
-  }
-  const buf = safeStorage.isEncryptionAvailable()
-    ? safeStorage.encryptString(key)
-    : Buffer.from(key, 'utf8');
+  if (!key) { try { fs.unlinkSync(KEY_FILE()); } catch {} return; }
+  const buf = safeStorage.isEncryptionAvailable() ? safeStorage.encryptString(key) : Buffer.from(key, 'utf8');
   fs.writeFileSync(KEY_FILE(), buf, { mode: 0o600 });
 }
 
-// ---------- Claude ----------
+// ---------- chat ----------
 
-const active = new Map(); // requestId -> stream, so Stop can abort it
+const active = new Map(); // requestId -> AbortController | Claude stream
 
-async function runChat(sender, { requestId, model, effort, maxTokens, system, messages }) {
+async function runLocal(sender, p) {
+  const model = installedModels().find((m) => m.id === p.target.modelId);
+  if (!model) throw new Error('That model is not installed any more. Pick another one at the top of the chat.');
+  const controller = new AbortController();
+  active.set(p.requestId, controller);
+  if (engine.loadedFile() !== model.file) sender.send('chat:status', { requestId: p.requestId, status: `Loading ${model.name}…` });
+  const { aborted } = await engine.generate({
+    file: model.file,
+    contextSize: p.contextSize,
+    gpuLayers: p.gpuLayers,
+    system: p.system,
+    history: p.messages,
+    maxTokens: p.maxTokens,
+    temperature: p.temperature,
+    signal: controller.signal,
+    onText: (text) => sender.send('chat:delta', { requestId: p.requestId, text }),
+  });
+  if (aborted) sender.send('chat:error', { requestId: p.requestId, message: 'Stopped.', aborted: true });
+  else sender.send('chat:done', { requestId: p.requestId });
+}
+
+async function runClaude(sender, p) {
   const apiKey = readKey();
-  if (!apiKey) {
-    sender.send('chat:error', { requestId, message: 'Add your Anthropic API key in Settings first.' });
-    return;
-  }
+  if (!apiKey) throw new Error('Claude needs an Anthropic API key (Settings → Cloud). Local models need none.');
+  const Anthropic = require('@anthropic-ai/sdk').default;
   const client = new Anthropic({ apiKey });
-
   try {
-    // Server-side fallback: if the model declines, the API re-runs the request on
-    // Anthropic's recommended fallback model inside the same call.
     const stream = client.beta.messages.stream({
-      model,
-      max_tokens: maxTokens,
-      system,
-      messages,
-      output_config: { effort },
+      model: p.target.model,
+      max_tokens: p.maxTokens,
+      system: p.system,
+      messages: p.messages,
+      output_config: { effort: p.target.effort || 'low' },
       betas: ['server-side-fallback-2026-07-01'],
       fallbacks: 'default',
     });
-    active.set(requestId, stream);
-
-    stream.on('text', (text) => sender.send('chat:delta', { requestId, text }));
-
+    active.set(p.requestId, stream);
+    stream.on('text', (text) => sender.send('chat:delta', { requestId: p.requestId, text }));
     const final = await stream.finalMessage();
-    if (final.stop_reason === 'refusal') {
-      sender.send('chat:error', {
-        requestId,
-        message: 'Claude declined to continue this reply. Try editing your last message or the scene.',
-      });
+    if (final.stop_reason === 'refusal') throw new Error('Claude declined to continue this reply.');
+    sender.send('chat:done', { requestId: p.requestId, stopReason: final.stop_reason });
+  } catch (err) {
+    if (err instanceof Anthropic.APIUserAbortError) {
+      sender.send('chat:error', { requestId: p.requestId, message: 'Stopped.', aborted: true });
       return;
     }
-    sender.send('chat:done', {
-      requestId,
-      stopReason: final.stop_reason,
-      model: final.model,
-      usage: final.usage,
-    });
-  } catch (err) {
-    sender.send('chat:error', { requestId, message: describeError(err), aborted: isAbort(err) });
-  } finally {
-    active.delete(requestId);
+    if (err instanceof Anthropic.AuthenticationError) throw new Error('Your Anthropic API key was not accepted.');
+    if (err instanceof Anthropic.RateLimitError) throw new Error('Claude is rate limited. Wait a moment and try again.');
+    if (err instanceof Anthropic.APIConnectionError) throw new Error('Could not reach Claude. Check your internet connection, or use a local model.');
+    throw err;
   }
 }
 
-function isAbort(err) {
-  return err instanceof Anthropic.APIUserAbortError || err?.name === 'AbortError';
+async function runChat(sender, p) {
+  try {
+    if (p.target.kind === 'claude') await runClaude(sender, p);
+    else await runLocal(sender, p);
+  } catch (err) {
+    sender.send('chat:error', { requestId: p.requestId, message: friendly(err) });
+  } finally {
+    active.delete(p.requestId);
+  }
 }
 
-function describeError(err) {
-  if (isAbort(err)) return 'Stopped.';
-  if (err instanceof Anthropic.AuthenticationError) return 'Your API key was not accepted. Check it in Settings.';
-  if (err instanceof Anthropic.PermissionDeniedError) return 'This API key cannot use that model.';
-  if (err instanceof Anthropic.NotFoundError) return 'That model was not found. Pick another one in Settings.';
-  if (err instanceof Anthropic.RateLimitError) return 'Rate limited. Wait a moment and try again.';
-  if (err instanceof Anthropic.BadRequestError) return `The request was rejected: ${err.message}`;
-  if (err instanceof Anthropic.APIConnectionError) return 'Could not reach the Claude API. Check your internet connection.';
-  if (err instanceof Anthropic.APIError) return `Claude API error (${err.status ?? 'unknown'}): ${err.message}`;
-  return String(err?.message || err);
+function friendly(err) {
+  const msg = String(err?.message || err);
+  if (/out of memory|failed to allocate|ErrorOutOfDeviceMemory|insufficient memory/i.test(msg)) {
+    return 'Not enough memory to run this model. Try a smaller model, or lower the context size in Settings.';
+  }
+  return msg;
 }
 
 // ---------- IPC ----------
 
-ipcMain.handle('store:load', () => loadData());
-ipcMain.handle('store:save', (_e, data) => { saveData(data); return true; });
+ipcMain.handle('store:load', () => readJSON(DATA_FILE(), null));
+ipcMain.handle('store:save', (_e, data) => { writeJSON(DATA_FILE(), data); return true; });
 
 ipcMain.handle('key:status', () => ({
-  hasKey: Boolean(readKey()),
-  fromEnv: Boolean(process.env.ANTHROPIC_API_KEY),
-  encrypted: safeStorage.isEncryptionAvailable(),
+  hasKey: Boolean(readKey()), fromEnv: Boolean(process.env.ANTHROPIC_API_KEY), encrypted: safeStorage.isEncryptionAvailable(),
 }));
 ipcMain.handle('key:set', (_e, key) => { writeKey(String(key || '').trim()); return true; });
 
-ipcMain.on('chat:send', (e, payload) => { runChat(e.sender, payload); });
-ipcMain.on('chat:abort', (_e, requestId) => { active.get(requestId)?.abort(); });
+ipcMain.on('chat:send', (e, p) => { runChat(e.sender, p); });
+ipcMain.on('chat:abort', (_e, id) => { active.get(id)?.abort(); });
+
+ipcMain.handle('system:hardware', () => engine.hardware());
+
+ipcMain.handle('models:list', () => ({
+  installed: installedModels(),
+  catalog: catalog.MODELS,
+  jobs: Object.fromEntries(Object.entries(catalog.JOBS).map(([k, v]) => [k, { label: v.label, icon: v.icon, pitch: v.pitch }])),
+  downloading: [...downloading.values()],
+  dir: MODELS_DIR(),
+}));
+
+ipcMain.handle('advisor:advise', async (_e, job) => {
+  const hw = await engine.hardware();
+  const installedIds = installedModels().map((m) => m.catalogId).filter(Boolean);
+  return { hardware: hw, advice: catalog.advise(job, hw, installedIds), job: catalog.JOBS[job] };
+});
+
+const downloading = new Map(); // id -> { id, name, downloaded, total }
+
+ipcMain.handle('models:download', async (e, req) => {
+  const sender = e.sender;
+  const item = req.catalogId ? catalog.MODELS.find((m) => m.id === req.catalogId) : null;
+  const uri = item ? item.uri : String(req.uri || '').trim();
+  if (!uri) throw new Error('Paste a Hugging Face link or hf: address.');
+  const id = item ? item.id : `custom-${Date.now()}`;
+  if (downloading.has(id)) return { id };
+  const name = item ? item.name : uri.replace(/^hf:/, '').split(/[/:]/).slice(-2).join(' ');
+  const state = { id, name, downloaded: 0, total: 0 };
+  downloading.set(id, state);
+  sender.send('models:progress', state);
+  engine.download({
+    id, uri, dir: MODELS_DIR(),
+    onProgress: ({ totalSize, downloadedSize }) => {
+      state.total = totalSize; state.downloaded = downloadedSize;
+      if (!state._t || Date.now() - state._t > 250) { state._t = Date.now(); sender.send('models:progress', state); }
+    },
+  }).then(async ({ file, size }) => {
+    let label = name;
+    if (!item) { try { label = (await engine.inspect(file)).name; } catch {} }
+    const entry = addModel({ id: item ? item.id : `m-${Date.now().toString(36)}`, name: label, file, size, catalogId: item?.id, source: uri });
+    downloading.delete(id);
+    sender.send('models:done', { id, model: entry });
+  }).catch((err) => {
+    downloading.delete(id);
+    const cancelled = /cancel|abort/i.test(String(err?.message || err));
+    sender.send('models:error', { id, cancelled, message: cancelled ? 'Download cancelled.' : `Download failed: ${err?.message || err}` });
+  });
+  return { id };
+});
+
+ipcMain.handle('models:cancel', (_e, id) => engine.cancelDownload(id));
+
+ipcMain.handle('models:import', async (e) => {
+  const win = BrowserWindow.fromWebContents(e.sender);
+  const { canceled, filePaths } = await dialog.showOpenDialog(win, {
+    title: 'Import a model file',
+    properties: ['openFile'],
+    filters: [{ name: 'GGUF model', extensions: ['gguf'] }],
+  });
+  if (canceled || !filePaths[0]) return null;
+  const info = await engine.inspect(filePaths[0]); // throws if it isn't a model
+  return addModel({ id: `m-${Date.now().toString(36)}`, name: info.name, file: filePaths[0], size: info.size, source: 'imported' });
+});
+
+ipcMain.handle('models:delete', async (_e, id) => {
+  const list = installedModels();
+  const m = list.find((x) => x.id === id);
+  if (!m) return false;
+  if (engine.loadedFile() === m.file) await engine.unload();
+  // Only delete files Quicksilver downloaded itself; imported files stay where they were.
+  if (m.source !== 'imported' && m.file.startsWith(MODELS_DIR())) { try { fs.unlinkSync(m.file); } catch {} }
+  saveModels(list.filter((x) => x.id !== id));
+  return true;
+});
+
+ipcMain.handle('models:folder', () => { fs.mkdirSync(MODELS_DIR(), { recursive: true }); shell.openPath(MODELS_DIR()); });
 
 ipcMain.handle('file:export', async (e, { suggestedName, json }) => {
   const win = BrowserWindow.fromWebContents(e.sender);
   const { canceled, filePath } = await dialog.showSaveDialog(win, {
-    defaultPath: suggestedName,
-    filters: [{ name: 'Character JSON', extensions: ['json'] }],
+    defaultPath: suggestedName, filters: [{ name: 'Character JSON', extensions: ['json'] }],
   });
   if (canceled || !filePath) return false;
   fs.writeFileSync(filePath, json);
@@ -145,8 +232,7 @@ ipcMain.handle('file:export', async (e, { suggestedName, json }) => {
 ipcMain.handle('file:import', async (e) => {
   const win = BrowserWindow.fromWebContents(e.sender);
   const { canceled, filePaths } = await dialog.showOpenDialog(win, {
-    properties: ['openFile', 'multiSelections'],
-    filters: [{ name: 'Character JSON', extensions: ['json'] }],
+    properties: ['openFile', 'multiSelections'], filters: [{ name: 'Character JSON', extensions: ['json'] }],
   });
   if (canceled) return [];
   return filePaths.map((p) => fs.readFileSync(p, 'utf8'));
@@ -156,11 +242,12 @@ ipcMain.handle('file:import', async (e) => {
 
 function createWindow() {
   const win = new BrowserWindow({
-    width: 1280,
-    height: 820,
-    minWidth: 760,
-    minHeight: 520,
+    width: 1320,
+    height: 860,
+    minWidth: 820,
+    minHeight: 560,
     title: 'Quicksilver',
+    icon: path.join(__dirname, 'build', 'icon.png'),
     backgroundColor: '#0d1220',
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
@@ -171,8 +258,6 @@ function createWindow() {
   });
   win.setMenuBarVisibility(false);
   win.loadFile(path.join(__dirname, 'renderer', 'index.html'));
-
-  // Links in messages open in the real browser, never inside the app.
   win.webContents.setWindowOpenHandler(({ url }) => {
     if (/^https?:/.test(url)) shell.openExternal(url);
     return { action: 'deny' };
@@ -185,4 +270,7 @@ app.whenReady().then(() => {
   app.on('activate', () => { if (BrowserWindow.getAllWindows().length === 0) createWindow(); });
 });
 
-app.on('window-all-closed', () => { if (process.platform !== 'darwin') app.quit(); });
+app.on('window-all-closed', async () => {
+  await engine.unload();
+  if (process.platform !== 'darwin') app.quit();
+});

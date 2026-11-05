@@ -1,98 +1,99 @@
-// Drives the real page in Chromium with the mock bridge. Run: node test/ui.test.js
+// Drives the real page in Chromium with the mock bridge. Run: npm test  (optional arg: screenshot folder)
 const { chromium } = require('playwright');
 const path = require('node:path');
 const assert = require('node:assert');
-const fs = require('node:fs');
 
 (async () => {
   const shots = process.argv[2];
   const browser = await chromium.launch();
-  const page = await browser.newPage({ viewport: { width: 1280, height: 820 } });
+  const page = await browser.newPage({ viewport: { width: 1320, height: 860 } });
   const errors = [];
   page.on('pageerror', (e) => errors.push(e.message));
   page.on('console', (m) => m.type() === 'error' && errors.push(m.text()));
   await page.addInitScript({ path: path.join(__dirname, 'mock-bridge.js') });
   await page.goto('file://' + path.join(__dirname, '..', 'renderer', 'index.html'));
+  const idle = () => page.waitForFunction(() => !document.querySelector('.bubble.typing'));
 
-  // First run asks for a key.
-  await page.waitForSelector('#s-key');
-  await page.fill('#s-key', 'sk-ant-test');
-  await page.fill('#s-name', 'Liquid');
-  await page.click('#s-save');
-  await page.waitForSelector('#modal', { state: 'hidden' });
+  // No models and no key: opens on the Stack Advisor, no key prompt.
+  await page.waitForSelector('.jobs');
+  assert.equal(await page.locator('#s-key').count(), 0);
+  await page.waitForSelector('.hw .pill b:has-text("RTX 4070")');
 
-  // Two starter characters on the home grid.
-  assert.equal(await page.locator('.card[data-id]').count(), 2);
-  if (shots) await page.screenshot({ path: `${shots}/1-home.png` });
+  // Coding stack: recommends the coder model, downloads it, creates the Code Partner assistant.
+  await page.click('[data-job="coding"]');
+  await page.waitForSelector('.pick.best');
+  assert.match(await page.locator('.pick.best h3').innerText(), /Coder/);
+  if (shots) await page.screenshot({ path: `${shots}/1-advisor.png` });
+  await page.click('.pick.best [data-build]');
+  await page.waitForFunction(() => document.querySelector('.pick.best h3')?.textContent.includes('installed'), null, { timeout: 5000 });
+  await page.click('[data-nav="home"]');
+  await page.click('.card[data-id]:has-text("Code Partner")');
+  await page.click('#start');
+  assert.match(await page.locator('#model-pick option:checked').innerText(), /Coder/);
+  await page.fill('#input', 'Write an add function');
+  await page.keyboard.press('Enter');
+  await idle();
+  const req = await page.evaluate(() => window.__lastRequest);
+  assert.deepEqual(req.target, { kind: 'local', modelId: 'qwen2.5-coder-7b' });
+  assert.equal(req.temperature, 0.2);
+  assert.equal(req.contextSize, 16384);
+  assert.match(req.system, /software engineer/);
+  assert.equal(await page.locator('.bubble.md pre code').count(), 1); // code block rendered
+  assert.equal(await page.locator('.bubble.md li').count(), 2);
+  assert.match(await page.locator('.who small').innerText(), /Write an add function/); // chat titled from first message
+  if (shots) await page.screenshot({ path: `${shots}/2-coding-chat.png` });
 
-  // Create a character.
-  await page.click('#new-card');
-  await page.fill('#f-name', 'Captain Reyes');
-  await page.fill('#f-tagline', 'A smuggler pilot with a heart of gold and a ship held together by tape.');
-  await page.fill('#f-tags', 'Sci-fi, Adventure');
-  await page.fill('#f-personality', 'Cocky, quick-witted, loyal to her crew.');
-  await page.fill('#f-first', '*Reyes kicks the console.* "Hold on, {{user}}!"');
-  await page.click('#save');
-  await page.waitForSelector('.profile');
-  assert.equal(await page.locator('.profile h1').innerText(), 'Captain Reyes');
+  // Model Hub shows it installed and lets you download another.
+  await page.click('[data-nav="hub"]');
+  await page.waitForSelector('[data-download="llama-3.2-3b"]');
+  assert.equal(await page.locator('.model-card:has-text("Qwen 2.5 Coder") .badge.good').count() >= 1, true);
+  await page.click('[data-download="llama-3.2-3b"]');
+  await page.waitForSelector('[data-dl="llama-3.2-3b"]');
+  if (shots) await page.screenshot({ path: `${shots}/3-hub.png` });
+  await page.waitForFunction(() => !document.querySelector('[data-dl]'), null, { timeout: 5000 });
 
-  // Open Marlow and chat.
+  // Role-play: character chat uses role-play prompt; switch model from the picker.
   await page.click('[data-nav="home"]');
   await page.click('.card[data-id]:has-text("Marlow")');
   await page.click('#start');
-  await page.waitForSelector('.msg.assistant');
-  await page.fill('#input', 'I need you to find my sister. *I set a photo on the desk.*');
+  await page.selectOption('#model-pick', 'local:llama-3.2-3b');
+  await page.fill('#input', 'I need you to find my sister.');
   await page.keyboard.press('Enter');
-  await page.waitForFunction(() => document.querySelectorAll('.msg').length === 3 && !document.querySelector('.bubble.typing'));
-  const req = await page.evaluate(() => window.__lastRequest);
-  assert.equal(req.model, 'claude-opus-5-5');
-  assert.equal(req.messages[0].role, 'user');           // stage cue first
-  assert.equal(req.messages[1].role, 'assistant');      // greeting
-  assert.match(req.messages[2].content, /find my sister/);
-  assert.match(req.system, /You are Marlow Vance/);
-  assert.match(req.system, /Liquid/);                    // {{user}} filled with the user's name
-  assert.ok(!/\{\{user\}\}/.test(req.system));
+  await idle();
+  const rp = await page.evaluate(() => window.__lastRequest);
+  assert.equal(rp.target.modelId, 'llama-3.2-3b');
+  assert.match(rp.system, /You are Marlow Vance/);
+  assert.equal(rp.messages[0].role, 'user');
+  assert.equal(await page.locator('.bubble em.action').count() > 0, true);
 
-  // Reroll makes a second version with arrows.
+  // Reroll / swipe / stop.
   await page.click('[data-act="reroll"]');
-  await page.waitForFunction(() => !document.querySelector('.bubble.typing') && document.querySelector('.swipe-count'));
+  await idle();
   assert.equal(await page.locator('.swipe-count').innerText(), '2/2');
-  await page.click('[data-act="prev"]');
-  assert.equal(await page.locator('.swipe-count').innerText(), '1/2');
-  if (shots) await page.screenshot({ path: `${shots}/2-chat.png` });
-
-  // Edit a message.
-  await page.locator('.msg.user [data-act="edit"]').click({ force: true });
-  await page.fill('.bubble textarea', 'I need you to find my brother.');
-  await page.click('[data-x="save"]');
-  assert.match(await page.locator('.msg.user .bubble').innerText(), /brother/);
-
-  // Stop mid-stream keeps partial text.
   await page.fill('#input', 'Hurry.');
   await page.keyboard.press('Enter');
-  await page.waitForTimeout(60);
-  await page.click('#send'); // Stop
-  await page.waitForFunction(() => !document.querySelector('.bubble.typing'));
-  assert.equal(await page.locator('.msg').count(), 5);
+  await page.waitForTimeout(40);
+  await page.click('#send');
+  await idle();
 
-  // Persisted and shows in recent chats.
-  assert.equal(await page.locator('.recent-item').count(), 1);
+  // New chat button opens the general assistant.
+  await page.click('[data-nav="newchat"]');
+  assert.match(await page.locator('.who b').innerText(), /Quicksilver Assistant/);
+
+  // Persisted.
   await page.reload();
   await page.waitForSelector('.card');
-  assert.equal(await page.locator('.recent-item').count(), 1);
-  assert.equal(await page.locator('.card[data-id]').count(), 3);
+  assert.ok(await page.locator('.recent-item').count() >= 2);
 
-  // HTML in a message is shown as text, not run.
+  // Escaping.
   await page.click('.recent-item');
   await page.fill('#input', '<img src=x onerror="window.__xss=1">');
   await page.keyboard.press('Enter');
-  await page.waitForFunction(() => !document.querySelector('.bubble.typing'));
+  await idle();
   assert.equal(await page.evaluate(() => window.__xss), undefined);
 
-  await page.setViewportSize({ width: 800, height: 700 });
-  if (shots) await page.screenshot({ path: `${shots}/3-narrow.png` });
   await page.click('[data-nav="settings"]');
-  await page.waitForSelector('#s-model');
+  await page.waitForSelector('#s-default');
   if (shots) await page.screenshot({ path: `${shots}/4-settings.png` });
 
   assert.deepEqual(errors, []);

@@ -207,3 +207,54 @@ button { cursor: pointer; }
   .profile, .form-row { grid-template-columns: 1fr; }
   .page { padding: 20px 18px 40px; }
 }
+
+/* ---------- local models, advisor, markdown ---------- */
+.nav-item.new-chat { background: linear-gradient(90deg, rgba(233,238,246,.12), rgba(94,231,240,.14)); border: 1px solid var(--line); margin-bottom: 6px; font-weight: 600; }
+.dl-mini { margin: 8px 4px 0; padding: 8px 10px; border: 1px solid var(--line); border-radius: 10px; font-size: 12px; color: var(--muted); cursor: pointer; }
+.bar { height: 6px; background: var(--panel-2); border-radius: 999px; overflow: hidden; margin-top: 6px; }
+.bar > i { display: block; height: 100%; background: linear-gradient(90deg, #e9eef6, #5ee7f0); width: 0; transition: width .2s; }
+.hw { display: flex; flex-wrap: wrap; gap: 10px; margin: 0 0 22px; }
+.hw .pill { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 8px 12px; font-size: 13px; }
+.hw .pill b { display: block; font-size: 15px; color: var(--text); }
+.hw .pill span { color: var(--muted); }
+.jobs { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; margin-bottom: 26px; }
+.job { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px; text-align: left; display: flex; flex-direction: column; gap: 4px; }
+.job:hover { border-color: var(--accent); }
+.job.on { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent) inset; }
+.job .ic { font-size: 24px; }
+.job b { font-size: 15px; }
+.job small { color: var(--muted); }
+.picks { display: flex; flex-direction: column; gap: 12px; }
+.pick { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px; display: grid; grid-template-columns: 1fr auto; gap: 8px 16px; align-items: center; }
+.pick.best { border-color: var(--accent); }
+.pick h3 { margin: 0; font-size: 17px; }
+.pick .why { color: var(--muted); font-size: 13.5px; }
+.badge { display: inline-block; font-size: 11px; padding: 2px 8px; border-radius: 999px; background: var(--panel-2); color: var(--muted); margin-left: 6px; vertical-align: 2px; }
+.badge.good { background: rgba(94, 231, 240, .16); color: #9ff3ff; }
+.badge.warn { background: rgba(255, 196, 107, .14); color: #ffd28a; }
+.stack-settings { color: var(--muted); font-size: 13px; }
+.hub-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; }
+.model-card { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px; display: flex; flex-direction: column; gap: 6px; }
+.model-card .top { display: flex; justify-content: space-between; gap: 8px; align-items: baseline; }
+.model-card .meta { color: var(--muted); font-size: 12.5px; }
+.model-card .desc { font-size: 13.5px; flex: 1; }
+.model-card .row { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+.inline-form { display: flex; gap: 8px; flex-wrap: wrap; margin: 6px 0 22px; }
+.inline-form input { flex: 1; min-width: 240px; background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 9px 12px; }
+.model-select { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 7px 10px; max-width: 280px; }
+.banner { max-width: 860px; margin: 0 auto; background: var(--panel); border: 1px dashed var(--accent); border-radius: var(--radius); padding: 14px 16px; display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+.banner p { margin: 0; flex: 1; min-width: 220px; }
+.status-line { color: var(--muted); font-size: 13px; font-style: italic; }
+.md p { margin: 0 0 .7em; } .md p:last-child { margin-bottom: 0; }
+.md h1, .md h2, .md h3, .md h4 { margin: .8em 0 .4em; line-height: 1.25; } .md h1 { font-size: 1.3em; } .md h2 { font-size: 1.18em; } .md h3, .md h4 { font-size: 1.05em; }
+.md ul, .md ol { margin: 0 0 .7em; padding-left: 1.4em; }
+.md code { background: rgba(255,255,255,.08); padding: 1px 5px; border-radius: 5px; font: 13px/1.5 ui-monospace, Consolas, "Cascadia Code", monospace; }
+.md pre { position: relative; background: #070b14; border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; overflow-x: auto; margin: 0 0 .8em; }
+.md pre code { background: none; padding: 0; white-space: pre; }
+.md pre .lang { position: absolute; top: 4px; right: 8px; font-size: 11px; color: var(--muted); }
+.md pre .copy { position: absolute; bottom: 6px; right: 8px; font-size: 11px; background: var(--panel-2); border: 1px solid var(--line); border-radius: 6px; color: var(--muted); padding: 1px 7px; }
+.md blockquote { margin: 0 0 .7em; padding-left: 10px; border-left: 3px solid var(--line); color: var(--muted); }
+.md a { color: #9ff3ff; }
+.md table { border-collapse: collapse; margin: 0 0 .8em; } .md td, .md th { border: 1px solid var(--line); padding: 4px 8px; }
+.bubble.md { width: min(760px, 100%); }
+.md pre { padding: 22px 14px 30px; }
