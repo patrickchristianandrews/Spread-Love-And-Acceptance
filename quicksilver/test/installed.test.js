@@ -69,8 +69,11 @@ function redPng(size = 64) {
     // The default is chosen just after the model list loads: wait for it rather than racing it.
     await win.waitForFunction(() => S.data.prefs.defaultTarget === 'local:starter', null, { timeout: 30000 })
       .catch(async () => { throw new Error(`the small model should answer until the main one arrives (default: ${(await state()).def || 'none'})`); });
+    // The download starts once the app has looked the model up online (a second or so later).
+    await win.waitForFunction(() => Boolean(S.downloads['qwen3-4b']) || S.installed.some((m) => m.catalogId === 'qwen3-4b'), null, { timeout: 60000 })
+      .catch(() => { throw new Error('the main model should start downloading in the background'); });
     s = await state();
-    assert.ok(s.downloads.some((d) => d.id === 'qwen3-4b') || s.installed.some((m) => m.catalogId === 'qwen3-4b'), 'the main model is downloading in the background');
+    console.log(`  downloading: ${JSON.stringify(s.downloads)}`);
     ok('first launch without the models folder: the small model is ready; the main model is downloading');
   }
   await win.waitForSelector('.best-setup', { timeout: 60000 });
