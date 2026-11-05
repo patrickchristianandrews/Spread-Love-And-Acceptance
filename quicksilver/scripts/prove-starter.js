@@ -58,9 +58,9 @@ async function prove(m) {
     if (m.pack) {
       // The way Quicksilver asks: work it out step by step, then answer.
       const sum = await ask('What is 17 × 23? Work it out step by step, then give the final answer.', 300);
-      const final = sum.split('\n').filter(Boolean).pop();
-      console.log(`  Q: 17 × 23 → ${final}`);
-      if (!/391/.test(final)) throw new Error(`${m.name} got 17 × 23 wrong:\n${sum}`);
+      const final = (sum.match(/\d[\d,]*/g) || []).pop(); // the last number in the answer
+      console.log(`  Q: 17 × 23 (step by step) → ${final}`);
+      if (final !== '391') throw new Error(`${m.name} got 17 × 23 wrong:\n${sum}`);
     }
     if (m.files.mmproj) {
       const img = `data:image/png;base64,${png(220, 30, 30).toString('base64')}`;
