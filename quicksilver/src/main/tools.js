@@ -6,7 +6,7 @@ const integrations = require('./integrations');
 const mcp = require('./mcp');
 
 async function available() {
-  const list = [...integrations.tools(), ...(await mcp.tools())];
+  const list = [...integrations.tools(), ...require('./customapi').tools(), ...(await mcp.tools())];
   const seen = new Set();
   return list.filter((t) => (seen.has(t.name) ? false : seen.add(t.name)));
 }

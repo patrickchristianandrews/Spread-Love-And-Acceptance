@@ -315,6 +315,42 @@ async function collect(gen) {
     console.log('✓ connectors: weather, Wikipedia, calendar, news feeds, notes folder, Todoist, automation webhook');
   }
 
+  // Your own API (any REST service) and the MCP directory.
+  {
+    const customapi = require('../src/main/customapi');
+    const catalogMcp = require('../src/main/mcp-catalog');
+    const seen = [];
+    global.fetch = async (url, opts = {}) => {
+      seen.push({ url: String(url), method: opts.method || 'GET', headers: opts.headers, body: opts.body });
+      return new Response(JSON.stringify({ ok: true, url: String(url) }), { status: 200 });
+    };
+    assert.throws(() => customapi.parseEndpoints('fetch the orders'), /isn't an endpoint/);
+    const api = customapi.save({ name: 'My Shop', baseUrl: 'https://shop.example/v1/', authType: 'header', authName: 'X-Key', endpointsText: 'GET /orders - List orders\nGET /orders/{id} - One order\nPOST /orders/{id}/refund - Refund' }, 'k123');
+    assert.equal(api.endpoints.length, 3);
+    const T = customapi.tools();
+    const one = T.find((t) => /get_orders_by/.test(t.name));
+    assert.deepEqual(one.parameters.required, ['id']);
+    await one.run({ id: 'A 7', query: { expand: 'items' } });
+    assert.equal(seen.at(-1).url, 'https://shop.example/v1/orders/A%207?expand=items');
+    assert.equal(seen.at(-1).headers['X-Key'], 'k123');
+    const refund = T.find((t) => /post/.test(t.name));
+    assert.ok(refund.write && !one.write, 'changes ask first');
+    await refund.run({ id: '9', body: { amount: 5 } });
+    assert.ok(seen.at(-1).method === 'POST' && seen.at(-1).body === '{"amount":5}');
+    assert.equal(await customapi.test(api.id), 'connected');
+    assert.ok((await toolbox.available()).some((t) => t.name === one.name), 'its tools reach chats');
+    customapi.remove(api.id);
+    assert.equal(customapi.tools().length, 0);
+    // Registry entries become ready-to-add servers.
+    const npm = catalogMcp.fromRegistry({ server: { name: 'io.example/maps', description: 'Maps and places', packages: [{ registryType: 'npm', identifier: '@ex/maps-mcp', transport: { type: 'stdio' }, environmentVariables: [{ name: 'MAPS_KEY', description: 'Your key', isRequired: true }] }] } });
+    assert.deepEqual([npm.command, npm.args, npm.env], ['npx', ['-y', '@ex/maps-mcp'], { MAPS_KEY: '<Your key>' }]);
+    const remote = catalogMcp.fromRegistry({ server: { name: 'io.example/notes', description: 'Notes', remotes: [{ type: 'streamable-http', url: 'https://notes.example/mcp' }] } });
+    assert.deepEqual([remote.transport, remote.url], ['http', 'https://notes.example/mcp']);
+    assert.ok(Object.keys(catalogMcp.PRESETS).length >= 35, 'many ready-made MCP servers');
+    global.fetch = realFetch;
+    console.log('✓ your own API: endpoints become tools (writes ask first); MCP directory entries ready to add');
+  }
+
   // Measured speeds: real answers are timed per model and re-tune every estimate.
   {
     const speeds = require('../src/main/speeds');

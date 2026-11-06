@@ -4,9 +4,9 @@
 let intData = null;   // { connectors, mcp, presets, tools, allowed }
 
 async function refreshIntegrations() {
-  const [connectors, mcpList, presets, allowed, auto] = await Promise.all([qs.call('int:list'), qs.call('mcp:list'), qs.call('mcp:presets'), qs.call('tools:allowed'), qs.call('tools:auto')]);
-  intData = { connectors, mcp: mcpList, presets, allowed, auto, tools: intData?.tools || null };
-  S.hasIntegrations = connectors.some((c) => c.enabled) || mcpList.length > 0;
+  const [connectors, mcpList, presets, allowed, auto, apis] = await Promise.all([qs.call('int:list'), qs.call('mcp:list'), qs.call('mcp:presets'), qs.call('tools:allowed'), qs.call('tools:auto'), qs.call('capi:list')]);
+  intData = { connectors, mcp: mcpList, presets, allowed, auto, apis, tools: intData?.tools || null, found: intData?.found || null, query: intData?.query || '' };
+  S.hasIntegrations = connectors.some((c) => c.enabled) || mcpList.length > 0 || apis.length > 0;
 }
 
 views.integrations = {
@@ -34,9 +34,22 @@ views.integrations = {
           ${s.toolNames?.length ? `<div class="row small" style="margin-bottom:8px">${s.toolNames.slice(0, 10).map((t) => `<span class="badge b-lav">${esc(t)}</span>`).join('')}${s.toolNames.length > 10 ? `<span class="muted">+${s.toolNames.length - 10}</span>` : ''}</div>` : ''}
           <div class="row"><button class="btn small" data-mcp-test="${s.id}">Test connection</button><button class="btn small" data-mcp-edit="${s.id}">Edit</button><button class="btn small danger" data-mcp-del="${s.id}">Remove</button></div>
         </div>`).join('')}</div>` : ''}
-      <div class="cards" style="grid-template-columns:repeat(auto-fill,minmax(240px,1fr))">${Object.entries(presets).map(([k, p]) => `
+      ${[...new Set(Object.values(presets).map((p) => p.group || 'Other'))].map((g) => `<h3 class="int-group">${esc(g)}</h3><div class="cards" style="grid-template-columns:repeat(auto-fill,minmax(240px,1fr))">${Object.entries(presets).filter(([, p]) => (p.group || 'Other') === g).map(([k, p]) => `
         <button class="card" data-mcp-preset="${k}" style="text-align:left"><h3>${esc(p.name)}</h3><div class="small muted" style="font-weight:600;margin-top:4px">${esc(p.note)}</div></button>`).join('')}
-      </div>
+      </div>`).join('')}
+
+      <div class="section"><h2>Find more in the MCP directory</h2><span class="small muted">Thousands of public servers from the official MCP Registry.</span></div>
+      <div class="row" style="margin-bottom:12px"><input id="mcp-q" type="search" placeholder="Search: email, calendar, maps, spotify, database…" value="${esc(intData.query)}" style="max-width:420px"><button class="btn" id="mcp-search">Search</button></div>
+      ${intData.found ? (intData.found.error ? `<div class="notice">${esc(intData.found.error)}</div>` : intData.found.length ? `<div class="cards" style="grid-template-columns:repeat(auto-fill,minmax(260px,1fr))">${intData.found.map((p, i) => `
+        <div class="card"><div class="row"><h3 class="grow">${esc(p.name)}</h3><span class="badge ${p.transport === 'http' ? 'b-sky' : 'b-lav'}">${p.transport === 'http' ? 'remote' : p.command}</span></div>
+          <div class="small muted" style="font-weight:600;margin:6px 0 10px">${esc(p.note)}</div>
+          <div class="row"><button class="btn small primary" data-found="${i}">Add</button><span class="small muted" style="word-break:break-all">${esc(p.source || '')}</span></div></div>`).join('')}</div>` : '<p class="muted">Nothing found. Try another word.</p>') : ''}
+
+      <div class="section"><h2>Your own APIs</h2><button class="btn small primary" id="capi-new">＋ Add any web API</button></div>
+      <p class="small muted" style="margin-top:-6px">Connect a service that isn't listed: give its address, key and the endpoints the AI may use. Reading needs no approval; anything that changes data asks first.</p>
+      ${intData.apis.length ? `<div class="cards">${intData.apis.map((a) => `<div class="card"><div class="row"><span class="emoji-badge">${esc(a.icon)}</span><h3 class="grow">${esc(a.name)}</h3><span class="badge b-lav">${a.endpoints.length} endpoint${a.endpoints.length === 1 ? '' : 's'}</span></div>
+        <div class="meta" style="margin:6px 0;word-break:break-all">${esc(a.baseUrl)}</div>${a.note ? `<p class="desc" style="margin:4px 0 8px">${esc(a.note)}</p>` : ''}
+        <div class="row"><button class="btn small" data-capi-test="${a.id}">Test</button><button class="btn small" data-capi-edit="${a.id}">Edit</button><button class="btn small danger" data-capi-del="${a.id}">Remove</button></div></div>`).join('')}</div>` : ''}
 
       <div class="section"><h2>Actions</h2></div>
       <label class="pick-row ${intData.auto ? 'on' : ''}" style="margin-bottom:10px"><input type="checkbox" id="tools-auto" ${intData.auto ? 'checked' : ''}>
@@ -61,6 +74,19 @@ views.integrations = {
     }));
     $$('[data-forget]').forEach((b) => b.addEventListener('click', async () => { await call('tools:forget', b.dataset.forget); await refreshIntegrations(); render(); }));
     $('#tools-auto')?.addEventListener('change', async (e) => { intData.auto = await call('tools:auto', e.target.checked); toast(intData.auto ? 'The AI will act without asking.' : 'The AI will ask before each change.'); render(); });
+    const doSearch = async () => {
+      intData.query = $('#mcp-q').value.trim();
+      $('#mcp-search').textContent = 'Searching…';
+      try { intData.found = await qs.call('mcp:registry', intData.query); } catch (err) { intData.found = { error: `Couldn't reach the MCP directory: ${err.message}` }; }
+      render();
+    };
+    $('#mcp-search').addEventListener('click', doSearch);
+    $('#mcp-q').addEventListener('keydown', (e) => { if (e.key === 'Enter') doSearch(); });
+    $$('[data-found]').forEach((b) => b.addEventListener('click', () => editMcp({ ...intData.found[Number(b.dataset.found)], askFolder: true })));
+    $('#capi-new').addEventListener('click', () => editApi(null));
+    $$('[data-capi-edit]').forEach((b) => b.addEventListener('click', () => editApi(intData.apis.find((a) => a.id === b.dataset.capiEdit))));
+    $$('[data-capi-del]').forEach((b) => b.addEventListener('click', async () => { if (!(await confirmBox('Remove this API and its saved key?', { yes: 'Remove' }))) return; await call('capi:remove', b.dataset.capiDel); await refreshIntegrations(); render(); }));
+    $$('[data-capi-test]').forEach((b) => b.addEventListener('click', async () => { b.disabled = true; try { toast(`It works: ${await qs.call('capi:test', b.dataset.capiTest)}.`); } catch (err) { toast(`It didn't work: ${err.message}`, 8000); } b.disabled = false; }));
     $('#int-tools').addEventListener('click', async (e) => { e.target.textContent = 'Loading…'; intData.tools = await call('int:tools'); render(); });
   },
 };
@@ -107,6 +133,7 @@ function editMcp(p) {
     const transport = b.querySelector('#m-transport').value;
     const args = b.querySelector('#m-args').value.split('\n').map((x) => x.trim()).filter(Boolean);
     if (args.some((x) => /^<.*>$/.test(x))) { toast('Replace the <placeholder> arguments with real values first.'); return; }
+    if (/=\s*<[^>]*>\s*$/m.test(b.querySelector('#m-env').value)) { toast('Fill in the <placeholder> values under Environment variables first (your key or token).'); return; }
     const env = Object.fromEntries(b.querySelector('#m-env').value.split('\n').map((l) => l.split('=')).filter((x) => x[0]?.trim() && x.length > 1).map(([k, ...v]) => [k.trim(), v.join('=').trim()]));
     const entry = { id: p.id, name: b.querySelector('#m-name').value.trim() || 'MCP server', transport, url: b.querySelector('#m-url').value.trim(), command: b.querySelector('#m-cmd').value.trim(), args, env, auth: p.auth };
     if (transport === 'http' && !/^https?:\/\//.test(entry.url)) { toast('Enter the server address (https://…).'); return; }
@@ -115,6 +142,33 @@ function editMcp(p) {
     closeModal();
     toast('Connecting…');
     try { const names = await qs.call('mcp:test', saved.id); toast(`Connected to ${saved.name}: ${names.length} tools.`); } catch (err) { toast(`Saved, but it could not connect: ${err.message}`, 9000); }
+    await refreshIntegrations(); render();
+  });
+}
+
+// Your own API: address, key and endpoints (one per line: GET /path - what it does).
+function editApi(a) {
+  const v = a || { name: '', icon: '🔗', baseUrl: '', authType: 'bearer', authName: '', note: '', endpointsText: '' };
+  const b = openModal(`<h2>${a ? `Edit ${esc(a.name)}` : 'Add any web API'}</h2>
+    <div class="stack-v">
+      <div class="row"><div class="field" style="width:90px"><label for="ca-icon">Icon</label><input id="ca-icon" value="${esc(v.icon)}" maxlength="4" style="text-align:center"></div>
+        <div class="field grow"><label for="ca-name">Name</label><input id="ca-name" value="${esc(v.name)}" placeholder="e.g. My shop"></div></div>
+      <div class="field"><label for="ca-url">Base address</label><input id="ca-url" value="${esc(v.baseUrl)}" placeholder="https://api.example.com/v1"></div>
+      <div class="grid2">
+        <div class="field"><label for="ca-auth">How the key is sent</label><select id="ca-auth">${[['bearer', 'Authorization: Bearer key'], ['header', 'In a header'], ['query', 'In the address (?key=…)'], ['none', 'No key']].map(([k, l]) => `<option value="${k}" ${v.authType === k ? 'selected' : ''}>${l}</option>`).join('')}</select></div>
+        <div class="field"><label for="ca-authname">Header or parameter name</label><input id="ca-authname" value="${esc(v.authName)}" placeholder="X-API-Key or api_key"></div>
+      </div>
+      <div class="field"><label for="ca-key">Key or token</label><span class="help">${a?.hasKey ? 'A key is saved. Paste a new one to replace it.' : 'Encrypted on this PC and only sent to this address.'}</span><input id="ca-key" type="password" autocomplete="off"></div>
+      <div class="field"><label for="ca-eps">Endpoints the AI may use</label><span class="help">One per line: method, path and what it does. {name} in the path becomes something the AI fills in. GET reads freely; POST, PUT, PATCH and DELETE ask you first.</span>
+        <textarea id="ca-eps" rows="6" placeholder="GET /orders - List recent orders&#10;GET /orders/{id} - Get one order&#10;POST /orders/{id}/refund - Refund an order">${esc(v.endpointsText)}</textarea></div>
+      <div class="field"><label for="ca-note">Notes for the AI (optional)</label><input id="ca-note" value="${esc(v.note)}" placeholder="e.g. Prices are in cents. Dates are YYYY-MM-DD."></div>
+    </div>
+    <div class="modal-actions"><button class="btn" data-close>Cancel</button><button class="btn primary" id="ca-save">Save</button></div>`, { wide: true });
+  b.querySelector('#ca-save').addEventListener('click', async () => {
+    const api = { id: a?.id, icon: b.querySelector('#ca-icon').value.trim() || '🔗', name: b.querySelector('#ca-name').value.trim(), baseUrl: b.querySelector('#ca-url').value.trim(), authType: b.querySelector('#ca-auth').value, authName: b.querySelector('#ca-authname').value.trim(), note: b.querySelector('#ca-note').value.trim(), endpointsText: b.querySelector('#ca-eps').value };
+    if (!api.name) { toast('Give it a name.'); return; }
+    try { await call('capi:save', api, b.querySelector('#ca-key').value.trim()); } catch { return; }
+    closeModal(); toast(`${api.name} added. Turn on 🔌 Tools in a chat to use it.`);
     await refreshIntegrations(); render();
   });
 }
