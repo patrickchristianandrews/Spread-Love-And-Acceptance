@@ -438,7 +438,8 @@ function composeMedia(job, hw, calib, mediaPool, textPool) {
 // answering and a lead that compares them catch more mistakes than one model alone. A cloud fact
 // check or lead adds more.
 function accuracyLevel(quality, { stack = false, cloud = false } = {}) {
-  const q = Math.min(10, (quality || 0) + (stack ? 0.5 : 0) + (cloud ? 1 : 0));
+  // Never 10/10: no AI is always right.
+  const q = Math.min(9.6, (quality || 0) + (stack ? 0.5 : 0) + (cloud ? 1 : 0));
   const dots = Math.max(1, Math.min(5, Math.round(q / 2)));
   return { score: Math.round(q * 10) / 10, label: ['Basic', 'Fair', 'Good', 'High', 'Very high', 'Excellent'][dots], dots };
 }
