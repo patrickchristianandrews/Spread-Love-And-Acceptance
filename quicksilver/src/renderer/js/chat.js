@@ -41,7 +41,7 @@ views.chat = {
       <header class="chat-top">
         <div class="pickers">
           <label class="pill-select" title="Assistant"><span class="pill-emoji">${esc(a.emoji)}</span><select id="pick-assistant" aria-label="Assistant">${S.data.assistants.map((x) => `<option value="${x.id}" ${x.id === a.id ? 'selected' : ''}>${esc(x.name)}</option>`).join('')}</select>${icon('chevron', 16)}</label>
-          <label class="pill-select" title="Model or stack">${icon(target.startsWith('stack:') ? 'layers' : 'cpu', 16)}<select id="pick-model" aria-label="Model or stack">${S.targets.length ? targetOptions(target) : '<option value="">No models yet</option>'}<option value="__infuse">✨ Infuse several AIs…</option><option value="__get">＋ Get more models…</option></select>${icon('chevron', 16)}</label>
+          <label class="pill-select" title="Model or stack">${icon(target.startsWith('stack:') ? 'layers' : 'cpu', 16)}<select id="pick-model" aria-label="Model or stack">${!a.target && S.data.prefs.autoRoute !== false && S.targets.length > 1 ? `<option value="__auto" ${autoOn(chat, a) ? 'selected' : ''}>✨ Automatic</option>` : ''}${S.targets.length ? targetOptions(autoOn(chat, a) ? '' : target) : '<option value="">No models yet</option>'}<option value="__infuse">✨ Infuse several AIs…</option><option value="__get">＋ Get more models…</option></select>${icon('chevron', 16)}</label>
           <button class="net-pill ${S.config?.offline ? 'off' : ''}" id="net-pill" role="switch" aria-checked="${!S.config?.offline}" title="${S.config?.offline ? 'Offline: nothing leaves this PC. Click to go online.' : 'Online: web search, cloud AIs and downloads are available. Click to go offline.'}"><span class="net-dot"></span><span>${S.config?.offline ? 'Offline' : 'Online'}</span><span class="net-sw"><i></i></span></button>
         </div>
         <div class="chat-title" title="${esc(chat.title)}">${projectChipHTML(chat)}${chat.private ? '<span class="priv-chip" title="Private chat: memory is not used or added">🔒 Private</span>' : ''}<span class="ct">${chat.messages.length && chat.title !== 'New chat' ? esc(chat.title) : ''}</span></div>
@@ -58,6 +58,7 @@ views.chat = {
           <div class="skill-pop" id="skill-pop" hidden></div>
           <textarea id="input" rows="1" placeholder="${esc(chat.pendingSkill ? skillById(chat.pendingSkill)?.hint || 'Add details…' : `Message ${a.name}…  Type / for skills`)}" aria-label="Message"></textarea>
           <div class="composer-bar">
+            <button class="icon-btn opts-btn" id="opts-btn" title="Options: web search, knowledge, fact check, effort, skills" aria-label="Options">${icon('plus')}</button>
             <button class="icon-btn" id="skill-btn" title="Use a skill (or type /)" aria-label="Skills">${icon('zap')}</button>
             <button class="icon-btn improve-btn" id="improve-btn" title="Improve my prompt: clearer and more complete, so the answer is better" aria-label="Improve my prompt">${icon('sparkle')}</button>
             <button class="icon-btn mic-btn ${voiceRec?.chatId === chat.id ? 'rec' : ''}" id="mic-btn" title="Voice typing: click and speak (Ctrl+Space)" aria-label="Voice typing">${icon('mic')}</button>
@@ -72,7 +73,7 @@ views.chat = {
             <button class="send-btn ${pending?.chatId === chat.id ? 'stop' : ''}" id="send" title="${pending?.chatId === chat.id ? 'Stop' : 'Send (Enter)'}" aria-label="${pending?.chatId === chat.id ? 'Stop' : 'Send'}">${icon(pending?.chatId === chat.id ? 'stop' : 'send', 20)}</button>
           </div>
         </div>
-        <div class="composer-hint">Runs on ${esc(targetLabel(target))}${chatEtaHint(target, a)}${chatHasSettings(chat) ? ' · <a href="#" data-chat-settings>custom settings</a>' : ''}${chat.messages.length ? ` · ${contextMeterHTML(chat, a)}` : ' · Drop or paste photos, video, PDF, Word, Excel or PowerPoint'}</div>
+        <div class="composer-hint">${autoOn(chat, a) ? 'Automatic: the best model for each question, quick answers first' : `Runs on ${esc(targetLabel(target))}${simpleOn() ? '' : chatEtaHint(target, a)}`}${chatHasSettings(chat) ? ' · <a href="#" data-chat-settings>custom settings</a>' : ''}${chat.messages.length ? ` · ${contextMeterHTML(chat, a)}` : ' · Drop or paste photos, video, PDF, Word, Excel or PowerPoint'}</div>
       </div>
       </div>${docPanelHTML(chat) || factPanelHTML(chat)}</div>
     </div>`;
@@ -167,7 +168,7 @@ function messageHTML(chat, a, m, i) {
   return `<div class="msg assistant" data-msg="${m.id}">
     <div class="av" aria-hidden="true">${esc(a.emoji)}</div>
     <div class="msg-main">
-    <div class="who-line"><b>${esc(a.name)}</b>${model ? `<span class="who-model">${esc(model)}</span>` : ''}${alt.skillId && skillById(alt.skillId) ? `<span class="badge b-peach">⚡ ${esc(skillById(alt.skillId).name)}</span>` : ''}${alt.imported ? `<span class="badge">From ${esc(alt.imported)}</span>` : ''}${etaNow}${alt.stats?.tps && !streaming ? `<span class="who-speed" title="${esc(statsTitle(alt))}">${Math.round(alt.stats.tps * 0.75)} words/s</span>` : ''}${m.t ? `<span class="who-time">${esc(msgTime(m))}</span>` : ''}</div>
+    <div class="who-line"><b>${esc(a.name)}</b>${model ? `<span class="who-model"${alt.autoWhy ? ` title="${esc(alt.autoWhy)}"` : ''}>${alt.autoWhy ? '✨ ' : ''}${esc(model)}</span>` : ''}${alt.skillId && skillById(alt.skillId) ? `<span class="badge b-peach">⚡ ${esc(skillById(alt.skillId).name)}</span>` : ''}${alt.imported ? `<span class="badge">From ${esc(alt.imported)}</span>` : ''}${etaNow}${alt.stats?.tps && !streaming ? `<span class="who-speed" title="${esc(statsTitle(alt))}">${Math.round(alt.stats.tps * 0.75)} words/s</span>` : ''}${m.t ? `<span class="who-time">${esc(msgTime(m))}</span>` : ''}</div>
     ${metaRow(stepsHTML(alt, streaming) + toolsHTML(alt) + memoryChipHTML(alt) + (alt.reasoning ? `<details class="think chip-d"><summary>${streaming && !alt.text ? '<span class="pulse"></span>Thinking…' : '💭 Thought it through'}</summary><div>${esc(alt.reasoning)}</div></details>` : ''))}
     <div class="bubble md ${streaming ? 'streaming' : ''} ${alt.error ? 'error' : ''}">${body}</div>
     ${downloadHTML(m, alt, streaming)}
@@ -274,7 +275,7 @@ function bindChat() {
   $('#pick-model').addEventListener('change', (e) => {
     if (e.target.value === '__get') { go({ view: 'stacks' }); return; }
     if (e.target.value === '__infuse') { e.target.value = resolveTarget(chat, a); infuseModal((st) => { chat.target = `stack:${st.id}`; save(); render(); }); return; }
-    chat.target = e.target.value; save(); render();
+    chat.target = e.target.value === '__auto' ? '' : e.target.value; save(); render();
   });
   $('#tog-lib').addEventListener('click', () => { chat.library = !(chat.library ?? a.library); save(); render(); });
   $('#tog-web')?.addEventListener('click', () => {
@@ -311,6 +312,7 @@ function bindChat() {
   bindDocPanel(chat);
   $('#mic-btn').addEventListener('click', () => toggleVoice(chat));
   $('#improve-btn').addEventListener('click', () => improvePromptBox(chat));
+  $('#opts-btn').addEventListener('click', (e) => composerOptions(chat, e.currentTarget));
   $('[data-chat-settings]')?.addEventListener('click', (e) => { e.preventDefault(); chatSettings(chat); });
   scrollDown(true);
   if (!pending && !docOpen(chat)) input.focus();
@@ -469,13 +471,20 @@ function systemPrompt(a, sources, strict, chat, question = '', ctx = 16384, note
 
 async function generate(chat, rerollMsg, withTarget) {
   const a = assistantById(chat.assistantId);
-  const target = withTarget || resolveTarget(chat, a);
+  let autoWhy = '';
+  let target = withTarget || resolveTarget(chat, a);
+  if (!withTarget && autoOn(chat, a)) {
+    const q = [...chat.messages.slice(0, rerollMsg ? chat.messages.indexOf(rerollMsg) : chat.messages.length)].reverse().find((m) => m.role === 'user');
+    const pick = autoPick(chat, a, q?.text || '', (q?.attachments || []).some((x) => x.type === 'image' || x.type === 'video'));
+    if (pick.target) { target = pick.target; autoWhy = pick.why || ''; }
+  }
   if (!target) { toast('Get a model first: open the Stack Advisor.'); return; }
   let msg = rerollMsg;
   let upTo;
   if (msg) { upTo = chat.messages.indexOf(msg); msg.alts.push({ text: '', target }); msg.altIndex = msg.alts.length - 1; }
   else { upTo = chat.messages.length; msg = { id: uid(), t: now(), role: 'assistant', alts: [{ text: '', target }], altIndex: 0 }; chat.messages.push(msg); }
   const alt = msg.alts[msg.altIndex];
+  if (autoWhy) alt.autoWhy = autoWhy;
   alt.status = 'Getting ready…';
   alt.t0 = Date.now();
   {

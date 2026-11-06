@@ -58,6 +58,10 @@ function redPng(size = 64) {
   // Home dashboard.
   await win.waitForSelector('text=Forms to fit your work.');
   await win.waitForSelector('text=Fake GPU 8GB', { timeout: 30000 });
+  // Most checks below use the full view (every option on screen); the simple view, which is the
+  // default, is checked near the end.
+  assert.equal(await win.evaluate(() => S.data.prefs.simple), true, 'simple view is the default');
+  await win.evaluate(() => { S.data.prefs.simple = false; S.data.prefs.autoRoute = false; applyPrefs(); save(); render(); });
   await win.waitForSelector('text=and added it. Ready to use', { timeout: 30000 });
   console.log('✓ home (model from another app added automatically)');
   await shot(win, '01-home');
@@ -106,21 +110,21 @@ function redPng(size = 64) {
   console.log('✓ stacks: how it works, three strengths with accuracy, cloud boost with savings');
   // Stacks for specific work: 27 ready-made teams; set one up and chat with it.
   await win.waitForSelector('.rx-card:has-text("Isolated medical journal")');
-  assert.equal(await win.locator('.rx-card').count(), 40);
+  assert.equal(await win.locator('.rx-card').count(), 30);
   await win.click('.rx-card:has-text("Invoices, receipt reading") [data-rx]');
   await win.waitForFunction(() => S.data.assistants.some((a) => a.id === 'as-rx-bookkeeping'), null, { timeout: 30000 });
   // Song creation: 13 teams, each tuned to this PC (no model that won't run here; a speed helper
   // for leads that can use one). The song doctor debates before it answers.
-  await win.waitForSelector('.rx-card:has-text("Complete song: lyrics, chords")');
-  const tuned = await win.evaluate(() => STACK_RECIPES.filter((r) => r.group === 'songs').map((r) => ({ id: r.id, parts: rxResolve(r).parts.filter((p) => p.kind === 'model').map((p) => ({ id: p.id, from: p.from, helper: p.helper, rating: S.est?.text?.[p.id]?.rating || S.est?.media?.[p.id]?.rating })) })));
-  assert.equal(tuned.length, 13);
+  await win.waitForSelector('.rx-card:has-text("Songwriter: any genre")');
+  const tuned = await win.evaluate(() => STACK_RECIPES.filter((r) => r.id.startsWith('song-')).map((r) => ({ id: r.id, parts: rxResolve(r).parts.filter((p) => p.kind === 'model').map((p) => ({ id: p.id, from: p.from, helper: p.helper, rating: S.est?.text?.[p.id]?.rating || S.est?.media?.[p.id]?.rating })) })));
+  assert.equal(tuned.length, 3);
   for (const r of tuned) for (const p of r.parts) assert.notEqual(p.rating, 'wont', `${r.id}: ${p.id} won't run here`);
   console.log('  tuned for this PC:', tuned.flatMap((r) => r.parts.filter((p) => p.from || p.helper).map((p) => `${r.id}: ${p.helper ? `+${p.id} (speed helper)` : `${p.from}→${p.id}`}`)).join('; ') || 'as listed');
   await win.click('.rx-card:has-text("Song doctor") [data-rx]');
   await win.waitForFunction(() => S.data.assistants.some((a) => a.id === 'as-rx-song-doctor'), null, { timeout: 30000 });
   assert.equal(await win.evaluate(async () => (await qs.call('stacks:list')).find((x) => x.id === 'rx-song-doctor')?.members.mode), 'debate');
   assert.equal(await win.evaluate(() => S.data.assistants.find((a) => a.id === 'as-rx-song-doctor').skill), 'song-critique');
-  console.log('✓ stacks for specific work: 40 teams incl. 13 for songs, tuned to this PC, set up as a stack and an assistant');
+  console.log('✓ stacks for specific work: 30 teams incl. 3 song stacks (any genre), tuned to this PC, set up as a stack and an assistant');
 
   // Chat with the powerhouse stack, a spreadsheet attached and fact check on.
   await win.click('[data-nav="newchat"]');
@@ -585,6 +589,31 @@ function redPng(size = 64) {
   await win.waitForSelector('.menu [data-f="docx"]');
   await win.keyboard.press('Escape');
   console.log('✓ answer area: follow-ups, more menu, save as');
+
+  // Simple view: a short sidebar, a clean message box, and the best model picked per question.
+  await win.evaluate(() => { S.data.prefs.simple = true; S.data.prefs.autoRoute = true; S.data.prefs.navMore = false; applyPrefs(); save(); });
+  await win.click('[data-nav="newchat"]');
+  assert.ok(!(await win.isVisible('.nav [data-nav="models"]')), 'Models is under More');
+  assert.ok(!(await win.isVisible('#tog-web')) && !(await win.isVisible('#pick-effort')), 'options are tucked away');
+  await win.click('#nav-more');
+  await win.waitForSelector('.nav [data-nav="models"]', { state: 'visible' });
+  await win.click('#nav-more');
+  await win.selectOption('#pick-assistant', 'as-general');
+  assert.equal(await win.inputValue('#pick-model'), '__auto');
+  await win.click('#opts-btn');
+  await win.click('.opts-menu [data-o="tog-fact"]');
+  await win.waitForSelector('#tog-fact.on', { state: 'visible' }); // a switched-on option shows as a chip
+  await win.click('#tog-fact');
+  await shot(win, '20-simple-view');
+  // A photo goes to a model that can see it.
+  await win.setInputFiles('#file-in', { name: 'dot.png', mimeType: 'image/png', buffer: Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==', 'base64') });
+  await win.waitForSelector('.attach:has-text("dot.png")');
+  await win.fill('#input', 'What colour is this?');
+  await win.keyboard.press('Enter');
+  await idle();
+  const picked = await win.evaluate(() => { const m = chatById(S.route.id).messages.at(-1); return m.alts[m.altIndex].target; });
+  assert.ok(await win.evaluate((t) => S.speed.targets[t]?.vision, picked), `a model that can see answered (${picked})`);
+  console.log('✓ simple view: short sidebar, options under ＋, automatic model choice (photo →', picked + ')');
 
   if (errors.length) console.log('PAGE ERRORS:', errors);
   assert.deepEqual(errors, []);

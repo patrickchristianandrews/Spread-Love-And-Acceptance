@@ -8,8 +8,9 @@ const engineProg = {};
 views.settings = {
   html() {
     const tabs = { general: 'General', chat: 'Chat & accuracy', memory: 'Memory', voice: 'Voice', phone: 'Phone', web: 'Web search', api: 'API server', engines: 'Engines', accounts: 'Accounts' };
+    const adv = new Set(['web', 'api', 'engines', 'accounts', 'phone']);
     return `<div class="page"><div class="page-head"><h1>Settings</h1></div>
-      <div class="tabs">${Object.entries(tabs).map(([k, l]) => `<button class="tab ${setTab === k ? 'active' : ''}" data-set-tab="${k}">${l}</button>`).join('')}</div>
+      <div class="tabs">${Object.entries(tabs).filter(([k]) => !simpleOn() || !adv.has(k) || setTab === k).map(([k, l]) => `<button class="tab ${setTab === k ? 'active' : ''}" data-set-tab="${k}">${l}</button>`).join('')}</div>
       <div style="max-width:860px">${({ general: generalHTML, chat: chatSetHTML, memory: memSetHTML, voice: voiceSetHTML, phone: phoneSetHTML, web: webHTML, api: apiSrvHTML, engines: enginesHTML, accounts: accountsHTML })[setTab]()}</div></div>`;
   },
   bind() {
@@ -22,6 +23,8 @@ const P = () => S.data.prefs;
 
 function generalHTML() {
   return `<div class="stack-v">
+    <div class="field"><label>View</label><div class="row">${[[true, 'Simple'], [false, 'Full']].map(([v, l]) => `<button class="btn small ${simpleOn() === v ? 'on' : ''}" data-simple="${v}">${l}</button>`).join('')}</div><span class="help">Simple shows what most people need; everything else is under More in the sidebar and the ＋ in the message box. Full shows every option.</span></div>
+    <label class="row"><input type="checkbox" id="g-auto" ${S.data.prefs.autoRoute !== false ? 'checked' : ''}> <span><b>Pick the best model for each question automatically</b> <span class="help">quick answers first; the team works on hard questions when it can still answer in about a minute</span></span></label>
     <div class="field"><label for="g-name">Your name</label><input id="g-name" value="${esc(P().userName)}" placeholder="Optional"></div>
     <div class="field"><label for="g-about">About you</label><span class="help">Optional. Shared with your assistants so answers fit you (for example your role, company or preferences).</span><textarea id="g-about" rows="3">${esc(P().about)}</textarea></div>
     <div class="field"><label>Appearance</label><div class="row">${[['dark', 'Dark'], ['light', 'Light'], ['system', 'Match Windows']].map(([k, l]) => `<button class="btn small ${(P().theme || 'dark') === k ? 'on' : ''}" data-theme-set="${k}">${l}</button>`).join('')}</div></div>
@@ -34,6 +37,8 @@ function generalHTML() {
 const memSetHTML = () => `<p class="lede" style="margin-top:0">What your assistants remember about you, across all chats. Click a line to change it.</p><div id="mem-box">${memoryManagerHTML()}</div>`;
 function bindMemSet() { const box = $('#mem-box'); const repaint = () => { box.innerHTML = memoryManagerHTML(); bindMemoryManager(box, repaint); }; bindMemoryManager(box, repaint); }
 function bindGeneral() {
+  $$('[data-simple]').forEach((b) => b.addEventListener('click', () => { P().simple = b.dataset.simple === 'true'; applyPrefs(); save(); render(); }));
+  $('#g-auto').addEventListener('change', (e) => { P().autoRoute = e.target.checked; save(); });
   bindUpdateBox();
   bindImport();
   $$('[data-theme-set]').forEach((b) => b.addEventListener('click', () => { P().theme = b.dataset.themeSet; applyPrefs(); save(); render(); }));

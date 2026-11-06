@@ -31,67 +31,25 @@ const SUNO = (role) => rxX('Suno v4 / Udio', role, 'Neither has an official publ
 const VEO = (role) => rxX('Veo 2 / Runway Gen-3', role, 'Cloud video APIs aren\'t connected in Quicksilver yet.');
 
 const RX_GROUPS = [
-  ['songs', '🎶 Song creation'], ['music', '🎵 Music, audio, voice & podcasts'], ['office', '📊 Office, Excel & bookkeeping'], ['research', '🔬 Medical, science & academic research'],
+  ['music', '🎵 Music, audio, voice & podcasts'], ['office', '📊 Office, Excel & bookkeeping'], ['research', '🔬 Medical, science & academic research'],
   ['photo', '🎨 Photos, editing & e-commerce'], ['video', '🎬 Video & short-form content'], ['code', '💻 Coding, apps & security'],
   ['writing', '✍️ Writing, books & marketing'], ['finance', '💰 Finance, tax & contracts'], ['learn', '🎓 Tutoring & languages'], ['games', '🎮 Games, D&D & game development'],
 ];
 
 const STACK_RECIPES = [
-  // ---------- Song creation ----------
-  // Two writers draft, the lead combines the best lines. Models step up automatically on PCs
-  // that can run stronger ones smoothly (see rxResolve).
-  { id: 'song-complete', group: 'songs', where: 'local', name: 'Complete song: lyrics, chords, melody & demo beat', icon: '🎶', temperature: 0.85,
-    parts: [rxM('gemma-2-9b', 'Lyricist (imagery & story)', 'creative'), rxM('qwen3-8b', 'Co-writer: structure, rhyme & chords', 'creative'), rxT('melody', 'Melody guide'), rxT('beats', 'Demo backing track', 'MusicGen Stereo')],
+  // ---------- Music: three song stacks, each for a different job (any genre) ----------
+  { id: 'song-complete', group: 'music', where: 'local', name: 'Songwriter: any genre, with chords, melody & a demo beat', icon: '🎶', temperature: 0.85,
+    parts: [rxM('gemma-2-9b', 'Lyricist', 'creative'), rxM('qwen3-8b', 'Co-writer: structure, rhyme & chords', 'creative'), rxT('melody', 'Melody guide'), rxT('beats', 'Demo beat', 'MusicGen Stereo')],
     lead: 'qwen3-8b', skill: 'song-writer',
-    instructions: 'You are a professional songwriter. Write complete, original songs: a title, key, tempo (bpm) and feel; then labelled sections (Verse 1, Pre-chorus, Chorus, Verse 2, Bridge, Final chorus) with chord symbols above the lyric lines. Make the chorus a short, singable hook that repeats. Use concrete images instead of clichés, keep syllable counts consistent between matching lines, and use rhyme on purpose (perfect rhymes in the chorus, slant rhymes allowed in verses). End with a melody note (range, where it rises, the hook rhythm) and an arrangement note. Never copy existing lyrics.' },
-  { id: 'song-rap', group: 'songs', where: 'local', name: 'Rap, hip-hop & drill writer with beats', icon: '🎙️', temperature: 0.9,
-    parts: [rxM('mistral-nemo-12b', 'Bars, wordplay & punchlines', 'creative'), rxM('qwen3-8b', 'Flow, rhyme scheme & syllable checker', 'general'), rxT('beats', 'Trap & boom-bap beats', 'MusicGen Stereo')],
-    lead: 'qwen3-8b', skill: 'rap-verse',
-    instructions: 'You are a skilled rap writer. Write original verses with multisyllabic and internal rhymes, a clear flow (mark stresses or bar counts when useful), strong punchlines, wordplay and a memorable hook. Keep 16-bar verses to 16 bars. Match the requested style (boom-bap, trap, drill, conscious, melodic) and suggest a tempo and beat feel. No copying existing lyrics.' },
-  { id: 'song-pop', group: 'songs', where: 'local', name: 'Pop, K-pop & radio hit lab', icon: '✨', temperature: 0.85,
-    parts: [rxM('gemma-3-12b', 'Hook & topline writer', 'creative'), rxM('llama-3.1-8b', 'Chorus doctor (catchier, simpler)', 'creative'), rxT('melody', 'Hook melody'), rxT('beats', 'Pop / dance demo beat', 'MusicGen Stereo')],
-    lead: 'gemma-3-12b', skill: 'song-writer',
-    instructions: 'You write modern pop hits. Lead with the hook: a short title phrase sung in the chorus, repeated. Keep verses conversational and specific, pre-chorus building tension, chorus simple and big, a post-chorus chant or tag if it fits. Give chords, tempo and a reference feel (without naming or copying real songs), plus a topline melody description. Offer two alternative hooks.' },
-  { id: 'song-acoustic', group: 'songs', where: 'local', name: 'Singer-songwriter, folk & acoustic (guitar & piano)', icon: '🎸', temperature: 0.8,
-    parts: [rxM('gemma-2-9b', 'Storyteller lyricist', 'creative'), rxM('qwen3-4b', 'Chord charts, capo & strumming', 'general'), rxT('melody', 'Melody guide')],
-    lead: 'gemma-2-9b', skill: 'chords',
-    instructions: 'You are a singer-songwriter and accompanist. Write intimate, honest lyrics with a narrative arc, then a full chord chart with capo position, strumming or fingerpicking pattern, and easy voicings for guitar and piano. Suggest a key that suits the singer\'s range when they mention it.' },
-  { id: 'song-country', group: 'songs', where: 'local', name: 'Country, Americana & story songs', icon: '🤠', temperature: 0.8,
-    parts: [rxM('gemma-2-9b', 'Story & twist writer', 'creative'), rxM('llama-3.1-8b', 'Hook & title-line editor', 'creative'), rxT('melody', 'Melody guide')],
-    lead: 'gemma-2-9b', skill: 'song-writer',
-    instructions: 'You write country and Americana songs. Build each song around a strong title line that lands at the end of the chorus and changes meaning by the last chorus. Use specific places, objects and small details, a clear story across the verses, and simple I–IV–V-style progressions (with a nod to the requested sub-style). Keep it original.' },
-  { id: 'song-edm', group: 'songs', where: 'local', name: 'EDM, house & techno producer: drops, arrangement & sound design', icon: '🎛️', temperature: 0.75,
-    parts: [rxM('qwen3-8b', 'Arrangement & sound-design planner', 'general'), rxM('llama-3.2-3b', 'Vocal chop & hook lines', 'creative'), rxT('beats', 'House & dance beats', 'MusicGen Stereo'), rxT('loudness', 'Loudness & mix check')],
-    lead: 'qwen3-8b', skill: 'make-beat',
-    instructions: 'You are an electronic music producer. Plan tracks bar by bar (intro, build, drop, breakdown, second drop, outro) with tempo, key, synth patches (oscillators, filters, envelopes), drum programming, sidechain and FX automation, and short vocal hooks. Make beats when asked, and explain mixing and mastering steps for any DAW.' },
-  { id: 'song-score', group: 'songs', where: 'local', name: 'Film, game & trailer score composer', icon: '🎬', temperature: 0.7,
-    parts: [rxM('qwen3-14b', 'Composer: themes, cues & orchestration', 'general'), rxM('gemma-2-9b', 'Story & emotion map', 'creative'), rxT('melody', 'Theme sketches')],
-    lead: 'qwen3-14b', skill: 'score-cue',
-    instructions: 'You are a media composer. From a scene, story or game level, write a cue sheet (timing, emotion, tempo, key), leitmotifs with melodic shape and chords, orchestration (which sections carry what), dynamics and transitions, and how the music loops or adapts for games. Sketch themes as melodies when useful.' },
-  { id: 'song-doctor', group: 'songs', where: 'local', name: 'Song doctor: honest critique, rewrite & polish', icon: '🩺', temperature: 0.6, mode: 'debate',
-    parts: [rxM('deepseek-r1-qwen3-8b', 'Critic: structure, rhyme & prosody', 'reasoning'), rxM('gemma-2-9b', 'Rewriter: stronger lines & hook', 'creative')],
+    instructions: 'You are a professional songwriter who writes in any genre: pop, rap, rock, country, folk, R&B, EDM, worship, musical theatre and more. Work out the genre and mood from the request (ask only if it is unclear) and follow that genre\'s conventions: rap gets multisyllabic rhymes and flow, pop a short repeated hook, country a title line with a twist, folk a story. Give a title, key, tempo and feel; labelled sections (Verse, Pre-chorus, Chorus, Bridge) with chord symbols above the lyrics; a strong, singable hook; concrete images instead of clichés; matching syllable counts in matching lines. End with a short melody note and arrangement note. Never copy existing lyrics.' },
+  { id: 'song-doctor', group: 'music', where: 'local', name: 'Song doctor: critique, rewrite & translate lyrics', icon: '🩺', temperature: 0.6, mode: 'debate',
+    parts: [rxM('deepseek-r1-qwen3-8b', 'Critic: structure, rhyme & flow', 'reasoning'), rxM('gemma-2-9b', 'Rewriter: stronger lines & hook', 'creative')],
     lead: 'gemma-2-9b', skill: 'song-critique',
-    instructions: 'You are a song doctor. Review the user\'s song honestly but kindly: what works, then the biggest problems (hook strength, structure, clichés, rhyme and syllable flow, prosody: stresses landing on the beat), then a rewritten version that keeps their voice and meaning. Mark what you changed and why.' },
-  { id: 'song-translate', group: 'songs', where: 'local', name: 'Singable lyric translation & adaptation', icon: '🌍', temperature: 0.6,
-    parts: [rxM('qwen2.5-7b', 'Translator (many languages)', 'general'), rxM('gemma-3-12b', 'Singability & rhyme editor', 'creative')],
-    lead: 'gemma-3-12b', skill: 'song-translate',
-    instructions: 'You adapt song lyrics into other languages so they can be sung to the same melody: keep syllable counts and stresses per line, keep the rhymes where it matters (end of chorus lines), and keep the meaning and feeling rather than translating word for word. Show the singable version, then a literal translation for comparison.' },
-  { id: 'song-jingle', group: 'songs', where: 'local', name: 'Jingles, ads, kids\' songs & party songs', icon: '🎈', temperature: 0.9,
-    parts: [rxM('llama-3.2-3b', 'Catchy short lyrics', 'creative'), rxM('qwen3-4b', 'Brand & age check', 'general'), rxT('melody', 'Jingle melody'), rxT('beats', 'Backing loop')],
-    lead: 'qwen3-4b', skill: 'jingle',
-    instructions: 'You write short, catchy songs: brand jingles (5–30 seconds, the name sung clearly), kids\' songs (simple words, actions, repetition), birthday and party songs (with the person\'s name). Keep lines short and singable, add a melody guide, and make several options.' },
-  { id: 'song-arranger', group: 'songs', where: 'local', name: 'Band, choir & harmony arranger', icon: '🎺', temperature: 0.5,
-    parts: [rxM('qwen3-14b', 'Arranger: voicings & parts', 'general'), rxM('deepseek-r1-qwen3-8b', 'Theory checker (voice leading & ranges)', 'reasoning')],
-    lead: 'qwen3-14b', skill: 'chords',
-    instructions: 'You arrange songs for bands and choirs: SATB or close harmony parts, horn and string lines, bass lines, and charts in chord symbols or the Nashville number system. Respect instrument and voice ranges, use smooth voice leading, and explain any music theory in plain words.' },
-  { id: 'song-release', group: 'songs', where: 'local', name: 'Song release kit: cover art, visualizer & promo', icon: '💿', temperature: 0.8,
-    parts: [rxM('qwen3-8b', 'Release copy, captions & bio', 'creative'), rxM('sdxl-turbo', 'Cover art'), rxM('wan2.1-1.3b', 'Looping visualizer clip')],
-    lead: 'qwen3-8b', skill: 'cover-art',
-    instructions: 'You help artists release music: cover art concepts and prompts (square, bold, readable at thumbnail size, no copyrighted characters), a short looping visualizer idea, release captions for each social platform, a short artist bio, and a release-week plan.' },
-  { id: 'song-cloud', group: 'songs', where: 'hybrid', name: 'Sung vocals & full tracks (with cloud music services)', icon: '🎤',
-    parts: [rxM('gemma-2-9b', 'Local lyricist (your words stay on your PC)', 'creative'), rxC('elevenlabs', 'Sung vocals & full tracks', 'ElevenLabs (MCP server)'), SUNO('Full vocal song'), rxT('loudness', 'Loudness & cleanup')],
-    lead: 'gemma-2-9b', skill: 'song-writer', temperature: 0.85,
-    instructions: 'You write songs ready for an AI vocal or music service: final lyrics with section tags in [brackets], a style prompt (genre, mood, tempo, instruments, vocal type) under 200 characters, and an alternate version. Keep everything original.' },
+    instructions: 'You are a song doctor. For feedback: say what works, then the biggest problems (hook, structure, clichés, rhyme and syllable flow, stresses landing on the beat), then a rewritten version that keeps the writer\'s voice, with changes in bold. For translation: make it singable to the same melody (same syllables and stresses per line, rhymes kept where they matter), then give a literal translation underneath.' },
+  { id: 'song-score', group: 'music', where: 'local', name: 'Soundtrack & jingle composer: film, games & ads', icon: '🎬', temperature: 0.75,
+    parts: [rxM('qwen3-14b', 'Composer: themes, cues & orchestration', 'general'), rxM('gemma-2-9b', 'Story & mood', 'creative'), rxT('melody', 'Theme sketches')],
+    lead: 'qwen3-14b', skill: 'score-cue',
+    instructions: 'You compose music for picture, games and brands. For a scene or level: a cue sheet (timing, emotion, tempo, key), a memorable theme with chords, orchestration and how it builds or loops. For a jingle or ad: several short, catchy options with the name sung clearly, a tempo and a melody guide. Sketch themes as playable melodies when useful.' },
 
   // ---------- Music, audio, voice & podcasts ----------
   { id: 'music-producer', group: 'music', where: 'local', name: 'Music producer, beat maker & stem splitter', icon: '🎚️',
@@ -306,8 +264,11 @@ function recipeCard(r) {
 }
 
 function recipesHTML() {
-  return `<div class="section"><h2>Stacks for specific work</h2><span class="small muted">${STACK_RECIPES.length} ready-made teams. ✓ ready · ⬇ downloads · ☁ needs a cloud connection · – not in Quicksilver yet</span></div>
-    ${RX_GROUPS.map(([g, label]) => { const list = STACK_RECIPES.filter((r) => r.group === g); return list.length ? `<h3 class="int-group">${esc(label.replace(/^\S+\s/, ''))}</h3><div class="cards rx-grid">${list.map(recipeCard).join('')}</div>` : ''; }).join('')}`;
+  if (simpleOn()) return `<details class="rx-fold"><summary><span><b>Ready-made stacks for specific work</b> <span class="small muted">${STACK_RECIPES.length} teams: music, office, research, photos, video, code, writing, finance, tutoring, games</span></span></summary>${recipesBody()}</details>`;
+  return `<div class="section"><h2>Stacks for specific work</h2><span class="small muted">${STACK_RECIPES.length} ready-made teams. ✓ ready · ⬇ downloads · ☁ needs a cloud connection · – not in Quicksilver yet</span></div>${recipesBody()}`;
+}
+function recipesBody() {
+  return `${RX_GROUPS.map(([g, label]) => { const list = STACK_RECIPES.filter((r) => r.group === g); return list.length ? `<h3 class="int-group">${esc(label.replace(/^\S+\s/, ''))}</h3><div class="cards rx-grid">${list.map(recipeCard).join('')}</div>` : ''; }).join('')}`;
 }
 
 async function setUpRecipe(id) {

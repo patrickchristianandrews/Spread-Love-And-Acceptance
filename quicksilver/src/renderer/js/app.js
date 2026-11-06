@@ -3,7 +3,7 @@
 
 const DEFAULT_PREFS = {
   userName: '', about: '', textSize: 'normal', defaultTarget: '', temperature: 0.6, contextSize: 16384, maxTokens: 4096,
-  gpu: 'auto', effort: 'medium', effortLevel: 'thorough', theme: 'dark', factCheck: false, factChecker: '', lastAssistant: 'as-general', sourcesPerAnswer: 8,
+  gpu: 'auto', effort: 'medium', effortLevel: 'thorough', simple: true, autoRoute: true, theme: 'dark', factCheck: false, factChecker: '', lastAssistant: 'as-general', sourcesPerAnswer: 8,
 };
 
 // More ready-made assistants for everyday uses. Each borrows the settings of the stack type that
@@ -43,6 +43,7 @@ const systemDark = window.matchMedia('(prefers-color-scheme: dark)');
 systemDark.addEventListener?.('change', () => S.data && applyPrefs());
 function applyPrefs() {
   applySideSize();
+  applySimple();
   const t = S.data.prefs.theme || 'dark';
   document.documentElement.dataset.theme = t === 'system' ? (systemDark.matches ? 'dark' : 'light') : t;
   const tb = document.getElementById('theme-btn');
