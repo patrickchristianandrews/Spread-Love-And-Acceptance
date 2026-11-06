@@ -441,7 +441,10 @@ async function explainStack(id) {
     if (p.kind === 'local') {
       const m = models.get(p.id);
       const prof = catalog.profileInstalled(m);
-      return { target: t, name: m.name, prof, est: catalog.estimateText(prof, hw, calib), vision: prof.vision, local: true };
+      const est = catalog.estimateText(prof, hw, calib);
+      const real = require('./speeds').measured()[m.id];
+      if (real) Object.assign(est, { tps: real.tps, wordsPerSec: real.tps * 0.75, measured: true });
+      return { target: t, name: m.name, prof, est, vision: prof.vision, local: true };
     }
     return { target: t, name: label(t), prof: { id: t, jobs: { general: 8, coding: 8, research: 8 }, judge: 8, vision: canSee(t) }, est: { fit: 'cloud', rating: 'great', label: 'Fast', wordsPerSec: 40 }, vision: canSee(t), local: false };
   };
@@ -462,7 +465,7 @@ async function explainStack(id) {
   const quality = Math.max(...all.map((x) => catalog.scoreFor(x.prof, 'general')));
   return {
     id: st.id, name: st.name, emoji: st.emoji || '🧩', auto,
-    members: all.map((x) => ({ name: x.name, roles: roles(x), where: WHERE[x.est.fit] || x.est.fit, speed: x.est.label, rating: x.est.rating, wps: Math.round(wps(x)), vision: x.vision })),
+    members: all.map((x) => ({ name: x.name, roles: roles(x), where: WHERE[x.est.fit] || x.est.fit, speed: x.est.label, rating: x.est.rating, wps: Math.round(wps(x)), vision: x.vision, measured: Boolean(x.est.measured) })),
     lead: lead.name, second: drafters.find((d) => !same(d, lead))?.name || null, eyes: eyes && !same(eyes, lead) ? eyes.name : (lead.vision ? lead.name : null),
     times: { simple, hard: full, photo: eyes ? photo : null },
     stars: catalog.starsFor(quality, all.length >= 2),

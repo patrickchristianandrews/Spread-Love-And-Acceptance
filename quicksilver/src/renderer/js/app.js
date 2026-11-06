@@ -224,6 +224,17 @@ async function startupModels() {
     const t = resolveTarget(null, assistantById(p.lastAssistant));
     if (t) qs.call('models:warm', t, { contextSize: p.contextSize, gpu: p.gpu }).catch(() => {});
   }
+  // Measured speeds: if no answer has been timed on this PC yet, run a short speed test once the
+  // app is idle, so every "~6 s" on screen is real rather than estimated.
+  setTimeout(async () => {
+    try {
+      if (S.speed && Object.values(S.speed.targets).some((x) => x.measured)) return;
+      if (pending || !S.installed.some((m) => m.kind === 'text')) return;
+      await qs.call('bench:run');
+      await refreshModels();
+      if (['home', 'compare', 'pc'].includes(S.route.view)) render();
+    } catch {}
+  }, 25000);
 }
 
 init().catch((err) => { document.body.innerHTML = `<div style="padding:40px;font:16px system-ui"><h1>Quicksilver couldn't start</h1><pre>${String(err?.stack || err).replace(/</g, '&lt;')}</pre></div>`; });

@@ -53,7 +53,7 @@ function bestSetupHTML() {
   return `<div class="card hero best-setup">
     ${head(`${esc(q.emoji)} ${esc(q.name)} ${starsHTML(q.stars)}`, `🖥️ Your PC: ${hwText(o.hardware)}`)}
     <div class="bs-grid">
-      <div class="bs-col"><h4>The team on this PC</h4>${q.members.map((m) => `<div class="bs-member"><b>${esc(m.name)}</b><div class="row bs-tags">${m.roles.map((r) => ROLE_TAG[r]).join('')}</div><div class="small muted">Runs on the ${esc(m.where)} · <span class="rate-${m.rating}">${esc(m.speed)}</span> · ~${m.wps} words/s</div></div>`).join('')}</div>
+      <div class="bs-col"><h4>The team on this PC</h4>${q.members.map((m) => `<div class="bs-member"><b>${esc(m.name)}</b><div class="row bs-tags">${m.roles.map((r) => ROLE_TAG[r]).join('')}</div><div class="small muted">Runs on the ${esc(m.where)} · <span class="rate-${m.rating}">${esc(m.speed)}</span> · ~${m.wps} words/s ${m.measured ? '<span class="meas" title="Timed on this PC from real answers">✓ measured</span>' : '<span class="muted" title="Calculated from your hardware; becomes exact after the first answers">(estimate)</span>'}</div></div>`).join('')}</div>
       <div class="bs-col"><h4>How it works</h4>${flow.map(([ic, t, d, sec]) => `<div class="bs-flow"><span class="bs-ic">${ic}</span><div class="grow"><b>${t}</b><div class="small">${d}</div></div>${timeChip(sec, '')}</div>`).join('')}</div>
       <div class="bs-col"><h4>What it can do here</h4>${capsHTML(q.caps)}</div>
     </div>

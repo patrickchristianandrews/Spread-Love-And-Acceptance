@@ -248,6 +248,52 @@ async function collect(gen) {
   global.fetch = realFetch;
   console.log('✓ GitHub connector: connect, list issues, create issue (approved)');
 
+  // Measured speeds: real answers are timed per model and re-tune every estimate.
+  {
+    const speeds = require('../src/main/speeds');
+    store.saveConfig({ measured: {}, calib: { text: 1, media: 1 } });
+    // The stand-in engine reports 42.5 tokens/s.
+    await collect(complete.run('local:qwen3-8b', { messages: [{ role: 'user', content: 'Tell me a longer story about the sea and a lighthouse keeper named Ada who loves her work deeply' }], contextSize: 2048, maxTokens: 64 }));
+    const m = speeds.measured()['qwen3-8b'];
+    assert.ok(m && Math.abs(m.tps - 42.5) < 0.01 && m.n === 1, 'the answer was timed');
+    assert.ok(store.config().calib.text !== 1, 'estimates re-tuned from the measurement');
+    assert.equal(speeds.record('qwen3-8b', 100, 5, 40), null, 'very short answers are not used');
+    speeds.record('qwen3-8b', 52.5, 64, 40);
+    assert.ok(Math.abs(speeds.measured()['qwen3-8b'].tps - (42.5 * 0.6 + 52.5 * 0.4)) < 0.01, 'smoothed across answers');
+    store.saveConfig({ measured: {}, calib: { text: 1, media: 1 } });
+    console.log('✓ measured speeds: answers timed, estimates re-tuned');
+  }
+
+  // Free web search (no key): DuckDuckGo's HTML page, Mojeek as backup, then the top pages are read.
+  {
+    const websearch = require('../src/main/websearch');
+    const real = global.fetch;
+    const ddg = `<div class="result results_links web-result"><h2 class="result__title"><a rel="nofollow" class="result__a" href="//duckduckgo.com/l/?uddg=https%3A%2F%2Fen.wikipedia.org%2Fwiki%2FParis&amp;rut=abc">Paris - <b>Wikipedia</b></a></h2>
+      <a class="result__snippet" href="//duckduckgo.com/l/?uddg=x">Paris is the <b>capital</b> of France.</a><div class="clear"></div></div>
+      <div class="result"><a href="https://duckduckgo.com/y.js?ad_domain=x" class="result__a">Ad</a></div>
+      <div class="result"><a href="//duckduckgo.com/l/?uddg=https%3A%2F%2Fexample.org%2Ffrance" class="result__a" rel="nofollow">France facts</a><div class="result__snippet">France, officially the French Republic.</div></div>`;
+    const moj = '<ul class="results-standard"><li><a class="title" href="https://example.com/paris">Paris guide</a><p class="s">The <strong>capital</strong> city.</p></li></ul>';
+    let ddgDown = false;
+    global.fetch = async (url, opts) => {
+      const u = String(url);
+      if (u.includes('html.duckduckgo.com')) return ddgDown ? new Response('<p>unusual traffic</p>', { status: 200 }) : new Response(ddg, { status: 200, headers: { 'content-type': 'text/html' } });
+      if (u.includes('mojeek.com')) return new Response(moj, { status: 200, headers: { 'content-type': 'text/html' } });
+      if (u.startsWith('https://en.wikipedia.org/')) return new Response('<html><body><p>Paris is the capital and largest city of France.</p></body></html>', { status: 200, headers: { 'content-type': 'text/html' } });
+      return new Response('<p>page</p>', { status: 200, headers: { 'content-type': 'text/html' } });
+    };
+    store.saveConfig({ web: { provider: 'free' } });
+    let r = await websearch.search('capital of France');
+    assert.deepEqual(r.map((x) => x.url), ['https://en.wikipedia.org/wiki/Paris', 'https://example.org/france'], 'results decoded, ads skipped, attribute order ignored');
+    assert.equal(r[0].title, 'Paris - Wikipedia'); assert.match(r[0].snippet, /capital of France/); assert.match(r[0].text, /largest city/);
+    assert.match(r[1].snippet, /French Republic/);
+    ddgDown = true;
+    r = await websearch.search('capital of France');
+    assert.equal(r[0].url, 'https://example.com/paris', 'falls back to Mojeek');
+    global.fetch = real;
+    store.saveConfig({ web: { provider: 'none' } });
+    console.log('✓ free web search: DuckDuckGo, Mojeek fallback, pages read');
+  }
+
   // A cut-off download is caught before loading, with a clear "Repair" message (not an engine log line).
   {
     const cut = path.join(store.dir('models'), 'cut.gguf');

@@ -54,14 +54,16 @@ function hasSecret(name) { return Boolean(secrets()[name]); }
 // App settings shared by the main process (engines, API server, providers, web search).
 const DEFAULT_CONFIG = {
   apiServer: { enabled: false, port: 1337, requireKey: false },
-  web: { provider: 'none', searxngUrl: '' },
+  web: { provider: 'free', searxngUrl: '' },
   providers: [], // [{ id, preset, name, baseUrl, models: [], imageModels: [] }]
   engine: { llama: 'auto', sd: 'auto' },
   calib: { text: 1, media: 1 },
 };
 function config() {
   const c = readJSON(file('config.json'), {});
-  return { ...DEFAULT_CONFIG, ...c, apiServer: { ...DEFAULT_CONFIG.apiServer, ...c.apiServer }, web: { ...DEFAULT_CONFIG.web, ...c.web }, engine: { ...DEFAULT_CONFIG.engine, ...c.engine }, calib: { ...DEFAULT_CONFIG.calib, ...c.calib } };
+  // 2.7: web search works without a key; turn it on for everyone still on the old default (Off).
+  if (!c.webFreeDefault && c.web?.provider === 'none') c.web = { ...c.web, provider: 'free' };
+  return { ...DEFAULT_CONFIG, ...c, webFreeDefault: true, apiServer: { ...DEFAULT_CONFIG.apiServer, ...c.apiServer }, web: { ...DEFAULT_CONFIG.web, ...c.web }, engine: { ...DEFAULT_CONFIG.engine, ...c.engine }, calib: { ...DEFAULT_CONFIG.calib, ...c.calib } };
 }
 function saveConfig(patch) {
   const next = { ...config(), ...patch };

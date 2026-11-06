@@ -81,13 +81,17 @@ handle('upgrades:advise', async () => {
 handle('speed:map', async () => {
   const hw = await hardware.detect();
   const calib = store.config().calib;
+  const measuredSpeeds = require('./speeds').measured();
   const wpsOf = (t) => {
     const p = complete.parse(t);
     if (p.kind === 'api') return 40;
     if (p.kind !== 'local') return null;
     const m = models.get(p.id);
-    return m ? Math.max(0.1, catalog.estimateText(catalog.profileInstalled(m), hw, calib.text).wordsPerSec || 0.1) : null;
+    if (!m) return null;
+    const real = measuredSpeeds[m.id];
+    return Math.max(0.1, real ? real.tps * 0.75 : catalog.estimateText(catalog.profileInstalled(m), hw, calib.text).wordsPerSec || 0.1);
   };
+  const isMeasured = (t) => { const p = complete.parse(t); return p.kind === 'local' && Boolean(measuredSpeeds[p.id]); };
   // Expected quality (0-10) of each kind of output: a model's own score; for a stack, its best
   // member's, and "team" when a second model cross-checks it.
   const JOBS = ['general', 'reasoning', 'office', 'research', 'writing', 'coding', 'open'];
@@ -105,12 +109,12 @@ handle('speed:map', async () => {
     const p = complete.parse(t.target);
     if (p.kind === 'local' || p.kind === 'api') {
       const m = p.kind === 'local' && models.get(p.id);
-      out.targets[t.target] = { kind: 'model', wps: wpsOf(t.target), scores: scoresOf(t.target), vision: Boolean(t.vision), local: p.kind === 'local', ctx: m ? catalog.profileInstalled(m).ctx || 8192 : 131072, name: t.label };
+      out.targets[t.target] = { kind: 'model', wps: wpsOf(t.target), measured: isMeasured(t.target), scores: scoresOf(t.target), vision: Boolean(t.vision), local: p.kind === 'local', ctx: m ? catalog.profileInstalled(m).ctx || 8192 : 131072, name: t.label };
     }
     else if (p.kind === 'stack') {
       const m = complete.stacks().find((x) => x.id === p.id)?.members || {};
       const all = [...new Set([...(m.drafters || []), m.judge, m.vision].filter(Boolean))];
-      out.targets[t.target] = { kind: 'stack', auto: m.mode === 'auto', drafters: (m.drafters || []).map(wpsOf).filter(Boolean), judge: m.judge ? wpsOf(m.judge) : null, vision: m.vision ? wpsOf(m.vision) : null, scores: best(all.map(scoresOf)), team: all.length >= 2 };
+      out.targets[t.target] = { kind: 'stack', measured: all.some(isMeasured), auto: m.mode === 'auto', drafters: (m.drafters || []).map(wpsOf).filter(Boolean), judge: m.judge ? wpsOf(m.judge) : null, vision: m.vision ? wpsOf(m.vision) : null, scores: best(all.map(scoresOf)), team: all.length >= 2 };
     } else if (p.kind === 'kbm') out.targets[t.target] = { kind: 'kbm', base: complete.kbModels().find((k) => k.id === p.id)?.base };
   }
   for (const m of models.list().filter((x) => x.kind !== 'text')) {
@@ -142,7 +146,8 @@ handle('advisor:overview', async () => {
   const quicksilver = (await complete.ensureQuicksilverStack()) ? await complete.explainStack('quicksilver') : null;
   const yours = [];
   for (const s of complete.stacks()) if (s.id !== 'quicksilver') { const e = await complete.explainStack(s.id); if (e) yours.push(e); }
-  return { hardware: hw, quicksilver, jobs, yours };
+  const measured = require('./speeds').measured();
+  return { hardware: hw, quicksilver, jobs, yours, measuredCount: Object.keys(measured).length };
 });
 handle('advisor:advise', async (job) => {
   const hw = await hardware.detect();
@@ -166,6 +171,7 @@ handle('bench:run', async () => {
   const expected = catalog.estimateText(spec, hw, 1).tps || 1;
   const factor = Math.max(0.2, Math.min(3, tps / expected));
   store.saveConfig({ calib: { ...store.config().calib, text: factor, media: Math.max(0.3, Math.min(3, 1 / factor)) } });
+  require('./speeds').record(m.id, tps, Math.max(tokens, 24), expected);
   return { model: m.name, tps, expected, factor };
 });
 

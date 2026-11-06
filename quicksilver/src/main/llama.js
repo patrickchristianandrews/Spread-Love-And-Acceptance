@@ -7,6 +7,7 @@ const fs = require('node:fs');
 const engines = require('./engines');
 const hardware = require('./hardware');
 const oai = require('./oai');
+const speeds = require('./speeds');
 
 // ---------- GGUF header reader (layer count, context length, name) ----------
 
@@ -266,6 +267,10 @@ async function* chat(model, opts) {
       signal,
     })) {
       produced = true;
+      if (ev.type === 'stats' && model.id) {
+        // A real measurement of this model on this PC (see speeds.js).
+        try { const hw = await hardware.detect(); const reg = require('./models').get(model.id); if (reg) speeds.record(model.id, ev.tps, ev.tokens, speeds.estimateFor(reg, hw)); } catch {}
+      }
       yield ev;
     }
     s.lastUsed = Date.now();

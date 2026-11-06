@@ -599,3 +599,5 @@ select optgroup { font-weight: 800; color: var(--muted); }
 .net-pill .net-sw { width: 30px; height: 18px; }
 .net-pill .net-sw i { width: 12px; height: 12px; top: 3px; left: 15px; }
 .pickers { align-items: center; }
+
+.meas { color: var(--mint-ink); font-weight: 750; }
