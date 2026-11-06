@@ -1026,3 +1026,19 @@ code.sel { user-select: all; background: var(--soft); padding: 1px 6px; border-r
 .followups.pending .fu.ghost { width: 150px; height: 32px; padding: 0; border-color: var(--line-soft); background: linear-gradient(90deg, var(--soft) 0%, var(--hover) 50%, var(--soft) 100%); background-size: 220% 100%; animation: shimmer 1.6s linear infinite; cursor: default; }
 .followups.pending .fu.ghost:nth-child(2) { width: 190px; } .followups.pending .fu.ghost:nth-child(3) { width: 130px; }
 .followups.pending .fu.ghost::before { content: none; }
+
+.pm-grid { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+.pm-card { display: flex; flex-direction: column; }
+.pm-card .row:last-child { margin-top: auto; }
+
+/* ---------- first-visit welcome ---------- */
+.welcome-card { position: relative; border-radius: 18px; padding: 24px 26px 22px; margin-bottom: 22px; background: linear-gradient(135deg, color-mix(in srgb, var(--accent) 14%, var(--panel)), var(--panel) 60%); border: 1px solid var(--accent-line); box-shadow: var(--sh-1); }
+.welcome-card h2 { margin: 0 0 4px; font-size: 1.35rem; letter-spacing: -.01em; }
+.welcome-card > p { margin: 0 0 16px; }
+.wc-x { position: absolute; top: 12px; right: 12px; }
+.wc-steps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+@media (max-width: 1000px) { .wc-steps { grid-template-columns: 1fr; } }
+.wc-step { display: flex; gap: 12px; align-items: flex-start; text-align: left; padding: 14px 16px; border-radius: 14px; border: 1px solid var(--line-soft); background: var(--panel); color: var(--text); font: inherit; cursor: pointer; transition: border-color .15s, transform .15s; }
+.wc-step:hover { border-color: var(--accent-line); transform: translateY(-1px); }
+.wc-step > span:last-child { display: flex; flex-direction: column; gap: 3px; }
+.wc-n { width: 28px; height: 28px; flex: none; border-radius: 50%; display: grid; place-items: center; font-weight: 800; background: var(--accent); color: var(--accent-ink); }

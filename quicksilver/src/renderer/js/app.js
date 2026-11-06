@@ -82,6 +82,7 @@ views.home = {
     const api = S.apiStatus;
     const tile = (icon, k, v, sub, view) => `<button class="card" ${view ? `data-goto="${view}"` : ''} style="text-align:left"><div class="k" style="font-size:.8rem;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.05em">${icon} ${k}</div><div style="font-size:1.5rem;font-weight:800;margin:4px 0">${v}</div><div class="small muted" style="font-weight:600">${sub}</div></button>`;
     return `<div class="page">
+      ${welcomeCardHTML()}
       ${bestSetupHTML()}
       <div class="row feature-row">
         <span class="feature">${cloud ? 'Local by default, cloud only where you choose' : 'Everything runs on this PC'}</span><span class="feature">Several models as one team</span><span class="feature">Double-checking built in</span><span class="feature">Photo, video and music studio</span><span class="feature">Private knowledge bases</span><span class="feature">OpenAI-compatible local API</span>
@@ -111,8 +112,28 @@ views.home = {
     $$('[data-start]').forEach((b) => b.addEventListener('click', () => newChat(b.dataset.start)));
     $('[data-nav-new]')?.addEventListener('click', () => newChat());
     bindBestSetup();
+    $('#wc-close')?.addEventListener('click', () => { S.data.prefs.welcomed = true; save(); render(); });
+    $('#wc-chat')?.addEventListener('click', () => { S.data.prefs.welcomed = true; save(); newChat(); });
+    $('#wc-import')?.addEventListener('click', () => { setTab = 'general'; go({ view: 'settings' }); setTimeout(() => $('#imp-file')?.click(), 250); });
+    $('#wc-setup')?.addEventListener('click', () => go({ view: 'stacks' }));
   },
 };
+
+// First visits: what Quicksilver is, in three steps. Closes for good with ×.
+function welcomeCardHTML() {
+  if (S.data.prefs.welcomed) return '';
+  const name = S.data.prefs.userName;
+  return `<div class="welcome-card">
+    <button class="icon-btn sm wc-x" id="wc-close" title="Close" aria-label="Close">${icon('x', 16)}</button>
+    <h2>Welcome${name ? `, ${esc(name)}` : ''}. Your own AI, on your own computer.</h2>
+    <p class="muted">Private, free and works offline: nothing you type leaves this PC unless you connect a cloud AI.</p>
+    <div class="wc-steps">
+      <button class="wc-step" id="wc-chat"><span class="wc-n">1</span><span><b>Ask anything</b><span class="small muted">It's ready now. Type, talk (mic) or drop in a photo or file.</span></span></button>
+      <button class="wc-step" id="wc-import"><span class="wc-n">2</span><span><b>Bring your ChatGPT or Claude chats</b><span class="small muted">Carry on any conversation here, privately.</span></span></button>
+      <button class="wc-step" id="wc-setup"><span class="wc-n">3</span><span><b>Make it great at your work</b><span class="small muted">Get the best free models for what you do, fitted to this PC.</span></span></button>
+    </div>
+  </div>`;
+}
 
 async function init() {
   S.catalog = await qs.call('catalog:get');

@@ -31,6 +31,7 @@ views.stacks = {
       <div id="adv-out">${advResult ? advisorHTML(advResult) : '<div class="empty">Checking your PC and your models…</div>'}</div>
       <div class="section"><h2>Your teams</h2></div>
       ${yourStacksHTML()}
+      ${powerMovesHTML()}
       ${recipesHTML()}
     </div>`;
   },
@@ -380,6 +381,10 @@ function editStack(s) {
 const INFUSE_MODES = {
   blend: { name: 'Blend', icon: '🫧', blurb: 'Each AI answers; a lead merges the best of all of them into one answer.', cost: 'Fastest' },
   debate: { name: 'Debate', icon: '⚔️', blurb: 'Each AI answers, then critiques the others and revises; a lead judges the result.', cost: 'Most accurate, slowest' },
+  vote: { name: 'Majority vote', icon: '🗳️', blurb: 'Answers three times on its own; if two agree, that\'s the answer, otherwise it settles the difference. Best for maths and logic.', cost: 'Strong, moderate speed' },
+  redteam: { name: 'Red team', icon: '🛡️', blurb: 'One AI answers, another hunts for every mistake, the first fixes them. Best for code, facts and advice.', cost: 'Very accurate' },
+  plan: { name: 'Plan, then solve', icon: '🗺️', blurb: 'A planner breaks the task into steps; the lead follows them. Best for long, multi-step work.', cost: 'Fast' },
+  panel: { name: 'Expert panel', icon: '🎓', blurb: 'An expert, a sceptic and a creative thinker each weigh in; the lead decides. Best for decisions and plans.', cost: 'Balanced' },
   consensus: { name: 'Consensus', icon: '🤝', blurb: 'Builds on what most AIs agree on and flags where they disagree. Best for facts.', cost: 'Balanced' },
 };
 

@@ -104,14 +104,32 @@ async function collect(gen) {
     assert.match(easy.text, /Answer from phi\.gguf/, 'the lead answered alone');
     const hard = await collect(complete.run('stack:team2', { messages: [{ role: 'user', content: 'Explain why the sky is blue, step by step' }], maxTokens: 200, contextSize: 4096, level: 'thorough' }));
     const hRoles = uniq(hard.steps);
-    assert.deepEqual(hRoles.map((x) => x.role), ['draft', 'draft', 'lead']);
-    assert.match(hRoles[1].model, /Phi-4/, 'the lead drafts last, so it stays loaded');
-    assert.match(hRoles[2].label, /agreed/, 'near-identical drafts skip the combining step');
+    assert.deepEqual(hRoles.map((x) => x.role), ['draft', 'lead'], 'key points first: the helper lists points, the lead writes once');
+    assert.match(hRoles[0].label, /Key points/); assert.match(hRoles[0].model, /Qwen3/);
+    assert.match(hRoles[1].model, /Phi-4/);
+    assert.ok(hRoles[0].text.length < 400, 'the helper wrote short notes, not a whole answer');
+    // A team with no lead still writes full drafts, and skips combining when they agree.
+    complete.saveStack({ id: 'team3', name: 'Pair', members: { drafters: ['local:qwen3-8b', 'local:phi-4'], mode: 'blend' } });
+    const pair = uniq((await collect(complete.run('stack:team3', { messages: [{ role: 'user', content: 'Explain why the sky is blue, step by step' }], maxTokens: 200, contextSize: 4096, level: 'thorough' }))).steps);
+    assert.deepEqual(pair.map((x) => x.role), ['draft', 'draft', 'lead']);
+    assert.match(pair[2].label, /agreed/, 'near-identical drafts skip the combining step');
     const files = llama.status().map((x) => x.file);
     assert.equal(files.length, new Set(files).size, 'one server per model');
     assert.ok(llama.contextFor([{ role: 'user', content: 'Hi' }], 512, 32768) === 4096, 'a short chat reserves a small context');
     assert.ok(llama.contextFor([{ role: 'user', content: 'x'.repeat(60000) }], 2048, 32768) >= 16384, 'a long one gets more');
-    console.log('✓ efficient stacks: easy questions use one model, agreement skips combining, lead drafts last, right-sized memory');
+    console.log('✓ efficient stacks: easy questions use one model, key points first on hard ones, agreement skips combining, right-sized memory');
+    // Power moves: majority vote, red team, plan then solve, expert panel.
+    const hardQ = [{ role: 'user', content: 'Explain why the sky is blue, step by step' }];
+    for (const [mode, want] of [['vote', /Attempt 1 of 3.*Attempt 3 of 3.*Majority agreed/], ['redteam', /First answer.*Red team.*(Fixing|No mistakes)/], ['plan', /Planning the answer.*Solving it step by step/], ['panel', /practical expert.*careful sceptic.*creative thinker.*Weighing the panel/]]) {
+      complete.saveStack({ id: `pm-${mode}`, name: mode, members: { drafters: ['local:qwen3-8b'], judge: 'local:phi-4', mode } });
+      const r = await collect(complete.run(`stack:pm-${mode}`, { messages: hardQ, maxTokens: 200, contextSize: 4096, level: 'thorough' }));
+      const labels = uniq(r.steps).map((x) => x.label).join(' | ');
+      assert.match(labels, want, `${mode}: ${labels}`);
+      assert.ok(r.text.length > 10, `${mode} answered`);
+    }
+    const easyPm = await collect(complete.run('stack:pm-panel', { messages: [{ role: 'user', content: 'Hi!' }], maxTokens: 100, contextSize: 4096, level: 'thorough' }));
+    assert.equal(uniq(easyPm.steps).length, 0, 'easy questions skip the power move: quick answers first');
+    console.log('✓ power moves: majority vote, red team, plan then solve, expert panel');
     // Speed: a small same-family model drafts for a big one (speculative decoding) when installed.
     assert.equal(catalog.draftFor('qwen3-8b', []), null, 'nothing to draft with yet');
     const tinyDraft = { id: 'q17', catalogId: 'qwen3-1.7b', files: { model: path.join(dir, 'qwen.gguf') } };

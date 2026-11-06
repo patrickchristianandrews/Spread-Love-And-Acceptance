@@ -304,7 +304,43 @@ async function setUpRecipe(id) {
   render();
 }
 
+// ---------- power moves: little-known ways of working together ----------
+const POWER_CARDS = [
+  ['vote', 'Majority vote', '🗳️', 'Your best model answers three times, independently. When two agree, that\'s the answer; if not, it works out which is right.', 'Maths, logic, tricky questions'],
+  ['redteam', 'Red team', '🛡️', 'One model answers, a second hunts for every mistake, and the first fixes them before you see it.', 'Code, facts, advice that has to be right'],
+  ['plan', 'Plan, then solve', '🗺️', 'A fast model plans the steps; your strongest model follows the plan. Long tasks come out complete and well organised.', 'Reports, projects, long how-tos'],
+  ['panel', 'Expert panel', '🎓', 'A practical expert, a sceptic and a creative thinker each weigh in; the lead turns it into one balanced answer.', 'Decisions, plans, big choices'],
+];
+function powerMovesHTML() {
+  return `<div class="section"><h2>Power moves</h2><span class="small muted">Little-known ways of making AIs work together. Each one makes your own models answer better than they can alone.</span></div>
+    <div class="cards pm-grid">${POWER_CARDS.map(([k, n, ic, what, best]) => {
+      const made = S.stacks.some((s) => s.id === `pm-${k}`);
+      return `<div class="card pm-card"><div class="row"><span class="emoji-badge">${ic}</span><h3 class="grow" style="margin:0">${esc(n)}</h3></div>
+        <p class="small" style="margin:8px 0 4px">${esc(what)}</p><p class="small muted" style="margin:0 0 10px">Best for: ${esc(best)}</p>
+        <div class="row">${made ? `<button class="btn small primary" data-pm-chat="${k}">Chat with it</button>` : `<button class="btn small primary" data-pm="${k}">Use it</button>`}</div></div>`;
+    }).join('')}</div>`;
+}
+// Builds the move from the best models already on this PC (no downloads).
+async function createPowerMove(kind) {
+  const T = S.speed?.targets || {};
+  const local = S.targets.map((t) => t.target).filter((t) => t.startsWith('local:') && T[t] && (T[t].wps ?? 0) >= 2);
+  if (!local.length) { toast('Install a model first (Models).'); return; }
+  const rank = [...local].sort((a, b) => (T[b].scores?.general ?? 0) - (T[a].scores?.general ?? 0) || (T[b].wps ?? 0) - (T[a].wps ?? 0));
+  const lead = rank[0];
+  const fastest = [...local].filter((t) => t !== lead).sort((a, b) => (T[b].wps ?? 0) - (T[a].wps ?? 0))[0];
+  const helper = kind === 'vote' ? lead : (kind === 'plan' ? fastest : rank[1]) || lead;
+  const card = POWER_CARDS.find((x) => x[0] === kind);
+  await call('stacks:save', { id: `pm-${kind}`, name: card[1], emoji: card[2], builtFor: 'power', members: { drafters: [...new Set([helper, ...(kind === 'panel' ? rank.slice(1, 3) : [])])].filter(Boolean), judge: lead, mode: kind } });
+  await refreshModels();
+  newChat();
+  const c = chatById(S.route.id);
+  c.target = `stack:pm-${kind}`; save(); render();
+  toast(`${card[1]} is ready, using ${targetLabel(lead)}${helper !== lead ? ` and ${targetLabel(helper)}` : ''}. Ask it something hard.`, 6000);
+}
+
 function bindRecipes() {
+  $$('[data-pm]').forEach((b) => b.addEventListener('click', () => { b.disabled = true; createPowerMove(b.dataset.pm); }));
+  $$('[data-pm-chat]').forEach((b) => b.addEventListener('click', () => { newChat(); const c = chatById(S.route.id); c.target = `stack:pm-${b.dataset.pmChat}`; save(); render(); }));
   $$('[data-rx]').forEach((b) => b.addEventListener('click', () => { b.disabled = true; b.textContent = 'Setting up…'; setUpRecipe(b.dataset.rx); }));
   $$('[data-rx-chat]').forEach((b) => b.addEventListener('click', () => newChat(`as-rx-${b.dataset.rxChat}`)));
 }

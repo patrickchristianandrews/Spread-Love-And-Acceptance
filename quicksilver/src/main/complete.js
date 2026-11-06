@@ -122,7 +122,10 @@ async function* single(target, req) {
     if (!m) throw new Error('That model is no longer installed. Pick another one.');
     // A small same-family model, if installed, speeds this one up (speculative decoding).
     const d = !m.files.mmproj && !hasImages(req.messages) ? catalog.draftFor(m.catalogId, models.list()) : null;
-    yield* llama.chat({ id: m.id, name: m.name, file: m.files.model, mmproj: m.files.mmproj, draft: d?.files.model }, req);
+    // Thinking takes time: models that can switch it off skip it for easy questions (Deep think
+    // always thinks). Hard questions still get the full think.
+    const level = req.level === 'max' || req.points ? req.level : (req.level === 'quick' || autoLevel(req) === 'quick' ? 'quick' : req.level);
+    yield* llama.chat({ id: m.id, name: m.name, file: m.files.model, mmproj: m.files.mmproj, draft: d?.files.model }, { ...req, level: req.points ? 'quick' : level });
   } else if (t.kind === 'api') {
     yield* providers.chat(t.providerId, t.model, req);
   } else if (t.kind === 'kbm') {
@@ -174,6 +177,119 @@ const CRITIQUE = `Other AI models answered the same question as you. Read their 
 1. In a section "Critique", list concrete errors, gaps or weak reasoning in the other answers (and in your own), briefly.
 2. In a section "Revised answer", write your improved answer, keeping what was right and fixing what was wrong.`;
 
+// ---------- power moves ----------
+//  vote     Majority vote: the lead answers three times independently; if they agree that's
+//           the answer, otherwise it settles the differences. Big gains on maths and logic.
+//  redteam  Red team: one model answers, another hunts for every mistake, the first fixes them.
+//  plan     Plan, then solve: a planner breaks the task into steps; the lead follows them.
+//  panel    Expert panel: a practical expert, a sceptic and a creative each give their view;
+//           the lead weighs them into one balanced answer.
+const POWER_MOVES = ['vote', 'redteam', 'plan', 'panel'];
+const RED_TEAM = 'You are a ruthless reviewer. Find every real problem in the answer above: factual errors, wrong numbers or maths, broken logic or code, missing cases, risky advice, unclear parts. List each problem with a short fix. If there are no real problems, reply exactly: NO ISSUES.';
+const PLANNER = 'Do not answer yet. Write a short, numbered plan for the best possible answer to my message: the steps to work through, what to check, and the format the answer should take. At most 8 steps.';
+const PANEL = [
+  ['A practical expert', 'Answer as a seasoned practical expert in this subject: what actually works, concrete steps and numbers.'],
+  ['A careful sceptic', 'Answer as a careful sceptic: the risks, hidden costs, common mistakes and what could go wrong, plus how to avoid them.'],
+  ['A creative thinker', 'Answer as a creative thinker: unusual options, smarter angles and alternatives most people miss.'],
+];
+function askOnLast(messages, extra) {
+  const out = [...messages];
+  const last = out[out.length - 1];
+  if (!last || last.role !== 'user') return out;
+  out[out.length - 1] = typeof last.content === 'string' ? { ...last, content: `${last.content}\n\n(${extra})` } : { ...last, content: [...last.content, { type: 'text', text: `\n\n(${extra})` }] };
+  return out;
+}
+function leadOver(base, sys, notes) {
+  const last = base[base.length - 1];
+  const lastText = typeof last.content === 'string' ? last.content : last.content.filter((p) => p.type === 'text').map((p) => p.text).join('\n');
+  return [
+    { role: 'system', content: `${sys}${base[0]?.role === 'system' ? `\n\nThe user's assistant instructions, which still apply:\n${typeof base[0].content === 'string' ? base[0].content : ''}` : ''}` },
+    ...base.slice(base[0]?.role === 'system' ? 1 : 0, -1),
+    { role: 'user', content: Array.isArray(last.content) ? [...last.content.filter((p) => p.type === 'image_url'), { type: 'text', text: `${lastText}\n\n---\n${notes}\n---\nWrite the final answer to my message above.` }] : `${lastText}\n\n---\n${notes}\n---\nWrite the final answer to my message above.` },
+  ];
+}
+async function* powerMove(kind, lead, helpers, req, msgsFor, step, live) {
+  const run = async (s, target, r) => { const t0 = Date.now(); try { s.text = await collect(target, r, live(s)); } catch (err) { if (req.signal?.aborted) throw err; s.error = String(err.message || err); } s.done = true; s.ms = Date.now() - t0; req.onStep?.(s); return s.text || ''; };
+  const helper = helpers[0] || lead;
+  const finish = async function* (sys, notes, labelText) {
+    const s = { role: 'lead', label: labelText, model: label(lead), text: '', done: false };
+    yield step(s);
+    const t0 = Date.now();
+    yield* single(lead, { ...req, messages: leadOver(msgsFor(lead), sys, notes) });
+    s.done = true; s.ms = Date.now() - t0;
+    yield { type: 'step', step: s };
+  };
+  if (kind === 'vote') {
+    const tries = [0.2, 0.7, 1.0].map((temp, i) => ({ s: { role: 'draft', label: `Attempt ${i + 1} of 3`, model: label(lead), text: '', done: false }, temp }));
+    for (const x of tries) yield step(x.s);
+    yield { type: 'status', text: 'Answering three times independently, then taking the majority…' };
+    for (const x of tries) await run(x.s, lead, { ...req, messages: msgsFor(lead), temperature: x.temp, maxTokens: Math.min(req.maxTokens || 2048, 1500) });
+    for (const x of tries) yield { type: 'step', step: x.s };
+    const texts = tries.map((x) => x.s.text).filter(Boolean);
+    if (!texts.length) throw new Error('Every attempt failed.');
+    // Two or more attempts agree: that's the answer.
+    for (let i = 0; i < texts.length; i++) for (let j = i + 1; j < texts.length; j++) {
+      if (draftsAgree([texts[i], texts[j]])) {
+        const s = { role: 'lead', label: 'Majority agreed', model: label(lead), text: '', done: true, ms: 0 };
+        yield step(s);
+        for (const part of (texts[i].length >= texts[j].length ? texts[i] : texts[j]).match(/[\s\S]{1,80}/g) || []) yield { type: 'text', text: part };
+        return;
+      }
+    }
+    yield* finish(`${LEAD}\nThese drafts are independent attempts by the same model. Where they disagree on a result, work it out carefully yourself and give the correct one.`, texts.map((t, i) => `<attempt number="${i + 1}">\n${t.slice(0, 6000)}\n</attempt>`).join('\n\n'), 'Settling the differences');
+    return;
+  }
+  if (kind === 'redteam') {
+    const a = { role: 'draft', label: 'First answer', model: label(lead), text: '', done: false };
+    const c = { role: 'critique', label: 'Red team: hunting for mistakes', model: label(helper), text: '', done: false };
+    yield step(a); yield step(c);
+    yield { type: 'status', text: 'Answering, then a second model hunts for mistakes…' };
+    const answer = await run(a, lead, { ...req, messages: msgsFor(lead), maxTokens: Math.min(req.maxTokens || 2048, 2000) });
+    yield { type: 'step', step: a };
+    if (!answer) throw new Error(a.error || 'No answer to check.');
+    const issues = await run(c, helper, { ...req, points: true, messages: [...msgsFor(helper), { role: 'assistant', content: answer }, { role: 'user', content: RED_TEAM }], maxTokens: 500, temperature: 0.2 });
+    yield { type: 'step', step: c };
+    if (!issues || /^\W*no issues\W*$/i.test(issues.trim())) {
+      const s = { role: 'lead', label: 'No mistakes found', model: label(lead), text: '', done: true, ms: 0 };
+      yield step(s);
+      for (const part of answer.match(/[\s\S]{1,80}/g) || []) yield { type: 'text', text: part };
+      return;
+    }
+    yield* finish('You wrote the first answer below; a reviewer then listed problems with it. Write the corrected final answer: fix every real problem, ignore any criticism that is wrong, and keep what was good. Write only the final answer; do not mention the review.', `<first_answer>\n${answer.slice(0, 8000)}\n</first_answer>\n\n<review>\n${issues.slice(0, 3000)}\n</review>`, 'Fixing what the red team found');
+    return;
+  }
+  if (kind === 'plan') {
+    const p = { role: 'draft', label: 'Planning the answer', model: label(helper), text: '', done: false };
+    yield step(p);
+    yield { type: 'status', text: 'Planning first, then solving step by step…' };
+    const plan = await run(p, helper, { ...req, points: true, messages: askOnLast(msgsFor(helper), PLANNER), maxTokens: 350, temperature: 0.3 });
+    yield { type: 'step', step: p };
+    yield* finish('A planner wrote the plan below for answering the user\'s latest message. Follow it step by step to write the best, complete final answer (improve the plan if a step is wrong). Write only the final answer; do not mention the plan.', `<plan>\n${plan.slice(0, 3000)}\n</plan>`, 'Solving it step by step');
+    return;
+  }
+  if (kind === 'panel') {
+    const who = [lead, ...helpers];
+    const views = PANEL.map(([name], i) => ({ s: { role: 'draft', label: name, model: label(who[i % who.length]), text: '', done: false }, target: who[i % who.length], ask: PANEL[i][1] }));
+    for (const v of views) yield step(v.s);
+    yield { type: 'status', text: 'Asking an expert, a sceptic and a creative thinker…' };
+    for (const v of views) await run(v.s, v.target, { ...req, points: true, messages: askOnLast(msgsFor(v.target), `${v.ask} Be concise: at most 150 words.`), maxTokens: 300 });
+    for (const v of views) yield { type: 'step', step: v.s };
+    yield* finish('A panel gave three perspectives on the user\'s latest message: a practical expert, a careful sceptic and a creative thinker. Write one balanced, decisive final answer that uses the best of each: the practical steps, the important risks, and any smart alternative worth knowing. Write only the final answer; do not mention the panel.', views.filter((v) => v.s.text).map((v) => `<view from="${v.s.label}">\n${v.s.text.slice(0, 2500)}\n</view>`).join('\n\n'), 'Weighing the panel');
+  }
+}
+
+// Key points first: what helpers are asked for, and how the lead uses them.
+const POINTS_ASK = 'Do not write the full answer. List only the key points a complete, correct answer must include: the facts, numbers, steps, options and pitfalls, plus anything easy to get wrong. Terse bullet points, at most 120 words.';
+const POINTS_LEAD = `You are the lead of a team of AI models. Helper models have listed key points for the user's latest message. Write the best complete answer yourself: use the points that are correct and useful, ignore any that are wrong, and add anything important they missed. Check numbers and logic yourself. Write only the final answer, as if you wrote it alone; do not mention the notes, helpers or this process.`;
+function withPointsAsk(messages) {
+  const out = [...messages];
+  const last = out[out.length - 1];
+  if (!last || last.role !== 'user') return out;
+  out[out.length - 1] = typeof last.content === 'string'
+    ? { ...last, content: `${last.content}\n\n(${POINTS_ASK})` }
+    : { ...last, content: [...last.content, { type: 'text', text: `\n\n(${POINTS_ASK})` }] };
+  return out;
+}
 const REVIEW = `You are a careful senior reviewer. Another model has drafted an answer to the user's latest message. Produce the final answer: keep what is good, fix any errors in facts, numbers, logic or code, fill important gaps, and improve clarity and structure. Write only the final answer, as if you wrote it yourself. Do not mention the draft or this process.`;
 
 function textOnly(messages, descriptions) {
@@ -305,6 +421,14 @@ async function* stack(stackDef, req) {
   }
   const msgsFor = (target) => (canSee(target) || !req.describedMessages ? messages : req.describedMessages);
 
+  // Power moves: little-known ways of working together that beat a bigger model.
+  if (POWER_MOVES.includes(members.mode) && level !== 'quick') {
+    const lead = judge || drafters[0];
+    const helpers = [...new Set([...(members.drafters || []).filter(exists), judge].filter((x) => x && x !== lead))];
+    yield* powerMove(members.mode, lead, helpers, req, msgsFor, step, live);
+    return;
+  }
+
   // 2. One drafter and no lead: just stream it.
   if (!judge && drafters.length === 1) {
     yield* single(drafters[0], { ...req, messages: msgsFor(drafters[0]) });
@@ -313,14 +437,23 @@ async function* stack(stackDef, req) {
 
   // 3. Drafts. Local models take turns (they share this PC's memory); cloud models run at the
   //    same time, so a mixed stack costs little extra time.
-  const draftSteps = drafters.map((d, i) => ({ role: 'draft', label: `Draft ${i + 1} of ${drafters.length}`, model: label(d), text: '', done: false }));
+  //    Key points first (Auto effort, blend teams): the helpers write short key points instead
+  //    of full answers, and the lead writes one full answer from them. Most of a team's gain
+  //    comes from comparing ideas, so this keeps the accuracy at a fraction of the time.
+  //    Deep think (Max) still has every model write a full answer.
+  const mode0 = stackDef.members.mode || 'blend';
+  const points = judge && !req.forceTeam && ['blend', 'consensus', 'auto'].includes(mode0) && level === 'thorough' && drafters.some((d) => d !== judge);
+  if (points) drafters = drafters.filter((d) => d !== judge);
+  const draftSteps = drafters.map((d, i) => ({ role: 'draft', label: points ? `Key points ${i + 1} of ${drafters.length}` : `Draft ${i + 1} of ${drafters.length}`, model: label(d), text: '', done: false }));
   for (const s of draftSteps) yield step(s);
   yield { type: 'status', text: `Drafting with ${drafters.length} models…` };
   const runDraft = async (d, i) => {
     const s = draftSteps[i];
     const started = Date.now();
     try {
-      s.text = await collect(d, { ...req, messages: msgsFor(d), maxTokens: Math.min(req.maxTokens || 2048, 1800) }, live(s));
+      s.text = points
+        ? await collect(d, { ...req, points: true, messages: withPointsAsk(msgsFor(d)), maxTokens: 320, temperature: Math.min(req.temperature ?? 0.6, 0.5) }, live(s))
+        : await collect(d, { ...req, messages: msgsFor(d), maxTokens: Math.min(req.maxTokens || 2048, 1800) }, live(s));
     } catch (err) {
       if (req.signal?.aborted) throw err;
       s.error = String(err.message || err);
@@ -367,7 +500,7 @@ async function* stack(stackDef, req) {
 
   // 3c. Agreement: when the drafts already say the same thing, combining them adds little, so
   //     the lead's own draft (or the fullest one) is the answer. Debate always gets judged.
-  if (drafts.length >= 2 && mode !== 'debate' && !req.forceTeam) {
+  if (drafts.length >= 2 && mode !== 'debate' && !req.forceTeam && !points) {
     const agreed = draftsAgree(drafts.map((d) => d.text));
     if (agreed) {
       const own = draftSteps.find((s, i) => drafters[i] === judge && s.text)?.text;
@@ -382,10 +515,10 @@ async function* stack(stackDef, req) {
   // 4. The lead combines (or reviews) and streams the final answer.
   const lead = judge || drafters[0];
   const base = msgsFor(lead);
-  const sys = drafts.length > 1 ? ({ debate: DEBATE_LEAD, consensus: CONSENSUS }[mode] || LEAD) : REVIEW;
+  const sys = points ? POINTS_LEAD : drafts.length > 1 ? ({ debate: DEBATE_LEAD, consensus: CONSENSUS }[mode] || LEAD) : REVIEW;
   // Very long drafts are trimmed for the lead: it needs their substance, not every word, and a
   // shorter read is faster and lighter on memory.
-  const draftText = drafts.map((d, i) => `<draft number="${i + 1}">\n${d.text.length > 7000 ? `${d.text.slice(0, 7000)}\n[…the rest of this draft is shortened]` : d.text}\n</draft>`).join('\n\n');
+  const draftText = points ? drafts.map((d, i) => `<notes from="helper ${i + 1}">\n${d.text.slice(0, 3000)}\n</notes>`).join('\n\n') : drafts.map((d, i) => `<draft number="${i + 1}">\n${d.text.length > 7000 ? `${d.text.slice(0, 7000)}\n[…the rest of this draft is shortened]` : d.text}\n</draft>`).join('\n\n');
   const last = base[base.length - 1];
   const lastText = typeof last.content === 'string' ? last.content : last.content.filter((p) => p.type === 'text').map((p) => p.text).join('\n');
   const leadMessages = [

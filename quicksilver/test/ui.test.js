@@ -61,6 +61,10 @@ function redPng(size = 64) {
   // Most checks below use the full view (every option on screen); the simple view, which is the
   // default, is checked near the end.
   assert.equal(await win.evaluate(() => S.data.prefs.simple), true, 'simple view is the default');
+  await win.waitForSelector('.welcome-card:has-text("Bring your ChatGPT or Claude chats")');
+  await shot(win, '00-welcome');
+  await win.click('#wc-close');
+  await win.waitForSelector('.welcome-card', { state: 'detached' });
   await win.evaluate(() => { S.data.prefs.simple = false; S.data.prefs.autoRoute = false; applyPrefs(); save(); render(); });
   await win.waitForSelector('text=and added it. Ready to use', { timeout: 30000 });
   console.log('✓ home (model from another app added automatically)');
@@ -124,6 +128,13 @@ function redPng(size = 64) {
   await win.waitForFunction(() => S.data.assistants.some((a) => a.id === 'as-rx-song-doctor'), null, { timeout: 30000 });
   assert.equal(await win.evaluate(async () => (await qs.call('stacks:list')).find((x) => x.id === 'rx-song-doctor')?.members.mode), 'debate');
   assert.equal(await win.evaluate(() => S.data.assistants.find((a) => a.id === 'as-rx-song-doctor').skill), 'song-critique');
+  // Power moves: one click builds the team from your own models and opens a chat with it.
+  await win.click('[data-nav="stacks"]');
+  await win.click('[data-pm="redteam"]');
+  await win.waitForFunction(() => chatById(S.route.id)?.target === 'stack:pm-redteam', null, { timeout: 30000 });
+  await win.click('[data-nav="stacks"]');
+  await win.waitForSelector('[data-pm-chat="redteam"]');
+  console.log('✓ power moves: built from your own models in one click');
   console.log('✓ stacks for specific work: 30 teams incl. 3 song stacks (any genre), tuned to this PC, set up as a stack and an assistant');
 
   // Chat with the powerhouse stack, a spreadsheet attached and fact check on.
