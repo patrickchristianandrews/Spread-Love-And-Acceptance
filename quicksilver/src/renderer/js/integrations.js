@@ -1,4 +1,4 @@
-// Integrations: built-in connectors (GitHub, Notion, Slack, Jira, Linear) and MCP servers.
+// Integrations: built-in connectors (grouped by kind) and MCP servers.
 'use strict';
 
 let intData = null;   // { connectors, mcp, presets, tools, allowed }
@@ -17,14 +17,13 @@ views.integrations = {
       <div class="page-head"><h1>Integrations</h1></div>
       <p class="lede"><b>Connect the tools you work in.</b> Models can then look things up and take actions for you during a chat: "list my open GitHub issues", "summarize #design in Slack", "create a Jira ticket for this bug". Turn on <b>🔌 Tools</b> in a chat to use them. <b>Anything that changes something asks you first</b>; reading never does. Tokens are encrypted on this PC and only sent to that service.</p>
 
-      <div class="section"><h2>Connectors</h2></div>
-      <div class="cards">${connectors.map((c) => `
+      <div class="section"><h2>Connectors</h2><span class="small muted">${connectors.length} built in. Free ones need no account.</span></div>
+      ${INT_GROUPS.map((g) => { const list = connectors.filter((c) => c.group === g); return list.length ? `<h3 class="int-group">${esc(g)}</h3><div class="cards">${list.map((c) => `
         <div class="card ${c.enabled ? 'hl' : ''}">
           <div class="row"><span class="emoji-badge">${c.icon}</span><h3 class="grow">${esc(c.name)}</h3>${c.enabled ? `<span class="badge b-mint">● ${esc(c.account || 'connected')}</span>` : ''}</div>
           <p class="desc" style="margin:10px 0">${esc(c.blurb)}</p>
-          <div class="row">${c.enabled ? `<button class="btn small" data-int-edit="${c.id}">Settings</button><button class="btn small danger" data-int-off="${c.id}">Disconnect</button>` : `<button class="btn small primary" data-int-edit="${c.id}">Connect</button>`}</div>
-        </div>`).join('')}
-      </div>
+          <div class="row">${c.enabled ? `<button class="btn small" data-int-edit="${c.id}">Settings</button><button class="btn small danger" data-int-off="${c.id}">Disconnect</button>` : `<button class="btn small primary" data-int-edit="${c.id}">Connect</button>`}${c.noToken ? '<span class="badge b-mint">free · no account</span>' : ''}</div>
+        </div>`).join('')}</div>` : ''; }).join('')}
 
       <div class="section"><h2>MCP servers</h2><span class="small muted">The open standard for AI integrations: hundreds of servers for files, databases, browsers, cloud services and more.</span></div>
       ${servers.length ? `<div class="cards" style="margin-bottom:16px">${servers.map((s) => `
@@ -51,7 +50,7 @@ views.integrations = {
   bind() {
     if (!intData) { refreshIntegrations().then(() => S.route.view === 'integrations' && render()); return; }
     $$('[data-int-edit]').forEach((b) => b.addEventListener('click', () => editConnector(intData.connectors.find((c) => c.id === b.dataset.intEdit))));
-    $$('[data-int-off]').forEach((b) => b.addEventListener('click', async () => { if (!(await confirmBox('Disconnect and forget the token?', { yes: 'Disconnect' }))) return; await call('int:disable', b.dataset.intOff); await refreshIntegrations(); render(); }));
+    $$('[data-int-off]').forEach((b) => b.addEventListener('click', async () => { if (!(await confirmBox(intData.connectors.find((c) => c.id === b.dataset.intOff)?.noToken ? 'Turn this off?' : 'Disconnect and forget the token?', { yes: 'Disconnect' }))) return; await call('int:disable', b.dataset.intOff); await refreshIntegrations(); render(); }));
     $$('[data-mcp-preset]').forEach((b) => b.addEventListener('click', () => editMcp({ preset: b.dataset.mcpPreset, ...intData.presets[b.dataset.mcpPreset] })));
     $$('[data-mcp-edit]').forEach((b) => b.addEventListener('click', () => editMcp(intData.mcp.find((s) => s.id === b.dataset.mcpEdit))));
     $$('[data-mcp-del]').forEach((b) => b.addEventListener('click', async () => { if (!(await confirmBox('Remove this MCP server?', { yes: 'Remove' }))) return; await call('mcp:remove', b.dataset.mcpDel); await refreshIntegrations(); render(); }));
@@ -66,6 +65,8 @@ views.integrations = {
   },
 };
 
+const INT_GROUPS = ['Everyday', 'Notes & knowledge', 'Tasks & projects', 'Messaging & automation', 'Developer', 'Home', 'Other'];
+
 function editConnector(c) {
   const b = openModal(`<h2>${c.icon} ${c.enabled ? 'Settings' : 'Connect'}: ${esc(c.name)}</h2>
     <div class="stack-v">${c.fields.map((f) => `<div class="field"><label for="f-${f.key}">${esc(f.label)}</label>${f.help ? `<span class="help">${esc(f.help)}${f.url ? ` <a href="${esc(f.url)}">Open</a>` : ''}</span>` : ''}
@@ -75,7 +76,7 @@ function editConnector(c) {
     const values = {};
     let token = '';
     for (const f of c.fields) { const v = b.querySelector(`#f-${f.key}`).value.trim(); if (f.secret) token = v; else values[f.key] = v; }
-    if (!token && !c.hasToken) { toast('Paste the token first.'); return; }
+    if (!token && !c.hasToken && !c.noToken) { toast('Paste the token first.'); return; }
     const btn = b.querySelector('#int-save'); btn.disabled = true; btn.textContent = 'Checking…';
     try {
       const account = await qs.call('int:save', c.id, values, token);

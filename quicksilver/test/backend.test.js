@@ -248,6 +248,59 @@ async function collect(gen) {
   global.fetch = realFetch;
   console.log('✓ GitHub connector: connect, list issues, create issue (approved)');
 
+  // More connectors: weather, Wikipedia, calendar (iCal), news feeds, a notes folder, Todoist, webhooks.
+  {
+    const calls = [];
+    const ics = 'BEGIN:VCALENDAR\r\nBEGIN:VEVENT\r\nDTSTART:' + new Date(Date.now() + 86400000).toISOString().replace(/[-:]/g, '').slice(0, 15) + 'Z\r\nSUMMARY:Dentist\r\nLOCATION:High St\r\nEND:VEVENT\r\nBEGIN:VEVENT\r\nDTSTART;VALUE=DATE:20000101\r\nSUMMARY:Old\r\nEND:VEVENT\r\nEND:VCALENDAR';
+    const rss = '<rss><channel><title>Daily News</title><item><title>Rain expected</title><link>https://n.example/1</link><pubDate>Mon, 02 Nov 2026 10:00:00 GMT</pubDate><description>Wet week</description></item><item><title>Markets up</title><link>https://n.example/2</link></item></channel></rss>';
+    global.fetch = async (url, opts = {}) => {
+      const u = String(url);
+      calls.push(`${opts.method || 'GET'} ${u}`);
+      const json = (o) => new Response(JSON.stringify(o), { status: 200, headers: { 'Content-Type': 'application/json' } });
+      if (u.includes('geocoding-api')) return json({ results: [{ name: 'Leeds', admin1: 'England', country: 'United Kingdom', latitude: 53.8, longitude: -1.55 }] });
+      if (u.includes('api.open-meteo.com')) return json({ current: { time: '2026-11-06T10:00', temperature_2m: 9, apparent_temperature: 7, weather_code: 61, wind_speed_10m: 14, relative_humidity_2m: 88 }, daily: { time: ['2026-11-06'], weather_code: [63], temperature_2m_min: [5], temperature_2m_max: [10], precipitation_probability_max: [80] } });
+      if (u.includes('wikipedia.org') && u.includes('list=search')) return json({ query: { search: [{ title: 'Ada Lovelace', snippet: 'English <span>mathematician</span>' }] } });
+      if (u.includes('wikipedia.org')) return json({ query: { pages: { 1: { title: 'Ada Lovelace', extract: 'Ada Lovelace was a mathematician.' } } } });
+      if (u.startsWith('https://cal.example')) return new Response(ics, { status: 200 });
+      if (u.startsWith('https://n.example/feed')) return new Response(rss, { status: 200 });
+      if (u.includes('api.todoist.com/api/v1/tasks') && opts.method === 'POST') return json({ content: JSON.parse(opts.body).content });
+      if (u.includes('api.todoist.com/api/v1/tasks')) return json({ results: [{ id: '1', content: 'Buy milk', due: { string: 'today' }, priority: 4 }] });
+      if (u.startsWith('https://hooks.example')) return json({ ok: true });
+      return json({});
+    };
+    await integrations.save('weather', { units: 'celsius', home: 'Leeds' }, '');
+    await integrations.save('wikipedia', { lang: 'en' }, '');
+    assert.match(await integrations.save('calendar', {}, 'https://cal.example/basic.ics'), /1 upcoming/);
+    await integrations.save('rss', { feeds: 'https://n.example/feed' }, '');
+    const notesDir = fs.mkdtempSync(path.join(os.tmpdir(), 'qs-notes-'));
+    fs.writeFileSync(path.join(notesDir, 'Garden plan.md'), 'Plant tulips in October.');
+    assert.equal(await integrations.save('notes', { folder: notesDir }, ''), '1 notes');
+    assert.match(await integrations.save('todoist', {}, 'td_test'), /1 open task/);
+    await integrations.save('webhook', {}, 'https://hooks.example/abc');
+    const T = Object.fromEntries(integrations.tools().map((t) => [t.name, t]));
+    assert.match(await T.weather_forecast.run({}), /Leeds, England[\s\S]*light rain, 9°C[\s\S]*rain chance 80%/);
+    assert.match(await T.wikipedia_search.run({ query: 'Ada' }), /Ada Lovelace: English mathematician/);
+    assert.match(await T.wikipedia_read.run({ title: 'Ada Lovelace' }), /was a mathematician/);
+    const cal = await T.calendar_upcoming.run({ days: 7 });
+    assert.ok(/Dentist @ High St/.test(cal) && !/Old/.test(cal), 'upcoming events only');
+    assert.match(await T.news_latest.run({ topic: 'rain' }), /\[Daily News\] Rain expected \(2026-11-02\) https:\/\/n.example\/1/);
+    assert.match(await T.notes_search.run({ query: 'tulips' }), /Garden plan\.md/);
+    assert.equal(await T.notes_read.run({ file: 'Garden plan.md' }), 'Plant tulips in October.');
+    await assert.rejects(T.notes_read.run({ file: '../outside.md' }), /outside the notes folder/);
+    assert.ok(T.notes_create.write && T.todoist_add.write && T.automation_trigger.write && !T.notes_search.write, 'changes ask first');
+    await T.notes_create.run({ title: 'Ideas', content: 'Paint the shed' });
+    assert.ok(fs.existsSync(path.join(notesDir, 'Ideas.md')));
+    assert.match(await T.todoist_tasks.run({}), /1: Buy milk \(due today\) \[p1\]/);
+    assert.match(await T.todoist_add.run({ content: 'Call mum', due: 'tomorrow' }), /Added: Call mum/);
+    assert.equal(await T.automation_trigger.run({ message: 'Hi' }), 'Sent to the automation.');
+    assert.ok(calls.some((c) => c.startsWith('POST https://hooks.example/abc')));
+    for (const id of ['weather', 'wikipedia', 'calendar', 'rss', 'notes', 'todoist', 'webhook']) integrations.disable(id);
+    assert.equal(integrations.tools().length, 0);
+    assert.ok(integrations.list().length >= 20, 'twenty connectors');
+    global.fetch = realFetch;
+    console.log('✓ connectors: weather, Wikipedia, calendar, news feeds, notes folder, Todoist, automation webhook');
+  }
+
   // Measured speeds: real answers are timed per model and re-tune every estimate.
   {
     const speeds = require('../src/main/speeds');

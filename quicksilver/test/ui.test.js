@@ -143,6 +143,23 @@ function redPng(size = 64) {
   await idle();
   await win.waitForFunction(() => [...document.querySelectorAll('.msg.assistant .bubble')].pop()?.textContent.includes('Answer from qwen.gguf'), null, { timeout: 60000 });
   console.log('✓ quick effort');
+  // Dropdowns are drawn by Quicksilver (readable in both themes): click, see the choices, pick one.
+  await win.click('#pick-effort');
+  await win.waitForSelector('.sel-pop .sel-item.sel:has-text("Quick")');
+  assert.equal(await win.locator('.sel-pop .sel-item').count(), 4);
+  const look = await win.evaluate(() => { const p = getComputedStyle(document.querySelector('.sel-pop')); const i = getComputedStyle(document.querySelector('.sel-pop .sel-item')); return { bg: p.backgroundColor, fg: i.color }; });
+  assert.notEqual(look.bg, look.fg, 'text and background differ');
+  await shot(win, '09b-dropdown');
+  await win.click('.sel-pop .sel-item:has-text("Thorough")');
+  await win.waitForFunction(() => !document.querySelector('.sel-pop') && document.querySelector('#pick-effort').value === 'thorough');
+  // Keyboard: Enter opens, arrows move, Escape closes without changing anything.
+  await win.focus('#pick-effort');
+  await win.keyboard.press('Enter');
+  await win.waitForSelector('.sel-pop');
+  await win.keyboard.press('ArrowUp');
+  await win.keyboard.press('Escape');
+  await win.waitForFunction(() => !document.querySelector('.sel-pop') && document.querySelector('#pick-effort').value === 'thorough');
+  console.log('✓ dropdown menus: readable, click and keyboard');
 
   // Skills: "/" picker, the chip, the skill applied to the request, the file button.
   await win.waitForFunction(() => !document.querySelector('.fact-chip.k-run'), null, { timeout: 60000 });

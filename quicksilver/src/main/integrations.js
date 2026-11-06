@@ -1,23 +1,25 @@
-// Built-in connectors (GitHub, Notion, Slack, Jira, Linear). Each gives models tools they can use
+// Built-in connectors (GitHub, Notion, Slack, Jira, Linear, plus the ones in integrations-more.js:
+// weather, Wikipedia, calendar, news, notes, Todoist, Trello, Asana, Airtable, GitLab, Confluence,
+// Home Assistant, Discord, Telegram and webhooks). Each gives models tools they can use
 // during a chat. Tools marked `write` change something, so they always ask you first.
 // Tokens are stored encrypted on this PC and only sent to that service.
 const store = require('./store');
 
 const CONNECTORS = {
   github: {
-    name: 'GitHub', icon: '🐙', blurb: 'Code, issues and pull requests.',
+    name: 'GitHub', icon: '🐙', group: 'Developer', blurb: 'Code, issues and pull requests.',
     fields: [{ key: 'token', label: 'Personal access token', secret: true, help: 'Create one at github.com/settings/tokens (fine-grained, with read access to the repositories you want, plus Issues: write to create issues).', url: 'https://github.com/settings/personal-access-tokens' }],
   },
   notion: {
-    name: 'Notion', icon: '📓', blurb: 'Search, read and create pages.',
+    name: 'Notion', icon: '📓', group: 'Notes & knowledge', blurb: 'Search, read and create pages.',
     fields: [{ key: 'token', label: 'Internal integration secret', secret: true, help: 'Create an integration at notion.so/my-integrations, then share the pages you want with it (••• → Connections).', url: 'https://www.notion.so/my-integrations' }],
   },
   slack: {
-    name: 'Slack', icon: '💬', blurb: 'Read channels and post messages.',
+    name: 'Slack', icon: '💬', group: 'Messaging & automation', blurb: 'Read channels and post messages.',
     fields: [{ key: 'token', label: 'Bot token (xoxb-…)', secret: true, help: 'Create a Slack app at api.slack.com/apps with scopes channels:read, channels:history and chat:write, install it, then invite it to channels.', url: 'https://api.slack.com/apps' }],
   },
   jira: {
-    name: 'Jira', icon: '🧭', blurb: 'Search, read, create and comment on issues.',
+    name: 'Jira', icon: '🧭', group: 'Tasks & projects', blurb: 'Search, read, create and comment on issues.',
     fields: [
       { key: 'site', label: 'Site', placeholder: 'yourcompany.atlassian.net' },
       { key: 'email', label: 'Account email' },
@@ -25,7 +27,7 @@ const CONNECTORS = {
     ],
   },
   linear: {
-    name: 'Linear', icon: '📐', blurb: 'Search and create issues.',
+    name: 'Linear', icon: '📐', group: 'Tasks & projects', blurb: 'Search and create issues.',
     fields: [{ key: 'token', label: 'Personal API key', secret: true, help: 'Linear → Settings → Security & access → Personal API keys.', url: 'https://linear.app/settings/account/security' }],
   },
 };
@@ -39,7 +41,7 @@ function list() {
   const c = cfg();
   return Object.entries(CONNECTORS).map(([id, def]) => ({
     id, ...def, enabled: Boolean(c[id]?.enabled), values: Object.fromEntries(def.fields.filter((f) => !f.secret).map((f) => [f.key, c[id]?.[f.key] || ''])),
-    hasToken: store.hasSecret(`int:${id}`), account: c[id]?.account || '',
+    hasToken: store.hasSecret(`int:${id}`), account: c[id]?.account || '', noToken: Boolean(def.noToken), group: def.group || 'Other',
   }));
 }
 
@@ -229,6 +231,9 @@ const LINEAR_TOOLS = [
 ];
 
 const TOOLS = { github: GITHUB_TOOLS, notion: NOTION_TOOLS, slack: SLACK_TOOLS, jira: JIRA_TOOLS, linear: LINEAR_TOOLS };
+const more = require('./integrations-more')({ http, clip, secret, cfg });
+Object.assign(CONNECTORS, more.CONNECTORS);
+Object.assign(TOOLS, more.TOOLS);
 
 async function test(id) {
   if (id === 'github') return (await gh('/user')).login;
@@ -236,13 +241,13 @@ async function test(id) {
   if (id === 'slack') { const r = await sl('auth.test'); return `${r.team} (${r.user})`; }
   if (id === 'jira') return (await jr('/rest/api/3/myself')).displayName;
   if (id === 'linear') return (await ln('{viewer{name}}')).viewer.name;
-  return 'connected';
+  return more.test(id);
 }
 
 // Tools from every enabled connector.
 function tools() {
   const c = cfg();
-  return Object.entries(TOOLS).filter(([id]) => c[id]?.enabled && store.hasSecret(`int:${id}`)).flatMap(([id, list]) => list.map((t) => ({ ...t, source: CONNECTORS[id].name, sourceId: id })));
+  return Object.entries(TOOLS).filter(([id]) => c[id]?.enabled && (CONNECTORS[id].noToken || store.hasSecret(`int:${id}`))).flatMap(([id, list]) => list.map((t) => ({ ...t, source: CONNECTORS[id].name, sourceId: id })));
 }
 
 module.exports = { CONNECTORS, list, save, disable, test, tools, githubRepoFiles, clip };

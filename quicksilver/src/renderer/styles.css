@@ -611,3 +611,21 @@ select optgroup { font-weight: 800; color: var(--muted); }
 .media-need { margin: 6px 0; }
 .gitem.sound { display: flex; flex-direction: column; }
 .gitem .sound-tile { display: grid; place-items: center; aspect-ratio: 1; font-size: 2.6rem; background: linear-gradient(135deg, var(--lemon, #fff4c2), var(--lav, #e6e0ff)); }
+
+/* Dropdown menus (select.js): Quicksilver draws the list, so it always matches the theme. */
+.sel-pop { position: fixed; z-index: 9999; overflow-y: auto; background: var(--panel); color: var(--text); border: 1.5px solid var(--line); border-radius: 14px; padding: 6px; box-shadow: 0 18px 48px rgba(0, 0, 0, .35), var(--sh-2); animation: sel-in .12s ease-out; }
+@keyframes sel-in { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
+.sel-item { display: flex; align-items: center; gap: 8px; padding: 9px 12px 9px 8px; border-radius: 9px; font-weight: 650; font-size: .92rem; line-height: 1.3; cursor: pointer; color: var(--text); }
+.sel-item.hot { background: var(--soft-2, var(--lav)); }
+.sel-item.sel { color: var(--accent); font-weight: 800; }
+.sel-item.off { opacity: .45; cursor: default; }
+.sel-check { width: 16px; flex: none; text-align: center; font-weight: 900; color: var(--accent); }
+.sel-text { white-space: normal; }
+.sel-group { padding: 10px 12px 4px; font-size: .74rem; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.sel-group:first-child { padding-top: 4px; }
+select.sel-open { border-color: var(--accent) !important; }
+.pill-select:has(select.sel-open) { border-color: var(--accent); color: var(--accent); }
+/* If the system list ever shows, it still gets solid, readable colours. */
+select { background-color: var(--panel); color: var(--text); }
+.pill-select select { background-color: var(--panel) !important; }
+.int-group { margin: 18px 0 10px; font-size: .78rem; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
