@@ -185,6 +185,7 @@ handle('models:options', (repo) => models.ggufOptions(repo));
 handle('models:cancel', (id) => models.cancel(id));
 handle('models:remove', (id) => { llama.stopAll(); return models.remove(id); });
 handle('models:search', (q) => models.search(q));
+handle('models:trending', async (force) => models.trending({ force, hw: await hardware.detect() }));
 handle('models:import', async () => {
   const r = await dialog.showOpenDialog(win, { title: 'Import a GGUF model', properties: ['openFile'], filters: [{ name: 'GGUF model', extensions: ['gguf'] }] });
   if (r.canceled || !r.filePaths[0]) return null;

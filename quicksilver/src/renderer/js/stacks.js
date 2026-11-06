@@ -22,7 +22,7 @@ views.stacks = {
       <span class="goal-ic">${j.icon}</span><span><b>${esc(j.label)}</b><span class="small muted">${esc(j.pitch)}</span></span></button>`;
     return `<div class="page">
       <div class="page-head"><h1>Stacks</h1><button class="btn" data-goto="compare">📊 Compare stacks</button><button class="btn" id="infuse">${icon('sparkle', 16)} Infuse any AIs, including cloud</button></div>
-      <p class="lede">A stack makes several AI models work as one: they answer separately, then a lead combines the best of each and fixes mistakes.</p>
+      <p class="lede">A stack makes several AI models work as one: they answer separately, then a lead combines the best of each and fixes mistakes. <b>Pick what you want to do</b>, and Quicksilver shows the best team for this PC, how strong and fast each option is, and which cloud AI (optional) would make it even better.</p>
       ${foundBanner()}
       <div class="section"><h2>1. Choose a stack</h2>${hwLine()}</div>
       <div class="goal-group"><div class="label">Think &amp; work</div><div class="goal-grid">${jobs.filter(([, j]) => j.kind === 'text').map(goal).join('')}</div></div>
@@ -121,7 +121,7 @@ async function runAdvisor(job) {
 }
 
 function advisorHTML(r) {
-  return `<div class="adv-grid">${r.kind === 'media' ? mineKitHTML(r) : mineTextHTML(r)}${bestHTML(r)}</div>`;
+  return `${howItWorksHTML(r)}<div class="adv-grid">${r.kind === 'media' ? mineKitHTML(r) : mineTextHTML(r)}${bestHTML(r)}</div>${tiersHTML(r)}${cloudHTML(r)}`;
 }
 
 // ----- text stacks: tick the models you have; roles are worked out for you -----
@@ -255,6 +255,7 @@ function bindAdvisor() {
   $('#adv-create')?.addEventListener('click', () => createMine(r));
   $('#kit-create')?.addEventListener('click', () => saveKit(r, advKit));
   $('#best-build')?.addEventListener('click', () => createBest(r));
+  bindStacksMore(r);
 }
 
 async function saveTextStack(r, stack, waiting = 0) {

@@ -563,7 +563,8 @@ function chatWithAttachment(att, text, assistantId) {
 // A second, different model checks the answer claim by claim, with the same sources and files.
 
 const checks = new Map(); // requestId -> { chatId, msgId, alt }
-const factOn = (chat, a) => effortOf(chat, a) === 'max' || Boolean(chat.factCheck ?? a.factCheck ?? S.data.prefs.factCheck);
+const stackOf = (target) => S.stacks.find((x) => `stack:${x.id}` === target);
+const factOn = (chat, a) => effortOf(chat, a) === 'max' || Boolean(chat.factCheck ?? a.factCheck ?? S.data.prefs.factCheck) || Boolean(stackOf(resolveTarget(chat, a))?.members.cloudCheck && !S.config?.offline);
 const checkRunning = (m) => [...checks.values()].some((c) => c.msgId === m.id);
 
 function membersOf(target) {
@@ -575,6 +576,8 @@ function membersOf(target) {
 // Picks the checker: your choice in Settings, else the strongest model that did NOT write the answer.
 function pickChecker(answerTarget) {
   const used = new Set(membersOf(answerTarget));
+  const own = stackOf(answerTarget)?.members.cloudCheck;
+  if (own && targetValid(own) && !used.has(own)) return own;
   const pref = S.data.prefs.factChecker;
   if (pref && targetValid(pref) && !used.has(pref)) return pref;
   const strength = (t) => {

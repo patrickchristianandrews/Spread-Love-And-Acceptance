@@ -46,19 +46,19 @@ const TEXT_MODELS = [
     blurb: 'Big step up in knowledge and judgment. Thinks through hard problems.', jobs: { general: 8, office: 8, research: 8, coding: 8, vision: 0, fast: 3 }, judge: 8 },
   { id: 'gpt-oss-20b', name: 'gpt-oss 20B', maker: 'OpenAI', params: '21B (3.6B active)', category: 'general', repo: 'ggml-org/gpt-oss-20b-GGUF', quant: null, sizeGB: 12.1, activeGB: 2.4, ctx: 131072, reasoning: true,
     blurb: 'OpenAI\'s open model. Strong reasoning and tool use, fast for its size.', jobs: { general: 8, office: 8, research: 8, coding: 8, vision: 0, fast: 5 }, judge: 8 },
-  { id: 'qwen3-30b-a3b', name: 'Qwen3 30B-A3B Instruct 2507', maker: 'Alibaba', params: '30B (3B active)', category: 'general', repo: 'unsloth/Qwen3-30B-A3B-Instruct-2507-GGUF', quant: 'Q4_K_M', sizeGB: 18.6, activeGB: 2.0, ctx: 262144,
+  { id: 'qwen3-30b-a3b', name: 'Qwen3 30B-A3B Instruct 2507', maker: 'Alibaba', params: '30B (3B active)', category: 'large', repo: 'unsloth/Qwen3-30B-A3B-Instruct-2507-GGUF', quant: 'Q4_K_M', sizeGB: 18.6, activeGB: 2.0, ctx: 262144,
     blurb: 'Big-model quality at small-model speed. One of the best local models.', jobs: { general: 9, office: 9, research: 9, coding: 8, vision: 0, fast: 6 }, judge: 9 },
-  { id: 'qwen3-32b', name: 'Qwen3 32B', maker: 'Alibaba', params: '32B', category: 'general', repo: 'unsloth/Qwen3-32B-GGUF', quant: 'Q4_K_M', sizeGB: 19.8, ctx: 32768, reasoning: true,
+  { id: 'qwen3-32b', name: 'Qwen3 32B', maker: 'Alibaba', params: '32B', category: 'large', repo: 'unsloth/Qwen3-32B-GGUF', quant: 'Q4_K_M', sizeGB: 19.8, ctx: 32768, reasoning: true,
     blurb: 'Dense heavyweight with deep reasoning. Needs a graphics card (GPU) with 24 GB of its own memory to be quick.', jobs: { general: 9, office: 9, research: 9, coding: 9, vision: 0, fast: 1 }, judge: 9 },
 
   // Reasoning
-  { id: 'deepseek-r1-qwen-14b', name: 'DeepSeek R1 Distill 14B', maker: 'DeepSeek', params: '14B', category: 'reasoning', repo: 'unsloth/DeepSeek-R1-Distill-Qwen-14B-GGUF', quant: 'Q4_K_M', sizeGB: 9.0, ctx: 32768, reasoning: true,
+  { id: 'deepseek-r1-qwen-14b', name: 'DeepSeek R1 Distill 14B', maker: 'DeepSeek', params: '14B', category: 'reasoning', repo: 'unsloth/DeepSeek-R1-Distill-Qwen-14B-GGUF', quant: 'Q4_K_M', sizeGB: 9.0, ctx: 32768, reasoning: true, thinksLong: true,
     blurb: 'Works problems out step by step before answering. Great for maths and logic.', jobs: { general: 7, office: 7, research: 8, coding: 7, vision: 0, fast: 2 }, judge: 7 },
-  { id: 'qwen3-30b-a3b-thinking', name: 'Qwen3 30B-A3B Thinking 2507', maker: 'Alibaba', params: '30B (3B active)', category: 'reasoning', repo: 'unsloth/Qwen3-30B-A3B-Thinking-2507-GGUF', quant: 'Q4_K_M', sizeGB: 18.6, activeGB: 2.0, ctx: 262144, reasoning: true,
+  { id: 'qwen3-30b-a3b-thinking', name: 'Qwen3 30B-A3B Thinking 2507', maker: 'Alibaba', params: '30B (3B active)', category: 'reasoning', repo: 'unsloth/Qwen3-30B-A3B-Thinking-2507-GGUF', quant: 'Q4_K_M', sizeGB: 18.6, activeGB: 2.0, ctx: 262144, reasoning: true, thinksLong: true,
     blurb: 'Deep, careful reasoning on hard analysis, still quick thanks to its design.', jobs: { general: 8, office: 9, research: 9, coding: 8, vision: 0, fast: 4 }, judge: 9 },
-  { id: 'gpt-oss-120b', name: 'gpt-oss 120B', maker: 'OpenAI', params: '117B (5.1B active)', category: 'reasoning', repo: 'ggml-org/gpt-oss-120b-GGUF', quant: null, sizeGB: 63.4, activeGB: 3.5, ctx: 131072, reasoning: true,
+  { id: 'gpt-oss-120b', name: 'gpt-oss 120B', maker: 'OpenAI', params: '117B (5.1B active)', category: 'large', repo: 'ggml-org/gpt-oss-120b-GGUF', quant: null, sizeGB: 63.4, activeGB: 3.5, ctx: 131072, reasoning: true,
     blurb: 'Near-frontier reasoning. For workstations with 64 GB+ of memory.', jobs: { general: 10, office: 10, research: 10, coding: 9, vision: 0, fast: 3 }, judge: 10 },
-  { id: 'qwen3-235b-a22b', name: 'Qwen3 235B-A22B Instruct 2507', maker: 'Alibaba', params: '235B (22B active)', category: 'reasoning', repo: 'unsloth/Qwen3-235B-A22B-Instruct-2507-GGUF', quant: 'Q2_K_XL', sizeGB: 88, activeGB: 9, ctx: 262144,
+  { id: 'qwen3-235b-a22b', name: 'Qwen3 235B-A22B Instruct 2507', maker: 'Alibaba', params: '235B (22B active)', category: 'large', repo: 'unsloth/Qwen3-235B-A22B-Instruct-2507-GGUF', quant: 'Q2_K_XL', sizeGB: 88, activeGB: 9, ctx: 262144,
     blurb: 'Flagship-class open model. Only for very high-memory machines.', jobs: { general: 10, office: 10, research: 10, coding: 10, vision: 0, fast: 1 }, judge: 10 },
 
   // Coding
@@ -90,15 +90,75 @@ const TEXT_MODELS = [
     blurb: 'Precise, professional and sees images. Great for business documents.', jobs: { general: 9, office: 9, research: 8, coding: 8, vision: 8, fast: 2 }, judge: 8 },
   { id: 'gemma-3-27b', name: 'Gemma 3 27B (vision)', maker: 'Google', params: '27B', category: 'vision', repo: 'unsloth/gemma-3-27b-it-GGUF', quant: 'Q4_K_M', sizeGB: 16.5, mmprojGB: 0.9, vision: true, ctx: 131072,
     blurb: 'Google\'s largest open model. Top-tier vision and writing.', jobs: { general: 9, office: 9, research: 9, coding: 7, vision: 9, fast: 1 }, judge: 9 },
+
+  // ---------- more uncensored community models ----------
+  { id: 'hermes-3-llama-3.2-3b', name: 'Hermes 3 3B', maker: 'Nous Research', params: '3B', category: 'open', repo: 'NousResearch/Hermes-3-Llama-3.2-3B-GGUF', quant: 'Q4_K_M', sizeGB: 2.0, ctx: 131072, open: true,
+    blurb: 'Small and steerable with few refusals. Runs on laptops.', jobs: { general: 5, office: 4, research: 4, coding: 3, vision: 0, fast: 8 }, judge: 3 },
+  { id: 'dolphin-3-qwen2.5-3b', name: 'Dolphin 3.0 3B', maker: 'Cognitive Computations', params: '3B', category: 'open', repo: 'bartowski/Dolphin3.0-Qwen2.5-3b-GGUF', quant: 'Q4_K_M', sizeGB: 1.9, ctx: 32768, open: true,
+    blurb: 'Uncensored general assistant in a small size: you set the rules in the system prompt.', jobs: { general: 5, office: 4, research: 4, coding: 4, vision: 0, fast: 8 }, judge: 3 },
+  { id: 'rocinante-12b', name: 'Rocinante 12B', maker: 'TheDrummer', params: '12B', category: 'open', repo: 'TheDrummer/Rocinante-12B-v1.1-GGUF', quant: 'Q4_K_M', sizeGB: 7.5, ctx: 32768, open: true,
+    blurb: 'A favourite for stories and role-play: vivid prose, few refusals.', jobs: { general: 7, office: 5, research: 5, coding: 4, vision: 0, fast: 4 }, judge: 5 },
+  { id: 'hermes-4-14b', name: 'Hermes 4 14B', maker: 'Nous Research', params: '14B', category: 'open', repo: 'NousResearch/Hermes-4-14B-GGUF', quant: 'Q4_K_M', sizeGB: 9.0, ctx: 40960, open: true, reasoning: true,
+    blurb: 'Newest Hermes: strong reasoning and writing, highly steerable, few refusals.', jobs: { general: 8, office: 7, research: 7, coding: 7, vision: 0, fast: 3 }, judge: 7 },
+  { id: 'dolphin-3-mistral-24b', name: 'Dolphin 3.0 Mistral 24B', maker: 'Cognitive Computations', params: '24B', category: 'open', repo: 'bartowski/cognitivecomputations_Dolphin3.0-Mistral-24B-GGUF', quant: 'Q4_K_M', sizeGB: 14.3, ctx: 32768, open: true,
+    blurb: 'The strongest Dolphin: an uncensored, capable assistant for 16 GB+ graphics cards.', jobs: { general: 8, office: 8, research: 7, coding: 7, vision: 0, fast: 2 }, judge: 8 },
+
+  // ---------- more of the most popular open models ----------
+  // Small
+  { id: 'gemma-3-1b', name: 'Gemma 3 1B', maker: 'Google', params: '1B', category: 'small', repo: 'unsloth/gemma-3-1b-it-GGUF', quant: 'Q4_K_M', sizeGB: 0.8, ctx: 32768,
+    blurb: 'Google\'s tiniest model. Instant answers on any PC, good for simple tasks.', jobs: { general: 4, office: 3, research: 3, coding: 2, vision: 0, fast: 10 }, judge: 2 },
+  { id: 'smollm3-3b', name: 'SmolLM3 3B', maker: 'Hugging Face', params: '3B', category: 'small', repo: 'unsloth/SmolLM3-3B-GGUF', quant: 'Q4_K_M', sizeGB: 1.9, ctx: 65536, reasoning: true,
+    blurb: 'Fully open small model that can think before answering. Strong for its size.', jobs: { general: 5, office: 5, research: 5, coding: 4, vision: 0, fast: 8 }, judge: 4 },
+  { id: 'qwen2.5-coder-3b', name: 'Qwen2.5 Coder 3B', maker: 'Alibaba', params: '3B', category: 'coding', repo: 'unsloth/Qwen2.5-Coder-3B-Instruct-GGUF', quant: 'Q4_K_M', sizeGB: 1.9, ctx: 32768,
+    blurb: 'A small coding helper that runs on laptops: scripts, fixes and explanations.', jobs: { general: 4, office: 4, research: 3, coding: 6, vision: 0, fast: 8 }, judge: 3 },
+  { id: 'qwen3-4b-thinking', name: 'Qwen3 4B Thinking 2507', maker: 'Alibaba', params: '4B', category: 'reasoning', repo: 'unsloth/Qwen3-4B-Thinking-2507-GGUF', quant: 'Q4_K_M', sizeGB: 2.5, ctx: 262144, reasoning: true, thinksLong: true,
+    blurb: 'Small model that reasons step by step: surprisingly good at maths and logic.', jobs: { general: 6, office: 6, research: 7, coding: 7, vision: 0, fast: 6 }, judge: 6 },
+  { id: 'gemma-3n-e4b', name: 'Gemma 3n E4B', maker: 'Google', params: '8B (4B effective)', category: 'small', repo: 'unsloth/gemma-3n-E4B-it-GGUF', quant: 'Q4_K_M', sizeGB: 4.5, ctx: 32768,
+    blurb: 'Built for phones and laptops: 8B quality in the memory of a 4B model.', jobs: { general: 6, office: 6, research: 5, coding: 5, vision: 0, fast: 7 }, judge: 5 },
+  // General
+  { id: 'mistral-7b', name: 'Mistral 7B v0.3', maker: 'Mistral AI', params: '7B', category: 'general', repo: 'bartowski/Mistral-7B-Instruct-v0.3-GGUF', quant: 'Q4_K_M', sizeGB: 4.4, ctx: 32768,
+    blurb: 'The classic open model: quick, fluent and easy to steer.', jobs: { general: 6, office: 5, research: 5, coding: 5, vision: 0, fast: 6 }, judge: 4 },
+  { id: 'granite-3.3-8b', name: 'Granite 3.3 8B', maker: 'IBM', params: '8B', category: 'general', repo: 'ibm-granite/granite-3.3-8b-instruct-GGUF', quant: 'Q4_K_M', sizeGB: 4.9, ctx: 131072, reasoning: true,
+    blurb: 'Business-focused: documents, summaries, RAG and tool use, with a 128K context.', jobs: { general: 6, office: 7, research: 7, coding: 6, vision: 0, fast: 5 }, judge: 6 },
+  { id: 'glm-4-9b', name: 'GLM-4 9B 0414', maker: 'Zhipu AI', params: '9B', category: 'general', repo: 'unsloth/GLM-4-9B-0414-GGUF', quant: 'Q4_K_M', sizeGB: 5.7, ctx: 32768,
+    blurb: 'Capable all-rounder, good at writing, code and following instructions.', jobs: { general: 7, office: 7, research: 6, coding: 7, vision: 0, fast: 5 }, judge: 6 },
+  { id: 'llama-3.3-70b', name: 'Llama 3.3 70B', maker: 'Meta', params: '70B', category: 'large', repo: 'unsloth/Llama-3.3-70B-Instruct-GGUF', quant: 'Q4_K_M', sizeGB: 42.5, ctx: 131072,
+    blurb: 'Meta\'s best dense model: excellent writing and knowledge. Needs 48 GB+ of memory.', jobs: { general: 9, office: 9, research: 9, coding: 8, vision: 0, fast: 1 }, judge: 9 },
+  { id: 'glm-4.5-air', name: 'GLM-4.5-Air', maker: 'Zhipu AI', params: '106B (12B active)', category: 'large', repo: 'unsloth/GLM-4.5-Air-GGUF', quant: 'Q4_K_M', sizeGB: 72.9, activeGB: 7, ctx: 131072, reasoning: true,
+    blurb: 'Top-tier open model for agents, coding and reasoning, fast for its size. For 96 GB+ machines.', jobs: { general: 10, office: 10, research: 9, coding: 10, vision: 0, fast: 3 }, judge: 10 },
+  // Reasoning
+  { id: 'deepseek-r1-qwen3-8b', name: 'DeepSeek R1 0528 (Qwen3 8B)', maker: 'DeepSeek', params: '8B', category: 'reasoning', repo: 'unsloth/DeepSeek-R1-0528-Qwen3-8B-GGUF', quant: 'Q4_K_M', sizeGB: 5.0, ctx: 131072, reasoning: true, thinksLong: true,
+    blurb: 'DeepSeek\'s newest reasoning, distilled into 8B. Excellent at maths for its size.', jobs: { general: 7, office: 7, research: 8, coding: 7, vision: 0, fast: 3 }, judge: 7 },
+  { id: 'deepseek-r1-qwen-7b', name: 'DeepSeek R1 Distill 7B', maker: 'DeepSeek', params: '7B', category: 'reasoning', repo: 'unsloth/DeepSeek-R1-Distill-Qwen-7B-GGUF', quant: 'Q4_K_M', sizeGB: 4.7, ctx: 32768, reasoning: true, thinksLong: true,
+    blurb: 'Thinks out loud before answering. Good maths and logic on mid-range PCs.', jobs: { general: 5, office: 6, research: 6, coding: 6, vision: 0, fast: 3 }, judge: 5 },
+  { id: 'deepseek-r1-qwen-32b', name: 'DeepSeek R1 Distill 32B', maker: 'DeepSeek', params: '32B', category: 'reasoning', repo: 'unsloth/DeepSeek-R1-Distill-Qwen-32B-GGUF', quant: 'Q4_K_M', sizeGB: 19.9, ctx: 32768, reasoning: true, thinksLong: true,
+    blurb: 'Deep, careful reasoning for hard problems. Best with a 24 GB graphics card.', jobs: { general: 8, office: 8, research: 9, coding: 8, vision: 0, fast: 1 }, judge: 9 },
+  { id: 'phi-4-reasoning-plus', name: 'Phi-4 Reasoning Plus', maker: 'Microsoft', params: '14B', category: 'reasoning', repo: 'unsloth/Phi-4-reasoning-plus-GGUF', quant: 'Q4_K_M', sizeGB: 9.1, ctx: 32768, reasoning: true, thinksLong: true,
+    blurb: 'Microsoft\'s reasoning specialist: top-class maths and science for a 14B model.', jobs: { general: 7, office: 8, research: 8, coding: 8, vision: 0, fast: 2 }, judge: 8 },
+  { id: 'qwq-32b', name: 'QwQ 32B', maker: 'Alibaba', params: '32B', category: 'reasoning', repo: 'unsloth/QwQ-32B-GGUF', quant: 'Q4_K_M', sizeGB: 19.9, ctx: 131072, reasoning: true, thinksLong: true,
+    blurb: 'Famous open reasoner: long, careful thinking on hard maths and logic.', jobs: { general: 8, office: 8, research: 9, coding: 8, vision: 0, fast: 1 }, judge: 9 },
+  { id: 'magistral-small', name: 'Magistral Small 2509', maker: 'Mistral AI', params: '24B', category: 'reasoning', repo: 'unsloth/Magistral-Small-2509-GGUF', quant: 'Q4_K_M', sizeGB: 14.3, ctx: 131072, reasoning: true, thinksLong: true,
+    blurb: 'Mistral\'s reasoning model: transparent step-by-step thinking in many languages.', jobs: { general: 8, office: 8, research: 9, coding: 8, vision: 0, fast: 2 }, judge: 8 },
+  // Coding
+  { id: 'devstral-small', name: 'Devstral Small 2507', maker: 'Mistral AI', params: '24B', category: 'coding', repo: 'unsloth/Devstral-Small-2507-GGUF', quant: 'Q4_K_M', sizeGB: 14.3, ctx: 131072,
+    blurb: 'Built for coding agents: works across whole projects, edits files and fixes bugs.', jobs: { general: 7, office: 7, research: 6, coding: 9, vision: 0, fast: 2 }, judge: 7 },
+  { id: 'qwen2.5-coder-32b', name: 'Qwen2.5 Coder 32B', maker: 'Alibaba', params: '32B', category: 'coding', repo: 'unsloth/Qwen2.5-Coder-32B-Instruct-GGUF', quant: 'Q4_K_M', sizeGB: 19.9, ctx: 32768,
+    blurb: 'A favourite for serious coding on a 24 GB graphics card.', jobs: { general: 7, office: 7, research: 7, coding: 10, vision: 0, fast: 1 }, judge: 8 },
+  // Vision
+  { id: 'qwen3-vl-4b', name: 'Qwen3-VL 4B', maker: 'Alibaba', params: '4B', category: 'vision', repo: 'Qwen/Qwen3-VL-4B-Instruct-GGUF', quant: 'Q4_K_M', sizeGB: 2.5, mmprojGB: 0.8, vision: true, ctx: 262144,
+    blurb: 'Reads photos, documents and charts well, and answers quickly.', jobs: { general: 6, office: 7, research: 6, coding: 5, vision: 8, fast: 7 }, judge: 5 },
+  { id: 'qwen3-vl-8b', name: 'Qwen3-VL 8B', maker: 'Alibaba', params: '8B', category: 'vision', repo: 'Qwen/Qwen3-VL-8B-Instruct-GGUF', quant: 'Q4_K_M', sizeGB: 5.0, mmprojGB: 1.2, vision: true, ctx: 262144,
+    blurb: 'One of the best models at seeing: documents, screenshots, charts and video frames.', jobs: { general: 7, office: 8, research: 7, coding: 6, vision: 9, fast: 5 }, judge: 6 },
 ];
 
 const TEXT_CATEGORIES = {
-  small: { label: 'Small & fast', icon: '⚡' },
-  general: { label: 'General purpose', icon: '💬' },
-  reasoning: { label: 'Reasoning', icon: '🧠' },
-  coding: { label: 'Coding', icon: '💻' },
-  vision: { label: 'Vision (photos & video)', icon: '👁️' },
-  open: { label: 'Unfiltered', icon: '🔓' },
+  small: { label: 'Small & fast', icon: '⚡', note: 'Under 5 GB: laptops and older PCs.' },
+  general: { label: 'Everyday', icon: '💬', note: 'Strong all-rounders for most PCs.' },
+  large: { label: 'Big & powerful', icon: '🚀', note: 'The strongest open models, for PCs with lots of memory.' },
+  reasoning: { label: 'Reasoning', icon: '🧠', note: 'Think step by step: maths, logic, hard questions.' },
+  coding: { label: 'Coding', icon: '💻', note: 'Write, fix and explain code; build apps.' },
+  vision: { label: 'Vision (photos & video)', icon: '👁️', note: 'See photos, screenshots, documents and video.' },
+  open: { label: 'Uncensored', icon: '🔓', note: 'Community models with far fewer refusals: fiction, role-play, frank answers.' },
 };
 
 // ---------- image and video models (stable-diffusion.cpp) ----------
@@ -154,7 +214,7 @@ const JOBS = {
   general: { kind: 'text', words: 300, label: 'Everyday', icon: '⚡', pitch: 'Quick, reliable answers for questions, advice and small tasks.', speed: 25, budget: 60, temperature: 0.7, contextSize: 16384, maxTokens: 4096, library: false, web: true, mode: 'blend',
     assistant: { name: 'Quicksilver', emoji: '💧', instructions: 'You are Quicksilver, a capable, honest assistant running privately on the user\'s computer. Give clear, direct, well-organised answers. Use Markdown (headings, lists, tables, code blocks) when it helps. For arithmetic, numbers and calculations, work them out step by step before giving the result, and double-check it. If you are unsure, say so instead of guessing.' } },
   // Back from Quicksilver 2.0/2.1: quick answers on modest PCs.
-  fast: { kind: 'text', words: 250, label: 'Fast on a modest PC', icon: '🏃', pitch: 'Quick answers on laptops and older computers: the lightest models that still answer well.', speed: 30, budget: 30, temperature: 0.6, contextSize: 8192, maxTokens: 2048, library: false, web: true, mode: 'blend',
+  fast: { kind: 'text', words: 250, label: 'Fast on a modest PC', icon: '🏃', pitch: 'Quick answers on laptops and older computers: the best model that still answers in seconds.', single: true, speed: 30, budget: 30, temperature: 0.6, contextSize: 8192, maxTokens: 2048, library: false, web: true, mode: 'blend',
     assistant: { name: 'Quick Helper', emoji: '🏃', instructions: 'You are a fast, concise assistant. Keep answers short and to the point unless asked for more. Use a short list when it helps. If a question needs a long, careful answer, say so and give the key points first.' } },
   reasoning: { kind: 'text', words: 500, label: 'Reasoning', icon: '🧠', pitch: 'Maths, logic, tricky questions and decisions, worked through step by step.', speed: 8, budget: 240, temperature: 0.3, contextSize: 32768, maxTokens: 8192, library: false, web: false, mode: 'debate',
     assistant: { name: 'Thinker', emoji: '🧠', instructions: 'You are a careful reasoner. Work through problems step by step, state your assumptions, check each step, and verify the final answer (recompute numbers, test edge cases, look for counter-examples). Give the conclusion clearly at the end. If the question is ambiguous, say how you interpreted it.' } },
@@ -181,6 +241,8 @@ function scoreFor(m, job) {
   const j = m.jobs || {};
   if (job === 'writing') return Math.min(10, (j.general ?? 5) + (WRITERS.test(m.maker || '') ? 1 : 0) - (m.category === 'coding' ? 2 : 0));
   if (job === 'open') return m.open ? (j.general ?? 5) : 0;
+  // "Fast" means the best answers that still come quickly: quality, with the speed floor in compose.
+  if (job === 'fast') return j.general ?? 5;
   if (job === 'reasoning') return Math.min(10, Math.round(((j.research ?? 5) + (m.judge ?? 5)) / 2) + (m.reasoning ? 1 : 0) - (m.category === 'coding' ? 1 : 0));
   return j[job] ?? j.general ?? 5;
 }
@@ -245,11 +307,16 @@ const FAMILIES = ['gpt-oss', 'deepseek', 'hermes', 'dolphin', 'qwen', 'llama', '
 const words = (s) => String(s || '').toLowerCase().replace(/\.gguf$/, '').replace(/[^a-z0-9]+/g, ' ').replace(/([a-z])(\d)/g, '$1 $2').trim().split(/\s+/).filter(Boolean);
 
 function matchCatalog(name) {
+  const base = String(name).split('/').pop().replace(/\.gguf$/i, '').toLowerCase();
+  const exact = TEXT_MODELS.find((m) => m.repo.split('/').pop().toLowerCase() === base);
+  if (exact) return exact;
   const have = new Set(words(name));
   let best = null;
   for (const m of TEXT_MODELS) {
     const need = words(m.id);
-    if (need.every((w) => have.has(w)) && (!best || need.length > best.n)) best = { m, n: need.length };
+    // Specialist words (coder, vl, thinking…) win a tie with the general model of the same size.
+    const n = need.length + (need.some((w) => /^(coder|vl|thinking|reasoning|r1|distill|mini)$/.test(w)) ? 0.5 : 0);
+    if (need.every((w) => have.has(w)) && (!best || n > best.n)) best = { m, n };
   }
   return best?.m || null;
 }
@@ -281,20 +348,22 @@ function profileInstalled(inst) {
 // The Effort setting in each chat decides how much of the stack runs (Quick uses one model).
 
 // leadSpeed: how quick (tokens/s) the lead must be to count as fast enough; it answers every message.
-function compose(pool, job, hw, calib, { vision = true, budget = 150, speed = 10, leadSpeed = Math.min(speed, 10) } = {}) {
-  const ranked = pool.map((m) => ({ m, est: estimateText(m, hw, calib) })).filter((x) => x.est.fit !== 'no');
+function compose(pool, job, hw, calib, { vision = true, budget = 150, speed = 10, leadSpeed = Math.min(speed, 10), single = false } = {}) {
+  // Models that always think at length only join stacks for reasoning and research.
+  const thinkers = ['reasoning', 'research'].includes(job);
+  const ranked = pool.map((m) => ({ m, est: estimateText(m, hw, calib) })).filter((x) => x.est.fit !== 'no' && (thinkers || !x.m.thinksLong));
   if (!ranked.length) return null;
   const quick = (x, target) => Math.sqrt(Math.min(1, x.est.tps / target));
   const byJob = [...ranked].sort((a, b) => scoreFor(b.m, job) * quick(b, speed) - scoreFor(a.m, job) * quick(a, speed) || a.m.sizeGB - b.m.sizeGB);
   const drafters = [];
   for (const x of byJob) {
-    if (drafters.length >= 2) break;
+    if (drafters.length >= (single ? 1 : 2)) break;
     if (drafters.some((d) => familyOf(d.m) === familyOf(x.m))) continue;
     if (drafters.length && scoreFor(x.m, job) < scoreFor(drafters[0].m, job) - 3) continue; // too weak to help
     drafters.push(x);
   }
   for (const x of byJob) { // only one maker available: a second model of the same family still helps
-    if (drafters.length >= 2) break;
+    if (single || drafters.length >= 2) break;
     if (!drafters.includes(x) && scoreFor(x.m, job) >= scoreFor(drafters[0].m, job) - 2) drafters.push(x);
   }
   const members = { drafters: drafters.map((x) => x.m.id) };
@@ -364,6 +433,53 @@ function composeMedia(job, hw, calib, mediaPool, textPool) {
 // For a kind of work, two answers:
 //  mine: the best stack from the models already on this PC (nothing to download)
 //  best: the best stack this PC can run from the whole catalog
+// ---------- accuracy level ----------
+// A plain-words level from the expected quality (0-10). Stacks gain a little: several models
+// answering and a lead that compares them catch more mistakes than one model alone. A cloud fact
+// check or lead adds more.
+function accuracyLevel(quality, { stack = false, cloud = false } = {}) {
+  const q = Math.min(10, (quality || 0) + (stack ? 0.5 : 0) + (cloud ? 1 : 0));
+  const dots = Math.max(1, Math.min(5, Math.round(q / 2)));
+  return { score: Math.round(q * 10) / 10, label: ['Basic', 'Fair', 'Good', 'High', 'Very high', 'Excellent'][dots], dots };
+}
+
+// ---------- cloud boost: which paid (or free) API makes each stack better, and how ----------
+// mode 'hard': the private stack answers; only hard questions go to the cloud lead.
+// mode 'check': the private stack answers; a cloud model fact-checks every answer (short reply).
+// mode 'lead': the private stack drafts; the cloud model writes the final answer (best quality,
+//              about the same paid use as the cloud alone, so it's for quality, not savings).
+const CLOUD_BOOST = {
+  general: { provider: 'google', alt: 'anthropic', mode: 'hard', share: 0.15, why: 'Hard or current-events questions get a frontier model; everyday ones stay private and free.' },
+  fast: { provider: 'groq', alt: 'cerebras', mode: 'hard', share: 0.1, why: 'Groq and Cerebras answer in about a second, so hard questions stay fast too.' },
+  reasoning: { provider: 'anthropic', alt: 'google', mode: 'hard', share: 0.4, why: 'Frontier models are far stronger at multi-step maths and logic; your stack handles the rest.' },
+  office: { provider: 'anthropic', alt: 'google', mode: 'check', why: 'A second, independent model checks the figures and conclusions in every answer.' },
+  research: { provider: 'google', alt: 'openrouter', mode: 'check', why: 'Gemini checks each claim against what it knows, flagging anything the sources don\'t support.' },
+  writing: { provider: 'anthropic', alt: 'mistral', mode: 'lead', why: 'Your private models draft; Claude writes the final version in polished, natural prose.' },
+  vision: { provider: 'google', alt: 'openai', mode: 'hard', share: 0.25, why: 'Gemini reads hard documents, handwriting and charts very accurately.' },
+  open: { provider: 'openrouter', alt: 'xai', mode: 'hard', share: 0.2, why: 'OpenRouter has free uncensored community models, so hard requests get a bigger model with the same freedom.' },
+  coding: { provider: 'anthropic', alt: 'github', mode: 'check', why: 'A frontier model reviews each answer for bugs and security issues before you run it.' },
+  create: { provider: 'together', alt: 'openai', mode: 'image', why: 'For pictures beyond what this PC can make: FLUX Schnell is free on Together; OpenAI gpt-image-1 for the best results.' },
+  edit: { provider: 'openai', alt: 'together', mode: 'image', why: 'gpt-image-1 makes precise edits from a description, at a cost per image.' },
+};
+// Estimated paid use compared with asking the cloud model directly for every answer.
+// Output tokens cost about 4× input tokens, so input is counted at a quarter.
+function cloudPlan(job, localQuality = 7) {
+  const b = CLOUD_BOOST[job];
+  if (!b) return null;
+  const words = JOBS[job]?.words || 400;
+  const out = words * 1.35; // tokens in a typical answer
+  const prompt = 300; // tokens in a typical question with context
+  const alone = out + prompt / 4;
+  let paid = alone;
+  if (b.mode === 'hard') paid = alone * b.share;
+  if (b.mode === 'check') paid = 150 + (prompt + out) / 4; // reads the answer, writes a short verdict
+  if (b.mode === 'lead') paid = out + (prompt + 2 * out) / 4; // reads the drafts too
+  if (b.mode === 'image') paid = alone * 0.2; // only the pictures this PC can't make
+  const saved = Math.round((1 - paid / alone) * 100);
+  const after = b.mode === 'hard' ? localQuality * (1 - b.share) + 9.5 * b.share : b.mode === 'check' ? Math.max(localQuality, 8.5) + 0.5 : b.mode === 'lead' ? 9.5 : localQuality;
+  return { ...b, saved, paidShare: Math.round((paid / alone) * 100), before: accuracyLevel(localQuality, { stack: true }), after: accuracyLevel(after, { stack: true }) };
+}
+
 function advise(job, hw, opts = {}) {
   const j = JOBS[job] || JOBS.general;
   const calib = opts.calib || 1;
@@ -381,23 +497,41 @@ function advise(job, hw, opts = {}) {
     best.missingGB = best.ids.filter((id) => !best.have[id]).reduce((t, id) => { const m = MEDIA_MODELS.find((x) => x.id === id) || TEXT_MODELS.find((x) => x.id === id); return t + m.sizeGB + (m.mmprojGB || 0); }, 0);
     best.better = !mine || best.quality > mine.quality || (best.complete && !mine.complete);
     const yours = [...media.map((m) => ({ id: m.id, name: m.name, category: m.category, animate: Boolean(m.animate) })), ...text.map((m) => ({ id: m.id, name: m.name, category: 'text', vision: m.vision }))];
-    return { ...base, roles: j.roles, roleLabels: Object.fromEntries(j.roles.map((r) => [r, MEDIA_ROLES[r].label])), yours, mine, best };
+    return { ...base, roles: j.roles, roleLabels: Object.fromEntries(j.roles.map((r) => [r, MEDIA_ROLES[r].label])), yours, mine, best, cloud: cloudPlan(job) };
   }
   const vision = !['coding', 'reasoning', 'open'].includes(job);
-  const tune = { vision, speed: j.speed, budget: j.budget, leadSpeed: Math.max(8, j.speed) };
+  const tune = { vision, speed: j.speed, budget: j.budget, leadSpeed: Math.max(8, j.speed), single: Boolean(j.single) };
   const fits = (m) => !j.only || m[j.only]; // e.g. the Unfiltered stack only uses unfiltered models
   const pool = text.filter(fits);
   const mine = pool.length ? compose(pool, job, hw, calib, tune) : null;
   const best = compose(TEXT_MODELS.filter(fits), job, hw, calib, tune);
-  if (best) {
+  const finish = (s) => {
+    if (!s) return s;
     // Already installed? Use the installed copy instead of downloading again.
-    best.have = Object.fromEntries(best.ids.map((id) => [id, text.find((m) => m.catalogId === id)?.id || null]));
-    best.missingGB = best.ids.filter((id) => !best.have[id]).reduce((t, id) => { const m = TEXT_MODELS.find((x) => x.id === id); return t + m.sizeGB + (m.mmprojGB || 0); }, 0);
+    s.have = Object.fromEntries(s.ids.map((id) => [id, text.find((m) => m.catalogId === id)?.id || null]));
+    s.missingGB = s.ids.filter((id) => !s.have[id]).reduce((t, id) => { const m = TEXT_MODELS.find((x) => x.id === id); return t + m.sizeGB + (m.mmprojGB || 0); }, 0);
+    s.accuracy = accuracyLevel(s.quality, { stack: s.members.drafters.length > 1 || Boolean(s.members.judge) });
+    return s;
+  };
+  if (best) {
+    finish(best);
     best.better = !mine || best.quality > mine.quality || (best.members.drafters.length > mine.members.drafters.length && best.quality >= mine.quality);
   }
+  if (mine) mine.accuracy = accuracyLevel(mine.quality, { stack: mine.members.drafters.length > 1 || Boolean(mine.members.judge) });
+  // Three ways to run it on this PC: quickest, balanced (the recommendation) and most accurate.
+  const all = TEXT_MODELS.filter(fits);
+  const tiers = {
+    quick: finish(compose(all, job, hw, calib, { ...tune, single: true, speed: Math.max(25, j.speed), budget: Math.max(15, j.budget * 0.25) })),
+    balanced: best,
+    accurate: finish(compose(all, job, hw, calib, { ...tune, single: false, speed: 3, leadSpeed: 3, budget: j.budget * 4 })),
+  };
+  const same = (a, b) => a && b && JSON.stringify(a.members) === JSON.stringify(b.members);
+  if (tiers.accurate && best && (same(tiers.accurate, best) || (tiers.accurate.quality <= best.quality && tiers.accurate.accuracy.score <= best.accuracy.score))) tiers.accurate = null;
+  if (tiers.quick && best && same(tiers.quick, best)) tiers.quick = null;
+  const cloud = cloudPlan(job, (mine || best)?.quality ?? 7);
   const yours = pool.map((m) => ({ id: m.id, name: m.name, known: m.known, vision: m.vision, score: scoreFor(m, job), judge: m.judge, sizeGB: m.sizeGB, est: estimateText(m, hw, calib) }));
   return {
-    ...base, mode: j.mode,
+    ...base, mode: j.mode, tiers, cloud,
     settings: { temperature: j.temperature, contextSize: j.contextSize, maxTokens: j.maxTokens, library: j.library, web: j.web },
     assistant: j.assistant,
     yours, mine, best,
@@ -479,4 +613,4 @@ function capabilities(profiles, { local = true } = {}) {
   ];
 }
 
-module.exports = { TEXT_MODELS, TEXT_CATEGORIES, MEDIA_MODELS, MEDIA_CATEGORIES, JOBS, estimateText, estimateMedia, advise, compose, gpuBandwidth, profileInstalled, matchCatalog, scoreFor, familyOf, starsFor, capabilities, upgradeAdvice };
+module.exports = { TEXT_MODELS, TEXT_CATEGORIES, MEDIA_MODELS, MEDIA_CATEGORIES, JOBS, CLOUD_BOOST, cloudPlan, accuracyLevel, estimateText, estimateMedia, advise, compose, gpuBandwidth, profileInstalled, matchCatalog, scoreFor, familyOf, starsFor, capabilities, upgradeAdvice };

@@ -210,6 +210,11 @@ async function* stack(stackDef, req) {
   }
   let drafters = (members.drafters || []).filter(exists);
   let judge = members.judge && exists(members.judge) ? members.judge : null;
+  // Cloud boost: hard questions get a cloud lead; everything else stays on this PC.
+  if (members.cloudHard && exists(members.cloudHard) && level !== 'quick' && autoLevel(req) === 'thorough' && !require('./offline').isOffline()) {
+    judge = members.cloudHard;
+    yield { type: 'status', text: 'A hard one: your models draft, the cloud lead finishes it…' };
+  }
   if (level === 'quick') { drafters = drafters.slice(0, 1).length ? drafters.slice(0, 1) : [judge].filter(Boolean); judge = null; }
   else if (level === 'balanced') drafters = drafters.slice(0, 1);
   if (!drafters.length && !judge) throw new Error(`The stack "${stackDef.name}" has no installed models. Open Stacks to finish setting it up.`);

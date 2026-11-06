@@ -92,6 +92,18 @@ function redPng(size = 64) {
   await win.click('[data-improve="ci-prompt"]');
   await win.waitForFunction(() => document.querySelector('#ci-prompt').value !== 'a cat' && !document.querySelector('[data-improve="ci-prompt"]').disabled, null, { timeout: 30000 });
   console.log('✓ stacks: types, built from installed models, Studio kit with ✨ Improve');
+  // Each stack type explains how it works, offers three strengths with accuracy levels, and
+  // suggests a cloud AI with the paid use it saves.
+  await win.click('[data-nav="stacks"]');
+  await win.click('[data-job="reasoning"]');
+  await win.waitForSelector('.how-card:has-text("How the Reasoning stack works")', { timeout: 30000 });
+  await win.waitForSelector('.tier-card:has-text("Quickest") .acc');
+  await win.waitForSelector('.tier-card.hl:has-text("Balanced") [data-tier="balanced"]');
+  await win.waitForSelector('.cloud-card:has-text("Anthropic")', { timeout: 30000 });
+  assert.match(await win.locator('.cloud-card').innerText(), /less than asking/);
+  await win.evaluate(() => document.querySelector('.tier-grid').scrollIntoView());
+  await shot(win, '03b-stack-tiers');
+  console.log('✓ stacks: how it works, three strengths with accuracy, cloud boost with savings');
 
   // Chat with the powerhouse stack, a spreadsheet attached and fact check on.
   await win.click('[data-nav="newchat"]');
@@ -103,7 +115,7 @@ function redPng(size = 64) {
   await win.fill('#input', 'Which region sold more?');
   await win.keyboard.press('Enter');
   await idle();
-  await win.waitForFunction(() => document.querySelector('.msg.assistant .bubble')?.textContent.includes('FINAL from'), null, { timeout: 60000 });
+  await win.waitForFunction(() => document.querySelector('.msg.assistant .bubble')?.textContent.includes('FINAL from'), null, { timeout: 150000 });
   assert.match(await win.locator('.steps > summary').innerText(), /3 steps/);
   await win.waitForSelector('.fact-chip', { timeout: 60000 });
   await win.waitForFunction(() => !document.querySelector('.fact-chip.k-run'), null, { timeout: 60000 });

@@ -351,6 +351,36 @@ async function collect(gen) {
     console.log('✓ your own API: endpoints become tools (writes ask first); MCP directory entries ready to add');
   }
 
+  // Trending models: fetched from Hugging Face, grouped by type, rated for this PC, cached for hours.
+  {
+    let calls = 0;
+    global.fetch = async (url) => {
+      if (!String(url).includes('sort=trendingScore')) return realFetch(url);
+      calls++;
+      return new Response(JSON.stringify([
+        { id: 'unsloth/Qwen3-Coder-30B-A3B-Instruct-GGUF', downloads: 90000, likes: 800, trendingScore: 120, tags: ['gguf', 'code'], createdAt: '2026-10-30T00:00:00Z' },
+        { id: 'someone/Cool-VL-7B-GGUF', downloads: 5000, likes: 90, trendingScore: 80, tags: ['gguf'], pipeline_tag: 'image-text-to-text' },
+        { id: 'someone/Story-12B-Uncensored-GGUF', downloads: 3000, likes: 60, trendingScore: 60, tags: ['gguf'] },
+        { id: 'someone/Tiny-Embed-GGUF', downloads: 100, likes: 1, trendingScore: 50, tags: ['gguf'] },
+      ]), { status: 200, headers: { 'Content-Type': 'application/json' } });
+    };
+    store.saveConfig({ trendingCache: null });
+    const hw = await hardware.detect();
+    const t = await models.trending({ hw });
+    assert.equal(t.list.length, 3, 'embedding models left out');
+    const [coder, vl, story] = t.list;
+    assert.ok(coder.catalogId === 'qwen3-coder-30b' && coder.type === 'coding' && coder.est?.rating, 'known model matched and rated');
+    assert.ok(vl.type === 'vision' && vl.sizeGB === 4.2 && vl.est, 'size guessed from the name');
+    assert.equal(story.type, 'open');
+    await models.trending({ hw });
+    assert.equal(calls, 1, 'cached between refreshes');
+    await models.trending({ hw, force: true });
+    assert.equal(calls, 2, 'refresh on demand');
+    assert.deepEqual(models.paramsOf('x/Qwen3-30B-A3B-GGUF'), { params: 30, active: 3 });
+    global.fetch = realFetch;
+    console.log('✓ trending models: grouped by type, rated for this PC, refreshed every few hours');
+  }
+
   // Measured speeds: real answers are timed per model and re-tune every estimate.
   {
     const speeds = require('../src/main/speeds');
@@ -578,6 +608,21 @@ async function collect(gen) {
   assert.equal(catalog.matchCatalog('Phi-4-mini-instruct-Q4_K_M')?.id, 'phi-4-mini');
   assert.equal(catalog.matchCatalog('Qwen2.5-7B-Instruct')?.id, 'qwen2.5-7b', 'the 1.0 models are recognised again');
   assert.equal(catalog.matchCatalog('Yi-1.5-9B-Chat'), null, 'no false match');
+  {
+    // Three ways to run a stack, accuracy levels, and the cloud AI that would improve it.
+    const mid = { ramGB: 16, vramGB: 8, vramFreeGB: 7.5, gpuName: 'RTX 4060', cpuThreads: 12, unifiedMemory: false };
+    const g = catalog.advise('general', mid, {});
+    assert.ok(g.tiers.quick.members.drafters.length === 1 && !g.tiers.quick.members.judge, 'quickest is one model');
+    assert.ok(g.tiers.quick.secondsPerAnswer < g.tiers.balanced.secondsPerAnswer, 'and quicker');
+    assert.ok(!g.tiers.accurate || g.tiers.accurate.accuracy.score >= g.tiers.balanced.accuracy.score, 'most accurate is never less accurate');
+    assert.ok(['Good', 'High', 'Very high', 'Excellent'].includes(g.tiers.balanced.accuracy.label));
+    assert.ok(g.cloud.provider === 'google' && g.cloud.saved > 70 && g.cloud.after.score >= g.cloud.before.score, 'hard questions only: most paid use saved');
+    const w = catalog.cloudPlan('writing', 8);
+    assert.ok(w.mode === 'lead' && w.saved < 0, 'a cloud lead is for quality, not savings');
+    assert.ok(catalog.cloudPlan('office', 8).saved > 30, 'a fact check uses far less than full answers');
+    assert.ok(Object.keys(catalog.JOBS).every((j) => catalog.CLOUD_BOOST[j]), 'every stack type has a cloud suggestion');
+    console.log('✓ stack tiers: quickest / balanced / most accurate with accuracy levels; cloud boosts with savings');
+  }
   const unknown = catalog.profileInstalled({ id: 'x', name: 'mystery-chat-12b', size: 7.5e9 });
   assert.equal(unknown.known, false); assert.ok(unknown.jobs.general >= 6 && unknown.jobs.general <= 8);
   const mid = { ramGB: 32, vramGB: 12, vramFreeGB: 11.5 };

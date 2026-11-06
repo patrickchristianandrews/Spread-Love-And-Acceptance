@@ -629,3 +629,19 @@ select.sel-open { border-color: var(--accent) !important; }
 select { background-color: var(--panel); color: var(--text); }
 .pill-select select { background-color: var(--panel) !important; }
 .int-group { margin: 18px 0 10px; font-size: .78rem; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+
+/* Stacks: tiers, how it works, cloud boost */
+.tier-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 14px; }
+.tier-card { display: flex; flex-direction: column; }
+.tier-card .best-rows { flex: 1; }
+.muted-card { opacity: .75; }
+.tier-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 10px; }
+.tier-stats > div { background: var(--soft); border: 1px solid var(--line-soft); border-radius: 10px; padding: 7px 9px; font-size: .86rem; }
+.tier-stats .label { display: block; font-size: .7rem; margin-bottom: 2px; }
+.acc { font-weight: 750; white-space: nowrap; }
+.acc-dots { color: var(--accent); letter-spacing: 1px; }
+.acc-dots i { font-style: normal; color: var(--line); }
+.how-card { margin-bottom: 14px; }
+.how-steps { margin: 8px 0 12px; padding-left: 1.3em; line-height: 1.6; }
+.how-steps li { margin: 3px 0; }
+.cloud-card { border-style: dashed; }

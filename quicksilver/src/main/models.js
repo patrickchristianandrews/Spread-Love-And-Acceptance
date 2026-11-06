@@ -236,6 +236,42 @@ async function search(query, { limit = 30 } = {}) {
   return list.map((m) => ({ repo: m.id || m.modelId, downloads: m.downloads || 0, likes: m.likes || 0, updated: m.lastModified, tags: (m.tags || []).filter((t) => !/^(gguf|region|license|endpoints|base_model|dataset|arxiv)/.test(t)).slice(0, 6), pipeline: m.pipeline_tag }));
 }
 
+// ---------- trending on Hugging Face ----------
+// The GGUF models people are downloading most right now. Kept for a few hours, then refreshed.
+const TREND_TTL = 4 * 3600 * 1000;
+function trendType(id, tags = [], pipeline = '') {
+  const t = `${id} ${tags.join(' ')}`.toLowerCase();
+  if (/uncensor|abliterat|dolphin|hermes|lexi|rocinante|nsfw|roleplay|rp-|unfiltered/.test(t)) return 'open';
+  if (/vl\b|-vl-|vision|llava|minicpm-v|image-text-to-text|pixtral|smolvlm/.test(t) || pipeline === 'image-text-to-text') return 'vision';
+  if (/coder|code|devstral|starcoder|codestral/.test(t)) return 'coding';
+  if (/thinking|reason|r1\b|-r1-|qwq|magistral|o1|deepseek-r1/.test(t)) return 'reasoning';
+  return 'general';
+}
+function paramsOf(id) {
+  const moe = id.match(/(\d+(?:\.\d+)?)b[-_]a(\d+(?:\.\d+)?)b/i);
+  const m = id.match(/(\d+(?:\.\d+)?)\s*b(?![a-z])/i) || id.match(/[-_](\d+(?:\.\d+)?)b[-_]/i);
+  return { params: m ? Number(m[1]) : null, active: moe ? Number(moe[2]) : null };
+}
+async function trending({ force = false, hw = null } = {}) {
+  const cache = store.config().trendingCache;
+  let list = cache?.list;
+  if (force || !list || Date.now() - (cache.at || 0) > TREND_TTL) {
+    const raw = await hfJSON(`${HF}/api/models?filter=gguf&sort=trendingScore&direction=-1&limit=60`);
+    list = raw.map((m) => ({ repo: m.id || m.modelId, downloads: m.downloads || 0, likes: m.likes || 0, trending: m.trendingScore || 0, created: m.createdAt, tags: (m.tags || []).filter((t) => !/^(gguf|region|license|endpoints|base_model|dataset|arxiv|autotrain|text-generation-inference|transformers|safetensors)/.test(t)).slice(0, 5), pipeline: m.pipeline_tag || '' }))
+      .filter((m) => m.repo && !/lora|embed|rerank|whisper|tts|-mlx|onnx/i.test(m.repo));
+    store.saveConfig({ trendingCache: { at: Date.now(), list } });
+  }
+  const at = store.config().trendingCache?.at || Date.now();
+  return { at, list: list.map((m) => {
+    const known = catalog.matchCatalog(m.repo.split('/').pop());
+    const { params, active } = paramsOf(m.repo);
+    // About 0.6 GB per billion parameters at the usual Q4_K_M size.
+    const sizeGB = known?.sizeGB || (params ? Math.round(params * 0.6 * 10) / 10 : null);
+    const est = hw && sizeGB ? catalog.estimateText({ ...(known || {}), sizeGB, activeGB: known?.activeGB || (active ? active * 0.6 : undefined), ctx: known?.ctx || 8192 }, hw, 1) : null;
+    return { ...m, type: known?.category && known.category !== 'small' && known.category !== 'large' ? known.category : trendType(m.repo, m.tags, m.pipeline), sizeGB, params, catalogId: known?.id || null, est: est && { rating: est.rating, label: est.label, fit: est.fit, wordsPerSec: est.wordsPerSec } };
+  }) };
+}
+
 async function importFile(file, readGguf) {
   const info = await readGguf(file);
   if (info.isProjector) throw new Error('That file is a vision add-on (mmproj), not a model. Import the main model file.');
@@ -402,4 +438,4 @@ async function addFound(items, readGguf) {
   return added;
 }
 
-module.exports = { list, get, add, remove, start, cancel, active, planCatalog, planGguf, ggufOptions, search, importFile, tree, findOnPC, addFound, repair, registerStarter };
+module.exports = { list, get, add, remove, start, cancel, active, planCatalog, planGguf, ggufOptions, search, trending, trendType, paramsOf, importFile, tree, findOnPC, addFound, repair, registerStarter };

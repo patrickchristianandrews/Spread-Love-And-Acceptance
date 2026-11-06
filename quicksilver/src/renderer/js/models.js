@@ -10,14 +10,14 @@ let fitsOnly = false;
 
 views.models = {
   html() {
-    const tabs = { installed: `On this PC (${S.installed.length})`, text: 'Text & vision', media: 'Images & video', hf: 'Search Hugging Face', api: `Connect an API (${S.providers.length})` };
+    const tabs = { installed: `On this PC (${S.installed.length})`, text: 'Text & vision', media: 'Images & video', trending: '🔥 Trending now', hf: 'Search Hugging Face', api: `Connect an API (${S.providers.length})` };
     return `<div class="page">
       <div class="page-head"><h1>Models</h1>
         <button class="btn" id="find-models">Find models on this PC</button><button class="btn" id="import-gguf">Import a .gguf file</button><button class="btn ghost" id="open-folder">Open models folder</button></div>
       <p class="lede">Free, open models run on your PC: private, offline, no account. Ratings show how each one will run on <b>your</b> hardware. Not sure? Let the <a href="#" data-goto-stacks>Stack Advisor</a> choose.</p>
       ${foundBanner()}
       <div class="tabs" role="tablist">${Object.entries(tabs).map(([k, l]) => `<button class="tab ${modelsTab === k ? 'active' : ''}" data-tab="${k}" role="tab">${esc(l)}</button>`).join('')}</div>
-      ${({ installed: installedHTML, text: textHTML, media: mediaHTML, hf: hfHTML, api: apiHTML })[modelsTab]()}
+      ${({ installed: installedHTML, text: textHTML, media: mediaHTML, trending: trendingHTML, hf: hfHTML, api: apiHTML })[modelsTab]()}
     </div>`;
   },
   bind() {
@@ -53,6 +53,7 @@ views.models = {
     $$('[data-cat]').forEach((b) => b.addEventListener('click', () => { catFilter = b.dataset.cat; render(); }));
     $('#fits-only')?.addEventListener('change', (e) => { fitsOnly = e.target.checked; render(); });
     bindHf();
+    if (modelsTab === 'trending') bindTrending();
     bindApi();
   },
 };
@@ -108,7 +109,7 @@ function textHTML() {
   return `${filterBar(cats)}${Object.entries(cats).filter(([k]) => catFilter === 'all' || catFilter === k).map(([k, c]) => {
     const list = S.catalog.text.filter((m) => m.category === k && (!fitsOnly || S.est?.text[m.id]?.fit !== 'no'));
     if (!list.length) return '';
-    return `<div class="section"><h2>${c.icon} ${esc(c.label)}</h2></div><div class="cards">${list.sort((a, b) => (order[S.est?.text[a.id]?.rating] ?? 5) - (order[S.est?.text[b.id]?.rating] ?? 5) || a.sizeGB - b.sizeGB).map((m) => modelCard(m, S.est?.text[m.id], 'text')).join('')}</div>`;
+    return `<div class="section"><h2>${c.icon} ${esc(c.label)} <span class="small muted" style="font-weight:600">· ${list.length}</span></h2>${c.note ? `<span class="small muted">${esc(c.note)}</span>` : ''}</div><div class="cards">${list.sort((a, b) => (order[S.est?.text[a.id]?.rating] ?? 5) - (order[S.est?.text[b.id]?.rating] ?? 5) || a.sizeGB - b.sizeGB).map((m) => modelCard(m, S.est?.text[m.id], 'text')).join('')}</div>`;
   }).join('')}`;
 }
 
@@ -121,6 +122,40 @@ function mediaHTML() {
       if (!list.length) return '';
       return `<div class="section"><h2>${c.icon} ${esc(c.label)}</h2></div><div class="cards">${list.map((m) => modelCard(m, S.est?.media[m.id], 'media')).join('')}</div>`;
     }).join('')}`;
+}
+
+// ---------- trending now (Hugging Face, refreshed every few hours) ----------
+
+let trend = null;      // { at, list } or { error }
+let trendType = 'all';
+const TREND_TYPES = { all: '✨ All', general: '💬 Everyday', reasoning: '🧠 Reasoning', coding: '💻 Coding', vision: '👁️ Vision', open: '🔓 Uncensored' };
+async function loadTrending(force = false) {
+  try { trend = await qs.call('models:trending', force); } catch (err) { trend = { error: err.message }; }
+  if (S.route.view === 'models' && modelsTab === 'trending') render();
+}
+// Keep it fresh while the app is open.
+setInterval(() => { if (!S.config?.offline) loadTrending(false); }, 60 * 60 * 1000);
+
+function trendingHTML() {
+  if (!trend) { loadTrending(false); return '<div class="empty">Loading what\'s trending…</div>'; }
+  if (trend.error) return `<div class="notice">Couldn't load trending models: ${esc(trend.error)} <button class="btn small" id="tr-refresh">Try again</button></div>`;
+  const ago = Math.max(1, Math.round((Date.now() - trend.at) / 60000));
+  const list = trend.list.filter((m) => trendType === 'all' || m.type === trendType);
+  const rate = (e) => (e ? `<span class="badge rate-${e.rating}">${esc(e.label)}${e.wordsPerSec ? ` · ~${Math.round(e.wordsPerSec)} words/s` : ''}</span>` : '<span class="small muted">size unknown</span>');
+  return `<div class="row" style="margin-bottom:12px;flex-wrap:wrap"><p class="muted grow" style="margin:0">The open models people are downloading most on Hugging Face right now, newest hits first. Updated ${ago < 60 ? `${ago} min` : `${Math.round(ago / 60)} h`} ago; it refreshes by itself every few hours.</p><button class="btn small" id="tr-refresh">↻ Refresh</button></div>
+    <div class="row" style="margin-bottom:14px;flex-wrap:wrap">${Object.entries(TREND_TYPES).map(([k, l]) => `<button class="btn small ${trendType === k ? 'on' : ''}" data-trtype="${k}">${l}${k === 'all' ? '' : ` · ${trend.list.filter((m) => m.type === k).length}`}</button>`).join('')}</div>
+    ${list.length ? `<table class="list"><thead><tr><th>#</th><th>Model</th><th>Type</th><th>Size</th><th>On your PC</th><th>Popularity</th><th></th></tr></thead><tbody>${list.map((m, i) => `<tr>
+      <td class="muted">${i + 1}</td>
+      <td><b>${esc(m.repo.split('/').pop())}</b><div class="small muted">${esc(m.repo.split('/')[0])}${m.created ? ` · new ${esc(String(m.created).slice(0, 10))}` : ''}${m.catalogId ? ' · <span class="badge b-mint">in our catalog</span>' : ''}</div></td>
+      <td><span class="badge b-lav">${esc(TREND_TYPES[m.type] || m.type)}</span></td>
+      <td>${m.sizeGB ? `~${m.sizeGB} GB` : '—'}</td>
+      <td>${rate(m.est)}</td>
+      <td class="small">❤ ${m.likes.toLocaleString()} · ⬇ ${m.downloads.toLocaleString()}</td>
+      <td><button class="btn small primary" data-hf="${esc(m.repo)}">Download…</button></td></tr>`).join('')}</tbody></table>` : '<div class="empty">Nothing trending in this group right now.</div>'}`;
+}
+function bindTrending() {
+  $('#tr-refresh')?.addEventListener('click', (e) => { e.target.textContent = 'Refreshing…'; loadTrending(true); });
+  $$('[data-trtype]').forEach((b) => b.addEventListener('click', () => { trendType = b.dataset.trtype; render(); }));
 }
 
 // ---------- Hugging Face search ----------

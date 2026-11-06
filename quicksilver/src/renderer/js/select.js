@@ -70,10 +70,13 @@ const qsSelect = (() => {
     pop.style.minWidth = `${w}px`;
     pop.style.maxWidth = `${Math.max(w, Math.min(520, window.innerWidth - 24))}px`;
     const ph = Math.min(pop.scrollHeight, 360);
-    const below = window.innerHeight - r.bottom - 10;
-    const top = below >= Math.min(ph, 220) || below >= r.top ? r.bottom + 6 : Math.max(8, r.top - ph - 6);
-    pop.style.maxHeight = `${Math.max(140, top > r.top ? below : r.top - 14)}px`;
-    pop.style.top = `${top}px`;
+    const below = window.innerHeight - r.bottom - 12;
+    const above = r.top - 12;
+    const down = below >= ph || below >= above;
+    const room = Math.max(120, down ? below : above);
+    const h = Math.min(ph, room);
+    pop.style.maxHeight = `${room}px`;
+    pop.style.top = `${down ? r.bottom + 6 : Math.max(8, r.top - h - 6)}px`;
     pop.style.left = `${Math.max(8, Math.min(r.left, window.innerWidth - pop.offsetWidth - 8))}px`;
     pop.addEventListener('mousedown', (e) => e.preventDefault());
     pop.addEventListener('click', (e) => { const el = e.target.closest('.sel-item'); if (el) choose(Number(el.dataset.i)); });
@@ -112,7 +115,9 @@ const qsSelect = (() => {
   }, true);
 
   window.addEventListener('resize', () => close(false));
-  document.addEventListener('scroll', (e) => { if (pop && !pop.contains(e.target)) close(false); }, true);
+  // Close only when the dropdown itself moves (a scroll of something that contains it), not when
+  // another part of the page scrolls, such as the chat following a new answer.
+  document.addEventListener('scroll', (e) => { if (pop && current && !pop.contains(e.target) && (e.target === document || e.target.contains?.(current))) close(false); }, true);
   window.addEventListener('blur', () => close(false));
 
   return { open, close, isOpen: () => Boolean(pop) };
