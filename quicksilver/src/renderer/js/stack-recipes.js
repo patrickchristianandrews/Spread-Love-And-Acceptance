@@ -7,7 +7,7 @@
 // "Set up" downloads the models, creates the stack and an assistant that uses it.
 'use strict';
 
-const rxM = (id, role) => ({ kind: 'model', id, role });
+const rxM = (id, role, ladder) => ({ kind: 'model', id, role, ladder });
 const rxT = (id, role, instead) => ({ kind: 'tool', id, role, instead });
 const rxC = (provider, role, label) => ({ kind: 'cloud', provider, role, label });
 const rxX = (name, role, why) => ({ kind: 'missing', name, role, why });
@@ -22,18 +22,77 @@ const RX_TOOLS = {
   fps60: { name: 'Smooth to 60 fps', what: 'Motion-interpolated frames (Studio → Quick fixes)', go: 'studio' },
   videoedit: { name: 'Video editor', what: 'Trim, crop, speed, captions by hand (Studio → Edit video)', go: 'studio' },
   master: { name: 'Podcast mastering', what: 'Noise removal, compression and loudness (Studio → Quick fixes)', go: 'studio' },
+  whisper: { name: 'Voice typing (Whisper)', what: 'Speech to text on this PC: the mic button in chat, or Ctrl+Space', go: 'settings' },
+  melody: { name: 'Melody writer & player', what: 'Writes a tune over chords and plays it back as an MP3 (Studio → Music)', go: 'studio' },
+  loudness: { name: 'Loudness & cleanup', what: 'Streaming-ready loudness, hiss and hum removal (Studio → Quick fixes)', go: 'studio' },
 };
-const WHISPER = (role) => rxX('Whisper Large v3 Turbo', role, 'Speech-to-text arrives with voice input, which is planned.');
+const WHISPER = (role) => rxT('whisper', role, 'Whisper Large v3 Turbo');
 const SUNO = (role) => rxX('Suno v4 / Udio', role, 'Neither has an official public API to connect to.');
 const VEO = (role) => rxX('Veo 2 / Runway Gen-3', role, 'Cloud video APIs aren\'t connected in Quicksilver yet.');
 
 const RX_GROUPS = [
-  ['music', '🎵 Music, audio, voice & podcasts'], ['office', '📊 Office, Excel & bookkeeping'], ['research', '🔬 Medical, science & academic research'],
+  ['songs', '🎶 Song creation'], ['music', '🎵 Music, audio, voice & podcasts'], ['office', '📊 Office, Excel & bookkeeping'], ['research', '🔬 Medical, science & academic research'],
   ['photo', '🎨 Photos, editing & e-commerce'], ['video', '🎬 Video & short-form content'], ['code', '💻 Coding, apps & security'],
   ['writing', '✍️ Writing, books & marketing'], ['finance', '💰 Finance, tax & contracts'], ['learn', '🎓 Tutoring & languages'], ['games', '🎮 Games, D&D & game development'],
 ];
 
 const STACK_RECIPES = [
+  // ---------- Song creation ----------
+  // Two writers draft, the lead combines the best lines. Models step up automatically on PCs
+  // that can run stronger ones smoothly (see rxResolve).
+  { id: 'song-complete', group: 'songs', where: 'local', name: 'Complete song: lyrics, chords, melody & demo beat', icon: '🎶', temperature: 0.85,
+    parts: [rxM('gemma-2-9b', 'Lyricist (imagery & story)', 'creative'), rxM('qwen3-8b', 'Co-writer: structure, rhyme & chords', 'creative'), rxT('melody', 'Melody guide'), rxT('beats', 'Demo backing track', 'MusicGen Stereo')],
+    lead: 'qwen3-8b', skill: 'song-writer',
+    instructions: 'You are a professional songwriter. Write complete, original songs: a title, key, tempo (bpm) and feel; then labelled sections (Verse 1, Pre-chorus, Chorus, Verse 2, Bridge, Final chorus) with chord symbols above the lyric lines. Make the chorus a short, singable hook that repeats. Use concrete images instead of clichés, keep syllable counts consistent between matching lines, and use rhyme on purpose (perfect rhymes in the chorus, slant rhymes allowed in verses). End with a melody note (range, where it rises, the hook rhythm) and an arrangement note. Never copy existing lyrics.' },
+  { id: 'song-rap', group: 'songs', where: 'local', name: 'Rap, hip-hop & drill writer with beats', icon: '🎙️', temperature: 0.9,
+    parts: [rxM('mistral-nemo-12b', 'Bars, wordplay & punchlines', 'creative'), rxM('qwen3-8b', 'Flow, rhyme scheme & syllable checker', 'general'), rxT('beats', 'Trap & boom-bap beats', 'MusicGen Stereo')],
+    lead: 'qwen3-8b', skill: 'rap-verse',
+    instructions: 'You are a skilled rap writer. Write original verses with multisyllabic and internal rhymes, a clear flow (mark stresses or bar counts when useful), strong punchlines, wordplay and a memorable hook. Keep 16-bar verses to 16 bars. Match the requested style (boom-bap, trap, drill, conscious, melodic) and suggest a tempo and beat feel. No copying existing lyrics.' },
+  { id: 'song-pop', group: 'songs', where: 'local', name: 'Pop, K-pop & radio hit lab', icon: '✨', temperature: 0.85,
+    parts: [rxM('gemma-3-12b', 'Hook & topline writer', 'creative'), rxM('llama-3.1-8b', 'Chorus doctor (catchier, simpler)', 'creative'), rxT('melody', 'Hook melody'), rxT('beats', 'Pop / dance demo beat', 'MusicGen Stereo')],
+    lead: 'gemma-3-12b', skill: 'song-writer',
+    instructions: 'You write modern pop hits. Lead with the hook: a short title phrase sung in the chorus, repeated. Keep verses conversational and specific, pre-chorus building tension, chorus simple and big, a post-chorus chant or tag if it fits. Give chords, tempo and a reference feel (without naming or copying real songs), plus a topline melody description. Offer two alternative hooks.' },
+  { id: 'song-acoustic', group: 'songs', where: 'local', name: 'Singer-songwriter, folk & acoustic (guitar & piano)', icon: '🎸', temperature: 0.8,
+    parts: [rxM('gemma-2-9b', 'Storyteller lyricist', 'creative'), rxM('qwen3-4b', 'Chord charts, capo & strumming', 'general'), rxT('melody', 'Melody guide')],
+    lead: 'gemma-2-9b', skill: 'chords',
+    instructions: 'You are a singer-songwriter and accompanist. Write intimate, honest lyrics with a narrative arc, then a full chord chart with capo position, strumming or fingerpicking pattern, and easy voicings for guitar and piano. Suggest a key that suits the singer\'s range when they mention it.' },
+  { id: 'song-country', group: 'songs', where: 'local', name: 'Country, Americana & story songs', icon: '🤠', temperature: 0.8,
+    parts: [rxM('gemma-2-9b', 'Story & twist writer', 'creative'), rxM('llama-3.1-8b', 'Hook & title-line editor', 'creative'), rxT('melody', 'Melody guide')],
+    lead: 'gemma-2-9b', skill: 'song-writer',
+    instructions: 'You write country and Americana songs. Build each song around a strong title line that lands at the end of the chorus and changes meaning by the last chorus. Use specific places, objects and small details, a clear story across the verses, and simple I–IV–V-style progressions (with a nod to the requested sub-style). Keep it original.' },
+  { id: 'song-edm', group: 'songs', where: 'local', name: 'EDM, house & techno producer: drops, arrangement & sound design', icon: '🎛️', temperature: 0.75,
+    parts: [rxM('qwen3-8b', 'Arrangement & sound-design planner', 'general'), rxM('llama-3.2-3b', 'Vocal chop & hook lines', 'creative'), rxT('beats', 'House & dance beats', 'MusicGen Stereo'), rxT('loudness', 'Loudness & mix check')],
+    lead: 'qwen3-8b', skill: 'make-beat',
+    instructions: 'You are an electronic music producer. Plan tracks bar by bar (intro, build, drop, breakdown, second drop, outro) with tempo, key, synth patches (oscillators, filters, envelopes), drum programming, sidechain and FX automation, and short vocal hooks. Make beats when asked, and explain mixing and mastering steps for any DAW.' },
+  { id: 'song-score', group: 'songs', where: 'local', name: 'Film, game & trailer score composer', icon: '🎬', temperature: 0.7,
+    parts: [rxM('qwen3-14b', 'Composer: themes, cues & orchestration', 'general'), rxM('gemma-2-9b', 'Story & emotion map', 'creative'), rxT('melody', 'Theme sketches')],
+    lead: 'qwen3-14b', skill: 'score-cue',
+    instructions: 'You are a media composer. From a scene, story or game level, write a cue sheet (timing, emotion, tempo, key), leitmotifs with melodic shape and chords, orchestration (which sections carry what), dynamics and transitions, and how the music loops or adapts for games. Sketch themes as melodies when useful.' },
+  { id: 'song-doctor', group: 'songs', where: 'local', name: 'Song doctor: honest critique, rewrite & polish', icon: '🩺', temperature: 0.6, mode: 'debate',
+    parts: [rxM('deepseek-r1-qwen3-8b', 'Critic: structure, rhyme & prosody', 'reasoning'), rxM('gemma-2-9b', 'Rewriter: stronger lines & hook', 'creative')],
+    lead: 'gemma-2-9b', skill: 'song-critique',
+    instructions: 'You are a song doctor. Review the user\'s song honestly but kindly: what works, then the biggest problems (hook strength, structure, clichés, rhyme and syllable flow, prosody: stresses landing on the beat), then a rewritten version that keeps their voice and meaning. Mark what you changed and why.' },
+  { id: 'song-translate', group: 'songs', where: 'local', name: 'Singable lyric translation & adaptation', icon: '🌍', temperature: 0.6,
+    parts: [rxM('qwen2.5-7b', 'Translator (many languages)', 'general'), rxM('gemma-3-12b', 'Singability & rhyme editor', 'creative')],
+    lead: 'gemma-3-12b', skill: 'song-translate',
+    instructions: 'You adapt song lyrics into other languages so they can be sung to the same melody: keep syllable counts and stresses per line, keep the rhymes where it matters (end of chorus lines), and keep the meaning and feeling rather than translating word for word. Show the singable version, then a literal translation for comparison.' },
+  { id: 'song-jingle', group: 'songs', where: 'local', name: 'Jingles, ads, kids\' songs & party songs', icon: '🎈', temperature: 0.9,
+    parts: [rxM('llama-3.2-3b', 'Catchy short lyrics', 'creative'), rxM('qwen3-4b', 'Brand & age check', 'general'), rxT('melody', 'Jingle melody'), rxT('beats', 'Backing loop')],
+    lead: 'qwen3-4b', skill: 'jingle',
+    instructions: 'You write short, catchy songs: brand jingles (5–30 seconds, the name sung clearly), kids\' songs (simple words, actions, repetition), birthday and party songs (with the person\'s name). Keep lines short and singable, add a melody guide, and make several options.' },
+  { id: 'song-arranger', group: 'songs', where: 'local', name: 'Band, choir & harmony arranger', icon: '🎺', temperature: 0.5,
+    parts: [rxM('qwen3-14b', 'Arranger: voicings & parts', 'general'), rxM('deepseek-r1-qwen3-8b', 'Theory checker (voice leading & ranges)', 'reasoning')],
+    lead: 'qwen3-14b', skill: 'chords',
+    instructions: 'You arrange songs for bands and choirs: SATB or close harmony parts, horn and string lines, bass lines, and charts in chord symbols or the Nashville number system. Respect instrument and voice ranges, use smooth voice leading, and explain any music theory in plain words.' },
+  { id: 'song-release', group: 'songs', where: 'local', name: 'Song release kit: cover art, visualizer & promo', icon: '💿', temperature: 0.8,
+    parts: [rxM('qwen3-8b', 'Release copy, captions & bio', 'creative'), rxM('sdxl-turbo', 'Cover art'), rxM('wan2.1-1.3b', 'Looping visualizer clip')],
+    lead: 'qwen3-8b', skill: 'cover-art',
+    instructions: 'You help artists release music: cover art concepts and prompts (square, bold, readable at thumbnail size, no copyrighted characters), a short looping visualizer idea, release captions for each social platform, a short artist bio, and a release-week plan.' },
+  { id: 'song-cloud', group: 'songs', where: 'hybrid', name: 'Sung vocals & full tracks (with cloud music services)', icon: '🎤',
+    parts: [rxM('gemma-2-9b', 'Local lyricist (your words stay on your PC)', 'creative'), rxC('elevenlabs', 'Sung vocals & full tracks', 'ElevenLabs (MCP server)'), SUNO('Full vocal song'), rxT('loudness', 'Loudness & cleanup')],
+    lead: 'gemma-2-9b', skill: 'song-writer', temperature: 0.85,
+    instructions: 'You write songs ready for an AI vocal or music service: final lyrics with section tags in [brackets], a style prompt (genre, mood, tempo, instruments, vocal type) under 200 characters, and an alternate version. Keep everything original.' },
+
   // ---------- Music, audio, voice & podcasts ----------
   { id: 'music-producer', group: 'music', where: 'local', name: 'Music producer, beat maker & stem splitter', icon: '🎚️',
     parts: [rxM('llama-3.2-3b', 'Lyrics & chords'), rxT('beats', 'Beat synth', 'MusicGen Stereo'), rxT('vocals', 'Vocal & stem separation', 'Demucs v4'), WHISPER('Vocal timing')],
@@ -158,6 +217,54 @@ const STACK_RECIPES = [
 
 // ---------- status of each part on this PC ----------
 
+// ---------- tuned for each PC ----------
+// A recipe names a model for each role; on a PC that runs a stronger model of the same kind
+// smoothly, that one is used instead (and a lighter one on a PC where the named one won't fit).
+// Models you already have are preferred, so nothing is downloaded twice.
+const RX_LADDERS = {
+  creative: ['gemma-3-27b', 'mistral-small-3.2', 'qwen3-30b-a3b', 'mistral-nemo-12b', 'gemma-3-12b', 'qwen3-14b', 'gemma-2-9b', 'qwen3-8b', 'llama-3.1-8b', 'qwen3-4b', 'gemma-3-4b', 'llama-3.2-3b'],
+  general: ['qwen3-30b-a3b', 'qwen3-32b', 'qwen3-14b', 'phi-4', 'qwen2.5-14b', 'qwen3-8b', 'qwen2.5-7b', 'llama-3.1-8b', 'qwen3-4b', 'llama-3.2-3b'],
+  reasoning: ['qwen3-30b-a3b-thinking', 'qwq-32b', 'deepseek-r1-qwen-32b', 'phi-4-reasoning-plus', 'deepseek-r1-qwen-14b', 'deepseek-r1-qwen3-8b', 'qwen3-4b-thinking'],
+  coding: ['qwen3-coder-30b', 'qwen2.5-coder-32b', 'devstral-small', 'qwen2.5-coder-14b', 'qwen2.5-coder-7b', 'qwen2.5-coder-3b'],
+  vision: ['gemma-3-27b', 'mistral-small-3.2', 'qwen3-vl-8b', 'gemma-3-12b', 'qwen2.5-vl-7b', 'qwen3-vl-4b', 'gemma-3-4b', 'qwen3-vl-2b'],
+  open: ['dolphin-3-mistral-24b', 'hermes-4-14b', 'rocinante-12b', 'mistral-nemo-12b', 'hermes-3-llama-3.1-8b', 'dolphin-3-llama-3.1-8b', 'hermes-3-llama-3.2-3b'],
+};
+const RX_CLASS = { small: 'general', general: 'general', large: 'general', reasoning: 'reasoning', coding: 'coding', vision: 'vision', open: 'open' };
+const RX_RATE = { great: 4, good: 3, ok: 2, slow: 1, wont: 0 };
+// Small models from the same family make the lead faster (speculative decoding).
+const RX_SPEED = [[/^qwen3-(4b|8b|14b|32b)(-thinking)?$/, 'qwen3-1.7b'], [/^llama-3\.(1-8b|3-70b)$/, 'llama-3.2-1b'], [/^qwen2\.5-(coder-)?(7b|14b|32b)$/, 'qwen2.5-coder-1.5b']];
+
+function rxResolve(r) {
+  if (r._resolved && r._resolvedAt === S.est && r._inst === S.installed.length) return r._resolved;
+  const taken = new Set();
+  const rate = (id) => RX_RATE[S.est?.text?.[id]?.rating] ?? -1;
+  const size = (id) => S.catalog.text.find((x) => x.id === id)?.sizeGB || 0;
+  const leadId = r.lead || r.parts.filter((p) => p.kind === 'model' && S.catalog.text.some((x) => x.id === p.id)).at(-1)?.id;
+  const parts = r.parts.map((p) => {
+    const cm = p.kind === 'model' && S.catalog.text.find((x) => x.id === p.id);
+    if (!cm || !S.est?.text || S.data.prefs.rxExact) { if (p.kind === 'model') taken.add(p.id); return p; }
+    const ladder = RX_LADDERS[p.ladder || RX_CLASS[cm.category]] || [];
+    const isLead = p.id === leadId;
+    // The lead (who writes the final answer) gets the strongest model that runs smoothly; the
+    // helpers step up too, within a sensible size, so the whole team stays quick.
+    const cap = isLead ? Infinity : Math.max(cm.sizeGB * 3, 9);
+    const fits = (id, min) => !taken.has(id) && rate(id) >= min && size(id) <= cap;
+    let pick = ladder.find((id) => haveModel(id) && fits(id, 3) && ladder.indexOf(id) <= Math.max(0, ladder.indexOf(p.id)))
+      || ladder.find((id) => fits(id, 3) && (ladder.indexOf(p.id) < 0 || ladder.indexOf(id) <= ladder.indexOf(p.id) || rate(p.id) < 2))
+      || (rate(p.id) >= 2 && !taken.has(p.id) ? p.id : null)
+      || [...ladder].reverse().find((id) => fits(id, 2))
+      || p.id;
+    taken.add(pick);
+    return pick === p.id ? p : { ...p, id: pick, from: p.id, up: ladder.indexOf(pick) < ladder.indexOf(p.id) };
+  });
+  const leadPart = parts.find((p, i) => r.parts[i].id === leadId);
+  const helper = leadPart && RX_SPEED.find(([re]) => re.test(leadPart.id))?.[1];
+  if (helper && !taken.has(helper) && rate(helper) >= 3) parts.push({ kind: 'model', id: helper, role: 'Speed helper: drafts ahead so the lead writes 1.5–2.5× faster', helper: true });
+  r._resolved = { parts, lead: leadPart?.id || leadId };
+  r._resolvedAt = S.est; r._inst = S.installed.length;
+  return r._resolved;
+}
+
 const catModel = (id) => S.catalog.text.find((x) => x.id === id) || S.catalog.media.find((x) => x.id === id);
 const haveModel = (id) => S.installed.find((x) => x.catalogId === id || x.id === id);
 const providerOn = (p) => S.providers.some((x) => x.preset === p && (x.hasKey || x.noKey));
@@ -168,9 +275,11 @@ function partStatus(p) {
     const cm = catModel(p.id);
     const est = S.est?.text?.[p.id] || S.est?.media?.[p.id];
     const gb = (cm?.sizeGB || 0) + (cm?.mmprojGB || 0);
-    if (haveModel(p.id)) return { icon: '✓', cls: 'ok', sub: cm?.name || p.id, note: 'installed' };
+    const was = p.from && catModel(p.from)?.name;
+    const tuned = was ? (p.up ? `upgraded from ${was} for this PC` : `lighter than ${was}, to fit this PC`) : '';
+    if (haveModel(p.id)) return { icon: '✓', cls: 'ok', sub: cm?.name || p.id, note: tuned ? 'installed · tuned' : 'installed', title: tuned };
     if (est?.rating === 'wont') return { icon: '!', cls: 'bad', sub: cm?.name || p.id, note: 'too big', title: 'Too big for this PC. Click the model under Models for what it needs.' };
-    return { icon: '⬇', cls: 'dl', sub: cm?.name || p.id, note: `${gb.toFixed(1)} GB`, gb };
+    return { icon: '⬇', cls: 'dl', sub: `${cm?.name || p.id}${tuned ? (p.up ? ' ↑' : ' ↓') : ''}`, note: `${gb.toFixed(1)} GB`, gb, title: tuned };
   }
   if (p.kind === 'tool') { const tl = RX_TOOLS[p.id]; return { icon: '✓', cls: 'ok', sub: `${tl.name}${p.instead ? `, in place of ${p.instead}` : ''}`, note: 'built in', title: tl.what }; }
   if (p.kind === 'cloud') {
@@ -181,7 +290,7 @@ function partStatus(p) {
 }
 
 function recipeCard(r) {
-  const rows = r.parts.map((p) => ({ p, s: partStatus(p) }));
+  const rows = rxResolve(r).parts.map((p) => ({ p, s: partStatus(p) }));
   const gb = rows.reduce((n, x) => n + (x.s.gb || 0), 0);
   const blocked = rows.some((x) => x.s.cls === 'bad');
   const missing = rows.filter((x) => x.s.cls === 'miss').length;
@@ -204,25 +313,26 @@ function recipesHTML() {
 async function setUpRecipe(id) {
   const r = STACK_RECIPES.find((x) => x.id === id);
   if (!r) return;
-  const models = r.parts.filter((p) => p.kind === 'model');
+  const plan = rxResolve(r);
+  const models = plan.parts.filter((p) => p.kind === 'model');
   const usable = models.filter((p) => S.est?.text?.[p.id]?.rating !== 'wont' && S.est?.media?.[p.id]?.rating !== 'wont');
   // Downloads run in the background; the stack is ready as soon as they finish.
   for (const p of usable) if (!haveModel(p.id) && !S.downloads[p.id]) download({ catalogId: p.id }, catModel(p.id)?.name || p.id).catch(() => {});
-  const text = usable.filter((p) => S.catalog.text.some((tm) => tm.id === p.id)).map((p) => p.id);
+  const text = usable.filter((p) => !p.helper && S.catalog.text.some((tm) => tm.id === p.id)).map((p) => p.id);
   const target = (cid) => `local:${haveModel(cid)?.id || cid}`;
-  const cloud = r.parts.find((p) => p.kind === 'cloud' && p.provider !== 'elevenlabs' && providerOn(p.provider));
+  const cloud = plan.parts.find((p) => p.kind === 'cloud' && p.provider !== 'elevenlabs' && providerOn(p.provider));
   const cloudTarget = cloud ? S.targets.find((tg) => tg.target.startsWith(`api:${S.providers.find((pv) => pv.preset === cloud.provider).id}:`))?.target : null;
   let brain = '';
   if (text.length >= 2 || (text.length && cloudTarget)) {
-    const lead = r.lead && text.includes(r.lead) ? r.lead : text[text.length - 1];
+    const lead = plan.lead && text.includes(plan.lead) ? plan.lead : text[text.length - 1];
     const drafters = text.filter((d) => d !== lead);
     const vision = text.find((d) => S.catalog.text.find((tm) => tm.id === d)?.vision);
     await call('stacks:save', { id: `rx-${r.id}`, name: r.name, emoji: r.icon, builtFor: 'recipe',
-      members: { drafters: (drafters.length ? drafters : [lead]).map(target), judge: cloudTarget || target(lead), vision: vision && vision !== lead ? target(vision) : undefined, mode: 'blend' } });
+      members: { drafters: (drafters.length ? drafters : [lead]).map(target), judge: cloudTarget || target(lead), vision: vision && vision !== lead ? target(vision) : undefined, mode: r.mode || 'blend' } });
     brain = `stack:rx-${r.id}`;
   } else if (text.length === 1) brain = target(text[0]);
   else if (cloudTarget) brain = cloudTarget;
-  const as = { id: `as-rx-${r.id}`, name: r.name.split(/[,&(]/)[0].trim(), emoji: r.icon, description: r.name, instructions: r.instructions, target: brain, temperature: 0.5,
+  const as = { id: `as-rx-${r.id}`, name: r.name.split(/[,&(]/)[0].trim(), emoji: r.icon, description: r.name, instructions: r.instructions, target: brain, temperature: r.temperature ?? 0.5,
     library: Boolean(r.library), strict: Boolean(r.strict), web: Boolean(r.web), factCheck: Boolean(r.factCheck), tools: false, skill: r.skill || '', group: 'Yours' };
   S.data.assistants = S.data.assistants.filter((a) => a.id !== as.id);
   S.data.assistants.push(as);

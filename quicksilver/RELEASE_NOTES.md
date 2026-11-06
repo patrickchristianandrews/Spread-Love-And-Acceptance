@@ -1,3 +1,11 @@
+## What's new in Quicksilver 2.12
+
+- **13 song-creation stacks** (Stacks → Song creation): complete songs with chords, melody and a demo beat; rap and hip-hop; pop and K-pop hooks; singer-songwriter and acoustic; country and story songs; EDM drops and sound design; film and game scores; a song doctor that critiques and rewrites; singable lyric translation; jingles and kids' songs; band and choir arrangements; a release kit with cover art and a visualizer; and sung vocals with cloud music services.
+- **Six new song skills:** rap verse, song doctor, singable translation, jingle or party song, film or game music cue (played back), and album cover art.
+- **Every specialist stack is tuned to your PC.** Each role gets the strongest model of its kind that runs smoothly on your computer (and a lighter one where the listed model won't fit). Models you already have come first, so nothing downloads twice.
+- **Speed helpers.** Stacks whose lead model can use a small same-family helper get one, which makes answers about 1.5–2.5× faster with the same results.
+- Each stack now has its own creativity setting and teamwork style (the song doctor debates before it answers). Voice typing (Whisper) now shows as built in.
+
 ## What's new in Quicksilver 2.11
 
 - **A calmer, clearer chat screen.** Each answer sits beside its assistant's icon in a comfortable reading column. The name, model and speed are one quiet line, and the time shows when you hover.

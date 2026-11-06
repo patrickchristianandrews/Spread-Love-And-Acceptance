@@ -106,10 +106,21 @@ function redPng(size = 64) {
   console.log('✓ stacks: how it works, three strengths with accuracy, cloud boost with savings');
   // Stacks for specific work: 27 ready-made teams; set one up and chat with it.
   await win.waitForSelector('.rx-card:has-text("Isolated medical journal")');
-  assert.equal(await win.locator('.rx-card').count(), 27);
+  assert.equal(await win.locator('.rx-card').count(), 40);
   await win.click('.rx-card:has-text("Invoices, receipt reading") [data-rx]');
   await win.waitForFunction(() => S.data.assistants.some((a) => a.id === 'as-rx-bookkeeping'), null, { timeout: 30000 });
-  console.log('✓ stacks for specific work: 27 teams, set up as a stack and an assistant');
+  // Song creation: 13 teams, each tuned to this PC (no model that won't run here; a speed helper
+  // for leads that can use one). The song doctor debates before it answers.
+  await win.waitForSelector('.rx-card:has-text("Complete song: lyrics, chords")');
+  const tuned = await win.evaluate(() => STACK_RECIPES.filter((r) => r.group === 'songs').map((r) => ({ id: r.id, parts: rxResolve(r).parts.filter((p) => p.kind === 'model').map((p) => ({ id: p.id, from: p.from, helper: p.helper, rating: S.est?.text?.[p.id]?.rating || S.est?.media?.[p.id]?.rating })) })));
+  assert.equal(tuned.length, 13);
+  for (const r of tuned) for (const p of r.parts) assert.notEqual(p.rating, 'wont', `${r.id}: ${p.id} won't run here`);
+  console.log('  tuned for this PC:', tuned.flatMap((r) => r.parts.filter((p) => p.from || p.helper).map((p) => `${r.id}: ${p.helper ? `+${p.id} (speed helper)` : `${p.from}→${p.id}`}`)).join('; ') || 'as listed');
+  await win.click('.rx-card:has-text("Song doctor") [data-rx]');
+  await win.waitForFunction(() => S.data.assistants.some((a) => a.id === 'as-rx-song-doctor'), null, { timeout: 30000 });
+  assert.equal(await win.evaluate(async () => (await qs.call('stacks:list')).find((x) => x.id === 'rx-song-doctor')?.members.mode), 'debate');
+  assert.equal(await win.evaluate(() => S.data.assistants.find((a) => a.id === 'as-rx-song-doctor').skill), 'song-critique');
+  console.log('✓ stacks for specific work: 40 teams incl. 13 for songs, tuned to this PC, set up as a stack and an assistant');
 
   // Chat with the powerhouse stack, a spreadsheet attached and fact check on.
   await win.click('[data-nav="newchat"]');
