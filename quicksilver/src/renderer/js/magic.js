@@ -38,7 +38,7 @@ async function autoTitle(chatId) {
   if (!target) return;
   chat.autoTitled = true;
   try {
-    const out = await askAI(target, 'Write a short title (3 to 6 words) for this conversation. Reply with the title only: no quotes, no full stop, no emoji.', `Question: ${user.text.slice(0, 600)}\n\nAnswer starts: ${answer.slice(0, 400)}`, { temperature: 0.3, maxTokens: 24 });
+    const out = await askAI(target, 'Write a short title (3 to 6 words) for this conversation. Reply with the title only: no quotes, no full stop, no emoji.', `Question: ${user.text.slice(0, 600)}\n\nAnswer starts: ${answer.slice(0, 400)}`, { temperature: 0.3, maxTokens: 24, level: 'quick' });
     const title = String(out || '').split('\n')[0].replace(/^["'“”#*\s]+|["'“”.*\s]+$/g, '').replace(/^title:\s*/i, '').slice(0, 60);
     if (title.length >= 3 && !chat.renamed) {
       chat.title = title;

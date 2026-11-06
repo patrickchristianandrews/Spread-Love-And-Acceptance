@@ -35,7 +35,7 @@ function findFile(root, names, depth = 4) {
 function installed(kind) {
   const spec = ENGINES[kind];
   const list = [];
-  const env = kind === 'llama' ? process.env.QS_LLAMA_SERVER : process.env.QS_SD_BIN;
+  const env = { llama: process.env.QS_LLAMA_SERVER, sd: process.env.QS_SD_BIN, whisper: process.env.QS_WHISPER_BIN }[kind];
   if (env && fs.existsSync(env)) list.push({ variant: 'custom', label: 'Custom (environment)', bin: env, source: 'env' });
   const variants = spec.variants[process.platform] || {};
   for (const [variant, v] of Object.entries(variants)) {

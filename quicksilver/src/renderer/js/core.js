@@ -181,17 +181,19 @@ const oneShots = new Map();
 qs.onChat(({ requestId, ev }) => {
   const o = oneShots.get(requestId);
   if (!o) return;
-  if (ev.type === 'text') o.text += ev.text;
+  if (ev.type === 'text') { o.text += ev.text; o.onText?.(o.text); }
   else if (ev.type === 'done' || ev.type === 'error') {
     oneShots.delete(requestId);
-    if (ev.type === 'error') o.reject(new Error(ev.message)); else o.resolve(o.text.replace(/<think>[\s\S]*?<\/think>/g, '').trim());
+    if (ev.type === 'error') o.reject(new Error(ev.message));
+    else if (ev.aborted) o.reject(new Error('aborted'));
+    else o.resolve(o.text.replace(/<think>[\s\S]*?<\/think>/g, '').trim());
   }
 });
-function askAI(target, system, user, { temperature = 0.7, maxTokens = 400 } = {}) {
+// level: 'quick' keeps a stack to one model (small jobs like titles and memory notes).
+function askAI(target, system, user, { temperature = 0.7, maxTokens = 400, level, onText, requestId = uid(), contextSize = 4096 } = {}) {
   return new Promise((resolve, reject) => {
-    const requestId = uid();
-    oneShots.set(requestId, { text: '', resolve, reject });
-    qs.sendChat({ requestId, target, messages: [{ role: 'system', content: system }, { role: 'user', content: user }], temperature, maxTokens, contextSize: 4096, gpu: S.data.prefs.gpu, effort: 'quick' });
+    oneShots.set(requestId, { text: '', resolve, reject, onText });
+    qs.sendChat({ requestId, target, messages: [{ role: 'system', content: system }, { role: 'user', content: user }], temperature, maxTokens, contextSize, gpu: S.data.prefs.gpu, effort: 'quick', ...(level ? { level } : {}) });
   });
 }
 
@@ -242,7 +244,7 @@ function go(r) { S.route = r; render(); }
 function render() {
   renderChatList();
   paintDownloads();
-  $$('.nav-item[data-nav]').forEach((b) => b.classList.toggle('active', b.dataset.nav === S.route.view));
+  $$('.nav-item[data-nav]').forEach((b) => b.classList.toggle('active', b.dataset.nav === (S.route.view === 'project' ? 'projects' : S.route.view)));
   const v = views[S.route.view] || views.chat;
   const main = $('#main');
   main.innerHTML = v.html();
@@ -263,7 +265,7 @@ function renderChatList() {
     ['Earlier', chats.filter((c) => !c.pinned && c.updated < startOfDay)],
   ].filter(([, list]) => list.length);
   const row = (c) => `<div class="chat-row ${S.route.view === 'chat' && S.route.id === c.id ? 'active' : ''}">
-      <button class="chat-link" data-chat="${c.id}" title="${esc(c.title)} · ${esc(assistantById(c.assistantId).name)} · ${ago(c.updated)}"><span class="ce">${esc(assistantById(c.assistantId).emoji)}</span><span class="t">${esc(c.title)}</span></button>
+      <button class="chat-link" data-chat="${c.id}" title="${esc(c.title)} · ${esc(assistantById(c.assistantId).name)}${c.projectId && projectById(c.projectId) ? ` · ${esc(projectById(c.projectId).name)}` : ''}${c.fromPhone ? ' · from your phone' : ''} · ${ago(c.updated)}"><span class="ce">${esc(c.projectId && projectById(c.projectId) ? projectById(c.projectId).emoji || '📁' : assistantById(c.assistantId).emoji)}</span><span class="t">${esc(c.title)}</span>${c.fromPhone ? `<span class="chat-badge" aria-label="from your phone">${icon('phone', 13)}</span>` : ''}</button>
       <button class="chat-more" data-chat-menu="${c.id}" aria-label="Options for ${esc(c.title)}">⋯</button>
     </div>`;
   $('#chat-list').innerHTML = groups.length
@@ -280,13 +282,16 @@ function chatMenu(anchor, chat) {
   m.className = 'menu';
   m.style.top = `${Math.min(r.bottom + 4, window.innerHeight - 200)}px`;
   m.style.left = `${Math.max(8, r.left - 150)}px`;
-  m.innerHTML = `<button data-m="pin">${chat.pinned ? 'Unpin' : '📌 Pin to top'}</button><button data-m="rename">✏️ Rename</button><button data-m="export">⬇ Export as Markdown</button><button data-m="delete" class="danger">🗑 Delete</button>`;
+  m.innerHTML = `<button data-m="pin">${chat.pinned ? 'Unpin' : '📌 Pin to top'}</button><button data-m="rename">✏️ Rename</button><button data-m="project">📁 ${chat.projectId ? 'Change project' : 'Move to a project'}</button><button data-m="doc">📝 ${chat.doc ? 'Open the document' : 'New document beside the chat'}</button><button data-m="private">${chat.private ? '🔓 Use memory in this chat' : '🔒 Private (no memory)'}</button><button data-m="export">⬇ Export as Markdown</button><button data-m="delete" class="danger">🗑 Delete</button>`;
   document.body.appendChild(m);
   m.querySelector('button').focus();
   m.addEventListener('click', async (e) => {
     const act = e.target.closest('[data-m]')?.dataset.m;
     closeMenus();
     if (act === 'pin') { chat.pinned = !chat.pinned; save(); renderChatList(); }
+    if (act === 'project') moveToProject(chat);
+    if (act === 'doc') { if (S.route.id !== chat.id) S.route = { view: 'chat', id: chat.id }; openDoc(chat, chat.doc?.text ?? '', chat.doc?.title || (chat.title !== 'New chat' ? chat.title : 'Untitled document')); }
+    if (act === 'private') { chat.private = !chat.private; save(); render(); toast(chat.private ? 'Private chat: memory is not used, and nothing new is remembered.' : 'This chat uses your memory again.'); }
     if (act === 'rename') {
       const b = openModal(`<h2>Rename chat</h2><input id="rn" value="${esc(chat.title)}"><div class="modal-actions"><button class="btn" data-close>Cancel</button><button class="btn primary" id="rn-ok">Save</button></div>`);
       const ok = () => { chat.title = b.querySelector('#rn').value.trim() || chat.title; chat.renamed = true; save(); closeModal(); render(); };

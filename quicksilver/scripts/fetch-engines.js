@@ -1,6 +1,7 @@
 // Downloads the official engine builds that ship inside the installer:
 //   engine/llama  ← llama.cpp (llama-server)          github.com/ggml-org/llama.cpp
 //   engine/sd     ← stable-diffusion.cpp (sd / sd-cli) github.com/leejet/stable-diffusion.cpp
+//   engine/whisper ← whisper.cpp (whisper-cli)         github.com/ggml-org/whisper.cpp
 // Usage: node scripts/fetch-engines.js [--platform win32|linux|darwin]
 // Uses GITHUB_TOKEN when set (CI) to avoid API rate limits.
 const path = require('node:path');
@@ -17,7 +18,13 @@ const root = path.join(__dirname, '..', 'engine');
     const variant = spec.bundled[platform];
     const v = spec.variants[platform]?.[variant];
     if (!v) { console.log(`skip ${kind}: nothing for ${platform}`); continue; }
-    const { release, assets } = await findRelease(spec.repo, v, process.env.GITHUB_TOKEN);
+    let found;
+    try { found = await findRelease(spec.repo, v, process.env.GITHUB_TOKEN); } catch (err) {
+      if (!spec.optional) throw err;
+      console.log(`::warning::${kind} not bundled (${err.message.slice(0, 300)}); the app downloads it when first needed`);
+      continue;
+    }
+    const { release, assets } = found;
     console.log(`${kind}: ${spec.repo} ${release.tag_name} (${variant}): ${assets.map((a) => a.name).join(', ')}`);
     const dest = path.join(root, kind);
     fs.rmSync(dest, { recursive: true, force: true });

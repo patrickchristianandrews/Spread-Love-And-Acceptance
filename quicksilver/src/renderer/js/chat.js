@@ -5,9 +5,10 @@ let pending = null;          // { requestId, chatId, msgId }
 const drafts = {};           // chatId -> attachments waiting to be sent
 let paintQueued = false;
 
-function newChat(assistantId) {
-  const a = assistantById(assistantId || S.data.prefs.lastAssistant);
-  const chat = { id: uid(), assistantId: a.id, title: 'New chat', created: now(), updated: now(), target: '', library: null, web: null, messages: [] };
+function newChat(assistantId, projectId) {
+  const proj = projectId && projectById(projectId);
+  const a = assistantById(assistantId || proj?.assistantId || S.data.prefs.lastAssistant);
+  const chat = { id: uid(), assistantId: a.id, title: 'New chat', created: now(), updated: now(), target: proj?.target || '', library: null, web: null, messages: [], ...(proj ? { projectId: proj.id } : {}) };
   S.data.chats.push(chat);
   S.data.prefs.lastAssistant = a.id;
   save();
@@ -43,7 +44,7 @@ views.chat = {
           <label class="pill-select" title="Model or stack">${icon(target.startsWith('stack:') ? 'layers' : 'cpu', 16)}<select id="pick-model" aria-label="Model or stack">${S.targets.length ? targetOptions(target) : '<option value="">No models yet</option>'}<option value="__infuse">✨ Infuse several AIs…</option><option value="__get">＋ Get more models…</option></select>${icon('chevron', 16)}</label>
           <button class="net-pill ${S.config?.offline ? 'off' : ''}" id="net-pill" role="switch" aria-checked="${!S.config?.offline}" title="${S.config?.offline ? 'Offline: nothing leaves this PC. Click to go online.' : 'Online: web search, cloud AIs and downloads are available. Click to go offline.'}"><span class="net-dot"></span><span>${S.config?.offline ? 'Offline' : 'Online'}</span><span class="net-sw"><i></i></span></button>
         </div>
-        <div class="chat-title" title="${esc(chat.title)}">${chat.messages.length && chat.title !== 'New chat' ? esc(chat.title) : ''}</div>
+        <div class="chat-title" title="${esc(chat.title)}">${projectChipHTML(chat)}${chat.private ? '<span class="priv-chip" title="Private chat: memory is not used or added">🔒 Private</span>' : ''}<span class="ct">${chat.messages.length && chat.title !== 'New chat' ? esc(chat.title) : ''}</span></div>
         <button class="run-state" id="run-state" hidden aria-label="How the model is running"></button>
         <button class="icon-btn" id="chat-more" title="Pin, rename, export or delete this chat" aria-label="More options">${icon('more')}</button>
       </header>
@@ -57,6 +58,7 @@ views.chat = {
           <textarea id="input" rows="1" placeholder="${esc(chat.pendingSkill ? skillById(chat.pendingSkill)?.hint || 'Add details…' : `Message ${a.name}…  Type / for skills`)}" aria-label="Message"></textarea>
           <div class="composer-bar">
             <button class="icon-btn" id="skill-btn" title="Use a skill (or type /)" aria-label="Skills">${icon('zap')}</button>
+            <button class="icon-btn mic-btn ${voiceRec?.chatId === chat.id ? 'rec' : ''}" id="mic-btn" title="Voice typing: click and speak (Ctrl+Space)" aria-label="Voice typing">${icon('mic')}</button>
             <label class="icon-btn" title="Attach photos, videos or documents" aria-label="Attach">${icon('clip')}<input type="file" id="file-in" multiple hidden accept="image/*,video/*,.pdf,.docx,.xlsx,.xlsm,.csv,.tsv,.pptx,.txt,.md,.json,.html,.htm,.xml,.js,.ts,.py,.java,.c,.cpp,.cs,.go,.rs,.rb,.php,.sql"></label>
             <span class="bar-sep"></span>
             ${chip('tog-lib', 'book', 'Knowledge', lib, 'Search your knowledge bases and cite them')}
@@ -70,7 +72,7 @@ views.chat = {
         </div>
         <div class="composer-hint">Runs on ${esc(targetLabel(target))}${chatEtaHint(target, a)} · Drop or paste photos, video, PDF, Word, Excel or PowerPoint</div>
       </div>
-      </div>${factPanelHTML(chat)}</div>
+      </div>${docPanelHTML(chat) || factPanelHTML(chat)}</div>
     </div>`;
   },
   bind: bindChat,
@@ -144,11 +146,12 @@ function messageHTML(chat, a, m, i) {
   if (!pending) {
     if (isLast) tools.push(`<button class="tool" data-act="regen" data-id="${m.id}" title="Write a new answer">${icon('refresh', 15)} Regenerate</button><button class="tool" data-act="continue" data-id="${m.id}">Continue</button>`);
     if (alt.text && !alt.check && !checkRunning(m)) tools.push(`<button class="tool" data-act="check" data-id="${m.id}">${icon('shield', 15)} Fact check</button>`);
+    if (alt.text) tools.push(`<button class="tool" data-act="speak" data-id="${m.id}" title="Read this answer aloud">${icon('volume', 15)} ${speakingId === m.id ? 'Stop' : 'Listen'}</button><button class="tool" data-act="doc" data-id="${m.id}" title="Open it as a document beside the chat, to edit and refine">${icon('doc', 15)} Edit as document</button>`);
     tools.push(`<button class="tool" data-act="copy" data-id="${m.id}">${icon('copy', 15)} Copy</button><button class="tool" data-act="saveas" data-id="${m.id}">${icon('download', 15)} Save as…</button><button class="tool" data-act="del" data-id="${m.id}" title="Delete">${icon('trash', 15)}</button>`);
   }
   return `<div class="msg assistant" data-msg="${m.id}">
     <div class="who-line"><span>${esc(a.emoji)} ${esc(a.name)}</span>${etaNow}${alt.skillId && skillById(alt.skillId) ? `<span class="badge b-peach">⚡ ${esc(skillById(alt.skillId).name)}</span>` : ''}${alt.target ? `<span class="badge b-lav">${esc(targetLabel(alt.target))}</span>` : ''}${alt.stats?.tps ? `<span class="badge b-mint">${Math.round(alt.stats.tps * 0.75)} words/s</span>` : ''}</div>
-    ${metaRow(stepsHTML(alt, streaming) + toolsHTML(alt) + (alt.reasoning ? `<details class="think chip-d"><summary>${streaming && !alt.text ? '<span class="pulse"></span>Thinking…' : '💭 Thought it through'}</summary><div>${esc(alt.reasoning)}</div></details>` : ''))}
+    ${metaRow(stepsHTML(alt, streaming) + toolsHTML(alt) + memoryChipHTML(alt) + (alt.reasoning ? `<details class="think chip-d"><summary>${streaming && !alt.text ? '<span class="pulse"></span>Thinking…' : '💭 Thought it through'}</summary><div>${esc(alt.reasoning)}</div></details>` : ''))}
     <div class="bubble md ${streaming ? 'streaming' : ''} ${alt.error ? 'error' : ''}">${body}</div>
     ${downloadHTML(m, alt, streaming)}
     ${appButtonsHTML(m, alt, streaming)}
@@ -250,8 +253,10 @@ function bindChat() {
   comp.addEventListener('dragleave', () => comp.classList.remove('drag'));
   comp.addEventListener('drop', (e) => { e.preventDefault(); comp.classList.remove('drag'); addFiles(chat, [...e.dataTransfer.files]); });
   input.addEventListener('paste', (e) => { const files = [...e.clipboardData.files]; if (files.length) { e.preventDefault(); addFiles(chat, files); } });
+  bindDocPanel(chat);
+  $('#mic-btn').addEventListener('click', () => toggleVoice(chat));
   scrollDown(true);
-  if (!pending) input.focus();
+  if (!pending && !docOpen(chat)) input.focus();
   warmUp(chat, a);
 
   function sendOrStop() {
@@ -388,13 +393,14 @@ async function gatherSources(chat, a, query, force = {}) {
 // How answers should look: easy to scan, warm and direct.
 const ANSWER_STYLE = 'How to write answers: write like a thoughtful expert talking to a smart friend. Start with the direct answer in the first sentence; no openers like "Great question!" and no restating the question. Prefer clear, well-built paragraphs with varied sentence length; use a numbered list only for real steps, bullets only for genuinely list-like items, and a Markdown table only for comparisons. Use a few ## headings only for long answers. Bold sparingly, for the one or two things that matter most. Avoid stock phrases ("delve", "it\'s important to note", "in today\'s world", "in conclusion", "I hope this helps") and emoji unless the user uses them. Code goes in fenced blocks with the language. Keep short answers short.';
 
-function systemPrompt(a, sources, strict) {
+function systemPrompt(a, sources, strict, chat, question = '', ctx = 16384, note = '') {
   const p = S.data.prefs;
   const parts = [a.instructions || 'You are a helpful assistant.'];
   parts.push(ANSWER_STYLE);
   parts.push(`Today is ${new Date().toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}.`);
   if (p.userName) parts.push(`The user's name is ${p.userName}.`);
   if (p.about) parts.push(`About the user: ${p.about}`);
+  for (const extra of [memoryPrompt(chat, question), projectPrompt(chat, question, ctx), docPrompt(chat), note]) if (extra) parts.push(extra);
   if (strict) parts.push('IMPORTANT: Answer ONLY from the reference material provided below. Do not use general knowledge or memory. Cite every factual statement with its source number. If the material does not contain the answer, reply that it was not found in the knowledge base, and say what kind of source would answer it.');
   if (strict && !sources.length) parts.push('No reference material matched this question.');
   if (sources.length) {
@@ -438,7 +444,17 @@ async function generate(chat, rerollMsg) {
   pending.sources = sources;
   const ctx = Number(a.contextSize || p.contextSize) || 16384;
   const docBudget = Math.max(4000, Math.floor((ctx * 3 * 0.6) / Math.max(1, chat.messages.slice(0, upTo).reduce((n, m) => n + (m.attachments || []).filter((x) => x.type === 'doc').length, 0))));
-  const messages = [{ role: 'system', content: systemPrompt(a, sources, Boolean(a.strict && (chat.library ?? a.library))) + (skill ? `\n\n${skillPrompt(skill)}` : '') }];
+  // "Remember that…" / "Forget…" are saved straight away; the answer just confirms it.
+  let memNote = '';
+  if (!rerollMsg && lastUser?.text && !lastUser.memoryDone) {
+    const mc = memoryCommand(chat, lastUser.text);
+    if (mc) {
+      lastUser.memoryDone = true;
+      if (mc.saved) { alt.remembered = mc.saved; memNote = `You have just saved this to your long-term memory of the user: "${mc.saved[0]}". Confirm it in one short, natural sentence (and answer anything else they asked).`; }
+      if (mc.forgot) { alt.forgot = mc.forgot; memNote = `You have just deleted this from your memory of the user: "${mc.forgot.join('"; "')}". Confirm in one short sentence.`; }
+    } else if (/^\s*(?:please\s+)?forget\b/i.test(lastUser.text) && memOn()) memNote = 'The user asked you to forget something, but nothing matching it was in your memory. Say so briefly, and mention they can see and edit everything you remember under Settings → Memory.';
+  }
+  const messages = [{ role: 'system', content: systemPrompt(a, sources, Boolean(a.strict && (chat.library ?? a.library)), chat, lastUser?.text || '', ctx, memNote) + (skill ? `\n\n${skillPrompt(skill)}` : '') }];
   for (const m of chat.messages.slice(0, upTo)) {
     if (m.role === 'user') messages.push({ role: 'user', content: userContent(m, docBudget) });
     else { const t = msgText(m).trim(); if (t) messages.push({ role: 'assistant', content: t }); }
@@ -558,6 +574,8 @@ function messageAction(chat, act, id, el) {
   else if (act === 'regen') generate(chat, m);
   else if (act === 'continue') { chat.messages.push({ id: uid(), role: 'user', text: 'Continue.', attachments: [] }); generate(chat, null); }
   else if (act === 'copy') { navigator.clipboard?.writeText(msgText(m)); toast('Copied.'); }
+  else if (act === 'speak') speakMessage(m);
+  else if (act === 'doc') openDoc(chat, msgText(m).replace(/<think>[\s\S]*?<\/think>/g, '').trim(), answerTitle(chat, m));
   else if (act === 'dl') exportAnswer(chat, m, document.querySelector(`[data-act="dl"][data-id="${id}"]`)?.dataset.fmt);
   else if (act === 'saveas') saveAsMenu(chat, m, document.querySelector(`[data-act="saveas"][data-id="${id}"]`));
   else if (act === 'check' || act === 'recheck') { const alt = m.alts[m.altIndex]; delete alt.check; factPanel = { chatId: chat.id, msgId: m.id }; factCheck(chat, m, alt); }
@@ -742,7 +760,7 @@ function factPanelHTML(chat) {
 }
 
 function paintFactPanel(chat) {
-  if (S.route.view !== 'chat' || S.route.id !== chat.id) return;
+  if (S.route.view !== 'chat' || S.route.id !== chat.id || docOpen(chat)) return;
   const body = $('#chat-body');
   if (!body) return;
   const old = $('#fact-panel');

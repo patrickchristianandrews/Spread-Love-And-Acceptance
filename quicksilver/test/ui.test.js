@@ -418,6 +418,97 @@ function redPng(size = 64) {
 
   await shot(win, '09-settings-api');
 
+  const lastAnswer = () => win.evaluate(() => [...document.querySelectorAll('.msg.assistant .bubble')].at(-1)?.textContent || '');
+  const waitAnswer = (re) => win.waitForFunction((src) => new RegExp(src).test([...document.querySelectorAll('.msg.assistant .bubble')].at(-1)?.textContent || ''), re.source, { timeout: 90000 });
+
+  // Memory: "remember that…" is saved at once, used in a brand-new chat, and things you mention are noticed.
+  await idle();
+  await win.click('[data-nav="newchat"]');
+  await win.selectOption('#pick-model', 'local:qwen3-8b');
+  await win.fill('#input', 'Remember that I live in Leeds');
+  await win.keyboard.press('Enter');
+  await win.waitForSelector('.mem-chip', { timeout: 60000 });
+  await idle();
+  await win.click('[data-nav="newchat"]');
+  await win.selectOption('#pick-model', 'local:qwen3-8b');
+  await win.fill('#input', 'My dog is called Biscuit, any weekend ideas?');
+  await win.keyboard.press('Enter');
+  await waitAnswer(/\[memory: I live in Leeds\]/);
+  await win.waitForSelector('.mem-chip', { timeout: 60000 }); // noticed the dog on its own
+  await idle();
+  await win.click('[data-nav="settings"]');
+  await win.click('[data-set-tab="memory"]');
+  await win.waitForSelector('.mem-item:has-text("I live in Leeds")');
+  await win.waitForSelector('.mem-item:has-text("Biscuit")');
+  await win.fill('#mem-new', 'I prefer metric units');
+  await win.click('#mem-add');
+  await win.waitForSelector('.mem-item:has-text("metric units")');
+  await shot(win, '12-memory');
+  console.log('✓ memory: remembered on request, noticed on its own, used in new chats, editable');
+
+  // Projects: instructions and files reach every chat in the project.
+  await win.click('[data-nav="projects"]');
+  await win.click('#pj-new');
+  await win.fill('#pe-name', 'Kitchen renovation');
+  await win.fill('#pe-ins', 'Budget is 15,000 pounds. Suggest options with rough prices.');
+  await win.click('#pe-ok');
+  await win.waitForSelector('.proj-page h1:has-text("Kitchen renovation")');
+  await win.setInputFiles('#pj-file', { name: 'notes.txt', mimeType: 'text/plain', buffer: Buffer.from('The worktop is oak and the floor is slate.') });
+  await win.waitForSelector('.proj-file:has-text("notes.txt")');
+  await win.selectOption('#pj-model', 'local:qwen3-8b');
+  await shot(win, '13-project');
+  await win.fill('#pj-q', 'Which worktop do we have?');
+  await win.click('#pj-send');
+  await waitAnswer(/\[project: Kitchen renovation\]/);
+  await win.waitForSelector('.chat-title .proj-chip');
+  await idle();
+  console.log('✓ projects: instructions and files in every chat');
+
+  // The document editor beside the chat: open an answer, rewrite it, undo, and the chat sees it.
+  await win.click('.msg.assistant:last-child [data-act="doc"]');
+  await win.waitForSelector('#doc-panel #dp-text');
+  const before = await win.inputValue('#dp-text');
+  await win.click('[data-dp-do="shorter"]');
+  await win.waitForFunction(() => /^Edited by/.test(document.querySelector('#dp-text')?.value || '') && !document.querySelector('.dp-body.busy'), null, { timeout: 60000 });
+  await shot(win, '14-document-editor');
+  await win.click('[data-dp="undo"]');
+  assert.equal(await win.inputValue('#dp-text'), before);
+  await win.fill('#input', 'Is this document clear?');
+  await win.keyboard.press('Enter');
+  await waitAnswer(/\[sees the document\]/);
+  await idle();
+  await win.click('[data-dp="close"]');
+  await win.waitForSelector('#doc-panel', { state: 'detached' });
+  console.log('✓ document editor: rewrite, undo, the chat reads it');
+
+  // Arena: a blind test between two models, then the leaderboard.
+  await win.click('[data-nav="arena"]');
+  await win.selectOption('#ar-pool', 'local:qwen3-8b');
+  await win.fill('#ar-q', 'Name a colour');
+  await win.click('#ar-go');
+  await win.waitForSelector('[data-vote="A"]', { timeout: 150000 });
+  assert.ok(!(await win.evaluate(() => document.querySelector('.arena-grid').textContent.includes('Qwen3 8B'))), 'names are hidden until you vote');
+  await shot(win, '15-arena');
+  await win.click('[data-vote="A"]');
+  await win.waitForSelector('.arena-board tbody tr');
+  await win.waitForSelector('.arena-side.won');
+  await shot(win, '16-arena-voted');
+  console.log('✓ arena: blind answers, vote, leaderboard');
+
+  // Voice, phone and updates settings.
+  await win.click('[data-nav="settings"]');
+  await win.click('[data-set-tab="voice"]');
+  await win.waitForFunction(() => !/Checking/.test(document.querySelector('#vt-status')?.textContent || 'Checking'));
+  await win.click('[data-set-tab="phone"]');
+  await win.check('#ph-on');
+  await win.waitForFunction(() => document.querySelector('.phone-qr svg') || document.querySelector('#ph-on')?.checked, null, { timeout: 15000 });
+  await win.waitForTimeout(500);
+  await shot(win, '17-phone');
+  await win.uncheck('#ph-on');
+  await win.click('[data-set-tab="general"]');
+  await win.waitForSelector('#upd-box');
+  console.log('✓ settings: voice, phone (QR link), updates');
+
   if (errors.length) console.log('PAGE ERRORS:', errors);
   assert.deepEqual(errors, []);
   await app.close();

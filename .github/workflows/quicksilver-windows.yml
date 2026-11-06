@@ -59,7 +59,7 @@ jobs:
         env:
           PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: '1'
 
-      - name: Download the engines (llama.cpp + stable-diffusion.cpp)
+      - name: Download the engines (llama.cpp, stable-diffusion.cpp, whisper.cpp)
         run: node scripts/fetch-engines.js --platform win32
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -109,6 +109,19 @@ jobs:
           SD=$(find engine/sd \( -name sd-cli.exe -o -name sd.exe \) | head -1)
           echo "engine: $SD ($(cat engine/sd/VERSION.txt))"
           "$SD" --help | head -5
+
+      - name: Prove voice typing works (real whisper.cpp, real speech from Windows)
+        continue-on-error: true
+        shell: pwsh
+        run: |
+          $w = Get-ChildItem -Recurse engine\whisper -Filter whisper-cli.exe -ErrorAction SilentlyContinue | Select-Object -First 1
+          if (!$w) { Write-Host '::warning::whisper.cpp was not bundled; voice typing will download it on first use'; exit 0 }
+          Add-Type -AssemblyName System.Speech
+          $s = New-Object System.Speech.Synthesis.SpeechSynthesizer
+          $s.SetOutputToWaveFile("$PWD\speech.wav"); $s.Speak('The quick brown fox jumps over the lazy dog.'); $s.Dispose()
+          curl.exe -sSL -o whisper.bin https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-base-q5_1.bin
+          $env:QS_WHISPER_BIN = $w.FullName; $env:QS_WHISPER_MODEL = "$PWD\whisper.bin"; $env:QUICKSILVER_HOME = "$PWD\voice-home"
+          node -e "require('./src/main/whisper').transcribe(require('fs').readFileSync('speech.wav'), { ext: 'wav' }).then((t) => { console.log('heard:', t); if (!/fox/i.test(t)) { console.log('::warning::voice typing heard the wrong words'); process.exit(1); } console.log('voice typing: works'); }).catch((e) => { console.log('::warning::voice typing failed: ' + e.message); process.exit(1); })"
 
       # Signing removes Windows' "unknown publisher" warning. It turns on by itself once either
       # set of repository secrets exists (Settings → Secrets and variables → Actions):
@@ -197,9 +210,16 @@ jobs:
           path: quicksilver/install-shots/
           if-no-files-found: ignore
 
+      # The installer's fingerprint, which the app's automatic updates check before installing.
+      - name: Fingerprint the installer
+        run: for f in dist/Quicksilver-Setup-*.exe; do (cd dist && sha256sum "$(basename "$f")" > "$(basename "$f").sha256" && cat "$(basename "$f").sha256"); done
+
       - name: Publish release
         if: startsWith(github.ref, 'refs/tags/quicksilver-v')
         uses: softprops/action-gh-release@v2
         with:
-          files: quicksilver/dist/*.exe
           name: Quicksilver ${{ github.ref_name }}
+          body_path: quicksilver/RELEASE_NOTES.md
+          files: |
+            quicksilver/dist/*.exe
+            quicksilver/dist/*.exe.sha256

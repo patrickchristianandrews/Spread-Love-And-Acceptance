@@ -7,14 +7,14 @@ const engineProg = {};
 
 views.settings = {
   html() {
-    const tabs = { general: 'General', chat: 'Chat & accuracy', web: 'Web search', api: 'API server', engines: 'Engines', accounts: 'Accounts' };
+    const tabs = { general: 'General', chat: 'Chat & accuracy', memory: 'Memory', voice: 'Voice', phone: 'Phone', web: 'Web search', api: 'API server', engines: 'Engines', accounts: 'Accounts' };
     return `<div class="page"><div class="page-head"><h1>Settings</h1></div>
       <div class="tabs">${Object.entries(tabs).map(([k, l]) => `<button class="tab ${setTab === k ? 'active' : ''}" data-set-tab="${k}">${l}</button>`).join('')}</div>
-      <div style="max-width:860px">${({ general: generalHTML, chat: chatSetHTML, web: webHTML, api: apiSrvHTML, engines: enginesHTML, accounts: accountsHTML })[setTab]()}</div></div>`;
+      <div style="max-width:860px">${({ general: generalHTML, chat: chatSetHTML, memory: memSetHTML, voice: voiceSetHTML, phone: phoneSetHTML, web: webHTML, api: apiSrvHTML, engines: enginesHTML, accounts: accountsHTML })[setTab]()}</div></div>`;
   },
   bind() {
     $$('[data-set-tab]').forEach((b) => b.addEventListener('click', () => { setTab = b.dataset.setTab; render(); }));
-    ({ general: bindGeneral, chat: bindChatSet, web: bindWeb, api: bindApiSrv, engines: bindEngines, accounts: bindAccounts })[setTab]();
+    ({ general: bindGeneral, chat: bindChatSet, memory: bindMemSet, voice: bindVoiceSet, phone: bindPhoneSet, web: bindWeb, api: bindApiSrv, engines: bindEngines, accounts: bindAccounts })[setTab]();
   },
 };
 
@@ -27,9 +27,13 @@ function generalHTML() {
     <div class="field"><label>Appearance</label><div class="row">${[['dark', 'Dark'], ['light', 'Light'], ['system', 'Match Windows']].map(([k, l]) => `<button class="btn small ${(P().theme || 'dark') === k ? 'on' : ''}" data-theme-set="${k}">${l}</button>`).join('')}</div></div>
     <div class="field"><label>Text size</label><div class="row">${[['normal', 'Normal'], ['large', 'Large'], ['xl', 'Extra large']].map(([k, l]) => `<button class="btn small ${P().textSize === k ? 'on' : ''}" data-textsize="${k}">${l}</button>`).join('')}</div></div>
     <div><button class="btn primary" id="g-save">Save</button></div>
+    ${updateBoxHTML()}
   </div>`;
 }
+const memSetHTML = () => `<p class="lede" style="margin-top:0">What your assistants remember about you, across all chats. Click a line to change it.</p><div id="mem-box">${memoryManagerHTML()}</div>`;
+function bindMemSet() { const box = $('#mem-box'); const repaint = () => { box.innerHTML = memoryManagerHTML(); bindMemoryManager(box, repaint); }; bindMemoryManager(box, repaint); }
 function bindGeneral() {
+  bindUpdateBox();
   $$('[data-theme-set]').forEach((b) => b.addEventListener('click', () => { P().theme = b.dataset.themeSet; applyPrefs(); save(); render(); }));
   $$('[data-textsize]').forEach((b) => b.addEventListener('click', () => { P().textSize = b.dataset.textsize; applyPrefs(); save(); render(); }));
   $('#g-save').addEventListener('click', () => { P().userName = $('#g-name').value.trim(); P().about = $('#g-about').value.trim(); save(); toast('Saved.'); });

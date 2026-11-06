@@ -2,6 +2,7 @@
 // app (which can download others, such as NVIDIA CUDA, on the user's PC).
 //  - llama.cpp (ggml-org/llama.cpp): text and vision models, served by llama-server.
 //  - stable-diffusion.cpp (leejet/stable-diffusion.cpp): image and video generation and editing.
+//  - whisper.cpp (ggml-org/whisper.cpp): speech to text.
 
 const ENGINES = {
   llama: {
@@ -40,6 +41,18 @@ const ENGINES = {
       },
     },
     bundled: { win32: 'vulkan', linux: 'cpu', darwin: 'metal' },
+  },
+  // whisper.cpp (ggml-org/whisper.cpp): speech to text for voice typing, on the processor.
+  whisper: {
+    repo: 'ggml-org/whisper.cpp',
+    binaries: ['whisper-cli.exe', 'whisper-cli', 'main.exe'],
+    variants: {
+      win32: {
+        cpu: { label: 'CPU', assets: [/^whisper-bin-x64\.zip$/i] },
+      },
+    },
+    bundled: { win32: 'cpu' },
+    optional: true, // the build carries on without it; the app downloads it on first use
   },
 };
 

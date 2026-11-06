@@ -20,6 +20,9 @@ const media = require('./media');
 const apiserver = require('./apiserver');
 const integrations = require('./integrations');
 const mcp = require('./mcp');
+const whisper = require('./whisper');
+const phone = require('./phone');
+const updater = require('./updater');
 
 protocol.registerSchemesAsPrivileged([{ scheme: 'qsmedia', privileges: { standard: true, secure: true, supportFetchAPI: true, stream: true } }]);
 
@@ -56,6 +59,18 @@ handle('apiserver:newKey', () => {
 });
 handle('apiserver:revealKey', () => store.getSecret('apiServerKey'));
 handle('apiserver:status', () => apiserver.status());
+
+// ---------- voice typing, phone access, updates ----------
+handle('voice:status', () => whisper.status());
+handle('voice:setup', () => whisper.setup((p) => emit('app:event', { kind: 'voice:progress', ...p })));
+handle('voice:transcribe', (bytes, opts) => whisper.transcribe(bytes, opts));
+handle('phone:info', () => phone.info());
+handle('phone:set', (patch) => phone.configure({ enabled: Boolean(patch.enabled), ...(patch.port ? { port: Math.max(1024, Math.min(65535, Number(patch.port))) } : {}) }));
+handle('phone:newLink', () => phone.newToken());
+handle('update:state', () => updater.state());
+handle('update:check', () => updater.check());
+handle('update:download', () => updater.download());
+handle('update:install', () => updater.install({ starterDir: app.isPackaged ? path.join(process.resourcesPath, 'starter') : null }));
 
 // ---------- hardware, catalog, estimates, advisor ----------
 handle('hw:detect', (fresh) => hardware.detect({ fresh }));
@@ -495,8 +510,10 @@ app.whenReady().then(() => {
   });
   createWindow();
   apiserver.start();
+  phone.start(emit);
+  updater.init(emit);
   app.on('activate', () => { if (BrowserWindow.getAllWindows().length === 0) createWindow(); });
 });
 
-app.on('before-quit', () => { llama.stopAll(); apiserver.stop(); mcp.disconnectAll(); });
+app.on('before-quit', () => { llama.stopAll(); apiserver.stop(); phone.stop(); mcp.disconnectAll(); });
 app.on('window-all-closed', () => { llama.stopAll(); if (process.platform !== 'darwin') app.quit(); });

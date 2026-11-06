@@ -316,6 +316,31 @@ function registerStarter(dir) {
   return out;
 }
 
+// Before an update replaces the app's folder: the big "pack" models that were copied in next to
+// the app are moved to the data folder, so the new version keeps them instead of downloading
+// them again. (The small model comes inside every installer.)
+function keepPackModels(dir) {
+  const metaFile = dir && path.join(dir, 'STARTER.json');
+  if (!metaFile || !fs.existsSync(metaFile)) return 0;
+  const meta = JSON.parse(fs.readFileSync(metaFile, 'utf8'));
+  const keep = store.dir('models', 'kept');
+  const all = store.readJSON(REG(), []);
+  let moved = 0;
+  for (const e of meta.models || []) {
+    if (!e.pack) continue;
+    for (const f of Object.values(e.files)) {
+      const from = path.join(dir, f);
+      const to = path.join(keep, path.basename(f));
+      if (!fs.existsSync(from)) continue;
+      try { fs.renameSync(from, to); } catch { fs.copyFileSync(from, to); fs.rmSync(from, { force: true }); }
+      for (const m of all) for (const [role, p] of Object.entries(m.files || {})) if (path.resolve(p) === path.resolve(from)) m.files[role] = to;
+      moved++;
+    }
+  }
+  if (moved) save(all);
+  return moved;
+}
+
 // ---------- models already on this PC (other apps, Downloads) ----------
 // Finds GGUF models that LM Studio, Jan, Ollama or GPT4All already downloaded (or that are in
 // Downloads), so they can be used where they are: no second download, nothing copied.
@@ -438,4 +463,4 @@ async function addFound(items, readGguf) {
   return added;
 }
 
-module.exports = { list, get, add, remove, start, cancel, active, planCatalog, planGguf, ggufOptions, search, trending, trendType, paramsOf, importFile, tree, findOnPC, addFound, repair, registerStarter };
+module.exports = { keepPackModels, list, get, add, remove, start, cancel, active, planCatalog, planGguf, ggufOptions, search, trending, trendType, paramsOf, importFile, tree, findOnPC, addFound, repair, registerStarter };

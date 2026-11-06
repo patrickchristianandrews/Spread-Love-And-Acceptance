@@ -692,6 +692,106 @@ async function collect(gen) {
   assert.equal(moe.fit, 'split'); assert.ok(moe.tps > 5, 'MoE runs usefully even when split');
   console.log('✓ advisor: yours', JSON.stringify(adv.mine.members), '| best', JSON.stringify(power.members));
 
+  // Voice typing: a recording is converted to 16 kHz WAV and turned into text.
+  {
+    process.env.QS_WHISPER_BIN = path.join(__dirname, 'fakes', 'whisper-cli');
+    const fakeModel = path.join(HOME, 'whisper-model.bin');
+    fs.writeFileSync(fakeModel, Buffer.alloc(2e6));
+    process.env.QS_WHISPER_MODEL = fakeModel;
+    const whisper = require('../src/main/whisper');
+    assert.equal(whisper.status().ready, true);
+    const clip = path.join(HOME, 'clip.ogg');
+    require('node:child_process').execFileSync(require('ffmpeg-static'), ['-y', '-loglevel', 'error', '-f', 'lavfi', '-i', 'sine=frequency=440:duration=1', '-ar', '48000', '-c:a', 'libopus', clip]);
+    const said = await whisper.transcribe(fs.readFileSync(clip), { ext: 'ogg' });
+    assert.equal(said, 'Hello from the fake whisper at 16000 Hz.', said);
+    console.log('✓ voice typing: recording → 16 kHz WAV → text:', said);
+  }
+
+  // Phone access: the page, a secret link, the model list and a streamed answer that syncs back.
+  {
+    process.env.QS_PHONE_HOST = '127.0.0.1';
+    const phone = require('../src/main/phone');
+    const events = [];
+    phone.start((ch, d) => events.push(d));
+    const port = 18000 + Math.floor(Math.random() * 1000);
+    const inf = await phone.configure({ enabled: true, port });
+    assert.ok(inf.running, inf.error);
+    const key = inf.local.split('#k=')[1];
+    assert.ok(key && key.length >= 20);
+    assert.ok(/<svg/.test(inf.qr) || !inf.url, 'QR code for the link');
+    const base = `http://127.0.0.1:${port}`;
+    assert.ok((await (await fetch(`${base}/`)).text()).includes('Quicksilver on your phone'));
+    assert.equal((await fetch(`${base}/api/info`)).status, 401, 'no key, no access');
+    assert.equal((await fetch(`${base}/api/info`, { headers: { Authorization: 'Bearer wrong-key-xxxxxxxxxxxx' } })).status, 401);
+    const auth = { Authorization: `Bearer ${key}`, 'Content-Type': 'application/json' };
+    const pinfo = await (await fetch(`${base}/api/info`, { headers: auth })).json();
+    assert.ok(pinfo.targets.some((t) => t.target === 'local:qwen3-8b'));
+    store.writeJSON(store.file('app-data.json'), { prefs: { userName: 'Liquid' }, assistants: [{ id: 'as-general', name: 'Assistant', emoji: '💬', instructions: 'Be kind.' }], memory: [{ id: 'm1', text: 'The user lives in Leeds.' }] });
+    const r = await fetch(`${base}/api/chat`, { method: 'POST', headers: auth, body: JSON.stringify({ chatId: 'p1', title: 'Hi', assistantId: 'as-general', target: 'local:qwen3-8b', messages: [{ role: 'user', text: 'Hello from my phone' }] }) });
+    const body = await r.text();
+    const said = body.split('\n').filter((l) => l.startsWith('data: ')).map((l) => JSON.parse(l.slice(6))).map((e) => e.t || '').join('');
+    assert.ok(/Answer from .*Hello from my phone.*\[memory: The user lives in Leeds/.test(said), said);
+    assert.equal(events.at(-1).kind, 'phone:chat');
+    assert.equal(events.at(-1).chat.messages.length, 2);
+    const old = key;
+    const fresh = await phone.newToken();
+    assert.notEqual(fresh.local.split('#k=')[1], old);
+    assert.equal((await fetch(`${base}/api/info`, { headers: auth })).status, 401, 'a new link signs old phones out');
+    phone.stop();
+    console.log('✓ phone: page, secret link, answers with memory, synced to the PC, new link signs out');
+  }
+
+  // Automatic updates: finds a newer release, downloads it and checks its fingerprint.
+  {
+    const crypto = require('node:crypto');
+    const http = require('node:http');
+    const setup = Buffer.from('fake installer bytes '.repeat(500));
+    let goodSum = true;
+    const srv = http.createServer((req, res) => {
+      const base = `http://127.0.0.1:${srv.address().port}`;
+      if (req.url === '/releases') {
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        return res.end(JSON.stringify([
+          { tag_name: 'quicksilver-v9.1.0', draft: false, prerelease: true, assets: [{ name: 'Quicksilver-Setup-9.1.0.exe', size: 1, browser_download_url: `${base}/x` }] },
+          { tag_name: 'quicksilver-v9.0.0', draft: false, prerelease: false, body: '## New\nThings.', assets: [{ name: 'Quicksilver-Setup-9.0.0.exe', size: setup.length, browser_download_url: `${base}/setup.exe` }, { name: 'Quicksilver-Setup-9.0.0.exe.sha256', size: 64, browser_download_url: `${base}/setup.sha256` }] },
+          { tag_name: 'quicksilver-v2.0.0', draft: false, prerelease: false, assets: [{ name: 'Quicksilver-Setup-2.0.0.exe', size: 5, browser_download_url: `${base}/old` }] },
+          { tag_name: 'other-v99', draft: false, prerelease: false, assets: [] },
+        ]));
+      }
+      if (req.url === '/setup.exe') { res.writeHead(200, { 'Content-Length': setup.length }); return res.end(setup); }
+      if (req.url === '/setup.sha256') return res.end(goodSum ? `${crypto.createHash('sha256').update(setup).digest('hex')}  Quicksilver-Setup-9.0.0.exe\n` : 'ab'.repeat(32));
+      res.writeHead(404); res.end();
+    });
+    await new Promise((r) => srv.listen(0, '127.0.0.1', r));
+    process.env.QS_UPDATE_URL = `http://127.0.0.1:${srv.address().port}/releases`;
+    process.env.QS_VERSION = '2.9.0';
+    const updater = require('../src/main/updater');
+    assert.ok(updater.cmp('2.10.0', '2.9.0') > 0 && updater.cmp('2.9.0', '2.9.0') === 0);
+    const st = await updater.check();
+    assert.equal(st.available.version, '9.0.0', 'newest non-prerelease Quicksilver release');
+    goodSum = false;
+    await assert.rejects(updater.download(), /fingerprint/);
+    goodSum = true;
+    const d = await updater.download();
+    assert.equal(d.downloaded.version, '9.0.0');
+    assert.equal(fs.readFileSync(path.join(store.dir('updates'), 'Quicksilver-Setup-9.0.0.exe')).length, setup.length);
+    process.env.QS_VERSION = '9.0.0';
+    assert.equal((await updater.check()).available, null, 'up to date');
+    srv.close();
+    // Big starter models next to the app are moved to the data folder before an update.
+    const sdir = path.join(HOME, 'starter-app');
+    fs.mkdirSync(sdir, { recursive: true });
+    fs.writeFileSync(path.join(sdir, 'big.gguf'), 'x'.repeat(1000));
+    fs.writeFileSync(path.join(sdir, 'STARTER.json'), JSON.stringify({ models: [{ id: 'brain', catalogId: 'qwen3-4b', name: 'Brain', files: { model: 'big.gguf' }, pack: true }] }));
+    models.add({ id: 'brain', name: 'Brain', kind: 'text', catalogId: 'qwen3-4b', files: { model: path.join(sdir, 'big.gguf') }, size: 1000, source: 'bundled' });
+    assert.equal(models.keepPackModels(sdir), 1);
+    const kept = models.get('brain').files.model;
+    assert.ok(!kept.startsWith(sdir) && fs.existsSync(kept) && !fs.existsSync(path.join(sdir, 'big.gguf')));
+    assert.equal(models.registerStarter(sdir).missing.length, 0, 'not downloaded again after the update');
+    models.remove('brain');
+    console.log('✓ updates: newer release found, fingerprint checked, big models kept across updates');
+  }
+
   llama.stopAll();
   fs.rmSync(HOME, { recursive: true, force: true });
   console.log('\nBACKEND TESTS PASSED');
