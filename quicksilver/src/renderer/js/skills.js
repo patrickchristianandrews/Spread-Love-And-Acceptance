@@ -13,7 +13,7 @@ function allSkills() {
   const cat = (s) => (SKILL_CATEGORIES[s.category] ? s : { ...s, category: SKILL_RECAT[s.category] || 'office' });
   return [...BUILTIN_SKILLS.filter((s) => !overridden.has(s.id)), ...custom.map((s) => cat({ ...s, custom: true }))];
 }
-const skillById = (id) => allSkills().find((s) => s.id === id || s.overrides === id);
+const skillById = (id) => (id ? allSkills().find((s) => s.id === id || s.overrides === id) : undefined);
 
 function suggestSkill(text) {
   if (!text || text.length < 6) return null;

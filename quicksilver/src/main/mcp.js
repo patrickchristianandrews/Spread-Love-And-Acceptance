@@ -3,24 +3,7 @@
 // (stdio); remote servers are reached over HTTPS (Streamable HTTP), optionally with a token.
 const store = require('./store');
 
-const PRESETS = {
-  github: { name: 'GitHub (official remote server)', transport: 'http', url: 'https://api.githubcopilot.com/mcp/', auth: true, authHelp: 'A GitHub personal access token.', note: 'Repositories, issues, pull requests, Actions and code search.' },
-  filesystem: { name: 'Files on this PC', transport: 'stdio', command: 'npx', args: ['-y', '@modelcontextprotocol/server-filesystem', '<folder>'], note: 'Read and write files in a folder you choose. Needs Node.js (nodejs.org).', askFolder: true },
-  playwright: { name: 'Web browser (Playwright)', transport: 'stdio', command: 'npx', args: ['-y', '@playwright/mcp@latest'], note: 'Lets models open and read web pages and fill in forms. Needs Node.js.' },
-  memory: { name: 'Long-term memory', transport: 'stdio', command: 'npx', args: ['-y', '@modelcontextprotocol/server-memory'], note: 'A knowledge graph the AI can remember facts in across chats. Needs Node.js.' },
-  sqlite: { name: 'SQLite database', transport: 'stdio', command: 'uvx', args: ['mcp-server-sqlite', '--db-path', '<database file>'], note: 'Query and update a SQLite database. Needs uv (docs.astral.sh/uv).' },
-  fetch: { name: 'Fetch web pages', transport: 'stdio', command: 'uvx', args: ['mcp-server-fetch'], note: 'Fetches any URL as clean text. Needs uv.' },
-  context7: { name: 'Up-to-date code docs (Context7)', transport: 'http', url: 'https://mcp.context7.com/mcp', note: 'Current documentation for thousands of libraries, so code answers use today\'s APIs. Free, no key.' },
-  huggingface: { name: 'Hugging Face', transport: 'http', url: 'https://huggingface.co/mcp', auth: true, authHelp: 'A Hugging Face access token (huggingface.co/settings/tokens).', note: 'Search models, datasets, papers and Spaces.' },
-  stripe: { name: 'Stripe', transport: 'http', url: 'https://mcp.stripe.com', auth: true, authHelp: 'A Stripe restricted API key (dashboard.stripe.com/apikeys). Start with read-only permissions.', note: 'Customers, payments, invoices and subscriptions.' },
-  zapier: { name: 'Zapier (8,000+ apps)', transport: 'http', url: '', note: 'Paste your personal server address from mcp.zapier.com. Gives the AI the actions you choose there: Gmail, Google Sheets, Calendar, HubSpot and thousands more.' },
-  git: { name: 'Git repository', transport: 'stdio', command: 'uvx', args: ['mcp-server-git', '--repository', '<folder>'], note: 'History, diffs, branches and commits of a local repository. Needs uv.', askFolder: true },
-  time: { name: 'Time and time zones', transport: 'stdio', command: 'uvx', args: ['mcp-server-time'], note: 'The current time anywhere, and time-zone conversions. Needs uv.' },
-  thinking: { name: 'Step-by-step thinking', transport: 'stdio', command: 'npx', args: ['-y', '@modelcontextprotocol/server-sequential-thinking'], note: 'Helps models plan and revise their reasoning on hard problems. Needs Node.js.' },
-  excel: { name: 'Excel workbooks', transport: 'stdio', command: 'uvx', args: ['excel-mcp-server', 'stdio'], note: 'Create and edit .xlsx files: sheets, formulas, formatting and charts. Needs uv.' },
-  blender: { name: 'Blender (3D)', transport: 'stdio', command: 'uvx', args: ['blender-mcp'], note: 'Build and edit 3D scenes in Blender by describing them. Needs uv and the Blender MCP add-on.' },
-  custom: { name: 'Custom MCP server', transport: 'http', url: '', note: 'Any MCP server: a command to run, or an https:// address.' },
-};
+const { PRESETS } = require('./mcp-catalog');
 
 const servers = () => store.config().mcp || [];
 const live = new Map(); // id -> { client, tools, error }

@@ -248,6 +248,20 @@ async function collect(gen) {
   global.fetch = realFetch;
   console.log('✓ GitHub connector: connect, list issues, create issue (approved)');
 
+  // Models downloaded with Quicksilver 1.0 (older format) show up and work in this version.
+  {
+    const old = path.join(HOME, 'v1-qwen2.5-7b.gguf');
+    fs.copyFileSync(TINY, old);
+    const reg = store.readJSON(store.file('models.json'), []);
+    store.writeJSON(store.file('models.json'), [...reg, { id: 'qwen2.5-7b', name: 'Qwen 2.5 7B Instruct', file: old, size: 4.68e9, source: 'downloaded' }]);
+    const m = models.list().find((x) => x.id === 'qwen2.5-7b');
+    assert.ok(m && m.kind === 'text' && m.files.model === old && m.catalogId === 'qwen2.5-7b', 'a 1.0 model is listed as a text model');
+    assert.ok(store.readJSON(store.file('models.json'), []).find((x) => x.id === 'qwen2.5-7b').files, 'converted once and saved');
+    assert.ok(complete.targets().some((t) => t.target === 'local:qwen2.5-7b'), 'and can be picked in chats and stacks');
+    store.writeJSON(store.file('models.json'), reg);
+    console.log('✓ models from Quicksilver 1.0 are kept and usable');
+  }
+
   // More connectors: weather, Wikipedia, calendar (iCal), news feeds, a notes folder, Todoist, webhooks.
   {
     const calls = [];

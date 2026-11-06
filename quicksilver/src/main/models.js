@@ -62,8 +62,21 @@ function projRank(p) { return /f16/i.test(p) && !/bf16/i.test(p) ? 0 : /bf16/i.t
 // { id, name, kind: 'text'|'image'|'video', catalogId?, repo?, files: { role: absPath }, size, vision?, added }
 
 const REG = () => store.file('models.json');
+// Quicksilver 1.0 saved models as { id, name, file, size, catalogId? } (text only). Convert those
+// entries once, so models downloaded with 1.0 keep showing up and working.
+function upgradeOld(all) {
+  let changed = false;
+  const out = all.map((m) => {
+    if (m.files || !m.file) return m;
+    changed = true;
+    const cat = catalog.TEXT_MODELS.find((c) => c.id === m.catalogId || c.id === m.id);
+    return { ...m, kind: 'text', files: { model: m.file }, catalogId: m.catalogId || cat?.id, name: m.name || cat?.name || path.basename(m.file, '.gguf'), source: m.source || 'downloaded', file: undefined };
+  });
+  if (changed) save(out);
+  return out;
+}
 function list() {
-  return store.readJSON(REG(), []).filter((m) => Object.values(m.files || {}).every((f) => fs.existsSync(f)));
+  return upgradeOld(store.readJSON(REG(), [])).filter((m) => { const files = Object.values(m.files || {}); return files.length && files.every((f) => fs.existsSync(f)); });
 }
 function get(id) { return list().find((m) => m.id === id); }
 function save(entries) { store.writeJSON(REG(), entries); }

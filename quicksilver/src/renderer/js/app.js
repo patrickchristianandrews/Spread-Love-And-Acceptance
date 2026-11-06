@@ -28,9 +28,9 @@ function defaultAssistants() {
     instructions: j.assistant.instructions, target: '', temperature: j.temperature, contextSize: j.contextSize, maxTokens: j.maxTokens,
     library: j.library, web: false, factCheck: Boolean(facts[job]),
   }));
-  const extras = EXTRA_ASSISTANTS.filter((x) => S.catalog.jobs[x.job]).map((x) => {
+  const extras = [...EXTRA_ASSISTANTS, ...MORE_ASSISTANTS].filter((x) => S.catalog.jobs[x.job]).map((x) => {
     const j = S.catalog.jobs[x.job];
-    return { builtIn: true, target: '', contextSize: j.contextSize, maxTokens: j.maxTokens, library: false, factCheck: false, ...x, web: false };
+    return { builtIn: true, target: '', contextSize: j.contextSize, maxTokens: j.maxTokens, library: false, factCheck: false, group: ASSISTANT_GROUP_OF[x.id], ...x, web: Boolean(x.web) };
   });
   return [...fromJobs, ...extras];
 }
