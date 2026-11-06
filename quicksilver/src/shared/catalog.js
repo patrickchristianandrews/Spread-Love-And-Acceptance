@@ -21,6 +21,20 @@ const TEXT_MODELS = [
   { id: 'qwen3-4b', name: 'Qwen3 4B Instruct 2507', maker: 'Alibaba', params: '4B', category: 'small', repo: 'unsloth/Qwen3-4B-Instruct-2507-GGUF', quant: 'Q4_K_M', sizeGB: 2.5, ctx: 262144,
     blurb: 'The best all-rounder under 3 GB, on par with older 8B models. Huge context window.', jobs: { general: 7, office: 7, research: 7, coding: 7, vision: 0, fast: 8 }, judge: 6 },
 
+  // The models from Quicksilver 1.0, kept for anyone who prefers them (newer ones above are usually better).
+  { id: 'llama-3.2-1b', name: 'Llama 3.2 1B', maker: 'Meta', params: '1B', category: 'small', repo: 'bartowski/Llama-3.2-1B-Instruct-GGUF', quant: 'Q4_K_M', sizeGB: 0.8, ctx: 131072,
+    blurb: 'The smallest here. Very fast on any PC, but keeps things simple.', jobs: { general: 3, office: 3, research: 2, coding: 2, vision: 0, fast: 10 }, judge: 1 },
+  { id: 'qwen2.5-3b', name: 'Qwen2.5 3B', maker: 'Alibaba', params: '3B', category: 'small', repo: 'bartowski/Qwen2.5-3B-Instruct-GGUF', quant: 'Q4_K_M', sizeGB: 1.9, ctx: 32768,
+    blurb: 'Small model that punches above its weight at facts, maths and structure.', jobs: { general: 5, office: 5, research: 4, coding: 4, vision: 0, fast: 8 }, judge: 3 },
+  { id: 'phi-3.5-mini', name: 'Phi-3.5 Mini', maker: 'Microsoft', params: '3.8B', category: 'small', repo: 'bartowski/Phi-3.5-mini-instruct-GGUF', quant: 'Q4_K_M', sizeGB: 2.4, ctx: 131072,
+    blurb: 'Compact reasoner, good at explaining step by step.', jobs: { general: 4, office: 5, research: 4, coding: 4, vision: 0, fast: 8 }, judge: 3 },
+  { id: 'qwen2.5-7b', name: 'Qwen2.5 7B', maker: 'Alibaba', params: '7B', category: 'general', repo: 'bartowski/Qwen2.5-7B-Instruct-GGUF', quant: 'Q4_K_M', sizeGB: 4.7, ctx: 32768,
+    blurb: 'Sharp all-rounder: knowledge, maths, code and long answers.', jobs: { general: 6, office: 6, research: 6, coding: 6, vision: 0, fast: 5 }, judge: 5 },
+  { id: 'gemma-2-9b', name: 'Gemma 2 9B', maker: 'Google', params: '9B', category: 'general', repo: 'bartowski/gemma-2-9b-it-GGUF', quant: 'Q4_K_M', sizeGB: 5.8, ctx: 8192,
+    blurb: 'Polished, articulate writer with good judgment.', jobs: { general: 6, office: 6, research: 6, coding: 5, vision: 0, fast: 4 }, judge: 5 },
+  { id: 'qwen2.5-14b', name: 'Qwen2.5 14B', maker: 'Alibaba', params: '14B', category: 'general', repo: 'bartowski/Qwen2.5-14B-Instruct-GGUF', quant: 'Q4_K_M', sizeGB: 9.0, ctx: 32768,
+    blurb: 'Big, knowledgeable model. Needs a graphics card (GPU) with about 12 GB of its own memory, or lots of system memory.', jobs: { general: 7, office: 7, research: 7, coding: 7, vision: 0, fast: 3 }, judge: 7 },
+
   // General purpose
   { id: 'qwen3-8b', name: 'Qwen3 8B', maker: 'Alibaba', params: '8B', category: 'general', repo: 'unsloth/Qwen3-8B-GGUF', quant: 'Q4_K_M', sizeGB: 5.0, ctx: 32768, reasoning: true,
     blurb: 'Sharp everyday model with an optional thinking mode for hard questions.', jobs: { general: 7, office: 7, research: 7, coding: 7, vision: 0, fast: 5 }, judge: 6 },

@@ -473,7 +473,8 @@ async function collect(gen) {
   assert.equal(catalog.matchCatalog('Meta-Llama-3.1-8B-Instruct-Q4_K_M.gguf')?.id, 'llama-3.1-8b');
   assert.equal(catalog.matchCatalog('phi4:latest')?.id, 'phi-4');
   assert.equal(catalog.matchCatalog('Phi-4-mini-instruct-Q4_K_M')?.id, 'phi-4-mini');
-  assert.equal(catalog.matchCatalog('Qwen2.5-7B-Instruct'), null, 'no false match');
+  assert.equal(catalog.matchCatalog('Qwen2.5-7B-Instruct')?.id, 'qwen2.5-7b', 'the 1.0 models are recognised again');
+  assert.equal(catalog.matchCatalog('Yi-1.5-9B-Chat'), null, 'no false match');
   const unknown = catalog.profileInstalled({ id: 'x', name: 'mystery-chat-12b', size: 7.5e9 });
   assert.equal(unknown.known, false); assert.ok(unknown.jobs.general >= 6 && unknown.jobs.general <= 8);
   const mid = { ramGB: 32, vramGB: 12, vramFreeGB: 11.5 };
