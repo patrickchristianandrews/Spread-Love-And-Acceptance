@@ -120,7 +120,9 @@ async function* single(target, req) {
   if (t.kind === 'local') {
     const m = models.get(t.id);
     if (!m) throw new Error('That model is no longer installed. Pick another one.');
-    yield* llama.chat({ id: m.id, name: m.name, file: m.files.model, mmproj: m.files.mmproj }, req);
+    // A small same-family model, if installed, speeds this one up (speculative decoding).
+    const d = !m.files.mmproj && !hasImages(req.messages) ? catalog.draftFor(m.catalogId, models.list()) : null;
+    yield* llama.chat({ id: m.id, name: m.name, file: m.files.model, mmproj: m.files.mmproj, draft: d?.files.model }, req);
   } else if (t.kind === 'api') {
     yield* providers.chat(t.providerId, t.model, req);
   } else if (t.kind === 'kbm') {
@@ -318,7 +320,7 @@ async function* stack(stackDef, req) {
     const s = draftSteps[i];
     const started = Date.now();
     try {
-      s.text = await collect(d, { ...req, messages: msgsFor(d) }, live(s));
+      s.text = await collect(d, { ...req, messages: msgsFor(d), maxTokens: Math.min(req.maxTokens || 2048, 1800) }, live(s));
     } catch (err) {
       if (req.signal?.aborted) throw err;
       s.error = String(err.message || err);
@@ -326,6 +328,8 @@ async function* stack(stackDef, req) {
     s.done = true; s.ms = Date.now() - started;
     req.onStep?.(s);
   };
+  const team = [...drafters.slice(1), judge].filter((x, i, arr) => x && parse(x).kind === 'local' && arr.indexOf(x) === i);
+  llama.prefetch(team.map((x) => { const mm = models.get(parse(x).id); return mm && { id: mm.id, name: mm.name, file: mm.files.model, mmproj: mm.files.mmproj, size: mm.size }; }).filter(Boolean), { contextSize: req.contextSize, gpu: req.gpu }).catch(() => {});
   const localChain = (async () => { for (let i = 0; i < drafters.length; i++) if (parse(drafters[i]).kind !== 'api') await runDraft(drafters[i], i); })();
   const cloud = drafters.map((d, i) => (parse(d).kind === 'api' ? runDraft(d, i) : null)).filter(Boolean);
   await Promise.all([localChain, ...cloud]);

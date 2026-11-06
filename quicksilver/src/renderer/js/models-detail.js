@@ -18,7 +18,7 @@ async function openModelDetails(id) {
   const box = openModal('<div class="empty">Loading…</div>', { wide: true });
   let d;
   try { d = await qs.call('catalog:details', id); } catch (err) { box.innerHTML = `<div class="notice">${esc(err.message)}</div><div class="modal-actions"><button class="btn" data-close>Close</button></div>`; return; }
-  const { model: m, est, req, hardware: hw, alt, kind } = d;
+  const { model: m, est, req, hardware: hw, alt, kind, boost } = d;
   const inst = S.installed.some((x) => x.catalogId === m.id);
   const [fitTitle, fitWhy] = FIT_TEXT[est.fit] || ['', ''];
   const total = (m.sizeGB || 0) + (m.mmprojGB || 0);
@@ -38,6 +38,7 @@ async function openModelDetails(id) {
         <div class="row" style="margin:6px 0">${rateBadge(est, kind)}</div>
         <p style="margin:6px 0 4px"><b>${esc(fitTitle)}.</b> ${esc(fitWhy)}</p>
         ${speed ? `<p class="small" style="margin:0">${speed}</p>` : ''}
+        ${boost && est.fit !== 'no' ? `<p class="small" style="margin:8px 0 0">${boost.installed ? `<b>Speed boost on:</b> ${esc(boost.name)} drafts ahead for it, so it writes noticeably faster.` : `<b>Make it faster:</b> with ${esc(boost.name)} installed (${boost.sizeGB.toFixed(1)} GB), it drafts ahead and this model writes up to about twice as fast, with the same answers. <button class="btn small" data-md-get-boost="${esc(boost.id)}">Get it</button>`}</p>` : ''}
         <p class="small muted" style="margin:8px 0 0">Your PC: ${pcLine}. Free for AI: about ${gbText(req.haveRam || 0)} of memory${req.haveVram ? ` + ${gbText(req.haveVram)} on the graphics card` : ''}. This model needs about <b>${Math.ceil(req.need)} GB</b>.</p>
       </div>
       ${kind === 'text' ? `<div class="card md-sec"><h3>Output, accuracy and ratings</h3>${modelProfileHTML(m, kind)}<h3 style="margin-top:12px">Good at</h3>${Object.entries(JOB_LABEL).filter(([k]) => k !== 'vision' || m.vision).map(([k, l]) => `<div class="md-score"><span>${l}</span>${scoreDots(m.jobs?.[k] ?? 0)}</div>`).join('')}
@@ -59,6 +60,7 @@ async function openModelDetails(id) {
   $$('[data-close]', box).forEach((x) => x.addEventListener('click', closeModal));
   $$('[data-md-open]', box).forEach((b) => b.addEventListener('click', () => openModelDetails(b.dataset.mdOpen)));
   box.querySelector('[data-goto-upgrades]')?.addEventListener('click', (e) => { e.preventDefault(); closeModal(); go({ view: 'pc' }); });
+  box.querySelector('[data-md-get-boost]')?.addEventListener('click', async (e) => { e.target.disabled = true; await download({ catalogId: e.target.dataset.mdGetBoost }, boost.name); toast(`${boost.name} is downloading. ${m.name} will use it automatically.`); });
   box.querySelector('[data-md-get]')?.addEventListener('click', async () => { closeModal(); await download({ catalogId: m.id }, m.name); render(); });
 }
 

@@ -112,6 +112,19 @@ async function collect(gen) {
     assert.ok(llama.contextFor([{ role: 'user', content: 'Hi' }], 512, 32768) === 4096, 'a short chat reserves a small context');
     assert.ok(llama.contextFor([{ role: 'user', content: 'x'.repeat(60000) }], 2048, 32768) >= 16384, 'a long one gets more');
     console.log('✓ efficient stacks: easy questions use one model, agreement skips combining, lead drafts last, right-sized memory');
+    // Speed: a small same-family model drafts for a big one (speculative decoding) when installed.
+    assert.equal(catalog.draftFor('qwen3-8b', []), null, 'nothing to draft with yet');
+    const tinyDraft = { id: 'q17', catalogId: 'qwen3-1.7b', files: { model: path.join(dir, 'qwen.gguf') } };
+    assert.equal(catalog.draftFor('qwen3-8b', [tinyDraft])?.id, 'q17');
+    assert.equal(catalog.draftFor('qwen3-30b-a3b', [tinyDraft]), null, 'mixture-of-experts models are fast already');
+    assert.equal(catalog.draftFor('llama-3.1-8b', [tinyDraft]), null, 'only the same family (tokenizer)');
+    models.add({ ...tinyDraft, name: 'Qwen3 1.7B', kind: 'text', size: 1.1e9 });
+    llama.stopAll();
+    await collect(complete.run('local:qwen3-8b', { messages: [{ role: 'user', content: 'Hello again' }], maxTokens: 50, contextSize: 4096 }));
+    assert.ok(llama.status().some((x) => x.draft), 'the engine was started with the draft model');
+    models.remove('q17');
+    llama.stopAll();
+    console.log('✓ speculative decoding: a small same-family model speeds up a big one');
   }
 
   // Providers: an OpenAI-compatible API (the fake server stands in for one).

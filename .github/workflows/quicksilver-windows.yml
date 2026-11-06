@@ -76,6 +76,23 @@ jobs:
           echo "$RESPONSE" | grep -q '"choices"' || { cat llama.log; exit 1; }
           taskkill //F //IM llama-server.exe || true
 
+      # Quicksilver stores the model's working memory (KV cache) at 8-bit to save memory, and falls
+      # back to a normal cache if the engine refuses. This shows which one users get.
+      - name: Check the 8-bit memory cache and speculative decoding on the real engine
+        continue-on-error: true
+        run: |
+          SERVER=$(find engine/llama -name llama-server.exe | head -1)
+          "$SERVER" -m test/fixtures/tiny.gguf --host 127.0.0.1 --port 8098 -c 512 -ngl 0 --jinja --cache-reuse 256 --device none --cache-type-k q8_0 --cache-type-v q8_0 > kv.log 2>&1 &
+          for i in $(seq 1 60); do curl -sf http://127.0.0.1:8098/health && break; sleep 1; done
+          if curl -sf http://127.0.0.1:8098/v1/chat/completions -H "Content-Type: application/json" -d '{"messages":[{"role":"user","content":"Hi"}],"max_tokens":8}' | grep -q '"choices"'; then echo "8-bit KV cache: works"; else echo "::warning::8-bit KV cache not accepted; Quicksilver will use a normal cache"; tail -20 kv.log; fi
+          taskkill //F //IM llama-server.exe || true
+          sleep 2
+          # Speculative decoding: a small model drafts for a bigger one (the same file stands in for both here).
+          "$SERVER" -m test/fixtures/tiny.gguf --model-draft test/fixtures/tiny.gguf --gpu-layers-draft 0 --draft-max 16 --draft-min 2 --host 127.0.0.1 --port 8097 -c 512 -ngl 0 --jinja --device none > spec.log 2>&1 &
+          for i in $(seq 1 60); do curl -sf http://127.0.0.1:8097/health && break; sleep 1; done
+          if curl -sf http://127.0.0.1:8097/v1/chat/completions -H "Content-Type: application/json" -d '{"messages":[{"role":"user","content":"Hi"}],"max_tokens":8}' | grep -q '"choices"'; then echo "Speculative decoding: works"; else echo "::warning::speculative decoding flags not accepted; Quicksilver will run without a draft model"; tail -20 spec.log; fi
+          taskkill //F //IM llama-server.exe || true
+
       - name: Download the models that come with Quicksilver
         run: node scripts/fetch-starter.js
 

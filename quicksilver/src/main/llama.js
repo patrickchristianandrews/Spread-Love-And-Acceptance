@@ -162,8 +162,23 @@ function gpuLayers(model, info, hw, setting, otherVramGB = 0) {
   return Math.max(0, Math.floor((layers * free) / sizeGB));
 }
 
-// Engines that failed to start with an 8-bit KV cache (they get a normal cache from then on).
+// Engines that failed to start with an 8-bit KV cache (they get a normal cache from then on),
+// and models that failed to start with a draft model.
 const kvPlain = new Set();
+const noDraft = new Set();
+
+// Loads the rest of a stack's team in the background while the first model is writing, but only
+// when everything fits in memory at once (never pushing out a model that's in use).
+async function prefetch(list, { contextSize = 8192, gpu = 'auto' } = {}) {
+  const hw = await hardware.detect();
+  const budget = Math.max(hw.vramGB, 0) + hw.ramGB * 0.7 - 2;
+  const loadedGB = [...servers.values()].reduce((t, s) => t + s.sizeGB, 0);
+  const todo = list.filter((m) => !isLoaded(m.file));
+  const needGB = todo.reduce((t, m) => t + (m.size || 0) / 1024 ** 3, 0);
+  if (!todo.length || loadedGB + needGB > budget) return false;
+  for (const m of todo) await ensure(m, { contextSize: Math.min(contextSize || 8192, 8192), gpu }).catch(() => {});
+  return true;
+}
 
 // Context: the memory a model sets aside for the conversation. Reserving the maximum (often
 // 32K tokens) wastes gigabytes on short chats, so each request asks for the smallest size that
@@ -182,6 +197,7 @@ setInterval(() => { for (const [k, s] of [...servers.entries()]) if (Date.now() 
 // Starts (or reuses) a server for a model. model = { id, file, mmproj?, ctx? }
 async function ensure(model, { contextSize = 8192, gpu = 'auto', onStatus } = {}) {
   const key = `${model.file}|${gpu}`;
+  if (model.draft && noDraft.has(model.file)) model = { ...model, draft: null };
   const existing = servers.get(key);
   if (existing && !existing.exited && existing.ctx >= Math.min(contextSize, existing.maxCtx || contextSize)) {
     existing.lastUsed = Date.now();
@@ -211,6 +227,7 @@ async function ensure(model, { contextSize = 8192, gpu = 'auto', onStatus } = {}
   // The model's working memory (KV cache) is stored at 8-bit: about half the memory, with no
   // noticeable change in answers. Engines that can't do it get a normal cache instead.
   let kvq = !kvPlain.has(engine.bin);
+  let useDraft = Boolean(model.draft && fs.existsSync(model.draft));
   const start = async (layers) => {
     const port = await freePort();
     // --cache-reuse lets follow-up messages and stack steps reuse text the model already read.
@@ -219,11 +236,13 @@ async function ensure(model, { contextSize = 8192, gpu = 'auto', onStatus } = {}
     // driver can otherwise still fail the load even with no layers on it).
     if (!layers) args.push('--device', 'none');
     if (kvq) args.push('--cache-type-k', 'q8_0', '--cache-type-v', 'q8_0');
+    // Speculative decoding with a small same-family model (see catalog.draftFor).
+    if (useDraft) args.push('--model-draft', model.draft, '--gpu-layers-draft', layers ? '999' : '0', '--draft-max', '16', '--draft-min', '2');
     if (model.mmproj) args.push('--mmproj', model.mmproj);
     const proc = spawn(engine.bin, args, { windowsHide: true, stdio: ['ignore', 'pipe', 'pipe'] });
     const blocks = info.layers || 32;
     const vramGB = layers >= 999 ? sizeGB : layers ? (sizeGB * Math.min(layers, blocks)) / blocks : 0;
-    const s = { proc, port, file: model.file, sizeGB, vramGB, lastUsed: Date.now(), log: [], ctx, maxCtx: info.contextLength || ctx, layers, exited: false };
+    const s = { proc, port, file: model.file, draft: useDraft ? model.draft : null, sizeGB, vramGB, lastUsed: Date.now(), log: [], ctx, maxCtx: info.contextLength || ctx, layers, exited: false };
     const keep = (d) => { s.log.push(d.toString()); if (s.log.length > 200) s.log.shift(); };
     proc.stdout.on('data', keep);
     proc.stderr.on('data', keep);
@@ -239,7 +258,14 @@ async function ensure(model, { contextSize = 8192, gpu = 'auto', onStatus } = {}
   onStatus?.(`Loading ${model.name || 'model'} into memory${ngl ? '' : ' (on the processor)'}…`);
   try {
     try {
-      return await start(ngl);
+      try {
+        return await start(ngl);
+      } catch (err) {
+        if (!useDraft || err?.code === 'damaged') throw err;
+        // The draft model didn't work with this one: run without it from now on.
+        stop(key); useDraft = false; noDraft.add(model.file);
+        return await start(ngl);
+      }
     } catch (err) {
       if (!kvq || err?.code === 'damaged') throw err;
       // This engine or device couldn't use the 8-bit cache: remember that, and use a normal one.
@@ -317,8 +343,8 @@ async function* chat(model, opts) {
 }
 
 function status() {
-  return [...servers.values()].map((s) => ({ file: s.file, port: s.port, sizeGB: s.sizeGB, vramGB: s.vramGB, layers: s.layers, ctx: s.ctx, ready: !s.exited, idleSec: Math.round((Date.now() - s.lastUsed) / 1000) }));
+  return [...servers.values()].map((s) => ({ file: s.file, draft: s.draft || null, port: s.port, sizeGB: s.sizeGB, vramGB: s.vramGB, layers: s.layers, ctx: s.ctx, ready: !s.exited, idleSec: Math.round((Date.now() - s.lastUsed) / 1000) }));
 }
 const isLoaded = (file) => [...servers.values()].some((s) => s.file === file && !s.exited);
 
-module.exports = { readGguf, ensure, chat, stop, stopAll, status, isLoaded, contextFor };
+module.exports = { readGguf, ensure, chat, stop, stopAll, status, isLoaded, contextFor, prefetch };

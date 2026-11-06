@@ -70,7 +70,11 @@ handle('catalog:details', async (id) => {
   const kind = text ? 'text' : 'media';
   const est = text ? catalog.estimateText(m, hw, c.text) : catalog.estimateMedia(m, hw, c.media);
   const alt = text && est.fit === 'no' ? catalog.smallerAlternative(m, hw) : null;
-  return { model: m, kind, est, hardware: hw, req: catalog.requirements(m, hw, kind), alt: alt && { id: alt.id, name: alt.name, sizeGB: alt.sizeGB, est: catalog.estimateText(alt, hw, c.text) } };
+  // Speed boost: a small same-family model that would let this one write faster.
+  const fam = text && !m.activeGB && !m.vision ? catalog.DRAFT_FAMILIES.find((f) => f.targets.test(m.id)) : null;
+  const helper = fam && catalog.TEXT_MODELS.find((x) => x.id === fam.drafts[0] && x.sizeGB <= m.sizeGB * 0.3);
+  const boost = helper && { id: helper.id, name: helper.name, sizeGB: helper.sizeGB, installed: models.list().some((x) => x.catalogId === helper.id) };
+  return { model: m, kind, est, hardware: hw, boost, req: catalog.requirements(m, hw, kind), alt: alt && { id: alt.id, name: alt.name, sizeGB: alt.sizeGB, est: catalog.estimateText(alt, hw, c.text) } };
 });
 handle('catalog:estimates', async () => {
   const hw = await hardware.detect();
