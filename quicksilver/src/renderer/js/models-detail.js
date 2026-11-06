@@ -40,8 +40,8 @@ async function openModelDetails(id) {
         ${speed ? `<p class="small" style="margin:0">${speed}</p>` : ''}
         <p class="small muted" style="margin:8px 0 0">Your PC: ${pcLine}. Free for AI: about ${gbText(req.haveRam || 0)} of memory${req.haveVram ? ` + ${gbText(req.haveVram)} on the graphics card` : ''}. This model needs about <b>${Math.ceil(req.need)} GB</b>.</p>
       </div>
-      ${kind === 'text' ? `<div class="card md-sec"><h3>Good at</h3>${Object.entries(JOB_LABEL).filter(([k]) => k !== 'vision' || m.vision).map(([k, l]) => `<div class="md-score"><span>${l}</span>${scoreDots(m.jobs?.[k] ?? 0)}</div>`).join('')}
-        ${ability.length ? `<ul class="md-abil">${ability.map((x) => `<li>${esc(x)}</li>`).join('')}</ul>` : ''}</div>` : `<div class="card md-sec"><h3>About it</h3><ul class="md-abil">${[`Quality: ${m.quality}/10`, ...ability].map((x) => `<li>${esc(x)}</li>`).join('')}</ul></div>`}
+      ${kind === 'text' ? `<div class="card md-sec"><h3>Output, accuracy and ratings</h3>${modelProfileHTML(m, kind)}<h3 style="margin-top:12px">Good at</h3>${Object.entries(JOB_LABEL).filter(([k]) => k !== 'vision' || m.vision).map(([k, l]) => `<div class="md-score"><span>${l}</span>${scoreDots(m.jobs?.[k] ?? 0)}</div>`).join('')}
+        ${ability.length ? `<ul class="md-abil">${ability.map((x) => `<li>${esc(x)}</li>`).join('')}</ul>` : ''}</div>` : `<div class="card md-sec"><h3>Output, accuracy and ratings</h3>${modelProfileHTML(m, kind)}<ul class="md-abil">${[`Quality: ${m.quality}/10`, ...ability].map((x) => `<li>${esc(x)}</li>`).join('')}</ul></div>`}
     </div>
     ${est.fit === 'no' ? `<div class="card md-sec md-need">
       <h3>What you can do</h3>

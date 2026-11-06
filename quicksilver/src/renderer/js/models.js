@@ -78,6 +78,39 @@ function installedHTML() {
   }).join('');
 }
 
+// What a model produces, how accurate it is, and its rating for each kind of work (out of 5).
+const ACC_LABELS = ['Basic', 'Basic', 'Fair', 'Good', 'Very high', 'Excellent'];
+function modelAccuracy(m, kind) {
+  const q = kind === 'text' ? Math.max(m.jobs?.general ?? 0, m.jobs?.office ?? 0, m.jobs?.research ?? 0) : m.quality ?? 0;
+  const dots = Math.max(1, Math.min(5, Math.round(q / 2)));
+  return { q, dots, label: ACC_LABELS[dots] };
+}
+function modelOutput(m, kind) {
+  if (kind !== 'text') {
+    const d = m.defaults || {};
+    if (m.kind === 'video') return `Video clips, about ${Math.round((d.frames || 33) / (d.fps || 16))} s at ${d.width || 832}×${d.height || 480}${m.animate ? '; also animates photos' : ''}`;
+    if (m.category === 'edit') return 'Edited photos, from a description of the change';
+    return `Pictures up to ${d.width || 1024}×${d.height || 1024}${m.edit === 'img2img' ? '; can redraw a photo' : ''}`;
+  }
+  return ['Text answers', m.vision && 'reads photos & screenshots', m.reasoning && 'shows its reasoning', (m.jobs?.coding ?? 0) >= 7 && 'strong code', m.ctx >= 100000 && `long documents (${Math.round(m.ctx / 1024)}K)`].filter(Boolean).join(' · ');
+}
+function modelRatings(m, kind) {
+  const star = (v) => Math.max(0.5, Math.round(v) / 2);
+  if (kind !== 'text') return [['Quality', star(m.quality ?? 5)]];
+  const j = m.jobs || {};
+  const r = [['Everyday', star(j.general ?? 5)], ['Writing', star(Math.min(10, (j.general ?? 5) + (/Google|Meta|Mistral|Anthropic/.test(m.maker || '') ? 1 : 0) - (m.category === 'coding' ? 2 : 0)))], ['Research', star(j.research ?? 5)], ['Documents', star(j.office ?? 5)], ['Coding', star(j.coding ?? 5)]];
+  if (m.vision) r.push(['Photos', star(j.vision ?? 5)]);
+  return r;
+}
+function modelProfileHTML(m, kind) {
+  const acc = modelAccuracy(m, kind);
+  return `<div class="mp">
+    <div class="mp-row"><span class="mp-k">Output</span><span class="mp-v">${esc(modelOutput(m, kind))}</span></div>
+    <div class="mp-row"><span class="mp-k">Accuracy</span><span class="mp-v"><span class="acc-dots">${'●'.repeat(acc.dots)}<i>${'●'.repeat(5 - acc.dots)}</i></span> ${acc.label}</span></div>
+    <div class="mp-rates">${modelRatings(m, kind).map(([k, v]) => `<span class="mp-rate"><span>${k}</span><b>★ ${Number.isInteger(v) ? v : v.toFixed(1)}</b></span>`).join('')}</div>
+  </div>`;
+}
+
 function modelCard(m, est, kind) {
   const inst = S.installed.some((x) => x.catalogId === m.id);
   const tags = [];
@@ -91,6 +124,7 @@ function modelCard(m, est, kind) {
     <div class="row"><h3 class="grow">${esc(m.name)}</h3><span class="small" style="font-weight:800">${(m.sizeGB + (m.mmprojGB || 0)).toFixed(1)} GB</span></div>
     <div class="meta" style="margin:4px 0 8px">${esc(m.maker)}${m.params ? ` · ${esc(m.params)} parameters` : ''}</div>
     <p class="desc" style="margin:0 0 10px">${esc(m.blurb)}</p>
+    ${modelProfileHTML(m, kind)}
     <div class="row" style="margin-bottom:10px">${tags.join('')}</div>
     <div class="row" style="margin-bottom:12px"><span class="small" style="font-weight:700">On your PC:</span>${rateBadge(est, kind)}</div>
     <div class="row">${S.downloads[m.id] ? downloadBox(m.id) : inst ? '<span class="badge b-mint">✓ Installed</span>' : `<button class="btn primary small" data-get="${m.id}">Download</button>`}<span class="grow"></span><button class="btn small ghost" data-details="${esc(m.id)}">${est?.rating === 'wont' ? 'Why? What would it need?' : 'Details'}</button></div>
