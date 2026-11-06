@@ -1042,3 +1042,5 @@ code.sel { user-select: all; background: var(--soft); padding: 1px 6px; border-r
 .wc-step:hover { border-color: var(--accent-line); transform: translateY(-1px); }
 .wc-step > span:last-child { display: flex; flex-direction: column; gap: 3px; }
 .wc-n { width: 28px; height: 28px; flex: none; border-radius: 50%; display: grid; place-items: center; font-weight: 800; background: var(--accent); color: var(--accent-ink); }
+
+.fb-pre { white-space: pre-wrap; background: var(--soft); border: 1px solid var(--line-soft); border-radius: 10px; padding: 10px 12px; margin: 6px 0 0; font-size: .82rem; }

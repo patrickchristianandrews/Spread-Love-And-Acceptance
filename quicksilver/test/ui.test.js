@@ -601,6 +601,14 @@ function redPng(size = 64) {
   await win.waitForSelector('.menu [data-f="docx"]');
   await win.keyboard.press('Escape');
   console.log('✓ answer area: follow-ups, more menu, save as');
+  // Feedback: a short form; PC details are shown before they're included.
+  await win.click('#feedback-btn');
+  await win.click('[data-fb="confusing"]');
+  await win.fill('#fb-text', 'The model menu was hard to find');
+  assert.match(await win.locator('.fb-pre').textContent(), /Version: .*\nView: /);
+  await win.click('#fb-copy');
+  await win.keyboard.press('Escape');
+  console.log('✓ feedback form');
 
   // Simple view: a short sidebar, a clean message box, and the best model picked per question.
   await win.evaluate(() => { S.data.prefs.simple = true; S.data.prefs.autoRoute = true; S.data.prefs.navMore = false; applyPrefs(); save(); });
