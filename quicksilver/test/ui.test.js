@@ -104,6 +104,12 @@ function redPng(size = 64) {
   await win.evaluate(() => document.querySelector('.tier-grid').scrollIntoView());
   await shot(win, '03b-stack-tiers');
   console.log('✓ stacks: how it works, three strengths with accuracy, cloud boost with savings');
+  // Stacks for specific work: 27 ready-made teams; set one up and chat with it.
+  await win.waitForSelector('.rx-card:has-text("Isolated medical journal")');
+  assert.equal(await win.locator('.rx-card').count(), 27);
+  await win.click('.rx-card:has-text("Invoices, receipt reading") [data-rx]');
+  await win.waitForFunction(() => S.data.assistants.some((a) => a.id === 'as-rx-bookkeeping'), null, { timeout: 30000 });
+  console.log('✓ stacks for specific work: 27 teams, set up as a stack and an assistant');
 
   // Chat with the powerhouse stack, a spreadsheet attached and fact check on.
   await win.click('[data-nav="newchat"]');

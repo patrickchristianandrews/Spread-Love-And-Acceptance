@@ -109,6 +109,8 @@ const TEXT_MODELS = [
     blurb: 'Google\'s tiniest model. Instant answers on any PC, good for simple tasks.', jobs: { general: 4, office: 3, research: 3, coding: 2, vision: 0, fast: 10 }, judge: 2 },
   { id: 'smollm3-3b', name: 'SmolLM3 3B', maker: 'Hugging Face', params: '3B', category: 'small', repo: 'unsloth/SmolLM3-3B-GGUF', quant: 'Q4_K_M', sizeGB: 1.9, ctx: 65536, reasoning: true,
     blurb: 'Fully open small model that can think before answering. Strong for its size.', jobs: { general: 5, office: 5, research: 5, coding: 4, vision: 0, fast: 8 }, judge: 4 },
+  { id: 'qwen2.5-coder-1.5b', name: 'Qwen2.5 Coder 1.5B', maker: 'Alibaba', params: '1.5B', category: 'coding', repo: 'unsloth/Qwen2.5-Coder-1.5B-Instruct-GGUF', quant: 'Q4_K_M', sizeGB: 1.0, ctx: 32768,
+    blurb: 'Tiny and instant: quick code completions, small fixes and tests on any PC.', jobs: { general: 3, office: 3, research: 2, coding: 5, vision: 0, fast: 9 }, judge: 2 },
   { id: 'qwen2.5-coder-3b', name: 'Qwen2.5 Coder 3B', maker: 'Alibaba', params: '3B', category: 'coding', repo: 'unsloth/Qwen2.5-Coder-3B-Instruct-GGUF', quant: 'Q4_K_M', sizeGB: 1.9, ctx: 32768,
     blurb: 'A small coding helper that runs on laptops: scripts, fixes and explanations.', jobs: { general: 4, office: 4, research: 3, coding: 6, vision: 0, fast: 8 }, judge: 3 },
   { id: 'qwen3-4b-thinking', name: 'Qwen3 4B Thinking 2507', maker: 'Alibaba', params: '4B', category: 'reasoning', repo: 'unsloth/Qwen3-4B-Thinking-2507-GGUF', quant: 'Q4_K_M', sizeGB: 2.5, ctx: 262144, reasoning: true, thinksLong: true,

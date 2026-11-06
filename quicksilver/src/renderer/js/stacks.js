@@ -31,6 +31,7 @@ views.stacks = {
       <div id="adv-out">${advResult ? advisorHTML(advResult) : '<div class="empty">Checking your PC and your models…</div>'}</div>
       <div class="section"><h2>Your stacks</h2></div>
       ${yourStacksHTML()}
+      ${recipesHTML()}
     </div>`;
   },
   bind() {
@@ -42,6 +43,7 @@ views.stacks = {
     $$('.page-head [data-goto]').forEach((b) => b.addEventListener('click', () => go({ view: b.dataset.goto })));
     $('#found-review')?.addEventListener('click', foundModal);
     bindAdvisor();
+    bindRecipes();
     $$('[data-edit-stack]').forEach((b) => b.addEventListener('click', () => editStack(S.stacks.find((s) => s.id === b.dataset.editStack))));
     $$('[data-del-stack]').forEach((b) => b.addEventListener('click', async () => {
       if (!(await confirmBox('Delete this stack? The models stay installed.'))) return;
