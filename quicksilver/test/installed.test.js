@@ -42,9 +42,11 @@ function redPng(size = 64) {
   }));
   const idle = () => win.waitForFunction(() => !document.querySelector('.bubble.streaming') && !document.querySelector('.status-line') && !document.querySelector('.fact-chip.k-run'), null, { timeout: LONG });
   const lastAnswer = () => win.evaluate(() => [...document.querySelectorAll('.msg.assistant .bubble')].pop()?.innerText || '');
-  const ask = async (text, file) => {
+  const ask = async (text, file, target) => {
     await win.click('[data-nav="newchat"]');
     await win.waitForSelector('#input');
+    // Automatic picks the quickest good model per question; a test of the team names it.
+    if (target) await win.evaluate((t) => { const c = chatById(S.route.id); c.target = t; save(); render(); }, target);
     if (file) { await win.setInputFiles('#file-in', file); await win.waitForSelector('.attach'); }
     await win.fill('#input', text);
     await win.keyboard.press('Enter');
@@ -94,7 +96,7 @@ function redPng(size = 64) {
     ok(`background download finished: ${s.installed.map((m) => m.name).join(' + ')}; default ${s.def}`);
   }
 
-  r = await ask('What is 17 × 23? Work it out step by step.');
+  r = await ask('What is 17 × 23? Work it out step by step.', null, 'stack:quicksilver');
   const final = (r.a.match(/\d[\d,]*/g) || []).pop();
   console.log(`  steps: ${r.steps.join(' → ') || '(none)'}; final number: ${final}`);
   assert.equal(final, '391', 'the hard question is answered correctly');
@@ -111,7 +113,10 @@ function redPng(size = 64) {
 
     // Fact check of a fresh answer.
     await win.click('[data-nav="newchat"]');
-    if ((await win.getAttribute('#tog-fact', 'aria-pressed')) !== 'true') await win.click('#tog-fact');
+    if ((await win.getAttribute('#tog-fact', 'aria-pressed')) !== 'true') {
+      if (await win.isVisible('#tog-fact')) await win.click('#tog-fact');
+      else { await win.click('#opts-btn'); await win.click('.opts-menu [data-o="tog-fact"]'); } // simple view: under ＋
+    }
     await win.fill('#input', 'Name the largest planet in our solar system and one fact about it.');
     await win.keyboard.press('Enter');
     await win.waitForSelector('.fact-chip', { timeout: LONG });
