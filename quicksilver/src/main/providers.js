@@ -3,19 +3,36 @@
 const store = require('./store');
 const oai = require('./oai');
 
+// free: 'local' (runs on this PC), 'free' (a free plan with a key), 'some' (some free models or
+// credits), 'paid' (pay as you go). Free plans change, so the app also links to the pricing page.
 const PRESETS = {
-  anthropic: { name: 'Anthropic (Claude)', baseUrl: 'https://api.anthropic.com', keyUrl: 'https://console.anthropic.com/settings/keys', models: ['claude-opus-5-5', 'claude-sonnet-5-5', 'claude-haiku-5-5', 'claude-fable-5-1'], vision: true },
-  openai: { name: 'OpenAI', baseUrl: 'https://api.openai.com/v1', keyUrl: 'https://platform.openai.com/api-keys', imageModels: ['gpt-image-1'], vision: true },
-  google: { name: 'Google Gemini', baseUrl: 'https://generativelanguage.googleapis.com/v1beta/openai', keyUrl: 'https://aistudio.google.com/apikey', vision: true },
-  openrouter: { name: 'OpenRouter (hundreds of models)', baseUrl: 'https://openrouter.ai/api/v1', keyUrl: 'https://openrouter.ai/keys', vision: true },
-  groq: { name: 'Groq (very fast)', baseUrl: 'https://api.groq.com/openai/v1', keyUrl: 'https://console.groq.com/keys' },
-  mistral: { name: 'Mistral AI', baseUrl: 'https://api.mistral.ai/v1', keyUrl: 'https://console.mistral.ai/api-keys' },
-  deepseek: { name: 'DeepSeek', baseUrl: 'https://api.deepseek.com/v1', keyUrl: 'https://platform.deepseek.com/api_keys' },
-  xai: { name: 'xAI (Grok)', baseUrl: 'https://api.x.ai/v1', keyUrl: 'https://console.x.ai', vision: true },
-  together: { name: 'Together AI', baseUrl: 'https://api.together.xyz/v1', keyUrl: 'https://api.together.ai/settings/api-keys', imageModels: ['black-forest-labs/FLUX.1-schnell-Free'] },
-  ollama: { name: 'Ollama (on this PC)', baseUrl: 'http://localhost:11434/v1', noKey: true, vision: true },
-  lmstudio: { name: 'LM Studio (on this PC)', baseUrl: 'http://localhost:1234/v1', noKey: true, vision: true },
-  custom: { name: 'Custom OpenAI-compatible API', baseUrl: '', vision: true },
+  google: { name: 'Google Gemini', baseUrl: 'https://generativelanguage.googleapis.com/v1beta/openai', keyUrl: 'https://aistudio.google.com/apikey', vision: true,
+    free: 'free', freeNote: 'Free plan: get a key in Google AI Studio with a Google account, no card. Daily limits apply, and Google may use free-plan prompts to improve its products.', priceUrl: 'https://ai.google.dev/pricing' },
+  groq: { name: 'Groq (very fast)', baseUrl: 'https://api.groq.com/openai/v1', keyUrl: 'https://console.groq.com/keys',
+    free: 'free', freeNote: 'Free plan: sign up and create a key, no card. Requests per minute and per day are limited.', priceUrl: 'https://groq.com/pricing' },
+  openrouter: { name: 'OpenRouter (hundreds of models)', baseUrl: 'https://openrouter.ai/api/v1', keyUrl: 'https://openrouter.ai/keys', vision: true,
+    free: 'some', freeNote: 'Free models: any model whose name ends in ":free" costs nothing, with a daily limit. Other models are pay as you go.', priceUrl: 'https://openrouter.ai/models?max_price=0' },
+  github: { name: 'GitHub Models', baseUrl: 'https://models.github.ai/inference', keyUrl: 'https://github.com/settings/personal-access-tokens', vision: true, models: ['openai/gpt-4.1-mini', 'meta/Llama-3.3-70B-Instruct', 'deepseek/DeepSeek-R1', 'mistral-ai/Mistral-Large-2411'],
+    free: 'free', freeNote: 'Free with a GitHub account: use a personal access token with the "models" permission. Good for trying models; daily limits are low.', priceUrl: 'https://docs.github.com/en/github-models/use-github-models/prototyping-with-ai-models#rate-limits' },
+  cerebras: { name: 'Cerebras (very fast)', baseUrl: 'https://api.cerebras.ai/v1', keyUrl: 'https://cloud.cerebras.ai',
+    free: 'free', freeNote: 'Free plan: sign up and create a key, no card. Daily token limits apply.', priceUrl: 'https://www.cerebras.ai/pricing' },
+  mistral: { name: 'Mistral AI', baseUrl: 'https://api.mistral.ai/v1', keyUrl: 'https://console.mistral.ai/api-keys', vision: true,
+    free: 'free', freeNote: 'Free "Experiment" plan: verify a phone number, no card. Rate limits apply, and free-plan prompts may be used for training.', priceUrl: 'https://mistral.ai/pricing' },
+  huggingface: { name: 'Hugging Face', baseUrl: 'https://router.huggingface.co/v1', keyUrl: 'https://huggingface.co/settings/tokens', vision: true,
+    free: 'some', freeNote: 'Free monthly credits come with a Hugging Face account (a small amount; PRO gives more). Then pay as you go.', priceUrl: 'https://huggingface.co/docs/inference-providers/pricing' },
+  together: { name: 'Together AI', baseUrl: 'https://api.together.xyz/v1', keyUrl: 'https://api.together.ai/settings/api-keys', imageModels: ['black-forest-labs/FLUX.1-schnell-Free'],
+    free: 'some', freeNote: 'A few free models (like FLUX.1 Schnell Free for images); others are pay as you go. A small credit purchase may be needed to activate the account.', priceUrl: 'https://www.together.ai/pricing' },
+  anthropic: { name: 'Anthropic (Claude)', baseUrl: 'https://api.anthropic.com', keyUrl: 'https://console.anthropic.com/settings/keys', models: ['claude-opus-5-5', 'claude-sonnet-5-5', 'claude-haiku-5-5', 'claude-fable-5-1'], vision: true,
+    free: 'paid', freeNote: 'Pay as you go: buy credits first. No ongoing free plan.', priceUrl: 'https://www.anthropic.com/pricing#api' },
+  openai: { name: 'OpenAI', baseUrl: 'https://api.openai.com/v1', keyUrl: 'https://platform.openai.com/api-keys', imageModels: ['gpt-image-1'], vision: true,
+    free: 'paid', freeNote: 'Pay as you go: add credit first. A ChatGPT subscription does not include the API.', priceUrl: 'https://openai.com/api/pricing' },
+  deepseek: { name: 'DeepSeek', baseUrl: 'https://api.deepseek.com/v1', keyUrl: 'https://platform.deepseek.com/api_keys',
+    free: 'paid', freeNote: 'Pay as you go, at very low prices. No free plan.', priceUrl: 'https://api-docs.deepseek.com/quick_start/pricing' },
+  xai: { name: 'xAI (Grok)', baseUrl: 'https://api.x.ai/v1', keyUrl: 'https://console.x.ai', vision: true,
+    free: 'paid', freeNote: 'Pay as you go. New accounts sometimes get promotional credits.', priceUrl: 'https://docs.x.ai/docs/models' },
+  ollama: { name: 'Ollama (on this PC)', baseUrl: 'http://localhost:11434/v1', noKey: true, vision: true, free: 'local', freeNote: 'Free: runs on this PC with no key.' },
+  lmstudio: { name: 'LM Studio (on this PC)', baseUrl: 'http://localhost:1234/v1', noKey: true, vision: true, free: 'local', freeNote: 'Free: runs on this PC with no key.' },
+  custom: { name: 'Custom OpenAI-compatible API', baseUrl: '', vision: true, freeNote: 'Depends on the service.' },
 };
 
 function all() { return store.config().providers || []; }
@@ -62,6 +79,11 @@ async function refreshModels(id) {
     const { client } = anthropicClient(p);
     models = [];
     for await (const m of client.models.list()) models.push(m.id);
+  } else if (p.preset === 'github') {
+    // GitHub Models lists its catalog at a separate address.
+    const res = await fetch('https://models.github.ai/catalog/models', { headers: { Authorization: `Bearer ${store.getSecret(keyName(p.id))}`, Accept: 'application/json' }, signal: AbortSignal.timeout(15000) });
+    if (!res.ok) throw new Error(`GitHub Models returned HTTP ${res.status}`);
+    models = (await res.json()).filter((m) => !m.supported_output_modalities || m.supported_output_modalities.includes('text')).map((m) => m.id);
   } else {
     models = await oai.listModels({ baseUrl: p.baseUrl, apiKey: store.getSecret(keyName(p.id)) });
   }

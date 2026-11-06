@@ -299,7 +299,7 @@ handle('media:remove', (id) => media.removeFromGallery(id));
 handle('media:saveDataUrl', (dataUrl, meta) => { const g = media.saveDataUrl(dataUrl, meta); return { ...g, url: `qsmedia://g/${g.id}` }; });
 handle('media:importPath', async (p) => {
   const ext = path.extname(p).slice(1).toLowerCase();
-  const kind = /^(mp4|mov|webm|mkv|avi|m4v)$/.test(ext) ? 'video' : 'image';
+  const kind = /^(mp4|mov|webm|mkv|avi|m4v)$/.test(ext) ? 'video' : /^(mp3|wav|m4a|aac|flac|ogg|opus|wma)$/.test(ext) ? 'audio' : 'image';
   const dest = path.join(media.mediaDir(), `${Date.now().toString(36)}${Math.random().toString(36).slice(2, 6)}.${ext}`);
   fs.copyFileSync(p, dest);
   const g = media.addToGallery({ kind, file: dest, title: path.basename(p) });
@@ -352,6 +352,33 @@ handle('media:export', async (id) => {
   const r = await dialog.showSaveDialog(win, { defaultPath: path.basename(g.file) });
   if (r.canceled || !r.filePath) return false;
   fs.copyFileSync(g.file, r.filePath);
+  return true;
+});
+// Audio, video and photo tools (see avtools.js). Jobs report through the same events as Studio.
+const avtools = require('./avtools');
+const toolJob = (jobId, work) => {
+  work({ onProgress: (v) => emit('media:event', { jobId, type: 'progress', value: v }) })
+    .then((item) => emit('media:event', { jobId, type: 'done', item: { ...item, url: `qsmedia://g/${item.id}` } }))
+    .catch((err) => emit('media:event', { jobId, type: 'error', message: err.message }));
+  return true;
+};
+handle('tools:run', (jobId, kind, op, src) => toolJob(jobId, (o) => avtools.run(kind, op, src, o)));
+handle('tools:speak', (jobId, text, opts) => toolJob(jobId, (o) => avtools.speak(text, { ...opts, ...o })));
+handle('tools:voices', () => avtools.voices());
+handle('tools:saveWav', async (dataUrl, meta) => { const g = await avtools.saveWav(dataUrl, meta); return { ...g, url: `qsmedia://g/${g.id}` }; });
+
+// Apps made by the "Build an app" skills open in their own window: sandboxed, no access to
+// Quicksilver or your files, and no network (the page must be self-contained).
+handle('app:preview', async (html, title) => {
+  const file = path.join(store.dir('tmp'), `app-${Date.now().toString(36)}.html`);
+  fs.writeFileSync(file, String(html));
+  const w = new BrowserWindow({ width: 1100, height: 800, title: `${String(title || 'App').slice(0, 60)} · Quicksilver`, autoHideMenuBar: true,
+    webPreferences: { sandbox: true, contextIsolation: true, nodeIntegration: false, partition: `app-preview-${Date.now()}` } });
+  w.webContents.session.webRequest.onBeforeRequest((d, cb) => cb({ cancel: !/^(file|data|blob|about|devtools):/.test(d.url) }));
+  w.webContents.setWindowOpenHandler(() => ({ action: 'deny' }));
+  w.webContents.on('will-navigate', (ev, url) => { if (!url.startsWith('file:')) ev.preventDefault(); });
+  w.on('closed', () => fs.rmSync(file, { force: true }));
+  await w.loadFile(file);
   return true;
 });
 handle('media:reveal', (id) => shell.showItemInFolder(media.gallery().find((x) => x.id === id).file));

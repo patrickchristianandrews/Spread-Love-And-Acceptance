@@ -209,10 +209,10 @@ function starsOf(target, job = 'general') {
 }
 const starText = (n) => (n == null ? '' : `★ ${Number.isInteger(n) ? n : n.toFixed(1)}`);
 const etaBadge = (sec, what = '', stars = null) => (sec == null && stars == null ? '' : `<span class="badge b-lav eta" title="Estimated on this PC: time and expected quality (out of 5)">${sec != null ? `⏱ ${etaLabel(sec)}${what ? ` ${what}` : ''}` : ''}${sec != null && stars != null ? ' · ' : ''}${stars != null ? starText(stars) : ''}</span>`);
-const SKILL_JOB = { code: 'coding', writing: 'writing', creative: 'writing', office: 'office', research: 'research', vision: 'general' };
+const SKILL_JOB = { code: 'coding', writing: 'writing', career: 'writing', voice: 'writing', music: 'writing', office: 'office', finance: 'office', research: 'research', life: 'general', fun: 'general', vision: 'general', media: 'general', editing: 'general' };
 // How many words a job usually needs, from an assistant's kind of work or a skill's output.
 const wordsForJob = (job) => S.catalog?.jobs?.[job]?.words || WORDS.chat;
-const wordsForSkill = (s) => ({ docx: WORDS.document, pptx: WORDS.slides, xlsx: WORDS.sheet, chart: WORDS.chart }[s?.output] || (s?.category === 'code' ? WORDS.code : WORDS.writing));
+const wordsForSkill = (s) => ({ docx: WORDS.document, pptx: WORDS.slides, xlsx: WORDS.sheet, chart: WORDS.chart, app: WORDS.code * 2, beat: WORDS.prompt * 2, podcast: WORDS.document * 1.5, narrate: WORDS.document, image: WORDS.prompt, video: WORDS.prompt, edit: WORDS.prompt, animate: WORDS.prompt }[s?.output] || (s?.category === 'code' ? WORDS.code : WORDS.writing));
 function mediaEta(target) { const id = String(target || '').replace(/^local:/, ''); return S.speed?.media?.[id]?.sec ?? null; }
 async function refreshEstimates() { S.est = await qs.call('catalog:estimates'); return S.est; }
 

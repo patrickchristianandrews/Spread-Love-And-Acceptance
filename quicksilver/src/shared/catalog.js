@@ -35,7 +35,7 @@ const TEXT_MODELS = [
   { id: 'qwen3-30b-a3b', name: 'Qwen3 30B-A3B Instruct 2507', maker: 'Alibaba', params: '30B (3B active)', category: 'general', repo: 'unsloth/Qwen3-30B-A3B-Instruct-2507-GGUF', quant: 'Q4_K_M', sizeGB: 18.6, activeGB: 2.0, ctx: 262144,
     blurb: 'Big-model quality at small-model speed. One of the best local models.', jobs: { general: 9, office: 9, research: 9, coding: 8, vision: 0, fast: 6 }, judge: 9 },
   { id: 'qwen3-32b', name: 'Qwen3 32B', maker: 'Alibaba', params: '32B', category: 'general', repo: 'unsloth/Qwen3-32B-GGUF', quant: 'Q4_K_M', sizeGB: 19.8, ctx: 32768, reasoning: true,
-    blurb: 'Dense heavyweight with deep reasoning. Needs a 24 GB card to be quick.', jobs: { general: 9, office: 9, research: 9, coding: 9, vision: 0, fast: 1 }, judge: 9 },
+    blurb: 'Dense heavyweight with deep reasoning. Needs a graphics card (GPU) with 24 GB of its own memory to be quick.', jobs: { general: 9, office: 9, research: 9, coding: 9, vision: 0, fast: 1 }, judge: 9 },
 
   // Reasoning
   { id: 'deepseek-r1-qwen-14b', name: 'DeepSeek R1 Distill 14B', maker: 'DeepSeek', params: '14B', category: 'reasoning', repo: 'unsloth/DeepSeek-R1-Distill-Qwen-14B-GGUF', quant: 'Q4_K_M', sizeGB: 9.0, ctx: 32768, reasoning: true,
@@ -100,7 +100,7 @@ const FLUX_ENCODERS = {
 const MEDIA_MODELS = [
   { id: 'sd15', quality: 4, name: 'Stable Diffusion 1.5', maker: 'Stability AI / RunwayML', kind: 'image', category: 'image', recipe: 'sd', sizeGB: 4.3, vramGB: 3, refSec: 4, defaults: { width: 512, height: 512, steps: 25, cfg: 7 },
     files: { model: { repo: 'stable-diffusion-v1-5/stable-diffusion-v1-5', match: '^v1-5-pruned-emaonly\\.safetensors$' } },
-    blurb: 'The classic. Fast, light, endless styles. Good for older cards.', edit: 'img2img' },
+    blurb: 'The classic. Fast, light, endless styles. Runs well even on older graphics cards (the GPU, the chip that draws the screen) with as little as 4 GB of memory.', edit: 'img2img' },
   { id: 'sdxl-turbo', quality: 6, name: 'SDXL Turbo', maker: 'Stability AI', kind: 'image', category: 'image', recipe: 'sd', sizeGB: 6.9, vramGB: 6, refSec: 3, defaults: { width: 512, height: 512, steps: 4, cfg: 1 },
     files: { model: { repo: 'stabilityai/sdxl-turbo', match: '^sd_xl_turbo_1\\.0_fp16\\.safetensors$' } },
     blurb: 'Pictures in a few seconds. Great for quick ideas and drafts.', edit: 'img2img' },
@@ -118,7 +118,7 @@ const MEDIA_MODELS = [
     blurb: 'Powerful instruction editing, including changing and adding text in images.', edit: 'instruct' },
   { id: 'wan2.1-1.3b', quality: 6, name: 'Wan 2.1 Text-to-Video 1.3B', maker: 'Alibaba', kind: 'video', category: 'video', recipe: 'wan', sizeGB: 7.0, vramGB: 8, refSec: 240, defaults: { width: 832, height: 480, steps: 20, cfg: 6, frames: 33, fps: 16 },
     files: { diffusion: { repo: 'Comfy-Org/Wan_2.1_ComfyUI_repackaged', match: 'wan2\\.1_t2v_1\\.3B_fp16\\.safetensors$' }, vae: { repo: 'Comfy-Org/Wan_2.1_ComfyUI_repackaged', match: 'wan_2\\.1_vae\\.safetensors$' }, t5xxl: { repo: 'city96/umt5-xxl-encoder-gguf', match: 'Q4_K_M\\.gguf$' } },
-    blurb: 'Short video clips from a description. Fits on 8 GB cards.' },
+    blurb: 'Short video clips from a description. Fits on graphics cards (GPUs) with 8 GB of their own memory.' },
   { id: 'wan2.2-5b', quality: 8, name: 'Wan 2.2 Text/Image-to-Video 5B', maker: 'Alibaba', kind: 'video', category: 'video', recipe: 'wan', sizeGB: 9.5, vramGB: 12, refSec: 420, defaults: { width: 1280, height: 704, steps: 20, cfg: 5, frames: 49, fps: 24 },
     files: { diffusion: { repo: 'QuantStack/Wan2.2-TI2V-5B-GGUF', match: 'Q4_K_M\\.gguf$' }, vae: { repo: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', match: 'wan2\\.2_vae\\.safetensors$' }, t5xxl: { repo: 'city96/umt5-xxl-encoder-gguf', match: 'Q4_K_M\\.gguf$' } },
     blurb: 'Higher-quality 720p clips, from text or by animating a photo.', animate: true },

@@ -159,6 +159,13 @@ async function chooseQuant(repo) {
 
 // ---------- API connections ----------
 
+const FREE_BADGE = {
+  free: '<span class="badge b-mint" title="Has a free plan">✓ Free plan</span>',
+  some: '<span class="badge b-lemon" title="Some models or credits are free">✓ Free models</span>',
+  local: '<span class="badge b-mint">Free · on this PC</span>',
+  paid: '<span class="badge b-peach">Paid</span>',
+};
+
 function apiHTML() {
   return `<p class="muted">Optional. Connect cloud AI services to use their models next to your local ones, as the lead of a stack, as your fact checker, or for image generation. Keys are encrypted on this PC and only sent to that service.</p>
     ${S.providers.length ? `<div class="section"><h2>Connected</h2></div><div class="cards">${S.providers.map((p) => `<div class="card">
@@ -168,7 +175,7 @@ function apiHTML() {
       <div class="row"><button class="btn small" data-api-refresh="${p.id}">Refresh models</button><button class="btn small" data-api-edit="${p.id}">Edit</button><button class="btn small danger" data-api-del="${p.id}">Remove</button></div>
     </div>`).join('')}</div>` : ''}
     <div class="section"><h2>Add a connection</h2></div>
-    <div class="cards" style="grid-template-columns:repeat(auto-fill,minmax(230px,1fr))" id="presets"></div>`;
+    <div id="presets"></div>`;
 }
 
 async function bindApi() {
@@ -176,7 +183,14 @@ async function bindApi() {
   const presets = await qs.call('providers:presets');
   const box = $('#presets');
   if (!box) return;
-  box.innerHTML = Object.entries(presets).map(([k, p]) => `<button class="card" data-preset="${k}" style="text-align:left"><h3>${esc(p.name)}</h3><div class="small muted" style="font-weight:600">${p.noKey ? 'Runs on this PC, no key' : k === 'custom' ? 'Any OpenAI-compatible endpoint' : 'Needs an API key'}</div></button>`).join('');
+  // Free options first, so people can try cloud models without paying.
+  const groups = [['Free to start', (p) => ['free', 'some'].includes(p.free)], ['Free, on this PC', (p) => p.free === 'local'], ['Paid', (p) => p.free === 'paid'], ['Other', (p) => !p.free]];
+  box.innerHTML = `<p class="small muted" style="margin:-4px 0 12px">Free plans have daily limits and can change; each card links to the current prices.</p>` + groups.map(([title, test]) => {
+    const list = Object.entries(presets).filter(([, p]) => test(p));
+    return list.length ? `<h3 class="small muted" style="margin:14px 0 8px;text-transform:uppercase;letter-spacing:.05em">${title}</h3><div class="cards" style="grid-template-columns:repeat(auto-fill,minmax(250px,1fr))">${list.map(([k, p]) => `<button class="card" data-preset="${k}" style="text-align:left">
+      <div class="row"><h3 class="grow">${esc(p.name)}</h3>${FREE_BADGE[p.free] || ''}</div>
+      <div class="small muted" style="font-weight:600;margin-top:6px">${esc(p.freeNote || (k === 'custom' ? 'Any OpenAI-compatible endpoint' : 'Needs an API key'))}</div></button>`).join('')}</div>` : '';
+  }).join('');
   $$('[data-preset]').forEach((b) => b.addEventListener('click', () => editProvider({ preset: b.dataset.preset }, presets)));
   $$('[data-api-edit]').forEach((b) => b.addEventListener('click', () => editProvider(S.providers.find((p) => p.id === b.dataset.apiEdit), presets)));
   $$('[data-api-del]').forEach((b) => b.addEventListener('click', async () => { if (!(await confirmBox('Remove this connection and its saved key?'))) return; await call('providers:remove', b.dataset.apiDel); await refreshProviders(); render(); }));
@@ -189,6 +203,7 @@ function editProvider(p, presets) {
     <div class="stack-v">
       <div class="field"><label for="pv-name">Name</label><input id="pv-name" value="${esc(p.name || pre.name)}"></div>
       <div class="field"><label for="pv-url">Address (base URL)</label><input id="pv-url" value="${esc(p.baseUrl || pre.baseUrl)}" ${p.preset === 'custom' ? 'placeholder="https://…/v1"' : ''}></div>
+      ${pre.freeNote ? `<div class="notice ${['free', 'some', 'local'].includes(pre.free) ? 'info' : ''}" style="margin:0">${FREE_BADGE[pre.free] || ''} ${esc(pre.freeNote)}${pre.priceUrl ? ` <a href="${esc(pre.priceUrl)}">Current prices and limits</a>` : ''}</div>` : ''}
       ${pre.noKey ? '' : `<div class="field"><label for="pv-key">API key</label><span class="help">${p.hasKey ? 'A key is saved. Paste a new one to replace it.' : `Get one at <a href="${esc(pre.keyUrl || '#')}">${esc(pre.keyUrl || 'the provider\'s website')}</a>.`}</span><input id="pv-key" type="password" autocomplete="off" placeholder="Paste key"></div>`}
       <div class="field"><label for="pv-models">Models</label><span class="help">One per line. Leave empty and press "Save & load models" to fetch the list.</span><textarea id="pv-models" rows="4">${esc((p.models || pre.models || []).join('\n'))}</textarea></div>
       <div class="field"><label for="pv-img">Image models (optional)</label><input id="pv-img" value="${esc((p.imageModels || pre.imageModels || []).join(', '))}" placeholder="e.g. gpt-image-1"></div>

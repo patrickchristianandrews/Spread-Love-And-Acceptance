@@ -264,6 +264,35 @@ async function collect(gen) {
     console.log('✓ measured speeds: answers timed, estimates re-tuned');
   }
 
+  // Audio, video and photo tools (ffmpeg) and reading aloud (a test tone stands in for Windows' voices).
+  {
+    const avtools = require('../src/main/avtools');
+    const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'qs-av-'));
+    const clip = path.join(tmp, 'clip.mp4'), song = path.join(tmp, 'song.mp3'), pic = path.join(tmp, 'pic.png');
+    await media.runFfmpeg(['-f', 'lavfi', '-i', 'testsrc=size=160x120:rate=15:duration=1', '-f', 'lavfi', '-i', 'sine=frequency=330:duration=1', '-shortest', '-pix_fmt', 'yuv420p', clip]);
+    await media.runFfmpeg(['-f', 'lavfi', '-i', 'sine=frequency=440:duration=2', '-ac', '2', song]);
+    await media.runFfmpeg(['-f', 'lavfi', '-i', 'testsrc=size=64x48', '-frames:v', '1', pic]);
+    const v = await avtools.run('video', 'fps60', { path: clip });
+    const vi = await media.probe(v.file);
+    assert.ok(v.kind === 'video' && vi.width === 160 && vi.duration > 0.5, '60 fps video made');
+    const up = await avtools.run('image', 'upscale4', { path: pic });
+    assert.equal((await media.probe(up.file)).width, 256, 'photo upscaled 4×');
+    const m = await avtools.run('audio', 'master', { path: song });
+    assert.ok(m.kind === 'audio' && (await media.probe(m.file)).audio, 'audio mastered');
+    const k = await avtools.run('audio', 'karaoke', { path: song });
+    assert.ok(fs.statSync(k.file).size > 1000, 'vocal remover ran');
+    const x = await avtools.run('extract', 'mp3', { path: clip });
+    assert.ok(x.kind === 'audio', 'sound taken from a video');
+    await assert.rejects(avtools.run('video', 'nope', { path: clip }), /Unknown/);
+    process.env.QS_TTS_FAKE = '1';
+    const one = await avtools.speak('Hello there, this is a test of reading aloud.', { title: 'Test' });
+    const pod = await avtools.speak('ALEX: Welcome to the show.\nSAM: Thanks, glad to be here.\nALEX: Let us begin.', { title: 'Pod' });
+    assert.ok(one.kind === 'audio' && one.speakers === 'one' && pod.speakers === 'several', 'read aloud, and a two-voice script');
+    assert.ok((await media.probe(pod.file)).duration > (await media.probe(one.file)).duration * 0.5);
+    delete process.env.QS_TTS_FAKE;
+    console.log('✓ tools: 60 fps, upscale 4×, mastering, vocal remover, extract sound, read aloud, two-voice podcast');
+  }
+
   // Free web search (no key): DuckDuckGo's HTML page, Mojeek as backup, then the top pages are read.
   {
     const websearch = require('../src/main/websearch');

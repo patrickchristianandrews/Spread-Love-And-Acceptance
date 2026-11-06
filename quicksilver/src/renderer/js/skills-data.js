@@ -1,16 +1,26 @@
 // Built-in skills: reusable, ready-made abilities. Each one adds focused instructions to a chat
 // message, and some produce real files (PowerPoint, Word, Excel) or charts.
-// Fields: output = text | pptx | docx | xlsx | chart; triggers = phrases that suggest the skill.
+// Fields: output = text | pptx | docx | xlsx | chart | image | video | edit | animate | app;
+// triggers = phrases that suggest the skill. More skills are in skills-more.js.
 'use strict';
 
 const SKILL_CATEGORIES = {
-  writing: { label: 'Writing', icon: '✍️' },
-  office: { label: 'Office & business', icon: '📊' },
-  research: { label: 'Research & thinking', icon: '🔎' },
-  code: { label: 'Code & data', icon: '💻' },
-  vision: { label: 'Photos & documents', icon: '📷' },
-  creative: { label: 'Creative', icon: '💡' },
+  music: { label: 'Music & audio', icon: '🎵', pitch: 'Beats, melodies, lyrics, vocal remover and clean, loud sound.' },
+  media: { label: 'Photo & video generation', icon: '🎨', pitch: 'Photorealistic pictures, artwork, logos and short video clips.' },
+  editing: { label: 'Photo & video editing', icon: '✂️', pitch: 'Upscale 4×, remove backgrounds, retouch, 60 fps and slow motion.' },
+  office: { label: 'Productivity, office & Excel', icon: '📊', pitch: 'Excel formulas, documents, PDF summaries and meeting notes.' },
+  code: { label: 'Coding, apps & websites', icon: '💻', pitch: 'Write, fix and explain code, build apps and automate chores.' },
+  writing: { label: 'Writing, content & marketing', icon: '✍️', pitch: 'Articles, books, scripts, social posts and ad copy.' },
+  research: { label: 'Research, medical & study', icon: '🔬', pitch: 'Cited research, PubMed evidence summaries and study guides.' },
+  voice: { label: 'Voice & podcasts', icon: '🎙️', pitch: 'Read aloud, audiobooks, two-voice podcasts and podcast mastering.' },
+  finance: { label: 'Finance, tax & contracts', icon: '💰', pitch: 'Budgets, expense tracking, tax prep and contract red flags.' },
+  career: { label: 'Career & jobs', icon: '💼', pitch: 'Resumes, cover letters, interviews and pay.' },
+  vision: { label: 'Understand photos & files', icon: '📷', pitch: 'Read, identify and extract from pictures, screenshots and videos.' },
+  life: { label: 'Everyday life', icon: '🏡', pitch: 'Recipes, trips, workouts, gifts and repairs.' },
+  fun: { label: 'Fun & games', icon: '🎭', pitch: 'Role-play, adventures, trivia and jokes.' },
 };
+// Older and imported skills that used a category that has since been merged.
+const SKILL_RECAT = { creative: 'writing', marketing: 'writing', apps: 'code', learning: 'research' };
 
 const BUILTIN_SKILLS = [
   // ---------- Writing ----------

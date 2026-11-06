@@ -5,6 +5,7 @@ const path = require('node:path');
 const fs = require('node:fs');
 const os = require('node:os');
 const assert = require('node:assert');
+const zlib = require('node:zlib');
 
 const ROOT = path.join(__dirname, '..');
 const TINY = path.join(__dirname, 'fixtures', 'tiny.gguf');
@@ -12,6 +13,16 @@ const shots = process.argv[2];
 const shot = async (win, name) => { if (shots) await win.screenshot({ path: path.join(shots, `${name}.png`) }); };
 
 let WIN = null;
+// A plain red 64×64 PNG, built by hand.
+function redPng(size = 64) {
+  const t = Array.from({ length: 256 }, (_, n) => { let c = n; for (let k = 0; k < 8; k++) c = c & 1 ? 0xedb88320 ^ (c >>> 1) : c >>> 1; return c >>> 0; });
+  const crc = (b) => { let c = 0xffffffff; for (const x of b) c = t[(c ^ x) & 0xff] ^ (c >>> 8); return (c ^ 0xffffffff) >>> 0; };
+  const chunk = (ty, d) => { const l = Buffer.alloc(4); l.writeUInt32BE(d.length); const td = Buffer.concat([Buffer.from(ty), d]); const c = Buffer.alloc(4); c.writeUInt32BE(crc(td)); return Buffer.concat([l, td, c]); };
+  const ih = Buffer.alloc(13); ih.writeUInt32BE(size, 0); ih.writeUInt32BE(size, 4); ih[8] = 8; ih[9] = 2;
+  const row = Buffer.concat([Buffer.from([0]), Buffer.from(Array.from({ length: size }, () => [220, 30, 30]).flat())]);
+  return Buffer.concat([Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]), chunk('IHDR', ih), chunk('IDAT', zlib.deflateSync(Buffer.concat(Array.from({ length: size }, () => row)))), chunk('IEND', Buffer.alloc(0))]);
+}
+
 (async () => {
   const HOME = fs.mkdtempSync(path.join(os.tmpdir(), 'qs-ui-'));
   const mdir = path.join(HOME, 'models');
@@ -34,7 +45,7 @@ let WIN = null;
   const app = await electron.launch({
     executablePath: require('electron'),
     args: ['--no-sandbox', ROOT],
-    env: { ...process.env, QUICKSILVER_HOME: HOME, QS_LLAMA_SERVER: path.join(__dirname, 'fakes', 'llama-server'), QS_SD_BIN: path.join(__dirname, 'fakes', 'sd'), QS_SCAN_DIRS: SCAN },
+    env: { ...process.env, QS_TTS_FAKE: '1', QUICKSILVER_HOME: HOME, QS_LLAMA_SERVER: path.join(__dirname, 'fakes', 'llama-server'), QS_SD_BIN: path.join(__dirname, 'fakes', 'sd'), QS_SCAN_DIRS: SCAN },
   });
   const win = await app.firstWindow();
   WIN = win;
@@ -155,6 +166,36 @@ let WIN = null;
   await win.click('[data-nav="skills"]');
   await win.waitForSelector('text=Analyze a spreadsheet');
   await shot(win, '10-skills');
+  // The expanded library: the nine main areas, and well over 150 skills.
+  for (const c of ['Music & audio', 'Photo & video generation', 'Photo & video editing', 'Productivity, office & Excel', 'Coding, apps & websites', 'Writing, content & marketing', 'Research, medical & study', 'Voice & podcasts', 'Finance, tax & contracts']) await win.waitForSelector(`.section h2:has-text("${c}")`);
+  assert.ok(await win.evaluate(() => allSkills().length) > 150);
+
+  // A picture made from chat: the text model writes the prompt, the image model paints it.
+  await win.click('[data-nav="newchat"]');
+  await win.fill('#input', '/create');
+  await win.waitForSelector('#skill-pop .skill-opt:has-text("Create a picture")');
+  await win.fill('#input', '/picture');
+  await win.waitForSelector('#skill-pop .skill-opt.hot:has-text("Create a picture")');
+  await win.keyboard.press('Enter');
+  await win.fill('#input', 'A red fox in fresh snow at dawn');
+  await win.keyboard.press('Enter');
+  await win.waitForSelector('.skill-media-item img', { timeout: 60000 });
+  assert.ok(await win.evaluate(() => [...document.querySelectorAll('.skill-media .muted')].some((e) => /SDXL Turbo/.test(e.textContent))), 'made with the installed image model');
+  await shot(win, '10b-skill-picture');
+  // A tool skill on an attached photo: no text model, straight to the result.
+  await win.click('[data-nav="newchat"]');
+  await win.setInputFiles('#file-in', { name: 'red.png', mimeType: 'image/png', buffer: redPng() });
+  await win.waitForSelector('.attach');
+  await win.fill('#input', '/upscale');
+  await win.waitForSelector('#skill-pop .skill-opt.hot:has-text("Upscale a photo")');
+  await win.keyboard.press('Enter');
+  await win.fill('#input', 'please');
+  await win.keyboard.press('Enter');
+  await win.waitForFunction(() => [...document.querySelectorAll('.msg.assistant')].pop()?.querySelector('.skill-media-item img'), null, { timeout: 60000 });
+  assert.ok(/Done/.test(await win.evaluate(() => [...document.querySelectorAll('.msg.assistant .bubble')].pop().textContent)));
+  // Apps open in their own window: the page is found in the answer.
+  assert.ok(await win.evaluate(() => appHtmlOf('Here:\n```html\n<!doctype html><title>T</title>\n```') === '<!doctype html><title>T</title>\n'));
+  console.log('✓ skills: 9 areas, picture from chat, photo tool on an attachment, apps');
 
   // Integrations: add a real MCP server, then a chat uses its tools with an approval prompt.
   await win.click('[data-nav="integrations"]');
@@ -222,6 +263,10 @@ let WIN = null;
   await shot(win, '05-models');
   await win.click('[data-tab="api"]');
   await win.waitForSelector('text=Anthropic (Claude)');
+  await win.waitForSelector('#presets h3:has-text("Free to start")');
+  await win.waitForSelector('#presets .card:has-text("Google Gemini") .badge:has-text("Free plan")');
+  await win.waitForSelector('#presets .card:has-text("OpenAI") .badge:has-text("Paid")');
+  await shot(win, '05b-api-free');
   await win.click('[data-nav="pc"]');
   await win.waitForSelector('text=Speed test');
   await shot(win, '06-your-pc');
@@ -248,6 +293,25 @@ let WIN = null;
   await win.click('#cv-go');
   await win.waitForSelector('.gitem video', { timeout: 90000 });
   console.log('✓ studio: image, AI edit, video');
+  // Music: a groove in one click, played by the synth and saved as an MP3.
+  await win.click('[data-stab="music"]');
+  await win.click('[data-beat="lofi"]');
+  await win.waitForSelector('.studio audio', { timeout: 60000 });
+  await win.waitForSelector('#mu-chords');
+  await shot(win, '11b-music');
+  // Voice: read aloud (a test tone stands in for Windows' voices on Linux).
+  await win.click('[data-stab="voice"]');
+  await win.fill('#vo-text', 'ALEX: Welcome to the show.\nSAM: Glad to be here.');
+  await win.click('#vo-go');
+  await win.waitForFunction(() => [...document.querySelectorAll('.studio .card b')].some((b) => /Welcome/.test(b.textContent)), null, { timeout: 60000 });
+  // Quick fixes on a gallery item.
+  await win.click('[data-stab="tools"]');
+  const pickImg = await win.evaluate(() => gallery.find((g) => g.kind === 'image')?.id);
+  await win.selectOption('#tl-pick', pickImg);
+  await win.click('[data-fix="upscale2"]');
+  await win.waitForFunction(() => gallery.some((g) => /^Upscaled 2×/.test(g.title || '')), null, { timeout: 60000 });
+  await shot(win, '11c-quick-fixes');
+  console.log('✓ studio: music, voice, quick fixes');
 
   // Settings: API server on.
   await win.click('[data-nav="settings"]');

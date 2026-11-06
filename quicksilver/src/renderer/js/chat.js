@@ -115,8 +115,8 @@ function welcomeHTML(a) {
 function attachmentsHTML(list, removable) {
   return list.map((att, i) => {
     const icon = { spreadsheet: '📊', code: '💻', document: '📄' }[att.kind] || '📄';
-    const thumb = att.type === 'image' ? `<img src="${att.dataUrl}" alt="">` : att.type === 'video' ? `<img src="${att.frames?.[0]?.dataUrl || ''}" alt="">` : `<span class="thumb">${icon}</span>`;
-    const sub = att.type === 'video' ? `${att.frames.length} frames · ${att.duration.toFixed(1)} s` : att.type === 'doc' ? `${att.kind} · ${Math.round(att.text.length / 1000)}k chars` : 'photo';
+    const thumb = att.type === 'image' ? `<img src="${att.dataUrl}" alt="">` : att.type === 'video' ? `<img src="${att.frames?.[0]?.dataUrl || ''}" alt="">` : `<span class="thumb">${att.type === 'audio' ? '🎵' : icon}</span>`;
+    const sub = att.type === 'video' ? `${att.frames.length} frames · ${att.duration.toFixed(1)} s` : att.type === 'doc' ? `${att.kind} · ${Math.round(att.text.length / 1000)}k chars` : att.type === 'audio' ? 'sound' : 'photo';
     return `<div class="attach" title="${esc(att.name)}">${thumb}<span class="grow"><div style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(att.name)}</div><div class="small muted">${esc(sub)}</div></span>${removable ? `<button class="x" data-unattach="${i}" title="Remove">✕</button>` : ''}</div>`;
   }).join('');
 }
@@ -146,6 +146,7 @@ function messageHTML(chat, a, m, i) {
   const etaNow = left == null ? '' : `<span class="badge b-lav eta live" title="Estimated on this PC">⏱ ${left > 2 ? `~${fmtSec(left)} left` : 'almost done'}</span>`;
   const body = alt.error ? esc(alt.error)
     : !alt.text && streaming ? `<span class="status-line">${esc(alt.status || 'Thinking…')}</span>`
+    : HIDE_BLOCK.has(isMakerSkill(alt)?.output) ? (stripMediaBlock(alt.text) ? markdown(stripMediaBlock(alt.text)) : streaming ? `<span class="status-line">Writing the ${MEDIA_WORD[skillById(alt.skillId).output]} prompt…</span>` : '')
     : markdown(alt.text || '');
   const tools = [];
   if (m.alts.length > 1) tools.push(`<button class="tool" data-act="prev" data-id="${m.id}" aria-label="Previous answer">‹</button><span class="small muted">${m.altIndex + 1} / ${m.alts.length}</span><button class="tool" data-act="next" data-id="${m.id}" aria-label="Next answer">›</button>`);
@@ -161,6 +162,8 @@ function messageHTML(chat, a, m, i) {
     ${alt.reasoning ? `<details class="think"><summary>💭 Thinking${streaming && !alt.text ? '…' : ''}</summary><div>${esc(alt.reasoning)}</div></details>` : ''}
     <div class="bubble md ${streaming ? 'streaming' : ''} ${alt.error ? 'error' : ''}">${body}</div>
     ${downloadHTML(m, alt, streaming)}
+    ${appButtonsHTML(m, alt, streaming)}
+    ${skillMediaHTML(m, alt, streaming)}
     ${checkHTML(m, alt)}
     ${alt.sources?.length ? `<div class="sources card" style="padding:10px 12px"><b class="small">Sources</b>${alt.sources.map((s, k) => `<div class="src"><span class="cite">${k + 1}</span>${s.url ? `<a href="${esc(s.url)}">${esc(s.title || s.url)}</a>` : `<span>📄 ${esc(s.title)}</span>`}</div>`).join('')}</div>` : ''}
     <div class="msg-tools">${tools.join('')}</div>
@@ -246,7 +249,7 @@ function bindChat() {
   $('#tog-fact').addEventListener('click', () => { chat.factCheck = !factOn(chat, a); save(); render(); });
   $('#net-pill').addEventListener('click', toggleNet);
   $('#chat-more').addEventListener('click', (e) => { e.stopPropagation(); chatMenu(e.currentTarget, chat); });
-  $('#messages').addEventListener('click', (e) => { const b = e.target.closest('[data-act]'); if (b) messageAction(chat, b.dataset.act, b.dataset.id); });
+  $('#messages').addEventListener('click', (e) => { const b = e.target.closest('[data-act]'); if (b) messageAction(chat, b.dataset.act, b.dataset.id, b); });
   $('#chat-body').addEventListener('click', (e) => { const b = e.target.closest('[data-fp]'); if (b) factPanelAction(chat, b.dataset.fp, b.dataset.id); });
   $('#att-row').addEventListener('click', (e) => {
     const x = e.target.closest('[data-unattach]');
@@ -329,13 +332,16 @@ async function addFiles(chat, files) {
   for (const f of files) {
     try {
       if (f.type.startsWith('image/')) {
-        drafts[chat.id].push({ type: 'image', name: f.name || 'pasted image', dataUrl: await shrinkImage(await readDataUrl(f)) });
+        drafts[chat.id].push({ type: 'image', name: f.name || 'pasted image', dataUrl: await shrinkImage(await readDataUrl(f)), path: qs.pathForFile(f) || undefined });
       } else if (f.type.startsWith('video/') || /\.(mp4|mov|webm|mkv|m4v)$/i.test(f.name)) {
         toast(`Reading frames from ${f.name}…`);
         const url = URL.createObjectURL(f);
         const { duration, frames } = await videoFrames(url);
         URL.revokeObjectURL(url);
-        drafts[chat.id].push({ type: 'video', name: f.name, duration, frames });
+        drafts[chat.id].push({ type: 'video', name: f.name, duration, frames, path: qs.pathForFile(f) || undefined });
+      } else if (f.type.startsWith('audio/') || /\.(mp3|wav|m4a|aac|flac|ogg|opus|wma)$/i.test(f.name)) {
+        // Sound files are kept by reference for the audio tools (master, remove vocals…).
+        drafts[chat.id].push({ type: 'audio', name: f.name, path: qs.pathForFile(f) || undefined });
       } else {
         if (f.size > 100 * 1024 * 1024) throw new Error(`${f.name} is over 100 MB.`);
         const bytes = new Uint8Array(await f.arrayBuffer());
@@ -357,6 +363,7 @@ function userContent(m, docBudget) {
     const body = d.text.length > docBudget ? `${d.text.slice(0, docBudget)}\n[…truncated: the file is longer than fits in this model's memory. Raise the context size in Settings, or ask about a specific part.]` : d.text;
     text += `\n\n<file name="${d.name}" type="${d.kind}">\n${body}\n</file>`;
   }
+  for (const snd of (m.attachments || []).filter((x) => x.type === 'audio')) text += `\n[Attached sound file: ${snd.name}]`;
   const images = (m.attachments || []).filter((x) => x.type === 'image' || x.type === 'video');
   if (!images.length) return text.trim();
   for (const att of images) {
@@ -427,6 +434,8 @@ async function generate(chat, rerollMsg) {
   const lastUser = [...chat.messages.slice(0, upTo)].reverse().find((m) => m.role === 'user');
   const skill = lastUser?.skillId ? skillById(lastUser.skillId) : null;
   if (skill) { alt.skillId = skill.id; alt.forceFact = Boolean(skill.tools?.factCheck); }
+  // Tools that work straight on your files (and reading aloud) don't need a text model.
+  if (skill && DIRECT_OUTPUTS.has(skill.output)) { runDirectSkill(chat, msg, alt, skill, lastUser); return; }
   const force = skill?.tools || {};
   if ((chat.library ?? a.library) || (chat.web ?? a.web) || force.web || force.knowledge) { alt.status = 'Searching sources…'; paintStreaming(chat, msg); }
   const sources = await gatherSources(chat, a, lastUser?.text || skill?.name || '', force);
@@ -440,6 +449,10 @@ async function generate(chat, rerollMsg) {
     else { const t = msgText(m).trim(); if (t) messages.push({ role: 'assistant', content: t }); }
   }
   if (messages.at(-1).role !== 'user') messages.push({ role: 'user', content: 'Please continue.' });
+  // Photo edits: a model that can't see still writes the edit; the photo goes to the image model.
+  if (skill && ['edit', 'animate'].includes(skill.output) && !S.speed?.targets?.[target]?.vision) {
+    for (const msgOut of messages) if (Array.isArray(msgOut.content)) msgOut.content = [...msgOut.content.filter((x) => x.type !== 'image_url'), { type: 'text', text: '(A photo is attached for the image model to work on.)' }];
+  }
   if (pending?.requestId !== requestId) return; // stopped while searching
   alt.status = 'Thinking…';
   qs.sendChat({
@@ -447,7 +460,8 @@ async function generate(chat, rerollMsg) {
     temperature: Number(a.temperature ?? p.temperature),
     maxTokens: Math.round(Number(a.maxTokens || p.maxTokens) * (effortOf(chat, a) === 'max' ? 1.5 : 1)),
     contextSize: ctx,
-    level: effortOf(chat, a),
+    // Writing a picture prompt or a beat pattern is quick work: one model, no debate.
+    level: skill && HIDE_BLOCK.has(skill.output) ? 'quick' : effortOf(chat, a),
     tools: toolsOn(chat, a),
     gpu: p.gpu,
     effort: p.effort,
@@ -518,7 +532,10 @@ qs.onChat(({ requestId, ev }) => {
       chat.updated = now();
       save();
       if (S.route.view === 'chat') render(); else renderChatList();
-      if (ev.type === 'done' && !ev.aborted && alt.text && (alt.forceFact || factOn(chat, assistantById(chat.assistantId)))) factCheck(chat, msg, alt, sourcesFull);
+      const maker = isMakerSkill(alt);
+      if (ev.type === 'done' && !ev.aborted && maker && MEDIA_OUTPUTS.has(maker.output)) runSkillMedia(chat, msg, alt, maker);
+      else if (ev.type === 'done' && !ev.aborted && maker && AFTER_OUTPUTS.has(maker.output) && alt.text) runAfterText(chat, msg, alt, maker);
+      else if (ev.type === 'done' && !ev.aborted && alt.text && !maker && (alt.forceFact || factOn(chat, assistantById(chat.assistantId)))) factCheck(chat, msg, alt, sourcesFull);
       return;
     }
     default: break;
@@ -526,10 +543,12 @@ qs.onChat(({ requestId, ev }) => {
   paintStreaming(chat, msg);
 });
 
-function messageAction(chat, act, id) {
+function messageAction(chat, act, id, el) {
   const idx = chat.messages.findIndex((m) => m.id === id);
   const m = chat.messages[idx];
   if (!m) return;
+  if (act.startsWith('m-')) { skillMediaAction(chat, m, act, el); return; }
+  if (act.startsWith('app-')) { appAction(chat, m, act); return; }
   if (act === 'prev' || act === 'next') { if (pending) return; m.altIndex = (m.altIndex + (act === 'next' ? 1 : -1) + m.alts.length) % m.alts.length; save(); render(); }
   else if (act === 'regen') generate(chat, m);
   else if (act === 'continue') { chat.messages.push({ id: uid(), role: 'user', text: 'Continue.', attachments: [] }); generate(chat, null); }
@@ -782,6 +801,12 @@ function warmUp(chat, a) {
 }
 
 // ---------- skills in chat ----------
+
+// A skill that makes a picture, video, photo edit or app (see skill-media.js).
+function isMakerSkill(alt) {
+  const s = alt?.skillId && skillById(alt.skillId);
+  return s && (AFTER_OUTPUTS.has(s.output) || DIRECT_OUTPUTS.has(s.output) || s.output === 'app') ? s : null;
+}
 
 function skillChipHTML(chat) {
   const s = chat.pendingSkill && skillById(chat.pendingSkill);

@@ -3,14 +3,15 @@
 
 let skillQuery = '';
 let skillCat = 'all';
-const OUTPUT_LABEL = { text: 'Answer', pptx: 'PowerPoint file', docx: 'Word document', xlsx: 'Excel table', chart: 'Chart' };
-const OUTPUT_BADGE = { text: 'b-lav', pptx: 'b-peach', docx: 'b-sky', xlsx: 'b-mint', chart: 'b-lemon' };
+const OUTPUT_LABEL = { text: 'Answer', pptx: 'PowerPoint file', docx: 'Word document', xlsx: 'Excel table', chart: 'Chart', image: 'Picture', video: 'Video', edit: 'Edited photo', animate: 'Video from a photo', app: 'App you can open', beat: 'Music (MP3)', podcast: 'Podcast (MP3)', narrate: 'Recording (MP3)', speech: 'Recording (MP3)', tool: 'New file' };
+const OUTPUT_BADGE = { text: 'b-lav', pptx: 'b-peach', docx: 'b-sky', xlsx: 'b-mint', chart: 'b-lemon', image: 'b-pink', video: 'b-pink', edit: 'b-pink', animate: 'b-pink', app: 'b-sky', beat: 'b-lemon', podcast: 'b-lemon', narrate: 'b-lemon', speech: 'b-lemon', tool: 'b-mint' };
 
 // Built-ins (with any edits you made) plus your own skills.
 function allSkills() {
   const custom = S.data.skills || [];
   const overridden = new Set(custom.filter((s) => s.overrides).map((s) => s.overrides));
-  return [...BUILTIN_SKILLS.filter((s) => !overridden.has(s.id)), ...custom.map((s) => ({ ...s, custom: true }))];
+  const cat = (s) => (SKILL_CATEGORIES[s.category] ? s : { ...s, category: SKILL_RECAT[s.category] || 'office' });
+  return [...BUILTIN_SKILLS.filter((s) => !overridden.has(s.id)), ...custom.map((s) => cat({ ...s, custom: true }))];
 }
 const skillById = (id) => allSkills().find((s) => s.id === id || s.overrides === id);
 
@@ -25,17 +26,17 @@ views.skills = {
     const list = allSkills().filter((s) => (skillCat === 'all' || s.category === skillCat) && (!skillQuery || `${s.name} ${s.description}`.toLowerCase().includes(skillQuery.toLowerCase())));
     return `<div class="page">
       <div class="page-head"><h1>Skills</h1><label class="btn">⬆ Import SKILL.md<input type="file" id="sk-import" accept=".md,.markdown,text/markdown" multiple hidden></label><button class="btn primary" id="sk-new">＋ Create a skill</button></div>
-      <p class="lede"><b>Skills are ready-made abilities</b> you can apply to any message: "Create a presentation" gives you a real PowerPoint file, "Analyze a spreadsheet" finds the trends and draws a chart, "Meeting notes → actions" pulls out owners and dates. Type <b>/</b> in any chat to use one, or press <b>⚡ Skills</b>. Quicksilver also suggests the right skill as you type.</p>
+      <p class="lede"><b>${allSkills().length} ready-made skills</b> for the things people use AI for most: make pictures, videos and beats, edit photos and video, build apps, write anything, research with sources, read aloud and make podcasts, and sort out money and contracts. Skills that make files give you a real file (PowerPoint, Word, Excel, MP3, PNG, MP4). Type <b>/</b> in any chat to use one, or press <b>⚡ Skills</b>. Quicksilver also suggests the right skill as you type.</p>
       <div class="row" style="margin-bottom:16px"><input id="sk-q" type="search" placeholder="Search skills" value="${esc(skillQuery)}" style="max-width:320px">
         ${[['all', { label: 'All', icon: '✨' }], ...Object.entries(SKILL_CATEGORIES)].map(([k, c]) => `<button class="btn small ${skillCat === k ? 'on' : ''}" data-skcat="${k}">${c.icon} ${esc(c.label)}</button>`).join('')}</div>
       ${Object.entries(SKILL_CATEGORIES).map(([k, c]) => {
         const items = list.filter((s) => s.category === k);
         if (!items.length) return '';
-        return `<div class="section"><h2>${c.icon} ${esc(c.label)}</h2></div><div class="cards" style="grid-template-columns:repeat(auto-fill,minmax(260px,1fr))">${items.map((s) => `
+        return `<div class="section"><h2>${c.icon} ${esc(c.label)} <span class="small muted" style="font-weight:600">· ${items.length}</span></h2>${c.pitch ? `<p class="small muted" style="margin:2px 0 0;font-weight:600">${esc(c.pitch)}</p>` : ''}</div><div class="cards" style="grid-template-columns:repeat(auto-fill,minmax(260px,1fr))">${items.map((s) => `
           <div class="card">
             <div class="row"><span class="emoji-badge">${esc(s.icon)}</span><h3 class="grow">${esc(s.name)}</h3>${s.custom ? '<span class="badge b-pink">yours</span>' : ''}</div>
             <p class="desc" style="margin:10px 0">${esc(s.description)}</p>
-            <div class="row small" style="margin-bottom:10px"><span class="badge ${OUTPUT_BADGE[s.output] || 'b-lav'}">→ ${esc(OUTPUT_LABEL[s.output] || 'Answer')}</span>${etaBadge(etaFor(resolveTarget(null, assistantById(S.data.prefs.lastAssistant)), wordsForSkill(s)), '', starsOf(resolveTarget(null, assistantById(S.data.prefs.lastAssistant)), SKILL_JOB[s.category] || 'general'))}${s.tools?.web ? '<span class="badge b-mint">🌐 web</span>' : ''}${s.tools?.knowledge ? '<span class="badge b-sky">📚 knowledge</span>' : ''}${s.tools?.factCheck ? '<span class="badge b-peach">✅ fact check</span>' : ''}</div>
+            <div class="row small" style="margin-bottom:10px"><span class="badge ${OUTPUT_BADGE[s.output] || 'b-lav'}">→ ${esc(OUTPUT_LABEL[s.output] || 'Answer')}</span>${skillEtaBadge(s)}${s.tools?.web ? '<span class="badge b-mint">🌐 web</span>' : ''}${s.tools?.knowledge ? '<span class="badge b-sky">📚 knowledge</span>' : ''}${s.tools?.factCheck ? '<span class="badge b-peach">✅ fact check</span>' : ''}</div>
             <div class="row"><button class="btn small primary" data-sk-use="${esc(s.id)}">Use</button><button class="btn small" data-sk-edit="${esc(s.id)}">${s.custom ? 'Edit' : 'Customize'}</button><button class="btn small ghost" data-sk-export="${esc(s.id)}">Export</button>${s.custom ? `<button class="btn small danger" data-sk-del="${esc(s.id)}">${s.overrides ? 'Reset' : 'Delete'}</button>` : ''}</div>
           </div>`).join('')}</div>`;
       }).join('') || '<div class="empty">No skills match.</div>'}
@@ -63,10 +64,24 @@ views.skills = {
   },
 };
 
+// Time and expected quality on this PC. Picture and video skills show the image model's time.
+function skillEtaBadge(s) {
+  if (DIRECT_OUTPUTS.has(s.output)) return '<span class="badge b-mint" title="Runs on this PC with built-in tools: no model needed">⚡ instant tool · free</span>';
+  if (MEDIA_OUTPUTS.has(s.output)) {
+    const pick = pickMediaModel(s.output);
+    if (!pick) return '<span class="badge b-lemon" title="Get an image or video model under Models → Images & video">needs a Studio model</span>';
+    if (pick.api) return '<span class="badge b-lav">☁ via your image API</span>';
+    const m = S.speed?.media?.[pick.inst.id];
+    return etaBadge(m ? m.sec * Math.max(1, s.media?.count || 1) : null, '', m?.stars ?? null);
+  }
+  const t = resolveTarget(null, assistantById(S.data.prefs.lastAssistant));
+  return etaBadge(etaFor(t, wordsForSkill(s)), '', starsOf(t, SKILL_JOB[s.category] || 'general'));
+}
+
 // Start a chat with a skill ready to go.
 function useSkill(id) {
   const s = skillById(id);
-  const job = { office: 'office', research: 'research', code: 'coding', writing: 'writing', creative: 'writing', learning: 'learning' }[s.category];
+  const job = { office: 'office', finance: 'office', research: 'research', code: 'coding', writing: 'writing', career: 'writing', voice: 'writing', music: 'writing' }[s.category];
   const a = S.data.assistants.find((x) => x.job === job) || assistantById(S.data.prefs.lastAssistant);
   newChat(a.id);
   const chat = chatById(S.route.id);
@@ -139,13 +154,15 @@ const OUTPUT_RULES = {
 };
 
 function skillPrompt(s) {
-  return `<skill name="${s.name}">\n${s.instructions}\n${OUTPUT_RULES[s.output] || ''}\n</skill>\nApply the skill above to the user's latest message and attachments.`;
+  return `<skill name="${s.name}">\n${s.instructions}\n${OUTPUT_RULES[s.output] || MEDIA_RULES[s.output] || ''}\n</skill>\nApply the skill above to the user's latest message and attachments.`;
 }
 
 // ---------- the skill picker (⚡ button and "/" in the composer) ----------
 
 function skillPickerHTML(filter = '') {
   const f = filter.toLowerCase();
-  const list = allSkills().filter((s) => !f || s.name.toLowerCase().includes(f) || s.description.toLowerCase().includes(f) || s.id.includes(f));
+  // Best matches first: the name starts with it, then a word in the name does, then the description.
+  const score = (s) => { const n = s.name.toLowerCase(); return !f ? 0 : n.startsWith(f) ? 4 : n.split(/\W+/).some((w) => w.startsWith(f)) ? 3 : n.includes(f) || s.id.includes(f) ? 2 : s.description.toLowerCase().includes(f) ? 1 : -1; };
+  const list = allSkills().map((s, i) => ({ s, k: score(s), i })).filter((x) => x.k >= 0).sort((a, b) => b.k - a.k || a.i - b.i).map((x) => x.s);
   return list.length ? list.slice(0, 40).map((s, i) => `<button class="skill-opt ${i === 0 ? 'hot' : ''}" data-pick-skill="${esc(s.id)}"><span>${esc(s.icon)}</span><span class="grow"><b>${esc(s.name)}</b><span class="small muted"> · ${esc(s.description)}</span></span><span class="badge ${OUTPUT_BADGE[s.output]}">${esc(OUTPUT_LABEL[s.output])}</span></button>`).join('') : '<div class="small muted" style="padding:10px">No skills match.</div>';
 }

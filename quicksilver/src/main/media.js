@@ -242,4 +242,4 @@ async function generate(jobId, req, { onProgress, onStatus } = {}) {
 
 function stop(jobId) { running.get(jobId)?.kill(); }
 
-module.exports = { videoFrames, gallery, addToGallery, removeFromGallery, saveDataUrl, saveBuffer, editVideo, extractFrame, probe, generate, stop, ffmpegPath, mediaDir };
+module.exports = { runFfmpeg, videoFrames, gallery, addToGallery, removeFromGallery, saveDataUrl, saveBuffer, editVideo, extractFrame, probe, generate, stop, ffmpegPath, mediaDir };

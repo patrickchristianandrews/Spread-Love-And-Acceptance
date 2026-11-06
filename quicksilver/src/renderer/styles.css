@@ -601,3 +601,16 @@ select optgroup { font-weight: 800; color: var(--muted); }
 .pickers { align-items: center; }
 
 .meas { color: var(--mint-ink); font-weight: 750; }
+
+/* Skills that make pictures, video, sound and apps: results under the answer */
+.skill-media { display: flex; flex-direction: column; gap: 10px; margin: 6px 0 4px; }
+.skill-media-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px; }
+.skill-media-item { margin: 0; background: var(--panel); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; }
+.skill-media-item img, .skill-media-item video { display: block; width: 100%; max-height: 420px; object-fit: contain; background: var(--bg-soft, #0001); cursor: zoom-in; }
+.skill-media-item video { cursor: default; }
+.skill-media-item.audio { grid-column: 1 / -1; padding: 10px 10px 0; }
+.skill-media-item audio { width: 100%; }
+.skill-media-item figcaption { padding: 4px 6px; gap: 2px; }
+.media-need { margin: 6px 0; }
+.gitem.sound { display: flex; flex-direction: column; }
+.gitem .sound-tile { display: grid; place-items: center; aspect-ratio: 1; font-size: 2.6rem; background: linear-gradient(135deg, var(--lemon, #fff4c2), var(--lav, #e6e0ff)); }

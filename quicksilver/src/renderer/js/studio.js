@@ -1,4 +1,5 @@
-// Studio: create and edit photos and videos, locally or through a connected API.
+// Studio: create and edit photos, videos, music and voice, locally or through a connected API.
+// The Music, Voice and Quick fixes tabs are in studio-more.js.
 'use strict';
 
 let studioTab = 'create';
@@ -13,11 +14,11 @@ async function refreshGallery() { gallery = await qs.call('media:gallery'); }
 
 views.studio = {
   html() {
-    const tabs = { create: '🎨 Create image', edit: '🪄 Edit photo', video: '🎬 Create video', vedit: '✂️ Edit video', gallery: `🖼️ Gallery (${gallery.length})` };
+    const tabs = { create: '🎨 Create image', edit: '🪄 Edit photo', video: '🎬 Create video', vedit: '✂️ Edit video', music: '🎵 Music', voice: '🎙️ Voice', tools: '🧰 Quick fixes', gallery: `🖼️ Gallery (${gallery.length})` };
     return `<div class="page">
-      <div class="page-head"><h1>Studio</h1><label class="btn">⬆ Upload photo or video<input type="file" id="upload" accept="image/*,video/*" multiple hidden></label></div>
+      <div class="page-head"><h1>Studio</h1><label class="btn">⬆ Upload photo, video or sound<input type="file" id="upload" accept="image/*,video/*,audio/*" multiple hidden></label></div>
       <div class="tabs">${Object.entries(tabs).map(([k, l]) => `<button class="tab ${studioTab === k ? 'active' : ''}" data-stab="${k}">${l}</button>`).join('')}</div>
-      ${({ create: createHTML, edit: editHTML, video: videoHTML, vedit: veditHTML, gallery: galleryHTML })[studioTab]()}
+      ${({ create: createHTML, edit: editHTML, video: videoHTML, vedit: veditHTML, music: musicHTML, voice: voiceHTML, tools: fixesHTML, gallery: galleryHTML })[studioTab]()}
     </div>`;
   },
   bind() {
@@ -29,11 +30,11 @@ views.studio = {
       for (const f of e.target.files) last = await importFile(f);
       e.target.value = '';
       await refreshGallery();
-      if (last) { if (last.kind === 'video') { vid = { id: last.id, info: null }; studioTab = 'vedit'; } else { await loadEditor(last.id); studioTab = 'edit'; } }
+      if (last) { if (last.kind === 'audio') { toolPick = last.id; studioTab = 'tools'; } else if (last.kind === 'video') { vid = { id: last.id, info: null }; studioTab = 'vedit'; } else { await loadEditor(last.id); studioTab = 'edit'; } }
       render();
     });
     $$('[data-get]').forEach((b) => b.addEventListener('click', async () => { const m = S.catalog.media.find((x) => x.id === b.dataset.get); await download({ catalogId: m.id }, m.name); render(); }));
-    ({ create: bindCreate, edit: bindEdit, video: bindVideo, vedit: bindVedit, gallery: bindGallery })[studioTab]?.();
+    ({ create: bindCreate, edit: bindEdit, video: bindVideo, vedit: bindVedit, music: bindMusic, voice: bindVoice, tools: bindFixes, gallery: bindGallery })[studioTab]?.();
     $$('[data-improve]').forEach((b) => b.addEventListener('click', () => improvePrompt(b)));
   },
 };
@@ -143,7 +144,7 @@ function resultsHTML(kind) {
   return `<div class="section"><h2>Results</h2></div><div class="gallery">${items.map(gitemHTML).join('')}</div>`;
 }
 
-const gitemHTML = (g) => `<button class="gitem" data-gopen="${g.id}">${g.kind === 'video' ? `<video src="${g.url}" muted preload="metadata"></video>` : `<img src="${g.url}" alt="" loading="lazy">`}<div class="cap">${g.kind === 'video' ? '🎬 ' : ''}${esc(g.prompt || g.title || 'Untitled')}</div></button>`;
+const gitemHTML = (g) => `<button class="gitem ${g.kind === 'audio' ? 'sound' : ''}" data-gopen="${g.id}">${g.kind === 'audio' ? '<span class="sound-tile">🎵</span>' : g.kind === 'video' ? `<video src="${g.url}" muted preload="metadata"></video>` : `<img src="${g.url}" alt="" loading="lazy">`}<div class="cap">${g.kind === 'video' ? '🎬 ' : g.kind === 'audio' ? '🎵 ' : ''}${esc(g.prompt || g.title || 'Untitled')}</div></button>`;
 
 const SIZES = { square: ['Square', 1, 1], portrait: ['Portrait', 3, 4], landscape: ['Landscape', 4, 3], wide: ['Wide 16:9', 16, 9], tall: ['Tall 9:16', 9, 16] };
 function sizeFor(spec, preset) {
@@ -492,7 +493,7 @@ function bindVedit() {
 
 function galleryHTML() {
   const list = gallery.filter((g) => galleryFilter === 'all' || g.kind === galleryFilter);
-  return `<div class="row" style="margin-bottom:14px">${[['all', 'All'], ['image', 'Photos'], ['video', 'Videos']].map(([k, l]) => `<button class="btn small ${galleryFilter === k ? 'on' : ''}" data-gfilter="${k}">${l}</button>`).join('')}</div>
+  return `<div class="row" style="margin-bottom:14px">${[['all', 'All'], ['image', 'Photos'], ['video', 'Videos'], ['audio', 'Sounds']].map(([k, l]) => `<button class="btn small ${galleryFilter === k ? 'on' : ''}" data-gfilter="${k}">${l}</button>`).join('')}</div>
     ${list.length ? `<div class="gallery">${list.map(gitemHTML).join('')}</div>` : '<div class="empty">Nothing here yet. Create or upload something.</div>'}`;
 }
 
@@ -507,12 +508,13 @@ document.addEventListener('click', (e) => {
   if (!g) return;
   const animators = S.installed.filter((m) => S.catalog.media.find((c) => c.id === m.catalogId)?.animate);
   const box = openModal(`<div class="row" style="margin-bottom:10px"><h2 class="grow" style="margin:0">${esc(g.prompt || g.title || 'Untitled')}</h2><button class="btn small" data-close>Close</button></div>
-    <div class="canvas-wrap">${g.kind === 'video' ? `<video src="${g.url}" controls autoplay></video>` : `<img src="${g.url}" alt="">`}</div>
+    <div class="canvas-wrap">${g.kind === 'audio' ? `<audio src="${g.url}" controls autoplay style="width:100%"></audio>` : g.kind === 'video' ? `<video src="${g.url}" controls autoplay></video>` : `<img src="${g.url}" alt="">`}</div>
     <p class="small muted" style="font-weight:600">${[g.model, g.width && `${g.width}×${g.height}`, g.seed !== undefined && g.seed !== '' && `seed ${g.seed}`, g.seconds && `made in ${fmtSec(g.seconds)}`, new Date(g.created).toLocaleString()].filter(Boolean).map(esc).join(' · ')}</p>
     <div class="modal-actions" style="justify-content:flex-start">
-      ${g.kind === 'image' ? '<button class="btn primary" data-g="edit">🪄 Edit</button>' : '<button class="btn primary" data-g="vedit">✂️ Edit</button>'}
+      ${g.kind === 'image' ? '<button class="btn primary" data-g="edit">🪄 Edit</button>' : g.kind === 'video' ? '<button class="btn primary" data-g="vedit">✂️ Edit</button>' : ''}
+      <button class="btn" data-g="fix">🧰 Quick fixes</button>
       ${g.kind === 'image' && animators.length ? '<button class="btn" data-g="animate">🎬 Animate</button>' : ''}
-      <button class="btn" data-g="chat">💬 Ask AI about it</button>
+      ${g.kind === 'audio' ? '' : '<button class="btn" data-g="chat">💬 Ask AI about it</button>'}
       <button class="btn" data-g="export">⬇ Save as…</button><button class="btn" data-g="reveal">📁 Show in folder</button>
       <button class="btn danger" data-g="delete">🗑 Delete</button>
     </div>`, { wide: true });
@@ -521,6 +523,7 @@ document.addEventListener('click', (e) => {
     if (!act) return;
     if (act === 'edit') { closeModal(); await loadEditor(g.id); studioTab = 'edit'; go({ view: 'studio' }); }
     if (act === 'vedit') { closeModal(); vid = { id: g.id }; studioTab = 'vedit'; go({ view: 'studio' }); }
+    if (act === 'fix') { closeModal(); toolPick = g.id; studioTab = 'tools'; go({ view: 'studio' }); }
     if (act === 'animate') { closeModal(); studioTab = 'video'; go({ view: 'studio' }); setTimeout(() => { const s = $('#cv-from'); if (s) s.value = g.id; }, 50); }
     if (act === 'chat') {
       closeModal();
