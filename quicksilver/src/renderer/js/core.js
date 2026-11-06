@@ -171,7 +171,8 @@ function rateBadge(est, kind = 'text') {
   if (!est) return '';
   const extra = est.rating === 'wont' ? '' : kind === 'text' ? ` · ~${Math.max(1, Math.round(est.wordsPerSec))} words/s · ⏱ ~${fmtSec(WORDS.chat / Math.max(0.1, est.wordsPerSec))} per answer` : ` · ⏱ ~${fmtSec(est.sec)} each`;
   const where = { gpu: 'on graphics card', split: 'card + memory', cpu: 'on processor' }[est.fit] || '';
-  return `<span class="badge rate-${est.rating}" title="${esc(where)}">${esc(est.rating === 'wont' ? est.label : est.label + extra)}</span>`;
+  const tip = est.rating === 'wont' ? 'This PC doesn\'t have enough free memory to load this model, so it can\'t run here. Click the model for what it would need.' : where;
+  return `<span class="badge rate-${est.rating}" title="${esc(tip)}">${esc(est.rating === 'wont' ? est.label : est.label + extra)}</span>`;
 }
 
 // ---------- one-off AI requests (prompt writing and similar small jobs) ----------

@@ -87,13 +87,13 @@ function modelCard(m, est, kind) {
   if (m.ctx >= 100000) tags.push(`<span class="badge b-lemon">📜 ${Math.round(m.ctx / 1024)}K context</span>`);
   if (m.edit === 'instruct') tags.push('<span class="badge b-peach">🪄 edit by instruction</span>');
   if (m.animate) tags.push('<span class="badge b-peach">📷→🎬 animates photos</span>');
-  return `<div class="card ${est?.rating === 'great' && !inst ? '' : ''}">
+  return `<div class="card model-card" data-model-card="${esc(m.id)}" tabindex="0" title="Click for details">
     <div class="row"><h3 class="grow">${esc(m.name)}</h3><span class="small" style="font-weight:800">${(m.sizeGB + (m.mmprojGB || 0)).toFixed(1)} GB</span></div>
     <div class="meta" style="margin:4px 0 8px">${esc(m.maker)}${m.params ? ` · ${esc(m.params)} parameters` : ''}</div>
     <p class="desc" style="margin:0 0 10px">${esc(m.blurb)}</p>
     <div class="row" style="margin-bottom:10px">${tags.join('')}</div>
     <div class="row" style="margin-bottom:12px"><span class="small" style="font-weight:700">On your PC:</span>${rateBadge(est, kind)}</div>
-    ${S.downloads[m.id] ? downloadBox(m.id) : inst ? '<span class="badge b-mint">✓ Installed</span>' : `<button class="btn primary small" data-get="${m.id}">Download</button>`}
+    <div class="row">${S.downloads[m.id] ? downloadBox(m.id) : inst ? '<span class="badge b-mint">✓ Installed</span>' : `<button class="btn primary small" data-get="${m.id}">Download</button>`}<span class="grow"></span><button class="btn small ghost" data-details="${esc(m.id)}">${est?.rating === 'wont' ? 'Why? What would it need?' : 'Details'}</button></div>
   </div>`;
 }
 

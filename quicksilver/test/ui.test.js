@@ -305,6 +305,12 @@ function redPng(size = 64) {
   await win.click('[data-tab="text"]');
   await win.waitForSelector('text=Qwen3 30B-A3B');
   await shot(win, '05-models');
+  // Model details: click a model that won't fit to see why and what it would need.
+  await win.click('[data-details="gpt-oss-120b"]');
+  await win.waitForSelector('.md-need:has-text("What you can do")');
+  assert.match(await win.locator('.modal-box, #modal').first().innerText(), /The least it needs|To run it smoothly/);
+  await shot(win, '05c-model-details');
+  await win.click('#modal [data-close]');
   await win.click('[data-tab="api"]');
   await win.waitForSelector('text=Anthropic (Claude)');
   await win.waitForSelector('#presets h3:has-text("Free to start")');

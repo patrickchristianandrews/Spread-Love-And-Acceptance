@@ -282,6 +282,41 @@ function estimateText(m, hw, calib = 1) {
   return { fit, rating, label, tps, wordsPerSec: tps * 0.75, need };
 }
 
+// What a PC needs to run a model: the smallest that can load it at all, and one that runs it
+// smoothly, using common memory sizes. Also a smaller model that already fits, if there is one.
+const RAM_SIZES = [8, 16, 24, 32, 48, 64, 96, 128, 192, 256, 384, 512];
+const VRAM_SIZES = [6, 8, 12, 16, 24, 32, 48, 80, 96];
+function requirements(m, hw, kind = 'text') {
+  const est = (h) => (kind === 'text' ? estimateText(m, h) : estimateMedia(m, h));
+  const base = { cpuThreads: hw?.cpuThreads || 8, unifiedMemory: false, gpuName: '' };
+  // Minimum: no graphics card, just enough memory (slow but it works) — text models only.
+  const minRam = kind === 'text' ? RAM_SIZES.find((r) => est({ ...base, ramGB: r, vramGB: 0 }).fit !== 'no') : null;
+  // Smooth: the smallest graphics card that holds it entirely, with a normal amount of memory.
+  let smooth = null;
+  for (const v of VRAM_SIZES) {
+    const ram = Math.max(16, RAM_SIZES.find((r) => r >= v) || 16);
+    const e = est({ ...base, ramGB: ram, vramGB: v, vramFreeGB: v, gpuName: `${v} GB card` });
+    if (e.fit === 'gpu') { smooth = { vramGB: v, ramGB: ram, est: e }; break; }
+  }
+  // Big models no single card holds: a Mac or PC with lots of shared (unified) memory.
+  let unified = null;
+  if (!smooth || smooth.vramGB >= 48) {
+    for (const r of [32, 48, 64, 96, 128, 192, 256, 512]) {
+      const e = est({ ...base, unifiedMemory: true, ramGB: r, vramGB: r * 0.75, vramFreeGB: r * 0.72, gpuName: 'unified' });
+      if (e.fit === 'gpu') { unified = { ramGB: r, est: e }; break; }
+    }
+  }
+  const minEst = minRam ? est({ ...base, ramGB: minRam, vramGB: 0 }) : null;
+  return { need: kind === 'text' ? m.sizeGB + (m.mmprojGB || 0) + 0.8 : m.vramGB || m.sizeGB + 2, minRam, minEst, smooth, unified,
+    haveRam: hw ? usableRam(hw) : null, haveVram: hw?.vramGB ? usableVram(hw) : 0 };
+}
+function smallerAlternative(m, hw) {
+  const fam = familyOf(m);
+  const fits = (x) => estimateText(x, hw).fit !== 'no';
+  const same = TEXT_MODELS.filter((x) => x.id !== m.id && x.category !== 'large' && (familyOf(x) === fam || x.category === m.category) && x.sizeGB < m.sizeGB && fits(x));
+  return same.sort((a, b) => (familyOf(b) === fam) - (familyOf(a) === fam) || (b.jobs?.general || 0) - (a.jobs?.general || 0))[0] || null;
+}
+
 // How an image/video model would run on this PC.
 function estimateMedia(m, hw, calib = 1) {
   const vram = hw.vramGB ? usableVram(hw) : 0;
@@ -614,4 +649,4 @@ function capabilities(profiles, { local = true } = {}) {
   ];
 }
 
-module.exports = { TEXT_MODELS, TEXT_CATEGORIES, MEDIA_MODELS, MEDIA_CATEGORIES, JOBS, CLOUD_BOOST, cloudPlan, accuracyLevel, estimateText, estimateMedia, advise, compose, gpuBandwidth, profileInstalled, matchCatalog, scoreFor, familyOf, starsFor, capabilities, upgradeAdvice };
+module.exports = { TEXT_MODELS, TEXT_CATEGORIES, MEDIA_MODELS, MEDIA_CATEGORIES, JOBS, CLOUD_BOOST, cloudPlan, accuracyLevel, requirements, smallerAlternative, estimateText, estimateMedia, advise, compose, gpuBandwidth, profileInstalled, matchCatalog, scoreFor, familyOf, starsFor, capabilities, upgradeAdvice };

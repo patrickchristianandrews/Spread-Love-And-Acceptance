@@ -60,6 +60,18 @@ handle('apiserver:status', () => apiserver.status());
 // ---------- hardware, catalog, estimates, advisor ----------
 handle('hw:detect', (fresh) => hardware.detect({ fresh }));
 handle('catalog:get', () => ({ text: catalog.TEXT_MODELS, textCategories: catalog.TEXT_CATEGORIES, media: catalog.MEDIA_MODELS, mediaCategories: catalog.MEDIA_CATEGORIES, jobs: catalog.JOBS }));
+// Everything the model details view shows: how it runs here, why, and what it would need.
+handle('catalog:details', async (id) => {
+  const hw = await hardware.detect();
+  const c = store.config().calib;
+  const text = catalog.TEXT_MODELS.find((m) => m.id === id);
+  const m = text || catalog.MEDIA_MODELS.find((x) => x.id === id);
+  if (!m) throw new Error('Unknown model.');
+  const kind = text ? 'text' : 'media';
+  const est = text ? catalog.estimateText(m, hw, c.text) : catalog.estimateMedia(m, hw, c.media);
+  const alt = text && est.fit === 'no' ? catalog.smallerAlternative(m, hw) : null;
+  return { model: m, kind, est, hardware: hw, req: catalog.requirements(m, hw, kind), alt: alt && { id: alt.id, name: alt.name, sizeGB: alt.sizeGB, est: catalog.estimateText(alt, hw, c.text) } };
+});
 handle('catalog:estimates', async () => {
   const hw = await hardware.detect();
   const c = store.config().calib;

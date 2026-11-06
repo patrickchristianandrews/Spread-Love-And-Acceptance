@@ -739,3 +739,17 @@ a.src-chip:hover { border-color: var(--accent); color: var(--accent); }
 .rs-bar i { display: block; height: 100%; background: var(--accent); border-radius: 99px; transition: width .6s; }
 .rs-model { display: flex; align-items: center; gap: 8px; padding: 4px 0; font-weight: 650; }
 .rs-model .small { margin-left: auto; }
+
+/* Model details */
+.model-card { cursor: pointer; transition: border-color .15s, transform .15s; }
+.model-card:hover { border-color: var(--accent); }
+.md-head { display: flex; gap: 12px; align-items: flex-start; }
+.md-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 12px; margin-bottom: 12px; }
+@media (max-width: 760px) { .md-grid { grid-template-columns: 1fr; } }
+.md-sec h3 { margin: 0 0 6px; font-size: 1rem; }
+.md-score { display: flex; justify-content: space-between; padding: 3px 0; font-size: .9rem; font-weight: 600; }
+.md-abil { margin: 8px 0 0; padding-left: 1.2em; font-size: .88rem; }
+.md-abil li { margin: 3px 0; }
+.md-need { border-color: color-mix(in srgb, #fb923c 45%, var(--line-soft)); margin-bottom: 12px; }
+.md-steps { margin: 4px 0 0; padding-left: 1.3em; line-height: 1.55; }
+.md-steps li { margin: 6px 0; }
