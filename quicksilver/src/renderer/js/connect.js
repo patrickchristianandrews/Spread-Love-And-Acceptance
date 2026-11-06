@@ -19,7 +19,7 @@ function phoneSetHTML() {
           ${i.addresses.length > 1 ? `<div class="small muted">Other addresses for this PC: ${i.addresses.slice(1).map(esc).join(', ')}</div>` : ''}
           <div class="row"><button class="btn small" id="ph-new">New link (signs phones out)</button></div>
         </div></div>
-      <div class="notice info small"><b>If the phone can't connect:</b> when Windows asks whether Quicksilver may use the network, choose <b>Private networks</b>. Both devices must be on the same Wi-Fi (not a guest network). Your phone's chats also appear here, marked with ${icon('phone', 13)}.</div>` : ''}
+      <div class="notice info small"><b>If the phone can't connect:</b> when Windows asks whether Quicksilver may use the network, choose <b>Private networks</b>. Both devices must be on the same Wi-Fi (not a guest network). Chats you have on the phone also appear in your chat list here, with a small phone mark.</div>` : ''}
   </div>`;
 }
 function bindPhoneSet() {
