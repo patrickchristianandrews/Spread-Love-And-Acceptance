@@ -49,6 +49,7 @@ views.chat = {
         <button class="icon-btn" id="chat-more" title="Pin, rename, export or delete this chat" aria-label="More options">${icon('more')}</button>
       </header>
       <div class="chat-body" id="chat-body"><div class="chat-col">
+      <button class="to-latest" id="to-latest" hidden aria-label="Jump to the latest message" title="Jump to the latest message">${icon('chevron', 18)}</button>
       <div class="messages" id="messages"><div class="messages-inner">${chat.messages.length ? chat.messages.map((m, i) => messageHTML(chat, a, m, i)).join('') : welcomeHTML(a)}</div></div>
       <div class="composer" id="composer">
         <div class="composer-card">
@@ -124,43 +125,87 @@ function stepsHTML(alt, streaming) {
 const metaRow = (html) => (html.trim() ? `<div class="meta-row">${html}</div>` : '');
 const domainOf = (u) => { try { return new URL(u).hostname.replace(/^www\./, ''); } catch { return u; } };
 
+const msgTime = (m) => (m.t ? new Date(m.t).toLocaleString(undefined, { weekday: 'short', day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit' }) : '');
+const tb = (act, id, ic, label) => `<button class="tool icon" data-act="${act}" data-id="${id}" title="${esc(label)}" aria-label="${esc(label)}">${icon(ic, 16)}</button>`;
+
+// Quick next steps under the latest answer, picked from what kind of answer it is.
+function followupsHTML(alt) {
+  const t = alt.text || '';
+  const list = /```/.test(t) ? ['Explain how this works', 'Add comments and tests', 'Can it be simpler?']
+    : /^\s*\|.*\|\s*$/m.test(t) ? ['Which option would you pick?', 'Add a column for cost', 'Turn it into a chart']
+    : t.length > 1800 ? ['Summarise this in 5 bullets', 'What should I do first?', 'Explain it more simply']
+    : ['Tell me more', 'Give me an example', 'What are the downsides?'];
+  return `<div class="followups">${list.map((q) => `<button class="fu" data-followup="${esc(q)}">${esc(q)}</button>`).join('')}</div>`;
+}
+
 function messageHTML(chat, a, m, i) {
   if (m.role === 'user') {
     return `<div class="msg user" data-msg="${m.id}">
-      <div class="who-line">${esc(S.data.prefs.userName || 'You')}</div>
       ${m.attachments?.length ? `<div class="attach-row" style="justify-content:flex-end">${attachmentsHTML(m.attachments, false)}</div>` : ''}
-      ${m.text ? `<div class="bubble">${esc(m.text)}</div>` : ''}
-      <div class="msg-tools">${pending ? '' : `<button class="tool" data-act="edit" data-id="${m.id}">Edit</button><button class="tool" data-act="branch" data-id="${m.id}" title="Start a new chat from this point; this one stays as it is">Branch</button><button class="tool" data-act="del" data-id="${m.id}">Delete</button>`}</div>
+      ${m.text ? `<div class="bubble"${m.t ? ` title="${esc(msgTime(m))}"` : ''}>${esc(m.text)}</div>` : ''}
+      <div class="msg-tools">${pending ? '' : tb('edit', m.id, 'edit', 'Edit and ask again') + tb('branch', m.id, 'branch', 'Branch: a new chat from this point') + tb('copy', m.id, 'copy', 'Copy') + tb('del', m.id, 'trash', 'Delete')}</div>
     </div>`;
   }
   const alt = m.alts[m.altIndex] || {};
   const streaming = pending?.msgId === m.id;
   const isLast = i === chat.messages.length - 1;
   const left = streaming && alt.eta ? alt.eta.sec - (Date.now() - alt.eta.start) / 1000 : null;
-  const etaNow = left == null ? '' : `<span class="badge b-lav eta live" title="Estimated on this PC">⏱ ${left > 2 ? `~${fmtSec(left)} left` : 'almost done'}</span>`;
+  const etaNow = left == null ? '' : `<span class="who-eta" title="Estimated on this PC">${left > 2 ? `about ${fmtSec(left)} left` : 'almost done'}</span>`;
   const body = alt.error ? esc(alt.error)
     : !alt.text && streaming ? `<span class="status-line">${esc(alt.status || 'Thinking…')}</span>`
     : HIDE_BLOCK.has(isMakerSkill(alt)?.output) ? (stripMediaBlock(alt.text) ? markdown(stripMediaBlock(alt.text)) : streaming ? `<span class="status-line">Writing the ${MEDIA_WORD[skillById(alt.skillId).output]} prompt…</span>` : '')
     : markdown(alt.text || '');
   const tools = [];
-  if (m.alts.length > 1) tools.push(`<button class="tool" data-act="prev" data-id="${m.id}" aria-label="Previous answer">‹</button><span class="small muted">${m.altIndex + 1} / ${m.alts.length}</span><button class="tool" data-act="next" data-id="${m.id}" aria-label="Next answer">›</button>`);
-  if (!pending) {
-    if (isLast) tools.push(`<button class="tool" data-act="regen" data-id="${m.id}" title="Write a new answer">${icon('refresh', 15)} Regenerate</button><button class="tool" data-act="other" data-id="${m.id}" title="Answer again with a different model or stack; flip between the answers with ‹ ›">${icon('layers', 15)} Try another model</button><button class="tool" data-act="continue" data-id="${m.id}">Continue</button>`);
-    if (alt.text && !alt.check && !checkRunning(m)) tools.push(`<button class="tool" data-act="check" data-id="${m.id}">${icon('shield', 15)} Fact check</button>`);
-    if (alt.text) tools.push(`<button class="tool" data-act="speak" data-id="${m.id}" title="Read this answer aloud">${icon('volume', 15)} ${speakingId === m.id ? 'Stop' : 'Listen'}</button><button class="tool" data-act="doc" data-id="${m.id}" title="Open it as a document beside the chat, to edit and refine">${icon('doc', 15)} Edit as document</button>`);
-    tools.push(`<button class="tool" data-act="copy" data-id="${m.id}">${icon('copy', 15)} Copy</button><button class="tool" data-act="saveas" data-id="${m.id}">${icon('download', 15)} Save as…</button><button class="tool" data-act="del" data-id="${m.id}" title="Delete">${icon('trash', 15)}</button>`);
+  if (m.alts.length > 1) tools.push(`<span class="alt-switch" title="${m.alts.length} answers to this question${alt.target ? `; this one is by ${esc(targetLabel(alt.target))}` : ''}"><button class="tool icon" data-act="prev" data-id="${m.id}" aria-label="Previous answer">‹</button><span>${m.altIndex + 1} / ${m.alts.length}</span><button class="tool icon" data-act="next" data-id="${m.id}" aria-label="Next answer">›</button></span>`);
+  if (!streaming && !pending) {
+    if (alt.text) tools.push(tb('copy', m.id, 'copy', 'Copy'));
+    if (isLast) tools.push(tb('regen', m.id, 'refresh', 'Regenerate'), tb('other', m.id, 'layers', 'Try another model'));
+    if (alt.text) tools.push(`<button class="tool icon ${speakingId === m.id ? 'on' : ''}" data-act="speak" data-id="${m.id}" title="${speakingId === m.id ? 'Stop reading' : 'Listen'}" aria-label="Listen">${icon('volume', 16)}</button>`, tb('doc', m.id, 'doc', 'Edit as document'));
+    tools.push(tb('more', m.id, 'more', 'More: continue, fact check, save as, branch, delete'));
   }
+  const model = alt.target ? targetLabel(alt.target) : alt.imported ? '' : '';
   return `<div class="msg assistant" data-msg="${m.id}">
-    <div class="who-line"><span>${esc(a.emoji)} ${esc(a.name)}</span>${etaNow}${alt.skillId && skillById(alt.skillId) ? `<span class="badge b-peach">⚡ ${esc(skillById(alt.skillId).name)}</span>` : ''}${alt.target ? `<span class="badge b-lav">${esc(targetLabel(alt.target))}</span>` : ''}${alt.stats?.tps ? `<span class="badge b-mint" title="${esc(statsTitle(alt))}">${Math.round(alt.stats.tps * 0.75)} words/s</span>` : ''}${alt.imported ? `<span class="badge">From ${esc(alt.imported)}</span>` : ''}</div>
+    <div class="av" aria-hidden="true">${esc(a.emoji)}</div>
+    <div class="msg-main">
+    <div class="who-line"><b>${esc(a.name)}</b>${model ? `<span class="who-model">${esc(model)}</span>` : ''}${alt.skillId && skillById(alt.skillId) ? `<span class="badge b-peach">⚡ ${esc(skillById(alt.skillId).name)}</span>` : ''}${alt.imported ? `<span class="badge">From ${esc(alt.imported)}</span>` : ''}${etaNow}${alt.stats?.tps && !streaming ? `<span class="who-speed" title="${esc(statsTitle(alt))}">${Math.round(alt.stats.tps * 0.75)} words/s</span>` : ''}${m.t ? `<span class="who-time">${esc(msgTime(m))}</span>` : ''}</div>
     ${metaRow(stepsHTML(alt, streaming) + toolsHTML(alt) + memoryChipHTML(alt) + (alt.reasoning ? `<details class="think chip-d"><summary>${streaming && !alt.text ? '<span class="pulse"></span>Thinking…' : '💭 Thought it through'}</summary><div>${esc(alt.reasoning)}</div></details>` : ''))}
     <div class="bubble md ${streaming ? 'streaming' : ''} ${alt.error ? 'error' : ''}">${body}</div>
     ${downloadHTML(m, alt, streaming)}
     ${appButtonsHTML(m, alt, streaming)}
     ${skillMediaHTML(m, alt, streaming)}
     ${checkHTML(m, alt)}
-    ${alt.sources?.length ? `<div class="sources"><span class="src-label">Sources</span>${alt.sources.map((s, k) => `<${s.url ? `a href="${esc(s.url)}"` : 'span'} class="src-chip" title="${esc(s.title || s.url || '')}"><span class="cite">${k + 1}</span>${esc(s.url ? domainOf(s.url) : s.title)}${s.url ? '' : ''}</${s.url ? 'a' : 'span'}>`).join('')}</div>` : ''}
-    <div class="msg-tools">${tools.join('')}</div>
+    ${alt.sources?.length ? `<div class="sources"><span class="src-label">Sources</span>${alt.sources.map((s, k) => `<${s.url ? `a href="${esc(s.url)}"` : 'span'} class="src-chip" title="${esc(s.title || s.url || '')}"><span class="cite">${k + 1}</span>${esc(s.url ? domainOf(s.url) : s.title)}</${s.url ? 'a' : 'span'}>`).join('')}</div>` : ''}
+    ${tools.length ? `<div class="msg-tools">${tools.join('')}</div>` : ''}
+    ${isLast && !pending && alt.text && !alt.error && !isMakerSkill(alt) && !alt.imported ? followupsHTML(alt) : ''}
+    </div>
   </div>`;
+}
+
+// Less-used actions, tucked behind ⋯.
+function moreMenu(chat, m, anchor) {
+  closeMenus();
+  const i = chat.messages.indexOf(m);
+  const alt = m.alts[m.altIndex] || {};
+  const r = anchor.getBoundingClientRect();
+  const menu = document.createElement('div');
+  menu.className = 'menu';
+  menu.innerHTML = [
+    i === chat.messages.length - 1 && alt.text ? '<button data-mm="continue">Continue writing</button>' : '',
+    alt.text && !alt.check && !checkRunning(m) ? '<button data-mm="check">✓ Fact check this answer</button>' : '',
+    alt.text ? '<button data-mm="saveas">⬇ Save as Word, PDF, PowerPoint…</button>' : '',
+    '<button data-mm="branch">↳ Branch: new chat from here</button>',
+    '<button data-mm="del" class="danger">Delete</button>',
+  ].join('');
+  document.body.appendChild(menu);
+  const h = menu.offsetHeight;
+  menu.style.top = `${r.top - h - 6 > 8 ? r.top - h - 6 : r.bottom + 4}px`;
+  menu.style.left = `${Math.max(8, Math.min(r.left, window.innerWidth - menu.offsetWidth - 8))}px`;
+  menu.querySelector('button')?.focus();
+  menu.addEventListener('click', (e) => {
+    const act = e.target.closest('[data-mm]')?.dataset.mm;
+    closeMenus();
+    if (act) messageAction(chat, act, m.id, anchor);
+  });
 }
 
 function scrollDown(force) {
@@ -242,7 +287,16 @@ function bindChat() {
   $('#tog-fact').addEventListener('click', () => { chat.factCheck = !factOn(chat, a); save(); render(); });
   $('#net-pill').addEventListener('click', toggleNet);
   $('#chat-more').addEventListener('click', (e) => { e.stopPropagation(); chatMenu(e.currentTarget, chat); });
-  $('#messages').addEventListener('click', (e) => { const b = e.target.closest('[data-act]'); if (b) messageAction(chat, b.dataset.act, b.dataset.id, b); });
+  $('#messages').addEventListener('click', (e) => {
+    const f = e.target.closest('[data-followup]');
+    if (f) { input.value = f.dataset.followup; chat.draft = input.value; sendOrStop(); return; }
+    const b = e.target.closest('[data-act]'); if (b) messageAction(chat, b.dataset.act, b.dataset.id, b);
+  });
+  // A button to jump back down appears when you've scrolled up to read.
+  const box = $('#messages');
+  const latest = $('#to-latest');
+  box.addEventListener('scroll', () => { latest.hidden = box.scrollHeight - box.scrollTop - box.clientHeight < 400; }, { passive: true });
+  latest.addEventListener('click', () => box.scrollTo({ top: box.scrollHeight, behavior: 'smooth' }));
   $('#chat-body').addEventListener('click', (e) => { const b = e.target.closest('[data-fp]'); if (b) factPanelAction(chat, b.dataset.fp, b.dataset.id); });
   $('#att-row').addEventListener('click', (e) => {
     const x = e.target.closest('[data-unattach]');
@@ -273,7 +327,7 @@ function bindChat() {
     }
     if (!resolveTarget(chat, a)) { toast('Get a model first: open the Stack Advisor.'); go({ view: 'stacks' }); return; }
     // An assistant can apply a skill to every message (the Image Artist paints each request).
-    chat.messages.push({ id: uid(), role: 'user', text, attachments: atts, skillId: chat.pendingSkill || (skillById(a.skill) ? a.skill : undefined) });
+    chat.messages.push({ id: uid(), t: now(), role: 'user', text, attachments: atts, skillId: chat.pendingSkill || (skillById(a.skill) ? a.skill : undefined) });
     chat.pendingSkill = null; chat.suggested = null;
     drafts[chat.id] = [];
     if (chat.title === 'New chat') chat.title = (text || atts[0]?.name || 'New chat').replace(/\s+/g, ' ').slice(0, 60);
@@ -420,7 +474,7 @@ async function generate(chat, rerollMsg, withTarget) {
   let msg = rerollMsg;
   let upTo;
   if (msg) { upTo = chat.messages.indexOf(msg); msg.alts.push({ text: '', target }); msg.altIndex = msg.alts.length - 1; }
-  else { upTo = chat.messages.length; msg = { id: uid(), role: 'assistant', alts: [{ text: '', target }], altIndex: 0 }; chat.messages.push(msg); }
+  else { upTo = chat.messages.length; msg = { id: uid(), t: now(), role: 'assistant', alts: [{ text: '', target }], altIndex: 0 }; chat.messages.push(msg); }
   const alt = msg.alts[msg.altIndex];
   alt.status = 'Getting ready…';
   alt.t0 = Date.now();
@@ -584,7 +638,8 @@ function messageAction(chat, act, id, el) {
   else if (act === 'branch') branchChat(chat, m.id);
   else if (act === 'doc') openDoc(chat, msgText(m).replace(/<think>[\s\S]*?<\/think>/g, '').trim(), answerTitle(chat, m));
   else if (act === 'dl') exportAnswer(chat, m, document.querySelector(`[data-act="dl"][data-id="${id}"]`)?.dataset.fmt);
-  else if (act === 'saveas') saveAsMenu(chat, m, document.querySelector(`[data-act="saveas"][data-id="${id}"]`));
+  else if (act === 'saveas') saveAsMenu(chat, m, el || document.querySelector(`[data-act="more"][data-id="${id}"]`));
+  else if (act === 'more') moreMenu(chat, m, el);
   else if (act === 'check' || act === 'recheck') { const alt = m.alts[m.altIndex]; delete alt.check; factPanel = { chatId: chat.id, msgId: m.id }; factCheck(chat, m, alt); }
   else if (act === 'factopen') { factPanel = factPanel?.msgId === m.id && !S.data.prefs.factPanelPinned ? null : { chatId: chat.id, msgId: m.id }; paintFactPanel(chat); paintAll(chat); }
   else if (act === 'del') confirmBox('Delete this message?').then((ok) => { if (ok) { chat.messages.splice(idx, 1); save(); render(); } });

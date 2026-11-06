@@ -49,7 +49,7 @@ function speakMessage(m) {
   speak(msgText(m), { id: m.id });
 }
 function repaintSpeak() {
-  $$('[data-act="speak"]').forEach((b) => { b.innerHTML = `${icon('volume', 15)} ${speakingId === b.dataset.id ? 'Stop' : 'Listen'}`; b.classList.toggle('on', speakingId === b.dataset.id); });
+  $$('[data-act="speak"]').forEach((b) => { b.title = speakingId === b.dataset.id ? 'Stop reading' : 'Listen'; b.classList.toggle('on', speakingId === b.dataset.id); });
 }
 window.speechSynthesis?.addEventListener?.('voiceschanged', () => {});
 

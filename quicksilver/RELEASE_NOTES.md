@@ -1,3 +1,11 @@
+## What's new in Quicksilver 2.11
+
+- **A calmer, clearer chat screen.** Each answer sits beside its assistant's icon in a comfortable reading column. The name, model and speed are one quiet line, and the time shows when you hover.
+- **Actions as icons.** Copy, regenerate, try another model, listen and edit as a document sit in one row of icons under each answer. Continue, fact check, save as, branch and delete are under ⋯.
+- **Follow-up suggestions.** Under the latest answer, one click asks a natural next question ("Give me an example", "Explain how this works"…).
+- **Jump to latest.** When you scroll up to reread, a button takes you back to the newest message.
+- Thinking now shimmers softly instead of spinning, and the tab bar no longer shows a scrollbar.
+
 ## What's new in Quicksilver 2.10
 
 - **Try another model.** Under any answer: ask the same question to a different model or stack. Every version is kept; flip between them with ‹ ›.

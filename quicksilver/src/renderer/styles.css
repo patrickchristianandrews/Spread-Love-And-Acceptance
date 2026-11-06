@@ -945,3 +945,56 @@ code.sel { user-select: all; background: var(--soft); padding: 1px 6px; border-r
 .pal-foot { padding: 8px 16px; border-top: 1px solid var(--line-soft); }
 .math-block { overflow-x: auto; overflow-y: hidden; margin: .4em 0 .9em; padding: 2px 0; }
 .md .katex { font-size: 1.08em; }
+
+/* ===== Chat screen, 2.11: answers you can read and act on calmly ===== */
+.chat-col { position: relative; }
+.messages { padding: 32px 28px 18px; }
+.messages-inner { max-width: 800px; gap: 34px; }
+/* Answers: a small avatar beside a reading column. */
+.msg.assistant { flex-direction: row; align-items: flex-start; gap: 14px; }
+.msg.assistant .av { width: 32px; height: 32px; flex: none; display: grid; place-items: center; border-radius: 10px; font-size: 1.05rem; background: var(--badge-tile); border: 1px solid var(--badge-tile-line); margin-top: 1px; }
+.msg-main { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 9px; }
+.msg.assistant .who-line { font-size: .84rem; font-weight: 650; color: var(--faint); gap: 6px 10px; min-height: 32px; }
+.msg.assistant .who-line > b { color: var(--text); font-weight: 780; font-size: .9rem; }
+.who-model { color: var(--muted); font-weight: 600; }
+.who-model::before, .who-speed::before { content: "·"; margin-right: 10px; color: var(--line); }
+.who-speed { font-variant-numeric: tabular-nums; cursor: help; }
+.who-eta { color: var(--accent); font-weight: 700; font-variant-numeric: tabular-nums; }
+.who-time { margin-left: auto; font-size: .76rem; opacity: 0; transition: opacity .15s; white-space: nowrap; }
+.msg:hover .who-time { opacity: 1; }
+.msg.assistant .bubble { font-size: 1.02rem; line-height: 1.78; padding: 0; }
+.msg.assistant .bubble > .status-line { padding: 4px 0; }
+/* While it's thinking, the status text shimmers gently. */
+.msg.assistant .bubble .status-line { background: linear-gradient(90deg, var(--muted) 0%, var(--text) 45%, var(--muted) 90%); background-size: 220% 100%; -webkit-background-clip: text; background-clip: text; color: transparent; animation: shimmer 2.2s linear infinite; }
+.msg.assistant .bubble .status-line::before { border-color: var(--accent-soft); border-top-color: var(--accent); }
+@keyframes shimmer { from { background-position: 110% 0; } to { background-position: -110% 0; } }
+.bubble.streaming::after { width: 7px; height: 1.05em; border-radius: 3px; animation: blink 1.05s ease-in-out infinite; }
+/* Questions. */
+.msg.user { gap: 6px; }
+.msg.user .bubble { max-width: min(78%, 620px); font-size: 1rem; line-height: 1.6; padding: 11px 17px; }
+/* Actions: quiet icons, fully visible on hover and under the latest answer. */
+.msg-tools { gap: 2px; opacity: 0; margin-left: -6px; min-height: 30px; }
+.msg.user .msg-tools { margin: 0 -4px 0 0; }
+.msg:hover .msg-tools, .msg:last-child .msg-tools, .msg-tools:focus-within { opacity: 1; }
+.tool.icon { width: 32px; height: 30px; padding: 0; justify-content: center; border-radius: 8px; color: var(--faint); font-size: 1.1rem; font-weight: 700; }
+.tool.icon:hover { color: var(--text); background: var(--hover); border-color: transparent; }
+.tool.icon.on { color: var(--accent); background: var(--accent-tint); }
+.alt-switch { display: inline-flex; align-items: center; gap: 0; margin-right: 6px; padding: 0 2px; border: 1px solid var(--line-soft); border-radius: 9px; font-size: .8rem; font-weight: 700; color: var(--muted); font-variant-numeric: tabular-nums; }
+.alt-switch .tool.icon { width: 24px; height: 26px; }
+/* Follow-ups under the latest answer. */
+.followups { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 2px; }
+.fu { border: 1px solid var(--line-soft); background: transparent; color: var(--muted); border-radius: 999px; padding: 6px 14px; font: inherit; font-size: .86rem; font-weight: 650; cursor: pointer; transition: border-color .15s, color .15s, background .15s; }
+.fu:hover { border-color: var(--accent-line); color: var(--accent); background: var(--accent-tint); }
+.fu::before { content: "↳ "; opacity: .55; }
+/* Sources and meta chips sit closer to the text. */
+.msg-main .sources { margin-top: 2px; }
+.msg-main .meta-row:empty { display: none; }
+/* Jump to the latest message. */
+.to-latest { position: absolute; left: 50%; bottom: 150px; transform: translateX(-50%); z-index: 4; width: 38px; height: 38px; border-radius: 50%; border: 1px solid var(--line); background: var(--panel); color: var(--text); display: grid; place-items: center; box-shadow: var(--sh-3); cursor: pointer; animation: enter .18s var(--ease) both; }
+.to-latest:hover { color: var(--accent); border-color: var(--accent-line); }
+.to-latest[hidden] { display: none; }
+/* Tabs: no scrollbar, edges fade out when there are more tabs than fit. */
+.chat-tabs { scrollbar-width: none; mask-image: linear-gradient(90deg, #000 calc(100% - 28px), transparent); }
+.chat-tabs::-webkit-scrollbar { display: none; }
+.ctab { max-width: 200px; min-width: 96px; }
+@media (max-width: 900px) { .msg.assistant .av { display: none; } .messages { padding: 22px 16px 12px; } }

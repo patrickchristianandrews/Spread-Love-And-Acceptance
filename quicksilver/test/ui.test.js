@@ -559,6 +559,22 @@ function redPng(size = 64) {
   await win.waitForSelector('.badge:has-text("From ChatGPT")');
   console.log('✓ power tools: another model, branch, chat settings, maths, context meter, better prompt, palette, ChatGPT import');
 
+  // The answer area: follow-up suggestions send a message; ⋯ holds the less-used actions.
+  await win.click('[data-nav="newchat"]');
+  await win.selectOption('#pick-model', 'local:qwen3-8b');
+  await win.fill('#input', 'Name three rivers');
+  await win.keyboard.press('Enter');
+  await idle();
+  await win.click('.followups .fu >> nth=1');
+  await waitAnswer(/Give me an example/);
+  await idle();
+  await win.click('.msg.assistant:last-child [data-act="more"]');
+  await win.waitForSelector('.menu [data-mm="continue"]');
+  await win.click('.menu [data-mm="saveas"]');
+  await win.waitForSelector('.menu [data-f="docx"]');
+  await win.keyboard.press('Escape');
+  console.log('✓ answer area: follow-ups, more menu, save as');
+
   if (errors.length) console.log('PAGE ERRORS:', errors);
   assert.deepEqual(errors, []);
   await app.close();

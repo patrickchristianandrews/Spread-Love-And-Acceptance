@@ -313,7 +313,7 @@ function chatMenu(anchor, chat) {
 }
 function closeMenus() { $$('.menu').forEach((m) => m.parentNode.removeChild(m)); }
 // Clicks outside a menu close it (but not the click on the button that just opened one).
-document.addEventListener('click', (e) => { if (!e.target.closest('.menu, [data-chat-menu], [data-act="saveas"], [data-act="other"], [data-dp="save"], #chat-more')) closeMenus(); });
+document.addEventListener('click', (e) => { if (!e.target.closest('.menu, [data-chat-menu], [data-act="saveas"], [data-act="other"], [data-act="more"], [data-dp="save"], #chat-more')) closeMenus(); });
 document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeMenus(); });
 
 // ---------- charts (```chart JSON blocks become SVG charts) ----------
