@@ -23,9 +23,9 @@ function tiersHTML(r) {
   const cards = ['quick', 'balanced', 'accurate'].map((k) => {
     const s = r.tiers[k];
     const t = TIER_INFO[k];
-    if (!s) return `<div class="card tier-card muted-card"><h3>${t.icon} ${t.name}</h3><p class="small muted" style="font-weight:600">${k === 'accurate' ? 'The balanced setup is already the most accurate this PC can run well.' : 'Same as the balanced setup on this PC.'}</p></div>`;
+    if (!s) return `<div class="card tier-card muted-card"><h3>${t.name}</h3><p class="small muted" style="font-weight:600">${k === 'accurate' ? 'The balanced setup is already the most accurate this PC can run well.' : 'Same as the balanced setup on this PC.'}</p></div>`;
     return `<div class="card tier-card ${k === 'balanced' ? 'hl' : ''}">
-      <div class="row"><h3 class="grow">${t.icon} ${t.name}</h3>${k === 'balanced' ? '<span class="badge b-mint">Recommended</span>' : ''}</div>
+      <div class="row"><h3 class="grow">${t.name}</h3>${k === 'balanced' ? '<span class="badge b-mint">Recommended</span>' : ''}</div>
       <p class="small muted" style="font-weight:600;margin:4px 0 10px">${t.note}</p>
       <div class="tier-stats"><div><span class="label">Accuracy</span>${accDots(s.accuracy)}</div><div><span class="label">Per answer</span><b>⏱ ${fmtSec(s.secondsPerAnswer)}</b></div><div><span class="label">Download</span><b>${s.missingGB ? `${s.missingGB.toFixed(1)} GB` : 'Nothing'}</b></div></div>
       <div class="best-rows">${tierRows(s)}</div>
@@ -49,7 +49,7 @@ function howItWorksHTML(r) {
   if (r.cloud?.mode === 'check') steps.push('✅ Optional: a cloud AI double-checks the final answer (see below).');
   if (r.cloud?.mode === 'hard') steps.push('☁ Optional: hard questions can go to a cloud lead (see below); the rest never leave this PC.');
   const set = r.settings || {};
-  return `<div class="card how-card"><h3>🔍 How the ${esc(r.label)} stack works</h3>
+  return `<div class="card how-card"><h3>How the ${esc(r.label)} stack works</h3>
     <ol class="how-steps">${steps.map((x) => `<li>${x}</li>`).join('')}</ol>
     <div class="row small" style="flex-wrap:wrap;gap:6px">${set.web ? '<span class="badge b-mint">🌐 searches the web when useful</span>' : ''}${set.library ? '<span class="badge b-sky">📚 uses your knowledge bases</span>' : ''}<span class="badge b-lav">🎚️ creativity ${set.temperature ?? 0.5}</span><span class="badge b-lav">🧠 memory ${Math.round((set.contextSize || 8192) / 1024)}K tokens</span><span class="badge b-lav">🔒 private: runs on this PC</span></div>
   </div>`;

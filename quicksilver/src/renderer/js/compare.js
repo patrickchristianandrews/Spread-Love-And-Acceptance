@@ -51,7 +51,7 @@ function bestSetupHTML() {
     q.times.photo != null ? ['📷', 'Photos & screenshots', q.eyes && q.eyes !== q.lead ? `<b>${esc(q.eyes)}</b> reads the picture, <b>${esc(q.lead)}</b> answers` : `<b>${esc(q.lead)}</b> looks at it directly`, q.times.photo] : null,
   ].filter(Boolean);
   return `<div class="card hero best-setup">
-    ${head(`${esc(q.emoji)} ${esc(q.name)} ${starsHTML(q.stars)}`, `🖥️ Your PC: ${hwText(o.hardware)}`)}
+    ${head(`${esc(q.emoji)} ${esc(q.name)} ${starsHTML(q.stars)}`, `Your PC: ${hwText(o.hardware)}`)}
     <div class="bs-grid">
       <div class="bs-col"><h4>The team on this PC</h4>${q.members.map((m) => `<div class="bs-member"><b>${esc(m.name)}</b><div class="row bs-tags">${m.roles.map((r) => ROLE_TAG[r]).join('')}</div><div class="small muted">Runs on the ${esc(m.where)} · <span class="rate-${m.rating}">${esc(m.speed)}</span> · ~${m.wps} words/s ${m.measured ? '<span class="meas" title="Timed on this PC from real answers">✓ measured</span>' : '<span class="muted" title="Calculated from your hardware; becomes exact after the first answers">(estimate)</span>'}</div></div>`).join('')}</div>
       <div class="bs-col"><h4>How it works</h4>${flow.map(([ic, t, d, sec]) => `<div class="bs-flow"><span class="bs-ic">${ic}</span><div class="grow"><b>${t}</b><div class="small">${d}</div></div>${timeChip(sec, '')}</div>`).join('')}</div>
@@ -59,7 +59,7 @@ function bestSetupHTML() {
     </div>
     ${typicalHTML()}
     ${upgradeHTML}
-    <div class="bs-actions"><button class="btn" data-goto="compare">📊 Compare all stacks</button><button class="btn" data-upgrades>💡 Cheap upgrades for this PC</button><button class="btn ghost" data-goto="stacks">Customize</button></div>
+    <div class="bs-actions"><button class="btn" data-goto="compare">Compare all stacks</button><button class="btn" data-upgrades>Cheap upgrades for this PC</button><button class="btn ghost" data-goto="stacks">Customize</button></div>
   </div>`;
 }
 
@@ -72,14 +72,14 @@ function typicalHTML() {
   const vid = media(S.data.prefs.videoModel, (m) => m.kind === 'video');
   const edit = media(S.data.prefs.editModel, (m) => m.category === 'edit') || pic;
   const items = [
-    ['💬', 'Chat reply', etaFor(t, WORDS.chat), starsOf(t, 'general')],
-    ['🧠', 'Hard question', etaFor(t, WORDS.hard, { hard: true }), starsOf(t, 'reasoning')],
-    ['✍️', 'Email or post', etaFor(t, WORDS.writing), starsOf(t, 'writing')],
-    ['💻', 'Code', etaFor(t, WORDS.code, { hard: true }), starsOf(t, 'coding')],
-    ['📄', 'Report', etaFor(t, WORDS.document, { hard: true }), starsOf(t, 'office')],
-    ['🖼️', 'Picture', pic?.sec ?? null, pic?.stars ?? null, !pic],
-    ['🪄', 'Photo edit', edit?.sec ?? null, edit?.stars ?? null, !edit],
-    ['🎬', 'Video clip', vid?.sec ?? null, vid?.stars ?? null, !vid],
+    ['', 'Chat reply', etaFor(t, WORDS.chat), starsOf(t, 'general')],
+    ['', 'Hard question', etaFor(t, WORDS.hard, { hard: true }), starsOf(t, 'reasoning')],
+    ['', 'Email or post', etaFor(t, WORDS.writing), starsOf(t, 'writing')],
+    ['', 'Code', etaFor(t, WORDS.code, { hard: true }), starsOf(t, 'coding')],
+    ['', 'Report', etaFor(t, WORDS.document, { hard: true }), starsOf(t, 'office')],
+    ['', 'Picture', pic?.sec ?? null, pic?.stars ?? null, !pic],
+    ['', 'Photo edit', edit?.sec ?? null, edit?.stars ?? null, !edit],
+    ['', 'Video clip', vid?.sec ?? null, vid?.stars ?? null, !vid],
   ];
   return `<div class="typical"><span class="lbl">Typical on this PC</span>${items.map(([ic, name, sec, stars, missing]) => `<span class="typ" title="${missing ? 'Get a model for this in Stacks or Studio' : 'Estimated time and expected quality on this PC'}">${ic} ${name} ${missing ? '<span class="muted">· get a model</span>' : `<span class="muted">⏱ ${etaLabel(sec)}${stars != null ? ` · ${starText(stars)}` : ''}</span>`}</span>`).join('')}</div>`;
 }

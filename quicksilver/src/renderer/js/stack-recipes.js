@@ -198,7 +198,7 @@ function recipeCard(r) {
 
 function recipesHTML() {
   return `<div class="section"><h2>Stacks for specific work</h2><span class="small muted">${STACK_RECIPES.length} ready-made teams. ✓ ready · ⬇ downloads · ☁ needs a cloud connection · – not in Quicksilver yet</span></div>
-    ${RX_GROUPS.map(([g, label]) => { const list = STACK_RECIPES.filter((r) => r.group === g); return list.length ? `<h3 class="int-group">${esc(label)}</h3><div class="cards rx-grid">${list.map(recipeCard).join('')}</div>` : ''; }).join('')}`;
+    ${RX_GROUPS.map(([g, label]) => { const list = STACK_RECIPES.filter((r) => r.group === g); return list.length ? `<h3 class="int-group">${esc(label.replace(/^\S+\s/, ''))}</h3><div class="cards rx-grid">${list.map(recipeCard).join('')}</div>` : ''; }).join('')}`;
 }
 
 async function setUpRecipe(id) {

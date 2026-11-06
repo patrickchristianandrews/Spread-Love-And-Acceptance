@@ -21,7 +21,7 @@ views.stacks = {
     const goal = ([k, j]) => `<button class="goal ${advJob === k ? 'on' : ''}" data-job="${k}" aria-pressed="${advJob === k}">
       <span class="goal-ic">${j.icon}</span><span><b>${esc(j.label)}</b><span class="small muted">${esc(j.pitch)}</span></span></button>`;
     return `<div class="page">
-      <div class="page-head"><h1>Stacks</h1><button class="btn" data-goto="compare">📊 Compare stacks</button><button class="btn" id="infuse">${icon('sparkle', 16)} Infuse any AIs, including cloud</button></div>
+      <div class="page-head"><h1>Stacks</h1><button class="btn" data-goto="compare">Compare stacks</button><button class="btn" id="infuse">${icon('sparkle', 16)} Infuse any AIs, including cloud</button></div>
       <p class="lede">A stack makes several AI models work as one: they answer separately, then a lead combines the best of each and fixes mistakes. <b>Pick what you want to do</b>, and Quicksilver shows the best team for this PC, how strong and fast each option is, and which cloud AI (optional) would make it even better.</p>
       ${foundBanner()}
       <div class="section"><h2>1. Choose a stack</h2>${hwLine()}</div>
@@ -160,11 +160,11 @@ function mineTextHTML(r) {
     const any = S.installed.some((m) => m.kind === 'text');
     const why = any && r.job === 'open' ? 'None of your models are unfiltered ones yet. Use the setup on the right, or add a Hermes, Dolphin or Mistral model (from LM Studio, Ollama or Models).'
       : `No models on this PC yet. Use the setup on the right${S.found?.length ? ', add the ones found on this PC above,' : ''} or import a .gguf file under Models.`;
-    return `<div class="card adv-mine"><h3>🧩 Use the models you have</h3><p class="muted" style="font-weight:600">${why}</p></div>`;
+    return `<div class="card adv-mine"><h3>Use the models you have</h3><p class="muted" style="font-weight:600">${why}</p></div>`;
   }
   const p = textPlan(r);
   return `<div class="card hl adv-mine">
-    <div class="row"><h3 class="grow">🧩 Use the models you have</h3><span class="badge b-mint">Nothing to download</span></div>
+    <div class="row"><h3 class="grow">Use the models you have</h3><span class="badge b-mint">Nothing to download</span></div>
     <p class="small muted adv-help">Tick the models to combine. The best mix for ${esc(r.label.toLowerCase())} is already ticked.</p>
     <div class="pick-list" id="adv-rows">${rowsHTML(p)}</div>
     <div class="adv-opts">
@@ -198,9 +198,9 @@ function textSummary(p, r) {
 function mineKitHTML(r) {
   const main = r.roles[0];
   const pool = (role) => (r.yours || []).filter((y) => (role === 'helper' ? y.category === 'text' : role === 'animate' ? y.category === 'video' && y.animate : role === 'image' ? y.category === 'image' : y.category === role));
-  if (!r.mine) return `<div class="card adv-mine"><h3>🧩 Use the models you have</h3><p class="muted" style="font-weight:600">You don't have a model that ${esc(r.roleLabels[main].toLowerCase())} yet. Use the setup on the right, or pick one under Models → Images &amp; video.</p></div>`;
+  if (!r.mine) return `<div class="card adv-mine"><h3>Use the models you have</h3><p class="muted" style="font-weight:600">You don't have a model that ${esc(r.roleLabels[main].toLowerCase())} yet. Use the setup on the right, or pick one under Models → Images &amp; video.</p></div>`;
   return `<div class="card hl adv-mine">
-    <div class="row"><h3 class="grow">🧩 Use the models you have</h3><span class="badge b-mint">Nothing to download</span></div>
+    <div class="row"><h3 class="grow">Use the models you have</h3><span class="badge b-mint">Nothing to download</span></div>
     <p class="small muted adv-help">Choose a model for each job. Studio will use these by default.</p>
     <div class="kit-rows">${r.roles.map((role) => {
       const opts = pool(role);
@@ -216,13 +216,13 @@ function mineKitHTML(r) {
 function bestHTML(r) {
   const s = r.best;
   const media = r.kind === 'media';
-  if (!s || (media && !s.members[r.roles[0]])) return `<div class="card adv-best"><h3>🚀 Best for this PC</h3><p class="muted" style="font-weight:600">This PC doesn't have enough memory for ${esc(r.label.toLowerCase())} models.${media ? ' Studio\'s manual tools still work, or connect a cloud image API under Models.' : ' Close other apps, or connect a cloud API under Models.'}</p></div>`;
-  if (!s.better && (r.mine)) return `<div class="card adv-best ok"><h3>🚀 Best for this PC</h3><p style="font-weight:650;margin:6px 0 0">Your models are already the best fit for ${esc(r.label.toLowerCase())} on this PC. Nothing to download.</p></div>`;
+  if (!s || (media && !s.members[r.roles[0]])) return `<div class="card adv-best"><h3>Best for this PC</h3><p class="muted" style="font-weight:600">This PC doesn't have enough memory for ${esc(r.label.toLowerCase())} models.${media ? ' Studio\'s manual tools still work, or connect a cloud image API under Models.' : ' Close other apps, or connect a cloud API under Models.'}</p></div>`;
+  if (!s.better && (r.mine)) return `<div class="card adv-best ok"><h3>Best for this PC</h3><p style="font-weight:650;margin:6px 0 0">Your models are already the best fit for ${esc(r.label.toLowerCase())} on this PC. Nothing to download.</p></div>`;
   const rows = media
     ? r.roles.filter((role) => s.members[role]).map((role) => [`<span class="badge b-lav">${ROLE_ICON[role]} ${esc(r.roleLabels[role])}</span>`, s.members[role]])
     : s.ids.map((id) => [[s.members.vision === id && 'vision', s.members.drafters.includes(id) && 'draft', s.members.judge === id && 'lead'].filter(Boolean).map((k) => ROLE[k]).join(''), id]);
   return `<div class="card adv-best">
-    <div class="row"><h3 class="grow">🚀 Best for this PC</h3><span class="badge b-lav">${r.mine ? 'Upgrade' : 'Recommended'}</span></div>
+    <div class="row"><h3 class="grow">Best for this PC</h3><span class="badge b-lav">${r.mine ? 'Upgrade' : 'Recommended'}</span></div>
     <p class="small muted adv-help">The strongest ${esc(r.label.toLowerCase())} setup this PC can run.</p>
     <div class="best-rows">${rows.map(([tags, id]) => `<div class="best-row"><b class="grow">${esc(modelName(id))}</b>${s.have[id] ? '<span class="have">✓ you have it</span>' : ''}<span class="row" style="gap:4px">${tags}</span></div>`).join('')}</div>
     <div class="adv-foot"><span class="grow small" style="font-weight:700">${media ? '' : `⏱ About ${fmtSec(s.secondsPerAnswer)} per answer · `}${s.missingGB ? `${s.missingGB.toFixed(1)} GB to download` : 'Everything installed'}</span>

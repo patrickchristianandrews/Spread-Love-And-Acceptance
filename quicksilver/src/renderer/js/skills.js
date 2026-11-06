@@ -28,11 +28,11 @@ views.skills = {
       <div class="page-head"><h1>Skills</h1><label class="btn">⬆ Import SKILL.md<input type="file" id="sk-import" accept=".md,.markdown,text/markdown" multiple hidden></label><button class="btn primary" id="sk-new">＋ Create a skill</button></div>
       <p class="lede"><b>${allSkills().length} ready-made skills</b> for the things people use AI for most: make pictures, videos and beats, edit photos and video, build apps, write anything, research with sources, read aloud and make podcasts, and sort out money and contracts. Skills that make files give you a real file (PowerPoint, Word, Excel, MP3, PNG, MP4). Type <b>/</b> in any chat to use one, or press <b>⚡ Skills</b>. Quicksilver also suggests the right skill as you type.</p>
       <div class="row" style="margin-bottom:16px"><input id="sk-q" type="search" placeholder="Search skills" value="${esc(skillQuery)}" style="max-width:320px">
-        ${[['all', { label: 'All', icon: '✨' }], ...Object.entries(SKILL_CATEGORIES)].map(([k, c]) => `<button class="btn small ${skillCat === k ? 'on' : ''}" data-skcat="${k}">${c.icon} ${esc(c.label)}</button>`).join('')}</div>
+        ${[['all', { label: 'All' }], ...Object.entries(SKILL_CATEGORIES)].map(([k, c]) => `<button class="btn small ${skillCat === k ? 'on' : ''}" data-skcat="${k}">${esc(c.label)}</button>`).join('')}</div>
       ${Object.entries(SKILL_CATEGORIES).map(([k, c]) => {
         const items = list.filter((s) => s.category === k);
         if (!items.length) return '';
-        return `<div class="section"><h2>${c.icon} ${esc(c.label)} <span class="small muted" style="font-weight:600">· ${items.length}</span></h2>${c.pitch ? `<p class="small muted" style="margin:2px 0 0;font-weight:600">${esc(c.pitch)}</p>` : ''}</div><div class="cards" style="grid-template-columns:repeat(auto-fill,minmax(260px,1fr))">${items.map((s) => `
+        return `<div class="section"><h2>${esc(c.label)} <span class="small muted" style="font-weight:600">· ${items.length}</span></h2>${c.pitch ? `<p class="small muted" style="margin:2px 0 0;font-weight:600">${esc(c.pitch)}</p>` : ''}</div><div class="cards" style="grid-template-columns:repeat(auto-fill,minmax(260px,1fr))">${items.map((s) => `
           <div class="card">
             <div class="row"><span class="emoji-badge">${esc(s.icon)}</span><h3 class="grow">${esc(s.name)}</h3>${s.custom ? '<span class="badge b-pink">yours</span>' : ''}</div>
             <p class="desc" style="margin:10px 0">${esc(s.description)}</p>

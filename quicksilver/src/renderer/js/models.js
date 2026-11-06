@@ -98,7 +98,7 @@ function modelCard(m, est, kind) {
 }
 
 function filterBar(cats) {
-  return `<div class="row" style="margin-bottom:16px">${[['all', { label: 'All', icon: '✨' }], ...Object.entries(cats)].map(([k, c]) => `<button class="btn small ${catFilter === k ? 'on' : ''}" data-cat="${k}">${c.icon} ${esc(c.label)}</button>`).join('')}
+  return `<div class="row" style="margin-bottom:16px">${[['all', { label: 'All' }], ...Object.entries(cats)].map(([k, c]) => `<button class="btn small ${catFilter === k ? 'on' : ''}" data-cat="${k}">${esc(c.label)}</button>`).join('')}
     <label class="row small" style="margin-left:auto;font-weight:700"><input type="checkbox" id="fits-only" ${fitsOnly ? 'checked' : ''}> Only show models that fit my PC</label></div>`;
 }
 
@@ -109,7 +109,7 @@ function textHTML() {
   return `${filterBar(cats)}${Object.entries(cats).filter(([k]) => catFilter === 'all' || catFilter === k).map(([k, c]) => {
     const list = S.catalog.text.filter((m) => m.category === k && (!fitsOnly || S.est?.text[m.id]?.fit !== 'no'));
     if (!list.length) return '';
-    return `<div class="section"><h2>${c.icon} ${esc(c.label)} <span class="small muted" style="font-weight:600">· ${list.length}</span></h2>${c.note ? `<span class="small muted">${esc(c.note)}</span>` : ''}</div><div class="cards">${list.sort((a, b) => (order[S.est?.text[a.id]?.rating] ?? 5) - (order[S.est?.text[b.id]?.rating] ?? 5) || a.sizeGB - b.sizeGB).map((m) => modelCard(m, S.est?.text[m.id], 'text')).join('')}</div>`;
+    return `<div class="section"><h2>${esc(c.label)} <span class="small muted" style="font-weight:600">· ${list.length}</span></h2>${c.note ? `<span class="small muted">${esc(c.note)}</span>` : ''}</div><div class="cards">${list.sort((a, b) => (order[S.est?.text[a.id]?.rating] ?? 5) - (order[S.est?.text[b.id]?.rating] ?? 5) || a.sizeGB - b.sizeGB).map((m) => modelCard(m, S.est?.text[m.id], 'text')).join('')}</div>`;
   }).join('')}`;
 }
 
@@ -120,7 +120,7 @@ function mediaHTML() {
     ${filterBar(cats)}${Object.entries(cats).filter(([k]) => catFilter === 'all' || catFilter === k).map(([k, c]) => {
       const list = S.catalog.media.filter((m) => m.category === k && (!fitsOnly || S.est?.media[m.id]?.fit !== 'no'));
       if (!list.length) return '';
-      return `<div class="section"><h2>${c.icon} ${esc(c.label)}</h2></div><div class="cards">${list.map((m) => modelCard(m, S.est?.media[m.id], 'media')).join('')}</div>`;
+      return `<div class="section"><h2>${esc(c.label)}</h2></div><div class="cards">${list.map((m) => modelCard(m, S.est?.media[m.id], 'media')).join('')}</div>`;
     }).join('')}`;
 }
 
@@ -128,7 +128,7 @@ function mediaHTML() {
 
 let trend = null;      // { at, list } or { error }
 let trendType = 'all';
-const TREND_TYPES = { all: '✨ All', general: '💬 Everyday', reasoning: '🧠 Reasoning', coding: '💻 Coding', vision: '👁️ Vision', open: '🔓 Uncensored' };
+const TREND_TYPES = { all: 'All', general: 'Everyday', reasoning: 'Reasoning', coding: 'Coding', vision: 'Vision', open: 'Uncensored' };
 async function loadTrending(force = false) {
   try { trend = await qs.call('models:trending', force); } catch (err) { trend = { error: err.message }; }
   if (S.route.view === 'models' && modelsTab === 'trending') render();

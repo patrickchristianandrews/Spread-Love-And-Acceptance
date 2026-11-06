@@ -386,7 +386,7 @@ async function gatherSources(chat, a, query, force = {}) {
 }
 
 // How answers should look: easy to scan, warm and direct.
-const ANSWER_STYLE = 'How to format answers: start with the direct answer in the first sentence, without filler like "Great question!" or restating the question. Keep short answers short (a few sentences, no headings). For longer answers, use a few ## headings, short paragraphs, bulleted or numbered lists for steps and options, **bold** for the key terms and numbers, a Markdown table for comparisons, and fenced code blocks with the language for code. End longer answers with a one-line takeaway or next step. Use plain, friendly language.';
+const ANSWER_STYLE = 'How to write answers: write like a thoughtful expert talking to a smart friend. Start with the direct answer in the first sentence; no openers like "Great question!" and no restating the question. Prefer clear, well-built paragraphs with varied sentence length; use a numbered list only for real steps, bullets only for genuinely list-like items, and a Markdown table only for comparisons. Use a few ## headings only for long answers. Bold sparingly, for the one or two things that matter most. Avoid stock phrases ("delve", "it\'s important to note", "in today\'s world", "in conclusion", "I hope this helps") and emoji unless the user uses them. Code goes in fenced blocks with the language. Keep short answers short.';
 
 function systemPrompt(a, sources, strict) {
   const p = S.data.prefs;
