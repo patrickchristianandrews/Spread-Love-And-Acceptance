@@ -190,6 +190,20 @@ function redPng(size = 64) {
     await win.dblclick('.side-resize');
     assert.equal(await win.evaluate(() => S.data.prefs.sideWidth), undefined, 'double-click resets');
     console.log('✓ sidebar: resizable and remembered');
+  // Chat tabs: open a second chat as a tab, switch, close with the ×.
+  {
+    const first = await win.evaluate(() => S.route.id);
+    await win.keyboard.press('Control+t');
+    await win.waitForSelector('.chat-tabs .ctab.on');
+    const second = await win.evaluate(() => S.route.id);
+    assert.notEqual(first, second);
+    assert.ok(await win.locator('.ctab').count() >= 2, 'two tabs');
+    await win.click(`.ctab[data-tab-id="${first}"]`);
+    await win.waitForFunction((id) => S.route.id === id, first);
+    await win.click(`[data-tab-close="${second}"]`);
+    await win.waitForFunction((id) => !S.data.prefs.tabs.includes(id), second);
+    console.log('✓ chat tabs: open, switch, close');
+  }
   }
 
   // Skills: "/" picker, the chip, the skill applied to the request, the file button.

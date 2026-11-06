@@ -27,6 +27,7 @@ views.chat = {
       if (!chat) { setTimeout(() => newChat(), 0); return '<div class="page"></div>'; }
       S.route.id = chat.id;
     }
+    ensureTab(chat.id);
     const a = assistantById(chat.assistantId);
     const target = resolveTarget(chat, a);
     const lib = chat.library ?? a.library;
@@ -35,6 +36,7 @@ views.chat = {
     const tools = toolsOn(chat, a);
     const chip = (id, ic, label, on, title) => `<button class="chip-tog ${on ? 'on' : ''}" id="${id}" aria-pressed="${on}" title="${title}">${icon(ic, 16)}<span>${label}</span>${on ? icon('check', 14) : ''}</button>`;
     return `<div class="chat">
+      ${tabsHTML(chat)}
       <header class="chat-top">
         <div class="pickers">
           <label class="pill-select" title="Assistant"><span class="pill-emoji">${esc(a.emoji)}</span><select id="pick-assistant" aria-label="Assistant">${S.data.assistants.map((x) => `<option value="${x.id}" ${x.id === a.id ? 'selected' : ''}>${esc(x.name)}</option>`).join('')}</select>${icon('chevron', 16)}</label>
@@ -166,6 +168,7 @@ function scrollDown(force) {
 function bindChat() {
   const chat = chatById(S.route.id);
   if (!chat) return;
+  bindTabs();
   const a = assistantById(chat.assistantId);
   const input = $('#input');
   input.value = chat.draft || '';
@@ -252,6 +255,7 @@ function bindChat() {
   warmUp(chat, a);
 
   function sendOrStop() {
+    if (pending && pending.chatId !== chat.id) { const other = chatById(pending.chatId); toast(`One answer at a time: "${other?.title || 'another chat'}" is still answering. It will finish in a moment, or stop it in its tab.`, 6000); return; }
     if (pending) { qs.abortChat(pending.requestId); return; }
     const text = input.value.trim();
     const atts = drafts[chat.id] || [];
