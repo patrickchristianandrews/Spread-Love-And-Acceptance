@@ -536,7 +536,7 @@ async function collect(gen) {
   }
 
   // Catalog: goals, recognising your models, and the advisor (yours vs best for this PC).
-  assert.deepEqual(Object.keys(catalog.JOBS), ['general', 'reasoning', 'office', 'research', 'writing', 'open', 'coding', 'create', 'edit']);
+  assert.deepEqual(Object.keys(catalog.JOBS), ['general', 'fast', 'reasoning', 'office', 'research', 'writing', 'vision', 'open', 'coding', 'create', 'edit']);
   assert.equal(catalog.matchCatalog('Meta-Llama-3.1-8B-Instruct-Q4_K_M.gguf')?.id, 'llama-3.1-8b');
   assert.equal(catalog.matchCatalog('phi4:latest')?.id, 'phi-4');
   assert.equal(catalog.matchCatalog('Phi-4-mini-instruct-Q4_K_M')?.id, 'phi-4-mini');
