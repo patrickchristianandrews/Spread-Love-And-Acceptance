@@ -97,7 +97,7 @@ function redPng(size = 64) {
   }
 
   r = await ask('What is 17 × 23? Work it out step by step.', null, 'stack:quicksilver');
-  const final = (r.a.match(/\d[\d,]*/g) || []).pop();
+  const final = ((r.a.match(/\d[\d,]*/g) || []).pop() || '').replace(/,+$/, '');
   console.log(`  steps: ${r.steps.join(' → ') || '(none)'}; final number: ${final}`);
   assert.equal(final, '391', 'the hard question is answered correctly');
   assert.ok(r.steps.length >= 2, 'a hard question takes the two-model route');
