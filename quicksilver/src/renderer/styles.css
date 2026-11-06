@@ -753,3 +753,18 @@ a.src-chip:hover { border-color: var(--accent); color: var(--accent); }
 .md-need { border-color: color-mix(in srgb, #fb923c 45%, var(--line-soft)); margin-bottom: 12px; }
 .md-steps { margin: 4px 0 0; padding-left: 1.3em; line-height: 1.55; }
 .md-steps li { margin: 6px 0; }
+
+/* Resizable sidebar (sidebar.js) */
+.app { grid-template-columns: var(--side-w, 264px) 1fr; }
+.app.collapsed { grid-template-columns: 68px 1fr; }
+.sidebar { position: relative; }
+.side-resize { position: absolute; top: 0; right: -4px; width: 8px; height: 100%; cursor: col-resize; z-index: 5; }
+.side-resize::after { content: ""; position: absolute; left: 3px; top: 0; bottom: 0; width: 2px; background: transparent; transition: background .15s; }
+.side-resize:hover::after, body.resizing .side-resize::after { background: var(--accent); }
+.app.collapsed .side-resize, .app.collapsed .side-split { display: none; }
+.side-split { height: 10px; margin: 2px 6px; cursor: row-resize; display: grid; place-items: center; flex: none; }
+.side-split span { width: 36px; height: 4px; border-radius: 4px; background: var(--line-soft); transition: background .15s, width .15s; }
+.side-split:hover span, body.resizing .side-split span { background: var(--accent); width: 56px; }
+.sidebar .nav.sized { overflow-y: auto; flex: none; }
+body.resizing, body.resizing * { user-select: none !important; }
+body.resizing .app { transition: none; }

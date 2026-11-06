@@ -178,6 +178,19 @@ function redPng(size = 64) {
   await win.keyboard.press('Escape');
   await win.waitForFunction(() => !document.querySelector('.sel-pop') && document.querySelector('#pick-effort').value === 'thorough');
   console.log('✓ dropdown menus: readable, click and keyboard');
+  // The sidebar can be resized by dragging its edge, and the size is remembered.
+  {
+    const edge = await win.locator('.side-resize').boundingBox();
+    await win.mouse.move(edge.x + 4, edge.y + 300);
+    await win.mouse.down();
+    await win.mouse.move(edge.x + 104, edge.y + 300, { steps: 5 });
+    await win.mouse.up();
+    const w = await win.evaluate(() => S.data.prefs.sideWidth);
+    assert.ok(w > 300, `sidebar widened (${w})`);
+    await win.dblclick('.side-resize');
+    assert.equal(await win.evaluate(() => S.data.prefs.sideWidth), undefined, 'double-click resets');
+    console.log('✓ sidebar: resizable and remembered');
+  }
 
   // Skills: "/" picker, the chip, the skill applied to the request, the file button.
   await win.waitForFunction(() => !document.querySelector('.fact-chip.k-run'), null, { timeout: 60000 });

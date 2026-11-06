@@ -42,6 +42,7 @@ function paintIcons(root = document) {
 const systemDark = window.matchMedia('(prefers-color-scheme: dark)');
 systemDark.addEventListener?.('change', () => S.data && applyPrefs());
 function applyPrefs() {
+  applySideSize();
   const t = S.data.prefs.theme || 'dark';
   document.documentElement.dataset.theme = t === 'system' ? (systemDark.matches ? 'dark' : 'light') : t;
   const tb = document.getElementById('theme-btn');
@@ -129,7 +130,7 @@ async function init() {
     for (const c of S.data.chats) if (retired.includes(c.assistantId)) c.assistantId = 'as-general';
     if (retired.includes(S.data.prefs.lastAssistant)) S.data.prefs.lastAssistant = 'as-general';
   }
-  applyPrefs();
+  applyPrefs(); setUpSidebarResize();
   await Promise.all([refreshModels(), refreshProviders()]);
   Promise.all([qs.call('int:list'), qs.call('mcp:list')]).then(([c, m]) => { S.hasIntegrations = c.some((x) => x.enabled) || m.length > 0; }).catch(() => {});
   save();
