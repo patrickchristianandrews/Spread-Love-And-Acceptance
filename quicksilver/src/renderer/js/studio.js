@@ -16,7 +16,7 @@ views.studio = {
   html() {
     const tabs = { create: '🎨 Create image', edit: '🪄 Edit photo', video: '🎬 Create video', vedit: '✂️ Edit video', music: '🎵 Music', voice: '🎙️ Voice', tools: '🧰 Quick fixes', gallery: `🖼️ Gallery (${gallery.length})` };
     return `<div class="page">
-      <div class="page-head"><h1>Studio</h1><label class="btn">⬆ Upload photo, video or sound<input type="file" id="upload" accept="image/*,video/*,audio/*" multiple hidden></label></div>
+      <div class="page-head"><h1>Create</h1><label class="btn">⬆ Upload photo, video or sound<input type="file" id="upload" accept="image/*,video/*,audio/*" multiple hidden></label></div>
       <div class="tabs">${Object.entries(tabs).map(([k, l]) => `<button class="tab ${studioTab === k ? 'active' : ''}" data-stab="${k}">${l}</button>`).join('')}</div>
       ${({ create: createHTML, edit: editHTML, video: videoHTML, vedit: veditHTML, music: musicHTML, voice: voiceHTML, tools: fixesHTML, gallery: galleryHTML })[studioTab]()}
     </div>`;
@@ -67,7 +67,7 @@ async function improvePrompt(btn) {
   const text = box.value.trim();
   if (!text) { toast('Write a few words first, then press Improve.'); return; }
   const helper = promptHelper();
-  if (!helper) { toast('Install a text model to write prompts (Stacks → Photo & video generation).', 6000); return; }
+  if (!helper) { toast('Install a text model to write prompts (Teams → Photo & video generation).', 6000); return; }
   btn.disabled = true; btn.textContent = '✨ Writing…';
   try {
     const out = await askAI(helper, IMPROVE[btn.dataset.kind], text);

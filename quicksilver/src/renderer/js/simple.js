@@ -2,7 +2,7 @@
 // click away under "More" (sidebar) and "Options" (message box). Nothing is removed: switch to
 // the full view in Settings → General.
 //
-// Automatic model choice: for each question, Quicksilver picks the strongest model or stack
+// Automatic model choice: for each question, Quicksilver picks the strongest model or team
 // that can answer quickly on this PC (about 20 seconds; a minute for hard questions), the one
 // that can see for photos, and a coding model for code.
 'use strict';
@@ -67,12 +67,12 @@ function composerOptions(chat, anchor) {
   menu.className = 'menu opts-menu';
   menu.innerHTML = `
     <button data-o="tog-web" ${S.config?.offline ? 'disabled title="Go online to search the web"' : ''}>${icon('globe', 16)} Search the web<span class="grow"></span>${on('tog-web') ? icon('check', 15) : ''}</button>
-    <button data-o="tog-lib">${icon('book', 16)} Use my knowledge<span class="grow"></span>${on('tog-lib') ? icon('check', 15) : ''}</button>
-    <button data-o="tog-fact">${icon('shield', 16)} Fact check answers<span class="grow"></span>${on('tog-fact') ? icon('check', 15) : ''}</button>
+    <button data-o="tog-lib">${icon('book', 16)} Use my library<span class="grow"></span>${on('tog-lib') ? icon('check', 15) : ''}</button>
+    <button data-o="tog-fact">${icon('shield', 16)} Double-check answers<span class="grow"></span>${on('tog-fact') ? icon('check', 15) : ''}</button>
     <button data-o="tog-tools">${icon('plug', 16)} Use my connected apps<span class="grow"></span>${on('tog-tools') ? icon('check', 15) : ''}</button>
     <div class="menu-sep"></div>
     <div class="menu-h">How hard it should think</div>
-    <div class="opt-effort">${Object.entries(EFFORTS).map(([k, l]) => `<button data-eff="${k}" class="${k === eff ? 'on' : ''}" title="${{ quick: 'One model, fastest', balanced: 'One model, then a check', thorough: 'The team on hard questions only (recommended)', max: 'The whole team, always fact checked' }[k]}">${esc(l.replace(/^\S+\s/, ''))}</button>`).join('')}</div>
+    <div class="opt-effort">${Object.entries(EFFORTS).map(([k, l]) => `<button data-eff="${k}" class="${k === eff ? 'on' : ''}" title="${{ quick: 'One model, fastest', balanced: 'One model, then a check', thorough: 'The team on hard questions only (recommended)', max: 'The whole team, always double-checked' }[k]}">${esc(l.replace(/^\S+\s/, ''))}</button>`).join('')}</div>
     <div class="menu-sep"></div>
     <button data-o="skill-btn">${icon('zap', 16)} Use a skill…</button>
     <button data-o="improve-btn">${icon('sparkle', 16)} Improve my message</button>

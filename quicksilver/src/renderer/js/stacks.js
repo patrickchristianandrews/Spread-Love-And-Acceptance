@@ -1,4 +1,4 @@
-// Stacks: several models working as one. Pick a kind of work; the Stack Advisor combines the
+// Stacks: several models working as one. Pick a kind of work; the Setup Advisor combines the
 // models you already have (nothing to download) and shows the best setup this PC could run.
 'use strict';
 
@@ -21,15 +21,15 @@ views.stacks = {
     const goal = ([k, j]) => `<button class="goal ${advJob === k ? 'on' : ''}" data-job="${k}" aria-pressed="${advJob === k}">
       <span class="goal-ic">${j.icon}</span><span><b>${esc(j.label)}</b><span class="small muted">${esc(j.pitch)}</span></span></button>`;
     return `<div class="page">
-      <div class="page-head"><h1>Stacks</h1><button class="btn" data-goto="compare">Compare stacks</button><button class="btn" id="infuse">${icon('sparkle', 16)} Infuse any AIs, including cloud</button></div>
-      <p class="lede">A stack makes several AI models work as one: they answer separately, then a lead combines the best of each and fixes mistakes. <b>Pick what you want to do</b>, and Quicksilver shows the best team for this PC, how strong and fast each option is, and which cloud AI (optional) would make it even better.</p>
+      <div class="page-head"><h1>Teams</h1><button class="btn" data-goto="compare">Compare teams</button><button class="btn" id="infuse">${icon('sparkle', 16)} Build a team from any AIs, including cloud</button></div>
+      <p class="lede">A team makes several AI models work as one: they answer separately, then a lead combines the best of each and fixes mistakes. <b>Pick what you want to do</b>, and Quicksilver shows the best team for this PC, how strong and fast each option is, and which cloud AI (optional) would make it even better.</p>
       ${foundBanner()}
-      <div class="section"><h2>1. Choose a stack</h2>${hwLine()}</div>
+      <div class="section"><h2>1. Choose a team</h2>${hwLine()}</div>
       <div class="goal-group"><div class="label">Think &amp; work</div><div class="goal-grid">${jobs.filter(([, j]) => j.kind === 'text').map(goal).join('')}</div></div>
       <div class="goal-group"><div class="label">Create</div><div class="goal-grid">${jobs.filter(([, j]) => j.kind === 'media').map(goal).join('')}</div></div>
       <div class="section"><h2>2. Set it up</h2></div>
       <div id="adv-out">${advResult ? advisorHTML(advResult) : '<div class="empty">Checking your PC and your models…</div>'}</div>
-      <div class="section"><h2>Your stacks</h2></div>
+      <div class="section"><h2>Your teams</h2></div>
       ${yourStacksHTML()}
       ${recipesHTML()}
     </div>`;
@@ -46,7 +46,7 @@ views.stacks = {
     bindRecipes();
     $$('[data-edit-stack]').forEach((b) => b.addEventListener('click', () => editStack(S.stacks.find((s) => s.id === b.dataset.editStack))));
     $$('[data-del-stack]').forEach((b) => b.addEventListener('click', async () => {
-      if (!(await confirmBox('Delete this stack? The models stay installed.'))) return;
+      if (!(await confirmBox('Delete this team? The models stay installed.'))) return;
       await call('stacks:delete', b.dataset.delStack); await refreshModels(); render();
     }));
     $$('[data-chat-stack]').forEach((b) => b.addEventListener('click', () => {
@@ -158,7 +158,7 @@ function mineTextHTML(r) {
   const rows = textRows(r);
   if (!rows.length) {
     const any = S.installed.some((m) => m.kind === 'text');
-    const why = any && r.job === 'open' ? 'None of your models are unfiltered ones yet. Use the setup on the right, or add a Hermes, Dolphin or Mistral model (from LM Studio, Ollama or Models).'
+    const why = any && r.job === 'open' ? 'None of your models are unfiltered ones yet. Use the setup on the right, or add a Hermes, Dolphin or Mistral model (from LM Create, Ollama or Models).'
       : `No models on this PC yet. Use the setup on the right${S.found?.length ? ', add the ones found on this PC above,' : ''} or import a .gguf file under Models.`;
     return `<div class="card adv-mine"><h3>Use the models you have</h3><p class="muted" style="font-weight:600">${why}</p></div>`;
   }
@@ -172,7 +172,7 @@ function mineTextHTML(r) {
       <div class="field"><label for="adv-mode">Teamwork</label><select id="adv-mode">${Object.entries(INFUSE_MODES).map(([k, m]) => `<option value="${k}" ${k === advMode ? 'selected' : ''}>${m.icon} ${m.name} (${m.cost.toLowerCase()})</option>`).join('')}</select></div>
     </div>
     <div id="adv-preview">${p.ok ? teamPreviewHTML(planMembers(p)) : ''}</div>
-    <div class="adv-foot"><span class="grow" id="adv-sum">${textSummary(p, r)}</span><button class="btn primary" id="adv-create" ${p.ok ? '' : 'disabled'}>Create stack</button></div>
+    <div class="adv-foot"><span class="grow" id="adv-sum">${textSummary(p, r)}</span><button class="btn primary" id="adv-create" ${p.ok ? '' : 'disabled'}>Create team</button></div>
   </div>`;
 }
 
@@ -201,13 +201,13 @@ function mineKitHTML(r) {
   if (!r.mine) return `<div class="card adv-mine"><h3>Use the models you have</h3><p class="muted" style="font-weight:600">You don't have a model that ${esc(r.roleLabels[main].toLowerCase())} yet. Use the setup on the right, or pick one under Models → Images &amp; video.</p></div>`;
   return `<div class="card hl adv-mine">
     <div class="row"><h3 class="grow">Use the models you have</h3><span class="badge b-mint">Nothing to download</span></div>
-    <p class="small muted adv-help">Choose a model for each job. Studio will use these by default.</p>
+    <p class="small muted adv-help">Choose a model for each job. Create will use these by default.</p>
     <div class="kit-rows">${r.roles.map((role) => {
       const opts = pool(role);
       return `<div class="kit-row"><span class="kit-role">${ROLE_ICON[role]} ${esc(r.roleLabels[role])}</span>
         <select data-kit="${role}" ${opts.length ? '' : 'disabled'}>${opts.length ? `<option value="">None</option>${opts.map((y) => `<option value="local:${esc(y.id)}" ${advKit[role] === `local:${y.id}` ? 'selected' : ''}>${esc(y.name)}</option>`).join('')}` : '<option>None installed</option>'}</select></div>`;
     }).join('')}</div>
-    <div class="adv-foot"><span class="grow small muted">✍️ The prompt writer powers the ✨ Improve buttons in Studio.</span><button class="btn primary" id="kit-create">Use this setup</button></div>
+    <div class="adv-foot"><span class="grow small muted">✍️ The prompt writer powers the ✨ Improve buttons in Create.</span><button class="btn primary" id="kit-create">Use this setup</button></div>
   </div>`;
 }
 
@@ -216,7 +216,7 @@ function mineKitHTML(r) {
 function bestHTML(r) {
   const s = r.best;
   const media = r.kind === 'media';
-  if (!s || (media && !s.members[r.roles[0]])) return `<div class="card adv-best"><h3>Best for this PC</h3><p class="muted" style="font-weight:600">This PC doesn't have enough memory for ${esc(r.label.toLowerCase())} models.${media ? ' Studio\'s manual tools still work, or connect a cloud image API under Models.' : ' Close other apps, or connect a cloud API under Models.'}</p></div>`;
+  if (!s || (media && !s.members[r.roles[0]])) return `<div class="card adv-best"><h3>Best for this PC</h3><p class="muted" style="font-weight:600">This PC doesn't have enough memory for ${esc(r.label.toLowerCase())} models.${media ? ' Create\'s manual tools still work, or connect a cloud image API under Models.' : ' Close other apps, or connect a cloud API under Models.'}</p></div>`;
   if (!s.better && (r.mine)) return `<div class="card adv-best ok"><h3>Best for this PC</h3><p style="font-weight:650;margin:6px 0 0">Your models are already the best fit for ${esc(r.label.toLowerCase())} on this PC. Nothing to download.</p></div>`;
   const rows = media
     ? r.roles.filter((role) => s.members[role]).map((role) => [`<span class="badge b-lav">${ROLE_ICON[role]} ${esc(r.roleLabels[role])}</span>`, s.members[role]])
@@ -262,18 +262,18 @@ function bindAdvisor() {
 
 async function saveTextStack(r, stack, waiting = 0) {
   await call('stacks:save', stack);
-  // Point the matching assistant at the new stack, with its tuned settings.
+  // Point the matching assistant at the new team, with its tuned settings.
   const a = S.data.assistants.find((x) => x.job === r.job);
   if (a) Object.assign(a, { target: `stack:${stack.id}`, temperature: r.settings.temperature, contextSize: r.settings.contextSize, maxTokens: r.settings.maxTokens });
   if (r.job === 'general' || !targetValid(S.data.prefs.defaultTarget)) S.data.prefs.defaultTarget = `stack:${stack.id}`;
   save();
   await refreshModels();
-  if (waiting) { toast(`Stack created. ${waiting} model${waiting > 1 ? 's are' : ' is'} downloading; you can chat as soon as ${waiting > 1 ? 'they finish' : 'it finishes'}.`, 6000); render(); return; }
+  if (waiting) { toast(`Team created. ${waiting} model${waiting > 1 ? 's are' : ' is'} downloading; you can chat as soon as ${waiting > 1 ? 'they finish' : 'it finishes'}.`, 6000); render(); return; }
   toast(`${stack.name} is ready.${a ? ` ${a.name} now uses it.` : ''}`);
   if (a) newChat(a.id); else render();
 }
 
-// Media stacks are a set of Studio defaults, saved per kind of work.
+// Media teams are a set of Create defaults, saved per kind of work.
 function saveKit(r, kit, waiting = 0) {
   const k = Object.fromEntries(Object.entries(kit).filter(([, v]) => v));
   if (!k[r.roles[0]]) { toast(`Choose a model that ${r.roleLabels[r.roles[0]].toLowerCase()}.`); return; }
@@ -286,8 +286,8 @@ function saveKit(r, kit, waiting = 0) {
   if (k.animate && !p.videoModel) p.videoModel = k.animate;
   if (k.helper) p.promptHelper = k.helper;
   save();
-  if (waiting) { toast(`Setting up ${r.label}. ${waiting} model${waiting > 1 ? 's are' : ' is'} downloading; Studio is ready when ${waiting > 1 ? 'they finish' : 'it finishes'}.`, 6000); render(); return; }
-  toast(`${r.label} is set up. Studio now uses these models.`);
+  if (waiting) { toast(`Setting up ${r.label}. ${waiting} model${waiting > 1 ? 's are' : ' is'} downloading; Create is ready when ${waiting > 1 ? 'they finish' : 'it finishes'}.`, 6000); render(); return; }
+  toast(`${r.label} is set up. Create now uses these models.`);
   studioTab = r.job === 'edit' ? 'edit' : 'create';
   go({ view: 'studio' });
 }
@@ -317,7 +317,7 @@ async function createBest(r) {
 
 function yourStacksHTML() {
   const kits = Object.entries(S.data.mediaKits || {}).filter(([k]) => S.catalog.jobs[k]);
-  if (!S.stacks.length && !kits.length) return '<p class="muted">No stacks yet. Choose one above.</p>';
+  if (!S.stacks.length && !kits.length) return '<p class="muted">No teams yet. Choose one above.</p>';
   return `<div class="cards">${S.stacks.map(stackCard).join('')}${kits.map(([k, kit]) => kitCard(k, kit)).join('')}</div>`;
 }
 
@@ -325,9 +325,9 @@ function kitCard(k, kit) {
   const j = S.catalog.jobs[k];
   const labels = { image: 'Creates pictures', video: 'Makes videos', edit: 'Edits photos', animate: 'Brings photos to life', helper: 'Writes prompts' };
   return `<div class="card">
-    <div class="row"><span class="emoji-badge">${j.icon}</span><h3 class="grow">${esc(j.label)}</h3><span class="badge b-peach">Studio</span></div>
+    <div class="row"><span class="emoji-badge">${j.icon}</span><h3 class="grow">${esc(j.label)}</h3><span class="badge b-peach">Create</span></div>
     <div class="stack-v" style="gap:6px;margin:12px 0">${Object.entries(kit).map(([role, t]) => `<div class="row"><span class="badge b-lav">${ROLE_ICON[role]} ${labels[role]}</span><b class="small">${esc(targetLabel(t) === 'No model chosen' ? modelName(t.replace(/^local:/, '')) : targetLabel(t))}</b>${isInstalled(t.replace(/^local:/, '')) ? '' : '<span class="badge b-pink">downloading</span>'}</div>`).join('')}</div>
-    <div class="row"><button class="btn small primary" data-kit-open="${k}">Open Studio</button><button class="btn small danger" data-kit-del="${k}">Remove</button></div>
+    <div class="row"><button class="btn small primary" data-kit-open="${k}">Open Create</button><button class="btn small danger" data-kit-del="${k}">Remove</button></div>
   </div>`;
 }
 
@@ -349,7 +349,7 @@ function editStack(s) {
   const nonStack = { ...S, targets: S.targets.filter((t) => !t.stack) };
   const opts = (sel, none) => { const keep = S.targets; S.targets = nonStack.targets; const h = targetOptions(sel, { includeNone: true, noneLabel: none }); S.targets = keep; return h; };
   const visionOpts = () => `<option value="">None (or a drafter can see)</option>${S.targets.filter((t) => t.vision && !t.stack).map((t) => `<option value="${esc(t.target)}" ${t.target === v.members.vision ? 'selected' : ''}>${esc(t.label)}</option>`).join('')}`;
-  const b = openModal(`<h2>${s ? 'Edit stack' : 'Build your own stack'}</h2>
+  const b = openModal(`<h2>${s ? 'Edit team' : 'Build your own team'}</h2>
     <p class="help">Mix any models: ones on this PC and ones from connected APIs (for example, two local drafters with Claude or GPT as the lead). Local models take turns; cloud models run at the same time.</p>
     <div class="stack-v">
       <div class="row"><div class="field" style="width:110px"><label for="st-emoji">Icon</label><select id="st-emoji">${['🧩', '🚀', '📊', '🔎', '💻', '📷', '⚖️', '🧠'].map((e) => `<option ${e === v.emoji ? 'selected' : ''}>${e}</option>`).join('')}</select></div>
@@ -359,7 +359,7 @@ function editStack(s) {
       <div class="field"><label>${ROLE.lead}</label><span class="help">Reads the drafts, fixes mistakes and writes the final answer. Pick your strongest model.</span><select id="st-lead">${opts(v.members.judge, 'None (use the first drafter only)')}</select></div>
     </div>
     <div id="st-preview"></div>
-    <div class="modal-actions"><button class="btn" data-close>Cancel</button><button class="btn primary" id="st-save">Save stack</button></div>`, { wide: true });
+    <div class="modal-actions"><button class="btn" data-close>Cancel</button><button class="btn primary" id="st-save">Save team</button></div>`, { wide: true });
   const preview = () => {
     const drafters = [0, 1, 2].map((i) => b.querySelector(`#st-d${i}`).value).filter(Boolean);
     b.querySelector('#st-preview').innerHTML = teamPreviewHTML({ drafters, judge: b.querySelector('#st-lead').value || undefined, vision: b.querySelector('#st-vision').value || undefined, mode: v.members.mode });
@@ -391,8 +391,8 @@ function strengthOf(t) {
 
 function infuseModal(onCreated) {
   const options = S.targets.filter((t) => !t.stack);
-  if (options.length < 2) { toast('Install or connect at least two models to infuse them. Open Models, or the Stack Advisor.', 6000); return; }
-  const b = openModal(`<h2>✨ Infuse AIs</h2>
+  if (options.length < 2) { toast('Install or connect at least two models to infuse them. Open Models, or the Setup Advisor.', 6000); return; }
+  const b = openModal(`<h2>✨ Combine AIs</h2>
     <p class="help">Choose 2 to 4 AIs. Mixing different makers (for example Qwen + Llama + Claude) gives the biggest boost: they make different mistakes, so they catch each other's.</p>
     <div class="stack-v">
       <div class="label">1. Pick the AIs to infuse</div>
@@ -405,7 +405,7 @@ function infuseModal(onCreated) {
       </div>
     </div>
     <div id="inf-preview"></div>
-    <div class="modal-actions"><span class="small muted grow" id="inf-count">Pick 2 to 4 AIs.</span><button class="btn" data-close>Cancel</button><button class="btn primary" id="inf-go">${icon('sparkle', 16)} Infuse</button></div>`, { wide: true });
+    <div class="modal-actions"><span class="small muted grow" id="inf-count">Pick 2 to 4 AIs.</span><button class="btn" data-close>Cancel</button><button class="btn primary" id="inf-go">${icon('sparkle', 16)} Combine</button></div>`, { wide: true });
   const picked = () => [...b.querySelectorAll('.infuse-opt input:checked')].map((x) => x.value);
   b.querySelector('.infuse-pick').addEventListener('change', () => {
     const n = picked().length;

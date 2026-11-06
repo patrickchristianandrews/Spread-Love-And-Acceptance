@@ -1,5 +1,5 @@
 // Assistants: ready-made helpers, grouped by kind of work, plus a builder for your own.
-// Each assistant is instructions + a model or stack + knowledge and tools + optionally a skill it
+// Each assistant is instructions + a model or team + knowledge and tools + optionally a skill it
 // applies to every message (assistants-more.js has the built-in list and the builder's templates).
 'use strict';
 
@@ -18,7 +18,7 @@ function assistantCard(a) {
     <div class="row small" style="margin-bottom:10px;flex-wrap:wrap">
       <span class="badge b-lav">🧠 ${esc(a.target ? targetLabel(a.target) : 'Default model')}</span>
       ${sk ? `<span class="badge b-peach" title="Applied to every message">⚡ ${esc(sk.name)}</span>` : etaBadge(etaFor(t, wordsForJob(a.job)), a.job === 'coding' ? 'per code answer' : 'per answer', starsOf(t, a.job || 'general'))}
-      ${a.library ? `<span class="badge b-sky">📚 ${a.knowledge?.length ? `${a.knowledge.length} knowledge base${a.knowledge.length > 1 ? 's' : ''}` : 'Knowledge'}${a.strict ? ' · 🔒 only' : ''}</span>` : ''}${a.web ? '<span class="badge b-mint">🌐 Web</span>' : ''}${a.tools ? '<span class="badge b-mint">🔌 Tools</span>' : ''}${a.factCheck ? '<span class="badge b-peach">✅ Fact check</span>' : ''}
+      ${a.library ? `<span class="badge b-sky">📚 ${a.knowledge?.length ? `${a.knowledge.length} knowledge base${a.knowledge.length > 1 ? 's' : ''}` : 'Knowledge'}${a.strict ? ' · 🔒 only' : ''}</span>` : ''}${a.web ? '<span class="badge b-mint">🌐 Web</span>' : ''}${a.tools ? '<span class="badge b-mint">🔌 Tools</span>' : ''}${a.factCheck ? '<span class="badge b-peach">✅ Double-check</span>' : ''}
     </div>
     <div class="row">
       <button class="btn primary small" data-chat-with="${a.id}">Chat</button>
@@ -36,7 +36,7 @@ views.assistants = {
     const groups = ASSISTANT_GROUPS.filter((g) => S.data.assistants.some((a) => groupOf(a) === g));
     return `<div class="page">
       <div class="page-head"><h1>Assistants</h1><button class="btn primary" id="new-assistant">＋ Build your own assistant</button></div>
-      <p class="lede"><b>${S.data.assistants.length} ready-made helpers</b>, each set up for one kind of work: its own instructions, the best model or stack for it, and the knowledge, web search, tools and skills it needs. Some make things on every message, like the Image Artist or the Beat Maker. Pick one when you start a chat, or switch at the top of any chat. <a href="#" id="as-new-link">Build your own</a> in a minute, from scratch, from a template, or by describing it.</p>
+      <p class="lede"><b>${S.data.assistants.length} ready-made helpers</b>, each set up for one kind of work: its own instructions, the best model or team for it, and the knowledge, web search, tools and skills it needs. Some make things on every message, like the Image Artist or the Beat Maker. Pick one when you start a chat, or switch at the top of any chat. <a href="#" id="as-new-link">Build your own</a> in a minute, from scratch, from a template, or by describing it.</p>
       <div class="row" style="margin-bottom:16px;flex-wrap:wrap"><input id="as-q" type="search" placeholder="Search assistants" value="${esc(asQuery)}" style="max-width:280px">
         <button class="btn small ${asGroup === 'all' ? 'on' : ''}" data-asgroup="all">All</button>${groups.map((g) => `<button class="btn small ${asGroup === g ? 'on' : ''}" data-asgroup="${esc(g)}">${esc(g)}</button>`).join('')}</div>
       ${groups.map((g) => { const items = list.filter((a) => groupOf(a) === g); return items.length ? `<h3 class="int-group">${esc(g)} · ${items.length}</h3><div class="cards">${items.map(assistantCard).join('')}</div>` : ''; }).join('') || '<div class="empty">No assistants match.</div>'}
@@ -109,7 +109,7 @@ async function editAssistant(a, preset = null) {
       <div class="field"><label for="as-ins" class="row">Instructions<span class="grow"></span><button type="button" class="btn small ghost" id="as-improve" title="Let AI make the instructions clearer and more complete">✨ Improve</button></label><span class="help">Tell it how to work: its role, what to focus on, the format you want, and what to ask when details are missing. Plain sentences are best.</span>
         <textarea id="as-ins" rows="7" placeholder="You are an experienced contract lawyer. Read the attached contract and list risky clauses in a table with the clause, the risk and a suggested fix…">${esc(v.instructions)}</textarea></div>
       <div class="grid2">
-        <div class="field"><label for="as-target">Brain (model or stack)</label><select id="as-target">${targetOptions(v.target, { includeNone: true, noneLabel: 'Default model' })}</select></div>
+        <div class="field"><label for="as-target">Brain (model or team)</label><select id="as-target">${targetOptions(v.target, { includeNone: true, noneLabel: 'Default model' })}</select></div>
         <div class="field"><label for="as-effort">Effort</label><select id="as-effort"><option value="">Your default</option>${Object.entries(EFFORTS).map(([k, e]) => `<option value="${k}" ${v.effort === k ? 'selected' : ''}>${e.replace(/^\S+\s/, '')}</option>`).join('')}</select></div>
       </div>
       <div class="field"><label for="as-skill">Use a skill on every message (optional)</label><span class="help">For example "Create a picture" makes every request an image, "Read aloud" turns every message into an MP3.</span><select id="as-skill">${skillOpts}</select></div>
@@ -120,7 +120,7 @@ async function editAssistant(a, preset = null) {
         <label class="row" style="margin-top:6px"><input type="checkbox" id="as-strict" ${v.strict ? 'checked' : ''}> <span><b>🔒 Only answer from this knowledge</b> <span class="help">never from general memory; says "not found" instead of guessing</span></span></label></div>
       <label class="row"><input type="checkbox" id="as-web" ${v.web ? 'checked' : ''}> <span><b>🌐 Search the web</b> <span class="help">for current information (free, no key needed)</span></span></label>
       <label class="row"><input type="checkbox" id="as-tools" ${v.tools ? 'checked' : ''}> <span><b>🔌 Use integrations</b> <span class="help">weather, calendar, notes, GitHub, Slack, Todoist and the others you connect</span></span></label>
-      <label class="row"><input type="checkbox" id="as-fact" ${v.factCheck ? 'checked' : ''}> <span><b>✅ Fact check every answer</b> <span class="help">with a second model</span></span></label>
+      <label class="row"><input type="checkbox" id="as-fact" ${v.factCheck ? 'checked' : ''}> <span><b>✅ Double-check every answer</b> <span class="help">with a second model</span></span></label>
     </div>
     <div class="modal-actions"><button class="btn" data-close>Cancel</button>${a ? '' : '<button class="btn" id="as-save-chat">Create and start a chat</button>'}<button class="btn primary" id="as-save">${a ? 'Save' : 'Create'}</button></div>`, { wide: true });
   b.querySelector('#as-temp').addEventListener('input', (e) => { b.querySelector('#as-temp-v').textContent = e.target.value; });

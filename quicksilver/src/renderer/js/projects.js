@@ -53,7 +53,7 @@ views.project = {
           </div>
           <div class="card"><h3>Defaults</h3>
             <div class="field" style="margin-top:8px"><label for="pj-as">Assistant</label><select id="pj-as"><option value="">The one you last used</option>${S.data.assistants.map((x) => `<option value="${x.id}" ${x.id === p.assistantId ? 'selected' : ''}>${esc(x.emoji)} ${esc(x.name)}</option>`).join('')}</select></div>
-            <div class="field"><label for="pj-model">Model or stack</label><select id="pj-model">${targetOptions(p.target || '', { includeNone: true, noneLabel: "The assistant's own" })}</select></div>
+            <div class="field"><label for="pj-model">Model or team</label><select id="pj-model">${targetOptions(p.target || '', { includeNone: true, noneLabel: "The assistant's own" })}</select></div>
           </div>
         </aside>
       </div></div>`;

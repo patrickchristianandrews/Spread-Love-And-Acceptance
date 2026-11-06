@@ -7,7 +7,7 @@ const sk = (id, name, icon, category, output, description, hint, instructions, t
   ({ id, name, icon, category, output, description, hint, instructions, triggers, ...extra });
 
 BUILTIN_SKILLS.push(
-  // ---------- Pictures & video (made by the Studio's models, from chat) ----------
+  // ---------- Pictures & video (made by the Create's models, from chat) ----------
   sk('make-image', 'Create a picture', '🖼️', 'media', 'image', 'Describe it; Quicksilver writes a great prompt and paints it.',
     'Describe the picture you want…',
     'Turn the request into the best possible picture. Choose a fitting style if none is given, and decide the shape from the subject (portrait for people, wide for landscapes).',

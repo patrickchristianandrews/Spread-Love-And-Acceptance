@@ -11,10 +11,10 @@ async function refreshIntegrations() {
 
 views.integrations = {
   html() {
-    if (!intData) return '<div class="page"><h1>Integrations</h1><div class="empty">Loading…</div></div>';
+    if (!intData) return '<div class="page"><h1>Connectors</h1><div class="empty">Loading…</div></div>';
     const { connectors, mcp: servers, presets, allowed } = intData;
     return `<div class="page">
-      <div class="page-head"><h1>Integrations</h1></div>
+      <div class="page-head"><h1>Connectors</h1></div>
       <p class="lede"><b>Connect the tools you work in.</b> Models can then look things up and take actions for you during a chat: "list my open GitHub issues", "summarize #design in Slack", "create a Jira ticket for this bug". Turn on <b>🔌 Tools</b> in a chat to use them. <b>Anything that changes something asks you first</b>; reading never does. Tokens are encrypted on this PC and only sent to that service.</p>
 
       <div class="section"><h2>Connectors</h2><span class="small muted">${connectors.length} built in. Free ones need no account.</span></div>

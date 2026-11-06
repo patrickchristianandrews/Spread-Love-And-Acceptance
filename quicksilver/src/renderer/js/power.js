@@ -198,7 +198,7 @@ function paletteItems() {
   const a = chat && assistantById(chat.assistantId);
   const items = [
     ['New chat', 'Ctrl N', () => newChat()],
-    ...[['home', 'Home'], ['projects', 'Projects'], ['assistants', 'Assistants'], ['skills', 'Skills'], ['library', 'Knowledge'], ['stacks', 'Infuse & stacks'], ['studio', 'Studio'], ['integrations', 'Integrations'], ['models', 'Models'], ['arena', 'Arena (blind test)'], ['pc', 'Your PC'], ['settings', 'Settings']].map(([v, l]) => [`Go to ${l}`, '', () => go({ view: v })]),
+    ...[['home', 'Home'], ['projects', 'Projects'], ['assistants', 'Assistants'], ['skills', 'Skills'], ['library', 'Library'], ['stacks', 'AI teams'], ['studio', 'Create'], ['integrations', 'Connectors'], ['models', 'Models'], ['arena', 'Compare models (blind test)'], ['pc', 'Your PC'], ['settings', 'Settings']].map(([v, l]) => [`Go to ${l}`, '', () => go({ view: v })]),
     ...[['memory', 'Memory'], ['voice', 'Voice'], ['phone', 'Phone'], ['web', 'Web search'], ['api', 'API server'], ['engines', 'Engines']].map(([t, l]) => [`Settings: ${l}`, '', () => { setTab = t; go({ view: 'settings' }); }]),
     ['Switch light / dark', '', () => $('#theme-btn').click()],
     [S.config?.offline ? 'Go online' : 'Go offline', '', toggleNet],
@@ -212,7 +212,7 @@ function paletteItems() {
       ['This chat: move to a project', '', () => moveToProject(chat)],
       ['This chat: continue in a fresh chat (with a summary)', '', () => freshFromSummary(chat)],
       [`Turn web search ${(chat.web ?? a.web) ? 'off' : 'on'}`, '', () => { chat.web = !(chat.web ?? a.web); save(); render(); }],
-      [`Turn fact checking ${factOn(chat, a) ? 'off' : 'on'}`, '', () => { chat.factCheck = !factOn(chat, a); save(); render(); }],
+      [`Turn double-checking ${factOn(chat, a) ? 'off' : 'on'}`, '', () => { chat.factCheck = !factOn(chat, a); save(); render(); }],
       ['Voice typing', 'Ctrl Space', () => toggleVoice(chat)],
       ...S.targets.filter((t) => !t.target.startsWith('kb:')).map((t) => [`Use model: ${t.label}`, '', () => { chat.target = t.target; save(); render(); }]),
       ...Object.entries(EFFORTS).map(([k, l]) => [`Effort: ${l.replace(/^\S+\s/, '')}`, '', () => { chat.effort = k; save(); render(); }]),
@@ -285,4 +285,30 @@ function putMath(html, store) {
     try { return katex.renderToString(m.tex.trim(), { displayMode: display, throwOnError: false, output: 'htmlAndMathml', strict: 'ignore' }); } catch { return `<code>${esc(m.tex)}</code>`; }
   };
   return html.replace(/<p>\s*\u0002(\d+)\u0003\s*<\/p>/g, (_, n) => `<div class="math-block">${tex(Number(n), true)}</div>`).replace(/\u0002(\d+)\u0003/g, (_, n) => tex(Number(n), store[Number(n)]?.display));
+}
+
+// ---------- next-question suggestions, written from the answer ----------
+// The model that answered (already loaded, so it's quick) suggests the three things this person
+// is most likely to ask next, specific to what was actually said.
+async function writeFollowups(chat, msg, alt) {
+  const q = [...chat.messages.slice(0, chat.messages.indexOf(msg))].reverse().find((m) => m.role === 'user');
+  const answer = (alt.text || '').replace(/<think>[\s\S]*?<\/think>/g, '');
+  const brief = answer.length > 3200 ? `${answer.slice(0, 2600)}\n…\n${answer.slice(-500)}` : answer;
+  const paint = () => {
+    if (S.route.view !== 'chat' || S.route.id !== chat.id) return;
+    const el = document.querySelector(`[data-msg="${msg.id}"] .followups`);
+    const html = followupsHTML(alt);
+    if (el) el.outerHTML = html;
+    else document.querySelector(`[data-msg="${msg.id}"] .msg-main`)?.insertAdjacentHTML('beforeend', html);
+  };
+  try {
+    const target = alt.target && targetValid(alt.target) ? alt.target : promptHelper();
+    const out = await askAI(target, 'You suggest what this person will most likely want to ask next, after reading the answer below. Write exactly 3 short follow-up messages (each 3 to 9 words), in the person\'s own voice, as they would type them. Make each one specific to this answer: name the actual thing, step, option or number it mentions. Cover different directions: go deeper on the most useful point, apply it to their situation, and the natural next step. No generic phrases like "tell me more". Reply with ONLY a JSON array of 3 strings.', `Their question: ${(q?.text || '').slice(0, 800)}\n\nThe answer:\n${brief}`, { temperature: 0.3, maxTokens: 120, level: 'quick', contextSize: 8192 });
+    const arr = JSON.parse((out.match(/\[[\s\S]*\]/) || ['[]'])[0]);
+    const clean = (Array.isArray(arr) ? arr : []).map((x) => String(x).replace(/^\s*[\d.)\-•*]+\s*|^["“]|["”]$/g, '').trim()).filter((x) => x.length >= 4 && x.length <= 90);
+    alt.followups = [...new Set(clean)].slice(0, 3);
+  } catch {}
+  delete alt.fuPending;
+  save();
+  paint();
 }

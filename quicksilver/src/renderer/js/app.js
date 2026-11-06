@@ -6,7 +6,7 @@ const DEFAULT_PREFS = {
   gpu: 'auto', effort: 'medium', effortLevel: 'thorough', simple: true, autoRoute: true, theme: 'dark', factCheck: false, factChecker: '', lastAssistant: 'as-general', sourcesPerAnswer: 8,
 };
 
-// More ready-made assistants for everyday uses. Each borrows the settings of the stack type that
+// More ready-made assistants for everyday uses. Each borrows the settings of the team type that
 // suits it (job), and runs on your default model unless you pick another.
 const EXTRA_ASSISTANTS = [
   { id: 'as-tutor', job: 'reasoning', name: 'Tutor', emoji: '🎓', description: 'Homework help and step-by-step explanations, with quizzes and practice questions.', temperature: 0.4, factCheck: true,
@@ -84,14 +84,14 @@ views.home = {
     return `<div class="page">
       ${bestSetupHTML()}
       <div class="row feature-row">
-        <span class="feature">${cloud ? 'Local by default, cloud only where you choose' : 'Everything runs on this PC'}</span><span class="feature">Several models as one team</span><span class="feature">Fact checking built in</span><span class="feature">Photo, video and music studio</span><span class="feature">Private knowledge bases</span><span class="feature">OpenAI-compatible local API</span>
+        <span class="feature">${cloud ? 'Local by default, cloud only where you choose' : 'Everything runs on this PC'}</span><span class="feature">Several models as one team</span><span class="feature">Double-checking built in</span><span class="feature">Photo, video and music studio</span><span class="feature">Private knowledge bases</span><span class="feature">OpenAI-compatible local API</span>
       </div>
-      ${text.length && text.every((m) => m.source === 'bundled') && !cloud ? `<div class="notice info grow-note" style="margin-bottom:18px"><b>You're using Quicksilver's starter models.</b> They're quick and private, but on their own they're limited: smaller models know less and make more mistakes on hard questions. Quicksilver grows with you: install stronger models, or build stacks that make several models work as one, for sharper, more accurate answers. <span class="row" style="margin-top:8px"><button class="btn primary small" data-goto="stacks">Build a stack</button><button class="btn small" data-goto="models">Get more models</button></span></div>` : ''}
-      ${!text.length && !cloud ? `<div class="notice info" style="margin-bottom:18px"><b>First step:</b> open the Stack Advisor. It checks this PC and downloads the best free models for your work in one click. <button class="btn primary small" data-goto="stacks" style="margin-left:8px">Open the Stack Advisor</button></div>` : ''}
+      ${text.length && text.every((m) => m.source === 'bundled') && !cloud ? `<div class="notice info grow-note" style="margin-bottom:18px"><b>You're using Quicksilver's starter models.</b> They're quick and private, but on their own they're limited: smaller models know less and make more mistakes on hard questions. Quicksilver grows with you: install stronger models, or build teams that make several models work as one, for sharper, more accurate answers. <span class="row" style="margin-top:8px"><button class="btn primary small" data-goto="stacks">Build a team</button><button class="btn small" data-goto="models">Get more models</button></span></div>` : ''}
+      ${!text.length && !cloud ? `<div class="notice info" style="margin-bottom:18px"><b>First step:</b> open the Setup Advisor. It checks this PC and downloads the best free models for your work in one click. <button class="btn primary small" data-goto="stacks" style="margin-left:8px">Open the Setup Advisor</button></div>` : ''}
       <div class="cards" style="grid-template-columns:repeat(auto-fill,minmax(210px,1fr))">
         ${tile('💬', 'Models', text.length, text.length ? `${text.filter((m) => m.vision).length} can see images` : 'none installed yet', 'models')}
-        ${tile('✨', 'Infused AIs', S.stacks.length, S.stacks[0] ? esc(S.stacks[0].name) : 'fuse several AIs into one', 'stacks')}
-        ${tile('🎨', 'Studio models', media.length, media.length ? 'image & video ready' : 'create & edit photos and video', 'studio')}
+        ${tile('✨', 'AI teams', S.stacks.length, S.stacks[0] ? esc(S.stacks[0].name) : 'combine several AIs into one', 'stacks')}
+        ${tile('🎨', 'Image & video models', media.length, media.length ? 'image & video ready' : 'create & edit photos and video', 'studio')}
         ${tile('🖥️', 'Hardware', h ? `${h.ramGB.toFixed(0)} GB` : '…', h ? esc(h.vramGB ? `${h.gpuName} · ${h.vramGB.toFixed(0)} GB video` : 'running on the processor') : 'checking…', 'pc')}
         ${tile('☁️', 'Cloud APIs', cloud, cloud ? esc(S.providers.map((p) => p.name).join(', ')) : 'optional: Claude, GPT, Gemini…', 'models')}
         ${tile('🔌', 'API server', api?.running ? 'On' : 'Off', api?.running ? `127.0.0.1:${api.port}` : 'let other apps use your models', 'settings')}
@@ -170,7 +170,7 @@ async function init() {
   startupModels();
 }
 
-// The built-in Quicksilver model: a stack of the models that come with the app. If the bigger
+// The built-in Quicksilver model: a team of the models that come with the app. If the bigger
 // "brain" model wasn't shipped next to the installer, it downloads in the background; until then
 // the small model answers on its own.
 async function setUpQuicksilver(firstLook) {

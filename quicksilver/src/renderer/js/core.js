@@ -119,7 +119,7 @@ const WORDS = { chat: 300, hard: 500, writing: 450, code: 700, research: 500, co
 async function refreshSpeeds() { try { S.speed = await qs.call('speed:map'); } catch { S.speed = null; } }
 const HARD_RE = /\b(why|how does|how do|prove|calculate|compute|solve|compare|analy[sz]e|evaluate|step[- ]by[- ]step|debug|code|function|script|error|bug|plan|strategy|pros and cons|trade-?offs?|explain|summari[sz]e|review|translate)\b/i;
 const looksHard = (text) => HARD_RE.test(text || '') || (text || '').length > 500 || /```|\d+\s*[-+*/^×÷]\s*\d+/.test(text || '');
-// Seconds for a target to write `words`, or null if unknown. Smart stacks answer simple
+// Seconds for a target to write `words`, or null if unknown. Smart teams answer simple
 // messages with the lead alone; hard ones run every drafter plus the lead.
 function etaFor(target, words = WORDS.chat, { hard = false } = {}) {
   const s = S.speed?.targets?.[target];
@@ -189,7 +189,7 @@ qs.onChat(({ requestId, ev }) => {
     else o.resolve(o.text.replace(/<think>[\s\S]*?<\/think>/g, '').trim());
   }
 });
-// level: 'quick' keeps a stack to one model (small jobs like titles and memory notes).
+// level: 'quick' keeps a team to one model (small jobs like titles and memory notes).
 function askAI(target, system, user, { temperature = 0.7, maxTokens = 400, level, onText, requestId = uid(), contextSize = 4096 } = {}) {
   return new Promise((resolve, reject) => {
     oneShots.set(requestId, { text: '', resolve, reject, onText });
@@ -197,7 +197,7 @@ function askAI(target, system, user, { temperature = 0.7, maxTokens = 400, level
   });
 }
 
-// ---------- downloads (shared by Models, Stacks and Studio) ----------
+// ---------- downloads (shared by Models, Teams and Create) ----------
 
 async function download(req, name) {
   const r = await call('models:download', req);

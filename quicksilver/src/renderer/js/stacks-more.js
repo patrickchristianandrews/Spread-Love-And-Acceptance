@@ -1,6 +1,6 @@
-// Stacks page, part two: three ways to run the chosen stack on this PC (quickest, balanced, most
-// accurate) with an accuracy level for each, how the stack works step by step, and the cloud AI
-// that would improve it, with an honest estimate of how much paid AI the private stack saves.
+// Teams page, part two: three ways to run the chosen team on this PC (quickest, balanced, most
+// accurate) with an accuracy level for each, how the team works step by step, and the cloud AI
+// that would improve it, with an honest estimate of how much paid AI the private team saves.
 'use strict';
 
 let presetsCache = null;
@@ -34,7 +34,7 @@ function tiersHTML(r) {
   }).join('');
   return `<div class="section"><h2>3. How strong? Three ways to run it on this PC</h2></div>
     <div class="tier-grid">${cards}</div>
-    <p class="small muted" style="margin-top:8px">Accuracy levels compare the models' benchmark strength for ${esc(r.label.toLowerCase())}; a stack scores higher than its best model alone because the lead compares answers and fixes mistakes. Times are for a typical answer on this PC and become exact once Quicksilver has timed a few answers.</p>`;
+    <p class="small muted" style="margin-top:8px">Accuracy levels compare the models' benchmark strength for ${esc(r.label.toLowerCase())}; a team scores higher than its best model alone because the lead compares answers and fixes mistakes. Times are for a typical answer on this PC and become exact once Quicksilver has timed a few answers.</p>`;
 }
 
 function howItWorksHTML(r) {
@@ -50,7 +50,7 @@ function howItWorksHTML(r) {
   if (r.cloud?.mode === 'check') steps.push('✅ Optional: a cloud AI double-checks the final answer (see below).');
   if (r.cloud?.mode === 'hard') steps.push('☁ Optional: hard questions can go to a cloud lead (see below); the rest never leave this PC.');
   const set = r.settings || {};
-  return `<div class="card how-card"><h3>How the ${esc(r.label)} stack works</h3>
+  return `<div class="card how-card"><h3>How the ${esc(r.label)} team works</h3>
     <ol class="how-steps">${steps.map((x) => `<li>${x}</li>`).join('')}</ol>
     <div class="row small" style="flex-wrap:wrap;gap:6px">${set.web ? '<span class="badge b-mint">🌐 searches the web when useful</span>' : ''}${set.library ? '<span class="badge b-sky">📚 uses your knowledge bases</span>' : ''}<span class="badge b-lav">🎚️ creativity ${set.temperature ?? 0.5}</span><span class="badge b-lav">🧠 memory ${Math.round((set.contextSize || 8192) / 1024)}K tokens</span><span class="badge b-lav">🔒 private: runs on this PC</span></div>
   </div>`;
@@ -73,8 +73,8 @@ function cloudHTML(r) {
   const free = (x) => (x?.free === 'free' ? ' (free plan)' : x?.free === 'some' ? ' (free models)' : '');
   const connected = cloudTarget(c.provider) || (alt && cloudTarget(c.alt));
   const how = {
-    hard: `Your private stack answers everything; only hard questions (about ${Math.round(c.share * 100)}% for ${esc(r.label.toLowerCase())}) go to ${esc(p.name)} as the lead, together with your models' drafts.`,
-    check: `Your private stack writes every answer; ${esc(p.name)} only reads it and replies with a short verdict, flagging mistakes for you in the fact-check panel.`,
+    hard: `Your private team answers everything; only hard questions (about ${Math.round(c.share * 100)}% for ${esc(r.label.toLowerCase())}) go to ${esc(p.name)} as the lead, together with your models' drafts.`,
+    check: `Your private team writes every answer; ${esc(p.name)} only reads it and replies with a short verdict, flagging mistakes for you in the fact-check panel.`,
     lead: `Your private models write the drafts; ${esc(p.name)} reads them and writes the final answer.`,
     image: `Pictures this PC can make stay here; for the ones it can't (bigger sizes, text in images, top quality), use ${esc(p.name)}.`,
   }[c.mode];
@@ -89,7 +89,7 @@ function cloudHTML(r) {
       ${c.mode !== 'image' ? `<div class="tier-stats" style="margin:10px 0"><div><span class="label">Accuracy now</span>${accDots(c.before)}</div><div><span class="label">With ${esc(p.name.split(' ')[0])}</span>${accDots(c.after)}</div><div><span class="label">Paid AI used</span><b>${c.mode === 'lead' ? '≈ same' : `−${c.saved}%`}</b></div></div>` : ''}
       <p class="small" style="margin:0 0 6px">${usage}</p>
       <p class="small muted" style="margin:0 0 10px">🔒 ${c.mode === 'hard' ? 'Only the hard questions and your models\' drafts are sent' : c.mode === 'check' ? 'Only the question and the finished answer are sent' : c.mode === 'lead' ? 'The question and drafts are sent' : 'Only the picture description is sent'} to ${esc(p.name)}; everything else stays on this PC. Offline mode turns it off.</p>
-      <div class="row">${connected && c.mode !== 'image' ? `<button class="btn primary" data-cloud-add="${esc(connected)}">Add to my ${esc(r.label)} stack</button>` : ''}${connected ? '' : `<button class="btn primary" data-cloud-connect="${esc(c.provider)}">Connect ${esc(p.name)}</button>${alt ? `<button class="btn" data-cloud-connect="${esc(c.alt)}">Connect ${esc(alt.name)}</button>` : ''}`}</div>
+      <div class="row">${connected && c.mode !== 'image' ? `<button class="btn primary" data-cloud-add="${esc(connected)}">Add to my ${esc(r.label)} team</button>` : ''}${connected ? '' : `<button class="btn primary" data-cloud-connect="${esc(c.provider)}">Connect ${esc(p.name)}</button>${alt ? `<button class="btn" data-cloud-connect="${esc(c.alt)}">Connect ${esc(alt.name)}</button>` : ''}`}</div>
     </div>`;
 }
 
@@ -116,7 +116,7 @@ async function createTier(r, tier) {
   }, missing.length);
 }
 
-// Adds the cloud AI to the stack for this kind of work (creating the balanced one if needed).
+// Adds the cloud AI to the team for this kind of work (creating the balanced one if needed).
 async function addCloud(r, cloud) {
   let st = S.stacks.find((x) => x.builtFor === r.job) || S.stacks.find((x) => x.id === `${r.job}-best`);
   if (!st) { await createTier(r, 'balanced'); await refreshModels(); st = S.stacks.find((x) => x.id === `${r.job}-best`); }

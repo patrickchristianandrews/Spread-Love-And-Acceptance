@@ -1,4 +1,4 @@
-// Settings: you, appearance, chat defaults, fact checking, web search, the API server, engines, accounts.
+// Settings: you, appearance, chat defaults, double-checking, web search, the API server, engines, accounts.
 'use strict';
 
 let setTab = 'general';
@@ -49,12 +49,12 @@ function bindGeneral() {
 function chatSetHTML() {
   const p = P();
   return `<div class="stack-v">
-    <div class="field"><label for="c-default">Default model or stack</label><select id="c-default">${targetOptions(p.defaultTarget, { includeNone: true, noneLabel: 'Automatic' })}</select></div>
-    <label class="row"><input type="checkbox" id="c-auto" ${p.autoAddFound !== false ? 'checked' : ''}> <span><b>📦 Add models from other apps automatically</b> <span class="help">LM Studio, Jan, Ollama, GPT4All and Downloads, checked each time Quicksilver starts. Files stay where they are.</span></span></label>
+    <div class="field"><label for="c-default">Default model or team</label><select id="c-default">${targetOptions(p.defaultTarget, { includeNone: true, noneLabel: 'Automatic' })}</select></div>
+    <label class="row"><input type="checkbox" id="c-auto" ${p.autoAddFound !== false ? 'checked' : ''}> <span><b>📦 Add models from other apps automatically</b> <span class="help">LM Create, Jan, Ollama, GPT4All and Downloads, checked each time Quicksilver starts. Files stay where they are.</span></span></label>
     <label class="row"><input type="checkbox" id="c-preload" ${p.preloadDefault !== false ? 'checked' : ''}> <span><b>⚡ Load my default model when Quicksilver starts</b> <span class="help">the first reply is much quicker; the model waits in memory in the background</span></span></label>
-    <div class="field"><label for="c-effort">Default effort</label><span class="help">Quick uses one model with no thinking; Max runs the whole stack and always fact checks.</span><select id="c-effort">${Object.entries(EFFORTS).map(([k, l]) => `<option value="${k}" ${k === (p.effortLevel || 'thorough') ? 'selected' : ''}>${l}</option>`).join('')}</select></div>
-    <label class="row"><input type="checkbox" id="c-fact" ${p.factCheck ? 'checked' : ''}> <span><b>✅ Fact check every answer</b> <span class="help">in all chats (you can still turn it off per chat)</span></span></label>
-    <div class="field"><label for="c-checker">Fact checker</label><span class="help">Automatic picks the strongest model that didn't write the answer, so the check is independent.</span><select id="c-checker">${targetOptions(p.factChecker, { includeNone: true, noneLabel: 'Automatic (recommended)' })}</select></div>
+    <div class="field"><label for="c-effort">Default effort</label><span class="help">Instant uses one model and answers fastest. Auto (recommended) brings in the team only for hard questions. Deep think always uses the whole team and double-checks.</span><select id="c-effort">${Object.entries(EFFORTS).map(([k, l]) => `<option value="${k}" ${k === (p.effortLevel || 'thorough') ? 'selected' : ''}>${l}</option>`).join('')}</select></div>
+    <label class="row"><input type="checkbox" id="c-fact" ${p.factCheck ? 'checked' : ''}> <span><b>✅ Double-check every answer</b> <span class="help">in all chats (you can still turn it off per chat)</span></span></label>
+    <div class="field"><label for="c-checker">Double-checker</label><span class="help">Automatic picks the strongest model that didn't write the answer, so the check is independent.</span><select id="c-checker">${targetOptions(p.factChecker, { includeNone: true, noneLabel: 'Automatic (recommended)' })}</select></div>
     <div class="field"><label for="c-src">Sources per answer</label><span class="help">How many passages from your knowledge and live sources each answer can use. More sources = better grounding, but longer prompts.</span><select id="c-src">${[4, 8, 12, 16, 20, 30].map((n) => `<option ${Number(p.sourcesPerAnswer || 8) === n ? 'selected' : ''}>${n}</option>`).join('')}</select></div>
     <div class="field"><label for="c-temp">Creativity: <span id="c-temp-v">${p.temperature}</span></label><span class="help">Used when an assistant doesn't set its own.</span><input id="c-temp" type="range" min="0" max="1.2" step="0.05" value="${p.temperature}"></div>
     <div class="grid2">
@@ -112,7 +112,7 @@ function apiSrvHTML() {
     <div class="field"><label>Status</label><div style="padding-top:8px">${st.running ? `<span class="badge b-mint">● Running at ${esc(base)}</span>` : st.error ? `<span class="badge b-pink">${esc(st.error)}</span>` : '<span class="badge b-lemon">Off</span>'}</div></div></div>
     <label class="row"><input type="checkbox" id="a-key" ${a.requireKey ? 'checked' : ''}> <span><b>Require an access key</b> <span class="help">recommended if other people use this PC</span></span></label>
     <div class="row"><button class="btn primary" id="a-save">Save</button><button class="btn" id="a-newkey">Create a new key</button><button class="btn" id="a-showkey" ${S.config.secrets.apiServerKey ? '' : 'disabled'}>Copy key</button></div>
-    <div class="card"><h3>Try it</h3><p class="small muted" style="font-weight:600">Model names come from <code>${esc(base)}/models</code>: any local model, any stack (by name) or any connected API model.</p>
+    <div class="card"><h3>Try it</h3><p class="small muted" style="font-weight:600">Model names come from <code>${esc(base)}/models</code>: any local model, any team (by name) or any connected API model.</p>
 <pre style="background:#1d1838;color:#f1eeff;padding:12px;border-radius:10px;overflow-x:auto;white-space:pre-wrap">curl ${esc(base)}/chat/completions \\
   -H "Content-Type: application/json"${a.requireKey ? ' \\\n  -H "Authorization: Bearer YOUR_KEY"' : ''} \\
   -d '{"model": "${esc(S.stacks[0]?.name || 'local:qwen3-8b')}", "messages": [{"role": "user", "content": "Hello"}], "stream": true}'</pre>

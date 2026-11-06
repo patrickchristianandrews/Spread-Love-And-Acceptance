@@ -19,7 +19,7 @@ views.library = {
     const c = kb.collections.find((x) => x.id === kbSel);
     const icon = { spreadsheet: '📊', code: '💻', document: '📄', 'web page': '🌐' };
     return `<div class="page">
-      <div class="page-head"><h1>Knowledge</h1><button class="btn primary" id="kb-new">＋ New knowledge base</button></div>
+      <div class="page-head"><h1>Library</h1><button class="btn primary" id="kb-new">＋ New knowledge base</button></div>
       <p class="lede"><b>Give your AI your own data.</b> Each knowledge base is a separate, isolated collection: files, whole folders, websites, and live research databases like <b>PubMed</b>. Link one to an assistant (with "only answer from this knowledge" if you want) and every answer cites its sources as <span class="cite">1</span>. Your files stay on this PC.</p>
       ${kbModelsHTML()}
       <div class="section"><h2>Knowledge bases</h2></div>
@@ -136,7 +136,7 @@ function kbModelsHTML() {
   const list = kb.models || [];
   const name = (id) => kb.collections.find((c) => c.id === id);
   return `<div class="section"><h2>Knowledge models</h2><button class="btn small" id="kbm-new">＋ New knowledge model</button></div>
-    <p class="small muted" style="font-weight:600;margin:-4px 0 12px">A saved model that always searches your chosen knowledge first and cites it. Pick it in any chat, use it in stacks, or call it from other apps through the API server.</p>
+    <p class="small muted" style="font-weight:600;margin:-4px 0 12px">A saved model that always searches your chosen knowledge first and cites it. Pick it in any chat, use it in teams, or call it from other apps through the API server.</p>
     ${list.length ? `<div class="cards" style="margin-bottom:18px">${list.map((m) => `<div class="card">
       <div class="row"><span class="emoji-badge">${esc(m.emoji || '📚')}</span><h3 class="grow">${esc(m.name)}</h3>${m.strict ? '<span class="badge b-peach">🔒 Only this knowledge</span>' : ''}</div>
       <div class="small muted" style="font-weight:600;margin:8px 0">Answers with <b>${esc(targetLabel(m.base))}</b> from ${m.knowledge?.length ? m.knowledge.map((id) => name(id)).filter(Boolean).map((c) => `${esc(c.emoji)} ${esc(c.name)}`).join(', ') : 'all your knowledge bases'}</div>

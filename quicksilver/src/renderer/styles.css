@@ -1023,3 +1023,6 @@ code.sel { user-select: all; background: var(--soft); padding: 1px 6px; border-r
 .rx-fold > summary::after { content: "▾"; margin-left: auto; color: var(--faint); }
 .rx-fold[open] > summary::after { content: "▴"; }
 .rx-fold[open] { padding-bottom: 16px; }
+.followups.pending .fu.ghost { width: 150px; height: 32px; padding: 0; border-color: var(--line-soft); background: linear-gradient(90deg, var(--soft) 0%, var(--hover) 50%, var(--soft) 100%); background-size: 220% 100%; animation: shimmer 1.6s linear infinite; cursor: default; }
+.followups.pending .fu.ghost:nth-child(2) { width: 190px; } .followups.pending .fu.ghost:nth-child(3) { width: 130px; }
+.followups.pending .fu.ghost::before { content: none; }

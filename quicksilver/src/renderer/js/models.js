@@ -14,7 +14,7 @@ views.models = {
     return `<div class="page">
       <div class="page-head"><h1>Models</h1>
         <button class="btn" id="find-models">Find models on this PC</button><button class="btn" id="import-gguf">Import a .gguf file</button><button class="btn ghost" id="open-folder">Open models folder</button></div>
-      <p class="lede">Free, open models run on your PC: private, offline, no account. Ratings show how each one will run on <b>your</b> hardware. Not sure? Let the <a href="#" data-goto-stacks>Stack Advisor</a> choose.</p>
+      <p class="lede">Free, open models run on your PC: private, offline, no account. Ratings show how each one will run on <b>your</b> hardware. Not sure? Let the <a href="#" data-goto-stacks>Setup Advisor</a> choose.</p>
       ${foundBanner()}
       <div class="tabs" role="tablist">${Object.entries(tabs).map(([k, l]) => `<button class="tab ${modelsTab === k ? 'active' : ''}" data-tab="${k}" role="tab">${esc(l)}</button>`).join('')}</div>
       ${({ installed: installedHTML, text: textHTML, media: mediaHTML, trending: trendingHTML, hf: hfHTML, api: apiHTML })[modelsTab]()}
@@ -30,7 +30,7 @@ views.models = {
     $('#found-review')?.addEventListener('click', foundModal);
     $('#find-models').addEventListener('click', async () => {
       S.found = await call('models:found');
-      if (S.found.length) foundModal(); else toast('No other models found. Checked LM Studio, Jan, Ollama, GPT4All and Downloads.', 6000);
+      if (S.found.length) foundModal(); else toast('No other models found. Checked LM Create, Jan, Ollama, GPT4All and Downloads.', 6000);
       render();
     });
     $$('[data-get]').forEach((b) => b.addEventListener('click', async () => {
@@ -59,10 +59,10 @@ views.models = {
 };
 
 function installedHTML() {
-  if (!S.installed.length) return `<div class="notice info">Nothing installed yet. Start with the <a href="#" data-goto-stacks>Stack Advisor</a>, or browse <b>Text & vision</b>.</div>`;
+  if (!S.installed.length) return `<div class="notice info">Nothing installed yet. Start with the <a href="#" data-goto-stacks>Setup Advisor</a>, or browse <b>Text & vision</b>.</div>`;
   const kinds = { text: '💬 Text & vision', image: '🎨 Images', video: '🎬 Video' };
   const onlyStarter = S.installed.filter((m) => m.kind === 'text').every((m) => m.source === 'bundled');
-  const note = onlyStarter ? '<div class="notice info" style="margin-bottom:12px"><b>💡 Only the starter models so far.</b> They are limited on their own; download stronger ones under <b>Text &amp; vision</b>, or let the <a href="#" data-goto-stacks>Stack Advisor</a> pick a team for your PC. Quicksilver adds new models to its team automatically.</div>' : '';
+  const note = onlyStarter ? '<div class="notice info" style="margin-bottom:12px"><b>💡 Only the starter models so far.</b> They are limited on their own; download stronger ones under <b>Text &amp; vision</b>, or let the <a href="#" data-goto-stacks>Setup Advisor</a> pick a team for your PC. Quicksilver adds new models to its team automatically.</div>' : '';
   return note + Object.entries(kinds).map(([k, label]) => {
     const list = S.installed.filter((m) => m.kind === k);
     if (!list.length) return '';
@@ -236,7 +236,7 @@ const FREE_BADGE = {
 };
 
 function apiHTML() {
-  return `<p class="muted">Optional. Connect cloud AI services to use their models next to your local ones, as the lead of a stack, as your fact checker, or for image generation. Keys are encrypted on this PC and only sent to that service.</p>
+  return `<p class="muted">Optional. Connect cloud AI services to use their models next to your local ones, as the lead of a team, as your double-checker, or for image generation. Keys are encrypted on this PC and only sent to that service.</p>
     ${S.providers.length ? `<div class="section"><h2>Connected</h2></div><div class="cards">${S.providers.map((p) => `<div class="card">
       <div class="row"><h3 class="grow">${esc(p.name)}</h3>${p.hasKey || p.noKey ? '<span class="badge b-mint">✓ connected</span>' : '<span class="badge b-pink">needs key</span>'}</div>
       <div class="meta" style="margin:4px 0 8px">${esc(p.baseUrl)}</div>

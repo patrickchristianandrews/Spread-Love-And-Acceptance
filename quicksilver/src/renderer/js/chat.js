@@ -1,4 +1,4 @@
-// Chat: assistants, any model or stack, photos/video/documents, library and web sources.
+// Chat: assistants, any model or team, photos/video/documents, library and web sources.
 'use strict';
 
 let pending = null;          // { requestId, chatId, msgId }
@@ -15,7 +15,7 @@ function newChat(assistantId, projectId) {
   go({ view: 'chat', id: chat.id });
 }
 
-const EFFORTS = { quick: '⚡ Quick', balanced: '⚖️ Balanced', thorough: '🔬 Thorough', max: '🚀 Max' };
+const EFFORTS = { quick: '⚡ Instant', balanced: '⚖️ Balanced', thorough: '✨ Auto', max: '🧠 Deep think' };
 const effortOf = (chat, a) => chat.effort || a.effort || S.data.prefs.effortLevel || 'thorough';
 
 const msgText = (m) => (m.role === 'assistant' ? m.alts[m.altIndex]?.text || '' : m.text || '');
@@ -41,7 +41,7 @@ views.chat = {
       <header class="chat-top">
         <div class="pickers">
           <label class="pill-select" title="Assistant"><span class="pill-emoji">${esc(a.emoji)}</span><select id="pick-assistant" aria-label="Assistant">${S.data.assistants.map((x) => `<option value="${x.id}" ${x.id === a.id ? 'selected' : ''}>${esc(x.name)}</option>`).join('')}</select>${icon('chevron', 16)}</label>
-          <label class="pill-select" title="Model or stack">${icon(target.startsWith('stack:') ? 'layers' : 'cpu', 16)}<select id="pick-model" aria-label="Model or stack">${!a.target && S.data.prefs.autoRoute !== false && S.targets.length > 1 ? `<option value="__auto" ${autoOn(chat, a) ? 'selected' : ''}>✨ Automatic</option>` : ''}${S.targets.length ? targetOptions(autoOn(chat, a) ? '' : target) : '<option value="">No models yet</option>'}<option value="__infuse">✨ Infuse several AIs…</option><option value="__get">＋ Get more models…</option></select>${icon('chevron', 16)}</label>
+          <label class="pill-select" title="Model or team">${icon(target.startsWith('stack:') ? 'layers' : 'cpu', 16)}<select id="pick-model" aria-label="Model or team">${!a.target && S.data.prefs.autoRoute !== false && S.targets.length > 1 ? `<option value="__auto" ${autoOn(chat, a) ? 'selected' : ''}>✨ Automatic</option>` : ''}${S.targets.length ? targetOptions(autoOn(chat, a) ? '' : target) : '<option value="">No models yet</option>'}<option value="__infuse">✨ Combine several AIs…</option><option value="__get">＋ Get more models…</option></select>${icon('chevron', 16)}</label>
           <button class="net-pill ${S.config?.offline ? 'off' : ''}" id="net-pill" role="switch" aria-checked="${!S.config?.offline}" title="${S.config?.offline ? 'Offline: nothing leaves this PC. Click to go online.' : 'Online: web search, cloud AIs and downloads are available. Click to go offline.'}"><span class="net-dot"></span><span>${S.config?.offline ? 'Offline' : 'Online'}</span><span class="net-sw"><i></i></span></button>
         </div>
         <div class="chat-title" title="${esc(chat.title)}">${projectChipHTML(chat)}${chat.private ? '<span class="priv-chip" title="Private chat: memory is not used or added">🔒 Private</span>' : ''}<span class="ct">${chat.messages.length && chat.title !== 'New chat' ? esc(chat.title) : ''}</span></div>
@@ -58,17 +58,17 @@ views.chat = {
           <div class="skill-pop" id="skill-pop" hidden></div>
           <textarea id="input" rows="1" placeholder="${esc(chat.pendingSkill ? skillById(chat.pendingSkill)?.hint || 'Add details…' : `Message ${a.name}…  Type / for skills`)}" aria-label="Message"></textarea>
           <div class="composer-bar">
-            <button class="icon-btn opts-btn" id="opts-btn" title="Options: web search, knowledge, fact check, effort, skills" aria-label="Options">${icon('plus')}</button>
+            <button class="icon-btn opts-btn" id="opts-btn" title="Options: web search, knowledge, double-check, effort, skills" aria-label="Options">${icon('plus')}</button>
             <button class="icon-btn" id="skill-btn" title="Use a skill (or type /)" aria-label="Skills">${icon('zap')}</button>
             <button class="icon-btn improve-btn" id="improve-btn" title="Improve my prompt: clearer and more complete, so the answer is better" aria-label="Improve my prompt">${icon('sparkle')}</button>
             <button class="icon-btn mic-btn ${voiceRec?.chatId === chat.id ? 'rec' : ''}" id="mic-btn" title="Voice typing: click and speak (Ctrl+Space)" aria-label="Voice typing">${icon('mic')}</button>
             <label class="icon-btn" title="Attach photos, videos or documents" aria-label="Attach">${icon('clip')}<input type="file" id="file-in" multiple hidden accept="image/*,video/*,.pdf,.docx,.xlsx,.xlsm,.csv,.tsv,.pptx,.txt,.md,.json,.html,.htm,.xml,.js,.ts,.py,.java,.c,.cpp,.cs,.go,.rs,.rb,.php,.sql"></label>
             <span class="bar-sep"></span>
-            ${chip('tog-lib', 'book', 'Knowledge', lib, 'Search your knowledge bases and cite them')}
+            ${chip('tog-lib', 'book', 'Library', lib, 'Search your knowledge bases and cite them')}
             ${S.config?.offline ? `<span class="chip-tog" title="Offline: switch to Online in the sidebar to search the web" style="opacity:.5">${icon('globe', 16)}<span>Web (offline)</span></span>` : chip('tog-web', 'globe', 'Web', web, 'Search the web and cite sources')}
             ${chip('tog-tools', 'plug', 'Tools', tools, 'Let the AI use your integrations (GitHub, Slack, MCP servers…)')}
-            ${chip('tog-fact', 'shield', 'Fact check', fact, 'After each answer, a second model checks it claim by claim')}
-            <label class="pill-select small" title="Quick: one model. Balanced: one model, then a check. Thorough: the whole team on harder questions, one model on easy ones. Max: always the whole team.">${icon('gauge', 16)}<select id="pick-effort" aria-label="Effort">${Object.entries(EFFORTS).map(([k, e]) => `<option value="${k}" ${k === effortOf(chat, a) ? 'selected' : ''}>${e.replace(/^\S+\s/, '')}</option>`).join('')}</select>${icon('chevron', 14)}</label>
+            ${chip('tog-fact', 'shield', 'Double-check', fact, 'After each answer, a second model checks it claim by claim')}
+            <label class="pill-select small" title="Instant: one model, fastest. Balanced: one model, then a check. Auto: the team works on hard questions only. Deep think: the whole team on every question, always double-checked.">${icon('gauge', 16)}<select id="pick-effort" aria-label="Effort">${Object.entries(EFFORTS).map(([k, e]) => `<option value="${k}" ${k === effortOf(chat, a) ? 'selected' : ''}>${e.replace(/^\S+\s/, '')}</option>`).join('')}</select>${icon('chevron', 14)}</label>
             <span class="grow"></span>
             <button class="send-btn ${pending?.chatId === chat.id ? 'stop' : ''}" id="send" title="${pending?.chatId === chat.id ? 'Stop' : 'Send (Enter)'}" aria-label="${pending?.chatId === chat.id ? 'Stop' : 'Send'}">${icon(pending?.chatId === chat.id ? 'stop' : 'send', 20)}</button>
           </div>
@@ -81,7 +81,7 @@ views.chat = {
   bind: bindChat,
 };
 
-// "⏱ ~6 s per answer (hard questions ~20 s)", for the model or stack this chat runs on.
+// "⏱ ~6 s per answer (hard questions ~20 s)", for the model or team this chat runs on.
 function chatEtaHint(target, a) {
   const words = wordsForJob(a.job);
   const easy = etaFor(target, words);
@@ -97,9 +97,9 @@ function welcomeHTML(a) {
     <div class="emoji-badge" style="width:72px;height:72px;font-size:2.4rem;margin:0 auto 12px;border-radius:20px">${esc(a.emoji)}</div>
     <h1>${esc(a.name)}</h1>
     <p class="muted" style="font-size:1.05rem;font-weight:600">${esc(a.description || '')}</p>
-    ${none ? `<div class="notice info" style="text-align:left;margin-top:16px"><b>Let's get you set up.</b> Quicksilver runs AI on your own PC. The <b>Stack Advisor</b> checks your computer and downloads the best free models for the job, in one click. No account or key needed.
-      <div class="row" style="margin-top:10px"><button class="btn primary" data-goto="stacks">Open the Stack Advisor</button><button class="btn" data-goto="models">Browse models</button></div></div>` : ''}
-    ${S.installed.some((m) => m.kind === 'text') && S.installed.filter((m) => m.kind === 'text').every((m) => m.source === 'bundled') ? '<p class="small muted grow-tip">💡 The starter models are a great start but limited on their own. Answers get sharper as you add models or build stacks (<a href="#" data-goto="stacks">Stacks</a> · <a href="#" data-goto="models">Models</a>).</p>' : ''}
+    ${none ? `<div class="notice info" style="text-align:left;margin-top:16px"><b>Let's get you set up.</b> Quicksilver runs AI on your own PC. The <b>Setup Advisor</b> checks your computer and downloads the best free models for the job, in one click. No account or key needed.
+      <div class="row" style="margin-top:10px"><button class="btn primary" data-goto="stacks">Open the Setup Advisor</button><button class="btn" data-goto="models">Browse models</button></div></div>` : ''}
+    ${S.installed.some((m) => m.kind === 'text') && S.installed.filter((m) => m.kind === 'text').every((m) => m.source === 'bundled') ? '<p class="small muted grow-tip">💡 The starter models are a great start but limited on their own. Answers get sharper as you add models or build teams (<a href="#" data-goto="stacks">Teams</a> · <a href="#" data-goto="models">Models</a>).</p>' : ''}
   </div>`;
 }
 
@@ -129,8 +129,12 @@ const domainOf = (u) => { try { return new URL(u).hostname.replace(/^www\./, '')
 const msgTime = (m) => (m.t ? new Date(m.t).toLocaleString(undefined, { weekday: 'short', day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit' }) : '');
 const tb = (act, id, ic, label) => `<button class="tool icon" data-act="${act}" data-id="${id}" title="${esc(label)}" aria-label="${esc(label)}">${icon(ic, 16)}</button>`;
 
-// Quick next steps under the latest answer, picked from what kind of answer it is.
+// Next questions under the latest answer: written by the model from what it actually said
+// (see writeFollowups); while they're being written, quiet placeholders; if that fails, simple
+// ones chosen by the kind of answer.
 function followupsHTML(alt) {
+  if (alt.followups?.length) return `<div class="followups">${alt.followups.map((q) => `<button class="fu" data-followup="${esc(q)}">${esc(q)}</button>`).join('')}</div>`;
+  if (alt.fuPending) return '<div class="followups pending" aria-hidden="true"><span class="fu ghost"></span><span class="fu ghost"></span><span class="fu ghost"></span></div>';
   const t = alt.text || '';
   const list = /```/.test(t) ? ['Explain how this works', 'Add comments and tests', 'Can it be simpler?']
     : /^\s*\|.*\|\s*$/m.test(t) ? ['Which option would you pick?', 'Add a column for cost', 'Turn it into a chart']
@@ -162,7 +166,7 @@ function messageHTML(chat, a, m, i) {
     if (alt.text) tools.push(tb('copy', m.id, 'copy', 'Copy'));
     if (isLast) tools.push(tb('regen', m.id, 'refresh', 'Regenerate'), tb('other', m.id, 'layers', 'Try another model'));
     if (alt.text) tools.push(`<button class="tool icon ${speakingId === m.id ? 'on' : ''}" data-act="speak" data-id="${m.id}" title="${speakingId === m.id ? 'Stop reading' : 'Listen'}" aria-label="Listen">${icon('volume', 16)}</button>`, tb('doc', m.id, 'doc', 'Edit as document'));
-    tools.push(tb('more', m.id, 'more', 'More: continue, fact check, save as, branch, delete'));
+    tools.push(tb('more', m.id, 'more', 'More: continue, double-check, save as, branch, delete'));
   }
   const model = alt.target ? targetLabel(alt.target) : alt.imported ? '' : '';
   return `<div class="msg assistant" data-msg="${m.id}">
@@ -192,7 +196,7 @@ function moreMenu(chat, m, anchor) {
   menu.className = 'menu';
   menu.innerHTML = [
     i === chat.messages.length - 1 && alt.text ? '<button data-mm="continue">Continue writing</button>' : '',
-    alt.text && !alt.check && !checkRunning(m) ? '<button data-mm="check">✓ Fact check this answer</button>' : '',
+    alt.text && !alt.check && !checkRunning(m) ? '<button data-mm="check">✓ Double-check this answer</button>' : '',
     alt.text ? '<button data-mm="saveas">⬇ Save as Word, PDF, PowerPoint…</button>' : '',
     '<button data-mm="branch">↳ Branch: new chat from here</button>',
     '<button data-mm="del" class="danger">Delete</button>',
@@ -284,7 +288,7 @@ function bindChat() {
     chat.web = next; save(); render();
   });
   $('#pick-effort').addEventListener('change', (e) => { chat.effort = e.target.value; save(); render(); });
-  $('#tog-tools').addEventListener('click', () => { chat.tools = !toolsOn(chat, a); save(); render(); if (chat.tools && !S.hasIntegrations) toast('Connect GitHub, Slack, Notion, Jira, Linear or an MCP server under Integrations first.', 6000); });
+  $('#tog-tools').addEventListener('click', () => { chat.tools = !toolsOn(chat, a); save(); render(); if (chat.tools && !S.hasIntegrations) toast('Connect GitHub, Slack, Notion, Jira, Linear or an MCP server under Connectors first.', 6000); });
   $('#tog-fact').addEventListener('click', () => { chat.factCheck = !factOn(chat, a); save(); render(); });
   $('#net-pill').addEventListener('click', toggleNet);
   $('#chat-more').addEventListener('click', (e) => { e.stopPropagation(); chatMenu(e.currentTarget, chat); });
@@ -327,7 +331,7 @@ function bindChat() {
       if (chat.messages.at(-1)?.role === 'user') generate(chat, null);
       return;
     }
-    if (!resolveTarget(chat, a)) { toast('Get a model first: open the Stack Advisor.'); go({ view: 'stacks' }); return; }
+    if (!resolveTarget(chat, a)) { toast('Get a model first: open the Setup Advisor.'); go({ view: 'stacks' }); return; }
     // An assistant can apply a skill to every message (the Image Artist paints each request).
     chat.messages.push({ id: uid(), t: now(), role: 'user', text, attachments: atts, skillId: chat.pendingSkill || (skillById(a.skill) ? a.skill : undefined) });
     chat.pendingSkill = null; chat.suggested = null;
@@ -478,7 +482,7 @@ async function generate(chat, rerollMsg, withTarget) {
     const pick = autoPick(chat, a, q?.text || '', (q?.attachments || []).some((x) => x.type === 'image' || x.type === 'video'));
     if (pick.target) { target = pick.target; autoWhy = pick.why || ''; }
   }
-  if (!target) { toast('Get a model first: open the Stack Advisor.'); return; }
+  if (!target) { toast('Get a model first: open the Setup Advisor.'); return; }
   let msg = rerollMsg;
   let upTo;
   if (msg) { upTo = chat.messages.indexOf(msg); msg.alts.push({ text: '', target }); msg.altIndex = msg.alts.length - 1; }
@@ -617,10 +621,13 @@ qs.onChat(({ requestId, ev }) => {
       delete alt.status;
       if (alt.t0) { alt.ms = Date.now() - alt.t0; delete alt.t0; }
       const sourcesFull = pending.sources;
+      const fuOk = ev.type === 'done' && !ev.aborted && alt.text && !alt.error && !isMakerSkill(alt) && chat.messages.at(-1) === msg && S.data.prefs.smartFollowups !== false;
+      if (fuOk) alt.fuPending = true;
       pending = null;
       chat.updated = now();
       save();
       if (S.route.view === 'chat') render(); else renderChatList();
+      if (fuOk) writeFollowups(chat, msg, alt);
       const maker = isMakerSkill(alt);
       if (ev.type === 'done' && !ev.aborted && maker && MEDIA_OUTPUTS.has(maker.output)) runSkillMedia(chat, msg, alt, maker);
       else if (ev.type === 'done' && !ev.aborted && maker && AFTER_OUTPUTS.has(maker.output) && alt.text) runAfterText(chat, msg, alt, maker);
@@ -661,7 +668,7 @@ function messageAction(chat, act, id, el) {
   }
 }
 
-// Used by Studio and Library: start a chat with something attached.
+// Used by Create and Library: start a chat with something attached.
 function chatWithAttachment(att, text, assistantId) {
   newChat(assistantId);
   const chat = chatById(S.route.id);
@@ -670,7 +677,7 @@ function chatWithAttachment(att, text, assistantId) {
   render();
 }
 
-// ---------- fact checking ----------
+// ---------- double-checking ----------
 // A second, different model checks the answer claim by claim, with the same sources and files.
 
 const checks = new Map(); // requestId -> { chatId, msgId, alt }
@@ -718,7 +725,7 @@ CONFIDENCE: <0-100>%
 
 function factCheck(chat, msg, alt, sources) {
   const checker = pickChecker(alt.target || resolveTarget(chat, assistantById(chat.assistantId)));
-  if (!checker) { toast('Install a second model to fact check with.'); return; }
+  if (!checker) { toast('Install a second model to double-check with.'); return; }
   const idx = chat.messages.indexOf(msg);
   const q = [...chat.messages.slice(0, idx)].reverse().find((m) => m.role === 'user');
   const qText = q ? (q.text || '') : '';
@@ -752,12 +759,12 @@ function checkHTML(m, alt) {
   const n = checkCounts(ch.text);
   const active = factPanel?.msgId === m.id ? 'active' : '';
   let kind = p.kind, label;
-  if (ch.error) { kind = 'pink'; label = 'Fact check failed'; }
-  else if (ch.running) { kind = 'run'; label = `Fact checking…${n.ok + n.warn + n.bad ? ` ${n.ok + n.warn + n.bad} claims so far` : ''}`; }
+  if (ch.error) { kind = 'pink'; label = 'Double-check failed'; }
+  else if (ch.running) { kind = 'run'; label = `Double-checking…${n.ok + n.warn + n.bad ? ` ${n.ok + n.warn + n.bad} claims so far` : ''}`; }
   else label = `${p.verdict || 'Checked'}${p.confidence != null ? ` · ${p.confidence}%` : ''}`;
   if (ch.running && !(n.ok + n.warn + n.bad) && etaFor(ch.target, WORDS.check) != null) label += ` (${etaLabel(etaFor(ch.target, WORDS.check))})`;
   const flags = !ch.running && !ch.error ? `${n.bad ? `<span class="fc-n bad">${n.bad} ❌</span>` : ''}${n.warn ? `<span class="fc-n warn">${n.warn} ⚠️</span>` : ''}${!n.bad && !n.warn && n.ok ? `<span class="fc-n ok">${n.ok} ✅</span>` : ''}` : '';
-  return `<button class="fact-chip k-${kind} ${active}" data-act="factopen" data-id="${m.id}" title="Open the fact check beside the chat">
+  return `<button class="fact-chip k-${kind} ${active}" data-act="factopen" data-id="${m.id}" title="Open the double-check beside the chat">
     ${ch.running ? '<span class="fc-spin"></span>' : icon('shield', 15)}<span>${esc(label)}</span>${flags}${icon('left', 14).replace('class="ico"', 'class="ico fc-arrow"')}
   </button>`;
 }
@@ -804,9 +811,9 @@ function factPanelHTML(chat) {
   const at = list.indexOf(m);
   const q = [...chat.messages.slice(0, chat.messages.indexOf(m))].reverse().find((x) => x.role === 'user');
   const conf = p.confidence ?? null;
-  return `<aside class="fact-panel" id="fact-panel" aria-label="Fact check">
+  return `<aside class="fact-panel" id="fact-panel" aria-label="Double-check">
     <div class="fp-head">
-      <span class="fp-title">${icon('shield', 18)} Fact check</span>
+      <span class="fp-title">${icon('shield', 18)} Double-check</span>
       ${list.length > 1 ? `<span class="fp-nav"><button class="icon-btn sm" data-fp="prev" ${at <= 0 ? 'disabled' : ''} title="Earlier check" aria-label="Earlier check">‹</button><span class="small muted">${at + 1} / ${list.length}</span><button class="icon-btn sm" data-fp="next" ${at >= list.length - 1 ? 'disabled' : ''} title="Later check" aria-label="Later check">›</button></span>` : ''}
       <span class="grow"></span>
       <button class="icon-btn sm ${pinned ? 'on' : ''}" data-fp="pin" aria-pressed="${pinned}" title="${pinned ? 'Kept open: follows each new answer' : 'Keep open for every answer'}" aria-label="Keep open">${icon('pin', 16)}</button>
@@ -850,7 +857,7 @@ function factPanelAction(chat, act, id) {
   const list = checkedMsgs(chat);
   const cur = factPanelMsg(chat);
   if (act === 'close') { factPanel = null; if (S.data.prefs.factPanelPinned) { S.data.prefs.factPanelPinned = false; save(); } }
-  else if (act === 'pin') { S.data.prefs.factPanelPinned = !S.data.prefs.factPanelPinned; if (cur) factPanel = { chatId: chat.id, msgId: cur.id }; save(); toast(S.data.prefs.factPanelPinned ? 'Fact check stays open and follows each new answer.' : 'Fact check opens when you click a result.'); }
+  else if (act === 'pin') { S.data.prefs.factPanelPinned = !S.data.prefs.factPanelPinned; if (cur) factPanel = { chatId: chat.id, msgId: cur.id }; save(); toast(S.data.prefs.factPanelPinned ? 'Double-check stays open and follows each new answer.' : 'Double-check opens when you click a result.'); }
   else if (act === 'prev' || act === 'next') { const m = list[list.indexOf(cur) + (act === 'next' ? 1 : -1)]; if (m) { factPanel = { chatId: chat.id, msgId: m.id }; document.querySelector(`[data-msg="${m.id}"]`)?.scrollIntoView({ behavior: 'smooth', block: 'center' }); } }
   else if (act === 'jump') { const el = document.querySelector(`[data-msg="${id}"]`); el?.scrollIntoView({ behavior: 'smooth', block: 'center' }); el?.classList.add('flash'); setTimeout(() => el?.classList.remove('flash'), 1200); return; }
   else if (act === 'recheck') { messageAction(chat, 'recheck', id); return; }
@@ -874,7 +881,7 @@ qs.onChat(({ requestId, ev }) => {
   if (ev.type === 'text') ch.text += ev.text;
   else if (ev.type === 'status') ch.status = ev.text || ch.status;
   else if (ev.type === 'done' || ev.type === 'error') {
-    if (ev.type === 'error') ch.error = `Fact check failed: ${ev.message}`;
+    if (ev.type === 'error') ch.error = `Double-check failed: ${ev.message}`;
     ch.running = false;
     checks.delete(requestId);
     save();

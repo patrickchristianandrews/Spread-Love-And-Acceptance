@@ -1,4 +1,4 @@
-// Arena: a blind test. Two of your models or stacks answer the same question as "A" and "B";
+// Arena: a blind test. Two of your models or teams answer the same question as "A" and "B";
 // you pick the better answer before seeing which is which. Your votes build a leaderboard of
 // what actually works best for you.
 'use strict';
@@ -13,9 +13,9 @@ views.arena = {
     const r = arenaRound;
     const pool = arenaTargets();
     return `<div class="page arena">
-      <div class="page-head"><h1>Arena</h1><span class="small muted">Blind test: which answer is better?</span></div>
-      <p class="lede">Ask anything. Two of your models or stacks answer without their names; you pick the better one, then see who wrote it. Over time this shows which model really suits <i>your</i> work.</p>
-      ${pool.length < 2 ? '<div class="notice info">You need at least two models (or a model and a stack) for a blind test. <button class="btn small primary" data-goto="models">Get models</button></div>' : `
+      <div class="page-head"><h1>Compare models</h1><span class="small muted">Blind test: which answer is better?</span></div>
+      <p class="lede">Ask anything. Two of your models or teams answer without their names; you pick the better one, then see who wrote it. Over time this shows which model really suits <i>your</i> work.</p>
+      ${pool.length < 2 ? '<div class="notice info">You need at least two models (or a model and a team) for a blind test. <button class="btn small primary" data-goto="models">Get models</button></div>' : `
       <div class="arena-ask"><textarea id="ar-q" rows="2" placeholder="e.g. Explain compound interest to a 12-year-old">${esc(r?.prompt || '')}</textarea>
         <div class="row"><label class="small muted" for="ar-pool">Contestants</label><select id="ar-pool"><option value="all">Any two, at random</option>${pool.map((t) => `<option value="${esc(t.target)}" ${S.data.prefs.arenaFixed === t.target ? 'selected' : ''}>${esc(t.label)} vs a random other</option>`).join('')}</select>
         <span class="grow"></span><button class="btn primary" id="ar-go" ${r && !r.sides.every((s) => s.done) ? 'disabled' : ''}>${icon('scale', 17)} ${r ? 'New round' : 'Start'}</button></div></div>`}
@@ -29,7 +29,7 @@ views.arena = {
     $('#ar-q')?.addEventListener('keydown', (e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); startArena(); } });
     $('#ar-pool')?.addEventListener('change', (e) => { S.data.prefs.arenaFixed = e.target.value === 'all' ? '' : e.target.value; save(); });
     $$('[data-vote]').forEach((b) => b.addEventListener('click', () => arenaVote(b.dataset.vote)));
-    $('#ar-reset')?.addEventListener('click', async () => { if (await confirmBox('Clear all Arena votes and ratings?', { yes: 'Clear' })) { S.data.arena = { ratings: {}, games: [] }; save(); render(); } });
+    $('#ar-reset')?.addEventListener('click', async () => { if (await confirmBox('Clear all Compare models votes and ratings?', { yes: 'Clear' })) { S.data.arena = { ratings: {}, games: [] }; save(); render(); } });
   },
 };
 
@@ -52,7 +52,7 @@ function arenaBoardHTML() {
   const rows = Object.entries(d.ratings).filter(([t]) => targetValid(t) || d.ratings[t].games).sort((a, b) => b[1].elo - a[1].elo);
   if (!rows.length) return '<div class="section"><h2>Your leaderboard</h2></div><div class="empty small">Vote in a few rounds and your own ranking appears here.</div>';
   return `<div class="section"><h2>Your leaderboard</h2><span class="small muted">${d.games.length} vote${d.games.length === 1 ? '' : 's'}</span><button class="btn small ghost" id="ar-reset">Clear</button></div>
-    <table class="list arena-board"><thead><tr><th>#</th><th>Model or stack</th><th>Rating</th><th>Won</th><th>Lost</th><th>Tied</th></tr></thead><tbody>
+    <table class="list arena-board"><thead><tr><th>#</th><th>Model or team</th><th>Rating</th><th>Won</th><th>Lost</th><th>Tied</th></tr></thead><tbody>
     ${rows.map(([t, s], i) => `<tr><td>${i + 1}</td><td><b>${esc(targetLabel(t) === 'No model chosen' ? s.label || t : targetLabel(t))}</b></td><td><span class="elo">${Math.round(s.elo)}</span>${s.games < 5 ? ' <span class="small muted" title="Fewer than 5 votes: still settling">·</span>' : ''}</td><td>${s.w}</td><td>${s.l}</td><td>${s.t}</td></tr>`).join('')}
     </tbody></table><p class="small muted">Ratings start at 1000 and move with each vote (like chess ratings): beating a strong model counts for more.</p>`;
 }

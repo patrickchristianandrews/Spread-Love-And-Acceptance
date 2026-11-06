@@ -1,10 +1,10 @@
-// Specialist stacks: ready-made teams for specific kinds of work, shown on the Stacks page under
-// "Stacks for specific work". Each part is one of:
+// Specialist stacks: ready-made teams for specific kinds of work, shown on the Teams page under
+// "Teams for specific work". Each part is one of:
 //   rxM a model from the catalog (downloaded, runs on this PC)
 //   rxT a tool built into Quicksilver (sometimes standing in for a named model it doesn't run yet)
 //   rxC a cloud service you connect with a key
 //   rxX not available in Quicksilver yet (with the reason)
-// "Set up" downloads the models, creates the stack and an assistant that uses it.
+// "Set up" downloads the models, creates the team and an assistant that uses it.
 'use strict';
 
 const rxM = (id, role, ladder) => ({ kind: 'model', id, role, ladder });
@@ -14,17 +14,17 @@ const rxX = (name, role, why) => ({ kind: 'missing', name, role, why });
 
 const RX_TOOLS = {
   knowledge: { name: 'Knowledge bases', what: 'Quicksilver\'s own document search', go: 'library' },
-  voices: { name: 'Windows voices', what: 'Read aloud and two-voice podcasts (Studio → Voice)', go: 'studio' },
-  beats: { name: 'Beat & melody synth', what: 'Drums, bass, chords and melody as MP3 (Studio → Music)', go: 'studio' },
+  voices: { name: 'Windows voices', what: 'Read aloud and two-voice podcasts (Create → Voice)', go: 'studio' },
+  beats: { name: 'Beat & melody synth', what: 'Drums, bass, chords and melody as MP3 (Create → Music)', go: 'studio' },
   vocals: { name: 'Vocal remover', what: 'Takes vocals out or brings them forward (2-way, not 4 stems)', go: 'studio' },
   upscale: { name: 'Upscale 4×', what: 'Sharp enlargement (not AI upscaling yet)', go: 'studio' },
   bgremove: { name: 'Remove background', what: 'Uses an AI photo-edit model (FLUX Kontext or Qwen Image Edit)', go: 'models' },
-  fps60: { name: 'Smooth to 60 fps', what: 'Motion-interpolated frames (Studio → Quick fixes)', go: 'studio' },
-  videoedit: { name: 'Video editor', what: 'Trim, crop, speed, captions by hand (Studio → Edit video)', go: 'studio' },
-  master: { name: 'Podcast mastering', what: 'Noise removal, compression and loudness (Studio → Quick fixes)', go: 'studio' },
+  fps60: { name: 'Smooth to 60 fps', what: 'Motion-interpolated frames (Create → Quick fixes)', go: 'studio' },
+  videoedit: { name: 'Video editor', what: 'Trim, crop, speed, captions by hand (Create → Edit video)', go: 'studio' },
+  master: { name: 'Podcast mastering', what: 'Noise removal, compression and loudness (Create → Quick fixes)', go: 'studio' },
   whisper: { name: 'Voice typing (Whisper)', what: 'Speech to text on this PC: the mic button in chat, or Ctrl+Space', go: 'settings' },
-  melody: { name: 'Melody writer & player', what: 'Writes a tune over chords and plays it back as an MP3 (Studio → Music)', go: 'studio' },
-  loudness: { name: 'Loudness & cleanup', what: 'Streaming-ready loudness, hiss and hum removal (Studio → Quick fixes)', go: 'studio' },
+  melody: { name: 'Melody writer & player', what: 'Writes a tune over chords and plays it back as an MP3 (Create → Music)', go: 'studio' },
+  loudness: { name: 'Loudness & cleanup', what: 'Streaming-ready loudness, hiss and hum removal (Create → Quick fixes)', go: 'studio' },
 };
 const WHISPER = (role) => rxT('whisper', role, 'Whisper Large v3 Turbo');
 const SUNO = (role) => rxX('Suno v4 / Udio', role, 'Neither has an official public API to connect to.');
@@ -37,7 +37,7 @@ const RX_GROUPS = [
 ];
 
 const STACK_RECIPES = [
-  // ---------- Music: three song stacks, each for a different job (any genre) ----------
+  // ---------- Music: three song teams, each for a different job (any genre) ----------
   { id: 'song-complete', group: 'music', where: 'local', name: 'Songwriter: any genre, with chords, melody & a demo beat', icon: '🎶', temperature: 0.85,
     parts: [rxM('gemma-2-9b', 'Lyricist', 'creative'), rxM('qwen3-8b', 'Co-writer: structure, rhyme & chords', 'creative'), rxT('melody', 'Melody guide'), rxT('beats', 'Demo beat', 'MusicGen Stereo')],
     lead: 'qwen3-8b', skill: 'song-writer',
@@ -81,7 +81,7 @@ const STACK_RECIPES = [
 
   // ---------- Medical, science & academic research ----------
   { id: 'clinical-evidence', group: 'research', where: 'local', private: 'Strictly isolated', name: 'Isolated medical journal & clinical evidence', icon: '🩺',
-    parts: [rxT('knowledge', 'PubMed / Cochrane / FDA indexer', 'Nomic Embed v1.5'), rxM('qwen2.5-7b', 'Clinical synthesiser'), rxM('deepseek-r1-qwen3-8b', 'Peer-review fact checker')],
+    parts: [rxT('knowledge', 'PubMed / Cochrane / FDA indexer', 'Nomic Embed v1.5'), rxM('qwen2.5-7b', 'Clinical synthesiser'), rxM('deepseek-r1-qwen3-8b', 'Peer-review double-checker')],
     lead: 'deepseek-r1-qwen3-8b', library: true, strict: true, factCheck: true,
     instructions: 'You synthesise clinical evidence only from the indexed journals and documents. Give a bottom line, then the evidence by study type with effect sizes and quality, and cite every claim. Say clearly when the sources do not answer. Information, not medical advice.' },
   { id: 'lit-review', group: 'research', where: 'local', name: 'Literature review, thesis & citation checker', icon: '📚',
@@ -242,7 +242,7 @@ function partStatus(p) {
   if (p.kind === 'tool') { const tl = RX_TOOLS[p.id]; return { icon: '✓', cls: 'ok', sub: `${tl.name}${p.instead ? `, in place of ${p.instead}` : ''}`, note: 'built in', title: tl.what }; }
   if (p.kind === 'cloud') {
     const on = p.provider === 'elevenlabs' ? mcpOn('elevenlabs') : providerOn(p.provider);
-    return { icon: '☁', cls: on ? 'ok' : 'cloud', sub: p.label, note: on ? 'connected' : 'connect', title: on ? '' : p.provider === 'elevenlabs' ? 'Add it under Integrations → MCP servers.' : 'Connect it under Models → Connect an API.' };
+    return { icon: '☁', cls: on ? 'ok' : 'cloud', sub: p.label, note: on ? 'connected' : 'connect', title: on ? '' : p.provider === 'elevenlabs' ? 'Add it under Connectors → MCP servers.' : 'Connect it under Models → Connect an API.' };
   }
   return { icon: '–', cls: 'miss', sub: p.name, note: 'not yet', title: p.why };
 }
@@ -264,8 +264,8 @@ function recipeCard(r) {
 }
 
 function recipesHTML() {
-  if (simpleOn()) return `<details class="rx-fold"><summary><span><b>Ready-made stacks for specific work</b> <span class="small muted">${STACK_RECIPES.length} teams: music, office, research, photos, video, code, writing, finance, tutoring, games</span></span></summary>${recipesBody()}</details>`;
-  return `<div class="section"><h2>Stacks for specific work</h2><span class="small muted">${STACK_RECIPES.length} ready-made teams. ✓ ready · ⬇ downloads · ☁ needs a cloud connection · – not in Quicksilver yet</span></div>${recipesBody()}`;
+  if (simpleOn()) return `<details class="rx-fold"><summary><span><b>Ready-made teams for specific work</b> <span class="small muted">${STACK_RECIPES.length} teams: music, office, research, photos, video, code, writing, finance, tutoring, games</span></span></summary>${recipesBody()}</details>`;
+  return `<div class="section"><h2>Teams for specific work</h2><span class="small muted">${STACK_RECIPES.length} ready-made teams. ✓ ready · ⬇ downloads · ☁ needs a cloud connection · – not in Quicksilver yet</span></div>${recipesBody()}`;
 }
 function recipesBody() {
   return `${RX_GROUPS.map(([g, label]) => { const list = STACK_RECIPES.filter((r) => r.group === g); return list.length ? `<h3 class="int-group">${esc(label.replace(/^\S+\s/, ''))}</h3><div class="cards rx-grid">${list.map(recipeCard).join('')}</div>` : ''; }).join('')}`;
@@ -277,7 +277,7 @@ async function setUpRecipe(id) {
   const plan = rxResolve(r);
   const models = plan.parts.filter((p) => p.kind === 'model');
   const usable = models.filter((p) => S.est?.text?.[p.id]?.rating !== 'wont' && S.est?.media?.[p.id]?.rating !== 'wont');
-  // Downloads run in the background; the stack is ready as soon as they finish.
+  // Downloads run in the background; the team is ready as soon as they finish.
   for (const p of usable) if (!haveModel(p.id) && !S.downloads[p.id]) download({ catalogId: p.id }, catModel(p.id)?.name || p.id).catch(() => {});
   const text = usable.filter((p) => !p.helper && S.catalog.text.some((tm) => tm.id === p.id)).map((p) => p.id);
   const target = (cid) => `local:${haveModel(cid)?.id || cid}`;

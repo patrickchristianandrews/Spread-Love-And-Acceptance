@@ -1,5 +1,5 @@
 // Skills that make things: pictures, videos, photo edits and apps, right in the chat.
-// The text model writes the prompt (or the app); the Studio's image and video models then make
+// The text model writes the prompt (or the app); the Create's image and video models then make
 // the picture or clip, and it appears under the answer with buttons to save, edit or redo it.
 'use strict';
 
@@ -34,7 +34,7 @@ function parseMediaSpec(text) {
 // What to show in the bubble: the note, without the JSON block (also while it streams in).
 const stripMediaBlock = (text) => String(text || '').replace(/```(?:image|video|edit|beat)[\s\S]*?(```|$)/g, '').trim();
 
-// The best installed model for the job (your Studio choice first, then the highest quality).
+// The best installed model for the job (your Create choice first, then the highest quality).
 function pickMediaModel(kind) {
   const specOf = (m) => S.catalog.media.find((c) => c.id === m.catalogId) || {};
   const q = (m) => specOf(m).quality || 0;
@@ -185,7 +185,7 @@ Object.assign(MEDIA_RULES, {
 
 const parseBeat = (text) => { const m = String(text || '').match(/```(?:beat|json)?\s*\n?([\s\S]*?)```/); try { return JSON.parse(m ? m[1] : String(text).match(/\{[\s\S]*\}/)?.[0]); } catch { return null; } };
 
-// Follows one job (Studio engine, ffmpeg tool or speech) until it finishes.
+// Follows one job (Create engine, ffmpeg tool or speech) until it finishes.
 function trackJob(md, label, sec, start, repaint) {
   const jobId = uid();
   return new Promise((resolve) => {

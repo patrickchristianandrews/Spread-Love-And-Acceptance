@@ -36,7 +36,7 @@ views.skills = {
           <div class="card">
             <div class="row"><span class="emoji-badge">${esc(s.icon)}</span><h3 class="grow">${esc(s.name)}</h3>${s.custom ? '<span class="badge b-pink">yours</span>' : ''}</div>
             <p class="desc" style="margin:10px 0">${esc(s.description)}</p>
-            <div class="row small" style="margin-bottom:10px"><span class="badge ${OUTPUT_BADGE[s.output] || 'b-lav'}">→ ${esc(OUTPUT_LABEL[s.output] || 'Answer')}</span>${skillEtaBadge(s)}${s.tools?.web ? '<span class="badge b-mint">🌐 web</span>' : ''}${s.tools?.knowledge ? '<span class="badge b-sky">📚 knowledge</span>' : ''}${s.tools?.factCheck ? '<span class="badge b-peach">✅ fact check</span>' : ''}</div>
+            <div class="row small" style="margin-bottom:10px"><span class="badge ${OUTPUT_BADGE[s.output] || 'b-lav'}">→ ${esc(OUTPUT_LABEL[s.output] || 'Answer')}</span>${skillEtaBadge(s)}${s.tools?.web ? '<span class="badge b-mint">🌐 web</span>' : ''}${s.tools?.knowledge ? '<span class="badge b-sky">📚 knowledge</span>' : ''}${s.tools?.factCheck ? '<span class="badge b-peach">✅ double-check</span>' : ''}</div>
             <div class="row"><button class="btn small primary" data-sk-use="${esc(s.id)}">Use</button><button class="btn small" data-sk-edit="${esc(s.id)}">${s.custom ? 'Edit' : 'Customize'}</button><button class="btn small ghost" data-sk-export="${esc(s.id)}">Export</button>${s.custom ? `<button class="btn small danger" data-sk-del="${esc(s.id)}">${s.overrides ? 'Reset' : 'Delete'}</button>` : ''}</div>
           </div>`).join('')}</div>`;
       }).join('') || '<div class="empty">No skills match.</div>'}
@@ -69,7 +69,7 @@ function skillEtaBadge(s) {
   if (DIRECT_OUTPUTS.has(s.output)) return '<span class="badge b-mint" title="Runs on this PC with built-in tools: no model needed">⚡ instant tool · free</span>';
   if (MEDIA_OUTPUTS.has(s.output)) {
     const pick = pickMediaModel(s.output);
-    if (!pick) return '<span class="badge b-lemon" title="Get an image or video model under Models → Images & video">needs a Studio model</span>';
+    if (!pick) return '<span class="badge b-lemon" title="Get an image or video model under Models → Images & video">needs an image model</span>';
     if (pick.api) return '<span class="badge b-lav">☁ via your image API</span>';
     const m = S.speed?.media?.[pick.inst.id];
     return etaBadge(m ? m.sec * Math.max(1, s.media?.count || 1) : null, '', m?.stars ?? null);
@@ -102,7 +102,7 @@ function editSkill(s) {
         <div class="field"><label for="sk-out">Result</label><select id="sk-out">${Object.entries(OUTPUT_LABEL).map(([k, l]) => `<option value="${k}" ${v.output === k ? 'selected' : ''}>${l}</option>`).join('')}</select></div>
         <div class="field"><label for="sk-trig">Suggest when I type… (optional)</label><input id="sk-trig" value="${esc((v.triggers || []).join(', '))}" placeholder="status update, weekly report"></div>
       </div>
-      <div class="row"><label class="row"><input type="checkbox" id="sk-web" ${v.tools?.web ? 'checked' : ''}> 🌐 Search the web</label><label class="row"><input type="checkbox" id="sk-kb" ${v.tools?.knowledge ? 'checked' : ''}> 📚 Use knowledge</label><label class="row"><input type="checkbox" id="sk-fc" ${v.tools?.factCheck ? 'checked' : ''}> ✅ Fact check</label></div>
+      <div class="row"><label class="row"><input type="checkbox" id="sk-web" ${v.tools?.web ? 'checked' : ''}> 🌐 Search the web</label><label class="row"><input type="checkbox" id="sk-kb" ${v.tools?.knowledge ? 'checked' : ''}> 📚 Use knowledge</label><label class="row"><input type="checkbox" id="sk-fc" ${v.tools?.factCheck ? 'checked' : ''}> ✅ Double-check</label></div>
     </div>
     <div class="modal-actions"><button class="btn" data-close>Cancel</button><button class="btn primary" id="sk-save">Save skill</button></div>`, { wide: true });
   b.querySelector('#sk-save').addEventListener('click', () => {

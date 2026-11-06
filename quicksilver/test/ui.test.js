@@ -100,7 +100,7 @@ function redPng(size = 64) {
   // suggests a cloud AI with the paid use it saves.
   await win.click('[data-nav="stacks"]');
   await win.click('[data-job="reasoning"]');
-  await win.waitForSelector('.how-card:has-text("How the Reasoning stack works")', { timeout: 30000 });
+  await win.waitForSelector('.how-card:has-text("How the Reasoning team works")', { timeout: 30000 });
   await win.waitForSelector('.tier-card:has-text("Quickest") .acc');
   await win.waitForSelector('.tier-card.hl:has-text("Balanced") [data-tier="balanced"]');
   await win.waitForSelector('.cloud-card:has-text("Anthropic")', { timeout: 30000 });
@@ -154,7 +154,7 @@ function redPng(size = 64) {
 
   // Infuse: fuse two models into one with Debate, from the model picker.
   await win.selectOption('#pick-model', '__infuse');
-  await win.waitForSelector('text=Infuse AIs');
+  await win.waitForSelector('text=Combine AIs');
   await win.check('.infuse-opt input[value="local:qwen3-8b"]');
   await win.check('.infuse-opt input[value="local:phi-4"]');
   await win.click('.infuse-mode:has-text("Debate")');
@@ -185,12 +185,12 @@ function redPng(size = 64) {
   console.log('✓ status light: state of the model in use, with details');
   // Dropdowns are drawn by Quicksilver (readable in both themes): click, see the choices, pick one.
   await win.click('#pick-effort');
-  await win.waitForSelector('.sel-pop .sel-item.sel:has-text("Quick")');
+  await win.waitForSelector('.sel-pop .sel-item.sel:has-text("Instant")');
   assert.equal(await win.locator('.sel-pop .sel-item').count(), 4);
   const look = await win.evaluate(() => { const p = getComputedStyle(document.querySelector('.sel-pop')); const i = getComputedStyle(document.querySelector('.sel-pop .sel-item')); return { bg: p.backgroundColor, fg: i.color }; });
   assert.notEqual(look.bg, look.fg, 'text and background differ');
   await shot(win, '09b-dropdown');
-  await win.click('.sel-pop .sel-item:has-text("Thorough")');
+  await win.click('.sel-pop .sel-item:has-text("Auto")');
   await win.waitForFunction(() => !document.querySelector('.sel-pop') && document.querySelector('#pick-effort').value === 'thorough');
   // Keyboard: Enter opens, arrows move, Escape closes without changing anything.
   await win.focus('#pick-effort');
@@ -560,7 +560,7 @@ function redPng(size = 64) {
   // Command palette.
   await win.keyboard.press('Control+Shift+P');
   await win.waitForSelector('#pal-q');
-  await win.fill('#pal-q', 'go to arena');
+  await win.fill('#pal-q', 'blind test');
   await shot(win, '19-command-palette');
   await win.keyboard.press('Enter');
   await win.waitForSelector('.arena');
@@ -580,8 +580,9 @@ function redPng(size = 64) {
   await win.fill('#input', 'Name three rivers');
   await win.keyboard.press('Enter');
   await idle();
+  await win.waitForSelector('.followups .fu:has-text("Show an example of Name three rivers")', { timeout: 60000 }); // written from the answer
   await win.click('.followups .fu >> nth=1');
-  await waitAnswer(/Give me an example/);
+  await waitAnswer(/Which option suits a beginner/);
   await idle();
   await win.click('.msg.assistant:last-child [data-act="more"]');
   await win.waitForSelector('.menu [data-mm="continue"]');
@@ -621,7 +622,7 @@ function redPng(size = 64) {
   fs.rmSync(HOME, { recursive: true, force: true });
   console.log('\nUI TESTS PASSED');
 })().catch(async (e) => {
-  console.error('FAIL', e.message.split('\n')[0]);
+  console.error('FAIL', e.message.split('\n').slice(0, 3).join(' | '));
   if (WIN) { try { if (shots) await WIN.screenshot({ path: path.join(shots, 'FAIL.png') }); console.error('PAGE:', (await WIN.evaluate(() => document.body.innerText)).slice(0, 1500)); } catch {} }
   process.exit(1);
 });

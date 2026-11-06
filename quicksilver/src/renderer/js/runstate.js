@@ -1,4 +1,4 @@
-// The live status light at the top right of a chat: how the model or stack in use is running right
+// The live status light at the top right of a chat: how the model or team in use is running right
 // now (Fast, Medium, Slow, Busy PC, Low memory, Unstable, Loading…), from the real writing speed
 // while it answers, this PC's load and any engine trouble. Updates every second while it works.
 'use strict';
@@ -11,7 +11,7 @@ qs.onChat(({ ev }) => {
   if (!pending) return;
   const t = Date.now();
   if (!runLive.started || runLive.req !== pending.requestId) Object.assign(runLive, { req: pending.requestId, started: t, firstAt: 0, words: [], status: '', steps: {} });
-  // Stacks write their drafts as steps: count those words too.
+  // Teams write their drafts as steps: count those words too.
   if (ev.type === 'step' && ev.step) {
     const n = (String(ev.step.text || '').match(/\S+/g) || []).length;
     const prev = runLive.steps[ev.step.index] || 0;
@@ -43,7 +43,7 @@ function runState() {
   if (!chat) return null;
   const a = assistantById(chat.assistantId);
   const target = resolveTarget(chat, a);
-  if (!target) return { level: 'off', label: 'No model', detail: 'Choose a model or stack to start.' };
+  if (!target) return { level: 'off', label: 'No model', detail: 'Choose a model or team to start.' };
   const info = S.speed?.targets?.[target];
   const expected = info?.wps || null;
   const cloud = target.startsWith('api:') || info?.local === false;
