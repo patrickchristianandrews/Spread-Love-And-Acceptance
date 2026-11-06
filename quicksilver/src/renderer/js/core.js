@@ -76,73 +76,7 @@ function confirmBox(text, { yes = 'Delete', danger = true } = {}) {
 
 // ---------- markdown (safe: everything is escaped first) ----------
 
-function inlineMd(s) {
-  return s
-    .replace(/`([^`]+)`/g, (_, c) => `<code>${c}</code>`)
-    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
-    .replace(/(^|[^*\w])\*([^*\s][^*]*?)\*(?!\w)/g, '$1<em>$2</em>')
-    .replace(/\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>')
-    .replace(/\[(\d{1,2})\](?!\()/g, '<span class="cite" title="Source $1">$1</span>');
-}
-
-function tableHtml(lines) {
-  const cells = (l) => l.replace(/^\s*\|/, '').replace(/\|\s*$/, '').split('|').map((c) => c.trim());
-  const head = cells(lines[0]);
-  const rows = lines.slice(2).map(cells);
-  const id = `t${uid()}`;
-  tableHtml.store[id] = [head, ...rows].map((r) => r.map((c) => c.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/\*\*/g, '')));
-  return `<div class="table-wrap"><table><thead><tr>${head.map((h) => `<th>${inlineMd(h)}</th>`).join('')}</tr></thead><tbody>${rows.map((r) => `<tr>${head.map((_, i) => `<td>${inlineMd(r[i] || '')}</td>`).join('')}</tr>`).join('')}</tbody></table>
-    <div class="table-tools"><button class="tool" data-table="${id}" data-fmt="xlsx">Save as Excel</button><button class="tool" data-table="${id}" data-fmt="csv">Save as CSV</button><button class="tool" data-table="${id}" data-fmt="copy">Copy</button></div></div>`;
-}
-tableHtml.store = {};
-
-function markdown(text) {
-  const out = [];
-  String(text).split(/```/).forEach((part, i) => {
-    if (i % 2 === 1) {
-      const nl = part.indexOf('\n');
-      const lang = nl >= 0 ? part.slice(0, nl).trim() : '';
-      const code = nl >= 0 ? part.slice(nl + 1) : part;
-      if (lang === 'chart') { const c = chartHTML(code); if (c) { out.push(c); return; } }
-      out.push(`<pre><span class="bar-top"><span>${esc(lang || 'code')}</span><button class="copy">Copy</button></span><code>${esc(code.replace(/\n$/, ''))}</code></pre>`);
-      return;
-    }
-    const lines = esc(part).split('\n');
-    let list = null;
-    let para = [];
-    const flushPara = () => { if (para.length) { out.push(`<p>${inlineMd(para.join('<br>'))}</p>`); para = []; } };
-    const flushList = () => { if (list) { out.push(`<${list.tag}>${list.items.map((x) => `<li>${inlineMd(x)}</li>`).join('')}</${list.tag}>`); list = null; } };
-    for (let k = 0; k < lines.length; k++) {
-      const line = lines[k];
-      let m;
-      if (!line.trim()) { flushPara(); flushList(); continue; }
-      if (/^\s*\|.*\|\s*$/.test(line) && /^\s*\|?\s*:?-{2,}/.test(lines[k + 1] || '')) {
-        flushPara(); flushList();
-        const tl = [line];
-        k++;
-        tl.push(lines[k]);
-        while (k + 1 < lines.length && /^\s*\|.*\|\s*$/.test(lines[k + 1])) tl.push(lines[++k]);
-        out.push(tableHtml(tl));
-        continue;
-      }
-      if ((m = line.match(/^(#{1,4})\s+(.*)/))) { flushPara(); flushList(); out.push(`<h${m[1].length}>${inlineMd(m[2])}</h${m[1].length}>`); continue; }
-      if (/^\s*(-{3,}|\*{3,})\s*$/.test(line)) { flushPara(); flushList(); out.push('<hr>'); continue; }
-      if ((m = line.match(/^\s*[-*•]\s+(.*)/)) || (m = line.match(/^\s*\d+[.)]\s+(.*)/))) {
-        const tag = /^\s*\d/.test(line) ? 'ol' : 'ul';
-        flushPara();
-        if (list && list.tag !== tag) flushList();
-        list ||= { tag, items: [] };
-        list.items.push(m[1]);
-        continue;
-      }
-      if ((m = line.match(/^&gt;\s?(.*)/))) { flushPara(); flushList(); out.push(`<blockquote>${inlineMd(m[1])}</blockquote>`); continue; }
-      flushList();
-      para.push(line);
-    }
-    flushPara(); flushList();
-  });
-  return out.join('');
-}
+// Markdown (inlineMd, tableHtml, markdown) is in md.js.
 
 // Copy buttons on code and tables, anywhere in the app.
 document.addEventListener('click', async (e) => {

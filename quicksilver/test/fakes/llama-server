@@ -48,7 +48,7 @@ const server = http.createServer((req, res) => {
       clearInterval(t);
       res.write(`data: ${JSON.stringify({ choices: [{ delta: {}, finish_reason: 'stop' }], timings: { predicted_per_second: 42.5, predicted_n: words.length } })}\n\n`);
       res.end('data: [DONE]\n\n');
-    }, 5);
+    }, Number(process.env.QS_FAKE_TOKEN_MS) || 5);
   });
 });
 setTimeout(() => server.listen(port, '127.0.0.1'), 150);

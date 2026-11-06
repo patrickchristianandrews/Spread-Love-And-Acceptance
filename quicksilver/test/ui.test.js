@@ -155,6 +155,12 @@ function redPng(size = 64) {
   await idle();
   await win.waitForFunction(() => [...document.querySelectorAll('.msg.assistant .bubble')].pop()?.textContent.includes('Answer from qwen.gguf'), null, { timeout: 60000 });
   console.log('✓ quick effort');
+  // The status light at the top right shows how the model is running.
+  await win.waitForSelector('#run-state:not([hidden]) .rs-dot', { timeout: 10000 });
+  await win.click('#run-state');
+  await win.waitForSelector('#run-panel:has-text("In use")');
+  await win.click('#run-close');
+  console.log('✓ status light: state of the model in use, with details');
   // Dropdowns are drawn by Quicksilver (readable in both themes): click, see the choices, pick one.
   await win.click('#pick-effort');
   await win.waitForSelector('.sel-pop .sel-item.sel:has-text("Quick")');
@@ -191,6 +197,15 @@ function redPng(size = 64) {
   // Charts render from ```chart blocks.
   const svg = await win.evaluate(() => markdown('```chart\n{"type":"bar","title":"Sales","labels":["N","S"],"series":[{"name":"Rev","data":[3,5]}]}\n```').includes('<svg'));
   assert.ok(svg);
+  // Answers: numbered lists stay together across blank lines, sub-points nest, tasks, code colours.
+  const md = await win.evaluate(() => markdown('Steps:\n\n1. One\n\n2. Two\n   - detail\n\n3. Three\n\n- [x] done\n- [ ] todo\n\n```python\ndef f(x):\n    return 1  # one\n```\n\nAfter _this_ and ~~that~~.'));
+  assert.equal((md.match(/<ol/g) || []).length, 1, 'one numbered list');
+  assert.match(md, /<li>Two<ul><li>detail<\/li><\/ul><\/li>/);
+  assert.match(md, /class="task done"/);
+  assert.match(md, /<span class="hl-k">def<\/span>/);
+  assert.match(md, /<em>this<\/em>/);
+  assert.match(md, /<del>that<\/del>/);
+  assert.equal(await win.evaluate(() => markdown('2. Second\n3. Third').includes('start="2"')), true, 'numbering continues where it started');
   console.log('✓ skills: picker, applied, download, suggestion, charts');
   await win.click('[data-nav="skills"]');
   await win.waitForSelector('text=Analyze a spreadsheet');

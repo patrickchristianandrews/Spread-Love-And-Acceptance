@@ -42,6 +42,7 @@ views.chat = {
           <button class="net-pill ${S.config?.offline ? 'off' : ''}" id="net-pill" role="switch" aria-checked="${!S.config?.offline}" title="${S.config?.offline ? 'Offline: nothing leaves this PC. Click to go online.' : 'Online: web search, cloud AIs and downloads are available. Click to go offline.'}"><span class="net-dot"></span><span>${S.config?.offline ? 'Offline' : 'Online'}</span><span class="net-sw"><i></i></span></button>
         </div>
         <div class="chat-title" title="${esc(chat.title)}">${chat.messages.length && chat.title !== 'New chat' ? esc(chat.title) : ''}</div>
+        <button class="run-state" id="run-state" hidden aria-label="How the model is running"></button>
         <button class="icon-btn" id="chat-more" title="Pin, rename, export or delete this chat" aria-label="More options">${icon('more')}</button>
       </header>
       <div class="chat-body" id="chat-body"><div class="chat-col">
@@ -107,11 +108,16 @@ function attachmentsHTML(list, removable) {
 function stepsHTML(alt, streaming) {
   if (!alt.steps?.length) return '';
   const roleBadge = { vision: '<span class="badge b-sky">👁 Sees</span>', draft: '<span class="badge b-lav">✏️ Drafts</span>', critique: '<span class="badge b-peach">⚔️ Debates</span>', tools: '<span class="badge b-lemon">🔌 Tools</span>', lead: '<span class="badge b-mint">★ Lead</span>' };
-  return `<details class="steps" ${streaming ? 'open' : ''}><summary>🧩 How this answer was made: ${alt.steps.length} step${alt.steps.length > 1 ? 's' : ''}</summary>
+  const models = new Set(alt.steps.map((s) => s.model).filter(Boolean)).size;
+  const now = streaming ? alt.steps.find((s) => !s.done) : null;
+  return `<details class="steps chip-d"><summary>${now ? `<span class="pulse"></span>${esc(now.label)} · ${esc(now.model || '')}` : `🧩 ${models > 1 ? `Team of ${models}` : '1 model'} · ${alt.steps.length} step${alt.steps.length > 1 ? 's' : ''}`}</summary>
     ${alt.steps.map((s) => `<div class="step">${roleBadge[s.role] || ''}<div class="grow"><b>${esc(s.label)}</b> <span class="muted small">· ${esc(s.model)}${s.ms ? ` · ${fmtSec(s.ms / 1000)}` : ''}${s.done ? '' : ' · working…'}</span>${s.error ? `<div class="small" style="color:var(--danger);font-weight:700">${esc(s.error)}</div>` : ''}
       ${s.role !== 'lead' && s.text ? `<details><summary class="small">Show</summary><pre>${esc(s.text)}</pre></details>` : ''}</div></div>`).join('')}
   </details>`;
 }
+
+const metaRow = (html) => (html.trim() ? `<div class="meta-row">${html}</div>` : '');
+const domainOf = (u) => { try { return new URL(u).hostname.replace(/^www\./, ''); } catch { return u; } };
 
 function messageHTML(chat, a, m, i) {
   if (m.role === 'user') {
@@ -140,15 +146,13 @@ function messageHTML(chat, a, m, i) {
   }
   return `<div class="msg assistant" data-msg="${m.id}">
     <div class="who-line"><span>${esc(a.emoji)} ${esc(a.name)}</span>${etaNow}${alt.skillId && skillById(alt.skillId) ? `<span class="badge b-peach">⚡ ${esc(skillById(alt.skillId).name)}</span>` : ''}${alt.target ? `<span class="badge b-lav">${esc(targetLabel(alt.target))}</span>` : ''}${alt.stats?.tps ? `<span class="badge b-mint">${Math.round(alt.stats.tps * 0.75)} words/s</span>` : ''}</div>
-    ${stepsHTML(alt, streaming)}
-    ${toolsHTML(alt)}
-    ${alt.reasoning ? `<details class="think"><summary>💭 Thinking${streaming && !alt.text ? '…' : ''}</summary><div>${esc(alt.reasoning)}</div></details>` : ''}
+    ${metaRow(stepsHTML(alt, streaming) + toolsHTML(alt) + (alt.reasoning ? `<details class="think chip-d"><summary>${streaming && !alt.text ? '<span class="pulse"></span>Thinking…' : '💭 Thought it through'}</summary><div>${esc(alt.reasoning)}</div></details>` : ''))}
     <div class="bubble md ${streaming ? 'streaming' : ''} ${alt.error ? 'error' : ''}">${body}</div>
     ${downloadHTML(m, alt, streaming)}
     ${appButtonsHTML(m, alt, streaming)}
     ${skillMediaHTML(m, alt, streaming)}
     ${checkHTML(m, alt)}
-    ${alt.sources?.length ? `<div class="sources card" style="padding:10px 12px"><b class="small">Sources</b>${alt.sources.map((s, k) => `<div class="src"><span class="cite">${k + 1}</span>${s.url ? `<a href="${esc(s.url)}">${esc(s.title || s.url)}</a>` : `<span>📄 ${esc(s.title)}</span>`}</div>`).join('')}</div>` : ''}
+    ${alt.sources?.length ? `<div class="sources"><span class="src-label">Sources</span>${alt.sources.map((s, k) => `<${s.url ? `a href="${esc(s.url)}"` : 'span'} class="src-chip" title="${esc(s.title || s.url || '')}"><span class="cite">${k + 1}</span>${esc(s.url ? domainOf(s.url) : s.title)}${s.url ? '' : ''}</${s.url ? 'a' : 'span'}>`).join('')}</div>` : ''}
     <div class="msg-tools">${tools.join('')}</div>
   </div>`;
 }
@@ -377,9 +381,13 @@ async function gatherSources(chat, a, query, force = {}) {
   return out;
 }
 
+// How answers should look: easy to scan, warm and direct.
+const ANSWER_STYLE = 'How to format answers: start with the direct answer in the first sentence, without filler like "Great question!" or restating the question. Keep short answers short (a few sentences, no headings). For longer answers, use a few ## headings, short paragraphs, bulleted or numbered lists for steps and options, **bold** for the key terms and numbers, a Markdown table for comparisons, and fenced code blocks with the language for code. End longer answers with a one-line takeaway or next step. Use plain, friendly language.';
+
 function systemPrompt(a, sources, strict) {
   const p = S.data.prefs;
   const parts = [a.instructions || 'You are a helpful assistant.'];
+  parts.push(ANSWER_STYLE);
   parts.push(`Today is ${new Date().toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}.`);
   if (p.userName) parts.push(`The user's name is ${p.userName}.`);
   if (p.about) parts.push(`About the user: ${p.about}`);

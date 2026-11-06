@@ -185,6 +185,15 @@ handle('models:options', (repo) => models.ggufOptions(repo));
 handle('models:cancel', (id) => models.cancel(id));
 handle('models:remove', (id) => { llama.stopAll(); return models.remove(id); });
 handle('models:search', (q) => models.search(q));
+// This PC's load right now, for the status light in chats.
+let cpuPrev = null;
+handle('system:load', () => {
+  const os = require('node:os');
+  const t = os.cpus().reduce((acc, c) => { const tot = Object.values(c.times).reduce((x, y) => x + y, 0); return { idle: acc.idle + c.times.idle, total: acc.total + tot }; }, { idle: 0, total: 0 });
+  const cpu = cpuPrev && t.total > cpuPrev.total ? Math.max(0, Math.min(100, 100 * (1 - (t.idle - cpuPrev.idle) / (t.total - cpuPrev.total)))) : null;
+  cpuPrev = t;
+  return { cpu, memFreeGB: os.freemem() / 1024 ** 3, memTotalGB: os.totalmem() / 1024 ** 3, engines: llama.status() };
+});
 handle('models:trending', async (force) => models.trending({ force, hw: await hardware.detect() }));
 handle('models:import', async () => {
   const r = await dialog.showOpenDialog(win, { title: 'Import a GGUF model', properties: ['openFile'], filters: [{ name: 'GGUF model', extensions: ['gguf'] }] });
