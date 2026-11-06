@@ -132,16 +132,18 @@ function renderBlocks(text) {
 
 function markdown(text) {
   const out = [];
+  const maths = [];
   String(text).split(/```/).forEach((part, i) => {
     if (i % 2 === 1) {
       const nl = part.indexOf('\n');
       const lang = nl >= 0 ? part.slice(0, nl).trim() : '';
       const code = (nl >= 0 ? part.slice(nl + 1) : part).replace(/\n$/, '');
       if (lang === 'chart') { const c = chartHTML(code); if (c) { out.push(c); return; } }
-      out.push(`<pre><span class="bar-top"><span>${esc(lang || 'code')}</span><button class="copy">Copy</button></span><code>${highlight(code, lang)}</code></pre>`);
+      const previewable = /^(html?|svg|xml)$/i.test(lang) && /<(html|body|div|svg|section|main|h1|canvas|style|!doctype)/i.test(code);
+      out.push(`<pre><span class="bar-top"><span>${esc(lang || 'code')}</span>${previewable ? `<button class="preview" data-lang="${/svg/i.test(lang) || /^\s*<svg/i.test(code) ? 'svg' : 'html'}">Preview</button>` : ''}<button class="copy">Copy</button></span><code>${highlight(code, lang)}</code></pre>`);
       return;
     }
-    out.push(renderBlocks(part.replace(/^\n/, '')));
+    out.push(renderBlocks(typeof pullMath === 'function' ? pullMath(part.replace(/^\n/, ''), maths) : part.replace(/^\n/, '')));
   });
-  return out.join('');
+  return typeof putMath === 'function' ? putMath(out.join(''), maths) : out.join('');
 }

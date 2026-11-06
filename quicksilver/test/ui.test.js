@@ -509,6 +509,56 @@ function redPng(size = 64) {
   await win.waitForSelector('#upd-box');
   console.log('✓ settings: voice, phone (QR link), updates');
 
+  // Power tools: another model on the same question, branching, chat settings, maths, palette, import.
+  await win.click('[data-nav="newchat"]');
+  await win.selectOption('#pick-model', 'local:qwen3-8b');
+  await win.fill('#input', 'What is $x^2 + y^2$ when x = 3?');
+  await win.keyboard.press('Enter');
+  await idle();
+  await win.waitForSelector('.msg.assistant .bubble .katex');
+  await win.waitForSelector('.composer-hint .ctx-meter');
+  await win.click('.msg.assistant:last-child [data-act="other"]');
+  await win.click('.menu [data-t="local:phi-4"]');
+  await idle();
+  await waitAnswer(/Answer from phi\.gguf/);
+  assert.ok(await win.isVisible('.msg.assistant:last-child [data-act="prev"]'), 'both answers kept');
+  await win.click('.msg.assistant:last-child [data-act="prev"]');
+  await waitAnswer(/Answer from qwen\.gguf/);
+  await shot(win, '18-try-another-model');
+  const before2 = await win.evaluate(() => S.data.chats.length);
+  await win.click('.msg.user [data-act="branch"]');
+  await win.waitForFunction((n) => S.data.chats.length === n + 1 && chatById(S.route.id).branchOf, before2);
+  assert.equal(await win.evaluate(() => chatById(S.route.id).messages.length), 1, 'branch keeps messages up to that point');
+  await win.click('#chat-more');
+  await win.click('.menu [data-m="settings"]');
+  await win.fill('#cs-sys', 'Answer like a pirate');
+  await win.click('#cs-ok');
+  await win.click('#send'); // the branch ends on a question: answer it
+  await waitAnswer(/\[chat: Answer like a pirate\]/);
+  await idle();
+  await win.waitForSelector('[data-chat-settings]');
+  // Improve my prompt.
+  await win.fill('#input', 'pasta tips');
+  await win.click('#improve-btn');
+  await win.waitForFunction(() => /^Answer from/.test(document.querySelector('#input').value), null, { timeout: 60000 });
+  await win.fill('#input', '');
+  // Command palette.
+  await win.keyboard.press('Control+Shift+P');
+  await win.waitForSelector('#pal-q');
+  await win.fill('#pal-q', 'go to arena');
+  await shot(win, '19-command-palette');
+  await win.keyboard.press('Enter');
+  await win.waitForSelector('.arena');
+  // Import from ChatGPT.
+  await win.click('[data-nav="settings"]');
+  await win.click('[data-set-tab="general"]');
+  await win.setInputFiles('#imp-file', { name: 'conversations.json', mimeType: 'application/json', buffer: Buffer.from(JSON.stringify([{ title: 'Trip to Rome', create_time: 1700000000, update_time: 1700000500, conversation_id: 'r1', current_node: 'b', mapping: { a: { id: 'a', parent: null, children: ['b'], message: { author: { role: 'user' }, content: { content_type: 'text', parts: ['Plan 3 days in Rome'] } } }, b: { id: 'b', parent: 'a', children: [], message: { author: { role: 'assistant' }, content: { content_type: 'text', parts: ['Day 1: the Colosseum.'] } } } } }])) });
+  await win.waitForSelector('.proj-page h1:has-text("Imported from ChatGPT")');
+  await win.click('.proj-chat:has-text("Trip to Rome")');
+  await win.waitForSelector('.msg.assistant:has-text("Day 1: the Colosseum.")');
+  await win.waitForSelector('.badge:has-text("From ChatGPT")');
+  console.log('✓ power tools: another model, branch, chat settings, maths, context meter, better prompt, palette, ChatGPT import');
+
   if (errors.length) console.log('PAGE ERRORS:', errors);
   assert.deepEqual(errors, []);
   await app.close();

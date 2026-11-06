@@ -282,7 +282,7 @@ function chatMenu(anchor, chat) {
   m.className = 'menu';
   m.style.top = `${Math.min(r.bottom + 4, window.innerHeight - 200)}px`;
   m.style.left = `${Math.max(8, r.left - 150)}px`;
-  m.innerHTML = `<button data-m="pin">${chat.pinned ? 'Unpin' : '📌 Pin to top'}</button><button data-m="rename">✏️ Rename</button><button data-m="project">📁 ${chat.projectId ? 'Change project' : 'Move to a project'}</button><button data-m="doc">📝 ${chat.doc ? 'Open the document' : 'New document beside the chat'}</button><button data-m="private">${chat.private ? '🔓 Use memory in this chat' : '🔒 Private (no memory)'}</button><button data-m="export">⬇ Export as Markdown</button><button data-m="delete" class="danger">🗑 Delete</button>`;
+  m.innerHTML = `<button data-m="pin">${chat.pinned ? 'Unpin' : '📌 Pin to top'}</button><button data-m="rename">✏️ Rename</button><button data-m="project">📁 ${chat.projectId ? 'Change project' : 'Move to a project'}</button><button data-m="doc">📝 ${chat.doc ? 'Open the document' : 'New document beside the chat'}</button><button data-m="settings">⚙️ Chat settings</button><button data-m="private">${chat.private ? '🔓 Use memory in this chat' : '🔒 Private (no memory)'}</button><button data-m="export">⬇ Export as Markdown</button><button data-m="delete" class="danger">🗑 Delete</button>`;
   document.body.appendChild(m);
   m.querySelector('button').focus();
   m.addEventListener('click', async (e) => {
@@ -290,6 +290,7 @@ function chatMenu(anchor, chat) {
     closeMenus();
     if (act === 'pin') { chat.pinned = !chat.pinned; save(); renderChatList(); }
     if (act === 'project') moveToProject(chat);
+    if (act === 'settings') chatSettings(chat);
     if (act === 'doc') { if (S.route.id !== chat.id) S.route = { view: 'chat', id: chat.id }; openDoc(chat, chat.doc?.text ?? '', chat.doc?.title || (chat.title !== 'New chat' ? chat.title : 'Untitled document')); }
     if (act === 'private') { chat.private = !chat.private; save(); render(); toast(chat.private ? 'Private chat: memory is not used, and nothing new is remembered.' : 'This chat uses your memory again.'); }
     if (act === 'rename') {
@@ -311,7 +312,8 @@ function chatMenu(anchor, chat) {
   });
 }
 function closeMenus() { $$('.menu').forEach((m) => m.parentNode.removeChild(m)); }
-document.addEventListener('click', (e) => { if (!e.target.closest('.menu') && !e.target.closest('[data-chat-menu]')) closeMenus(); });
+// Clicks outside a menu close it (but not the click on the button that just opened one).
+document.addEventListener('click', (e) => { if (!e.target.closest('.menu, [data-chat-menu], [data-act="saveas"], [data-act="other"], [data-dp="save"], #chat-more')) closeMenus(); });
 document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeMenus(); });
 
 // ---------- charts (```chart JSON blocks become SVG charts) ----------

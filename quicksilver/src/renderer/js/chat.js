@@ -58,6 +58,7 @@ views.chat = {
           <textarea id="input" rows="1" placeholder="${esc(chat.pendingSkill ? skillById(chat.pendingSkill)?.hint || 'Add details…' : `Message ${a.name}…  Type / for skills`)}" aria-label="Message"></textarea>
           <div class="composer-bar">
             <button class="icon-btn" id="skill-btn" title="Use a skill (or type /)" aria-label="Skills">${icon('zap')}</button>
+            <button class="icon-btn improve-btn" id="improve-btn" title="Improve my prompt: clearer and more complete, so the answer is better" aria-label="Improve my prompt">${icon('sparkle')}</button>
             <button class="icon-btn mic-btn ${voiceRec?.chatId === chat.id ? 'rec' : ''}" id="mic-btn" title="Voice typing: click and speak (Ctrl+Space)" aria-label="Voice typing">${icon('mic')}</button>
             <label class="icon-btn" title="Attach photos, videos or documents" aria-label="Attach">${icon('clip')}<input type="file" id="file-in" multiple hidden accept="image/*,video/*,.pdf,.docx,.xlsx,.xlsm,.csv,.tsv,.pptx,.txt,.md,.json,.html,.htm,.xml,.js,.ts,.py,.java,.c,.cpp,.cs,.go,.rs,.rb,.php,.sql"></label>
             <span class="bar-sep"></span>
@@ -70,7 +71,7 @@ views.chat = {
             <button class="send-btn ${pending?.chatId === chat.id ? 'stop' : ''}" id="send" title="${pending?.chatId === chat.id ? 'Stop' : 'Send (Enter)'}" aria-label="${pending?.chatId === chat.id ? 'Stop' : 'Send'}">${icon(pending?.chatId === chat.id ? 'stop' : 'send', 20)}</button>
           </div>
         </div>
-        <div class="composer-hint">Runs on ${esc(targetLabel(target))}${chatEtaHint(target, a)} · Drop or paste photos, video, PDF, Word, Excel or PowerPoint</div>
+        <div class="composer-hint">Runs on ${esc(targetLabel(target))}${chatEtaHint(target, a)}${chatHasSettings(chat) ? ' · <a href="#" data-chat-settings>custom settings</a>' : ''}${chat.messages.length ? ` · ${contextMeterHTML(chat, a)}` : ' · Drop or paste photos, video, PDF, Word, Excel or PowerPoint'}</div>
       </div>
       </div>${docPanelHTML(chat) || factPanelHTML(chat)}</div>
     </div>`;
@@ -129,7 +130,7 @@ function messageHTML(chat, a, m, i) {
       <div class="who-line">${esc(S.data.prefs.userName || 'You')}</div>
       ${m.attachments?.length ? `<div class="attach-row" style="justify-content:flex-end">${attachmentsHTML(m.attachments, false)}</div>` : ''}
       ${m.text ? `<div class="bubble">${esc(m.text)}</div>` : ''}
-      <div class="msg-tools">${pending ? '' : `<button class="tool" data-act="edit" data-id="${m.id}">Edit</button><button class="tool" data-act="del" data-id="${m.id}">Delete</button>`}</div>
+      <div class="msg-tools">${pending ? '' : `<button class="tool" data-act="edit" data-id="${m.id}">Edit</button><button class="tool" data-act="branch" data-id="${m.id}" title="Start a new chat from this point; this one stays as it is">Branch</button><button class="tool" data-act="del" data-id="${m.id}">Delete</button>`}</div>
     </div>`;
   }
   const alt = m.alts[m.altIndex] || {};
@@ -144,13 +145,13 @@ function messageHTML(chat, a, m, i) {
   const tools = [];
   if (m.alts.length > 1) tools.push(`<button class="tool" data-act="prev" data-id="${m.id}" aria-label="Previous answer">‹</button><span class="small muted">${m.altIndex + 1} / ${m.alts.length}</span><button class="tool" data-act="next" data-id="${m.id}" aria-label="Next answer">›</button>`);
   if (!pending) {
-    if (isLast) tools.push(`<button class="tool" data-act="regen" data-id="${m.id}" title="Write a new answer">${icon('refresh', 15)} Regenerate</button><button class="tool" data-act="continue" data-id="${m.id}">Continue</button>`);
+    if (isLast) tools.push(`<button class="tool" data-act="regen" data-id="${m.id}" title="Write a new answer">${icon('refresh', 15)} Regenerate</button><button class="tool" data-act="other" data-id="${m.id}" title="Answer again with a different model or stack; flip between the answers with ‹ ›">${icon('layers', 15)} Try another model</button><button class="tool" data-act="continue" data-id="${m.id}">Continue</button>`);
     if (alt.text && !alt.check && !checkRunning(m)) tools.push(`<button class="tool" data-act="check" data-id="${m.id}">${icon('shield', 15)} Fact check</button>`);
     if (alt.text) tools.push(`<button class="tool" data-act="speak" data-id="${m.id}" title="Read this answer aloud">${icon('volume', 15)} ${speakingId === m.id ? 'Stop' : 'Listen'}</button><button class="tool" data-act="doc" data-id="${m.id}" title="Open it as a document beside the chat, to edit and refine">${icon('doc', 15)} Edit as document</button>`);
     tools.push(`<button class="tool" data-act="copy" data-id="${m.id}">${icon('copy', 15)} Copy</button><button class="tool" data-act="saveas" data-id="${m.id}">${icon('download', 15)} Save as…</button><button class="tool" data-act="del" data-id="${m.id}" title="Delete">${icon('trash', 15)}</button>`);
   }
   return `<div class="msg assistant" data-msg="${m.id}">
-    <div class="who-line"><span>${esc(a.emoji)} ${esc(a.name)}</span>${etaNow}${alt.skillId && skillById(alt.skillId) ? `<span class="badge b-peach">⚡ ${esc(skillById(alt.skillId).name)}</span>` : ''}${alt.target ? `<span class="badge b-lav">${esc(targetLabel(alt.target))}</span>` : ''}${alt.stats?.tps ? `<span class="badge b-mint">${Math.round(alt.stats.tps * 0.75)} words/s</span>` : ''}</div>
+    <div class="who-line"><span>${esc(a.emoji)} ${esc(a.name)}</span>${etaNow}${alt.skillId && skillById(alt.skillId) ? `<span class="badge b-peach">⚡ ${esc(skillById(alt.skillId).name)}</span>` : ''}${alt.target ? `<span class="badge b-lav">${esc(targetLabel(alt.target))}</span>` : ''}${alt.stats?.tps ? `<span class="badge b-mint" title="${esc(statsTitle(alt))}">${Math.round(alt.stats.tps * 0.75)} words/s</span>` : ''}${alt.imported ? `<span class="badge">From ${esc(alt.imported)}</span>` : ''}</div>
     ${metaRow(stepsHTML(alt, streaming) + toolsHTML(alt) + memoryChipHTML(alt) + (alt.reasoning ? `<details class="think chip-d"><summary>${streaming && !alt.text ? '<span class="pulse"></span>Thinking…' : '💭 Thought it through'}</summary><div>${esc(alt.reasoning)}</div></details>` : ''))}
     <div class="bubble md ${streaming ? 'streaming' : ''} ${alt.error ? 'error' : ''}">${body}</div>
     ${downloadHTML(m, alt, streaming)}
@@ -255,6 +256,8 @@ function bindChat() {
   input.addEventListener('paste', (e) => { const files = [...e.clipboardData.files]; if (files.length) { e.preventDefault(); addFiles(chat, files); } });
   bindDocPanel(chat);
   $('#mic-btn').addEventListener('click', () => toggleVoice(chat));
+  $('#improve-btn').addEventListener('click', () => improvePromptBox(chat));
+  $('[data-chat-settings]')?.addEventListener('click', (e) => { e.preventDefault(); chatSettings(chat); });
   scrollDown(true);
   if (!pending && !docOpen(chat)) input.focus();
   warmUp(chat, a);
@@ -400,7 +403,7 @@ function systemPrompt(a, sources, strict, chat, question = '', ctx = 16384, note
   parts.push(`Today is ${new Date().toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}.`);
   if (p.userName) parts.push(`The user's name is ${p.userName}.`);
   if (p.about) parts.push(`About the user: ${p.about}`);
-  for (const extra of [memoryPrompt(chat, question), projectPrompt(chat, question, ctx), docPrompt(chat), note]) if (extra) parts.push(extra);
+  for (const extra of [chat?.system ? `Instructions for this chat (follow them):\n${chat.system}` : '', memoryPrompt(chat, question), projectPrompt(chat, question, ctx), docPrompt(chat), note]) if (extra) parts.push(extra);
   if (strict) parts.push('IMPORTANT: Answer ONLY from the reference material provided below. Do not use general knowledge or memory. Cite every factual statement with its source number. If the material does not contain the answer, reply that it was not found in the knowledge base, and say what kind of source would answer it.');
   if (strict && !sources.length) parts.push('No reference material matched this question.');
   if (sources.length) {
@@ -410,9 +413,9 @@ function systemPrompt(a, sources, strict, chat, question = '', ctx = 16384, note
   return parts.join('\n\n');
 }
 
-async function generate(chat, rerollMsg) {
+async function generate(chat, rerollMsg, withTarget) {
   const a = assistantById(chat.assistantId);
-  const target = resolveTarget(chat, a);
+  const target = withTarget || resolveTarget(chat, a);
   if (!target) { toast('Get a model first: open the Stack Advisor.'); return; }
   let msg = rerollMsg;
   let upTo;
@@ -420,6 +423,7 @@ async function generate(chat, rerollMsg) {
   else { upTo = chat.messages.length; msg = { id: uid(), role: 'assistant', alts: [{ text: '', target }], altIndex: 0 }; chat.messages.push(msg); }
   const alt = msg.alts[msg.altIndex];
   alt.status = 'Getting ready…';
+  alt.t0 = Date.now();
   {
     const ask = (msg && chat.messages.slice(0, chat.messages.indexOf(msg)).reverse().find((m) => m.role === 'user')) || [...chat.messages].reverse().find((m) => m.role === 'user');
     const hard = looksHard(ask?.text) || (effortOf(chat, a) === 'max');
@@ -478,8 +482,8 @@ async function generate(chat, rerollMsg) {
   alt.status = 'Thinking…';
   qs.sendChat({
     requestId, target, messages,
-    temperature: Number(a.temperature ?? p.temperature),
-    maxTokens: Math.round(Number(a.maxTokens || p.maxTokens) * (effortOf(chat, a) === 'max' ? 1.5 : 1)),
+    temperature: Number(chat.temperature ?? a.temperature ?? p.temperature),
+    maxTokens: Math.round(Number(chat.maxTokens || a.maxTokens || p.maxTokens) * (effortOf(chat, a) === 'max' && chat.maxTokens == null ? 1.5 : 1)),
     contextSize: ctx,
     // Writing a picture prompt or a beat pattern is quick work: one model, no debate.
     level: skill && HIDE_BLOCK.has(skill.output) ? 'quick' : effortOf(chat, a),
@@ -522,7 +526,7 @@ qs.onChat(({ requestId, ev }) => {
   if (!msg) return;
   const alt = msg.alts[msg.altIndex];
   switch (ev.type) {
-    case 'text': alt.text += ev.text; alt.status = ''; break;
+    case 'text': if (!alt.text && alt.t0 && alt.ttft == null) alt.ttft = Date.now() - alt.t0; alt.text += ev.text; alt.status = ''; break;
     case 'reasoning': alt.reasoning = (alt.reasoning || '') + ev.text; break;
     case 'status': alt.status = ev.text || alt.status; break;
     case 'step': {
@@ -548,6 +552,7 @@ qs.onChat(({ requestId, ev }) => {
         if (!msg.alts.length) chat.messages = chat.messages.filter((m) => m !== msg); else msg.altIndex = msg.alts.length - 1;
       }
       delete alt.status;
+      if (alt.t0) { alt.ms = Date.now() - alt.t0; delete alt.t0; }
       const sourcesFull = pending.sources;
       pending = null;
       chat.updated = now();
@@ -575,6 +580,8 @@ function messageAction(chat, act, id, el) {
   else if (act === 'continue') { chat.messages.push({ id: uid(), role: 'user', text: 'Continue.', attachments: [] }); generate(chat, null); }
   else if (act === 'copy') { navigator.clipboard?.writeText(msgText(m)); toast('Copied.'); }
   else if (act === 'speak') speakMessage(m);
+  else if (act === 'other') tryOtherMenu(chat, m, el);
+  else if (act === 'branch') branchChat(chat, m.id);
   else if (act === 'doc') openDoc(chat, msgText(m).replace(/<think>[\s\S]*?<\/think>/g, '').trim(), answerTitle(chat, m));
   else if (act === 'dl') exportAnswer(chat, m, document.querySelector(`[data-act="dl"][data-id="${id}"]`)?.dataset.fmt);
   else if (act === 'saveas') saveAsMenu(chat, m, document.querySelector(`[data-act="saveas"][data-id="${id}"]`));

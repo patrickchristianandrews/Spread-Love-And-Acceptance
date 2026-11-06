@@ -68,6 +68,7 @@ handle('phone:info', () => phone.info());
 handle('phone:set', (patch) => phone.configure({ enabled: Boolean(patch.enabled), ...(patch.port ? { port: Math.max(1024, Math.min(65535, Number(patch.port))) } : {}) }));
 handle('phone:newLink', () => phone.newToken());
 handle('update:state', () => updater.state());
+handle('import:chats', (name, bytes) => require('./importer').parse(name, bytes));
 handle('update:check', () => updater.check());
 handle('update:download', () => updater.download());
 handle('update:install', () => updater.install({ starterDir: app.isPackaged ? path.join(process.resourcesPath, 'starter') : null }));

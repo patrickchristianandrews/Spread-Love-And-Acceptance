@@ -28,12 +28,14 @@ function generalHTML() {
     <div class="field"><label>Text size</label><div class="row">${[['normal', 'Normal'], ['large', 'Large'], ['xl', 'Extra large']].map(([k, l]) => `<button class="btn small ${P().textSize === k ? 'on' : ''}" data-textsize="${k}">${l}</button>`).join('')}</div></div>
     <div><button class="btn primary" id="g-save">Save</button></div>
     ${updateBoxHTML()}
+    ${importHTML()}
   </div>`;
 }
 const memSetHTML = () => `<p class="lede" style="margin-top:0">What your assistants remember about you, across all chats. Click a line to change it.</p><div id="mem-box">${memoryManagerHTML()}</div>`;
 function bindMemSet() { const box = $('#mem-box'); const repaint = () => { box.innerHTML = memoryManagerHTML(); bindMemoryManager(box, repaint); }; bindMemoryManager(box, repaint); }
 function bindGeneral() {
   bindUpdateBox();
+  bindImport();
   $$('[data-theme-set]').forEach((b) => b.addEventListener('click', () => { P().theme = b.dataset.themeSet; applyPrefs(); save(); render(); }));
   $$('[data-textsize]').forEach((b) => b.addEventListener('click', () => { P().textSize = b.dataset.textsize; applyPrefs(); save(); render(); }));
   $('#g-save').addEventListener('click', () => { P().userName = $('#g-name').value.trim(); P().about = $('#g-about').value.trim(); save(); toast('Saved.'); });

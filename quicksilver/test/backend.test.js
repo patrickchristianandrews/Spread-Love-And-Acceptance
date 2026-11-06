@@ -792,6 +792,31 @@ async function collect(gen) {
     console.log('✓ updates: newer release found, fingerprint checked, big models kept across updates');
   }
 
+  // Importing chats from ChatGPT (a tree with an edited branch, as a .zip) and Claude (.json).
+  {
+    const importer = require('../src/main/importer');
+    const AdmZip = require('adm-zip');
+    const gpt = [{ title: 'Pasta', create_time: 1700000000, update_time: 1700000100, conversation_id: 'c1', current_node: 'd', mapping: {
+      root: { id: 'root', message: null, parent: null, children: ['s'] },
+      s: { id: 's', parent: 'root', children: ['a'], message: { author: { role: 'system' }, content: { content_type: 'text', parts: [''] } } },
+      a: { id: 'a', parent: 's', children: ['b', 'b2'], message: { author: { role: 'user' }, content: { content_type: 'text', parts: ['How long do I boil pasta?'] }, create_time: 1700000000 } },
+      b2: { id: 'b2', parent: 'a', children: [], message: { author: { role: 'assistant' }, content: { content_type: 'text', parts: ['(an older answer)'] } } },
+      b: { id: 'b', parent: 'a', children: ['c'], message: { author: { role: 'assistant' }, content: { content_type: 'text', parts: ['About 10 minutes.'] } } },
+      c: { id: 'c', parent: 'b', children: ['d'], message: { author: { role: 'tool' }, content: { content_type: 'text', parts: ['tool output'] } } },
+      d: { id: 'd', parent: 'c', children: [], message: { author: { role: 'assistant' }, content: { content_type: 'text', parts: ['Taste it at 8.'] } } },
+    } }];
+    const zip = new AdmZip();
+    zip.addFile('conversations.json', Buffer.from(JSON.stringify(gpt)));
+    const g = importer.parse('chatgpt-export.zip', zip.toBuffer());
+    assert.equal(g.length, 1);
+    assert.deepEqual(g[0].messages.map((m) => [m.role, m.text]), [['user', 'How long do I boil pasta?'], ['assistant', 'About 10 minutes.\n\nTaste it at 8.']]);
+    assert.equal(g[0].source, 'chatgpt'); assert.equal(g[0].created, 1700000000000);
+    const cl = importer.parse('conversations.json', Buffer.from(JSON.stringify([{ uuid: 'u1', name: '', created_at: '2025-01-02T03:04:05Z', updated_at: '2025-01-02T03:05:05Z', chat_messages: [{ sender: 'human', text: 'Hi Claude', created_at: '2025-01-02T03:04:05Z' }, { sender: 'assistant', text: '', content: [{ type: 'text', text: 'Hello!' }] }] }])));
+    assert.equal(cl[0].title, 'Hi Claude'); assert.equal(cl[0].messages[1].text, 'Hello!'); assert.equal(cl[0].source, 'claude');
+    assert.throws(() => importer.parse('x.json', Buffer.from('[]')), /No conversations/);
+    console.log('✓ import: ChatGPT (zip, edited branches, tool steps) and Claude exports');
+  }
+
   llama.stopAll();
   fs.rmSync(HOME, { recursive: true, force: true });
   console.log('\nBACKEND TESTS PASSED');
