@@ -28,10 +28,12 @@ jobs:
           node-version: 22
           cache: npm
           cache-dependency-path: quicksilver/package-lock.json
+      # A stalled download is retried instead of hanging the build (it has happened twice).
       - name: Install
+        timeout-minutes: 20
         run: |
-          sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg xvfb
-          npm ci
+          for i in 1 2 3; do timeout 240 sudo apt-get update -qq && timeout 240 sudo apt-get install -y -qq ffmpeg xvfb && break; echo "apt attempt $i stalled or failed; retrying"; sleep 5; done
+          for i in 1 2 3; do timeout 300 npm ci && exit 0; echo "npm ci attempt $i stalled or failed; retrying"; sleep 5; done; exit 1
         env:
           PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: '1'
       - name: Back-end tests
