@@ -71,7 +71,7 @@ async function collect(gen) {
   // Powerhouse stack: vision describes, two drafters, lead combines.
   complete.saveStack({ id: 'office-power', name: 'Office Powerhouse', emoji: '📊', members: { vision: 'local:gemma-3-4b', drafters: ['local:qwen3-8b', 'local:phi-4'], judge: 'local:phi-4' } });
   const live = [];
-  const r2 = await collect(complete.run('stack:office-power', { messages: [{ role: 'system', content: 'Be an analyst.' }, { role: 'user', content: [{ type: 'text', text: 'Summarise this chart' }, img] }], temperature: 0.4, maxTokens: 500, contextSize: 4096, onStep: (s) => live.push(s.role) }));
+  const r2 = await collect(complete.run('stack:office-power', { messages: [{ role: 'system', content: 'Be an analyst.' }, { role: 'user', content: [{ type: 'text', text: 'Summarise this chart' }, img] }], temperature: 0.4, maxTokens: 500, contextSize: 4096, level: 'max', onStep: (s) => live.push(s.role) }));
   const uniq = (steps) => [...new Map(steps.map((s) => [s.index, s])).values()];
   const roles = uniq(r2.steps).map((s) => s.role);
   assert.deepEqual(roles, ['vision', 'draft', 'draft', 'lead']);
@@ -94,6 +94,25 @@ async function collect(gen) {
   const r3 = await collect(complete.run('stack:bal', { messages: [{ role: 'user', content: 'Plan my week' }], maxTokens: 200, contextSize: 4096 }));
   assert.equal(uniq(r3.steps).map((s) => s.role).join(','), 'draft,lead');
   console.log('✓ balanced stack; running servers:', llama.status().length);
+
+  // Efficient stacks: an easy question goes to the strongest member alone; when drafts agree the
+  // combining step is skipped; one server per model, sized to the conversation.
+  {
+    complete.saveStack({ id: 'team2', name: 'Team', members: { drafters: ['local:qwen3-8b', 'local:phi-4'], judge: 'local:phi-4', mode: 'blend' } });
+    const easy = await collect(complete.run('stack:team2', { messages: [{ role: 'user', content: 'Hi there!' }], maxTokens: 200, contextSize: 4096, level: 'thorough' }));
+    assert.equal(uniq(easy.steps).length, 0, 'no team steps for an easy question');
+    assert.match(easy.text, /Answer from phi\.gguf/, 'the lead answered alone');
+    const hard = await collect(complete.run('stack:team2', { messages: [{ role: 'user', content: 'Explain why the sky is blue, step by step' }], maxTokens: 200, contextSize: 4096, level: 'thorough' }));
+    const hRoles = uniq(hard.steps);
+    assert.deepEqual(hRoles.map((x) => x.role), ['draft', 'draft', 'lead']);
+    assert.match(hRoles[1].model, /Phi-4/, 'the lead drafts last, so it stays loaded');
+    assert.match(hRoles[2].label, /agreed/, 'near-identical drafts skip the combining step');
+    const files = llama.status().map((x) => x.file);
+    assert.equal(files.length, new Set(files).size, 'one server per model');
+    assert.ok(llama.contextFor([{ role: 'user', content: 'Hi' }], 512, 32768) === 4096, 'a short chat reserves a small context');
+    assert.ok(llama.contextFor([{ role: 'user', content: 'x'.repeat(60000) }], 2048, 32768) >= 16384, 'a long one gets more');
+    console.log('✓ efficient stacks: easy questions use one model, agreement skips combining, lead drafts last, right-sized memory');
+  }
 
   // Providers: an OpenAI-compatible API (the fake server stands in for one).
   const s = await llama.ensure({ file: path.join(dir, 'qwen.gguf'), name: 'x' }, { contextSize: 4096 });
@@ -191,7 +210,7 @@ async function collect(gen) {
   assert.match(nonStream.choices[0].message.content, /you said "via api"/);
   const streamed = [];
   for await (const ev of oai.streamChat({ baseUrl: base, apiKey: 'qs-secret', body: { model: 'Office Powerhouse', messages: [{ role: 'user', content: 'stack via api' }] } })) if (ev.type === 'text') streamed.push(ev.text);
-  assert.match(streamed.join(''), /FINAL from phi\.gguf combining 2 drafts/);
+  assert.match(streamed.join(''), /phi\.gguf/, 'an easy question to a stack is answered by its lead');
   const imgRes = await (await fetch(`${base}/images/generations`, { method: 'POST', headers: auth, body: JSON.stringify({ model: 'image:sdxl-turbo', prompt: 'a cat', size: '64x64' }) })).json();
   assert.ok(imgRes.data[0].b64_json.length > 50);
   apiserver.stop();

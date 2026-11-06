@@ -46,6 +46,7 @@ function howItWorksHTML(r) {
   if (s.members.vision) steps.push(`👁 <b>${esc(modelName(s.members.vision))}</b> reads any photos, screenshots or video frames you attach and describes them for the others.`);
   steps.push(`✏️ ${s.members.drafters.map((d) => `<b>${esc(modelName(d))}</b>`).join(' and ')} ${s.members.drafters.length > 1 ? 'each write an answer, independently' : 'writes the answer'}.`);
   if (s.members.judge) steps.push(s.members.drafters.length > 1 ? `★ <b>${esc(modelName(s.members.judge))}</b> leads the team. ${mode.icon} <b>${esc(mode.name)}</b>: ${esc(mode.blurb)}` : `★ <b>${esc(modelName(s.members.judge))}</b> checks that answer, fixes mistakes and writes the final version.`);
+  if (s.members.drafters.length > 1 || s.members.judge) steps.push(`Efficient by design: easy questions go to ${esc(modelName(s.members.judge || s.members.drafters[0]))} alone, the combining step is skipped when the drafts already agree, the lead drafts last so it never loads twice, and models that sit unused for 20 minutes give their memory back.`);
   if (r.cloud?.mode === 'check') steps.push('✅ Optional: a cloud AI double-checks the final answer (see below).');
   if (r.cloud?.mode === 'hard') steps.push('☁ Optional: hard questions can go to a cloud lead (see below); the rest never leave this PC.');
   const set = r.settings || {};

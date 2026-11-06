@@ -63,7 +63,7 @@ views.chat = {
             ${S.config?.offline ? `<span class="chip-tog" title="Offline: switch to Online in the sidebar to search the web" style="opacity:.5">${icon('globe', 16)}<span>Web (offline)</span></span>` : chip('tog-web', 'globe', 'Web', web, 'Search the web and cite sources')}
             ${chip('tog-tools', 'plug', 'Tools', tools, 'Let the AI use your integrations (GitHub, Slack, MCP servers…)')}
             ${chip('tog-fact', 'shield', 'Fact check', fact, 'After each answer, a second model checks it claim by claim')}
-            <label class="pill-select small" title="Effort: quicker or more thorough">${icon('gauge', 16)}<select id="pick-effort" aria-label="Effort">${Object.entries(EFFORTS).map(([k, e]) => `<option value="${k}" ${k === effortOf(chat, a) ? 'selected' : ''}>${e.replace(/^\S+\s/, '')}</option>`).join('')}</select>${icon('chevron', 14)}</label>
+            <label class="pill-select small" title="Quick: one model. Balanced: one model, then a check. Thorough: the whole team on harder questions, one model on easy ones. Max: always the whole team.">${icon('gauge', 16)}<select id="pick-effort" aria-label="Effort">${Object.entries(EFFORTS).map(([k, e]) => `<option value="${k}" ${k === effortOf(chat, a) ? 'selected' : ''}>${e.replace(/^\S+\s/, '')}</option>`).join('')}</select>${icon('chevron', 14)}</label>
             <span class="grow"></span>
             <button class="send-btn ${pending?.chatId === chat.id ? 'stop' : ''}" id="send" title="${pending?.chatId === chat.id ? 'Stop' : 'Send (Enter)'}" aria-label="${pending?.chatId === chat.id ? 'Stop' : 'Send'}">${icon(pending?.chatId === chat.id ? 'stop' : 'send', 20)}</button>
           </div>
@@ -444,6 +444,16 @@ async function generate(chat, rerollMsg) {
     else { const t = msgText(m).trim(); if (t) messages.push({ role: 'assistant', content: t }); }
   }
   if (messages.at(-1).role !== 'user') messages.push({ role: 'user', content: 'Please continue.' });
+  // Long chats: keep the instructions and the latest messages within the model's memory, so a
+  // long conversation keeps working instead of failing once it outgrows it.
+  {
+    const size = (x) => (typeof x.content === 'string' ? x.content.length : (x.content || []).reduce((n, p) => n + (p.text?.length || 0) + (p.type === 'image_url' ? 3000 : 0), 0));
+    const budget = ctx * 3.2 * 0.75;
+    let total = messages.reduce((n, x) => n + size(x), 0);
+    let dropped = 0;
+    while (total > budget && messages.length > 3) { total -= size(messages[1]); messages.splice(1, 1); dropped++; }
+    if (dropped) messages[0] = { ...messages[0], content: `${messages[0].content}\n\n(Note: the ${dropped} oldest messages of this long conversation were left out to fit; ask the user if something from earlier is needed.)` };
+  }
   // Photo edits: a model that can't see still writes the edit; the photo goes to the image model.
   if (skill && ['edit', 'animate'].includes(skill.output) && !S.speed?.targets?.[target]?.vision) {
     for (const msgOut of messages) if (Array.isArray(msgOut.content)) msgOut.content = [...msgOut.content.filter((x) => x.type !== 'image_url'), { type: 'text', text: '(A photo is attached for the image model to work on.)' }];

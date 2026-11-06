@@ -118,6 +118,7 @@ function redPng(size = 64) {
   await win.setInputFiles('#file-in', { name: 'sales.csv', mimeType: 'text/csv', buffer: Buffer.from('Region,Revenue\nNorth,1200\nSouth,800\n') });
   await win.waitForSelector('.attach:has-text("sales.csv")');
   if ((await win.getAttribute('#tog-fact', 'aria-pressed')) !== 'true') await win.click('#tog-fact');
+  await win.selectOption('#pick-effort', 'max'); // Max: the whole team, always combined
   await win.fill('#input', 'Which region sold more?');
   await win.keyboard.press('Enter');
   await idle();
@@ -407,6 +408,14 @@ function redPng(size = 64) {
   const models = await (await fetch('http://127.0.0.1:18440/v1/models')).json();
   assert.ok(models.data.some((m) => m.id === 'stack:office-powerhouse'));
   console.log('✓ API server from settings');
+  // Hidden extras: a chat gets a short title written by the model after the first answer.
+  await win.click('[data-nav="newchat"]');
+  await win.selectOption('#pick-model', 'local:qwen3-8b');
+  await win.fill('#input', 'Tell me how lighthouses worked before electricity was invented');
+  await win.keyboard.press('Enter');
+  await win.waitForFunction(() => /^Answer from/.test(chatById(S.route.id).title), null, { timeout: 60000 }); // the stand-in model's reply becomes the title
+  console.log('✓ automatic chat title:', await win.evaluate(() => chatById(S.route.id).title));
+
   await shot(win, '09-settings-api');
 
   if (errors.length) console.log('PAGE ERRORS:', errors);

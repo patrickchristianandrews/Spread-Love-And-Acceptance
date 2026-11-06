@@ -194,16 +194,34 @@ const HARD = /\b(why|how does|how do|prove|calculate|compute|solve|compare|analy
 function autoLevel(req) {
   if (hasImages(req.messages)) return 'quick';
   const text = lastUserText(req.messages);
-  const hard = HARD.test(text) || text.length > 500 || /```|\d+\s*[-+*/^×÷]\s*\d+/.test(text);
+  const hard = HARD.test(text) || text.length > 500 || /```|<file name=|\d+\s*[-+*/^×÷]\s*\d+/.test(text);
   return hard ? 'thorough' : 'quick';
 }
 
 // Effort: quick = first drafter only; balanced = first drafter + lead review;
 // thorough and max = every drafter + the lead combining them. "auto" stacks pick for themselves
 // unless you ask for Quick (always one model) or Max (always the full stack).
+// Do two or more answers say essentially the same thing? Same final number (for maths), or
+// mostly the same words.
+function draftsAgree(texts) {
+  if (texts.length < 2) return false;
+  const lastNum = (t) => (t.replace(/,/g, '').match(/-?\d+(?:\.\d+)?/g) || []).pop();
+  const words = (t) => new Set(t.toLowerCase().match(/[a-z0-9']{3,}/g) || []);
+  const nums = texts.map(lastNum);
+  if (nums.every(Boolean) && nums.every((n) => n === nums[0]) && texts.every((t) => t.length < 1500)) return true;
+  const sets = texts.map(words);
+  for (let i = 1; i < sets.length; i++) {
+    const a = sets[0], b = sets[i];
+    const inter = [...a].filter((w) => b.has(w)).length;
+    if (!a.size || !b.size || inter / Math.min(a.size, b.size) < 0.82 || Math.max(a.size, b.size) / Math.min(a.size, b.size) > 1.5) return false;
+  }
+  return true;
+}
+
 async function* stack(stackDef, req) {
   const { members } = stackDef;
   let level = req.level || 'thorough';
+  if (req.level === 'max') req = { ...req, forceTeam: true }; // Max: always the whole team, always combined
   if (members.mode === 'auto' && level !== 'quick') {
     level = level === 'max' ? 'thorough' : autoLevel(req);
     if (level === 'thorough') yield { type: 'status', text: 'A harder one: thinking it through with two models…' };
@@ -215,8 +233,21 @@ async function* stack(stackDef, req) {
     judge = members.cloudHard;
     yield { type: 'status', text: 'A hard one: your models draft, the cloud lead finishes it…' };
   }
+  // Easy questions don't need the whole team: the strongest member on this PC answers on its
+  // own (Max effort always uses everyone). Saves loading and running the other models.
+  const localLead = [judge, ...drafters].find((t) => t && parse(t).kind !== 'api');
+  if (level === 'thorough' && !req.forceTeam && members.mode !== 'auto' && members.mode !== 'debate' && !hasImages(req.messages) && !req.toolList && autoLevel(req) === 'quick' && localLead) {
+    drafters = [localLead]; judge = null; level = 'quick';
+    yield { type: 'status', text: `A quick one: ${label(localLead)} answers on its own…` };
+  }
   if (level === 'quick') { drafters = drafters.slice(0, 1).length ? drafters.slice(0, 1) : [judge].filter(Boolean); judge = null; }
   else if (level === 'balanced') drafters = drafters.slice(0, 1);
+  // Order: a model that's already in memory goes first, and the lead (if it also drafts) goes
+  // last, so it's still loaded when it writes the final answer instead of loading twice.
+  if (drafters.length > 1) {
+    const loaded = (t) => { const p = parse(t); const mm = p.kind === 'local' && models.get(p.id); return mm ? llama.isLoaded(mm.files.model) : false; };
+    drafters = [...drafters].sort((a, b) => (a === judge) - (b === judge) || loaded(b) - loaded(a));
+  }
   if (!drafters.length && !judge) throw new Error(`The stack "${stackDef.name}" has no installed models. Open Stacks to finish setting it up.`);
   let messages = req.messages;
   const steps = [];
@@ -330,11 +361,27 @@ async function* stack(stackDef, req) {
     if (req.signal?.aborted) return;
   }
 
+  // 3c. Agreement: when the drafts already say the same thing, combining them adds little, so
+  //     the lead's own draft (or the fullest one) is the answer. Debate always gets judged.
+  if (drafts.length >= 2 && mode !== 'debate' && !req.forceTeam) {
+    const agreed = draftsAgree(drafts.map((d) => d.text));
+    if (agreed) {
+      const own = draftSteps.find((s, i) => drafters[i] === judge && s.text)?.text;
+      const pick = own || drafts.map((d) => d.text).sort((a, b) => b.length - a.length)[0];
+      const s = { role: 'lead', label: 'The models agreed: no need to combine', model: label(judge || drafters[0]), text: '', done: true, ms: 0 };
+      yield step(s);
+      for (const part of pick.match(/[\s\S]{1,80}/g) || []) yield { type: 'text', text: part };
+      return;
+    }
+  }
+
   // 4. The lead combines (or reviews) and streams the final answer.
   const lead = judge || drafters[0];
   const base = msgsFor(lead);
   const sys = drafts.length > 1 ? ({ debate: DEBATE_LEAD, consensus: CONSENSUS }[mode] || LEAD) : REVIEW;
-  const draftText = drafts.map((d, i) => `<draft number="${i + 1}">\n${d.text}\n</draft>`).join('\n\n');
+  // Very long drafts are trimmed for the lead: it needs their substance, not every word, and a
+  // shorter read is faster and lighter on memory.
+  const draftText = drafts.map((d, i) => `<draft number="${i + 1}">\n${d.text.length > 7000 ? `${d.text.slice(0, 7000)}\n[…the rest of this draft is shortened]` : d.text}\n</draft>`).join('\n\n');
   const last = base[base.length - 1];
   const lastText = typeof last.content === 'string' ? last.content : last.content.filter((p) => p.type === 'text').map((p) => p.text).join('\n');
   const leadMessages = [
@@ -498,14 +545,14 @@ async function warm(target, { contextSize, gpu } = {}) {
   if (t.kind === 'kbm') { const km = kbModels().find((m) => m.id === t.id); if (!km) return false; return warm(km.base, { contextSize, gpu }); }
   if (t.kind === 'stack') {
     const st = stacks().find((x) => x.id === t.id);
-    const first = [...(st?.members.drafters || []), st?.members.judge].find((x) => x && parse(x).kind === 'local' && exists(x));
+    const first = [st?.members.judge, ...(st?.members.drafters || [])].find((x) => x && parse(x).kind === 'local' && exists(x));
     if (!first) return false;
     t = parse(first);
   }
   if (t.kind !== 'local') return false;
   const m = models.get(t.id);
   if (!m) return false;
-  await llama.ensure({ id: m.id, name: m.name, file: m.files.model, mmproj: m.files.mmproj }, { contextSize, gpu });
+  await llama.ensure({ id: m.id, name: m.name, file: m.files.model, mmproj: m.files.mmproj }, { contextSize: Math.min(contextSize || 8192, 8192), gpu });
   return true;
 }
 

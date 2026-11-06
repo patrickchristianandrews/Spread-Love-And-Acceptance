@@ -151,25 +151,44 @@ function lastError(log) {
 }
 
 // How many layers go on the graphics card: all if it fits, else a share, else none.
-function gpuLayers(model, info, hw, setting) {
+function gpuLayers(model, info, hw, setting, otherVramGB = 0) {
   if (setting === 0 || setting === 'cpu') return 0;
   if (!hw.vramGB) return 0;
   const sizeGB = (info.size + (model.mmprojSize || 0)) / 1024 ** 3;
-  const free = (hw.vramFreeGB || hw.vramGB) * 0.9 - 0.8;
+  const free = (hw.vramFreeGB || hw.vramGB) * 0.9 - 0.8 - otherVramGB;
+  if (free <= 0.5) return 0;
   if (sizeGB <= free) return 999;
   const layers = info.layers || 32;
   return Math.max(0, Math.floor((layers * free) / sizeGB));
 }
 
+// Engines that failed to start with an 8-bit KV cache (they get a normal cache from then on).
+const kvPlain = new Set();
+
+// Context: the memory a model sets aside for the conversation. Reserving the maximum (often
+// 32K tokens) wastes gigabytes on short chats, so each request asks for the smallest size that
+// fits it, from these steps; the server is restarted bigger only when a chat grows past it.
+const CTX_STEPS = [4096, 8192, 16384, 32768, 65536, 131072];
+function contextFor(messages, maxTokens = 2048, limit = 32768) {
+  const chars = messages.reduce((n, msg) => n + (typeof msg.content === 'string' ? msg.content.length : (msg.content || []).reduce((k, p) => k + (p.text?.length || 0) + (p.type === 'image_url' ? 3000 : 0), 0)), 0);
+  const need = Math.ceil(chars / 3.2) + Math.min(maxTokens || 2048, 8192) + 512;
+  return Math.min(limit, CTX_STEPS.find((c) => c >= need) || CTX_STEPS[CTX_STEPS.length - 1]);
+}
+
+// Models nobody has used for a while are unloaded, giving the memory back to the PC.
+const IDLE_MS = 20 * 60 * 1000;
+setInterval(() => { for (const [k, s] of [...servers.entries()]) if (Date.now() - s.lastUsed > IDLE_MS) stop(k); }, 60 * 1000).unref?.();
+
 // Starts (or reuses) a server for a model. model = { id, file, mmproj?, ctx? }
 async function ensure(model, { contextSize = 8192, gpu = 'auto', onStatus } = {}) {
-  const key = `${model.file}|${contextSize}|${gpu}`;
+  const key = `${model.file}|${gpu}`;
   const existing = servers.get(key);
-  if (existing && !existing.exited) {
+  if (existing && !existing.exited && existing.ctx >= Math.min(contextSize, existing.maxCtx || contextSize)) {
     existing.lastUsed = Date.now();
     await existing.ready;
     return existing;
   }
+  if (existing) stop(key); // its context was too small for this conversation: restart it bigger
   const hw = await hardware.detect();
   const engine = engines.resolve('llama', hw);
   if (!engine) throw new Error('The text engine is missing. Reinstall Quicksilver, or download an engine in Settings → Engines.');
@@ -187,7 +206,11 @@ async function ensure(model, { contextSize = 8192, gpu = 'auto', onStatus } = {}
   }
 
   const ctx = Math.min(contextSize, info.contextLength || contextSize);
-  const ngl = gpuLayers(model, info, hw, gpu);
+  const otherVram = [...servers.values()].reduce((t, s) => t + (s.vramGB || 0), 0);
+  const ngl = gpuLayers(model, info, hw, gpu, otherVram);
+  // The model's working memory (KV cache) is stored at 8-bit: about half the memory, with no
+  // noticeable change in answers. Engines that can't do it get a normal cache instead.
+  let kvq = !kvPlain.has(engine.bin);
   const start = async (layers) => {
     const port = await freePort();
     // --cache-reuse lets follow-up messages and stack steps reuse text the model already read.
@@ -195,9 +218,12 @@ async function ensure(model, { contextSize = 8192, gpu = 'auto', onStatus } = {}
     // On the processor, keep the graphics card out of it completely (a broken or built-in GPU
     // driver can otherwise still fail the load even with no layers on it).
     if (!layers) args.push('--device', 'none');
+    if (kvq) args.push('--cache-type-k', 'q8_0', '--cache-type-v', 'q8_0');
     if (model.mmproj) args.push('--mmproj', model.mmproj);
     const proc = spawn(engine.bin, args, { windowsHide: true, stdio: ['ignore', 'pipe', 'pipe'] });
-    const s = { proc, port, file: model.file, sizeGB, lastUsed: Date.now(), log: [], ctx, layers, exited: false };
+    const blocks = info.layers || 32;
+    const vramGB = layers >= 999 ? sizeGB : layers ? (sizeGB * Math.min(layers, blocks)) / blocks : 0;
+    const s = { proc, port, file: model.file, sizeGB, vramGB, lastUsed: Date.now(), log: [], ctx, maxCtx: info.contextLength || ctx, layers, exited: false };
     const keep = (d) => { s.log.push(d.toString()); if (s.log.length > 200) s.log.shift(); };
     proc.stdout.on('data', keep);
     proc.stderr.on('data', keep);
@@ -212,7 +238,14 @@ async function ensure(model, { contextSize = 8192, gpu = 'auto', onStatus } = {}
   const tick = setInterval(() => onStatus?.(`Loading ${model.name || 'model'} into memory… ${Math.round((Date.now() - t0) / 1000)} s (only the first time)`), 1000);
   onStatus?.(`Loading ${model.name || 'model'} into memory${ngl ? '' : ' (on the processor)'}…`);
   try {
-    return await start(ngl);
+    try {
+      return await start(ngl);
+    } catch (err) {
+      if (!kvq || err?.code === 'damaged') throw err;
+      // This engine or device couldn't use the 8-bit cache: remember that, and use a normal one.
+      stop(key); kvq = false; kvPlain.add(engine.bin);
+      return await start(ngl);
+    }
   } catch (err) {
     stop(key);
     if (ngl > 0 && err?.code !== 'damaged') {
@@ -257,7 +290,7 @@ async function* chat(model, opts) {
   const useGpu = cpuOnly.has(model.file) ? 0 : gpu;
   let produced = false;
   try {
-    const s = await ensure(model, { contextSize, gpu: useGpu, onStatus });
+    const s = await ensure(model, { contextSize: contextFor(messages, maxTokens, contextSize || 16384), gpu: useGpu, onStatus });
     s.lastUsed = Date.now();
     onStatus?.('');
     for await (const ev of oai.streamChat({
@@ -284,7 +317,8 @@ async function* chat(model, opts) {
 }
 
 function status() {
-  return [...servers.values()].map((s) => ({ file: s.file, port: s.port, sizeGB: s.sizeGB, layers: s.layers, ctx: s.ctx, ready: !s.exited }));
+  return [...servers.values()].map((s) => ({ file: s.file, port: s.port, sizeGB: s.sizeGB, vramGB: s.vramGB, layers: s.layers, ctx: s.ctx, ready: !s.exited, idleSec: Math.round((Date.now() - s.lastUsed) / 1000) }));
 }
+const isLoaded = (file) => [...servers.values()].some((s) => s.file === file && !s.exited);
 
-module.exports = { readGguf, ensure, chat, stop, stopAll, status };
+module.exports = { readGguf, ensure, chat, stop, stopAll, status, isLoaded, contextFor };

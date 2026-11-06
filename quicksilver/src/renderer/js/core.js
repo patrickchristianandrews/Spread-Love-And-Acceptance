@@ -289,7 +289,7 @@ function chatMenu(anchor, chat) {
     if (act === 'pin') { chat.pinned = !chat.pinned; save(); renderChatList(); }
     if (act === 'rename') {
       const b = openModal(`<h2>Rename chat</h2><input id="rn" value="${esc(chat.title)}"><div class="modal-actions"><button class="btn" data-close>Cancel</button><button class="btn primary" id="rn-ok">Save</button></div>`);
-      const ok = () => { chat.title = b.querySelector('#rn').value.trim() || chat.title; save(); closeModal(); render(); };
+      const ok = () => { chat.title = b.querySelector('#rn').value.trim() || chat.title; chat.renamed = true; save(); closeModal(); render(); };
       b.querySelector('#rn-ok').onclick = ok;
       b.querySelector('#rn').addEventListener('keydown', (k) => { if (k.key === 'Enter') ok(); });
       b.querySelector('#rn').select();
