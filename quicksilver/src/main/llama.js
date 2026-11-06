@@ -1,7 +1,7 @@
 // Runs local text and vision models with llama.cpp's llama-server, one process per loaded model.
 // Several models can stay loaded at once while they fit in memory; the least recently used is
 // stopped to make room. Each server speaks the OpenAI chat format on 127.0.0.1.
-const { spawn } = require('node:child_process');
+const { spawn, execFile } = require('node:child_process');
 const net = require('node:net');
 const fs = require('node:fs');
 const engines = require('./engines');
@@ -162,7 +162,28 @@ function gpuLayers(model, info, hw, setting, otherVramGB = 0) {
   return Math.max(0, Math.floor((layers * free) / sizeGB));
 }
 
-// Engines that failed to start with an 8-bit KV cache (they get a normal cache from then on),
+// Which options this engine build understands (llama.cpp renames some now and then), read once
+// from its --help.
+const helpCache = new Map();
+function engineHelp(bin) {
+  if (!helpCache.has(bin)) helpCache.set(bin, new Promise((resolve) => execFile(bin, ['--help'], { windowsHide: true, timeout: 15000, maxBuffer: 4 << 20 }, (_e, out, err) => resolve(`${out || ''}${err || ''}`))));
+  return helpCache.get(bin);
+}
+// The speculative-decoding options for this engine build, or null if it has none.
+async function draftArgs(bin, draftFile, onGpu) {
+  const help = await engineHelp(bin);
+  const has = (flag) => help.includes(flag);
+  if (!has('--model-draft') && !has('-md,')) return null;
+  const args = ['--model-draft', draftFile];
+  if (has('--gpu-layers-draft')) args.push('--gpu-layers-draft', onGpu ? '999' : '0');
+  if (has('--spec-draft-n-max')) args.push('--spec-draft-n-max', '16');
+  else if (/--draft-max\b(?![^\n]*removed)/.test(help)) args.push('--draft-max', '16');
+  if (has('--spec-draft-n-min')) args.push('--spec-draft-n-min', '2');
+  else if (/--draft-min\b(?![^\n]*removed)/.test(help)) args.push('--draft-min', '2');
+  return args;
+}
+
+// Models that failed to start with an 8-bit KV cache (they get a normal cache from then on),
 // and models that failed to start with a draft model.
 const kvPlain = new Set();
 const noDraft = new Set();
@@ -226,7 +247,7 @@ async function ensure(model, { contextSize = 8192, gpu = 'auto', onStatus } = {}
   const ngl = gpuLayers(model, info, hw, gpu, otherVram);
   // The model's working memory (KV cache) is stored at 8-bit: about half the memory, with no
   // noticeable change in answers. Engines that can't do it get a normal cache instead.
-  let kvq = !kvPlain.has(engine.bin);
+  let kvq = !kvPlain.has(model.file);
   let useDraft = Boolean(model.draft && fs.existsSync(model.draft));
   const start = async (layers) => {
     const port = await freePort();
@@ -237,7 +258,7 @@ async function ensure(model, { contextSize = 8192, gpu = 'auto', onStatus } = {}
     if (!layers) args.push('--device', 'none');
     if (kvq) args.push('--cache-type-k', 'q8_0', '--cache-type-v', 'q8_0');
     // Speculative decoding with a small same-family model (see catalog.draftFor).
-    if (useDraft) args.push('--model-draft', model.draft, '--gpu-layers-draft', layers ? '999' : '0', '--draft-max', '16', '--draft-min', '2');
+    if (useDraft) { const da = await draftArgs(engine.bin, model.draft, layers > 0); if (da) args.push(...da); else useDraft = false; }
     if (model.mmproj) args.push('--mmproj', model.mmproj);
     const proc = spawn(engine.bin, args, { windowsHide: true, stdio: ['ignore', 'pipe', 'pipe'] });
     const blocks = info.layers || 32;
@@ -269,7 +290,7 @@ async function ensure(model, { contextSize = 8192, gpu = 'auto', onStatus } = {}
     } catch (err) {
       if (!kvq || err?.code === 'damaged') throw err;
       // This engine or device couldn't use the 8-bit cache: remember that, and use a normal one.
-      stop(key); kvq = false; kvPlain.add(engine.bin);
+      stop(key); kvq = false; kvPlain.add(model.file);
       return await start(ngl);
     }
   } catch (err) {
