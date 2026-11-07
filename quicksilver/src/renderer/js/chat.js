@@ -450,11 +450,17 @@ function userContent(m, docBudget) {
 
 // Questions about what's happening now get a quick web search automatically (unless web search
 // is switched off for this chat), so answers about prices, news or current guidance aren't stale.
-const FRESH_Q = /\b(latest|newest|current(ly)?|today'?s?|tonight|tomorrow|yesterday|this (week|month|year)|right now|news|headlines?|prices?|price of|cost of|exchange rate|stock price|share price|weather|forecast|election|release date|just (came out|released)|guidance|guidelines|opening hours|open now|who won|20(2[5-9]|3\d))\b/i;
+// Only questions that really need up-to-the-minute facts trigger an automatic web search. Kept
+// deliberately narrow: generic words like "price", "cost", "today" or "tomorrow" appear in plenty
+// of questions a local model answers better on its own (a pricing calculation, "my exam tomorrow",
+// a website's opening hours), so they don't count on their own.
+const FRESH_Q = /\b(latest|most recent|newest|up[- ]to[- ]date|right now|at the moment|this (week|month|year)|news|headlines?|breaking|stock (price|market)|share price|exchange rate|crypto|bitcoin|weather|forecast|who won|final score|release dates?|out yet|released yet|as of 20\d\d|in 20(2[6-9]|[3-9]\d))\b/i;
+// A calculation, a creative or build request, or a how-to is about the user's own work, not the news.
+const NOT_FRESH = /\d\s*[-+*/^×÷%]\s*\d|\b(write|draft|create|build|make|design|generate|code|refactor|debug|explain|summar|translate|rewrite|compose|story|poem|lyrics|essay|email|script|app|website|function)\b/i;
 function webWanted(chat, a, query, force = {}) {
   if (!query || S.config?.web?.provider === 'none' || S.config?.offline) return '';
   if (force.web || (chat.web ?? a.web)) return 'on';
-  return chat.web !== false && S.data.prefs.autoWeb !== false && FRESH_Q.test(query) ? 'auto' : '';
+  return chat.web !== false && S.data.prefs.autoWeb !== false && FRESH_Q.test(query) && !NOT_FRESH.test(query) ? 'auto' : '';
 }
 
 async function gatherSources(chat, a, query, force = {}) {
@@ -626,7 +632,10 @@ async function generate(chat, rerollMsg, withTarget, opts = {}) {
   const facts = lastUser?.text ? exactFacts(lastUser.text) : [];
   if (facts.length) memNote = `${memNote ? `${memNote}\n` : ''}Exact results worked out by the app for this question (use these numbers as they are):\n${facts.map((f) => `- ${f}`).join('\n')}`;
   if (opts.fix) memNote = `${memNote ? `${memNote}\n` : ''}Checks of your previous answer to this question found these problems:\n<check>\n${String(opts.fix).slice(0, 6000)}\n</check>\nWrite a corrected, complete answer that fixes every real problem it found (if a finding is itself wrong, keep what was right). Don't mention the check; just give the better answer.`;
-  if (sources.webEmpty) memNote = `${memNote ? `${memNote}\n` : ''}${sources.autoWeb ? 'A web search ran for this question' : 'The user turned on web search'}, but the search found nothing for this question. Say in one short sentence at the start that you couldn't check the web this time, then answer from what you know. Don't claim anything is the "latest" or give publication dates or links you haven't seen.`;
+  // The user turned web search on but it found nothing: say so, briefly. An automatic search that
+  // found nothing stays silent (the user didn't ask for it) — just answer from what you know.
+  if (sources.webEmpty && !sources.autoWeb) memNote = `${memNote ? `${memNote}\n` : ''}The user turned on web search, but the search found nothing for this question. Say in one short sentence at the start that you couldn't check the web this time, then answer from what you know. Don't claim anything is the "latest" or give publication dates or links you haven't seen.`;
+  else if (sources.webEmpty) memNote = `${memNote ? `${memNote}\n` : ''}Answer from your own knowledge. Don't claim anything is the "latest" and don't give publication dates or links.`;
   const { strict, messages } = H;
   if (messages.at(-1).role !== 'user') messages.push({ role: 'user', content: 'Please continue.' });
   messages[messages.length - 1] = { ...messages.at(-1), content: withContext(messages.at(-1).content, turnContext(chat, sources, strict, lastUser?.text || '', ctx, memNote, skill ? skillPrompt(skill) : '')) };

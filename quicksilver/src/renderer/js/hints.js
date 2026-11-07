@@ -57,7 +57,7 @@ function composerHints(chat, a, text, attachments = []) {
     }
   }
   // Something current: the web makes it right.
-  if (FRESH_Q.test(t) && !webWanted(chat, a, t)) {
+  if (FRESH_Q.test(t) && !NOT_FRESH.test(t) && !webWanted(chat, a, t)) {
     if (S.config?.offline) add({ id: 'web', icon: '🌐', label: 'Go online to check the web', why: 'This is about something current, and you are offline.', act: { online: true } });
     else if (S.config?.web?.provider !== 'none') add({ id: 'web', icon: '🌐', label: 'Turn on web search', why: 'This is about something current, so an up-to-date search will make the answer right.', act: { web: true } });
   }
