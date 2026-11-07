@@ -1096,3 +1096,10 @@ code.sel { user-select: all; background: var(--soft); padding: 1px 6px; border-r
 .qz-why { margin: 8px 0 0 34px; padding: 8px 12px; border-radius: 10px; background: var(--soft); line-height: 1.5; }
 .qz-why.ok b { color: var(--ok, #2fa36b); } .qz-why.bad b { color: var(--danger); }
 .quiz-end { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding-top: 4px; border-top: 1px solid var(--line-soft); }
+
+/* ---------- "Add a model to start chatting" chooser ---------- */
+.need-model { display: flex; flex-direction: column; gap: 8px; margin: 14px 0 4px; }
+.need-opt { display: flex; flex-direction: column; gap: 3px; align-items: flex-start; text-align: left; padding: 12px 14px; border-radius: 12px; border: 1px solid var(--line-soft); background: var(--panel); color: var(--text); font: inherit; cursor: pointer; transition: border-color .15s, background .15s; }
+.need-opt:hover { border-color: var(--accent-line); background: var(--accent-tint); }
+.need-opt b { display: flex; align-items: center; gap: 8px; font-size: 1rem; }
+.need-opt .muted { line-height: 1.45; }

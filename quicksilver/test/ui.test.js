@@ -340,6 +340,14 @@ function redPng(size = 64) {
   await win.keyboard.press('Escape');
   await win.evaluate(() => { S.data.prefs.simple = false; applySimple?.(); });
   console.log('✓ connect a cloud AI from the message box (chip in full view, ＋ menu in simple)');
+  // With no model installed, chatting offers to add one or a team (keeps the typed message).
+  await win.evaluate((id) => go({ view: 'chat', id }), backTo2);
+  await win.evaluate(() => needModel(chatById(S.route.id)));
+  await win.waitForSelector('.need-model [data-nm="setup"]');
+  for (const nm of ['setup', 'teams', 'browse', 'api']) assert.ok(await win.locator(`.need-model [data-nm="${nm}"]`).count(), `chooser has ${nm}`);
+  await win.click('.need-model [data-nm="browse"]');
+  await win.waitForFunction(() => S.route.view === 'models' && modelsTab === 'text', null, { timeout: 10000 });
+  console.log('✓ no model: chatting opens a chooser to add a model, team, found models or a cloud AI');
   await win.evaluate((id) => go({ view: 'chat', id }), backTo2);
   console.log('✓ leverage: signals teach Automatic, connected apps used, cloud for hard questions (opt-in), next question answered in advance');
   console.log('✓ free checks: exact facts first, maths audit + code/page checks fix answers, unsure numbers double-checked, instant repeats, reading ahead');

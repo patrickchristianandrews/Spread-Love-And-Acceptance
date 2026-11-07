@@ -106,6 +106,32 @@ function welcomeHTML(a) {
   </div>`;
 }
 
+// No model installed yet: when the user tries to chat, help them add one (or a team) instead of a
+// dead end. Their typed message is kept in the box, ready to send once a model is set up.
+function needModel(chat) {
+  const found = (S.found || []).filter((m) => m.kind === 'text').length;
+  const b = openModal(`<h2>${icon('cpu', 22)} Add a model to start chatting</h2>
+    <p style="font-size:1.03rem">Quicksilver runs AI on your own PC, so you pick a model (or a team of models) first. Your message is saved — it'll be here when you come back.</p>
+    <div class="need-model">
+      <button class="need-opt" data-nm="setup"><b>${icon('sparkle', 16)} Set me up automatically</b><span class="small muted">The Setup Advisor checks your PC and downloads the best free model for the job, in one click. No account needed.</span></button>
+      <button class="need-opt" data-nm="teams"><b>${icon('layers', 16)} Build a team</b><span class="small muted">Combine models for stronger answers, or pick a ready-made team for coding, writing, study and more.</span></button>
+      <button class="need-opt" data-nm="browse"><b>${icon('box', 16)} Browse models</b><span class="small muted">See every free model, rated for how fast it runs on your PC, and download one.</span></button>
+      ${found ? `<button class="need-opt" data-nm="found"><b>${icon('download', 16)} Add ${found} model${found > 1 ? 's' : ''} already on this PC</b><span class="small muted">Found in LM Studio, Jan, Ollama, GPT4All or your Downloads — add ${found > 1 ? 'them' : 'it'} in place, no re-downloading.</span></button>` : ''}
+      <button class="need-opt" data-nm="api"><b>${icon('plus', 16)} Connect a cloud AI</b><span class="small muted">Use ChatGPT, Claude or Gemini with your own API key — no download, works on any PC.</span></button>
+    </div>
+    <div class="modal-actions"><button class="btn" data-close>Not now</button></div>`, { wide: true });
+  b.addEventListener('click', (e) => {
+    const nm = e.target.closest('[data-nm]')?.dataset.nm;
+    if (!nm) return;
+    closeModal();
+    if (nm === 'setup') { go({ view: 'stacks' }); runAdvisor('general'); }
+    else if (nm === 'teams') go({ view: 'stacks' });
+    else if (nm === 'browse') { modelsTab = 'text'; go({ view: 'models' }); }
+    else if (nm === 'found') { modelsTab = 'installed'; go({ view: 'models' }); setTimeout(() => (typeof foundModal === 'function' && (S.found || []).length ? foundModal() : $('#find-models')?.click()), 120); }
+    else if (nm === 'api') { modelsTab = 'api'; go({ view: 'models' }); }
+  });
+}
+
 function attachmentsHTML(list, removable) {
   return list.map((att, i) => {
     const icon = { spreadsheet: '📊', code: '💻', document: '📄' }[att.kind] || '📄';
@@ -345,7 +371,7 @@ function bindChat() {
       if (chat.messages.at(-1)?.role === 'user') generate(chat, null);
       return;
     }
-    if (!resolveTarget(chat, a)) { toast('Get a model first: open the Setup Advisor.'); go({ view: 'stacks' }); return; }
+    if (!resolveTarget(chat, a)) { needModel(chat); return; }
     // An assistant can apply a skill to every message (the Image Artist paints each request).
     chat.messages.push({ id: uid(), t: now(), role: 'user', text, attachments: atts, skillId: chat.pendingSkill || (skillById(a.skill) ? a.skill : undefined) });
     chat.pendingSkill = null; chat.suggested = null;
@@ -555,7 +581,7 @@ async function generate(chat, rerollMsg, withTarget, opts = {}) {
     const pick = autoPick(chat, a, q?.text || '', (q?.attachments || []).some((x) => x.type === 'image' || x.type === 'video'));
     if (pick.target) { target = pick.target; autoWhy = pick.why || ''; }
   }
-  if (!target) { toast('Get a model first: open the Setup Advisor.'); return; }
+  if (!target) { needModel(chat); return; }
   // The follow-up you clicked was answered while you read: show it at once.
   if (!rerollMsg && !withTarget && !opts.fix) {
     const pre = takePreanswer(chat);
