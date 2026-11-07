@@ -70,12 +70,14 @@ async function* streamChat({ baseUrl, apiKey, body, signal, headers = {} }) {
   let stats = null;
   let finish = null;
   const calls = []; // tool calls arrive in pieces: { index, id, function: { name, arguments } }
+  let minDigitP = null; // the model's lowest confidence in any digit it wrote (local engines)
   for await (const ev of sse(res)) {
     const choice = ev.choices?.[0];
     const d = choice?.delta || {};
     const reasoning = d.reasoning_content ?? d.reasoning;
     if (reasoning) { tokens++; yield { type: 'reasoning', text: reasoning }; }
     if (d.content) { tokens++; for (const part of split(d.content)) yield part; }
+    for (const lp of choice?.logprobs?.content || []) if (/\d/.test(lp.token || '') && Number.isFinite(lp.logprob)) minDigitP = Math.min(minDigitP ?? 1, Math.exp(lp.logprob));
     for (const tc of d.tool_calls || []) {
       const i = tc.index ?? calls.length;
       calls[i] ||= { id: '', name: '', arguments: '' };
@@ -90,7 +92,7 @@ async function* streamChat({ baseUrl, apiKey, body, signal, headers = {} }) {
   const toolCalls = calls.filter((c) => c && c.name).map((c, i) => ({ id: c.id || `call_${Date.now().toString(36)}_${i}`, name: c.name, arguments: c.arguments || '{}' }));
   if (toolCalls.length) yield { type: 'tool_calls', calls: toolCalls };
   const secs = (Date.now() - started) / 1000;
-  yield { type: 'stats', tps: stats?.tps || (secs ? tokens / secs : 0), tokens: stats?.tokens || tokens, finish };
+  yield { type: 'stats', tps: stats?.tps || (secs ? tokens / secs : 0), tokens: stats?.tokens || tokens, finish, ...(minDigitP != null ? { minDigitP } : {}) };
 }
 
 async function listModels({ baseUrl, apiKey, headers = {} }) {

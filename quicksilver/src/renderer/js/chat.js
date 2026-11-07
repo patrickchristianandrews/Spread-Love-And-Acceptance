@@ -174,7 +174,7 @@ function messageHTML(chat, a, m, i) {
   return `<div class="msg assistant" data-msg="${m.id}">
     <div class="av" aria-hidden="true">${esc(a.emoji)}</div>
     <div class="msg-main">
-    <div class="who-line"><b>${esc(a.name)}</b>${model ? `<span class="who-model"${alt.autoWhy ? ` title="${esc(alt.autoWhy)}"` : ''}>${alt.autoWhy ? '✨ ' : ''}${esc(model)}</span>` : ''}${alt.skillId && skillById(alt.skillId) ? `<span class="badge b-peach">⚡ ${esc(skillById(alt.skillId).name)}</span>` : ''}${alt.imported ? `<span class="badge">From ${esc(alt.imported)}</span>` : ''}${alt.fixed ? '<span class="badge b-mint" title="A second model double-checked the first answer and this one fixes what it found.">✓ Corrected</span>' : ''}${alt.autoWeb && !alt.sources?.length ? '<span class="badge b-sky" title="This question is about something current, so the web was searched automatically. Turn it off in Settings → General.">🌐 Checked the web</span>' : ''}${alt.webEmpty ? '<span class="badge b-lemon" title="Web search was on but found nothing for this question, so this answer is from the model\'s own knowledge.">Web: nothing found</span>' : ''}${etaNow}${alt.stats?.tps && !streaming ? `<span class="who-speed" title="${esc(statsTitle(alt))}">${Math.round(alt.stats.tps * 0.75)} words/s</span>` : ''}${m.t ? `<span class="who-time">${esc(msgTime(m))}</span>` : ''}</div>
+    <div class="who-line"><b>${esc(a.name)}</b>${model ? `<span class="who-model"${alt.autoWhy ? ` title="${esc(alt.autoWhy)}"` : ''}>${alt.autoWhy ? '✨ ' : ''}${esc(model)}</span>` : ''}${alt.skillId && skillById(alt.skillId) ? `<span class="badge b-peach">⚡ ${esc(skillById(alt.skillId).name)}</span>` : ''}${alt.imported ? `<span class="badge">From ${esc(alt.imported)}</span>` : ''}${alt.fixed ? '<span class="badge b-mint" title="A check of the first answer found a mistake (a sum, a code error or a wrong fact); this one fixes it. The first answer is still there with ‹ ›.">✓ Corrected</span>' : ''}${alt.cached ? '<span class="badge b-lemon" title="You rated this answer before (or it passed the double-check), so it was shown instantly. Regenerate for a fresh one.">⚡ Instant</span>' : ''}${alt.unsure && alt.check?.running ? '<span class="badge" title="The model was unsure of a number in this answer, so a second model is checking it.">Checking a number…</span>' : ''}${alt.autoWeb && !alt.sources?.length ? '<span class="badge b-sky" title="This question is about something current, so the web was searched automatically. Turn it off in Settings → General.">🌐 Checked the web</span>' : ''}${alt.webEmpty ? '<span class="badge b-lemon" title="Web search was on but found nothing for this question, so this answer is from the model\'s own knowledge.">Web: nothing found</span>' : ''}${etaNow}${alt.stats?.tps && !streaming ? `<span class="who-speed" title="${esc(statsTitle(alt))}">${Math.round(alt.stats.tps * 0.75)} words/s</span>` : ''}${m.t ? `<span class="who-time">${esc(msgTime(m))}</span>` : ''}</div>
     ${metaRow(stepsHTML(alt, streaming) + toolsHTML(alt) + memoryChipHTML(alt) + (alt.reasoning ? `<details class="think chip-d"><summary>${streaming && !alt.text ? '<span class="pulse"></span>Thinking…' : '💭 Thought it through'}</summary><div>${esc(alt.reasoning)}</div></details>` : ''))}
     <div class="bubble md ${streaming ? 'streaming' : ''} ${alt.error ? 'error' : ''}">${body}</div>
     ${downloadHTML(m, alt, streaming)}
@@ -247,8 +247,11 @@ function bindChat() {
     input.focus();
   };
   let suggestTimer = null;
+  let readAheadTimer = null;
   input.addEventListener('input', () => {
     chat.draft = input.value; grow(); save();
+    clearTimeout(readAheadTimer);
+    readAheadTimer = setTimeout(() => prefillChat(chat, a, input.value), 700);
     const m = input.value.match(/^\/(\S*)$/);
     if (m) openPop(m[1]); else closePop();
     clearTimeout(suggestTimer);
@@ -512,6 +515,24 @@ function withContext(content, text) {
   return i < 0 ? [{ type: 'text', text: head }, ...content] : content.map((x, k) => (k === i ? { ...x, text: head + x.text } : x));
 }
 
+// The system prompt and the conversation so far, exactly as the model reads them (used to send a
+// message, and to read ahead while you type).
+function chatHistory(chat, a, upTo, skill = null) {
+  const p = S.data.prefs;
+  // Building a site or app: a whole page is long, and later messages edit it, so allow a long
+  // answer and enough memory to keep the current version in view.
+  const appWork = skill?.output === 'app' || chat.messages.slice(0, upTo).some((m) => m.role === 'assistant' && /```html\s*\n[\s\S]*?(<!doctype html|<html[\s>])/i.test(msgText(m)));
+  const ctx = Math.max(Number(a.contextSize || p.contextSize) || 16384, appWork ? 32768 : 0);
+  const docBudget = Math.max(4000, Math.floor((ctx * 3 * 0.6) / Math.max(1, chat.messages.slice(0, upTo).reduce((n, m) => n + (m.attachments || []).filter((x) => x.type === 'doc').length, 0))));
+  const strict = Boolean(a.strict && (chat.library ?? a.library));
+  const messages = [{ role: 'system', content: systemPrompt(a, strict, chat) }];
+  for (const m of chat.messages.slice(0, upTo)) {
+    if (m.role === 'user') messages.push({ role: 'user', content: userContent(m, docBudget) });
+    else { const t = msgText(m).trim(); if (t) messages.push({ role: 'assistant', content: t }); }
+  }
+  return { messages, ctx, strict, appWork };
+}
+
 async function generate(chat, rerollMsg, withTarget, opts = {}) {
   const a = assistantById(chat.assistantId);
   let autoWhy = '';
@@ -522,6 +543,16 @@ async function generate(chat, rerollMsg, withTarget, opts = {}) {
     if (pick.target) { target = pick.target; autoWhy = pick.why || ''; }
   }
   if (!target) { toast('Get a model first: open the Setup Advisor.'); return; }
+  // Asked before and rated 👍 (or passed the double-check): answer instantly.
+  if (!rerollMsg && !withTarget && !opts.fix && chat.messages.at(-1)?.role === 'user') {
+    const hit = cachedAnswer(chat, chat.messages.at(-1));
+    if (hit) {
+      chat.messages.push({ id: uid(), t: now(), role: 'assistant', altIndex: 0, alts: [{ text: hit.text, target: hit.target, cached: true, ms: 0 }] });
+      if (chat.title === 'New chat') chat.title = chat.messages[0].text.slice(0, 60);
+      chat.updated = now(); save(); render();
+      return;
+    }
+  }
   let msg = rerollMsg;
   let upTo;
   if (msg) { upTo = chat.messages.indexOf(msg); msg.alts.push({ text: '', target }); msg.altIndex = msg.alts.length - 1; }
@@ -561,9 +592,8 @@ async function generate(chat, rerollMsg, withTarget, opts = {}) {
   pending.sources = sources;
   // Building a site or app: a whole page is long, and later messages edit it, so allow a long
   // answer and enough memory to keep the current version in view.
-  const appWork = skill?.output === 'app' || chat.messages.slice(0, upTo).some((m) => m.role === 'assistant' && /```html\s*\n[\s\S]*?(<!doctype html|<html[\s>])/i.test(msgText(m)));
-  const ctx = Math.max(Number(a.contextSize || p.contextSize) || 16384, appWork ? 32768 : 0);
-  const docBudget = Math.max(4000, Math.floor((ctx * 3 * 0.6) / Math.max(1, chat.messages.slice(0, upTo).reduce((n, m) => n + (m.attachments || []).filter((x) => x.type === 'doc').length, 0))));
+  const H = chatHistory(chat, a, upTo, skill);
+  const { ctx, appWork } = H;
   // "Remember that…" / "Forget…" are saved straight away; the answer just confirms it.
   let memNote = '';
   if (!rerollMsg && lastUser?.text && !lastUser.memoryDone) {
@@ -575,14 +605,11 @@ async function generate(chat, rerollMsg, withTarget, opts = {}) {
     } else if (/^\s*(?:please\s+)?forget\b/i.test(lastUser.text) && memOn()) memNote = 'The user asked you to forget something, but nothing matching it was in your memory. Say so briefly, and mention they can see and edit everything you remember under Settings → Memory.';
   }
   // Web search was on but found nothing: say so, and don't pretend to have checked.
-  if (opts.fix) memNote = `${memNote ? `${memNote}\n` : ''}A careful second model checked your previous answer to this question and found these problems:\n<check>\n${String(opts.fix).slice(0, 6000)}\n</check>\nWrite a corrected, complete answer that fixes every real problem it found (if a finding is itself wrong, keep what was right). Don't mention the check; just give the better answer.`;
+  const facts = lastUser?.text ? exactFacts(lastUser.text) : [];
+  if (facts.length) memNote = `${memNote ? `${memNote}\n` : ''}Exact results worked out by the app for this question (use these numbers as they are):\n${facts.map((f) => `- ${f}`).join('\n')}`;
+  if (opts.fix) memNote = `${memNote ? `${memNote}\n` : ''}Checks of your previous answer to this question found these problems:\n<check>\n${String(opts.fix).slice(0, 6000)}\n</check>\nWrite a corrected, complete answer that fixes every real problem it found (if a finding is itself wrong, keep what was right). Don't mention the check; just give the better answer.`;
   if (sources.webEmpty) memNote = `${memNote ? `${memNote}\n` : ''}${sources.autoWeb ? 'A web search ran for this question' : 'The user turned on web search'}, but the search found nothing for this question. Say in one short sentence at the start that you couldn't check the web this time, then answer from what you know. Don't claim anything is the "latest" or give publication dates or links you haven't seen.`;
-  const strict = Boolean(a.strict && (chat.library ?? a.library));
-  const messages = [{ role: 'system', content: systemPrompt(a, strict, chat) }];
-  for (const m of chat.messages.slice(0, upTo)) {
-    if (m.role === 'user') messages.push({ role: 'user', content: userContent(m, docBudget) });
-    else { const t = msgText(m).trim(); if (t) messages.push({ role: 'assistant', content: t }); }
-  }
+  const { strict, messages } = H;
   if (messages.at(-1).role !== 'user') messages.push({ role: 'user', content: 'Please continue.' });
   messages[messages.length - 1] = { ...messages.at(-1), content: withContext(messages.at(-1).content, turnContext(chat, sources, strict, lastUser?.text || '', ctx, memNote, skill ? skillPrompt(skill) : '')) };
   // Long chats: keep the instructions and the latest messages within the model's memory, so a
@@ -666,7 +693,7 @@ qs.onChat(({ requestId, ev }) => {
     }
     case 'approve': askToolApproval(ev); break;
     case 'sources': alt.sources = [...(alt.sources || []), ...ev.sources.map(({ title, url, path }) => ({ title, url, path }))]; pending.sources = [...(pending.sources || []), ...ev.sources]; break;
-    case 'stats': alt.stats = { tps: ev.tps, tokens: ev.tokens }; if (ev.finish === 'length') toast('The answer hit the length limit. Press Continue for more.'); break;
+    case 'stats': alt.stats = { tps: ev.tps, tokens: ev.tokens }; if (ev.minDigitP != null) alt.minDigitP = ev.minDigitP; if (ev.finish === 'length') toast('The answer hit the length limit. Press Continue for more.'); break;
     case 'error':
     case 'done': {
       if (ev.type === 'error') {
@@ -684,11 +711,17 @@ qs.onChat(({ requestId, ev }) => {
       chat.updated = now();
       save();
       if (S.route.view === 'chat') render(); else renderChatList();
-      if (fuOk) writeFollowups(chat, msg, alt);
       const maker = isMakerSkill(alt);
-      if (ev.type === 'done' && !ev.aborted && maker && MEDIA_OUTPUTS.has(maker.output)) runSkillMedia(chat, msg, alt, maker);
-      else if (ev.type === 'done' && !ev.aborted && maker && AFTER_OUTPUTS.has(maker.output) && alt.text) runAfterText(chat, msg, alt, maker);
-      else if (ev.type === 'done' && !ev.aborted && alt.text && !maker && (alt.forceFact || factOn(chat, assistantById(chat.assistantId)))) factCheck(chat, msg, alt, sourcesFull);
+      const ok = ev.type === 'done' && !ev.aborted;
+      (async () => {
+        // Free checks first (maths, code, web pages): a wrong answer is corrected straight away.
+        if (ok && alt.text && (!maker || maker.output === 'app') && await autoChecks(chat, msg, alt).catch(() => false)) return;
+        if (fuOk) writeFollowups(chat, msg, alt);
+        if (ok && maker && MEDIA_OUTPUTS.has(maker.output)) runSkillMedia(chat, msg, alt, maker);
+        else if (ok && maker && AFTER_OUTPUTS.has(maker.output) && alt.text) runAfterText(chat, msg, alt, maker);
+        else if (ok && alt.text && !maker && (alt.forceFact || factOn(chat, assistantById(chat.assistantId)))) factCheck(chat, msg, alt, sourcesFull);
+        else if (ok && alt.text && !maker) unsureCheck(chat, msg, alt);
+      })();
       return;
     }
     default: break;
@@ -946,6 +979,7 @@ qs.onChat(({ requestId, ev }) => {
     ch.running = false;
     checks.delete(requestId);
     save();
+    if (!ch.error && !checkCounts(ch.text).bad && /accurate/i.test(parseCheck(ch.text).verdict) && !/mostly/i.test(parseCheck(ch.text).verdict)) rememberAnswer(chat, msg, c.alt);
     // Self-correction: a definite error in the last answer gets fixed straight away, once.
     if (!ch.error && checkCounts(ch.text).bad && S.data.prefs.autoFix !== false && !c.alt.fixed && !msg.autoFixed && !pending && chat.messages[chat.messages.length - 1] === msg && msg.alts[msg.altIndex] === c.alt) {
       msg.autoFixed = true;
@@ -1075,6 +1109,7 @@ function rateAnswer(chat, m, v) {
   alt.rating = alt.rating === v ? null : v;
   alt.job = job;
   if (alt.rating) rec[alt.rating]++;
+  if (alt.rating === 'up') rememberAnswer(chat, m, alt); else forgetAnswer(chat, m);
   save();
   paintStreaming(chat, m);
   if (alt.rating === 'up') toast('Thanks: Automatic will lean on this model more for questions like this.');

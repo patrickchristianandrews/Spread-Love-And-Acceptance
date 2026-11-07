@@ -193,6 +193,7 @@ async function checkCpuMoe(bin) { if (!moeCache.has(bin)) moeCache.set(bin, (awa
 // and models that failed to start with a draft model.
 const kvPlain = new Set();
 const noDraft = new Set();
+const noLogprobs = new Set(); // engines that refused to report word probabilities
 
 // Loads the rest of a stack's team in the background while the first model is writing, but only
 // when everything fits in memory at once (never pushing out a model that's in use).
@@ -361,7 +362,7 @@ async function* chat(model, opts) {
       // Quick effort turns off "thinking" on models that support the switch (e.g. Qwen3).
       // Repetition guards: small models can loop ("wait, let me recheck…") until the length limit;
       // a light repeat penalty and the DRY sampler stop that without changing normal answers.
-      body: { messages, temperature, max_tokens: maxTokens, cache_prompt: true, repeat_penalty: 1.07, dry_multiplier: 0.8, dry_base: 1.75, dry_allowed_length: 3, ...(tools?.length ? { tools } : {}), ...(level === 'quick' ? { chat_template_kwargs: { enable_thinking: false }, reasoning_budget: 0 } : {}) },
+      body: { messages, temperature, max_tokens: maxTokens, cache_prompt: true, ...(noLogprobs.has(model.file) || tools?.length ? {} : { logprobs: true }), repeat_penalty: 1.07, dry_multiplier: 0.8, dry_base: 1.75, dry_allowed_length: 3, ...(tools?.length ? { tools } : {}), ...(level === 'quick' ? { chat_template_kwargs: { enable_thinking: false }, reasoning_budget: 0 } : {}) },
       signal,
     })) {
       produced = true;
@@ -373,6 +374,7 @@ async function* chat(model, opts) {
     }
     s.lastUsed = Date.now();
   } catch (err) {
+    if (!produced && !signal?.aborted && !noLogprobs.has(model.file) && /logprob|n_probs/i.test(String(err?.message || err))) { noLogprobs.add(model.file); yield* chat(model, opts); return; }
     if (signal?.aborted || produced || useGpu === 0 || !GPU_FAILURE.test(String(err?.message || err))) throw err;
     cpuOnly.add(model.file);
     for (const [k, srv] of [...servers.entries()]) if (srv.file === model.file) stop(k);
@@ -381,9 +383,19 @@ async function* chat(model, opts) {
   }
 }
 
+// Reads the conversation into the model's memory without answering (one token), so the real
+// question only has to read the new message. Only for a model that's already loaded or loading.
+async function prefill(model, messages, { contextSize = 16384, gpu = 'auto' } = {}) {
+  const useGpu = cpuOnly.has(model.file) ? 0 : gpu;
+  const s = await ensure(model, { contextSize: contextFor(messages, 4096, contextSize), gpu: useGpu });
+  s.lastUsed = Date.now();
+  await fetch(`http://127.0.0.1:${s.port}/v1/chat/completions`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ messages, max_tokens: 1, temperature: 0, cache_prompt: true }), signal: AbortSignal.timeout(180000) }).then((r) => r.text()).catch(() => {});
+  return true;
+}
+
 function status() {
   return [...servers.values()].map((s) => ({ file: s.file, draft: s.draft || null, port: s.port, sizeGB: s.sizeGB, vramGB: s.vramGB, layers: s.layers, ctx: s.ctx, ready: !s.exited, idleSec: Math.round((Date.now() - s.lastUsed) / 1000) }));
 }
 const isLoaded = (file) => [...servers.values()].some((s) => s.file === file && !s.exited);
 
-module.exports = { readGguf, ensure, chat, stop, stopAll, status, isLoaded, contextFor, prefetch };
+module.exports = { readGguf, ensure, prefill, chat, stop, stopAll, status, isLoaded, contextFor, prefetch };

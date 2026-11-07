@@ -242,6 +242,52 @@ function redPng(size = 64) {
   await win.waitForSelector('.refusal-hint [data-act="uncensored"]');
   await win.evaluate((id) => go({ view: 'chat', id }), backTo);
   console.log('✓ suggestions while typing: web, uncensored, attach, connect an app; dismiss; refused answers offer an uncensored model');
+
+  // Free accuracy checks and speed tricks.
+  const backTo2 = await win.evaluate(() => S.route.id);
+  const facts = await win.evaluate(() => [exactFacts('What is 17 × 23?'), exactFacts('What is 18% of 90?'), exactFacts('Run 5 km at 20°C'), exactFacts('How many days until Christmas?'), exactFacts('Book 3-4 nights on 7/11/2025')]);
+  assert.ok(facts[0].includes('17 × 23 = 391'), JSON.stringify(facts[0]));
+  assert.ok(facts[1].some((f) => /= 16\.2$/.test(f)), JSON.stringify(facts[1]));
+  assert.ok(facts[2].some((f) => /5 km = 3\.11 miles/.test(f)) && facts[2].some((f) => /20 °C = 68 °F/.test(f)), JSON.stringify(facts[2]));
+  assert.ok(facts[3].some((f) => /is \d+ days$/.test(f)), JSON.stringify(facts[3]));
+  assert.equal(facts[4].length, 0, 'ranges and dates are not sums');
+  const audits = await win.evaluate(() => [mathAudit('So 17 × 23 = 381, and 2 + 2 = 4.'), mathAudit('£2.40 × 120 = £288 and 10 / 3 = 3.33'), mathAudit('```\n1 + 1 = 3\n```')]);
+  assert.equal(audits[0].length, 1, JSON.stringify(audits[0])); assert.match(audits[0][0], /391/);
+  assert.equal(audits[1].length, 0, JSON.stringify(audits[1]));
+  assert.equal(audits[2].length, 0, 'code is left alone');
+  assert.equal((await win.evaluate(() => qs.call('code:check', [{ lang: 'js', code: 'function add(a, b {' }, { lang: 'js', code: 'const x = 1;' }, { lang: 'json', code: '{"a": 1,}' }]))).length, 2);
+  assert.ok((await win.evaluate(() => qs.call('page:check', '<!doctype html><html><body><button onclick="nope()">Go</button><script>missingFn();</script></body></html>'))).length >= 1, 'page errors are caught');
+  assert.equal((await win.evaluate(() => qs.call('page:check', '<!doctype html><html><body><p>Fine</p><script>document.title = "ok";</script></body></html>'))).length, 0);
+  const askNew = async (q) => { await win.click('[data-nav="newchat"]'); await win.fill('#input', q); await win.keyboard.press('Enter'); await win.waitForSelector('.msg.assistant'); await idle(); };
+  // A wrong sum and broken code are corrected by themselves.
+  await askNew('MATHBAD multiply seventeen by twenty-three');
+  await win.waitForFunction(() => /391/.test([...document.querySelectorAll('.msg.assistant .bubble')].pop()?.textContent || ''), null, { timeout: 60000 });
+  assert.ok(await win.locator('.msg.assistant .badge:has-text("Corrected")').count());
+  await askNew('JSBAD write an add function');
+  await win.waitForFunction(() => /function add\(a, b\)/.test([...document.querySelectorAll('.msg.assistant .bubble')].pop()?.textContent || ''), null, { timeout: 60000 });
+  // The app works out the numbers in the question and hands them to the model.
+  await askNew('What is 17 × 23 exactly?');
+  assert.match(await win.locator('.msg.assistant .bubble').last().innerText(), /\[facts: 17 × 23 = 391\]/);
+  // An unsure number gets the double-check (and only then).
+  await win.click('[data-nav="newchat"]');
+  await win.evaluate(() => { const c = chatById(S.route.id); c.factCheck = false; save(); render(); });
+  await win.fill('#input', 'UNSURE what is six times seven, 6 or 7 digits');
+  await win.keyboard.press('Enter');
+  await win.waitForSelector('.msg.assistant');
+  await idle();
+  await win.waitForFunction(() => { const c = chatById(S.route.id); const a = c.messages.at(-1).alts.at(-1); return a.unsure === true && a.check; }, null, { timeout: 60000 });
+  await win.waitForFunction(() => !document.querySelector('.fact-chip.k-run'), null, { timeout: 60000 });
+  // 👍 makes the same question instant next time.
+  await askNew('Explain what a haiku is in one line');
+  await win.locator('[data-act="up"]').last().click();
+  await askNew('Explain what a haiku is in one line');
+  assert.ok(await win.locator('.msg.assistant .badge:has-text("Instant")').count(), 'answered instantly from the rated answer');
+  // Reading ahead: typing in a chat with history makes the model read it in advance.
+  await win.fill('#input', 'And a limerick?');
+  await win.waitForFunction(() => prefilled.has(S.route.id), null, { timeout: 10000 });
+  await win.fill('#input', '');
+  await win.evaluate((id) => go({ view: 'chat', id }), backTo2);
+  console.log('✓ free checks: exact facts first, maths audit + code/page checks fix answers, unsure numbers double-checked, instant repeats, reading ahead');
   // The status light at the top right shows how the model is running.
   await win.waitForSelector('#run-state:not([hidden]) .rs-dot', { timeout: 10000 });
   await win.click('#run-state');

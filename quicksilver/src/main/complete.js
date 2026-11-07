@@ -123,17 +123,23 @@ function exists(target) {
 
 const hasImages = (messages) => messages.some((m) => Array.isArray(m.content) && m.content.some((p) => p.type === 'image_url'));
 
+// How a local model is started: with its small same-family helper when one is installed
+// (speculative decoding). Warm-up, reading ahead and answers must agree, or the answer would
+// reuse a server started without the helper.
+function localSpec(m, messages = []) {
+  const d = !m.files.mmproj && !hasImages(messages) ? catalog.draftFor(m.catalogId, models.list()) : null;
+  return { id: m.id, name: m.name, file: m.files.model, mmproj: m.files.mmproj, draft: d?.files.model };
+}
+
 async function* single(target, req) {
   const t = parse(target);
   if (t.kind === 'local') {
     const m = models.get(t.id);
     if (!m) throw new Error('That model is no longer installed. Pick another one.');
-    // A small same-family model, if installed, speeds this one up (speculative decoding).
-    const d = !m.files.mmproj && !hasImages(req.messages) ? catalog.draftFor(m.catalogId, models.list()) : null;
     // Thinking takes time: models that can switch it off skip it for easy questions (Deep think
     // always thinks). Hard questions still get the full think.
     const level = req.level === 'max' || req.points ? req.level : (req.level === 'quick' || autoLevel(req) === 'quick' ? 'quick' : req.level);
-    yield* llama.chat({ id: m.id, name: m.name, file: m.files.model, mmproj: m.files.mmproj, draft: d?.files.model }, { ...req, level: req.points ? 'quick' : level });
+    yield* llama.chat(localSpec(m, req.messages), { ...req, level: req.points ? 'quick' : level });
   } else if (t.kind === 'api') {
     yield* providers.chat(t.providerId, t.model, req);
   } else if (t.kind === 'kbm') {
@@ -693,6 +699,26 @@ function targets() {
 }
 
 // Loads a target's first local model ahead of time, so the first reply starts quickly.
+// The local model that answers first for a target (a team's lead).
+function firstLocal(target) {
+  let t = parse(target);
+  if (t.kind === 'kbm') { const km = kbModels().find((m) => m.id === t.id); return km ? firstLocal(km.base) : null; }
+  if (t.kind === 'stack') {
+    const st = stacks().find((x) => x.id === t.id);
+    const first = [st?.members.judge, ...(st?.members.drafters || [])].find((x) => x && parse(x).kind === 'local' && exists(x));
+    if (!first) return null;
+    t = parse(first);
+  }
+  return t.kind === 'local' ? models.get(t.id) || null : null;
+}
+// Reading ahead: the model reads the conversation so far while you type (see checks.js).
+async function prefill(target, messages, { contextSize, gpu } = {}) {
+  if (parse(target).kind === 'kbm') return false;
+  const m = firstLocal(target);
+  if (!m) return false;
+  return llama.prefill(localSpec(m, messages), messages, { contextSize, gpu });
+}
+
 async function warm(target, { contextSize, gpu } = {}) {
   let t = parse(target);
   if (t.kind === 'kbm') { const km = kbModels().find((m) => m.id === t.id); if (!km) return false; return warm(km.base, { contextSize, gpu }); }
@@ -705,8 +731,8 @@ async function warm(target, { contextSize, gpu } = {}) {
   if (t.kind !== 'local') return false;
   const m = models.get(t.id);
   if (!m) return false;
-  await llama.ensure({ id: m.id, name: m.name, file: m.files.model, mmproj: m.files.mmproj }, { contextSize: Math.min(contextSize || 8192, 8192), gpu });
+  await llama.ensure(localSpec(m), { contextSize: Math.min(contextSize || 8192, 8192), gpu });
   return true;
 }
 
-module.exports = { warm, run, targets, stacks, saveStack, deleteStack, kbModels, saveKbModel, deleteKbModel, label, exists, canSee, parse, autoLevel, ensureQuicksilverStack, explainStack };
+module.exports = { warm, prefill, run, targets, stacks, saveStack, deleteStack, kbModels, saveKbModel, deleteKbModel, label, exists, canSee, parse, autoLevel, ensureQuicksilverStack, explainStack };

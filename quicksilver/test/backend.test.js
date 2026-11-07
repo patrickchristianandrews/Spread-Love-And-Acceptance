@@ -142,6 +142,12 @@ async function collect(gen) {
     llama.stopAll();
     await collect(complete.run('local:qwen3-8b', { messages: [{ role: 'user', content: 'Hello again' }], maxTokens: 50, contextSize: 4096 }));
     assert.ok(llama.status().some((x) => x.draft), 'the engine was started with the draft model');
+    // Warm-up and reading ahead start the same server as answers (with the speed helper).
+    llama.stopAll();
+    await complete.warm('local:qwen3-8b', { contextSize: 4096 });
+    assert.ok(llama.status().some((x) => x.draft), 'warm-up starts the model with its draft helper');
+    assert.equal(await complete.prefill('local:qwen3-8b', [{ role: 'system', content: 'Be brief.' }, { role: 'user', content: 'Hi' }, { role: 'assistant', content: 'Hello!' }], { contextSize: 4096 }), true);
+    assert.equal(llama.status().length, 1, 'reading ahead reuses that server');
     // A helper far weaker than the lead isn't worth the wait: the lead answers on its own.
     complete.saveStack({ id: 'weakteam', name: 'Weak helper', members: { drafters: ['local:q17', 'local:phi-4'], judge: 'local:phi-4', mode: 'blend' } });
     const weak = await collect(complete.run('stack:weakteam', { messages: [{ role: 'user', content: 'Explain why the sky is blue, step by step' }], maxTokens: 200, contextSize: 4096, level: 'thorough' }));

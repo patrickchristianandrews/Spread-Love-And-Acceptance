@@ -255,6 +255,36 @@ handle('providers:refresh', (id) => providers.refreshModels(id));
 // ---------- stacks and chat ----------
 handle('targets:list', () => complete.targets());
 handle('models:warm', (target, opts) => complete.warm(target, opts).catch(() => false));
+handle('models:prefill', (target, messages, opts) => complete.prefill(target, messages, opts).catch(() => false));
+// Code in answers is compiled, never run: syntax errors are found without any risk.
+handle('code:check', (blocks) => {
+  const vm = require('node:vm');
+  const out = [];
+  for (const b of (blocks || []).slice(0, 6)) {
+    const code = String(b.code || '');
+    try {
+      if (b.lang === 'json') JSON.parse(code);
+      else if (!/^\s*(import|export)\s/m.test(code) && !/<[A-Z][\w.]*[\s/>]/.test(code)) new vm.Script(code, { filename: 'answer.js' });
+    } catch (err) { out.push(`The ${b.lang === 'json' ? 'JSON' : 'JavaScript'} code doesn't ${b.lang === 'json' ? 'parse' : 'compile'}: ${String(err.message).split('\n')[0]}`); }
+  }
+  return out;
+});
+// A web page from an answer is opened in a hidden, sealed-off window for a moment to catch
+// JavaScript errors (nothing can load from the internet or touch your files).
+handle('page:check', (html) => new Promise((resolve) => {
+  const file = path.join(store.dir('tmp'), `check-${Date.now().toString(36)}.html`);
+  fs.writeFileSync(file, String(html));
+  const errs = [];
+  const w = new BrowserWindow({ show: false, width: 1100, height: 800, webPreferences: { sandbox: true, contextIsolation: true, nodeIntegration: false, partition: `page-check-${Date.now()}` } });
+  w.webContents.session.webRequest.onBeforeRequest((d, cb) => cb({ cancel: !/^(file|data|blob|about|devtools):/.test(d.url) }));
+  w.webContents.setWindowOpenHandler(() => ({ action: 'deny' }));
+  w.webContents.on('will-navigate', (ev) => ev.preventDefault());
+  w.webContents.on('console-message', (e, level, message) => { const lvl = e?.level ?? level; const msg = e?.message ?? message; if ((lvl === 3 || lvl === 'error') && msg && !/Failed to load resource|net::ERR_BLOCKED/i.test(msg)) errs.push(String(msg).slice(0, 200)); });
+  const done = () => { try { w.destroy(); } catch {} fs.rmSync(file, { force: true }); resolve([...new Set(errs)].slice(0, 5)); };
+  const timer = setTimeout(done, 8000);
+  w.webContents.once('did-finish-load', () => { w.webContents.executeJavaScript("document.querySelectorAll('button, a, [onclick]').forEach((b, i) => { if (i < 12) try { b.click(); } catch (e) { console.error(String(e)); } }); true").catch(() => {}); setTimeout(() => { clearTimeout(timer); done(); }, 1500); });
+  w.loadFile(file).catch(() => { clearTimeout(timer); done(); });
+}));
 handle('stacks:list', () => complete.stacks());
 handle('stacks:save', (s) => complete.saveStack(s));
 handle('stacks:delete', (id) => complete.deleteStack(id));
