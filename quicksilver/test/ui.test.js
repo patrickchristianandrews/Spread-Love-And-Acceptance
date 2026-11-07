@@ -114,7 +114,7 @@ function redPng(size = 64) {
   console.log('✓ stacks: how it works, three strengths with accuracy, cloud boost with savings');
   // Stacks for specific work: 27 ready-made teams; set one up and chat with it.
   await win.waitForSelector('.rx-card:has-text("Isolated medical journal")');
-  assert.equal(await win.locator('.rx-card').count(), 31);
+  assert.equal(await win.locator('.rx-card').count(), 32);
   await win.click('.rx-card:has-text("Invoices, receipt reading") [data-rx]');
   await win.waitForFunction(() => S.data.assistants.some((a) => a.id === 'as-rx-bookkeeping'), null, { timeout: 30000 });
   // Song creation: 13 teams, each tuned to this PC (no model that won't run here; a speed helper
