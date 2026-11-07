@@ -134,7 +134,9 @@ async function codeAudit(text) {
 // Runs after an answer; returns true when it started a corrected answer.
 async function autoChecks(chat, msg, alt) {
   if (S.data.prefs.autoFix === false || alt.fixed || msg.autoFixed || alt.cached || !alt.text || alt.error) return false;
-  const findings = [...mathAudit(alt.text), ...(await codeAudit(alt.text))];
+  // Practice questions: the worked answers inside them are audited too.
+  const quizWhy = [...String(alt.text).matchAll(/```quiz\s*\n([\s\S]*?)```/g)].map((m) => (parseQuiz(m[1])?.questions || []).map((q) => q.why || '').join('\n')).join('\n');
+  const findings = [...mathAudit(alt.text), ...mathAudit(quizWhy), ...(await codeAudit(alt.text))];
   alt.audit = { math: true, findings: findings.length };
   if (!findings.length || pending || chat.messages.at(-1) !== msg || msg.alts[msg.altIndex] !== alt) return false;
   msg.autoFixed = true;
@@ -158,7 +160,7 @@ function unsureCheck(chat, msg, alt) {
 
 // ---------- 5. instant repeats ----------
 const cacheKey = (chat, text) => `${chat.assistantId}|${String(text || '').toLowerCase().replace(/[^a-z0-9£$€%]+/g, ' ').trim()}`;
-function cacheable(chat, q) { return q?.text && q.text.length <= 600 && !(q.attachments || []).length && !q.skillId && !chat.private && !FRESH_Q.test(q.text) && chat.messages.indexOf(q) === 0; }
+function cacheable(chat, q) { return !assistantById(chat.assistantId)?.exam && q?.text && q.text.length <= 600 && !(q.attachments || []).length && !q.skillId && !chat.private && !FRESH_Q.test(q.text) && chat.messages.indexOf(q) === 0; }
 function rememberAnswer(chat, msg, alt) {
   const q = chat.messages[chat.messages.indexOf(msg) - 1];
   if (!cacheable(chat, q) || !alt.text || alt.cached) return;

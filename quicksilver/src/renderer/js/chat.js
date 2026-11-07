@@ -98,6 +98,7 @@ function welcomeHTML(a) {
     <div class="emoji-badge" style="width:72px;height:72px;font-size:2.4rem;margin:0 auto 12px;border-radius:20px">${esc(a.emoji)}</div>
     <h1>${esc(a.name)}</h1>
     <p class="muted" style="font-size:1.05rem;font-weight:600">${esc(a.description || '')}</p>
+    ${a.exam ? studyPanelHTML(a) : ''}
     ${none ? `<div class="notice info" style="text-align:left;margin-top:16px"><b>Let's get you set up.</b> Quicksilver runs AI on your own PC. The <b>Setup Advisor</b> checks your computer and downloads the best free models for the job, in one click. No account or key needed.
       <div class="row" style="margin-top:10px"><button class="btn primary" data-goto="stacks">Open the Setup Advisor</button><button class="btn" data-goto="models">Browse models</button></div></div>` : ''}
     ${S.installed.some((m) => m.kind === 'text') && S.installed.filter((m) => m.kind === 'text').every((m) => m.source === 'bundled') ? '<p class="small muted grow-tip">💡 The starter models are a great start but limited on their own. Answers get sharper as you add models or build teams (<a href="#" data-goto="stacks">Teams</a> · <a href="#" data-goto="models">Models</a>).</p>' : ''}
@@ -503,7 +504,7 @@ function systemPrompt(a, strict, chat) {
   return parts.join('\n\n');
 }
 function turnContext(chat, sources, strict, question, ctx, note, extra) {
-  const parts = [memoryPrompt(chat, question), projectPrompt(chat, question, ctx), docPrompt(chat), note, extra].filter(Boolean);
+  const parts = [memoryPrompt(chat, question), projectPrompt(chat, question, ctx), docPrompt(chat), studyContext(assistantById(chat.assistantId)), note, extra].filter(Boolean);
   if (strict && !sources.length) parts.push('No reference material matched this question.');
   if (sources.length) {
     parts.push('Reference material for this answer. Use it when relevant and cite it inline with its number, like [1] or [2]. If it does not answer the question, say so and answer from general knowledge, making clear which is which.');

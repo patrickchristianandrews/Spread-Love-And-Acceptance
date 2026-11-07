@@ -311,6 +311,24 @@ function redPng(size = 64) {
   await win.click('.followups .fu >> nth=0');
   await win.waitForSelector('.msg.assistant .badge:has-text("Ready before you asked")', { timeout: 10000 });
   await idle();
+  // Exam coaches: a CPA course in the chat with interactive practice questions and progress.
+  await win.click('[data-nav="newchat"]');
+  await win.selectOption('#pick-assistant', 'as-cpa');
+  await win.waitForSelector('.study-sec:has-text("FAR")');
+  await win.evaluate(() => { const c = chatById(S.route.id); c.factCheck = false; save(); });
+  await win.click('.study-sec:has-text("FAR")');
+  await win.waitForSelector('.quiz .qz-c', { timeout: 60000 });
+  await idle();
+  assert.equal(await win.locator('.quiz .qz').count(), 1, 'one question at a time');
+  await win.click('.quiz .qz[data-i="0"] .qz-c[data-k="0"]');
+  await win.waitForSelector('.quiz .qz[data-i="0"] .qz-why.bad');
+  await win.click('.quiz .qz[data-i="1"] .qz-c[data-k="2"]');
+  await win.waitForSelector('.quiz-end:has-text("1 of 2 correct")');
+  const study = await win.evaluate(() => S.data.study);
+  assert.equal(study['CPA|FAR|Lease classification']?.wrong, 1); assert.equal(study['CPA|FAR|Lease measurement']?.right, 1);
+  assert.match(await win.evaluate(() => studyContext(assistantById('as-cpa'))), /FAR 1\/2/);
+  await shot(win, '21-cpa-coach');
+  console.log('✓ exam coaches: CPA/CIA outlines, interactive practice questions, results tracked and used');
   await win.evaluate((id) => go({ view: 'chat', id }), backTo2);
   console.log('✓ leverage: signals teach Automatic, connected apps used, cloud for hard questions (opt-in), next question answered in advance');
   console.log('✓ free checks: exact facts first, maths audit + code/page checks fix answers, unsure numbers double-checked, instant repeats, reading ahead');

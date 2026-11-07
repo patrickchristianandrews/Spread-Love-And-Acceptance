@@ -139,6 +139,7 @@ function markdown(text) {
       const lang = nl >= 0 ? part.slice(0, nl).trim() : '';
       const code = (nl >= 0 ? part.slice(nl + 1) : part).replace(/\n$/, '');
       if (lang === 'chart') { const c = chartHTML(code); if (c) { out.push(c); return; } }
+      if (lang === 'quiz' && typeof quizHTML === 'function') { out.push(quizHTML(code) || '<div class="quiz qz-pending"><span class="small muted">📝 Writing practice questions…</span></div>'); return; }
       const previewable = /^(html?|svg|xml)$/i.test(lang) && /<(html|body|div|svg|section|main|h1|canvas|style|!doctype)/i.test(code);
       out.push(`<pre><span class="bar-top"><span>${esc(lang || 'code')}</span>${previewable ? `<button class="preview" data-lang="${/svg/i.test(lang) || /^\s*<svg/i.test(code) ? 'svg' : 'html'}">Preview</button>` : ''}<button class="copy">Copy</button></span><code>${highlight(code, lang)}</code></pre>`);
       return;

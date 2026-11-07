@@ -4,7 +4,7 @@
 
 const ASSISTANT_GROUPS = ['Main', 'Photo & video', 'Music & audio', 'Voice & podcasts', 'Office & Excel', 'Coding & apps', 'Writing & marketing', 'Research, medical & study', 'Finance & legal', 'Career', 'Everyday life', 'Fun & games', 'Yours'];
 // Groups for the assistants that existed before.
-const ASSISTANT_GROUP_OF = { 'as-tutor': 'Research, medical & study', 'as-translator': 'Writing & marketing', 'as-career': 'Career', 'as-trip': 'Everyday life', 'as-ideas': 'Writing & marketing' };
+const ASSISTANT_GROUP_OF = { 'as-cpa': 'Research, medical & study', 'as-cia': 'Research, medical & study', 'as-tutor': 'Research, medical & study', 'as-translator': 'Writing & marketing', 'as-career': 'Career', 'as-trip': 'Everyday life', 'as-ideas': 'Writing & marketing' };
 
 const MORE_ASSISTANTS = [
   // Photo & video
