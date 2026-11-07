@@ -187,6 +187,21 @@ jobs:
           node test/installed.test.js C:\QS\Quicksilver.exe full install-shots
           if ($LASTEXITCODE -ne 0) { throw 'the installed app test failed' }
 
+      # Five tester sessions on the installed app (before the second install replaces it) with the real models: every answer, its speed
+      # and a screenshot are recorded for review. Informational: never blocks the build.
+      - name: Tester sessions (five people, real models)
+        continue-on-error: true
+        timeout-minutes: 90
+        shell: pwsh
+        run: node test/testers.js C:\QS\Quicksilver.exe tester-sessions
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: Quicksilver-tester-sessions
+          path: quicksilver/tester-sessions/
+          if-no-files-found: ignore
+
       - name: Install from the setup file alone, then uninstall
         shell: pwsh
         timeout-minutes: 40
@@ -210,21 +225,6 @@ jobs:
         with:
           name: Quicksilver-install-test-screenshots
           path: quicksilver/install-shots/
-          if-no-files-found: ignore
-
-      # Five tester sessions on the installed app with the real models: every answer, its speed
-      # and a screenshot are recorded for review. Informational: never blocks the build.
-      - name: Tester sessions (five people, real models)
-        continue-on-error: true
-        timeout-minutes: 90
-        shell: pwsh
-        run: node test/testers.js C:\QS\Quicksilver.exe tester-sessions
-
-      - uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: Quicksilver-tester-sessions
-          path: quicksilver/tester-sessions/
           if-no-files-found: ignore
 
       # The installer's fingerprint, which the app's automatic updates check before installing.
