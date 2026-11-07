@@ -443,7 +443,15 @@ async function* stack(stackDef, req) {
   //    Deep think (Max) still has every model write a full answer.
   const mode0 = stackDef.members.mode || 'blend';
   const points = judge && !req.forceTeam && ['blend', 'consensus', 'auto'].includes(mode0) && level === 'thorough' && drafters.some((d) => d !== judge);
-  if (points) drafters = drafters.filter((d) => d !== judge);
+  if (points) {
+    drafters = drafters.filter((d) => d !== judge);
+    // Only helpers close to the lead in quality are worth the wait: a much weaker model's key
+    // points mostly add noise, and on a PC without a graphics card each one costs real time.
+    const q = (t) => { const p = parse(t); if (p.kind !== 'local') return 8; const m = models.get(p.id); return m ? catalog.scoreFor(catalog.profileInstalled(m), 'general') : 0; };
+    const lead = q(judge);
+    drafters = drafters.filter((d) => q(d) >= lead - 1.5);
+    if (!drafters.length) { yield* single(judge, { ...req, messages: msgsFor(judge) }); return; }
+  }
   const draftSteps = drafters.map((d, i) => ({ role: 'draft', label: points ? `Key points ${i + 1} of ${drafters.length}` : `Draft ${i + 1} of ${drafters.length}`, model: label(d), text: '', done: false }));
   for (const s of draftSteps) yield step(s);
   yield { type: 'status', text: `Drafting with ${drafters.length} models…` };

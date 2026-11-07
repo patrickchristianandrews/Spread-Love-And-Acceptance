@@ -34,6 +34,13 @@ function jobOfQuestion(text, a) {
 }
 const AUTO_WHY = { coding: 'for code', reasoning: 'for working things out', writing: 'for writing', research: 'for research', office: 'for office work', general: '' };
 
+// Your 👍 / 👎 move a model up to two points for that kind of question; a couple of votes nudge,
+// many votes decide.
+function learnBonus(job, t) {
+  const r = S.data.learn?.[job]?.[t];
+  return r ? ((r.up - r.down) / (r.up + r.down + 2)) * 2 : 0;
+}
+
 function autoPick(chat, a, text, hasImage) {
   const base = resolveTarget(chat, a);
   const T = S.speed?.targets;
@@ -45,7 +52,7 @@ function autoPick(chat, a, text, hasImage) {
   const local = !base.startsWith('api:');
   const cands = S.targets.map((t) => t.target).filter((t) => T[t] && !t.startsWith('kb:') && (!t.startsWith('api:') || !local) && (!hasImage || T[t].vision));
   if (!cands.length) return { target: base };
-  const score = (t) => T[t].scores?.[job] ?? T[t].scores?.general ?? 0;
+  const score = (t) => (T[t].scores?.[job] ?? T[t].scores?.general ?? 0) + learnBonus(job, t);
   const secs = (t) => etaFor(t, words, { hard }) ?? 999;
   // A photo the usual choice can already see stays with it.
   if (hasImage && T[base]?.vision) return { target: base };

@@ -188,6 +188,31 @@ function redPng(size = 64) {
   await idle();
   await win.waitForFunction(() => [...document.querySelectorAll('.msg.assistant .bubble')].pop()?.textContent.includes('Answer from qwen.gguf'), null, { timeout: 60000 });
   console.log('✓ quick effort');
+
+  // 👍 / 👎 teach Automatic; a definite mistake found by the double-check is fixed once, by itself.
+  await win.locator('[data-act="up"]').last().click();
+  await win.waitForFunction(() => [...document.querySelectorAll('[data-act="up"]')].pop()?.getAttribute('aria-pressed') === 'true');
+  assert.match(await win.evaluate(() => JSON.stringify(S.data.learn)), /"up":1/);
+  await win.locator('[data-act="down"]').last().click();
+  assert.match(await win.evaluate(() => JSON.stringify(S.data.learn)), /"up":0,"down":1/, 'switching the vote moves it, not doubles it');
+  assert.ok(await win.evaluate(() => webWanted({}, {}, 'What is the latest NHS guidance on blood pressure?') !== '' || S.config?.web?.provider === 'none' || S.config?.offline), 'current questions search the web automatically');
+  assert.equal(await win.evaluate(() => webWanted({ web: false }, {}, 'latest news today')), '', 'not when web search is off for the chat');
+  if ((await win.getAttribute('#tog-fact', 'aria-pressed')) !== 'true') await win.click('#tog-fact');
+  await win.fill('#input', 'WRONGFACT what colour is the sky?');
+  await win.keyboard.press('Enter');
+  await win.waitForSelector('.msg.assistant .badge:has-text("Corrected")', { timeout: 60000 });
+  await idle();
+  await win.waitForFunction(() => [...document.querySelectorAll('.msg.assistant .bubble')].pop()?.textContent.includes('[fixed]'), null, { timeout: 60000 });
+  assert.match(await win.locator('.msg.assistant').last().locator('.alt-switch').innerText(), /2 \/ 2/, 'the corrected answer is added beside the first one');
+  await win.waitForFunction(() => !document.querySelector('.fact-chip.k-run'), null, { timeout: 60000 });
+  await win.locator('.fact-chip').last().click();
+  await shot(win, '03c-self-correction');
+  await win.click('#fact-panel [data-fp="fix"]');
+  await idle();
+  await win.waitForFunction(() => /3 \/ 3/.test([...document.querySelectorAll('.msg.assistant')].pop()?.querySelector('.alt-switch')?.textContent || ''), null, { timeout: 60000 });
+  await win.waitForFunction(() => !document.querySelector('.fact-chip.k-run'), null, { timeout: 60000 });
+  if (await win.locator('#fact-panel').count()) await win.keyboard.press('Escape');
+  console.log('✓ self-correction: 👍/👎 learning, auto web for current questions, double-check fixes mistakes');
   // The status light at the top right shows how the model is running.
   await win.waitForSelector('#run-state:not([hidden]) .rs-dot', { timeout: 10000 });
   await win.click('#run-state');

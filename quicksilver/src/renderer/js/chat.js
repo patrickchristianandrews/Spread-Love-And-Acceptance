@@ -164,6 +164,7 @@ function messageHTML(chat, a, m, i) {
   if (m.alts.length > 1) tools.push(`<span class="alt-switch" title="${m.alts.length} answers to this question${alt.target ? `; this one is by ${esc(targetLabel(alt.target))}` : ''}"><button class="tool icon" data-act="prev" data-id="${m.id}" aria-label="Previous answer">‹</button><span>${m.altIndex + 1} / ${m.alts.length}</span><button class="tool icon" data-act="next" data-id="${m.id}" aria-label="Next answer">›</button></span>`);
   if (!streaming && !pending) {
     if (alt.text) tools.push(tb('copy', m.id, 'copy', 'Copy'));
+    if (alt.text && alt.target) tools.push(`<button class="tool icon rate ${alt.rating === 'up' ? 'on' : ''}" data-act="up" data-id="${m.id}" title="Good answer" aria-label="Good answer" aria-pressed="${alt.rating === 'up'}">👍</button>`, `<button class="tool icon rate ${alt.rating === 'down' ? 'on' : ''}" data-act="down" data-id="${m.id}" title="Not good" aria-label="Not good" aria-pressed="${alt.rating === 'down'}">👎</button>`);
     if (isLast) tools.push(tb('regen', m.id, 'refresh', 'Regenerate'), tb('other', m.id, 'layers', 'Try another model'));
     if (alt.text) tools.push(`<button class="tool icon ${speakingId === m.id ? 'on' : ''}" data-act="speak" data-id="${m.id}" title="${speakingId === m.id ? 'Stop reading' : 'Listen'}" aria-label="Listen">${icon('volume', 16)}</button>`, tb('doc', m.id, 'doc', 'Edit as document'));
     tools.push(tb('more', m.id, 'more', 'More: continue, double-check, save as, branch, delete'));
@@ -172,7 +173,7 @@ function messageHTML(chat, a, m, i) {
   return `<div class="msg assistant" data-msg="${m.id}">
     <div class="av" aria-hidden="true">${esc(a.emoji)}</div>
     <div class="msg-main">
-    <div class="who-line"><b>${esc(a.name)}</b>${model ? `<span class="who-model"${alt.autoWhy ? ` title="${esc(alt.autoWhy)}"` : ''}>${alt.autoWhy ? '✨ ' : ''}${esc(model)}</span>` : ''}${alt.skillId && skillById(alt.skillId) ? `<span class="badge b-peach">⚡ ${esc(skillById(alt.skillId).name)}</span>` : ''}${alt.imported ? `<span class="badge">From ${esc(alt.imported)}</span>` : ''}${alt.webEmpty ? '<span class="badge b-lemon" title="Web search was on but found nothing for this question, so this answer is from the model\'s own knowledge.">Web: nothing found</span>' : ''}${etaNow}${alt.stats?.tps && !streaming ? `<span class="who-speed" title="${esc(statsTitle(alt))}">${Math.round(alt.stats.tps * 0.75)} words/s</span>` : ''}${m.t ? `<span class="who-time">${esc(msgTime(m))}</span>` : ''}</div>
+    <div class="who-line"><b>${esc(a.name)}</b>${model ? `<span class="who-model"${alt.autoWhy ? ` title="${esc(alt.autoWhy)}"` : ''}>${alt.autoWhy ? '✨ ' : ''}${esc(model)}</span>` : ''}${alt.skillId && skillById(alt.skillId) ? `<span class="badge b-peach">⚡ ${esc(skillById(alt.skillId).name)}</span>` : ''}${alt.imported ? `<span class="badge">From ${esc(alt.imported)}</span>` : ''}${alt.fixed ? '<span class="badge b-mint" title="A second model double-checked the first answer and this one fixes what it found.">✓ Corrected</span>' : ''}${alt.autoWeb ? '<span class="badge b-sky" title="This question is about something current, so the web was searched automatically. Turn it off in Settings → General.">🌐 Checked the web</span>' : ''}${alt.webEmpty ? '<span class="badge b-lemon" title="Web search was on but found nothing for this question, so this answer is from the model\'s own knowledge.">Web: nothing found</span>' : ''}${etaNow}${alt.stats?.tps && !streaming ? `<span class="who-speed" title="${esc(statsTitle(alt))}">${Math.round(alt.stats.tps * 0.75)} words/s</span>` : ''}${m.t ? `<span class="who-time">${esc(msgTime(m))}</span>` : ''}</div>
     ${metaRow(stepsHTML(alt, streaming) + toolsHTML(alt) + memoryChipHTML(alt) + (alt.reasoning ? `<details class="think chip-d"><summary>${streaming && !alt.text ? '<span class="pulse"></span>Thinking…' : '💭 Thought it through'}</summary><div>${esc(alt.reasoning)}</div></details>` : ''))}
     <div class="bubble md ${streaming ? 'streaming' : ''} ${alt.error ? 'error' : ''}">${body}</div>
     ${downloadHTML(m, alt, streaming)}
@@ -436,6 +437,15 @@ function userContent(m, docBudget) {
   return parts;
 }
 
+// Questions about what's happening now get a quick web search automatically (unless web search
+// is switched off for this chat), so answers about prices, news or current guidance aren't stale.
+const FRESH_Q = /\b(latest|newest|current(ly)?|today'?s?|tonight|tomorrow|yesterday|this (week|month|year)|right now|news|headlines?|prices?|price of|cost of|exchange rate|stock price|share price|weather|forecast|election|release date|just (came out|released)|guidance|guidelines|opening hours|open now|who won|20(2[5-9]|3\d))\b/i;
+function webWanted(chat, a, query, force = {}) {
+  if (!query || S.config?.web?.provider === 'none' || S.config?.offline) return '';
+  if (force.web || (chat.web ?? a.web)) return 'on';
+  return chat.web !== false && S.data.prefs.autoWeb !== false && FRESH_Q.test(query) ? 'auto' : '';
+}
+
 async function gatherSources(chat, a, query, force = {}) {
   const out = [];
   // A knowledge model searches its own knowledge bases (and reports them back as it answers).
@@ -447,8 +457,10 @@ async function gatherSources(chat, a, query, force = {}) {
       if (r.failures.length) toast(`Some sources didn't respond: ${r.failures.join('; ')}`, 6000);
     } catch (err) { toast(`Knowledge: ${err.message}`); }
   }
-  if ((force.web || (chat.web ?? a.web)) && query && S.config?.web?.provider !== 'none' && !S.config?.offline) {
+  const web = webWanted(chat, a, query, force);
+  if (web) {
     const before = out.length;
+    if (web === 'auto') out.autoWeb = true;
     try { for (const r of await qs.call('web:search', query)) out.push({ title: r.title, url: r.url, text: r.text || r.snippet }); } catch (err) { toast(`Web search: ${err.message}`, 6000); }
     if (out.length === before) out.webEmpty = true; // searched, found nothing: the answer must say so
   }
@@ -475,7 +487,7 @@ function systemPrompt(a, sources, strict, chat, question = '', ctx = 16384, note
   return parts.join('\n\n');
 }
 
-async function generate(chat, rerollMsg, withTarget) {
+async function generate(chat, rerollMsg, withTarget, opts = {}) {
   const a = assistantById(chat.assistantId);
   let autoWhy = '';
   let target = withTarget || resolveTarget(chat, a);
@@ -491,6 +503,7 @@ async function generate(chat, rerollMsg, withTarget) {
   else { upTo = chat.messages.length; msg = { id: uid(), t: now(), role: 'assistant', alts: [{ text: '', target }], altIndex: 0 }; chat.messages.push(msg); }
   const alt = msg.alts[msg.altIndex];
   if (autoWhy) alt.autoWhy = autoWhy;
+  if (opts.fix) alt.fixed = true;
   alt.status = 'Getting ready…';
   alt.t0 = Date.now();
   {
@@ -511,10 +524,11 @@ async function generate(chat, rerollMsg, withTarget) {
   // Tools that work straight on your files (and reading aloud) don't need a text model.
   if (skill && DIRECT_OUTPUTS.has(skill.output)) { runDirectSkill(chat, msg, alt, skill, lastUser); return; }
   const force = skill?.tools || {};
-  if ((chat.library ?? a.library) || (chat.web ?? a.web) || force.web || force.knowledge) { alt.status = 'Searching sources…'; paintStreaming(chat, msg); }
+  if ((chat.library ?? a.library) || webWanted(chat, a, lastUser?.text || '', force) || force.knowledge) { alt.status = 'Searching sources…'; paintStreaming(chat, msg); }
   const sources = await gatherSources(chat, a, lastUser?.text || skill?.name || '', force);
   alt.sources = sources.map(({ title, url, path }) => ({ title, url, path }));
   if (sources.webEmpty) alt.webEmpty = true;
+  if (sources.autoWeb && !sources.webEmpty) alt.autoWeb = true;
   pending.sources = sources;
   const ctx = Number(a.contextSize || p.contextSize) || 16384;
   const docBudget = Math.max(4000, Math.floor((ctx * 3 * 0.6) / Math.max(1, chat.messages.slice(0, upTo).reduce((n, m) => n + (m.attachments || []).filter((x) => x.type === 'doc').length, 0))));
@@ -529,7 +543,8 @@ async function generate(chat, rerollMsg, withTarget) {
     } else if (/^\s*(?:please\s+)?forget\b/i.test(lastUser.text) && memOn()) memNote = 'The user asked you to forget something, but nothing matching it was in your memory. Say so briefly, and mention they can see and edit everything you remember under Settings → Memory.';
   }
   // Web search was on but found nothing: say so, and don't pretend to have checked.
-  if (sources.webEmpty) memNote = `${memNote ? `${memNote}\n` : ''}The user turned on web search, but the search found nothing for this question. Say in one short sentence at the start that you couldn't check the web this time, then answer from what you know. Don't claim anything is the "latest" or give publication dates or links you haven't seen.`;
+  if (opts.fix) memNote = `${memNote ? `${memNote}\n` : ''}A careful second model checked your previous answer to this question and found these problems:\n<check>\n${String(opts.fix).slice(0, 6000)}\n</check>\nWrite a corrected, complete answer that fixes every real problem it found (if a finding is itself wrong, keep what was right). Don't mention the check; just give the better answer.`;
+  if (sources.webEmpty) memNote = `${memNote ? `${memNote}\n` : ''}${sources.autoWeb ? 'A web search ran for this question' : 'The user turned on web search'}, but the search found nothing for this question. Say in one short sentence at the start that you couldn't check the web this time, then answer from what you know. Don't claim anything is the "latest" or give publication dates or links you haven't seen.`;
   const messages = [{ role: 'system', content: systemPrompt(a, sources, Boolean(a.strict && (chat.library ?? a.library)), chat, lastUser?.text || '', ctx, memNote) + (skill ? `\n\n${skillPrompt(skill)}` : '') }];
   for (const m of chat.messages.slice(0, upTo)) {
     if (m.role === 'user') messages.push({ role: 'user', content: userContent(m, docBudget) });
@@ -654,6 +669,8 @@ function messageAction(chat, act, id, el) {
   else if (act === 'regen') generate(chat, m);
   else if (act === 'continue') { chat.messages.push({ id: uid(), role: 'user', text: 'Continue.', attachments: [] }); generate(chat, null); }
   else if (act === 'copy') { navigator.clipboard?.writeText(msgText(m)); toast('Copied.'); }
+  else if (act === 'up' || act === 'down') rateAnswer(chat, m, act);
+  else if (act === 'fix') { if (pending) { toast('Wait for the answer to finish first.'); return; } const alt = m.alts[m.altIndex]; if (alt.check?.text) generate(chat, m, alt.target, { fix: alt.check.text }); }
   else if (act === 'speak') speakMessage(m);
   else if (act === 'other') tryOtherMenu(chat, m, el);
   else if (act === 'branch') branchChat(chat, m.id);
@@ -838,6 +855,7 @@ function factPanelHTML(chat) {
     <div class="fp-foot">
       <span class="small muted grow" title="A different model from the one that answered">Checked by <b>${esc(targetLabel(ch.target))}</b></span>
       ${!ch.running ? `<button class="btn small" data-fp="recheck" data-id="${m.id}">${icon('refresh', 15)} Check again</button>` : ''}
+      ${!ch.running && !ch.error && (n.bad || n.warn) ? `<button class="btn small primary" data-fp="fix" data-id="${m.id}" title="Write a new answer that fixes what the check found">${icon('check', 15)} Fix it</button>` : ''}
     </div>
   </aside>`;
 }
@@ -865,7 +883,7 @@ function factPanelAction(chat, act, id) {
   else if (act === 'pin') { S.data.prefs.factPanelPinned = !S.data.prefs.factPanelPinned; if (cur) factPanel = { chatId: chat.id, msgId: cur.id }; save(); toast(S.data.prefs.factPanelPinned ? 'Double-check stays open and follows each new answer.' : 'Double-check opens when you click a result.'); }
   else if (act === 'prev' || act === 'next') { const m = list[list.indexOf(cur) + (act === 'next' ? 1 : -1)]; if (m) { factPanel = { chatId: chat.id, msgId: m.id }; document.querySelector(`[data-msg="${m.id}"]`)?.scrollIntoView({ behavior: 'smooth', block: 'center' }); } }
   else if (act === 'jump') { const el = document.querySelector(`[data-msg="${id}"]`); el?.scrollIntoView({ behavior: 'smooth', block: 'center' }); el?.classList.add('flash'); setTimeout(() => el?.classList.remove('flash'), 1200); return; }
-  else if (act === 'recheck') { messageAction(chat, 'recheck', id); return; }
+  else if (act === 'recheck' || act === 'fix') { messageAction(chat, act, id); return; }
   paintFactPanel(chat);
   paintAll(chat);
 }
@@ -890,6 +908,13 @@ qs.onChat(({ requestId, ev }) => {
     ch.running = false;
     checks.delete(requestId);
     save();
+    // Self-correction: a definite error in the last answer gets fixed straight away, once.
+    if (!ch.error && checkCounts(ch.text).bad && S.data.prefs.autoFix !== false && !c.alt.fixed && !msg.autoFixed && !pending && chat.messages[chat.messages.length - 1] === msg && msg.alts[msg.altIndex] === c.alt) {
+      msg.autoFixed = true;
+      toast('The double-check found a mistake, so the answer is being corrected.');
+      generate(chat, msg, c.alt.target, { fix: ch.text });
+      return;
+    }
     // Only repaint this message and the panel, so typing (and the skill picker) isn't interrupted.
     paintStreaming(chat, msg);
     paintFactPanel(chat);
@@ -996,4 +1021,24 @@ function askToolApproval(ev) {
     qs.approve({ approvalId: ev.approvalId, ok: k !== 'deny', always: k === 'always' });
     closeModal();
   });
+}
+
+// 👍 / 👎 on answers. Besides marking the answer, it teaches Automatic which model does best on
+// this kind of question for you (see learnBonus in simple.js).
+function rateAnswer(chat, m, v) {
+  const alt = m.alts[m.altIndex];
+  if (!alt?.target) return;
+  const a = assistantById(chat.assistantId);
+  const q = [...chat.messages.slice(0, chat.messages.indexOf(m))].reverse().find((x) => x.role === 'user');
+  const job = alt.job || jobOfQuestion(q?.text || '', a);
+  const learn = (S.data.learn ||= {});
+  const rec = ((learn[job] ||= {})[alt.target] ||= { up: 0, down: 0 });
+  if (alt.rating) rec[alt.rating] = Math.max(0, rec[alt.rating] - 1);
+  alt.rating = alt.rating === v ? null : v;
+  alt.job = job;
+  if (alt.rating) rec[alt.rating]++;
+  save();
+  paintStreaming(chat, m);
+  if (alt.rating === 'up') toast('Thanks: Automatic will lean on this model more for questions like this.');
+  else if (alt.rating === 'down') toast('Noted: Automatic will try other models more for questions like this. You can also click “Try another model”.', 5000);
 }

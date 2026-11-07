@@ -142,7 +142,15 @@ async function collect(gen) {
     llama.stopAll();
     await collect(complete.run('local:qwen3-8b', { messages: [{ role: 'user', content: 'Hello again' }], maxTokens: 50, contextSize: 4096 }));
     assert.ok(llama.status().some((x) => x.draft), 'the engine was started with the draft model');
+    // A helper far weaker than the lead isn't worth the wait: the lead answers on its own.
+    complete.saveStack({ id: 'weakteam', name: 'Weak helper', members: { drafters: ['local:q17', 'local:phi-4'], judge: 'local:phi-4', mode: 'blend' } });
+    const weak = await collect(complete.run('stack:weakteam', { messages: [{ role: 'user', content: 'Explain why the sky is blue, step by step' }], maxTokens: 200, contextSize: 4096, level: 'thorough' }));
+    assert.equal(uniq(weak.steps).length, 0, 'no key points from a much weaker helper');
+    assert.match(weak.text, /Answer from phi\.gguf/, 'the lead answered alone');
     models.remove('q17');
+    // The starter 2B vision model also speeds up the 4B brain (same tokenizer).
+    assert.equal(catalog.draftFor('qwen3-4b', [{ id: 'vl2', catalogId: 'qwen3-vl-2b' }])?.id, 'vl2');
+    console.log('✓ faster teams: weak helpers skipped; the starter 2B drafts for the 4B');
     llama.stopAll();
     console.log('✓ speculative decoding: a small same-family model speeds up a big one');
   }
@@ -503,6 +511,17 @@ async function collect(gen) {
     ddgDown = true;
     r = await websearch.search('capital of France');
     assert.equal(r[0].url, 'https://example.com/paris', 'falls back to Mojeek');
+    // Both engines blocked (as on some networks): Wikipedia's search API still answers.
+    global.fetch = async (url) => {
+      const u = String(url);
+      if (u.includes('html.duckduckgo.com')) return new Response('<p>unusual traffic</p>', { status: 200 });
+      if (u.includes('mojeek.com')) return new Response('', { status: 403 });
+      if (u.includes('en.wikipedia.org/w/api.php')) return new Response(JSON.stringify({ query: { search: [{ title: 'Blood pressure', snippet: 'Normal <span class="searchmatch">blood</span> pressure' }] } }), { status: 200, headers: { 'content-type': 'application/json' } });
+      return new Response('<html><body><p>Blood pressure is the pressure of circulating blood.</p></body></html>', { status: 200, headers: { 'content-type': 'text/html' } });
+    };
+    r = await websearch.search('normal blood pressure');
+    assert.equal(r[0].url, 'https://en.wikipedia.org/wiki/Blood_pressure', 'falls back to Wikipedia');
+    assert.equal(r[0].snippet, 'Normal blood pressure'); assert.match(r[0].text, /circulating blood/);
     global.fetch = real;
     store.saveConfig({ web: { provider: 'none' } });
     console.log('✓ free web search: DuckDuckGo, Mojeek fallback, pages read');

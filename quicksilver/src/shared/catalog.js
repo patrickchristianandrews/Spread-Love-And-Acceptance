@@ -323,7 +323,7 @@ function smallerAlternative(m, hw) {
 // words and the big model checks them all at once, which is often 1.5-2.5x faster with exactly
 // the same answers. Mixture-of-experts models are already fast, so they don't use one.
 const DRAFT_FAMILIES = [
-  { targets: /^qwen3-(4b|8b|14b|32b)(-thinking)?$/, drafts: ['qwen3-1.7b'] },
+  { targets: /^qwen3-(4b|8b|14b|32b)(-thinking)?$/, drafts: ['qwen3-1.7b', 'qwen3-vl-2b'] },
   { targets: /^llama-3\.(1-8b|3-70b)$/, drafts: ['llama-3.2-1b'] },
   { targets: /^qwen2\.5-(coder-)?(7b|14b|32b)$/, drafts: ['qwen2.5-coder-1.5b'] },
 ];
@@ -335,7 +335,7 @@ function draftFor(targetId, installed) {
   for (const id of fam.drafts) {
     const d = TEXT_MODELS.find((m) => m.id === id);
     const inst = installed.find((m) => m.catalogId === id);
-    if (d && inst && d.sizeGB <= target.sizeGB * 0.3) return inst;
+    if (d && inst && d.sizeGB <= target.sizeGB * 0.5) return inst;
   }
   return null;
 }

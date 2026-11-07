@@ -1044,3 +1044,5 @@ code.sel { user-select: all; background: var(--soft); padding: 1px 6px; border-r
 .wc-n { width: 28px; height: 28px; flex: none; border-radius: 50%; display: grid; place-items: center; font-weight: 800; background: var(--accent); color: var(--accent-ink); }
 
 .fb-pre { white-space: pre-wrap; background: var(--soft); border: 1px solid var(--line-soft); border-radius: 10px; padding: 10px 12px; margin: 6px 0 0; font-size: .82rem; }
+.tool.rate { font-size: 14px; filter: grayscale(1); opacity: .65; }
+.tool.rate:hover, .tool.rate.on { filter: none; opacity: 1; }

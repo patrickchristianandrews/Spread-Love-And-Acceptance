@@ -25,6 +25,8 @@ function generalHTML() {
   return `<div class="stack-v">
     <div class="field"><label>View</label><div class="row">${[[true, 'Simple'], [false, 'Full']].map(([v, l]) => `<button class="btn small ${simpleOn() === v ? 'on' : ''}" data-simple="${v}">${l}</button>`).join('')}</div><span class="help">Simple shows what most people need; everything else is under More in the sidebar and the ＋ in the message box. Full shows every option.</span></div>
     <label class="row"><input type="checkbox" id="g-auto" ${S.data.prefs.autoRoute !== false ? 'checked' : ''}> <span><b>Pick the best model for each question automatically</b> <span class="help">quick answers first; the team works on hard questions when it can still answer in about a minute</span></span></label>
+    <label class="row"><input type="checkbox" id="g-autoweb" ${S.data.prefs.autoWeb !== false ? 'checked' : ''}> <span><b>Check the web for questions about current things</b> <span class="help">news, prices, weather, the latest guidance; switch web search off in a chat to skip it there</span></span></label>
+    <label class="row"><input type="checkbox" id="g-autofix" ${S.data.prefs.autoFix !== false ? 'checked' : ''}> <span><b>Fix mistakes the double-check finds</b> <span class="help">when a second model spots a clear error, the answer is rewritten once with the correction</span></span></label>
     <div class="field"><label for="g-name">Your name</label><input id="g-name" value="${esc(P().userName)}" placeholder="Optional"></div>
     <div class="field"><label for="g-about">About you</label><span class="help">Optional. Shared with your assistants so answers fit you (for example your role, company or preferences).</span><textarea id="g-about" rows="3">${esc(P().about)}</textarea></div>
     <div class="field"><label>Appearance</label><div class="row">${[['dark', 'Dark'], ['light', 'Light'], ['system', 'Match Windows']].map(([k, l]) => `<button class="btn small ${(P().theme || 'dark') === k ? 'on' : ''}" data-theme-set="${k}">${l}</button>`).join('')}</div></div>
@@ -39,6 +41,8 @@ function bindMemSet() { const box = $('#mem-box'); const repaint = () => { box.i
 function bindGeneral() {
   $$('[data-simple]').forEach((b) => b.addEventListener('click', () => { P().simple = b.dataset.simple === 'true'; applyPrefs(); save(); render(); }));
   $('#g-auto').addEventListener('change', (e) => { P().autoRoute = e.target.checked; save(); });
+  $('#g-autoweb').addEventListener('change', (e) => { P().autoWeb = e.target.checked; save(); });
+  $('#g-autofix').addEventListener('change', (e) => { P().autoFix = e.target.checked; save(); });
   bindUpdateBox();
   bindImport();
   $$('[data-theme-set]').forEach((b) => b.addEventListener('click', () => { P().theme = b.dataset.themeSet; applyPrefs(); save(); render(); }));

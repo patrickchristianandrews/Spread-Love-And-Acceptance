@@ -51,12 +51,20 @@ async function mojeek(query) {
   return out;
 }
 
+// Wikipedia's own search API: works even where search engines block automated requests.
+async function wikipedia(query) {
+  const res = await fetch(`https://en.wikipedia.org/w/api.php?action=query&list=search&format=json&srlimit=5&srsearch=${encodeURIComponent(query)}`, { headers: { 'User-Agent': 'Quicksilver/2 (local AI app)', Accept: 'application/json' }, signal: AbortSignal.timeout(15000) });
+  if (!res.ok) throw new Error(`Wikipedia returned HTTP ${res.status}`);
+  const j = await res.json();
+  return (j.query?.search || []).map((r) => ({ title: r.title, url: `https://en.wikipedia.org/wiki/${encodeURIComponent(r.title.replace(/ /g, '_'))}`, snippet: decode(r.snippet) }));
+}
+
 async function search(query, { pages = 3 } = {}) {
   const cfg = store.config().web;
   let results = [];
   if (cfg.provider === 'free') {
     const errors = [];
-    for (const engine of [duckduckgo, mojeek]) {
+    for (const engine of [duckduckgo, mojeek, wikipedia]) {
       try { results = await engine(query); if (results.length) break; } catch (err) { errors.push(err.message); }
     }
     if (!results.length) throw new Error(errors.length ? `The free web search didn't respond (${errors.join('; ')}). Try again in a minute, or add a Brave or Tavily key in Settings → Web search.` : 'No web results for that.');
@@ -94,4 +102,4 @@ async function search(query, { pages = 3 } = {}) {
   return results;
 }
 
-module.exports = { search, duckduckgo, mojeek };
+module.exports = { search, duckduckgo, mojeek, wikipedia };
