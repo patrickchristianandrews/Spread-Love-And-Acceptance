@@ -329,6 +329,17 @@ function redPng(size = 64) {
   assert.match(await win.evaluate(() => studyContext(assistantById('as-cpa'))), /FAR 1\/2/);
   await shot(win, '21-cpa-coach');
   console.log('✓ exam coaches: CPA/CIA outlines, interactive practice questions, results tracked and used');
+  // Connect a cloud AI from the message box: inline chip (full view) and the ＋ options (simple).
+  await win.evaluate((id) => { S.data.prefs.simple = false; applySimple?.(); go({ view: 'chat', id }); }, backTo2);
+  await win.waitForSelector('#add-api-chip');
+  await win.click('#add-api-chip');
+  await win.waitForFunction(() => S.route.view === 'models' && modelsTab === 'api', null, { timeout: 10000 });
+  await win.evaluate((id) => { S.data.prefs.simple = true; applySimple?.(); go({ view: 'chat', id }); }, backTo2);
+  await win.click('#opts-btn');
+  await win.waitForSelector('.opts-menu [data-o="add-api"]');
+  await win.keyboard.press('Escape');
+  await win.evaluate(() => { S.data.prefs.simple = false; applySimple?.(); });
+  console.log('✓ connect a cloud AI from the message box (chip in full view, ＋ menu in simple)');
   await win.evaluate((id) => go({ view: 'chat', id }), backTo2);
   console.log('✓ leverage: signals teach Automatic, connected apps used, cloud for hard questions (opt-in), next question answered in advance');
   console.log('✓ free checks: exact facts first, maths audit + code/page checks fix answers, unsure numbers double-checked, instant repeats, reading ahead');

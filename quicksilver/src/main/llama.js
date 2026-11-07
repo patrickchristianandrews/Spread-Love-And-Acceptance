@@ -265,6 +265,10 @@ async function ensure(model, { contextSize = 8192, gpu = 'auto', onStatus } = {}
     // driver can otherwise still fail the load even with no layers on it).
     if (!layers) args.push('--device', 'none');
     if (kvq) args.push('--cache-type-k', 'q8_0', '--cache-type-v', 'q8_0');
+    // Flash attention computes attention in one fused, memory-light pass: faster, and it frees
+    // memory so models stay loaded instead of reloading. Only the modern "auto" form is used, so
+    // the engine turns it on where it's known to be safe and skips it otherwise.
+    if (/-fa\b[^\n]*\bauto\b|--flash-attn[^\n]*\bauto\b/i.test(await engineHelp(engine.bin))) args.push('-fa', 'auto');
     // Mixture-of-experts models (like Qwen3 30B-A3B) that don't fit on the graphics card: keep
     // every layer's shared part on the card and only the experts that don't fit in memory, instead
     // of moving whole layers. Each word only uses a few experts, so this is often 2-3x faster.

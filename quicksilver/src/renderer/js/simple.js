@@ -98,6 +98,7 @@ function composerOptions(chat, anchor) {
     <button data-o="tog-lib">${icon('book', 16)} Use my library<span class="grow"></span>${on('tog-lib') ? icon('check', 15) : ''}</button>
     <button data-o="tog-fact">${icon('shield', 16)} Double-check answers<span class="grow"></span>${on('tog-fact') ? icon('check', 15) : ''}</button>
     <button data-o="tog-tools">${icon('plug', 16)} Use my connected apps<span class="grow"></span>${on('tog-tools') ? icon('check', 15) : ''}</button>
+    <button data-o="add-api">${icon('plus', 16)} ${S.providers?.length ? 'Cloud AIs (ChatGPT, Claude…)' : 'Connect a cloud AI (ChatGPT, Claude…)'}<span class="grow"></span>${S.providers?.length ? `<span class="small muted">${S.providers.length}</span>` : ''}</button>
     <div class="menu-sep"></div>
     <div class="menu-h">How hard it should think</div>
     <div class="opt-effort">${Object.entries(EFFORTS).map(([k, l]) => `<button data-eff="${k}" class="${k === eff ? 'on' : ''}" title="${{ quick: 'One model, fastest', balanced: 'One model, then a check', thorough: 'The team on hard questions only (recommended)', max: 'The whole team, always double-checked' }[k]}">${esc(l.replace(/^\S+\s/, ''))}</button>`).join('')}</div>
@@ -115,6 +116,7 @@ function composerOptions(chat, anchor) {
     if (!o) return;
     closeMenus();
     if (o === 'settings') chatSettings(chat);
+    else if (o === 'add-api') { modelsTab = 'api'; go({ view: 'models' }); }
     else $(`#${o}`)?.click();
   });
 }

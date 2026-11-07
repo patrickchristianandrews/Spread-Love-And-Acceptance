@@ -69,6 +69,7 @@ views.chat = {
             ${S.config?.offline ? `<span class="chip-tog" title="Offline: switch to Online in the sidebar to search the web" style="opacity:.5">${icon('globe', 16)}<span>Web (offline)</span></span>` : chip('tog-web', 'globe', 'Web', web, 'Search the web and cite sources')}
             ${chip('tog-tools', 'plug', 'Tools', tools, 'Let the AI use your integrations (GitHub, Slack, MCP servers…)')}
             ${chip('tog-fact', 'shield', 'Double-check', fact, 'After each answer, a second model checks it claim by claim')}
+            <button class="chip-tog" id="add-api-chip" title="Connect a cloud AI (ChatGPT, Claude, Gemini…) to use alongside your local models">${icon('plus', 16)}<span>Cloud AI${S.providers?.length ? ` (${S.providers.length})` : ''}</span></button>
             <label class="pill-select small" title="Instant: one model, fastest. Balanced: one model, then a check. Auto: the team works on hard questions only. Deep think: the whole team on every question, always double-checked.">${icon('gauge', 16)}<select id="pick-effort" aria-label="Effort">${Object.entries(EFFORTS).map(([k, e]) => `<option value="${k}" ${k === effortOf(chat, a) ? 'selected' : ''}>${e.replace(/^\S+\s/, '')}</option>`).join('')}</select>${icon('chevron', 14)}</label>
             <span class="grow"></span>
             <button class="send-btn ${pending?.chatId === chat.id ? 'stop' : ''}" id="send" title="${pending?.chatId === chat.id ? 'Stop' : 'Send (Enter)'}" aria-label="${pending?.chatId === chat.id ? 'Stop' : 'Send'}">${icon(pending?.chatId === chat.id ? 'stop' : 'send', 20)}</button>
@@ -329,6 +330,7 @@ function bindChat() {
   $('#mic-btn').addEventListener('click', () => toggleVoice(chat));
   $('#improve-btn').addEventListener('click', () => improvePromptBox(chat));
   $('#opts-btn').addEventListener('click', (e) => composerOptions(chat, e.currentTarget));
+  $('#add-api-chip')?.addEventListener('click', () => { modelsTab = 'api'; go({ view: 'models' }); });
   $('[data-chat-settings]')?.addEventListener('click', (e) => { e.preventDefault(); chatSettings(chat); });
   scrollDown(true);
   if (!pending && !docOpen(chat)) input.focus();
