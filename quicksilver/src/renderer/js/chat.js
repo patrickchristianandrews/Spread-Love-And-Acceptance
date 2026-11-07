@@ -559,7 +559,10 @@ async function generate(chat, rerollMsg, withTarget, opts = {}) {
   if (sources.webEmpty) alt.webEmpty = true;
   if (sources.autoWeb && !sources.webEmpty) alt.autoWeb = true;
   pending.sources = sources;
-  const ctx = Number(a.contextSize || p.contextSize) || 16384;
+  // Building a site or app: a whole page is long, and later messages edit it, so allow a long
+  // answer and enough memory to keep the current version in view.
+  const appWork = skill?.output === 'app' || chat.messages.slice(0, upTo).some((m) => m.role === 'assistant' && /```html\s*\n[\s\S]*?(<!doctype html|<html[\s>])/i.test(msgText(m)));
+  const ctx = Math.max(Number(a.contextSize || p.contextSize) || 16384, appWork ? 32768 : 0);
   const docBudget = Math.max(4000, Math.floor((ctx * 3 * 0.6) / Math.max(1, chat.messages.slice(0, upTo).reduce((n, m) => n + (m.attachments || []).filter((x) => x.type === 'doc').length, 0))));
   // "Remember that…" / "Forget…" are saved straight away; the answer just confirms it.
   let memNote = '';
@@ -604,7 +607,7 @@ async function generate(chat, rerollMsg, withTarget, opts = {}) {
   qs.sendChat({
     requestId, target, messages,
     temperature: Number(chat.temperature ?? a.temperature ?? p.temperature),
-    maxTokens: Math.round(Number(chat.maxTokens || a.maxTokens || p.maxTokens) * (effortOf(chat, a) === 'max' && chat.maxTokens == null ? 1.5 : 1)),
+    maxTokens: Math.max(appWork && chat.maxTokens == null ? 8192 : 0, Math.round(Number(chat.maxTokens || a.maxTokens || p.maxTokens) * (effortOf(chat, a) === 'max' && chat.maxTokens == null ? 1.5 : 1))),
     contextSize: ctx,
     // Writing a picture prompt or a beat pattern is quick work: one model, no debate.
     level: skill && HIDE_BLOCK.has(skill.output) ? 'quick' : effortOf(chat, a),

@@ -87,7 +87,7 @@ const repoArg = { type: 'string', description: 'Repository as owner/name, e.g. o
 
 const GITHUB_TOOLS = [
   { name: 'github_my_repos', description: 'List repositories the user can access, most recently updated first.', parameters: { type: 'object', properties: {} },
-    run: async () => (await gh('/user/repos?per_page=50&sort=updated')).map((r) => `${r.full_name}${r.private ? ' (private)' : ''}: ${r.description || ''}`).join('\n') },
+    run: async () => (await gh('/user/repos?per_page=50&sort=updated').catch(async (err) => { if (!/^40[13]/.test(err.message)) throw err; return (await gh('/installation/repositories?per_page=50')).repositories; })).map((r) => `${r.full_name}${r.private ? ' (private)' : ''}: ${r.description || ''}`).join('\n') },
   { name: 'github_search_repos', description: 'Search public GitHub repositories.', parameters: { type: 'object', properties: { query: { type: 'string' } }, required: ['query'] },
     run: async ({ query }) => (await gh(`/search/repositories?per_page=10&q=${encodeURIComponent(query)}`)).items.map((r) => `${r.full_name} ★${r.stargazers_count}: ${r.description || ''}`).join('\n') },
   { name: 'github_list_files', description: 'List files and folders at a path in a repository.', parameters: { type: 'object', properties: { repo: repoArg, path: { type: 'string', description: 'Folder path; empty for the root' } }, required: ['repo'] },
@@ -236,7 +236,14 @@ Object.assign(CONNECTORS, more.CONNECTORS);
 Object.assign(TOOLS, more.TOOLS);
 
 async function test(id) {
-  if (id === 'github') return (await gh('/user')).login;
+  // A personal token knows its user; a GitHub App or Actions token doesn't, but can list its repos.
+  if (id === 'github') {
+    try { return (await gh('/user')).login; } catch (err) {
+      if (!/^40[13]/.test(err.message)) throw err;
+      const r = await gh('/installation/repositories?per_page=1').catch(() => { throw err; });
+      return r.repositories?.[0]?.owner?.login ? `${r.repositories[0].owner.login} (app token)` : 'app token';
+    }
+  }
   if (id === 'notion') { const u = await nt('/users/me'); return u.bot?.workspace_name || u.name || 'connected'; }
   if (id === 'slack') { const r = await sl('auth.test'); return `${r.team} (${r.user})`; }
   if (id === 'jira') return (await jr('/rest/api/3/myself')).displayName;

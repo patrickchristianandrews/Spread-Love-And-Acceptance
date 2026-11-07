@@ -182,7 +182,9 @@ async function skillMediaAction(chat, m, act, el) {
 const appHtmlOf = (text) => String(text || '').match(/```html\s*\n([\s\S]*?)```/i)?.[1] || null;
 function appButtonsHTML(m, alt, streaming) {
   const s = alt.skillId && skillById(alt.skillId);
-  if (!s || s.output !== 'app' || streaming || !appHtmlOf(alt.text)) return '';
+  const html = !streaming && appHtmlOf(alt.text);
+  // An app skill's page, or any complete web page in an answer (e.g. after "add a gallery").
+  if (!html || (s?.output !== 'app' && !/<!doctype html|<html[\s>]/i.test(html))) return '';
   return `<div class="row"><button class="btn primary" data-act="app-open" data-id="${m.id}">▶ Open the app</button><button class="btn" data-act="app-save" data-id="${m.id}">${icon('download', 15)} Save as .html</button><span class="small muted">Opens in its own window, cut off from your files.</span></div>`;
 }
 async function appAction(chat, m, act) {

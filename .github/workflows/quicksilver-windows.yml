@@ -14,6 +14,8 @@ on:
 
 permissions:
   contents: write
+  issues: read
+  pull-requests: read
 
 jobs:
   tests:
@@ -191,8 +193,13 @@ jobs:
       # and a screenshot are recorded for review. Informational: never blocks the build.
       - name: Tester sessions (five people, real models)
         continue-on-error: true
-        timeout-minutes: 90
+        timeout-minutes: 150
         shell: pwsh
+        env:
+          # The web developer connects GitHub with this run's own short-lived token (it can read
+          # this repository; creating issues isn't allowed, and the tester declines the request).
+          QS_TESTER_GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          QS_TESTER_GH_REPO: ${{ github.repository }}
         run: node test/testers.js C:\QS\Quicksilver.exe tester-sessions
 
       - uses: actions/upload-artifact@v4

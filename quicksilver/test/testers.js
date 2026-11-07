@@ -22,11 +22,14 @@ const PERSONAS = [
     { ask: 'Remember that my bakery is called Crumb & Co and it is in Leeds.' },
     { ask: 'Suggest three ideas for a spring promotion.', note: 'should use the remembered bakery name and city' },
   ] },
-  { id: 'dev', who: 'Dev, 27, software developer and AI enthusiast; cares about correctness, speed and power features', steps: [
-    { ask: 'Write a JavaScript function that returns the n-th Fibonacci number in O(log n) time, with a short explanation.' },
+  { id: 'dev', who: 'Dev, 29, coder and freelance website developer; works from GitHub; builds a whole client site inside Quicksilver', steps: [
+    { action: 'github', note: 'connects GitHub in Connectors (read-only token)' },
+    { ask: 'Use GitHub to read the README.md of REPO and tell me in 3 short bullets what the project is.', tools: true, note: 'reads the repo through the GitHub connector' },
     { ask: 'There is a bug here, find it and fix it:\n```python\ndef average(nums):\n    total = 0\n    for n in nums:\n        total += n\n    return total / len(nums) if nums else total / 1\n```\nWhat happens with an empty list, and is the second branch right?' },
-    { ask: 'What is 17 × 23? Work it out step by step.', target: 'stack:quicksilver', note: 'team route' },
-    { ask: 'A bat and a ball cost $1.10 in total. The bat costs $1.00 more than the ball. How much does the ball cost?', effort: 'max', note: 'Deep think: whole team + double-check' },
+    { ask: 'Build the complete website for my client Crumb & Co, an artisan bakery in Leeds, as one HTML file with its CSS and JavaScript inside: a hero with a call to action, a menu section with 6 items and prices in £, opening hours (Mon-Fri 7am-4pm, Sat 7am-2pm, closed Sunday), an about section, a contact form and a footer. Responsive, accessible, no external files.', skill: 'build-site', site: ['<form', 'menu', '£', 'Sunday'], note: 'builds the site (Landing page skill)' },
+    { ask: 'Add a dark mode toggle button in the header that remembers the choice, and a photo gallery section with 6 placeholder tiles. Keep everything else. Give me the full updated file.', same: true, site: ['dark', 'gallery', '<form', '£'], note: 'edits the site in the same chat' },
+    { ask: 'Bug: submitting the contact form reloads the page. Fix it so it checks the email field and shows a thank-you message instead. Full updated file please.', same: true, site: ['preventDefault', 'thank', 'dark', 'gallery'], note: 'fixes a bug in the site' },
+    { action: 'approval', ask: 'Use GitHub to create an issue in REPO titled "Crumb & Co site: launch checklist" listing 5 launch steps.', note: 'a write action must ask first; the tester declines' },
     { action: 'powermove', kind: 'redteam', ask: 'Is it safe to store user passwords with SHA-256 and a salt? What should I use instead?' },
   ] },
   { id: 'rosa', who: 'Rosa, 61, retired teacher; not technical; prefers talking to typing; wants plain answers', steps: [
@@ -82,7 +85,7 @@ async function session(p) {
   win.on('pageerror', (e) => errors.push(e.message));
   win.on('console', (m) => { if (m.type() === 'error' && !/Failed to load resource/.test(m.text())) errors.push(m.text()); });
   const shot = (name) => win.screenshot({ path: path.join(outDir, `${p.id}-${name}.png`) }).catch(() => {});
-  const idle = () => win.waitForFunction(() => !document.querySelector('.bubble.streaming') && !document.querySelector('.status-line') && !document.querySelector('.fact-chip.k-run'), null, { timeout: LONG });
+  const idle = (timeout = LONG) => win.waitForFunction(() => !document.querySelector('.bubble.streaming') && !document.querySelector('.status-line') && !document.querySelector('.fact-chip.k-run'), null, { timeout });
   const results = [];
   await win.waitForSelector('text=Forms to fit your work.', { timeout: 120000 });
   await win.waitForFunction(() => S.installed.some((m) => m.id === 'starter'), null, { timeout: 120000 });
@@ -93,10 +96,11 @@ async function session(p) {
     const m = [...(c?.messages || [])].reverse().find((x) => x.role === 'assistant');
     const a = m?.alts[m.altIndex] || {};
     return { text: a.text || a.error || '', error: a.error || '', model: a.target ? targetLabel(a.target) : '', autoWhy: a.autoWhy || '', ttftMs: a.ttft ?? null, totalMs: a.ms ?? null, tokens: a.stats?.tokens ?? null, tps: a.stats?.tps ?? null,
-      steps: (a.steps || []).map((s) => `${s.label} (${s.model}${s.ms ? `, ${Math.round(s.ms / 1000)} s` : ''})`), check: a.check ? { text: (a.check.text || '').slice(0, 1200), error: a.check.error || '' } : null, followups: a.followups || [], remembered: a.remembered || [], sources: (a.sources || []).map((s) => s.url || s.title).slice(0, 8) };
+      steps: (a.steps || []).map((s) => `${s.label} (${s.model}${s.ms ? `, ${Math.round(s.ms / 1000)} s` : ''})`), tools: (a.toolCalls || []).map((x) => `${x.name} → ${x.status}`), check: a.check ? { text: (a.check.text || '').slice(0, 1200), error: a.check.error || '' } : null, followups: a.followups || [], remembered: a.remembered || [], sources: (a.sources || []).map((s) => s.url || s.title).slice(0, 8) };
   });
+  const REPO = process.env.QS_TESTER_GH_REPO || 'patrickchristianandrews/Spread-Love-And-Acceptance';
   const ask = async (step, i) => {
-    await win.click('[data-nav="newchat"]');
+    if (!step.same) await win.click('[data-nav="newchat"]');
     await win.waitForSelector('#input');
     await win.evaluate((st) => {
       const c = chatById(S.route.id);
@@ -106,14 +110,16 @@ async function session(p) {
       if (st.web) c.web = true;
       if (st.private) c.private = true;
       if (st.skill) c.pendingSkill = st.skill;
+      if (st.tools) c.tools = true;
       save(); render();
     }, step);
     if (step.file === 'red') { await win.setInputFiles('#file-in', { name: 'photo.png', mimeType: 'image/png', buffer: redPng() }); await win.waitForSelector('.attach'); }
-    await win.fill('#input', step.ask);
+    await win.fill('#input', step.ask.replace(/REPO/g, REPO));
     const t = Date.now();
+    const before = await win.locator('.msg.assistant').count();
     await win.keyboard.press('Enter');
-    await win.waitForSelector('.msg.assistant', { timeout: 60000 });
-    await idle();
+    await win.waitForFunction((n) => document.querySelectorAll('.msg.assistant').length > n, before, { timeout: 60000 });
+    await idle(step.site ? 25 * 60 * 1000 : LONG);
     await win.waitForTimeout(1500);
     // Give the follow-up suggestions a moment to be written.
     await win.waitForFunction(() => !document.querySelector('.followups.pending'), null, { timeout: 60000 }).catch(() => {});
@@ -125,7 +131,59 @@ async function session(p) {
   for (const [i, step] of p.steps.entries()) {
     const rec = { step: i + 1, note: step.note || '', action: step.action || 'ask', input: step.ask || '' };
     try {
-      if (!step.action) Object.assign(rec, await ask(step, i + 1));
+      if (!step.action) {
+        Object.assign(rec, await ask(step, i + 1));
+        if (step.site) {
+          const html = await win.evaluate(() => { const c = chatById(S.route.id); const m = [...c.messages].reverse().find((x) => x.role === 'assistant'); return appHtmlOf(msgText(m)) || ''; });
+          const file = path.join(outDir, `${p.id}-site-${i + 1}.html`);
+          if (html) fs.writeFileSync(file, html);
+          const low = html.toLowerCase();
+          rec.site = { bytes: html.length, complete: /<\/html>\s*$/i.test(html.trim()), sections: (low.match(/<section\b/g) || []).length, has: Object.fromEntries(step.site.map((w) => [w, low.includes(w.toLowerCase())])), file: html ? path.basename(file) : '' };
+          if (!html) rec.error = 'No complete HTML page in the answer.';
+          else if (await win.locator('.msg.assistant').last().locator('[data-act="app-open"]').count()) {
+            const opened = app.waitForEvent('window', { timeout: 30000 });
+            await win.locator('.msg.assistant').last().locator('[data-act="app-open"]').click();
+            const pw = await opened;
+            const perrs = [];
+            pw.on('pageerror', (e) => perrs.push(e.message));
+            await pw.waitForLoadState().catch(() => {});
+            await pw.reload().catch(() => {});
+            await pw.setViewportSize({ width: 1280, height: 900 }).catch(() => {});
+            await pw.waitForTimeout(1500);
+            await pw.screenshot({ path: path.join(outDir, `${p.id}-${String(i + 1).padStart(2, '0')}-site-preview.png`), fullPage: true }).catch(() => {});
+            rec.site.previewErrors = perrs.slice(0, 5);
+            rec.site.previewText = (await pw.evaluate(() => document.body.innerText).catch(() => '')).slice(0, 600);
+            await pw.close().catch(() => {});
+            rec.site.opened = true;
+          } else rec.site.opened = false;
+        }
+      } else if (step.action === 'github') {
+        const token = process.env.QS_TESTER_GH_TOKEN;
+        if (!token) rec.error = 'No GitHub token on this machine.';
+        else {
+          await win.evaluate(() => go({ view: 'integrations' }));
+          await win.waitForSelector('[data-int-edit="github"]', { timeout: 60000 });
+          await win.click('[data-int-edit="github"]');
+          await win.fill('#f-token', token);
+          await win.click('#int-save');
+          const ok = await win.waitForSelector('[data-int-off="github"]', { timeout: 60000 }).then(() => true).catch(() => false);
+          if (!ok) throw new Error(`GitHub didn't connect: ${(await win.evaluate(() => [...document.querySelectorAll('.toast, #modal .notice, #modal .help')].map((e) => e.textContent).join(' | ')).catch(() => '')).slice(0, 300)}`);
+          rec.text = 'GitHub connected.';
+          await shot(`${String(i + 1).padStart(2, '0')}-github-connected`);
+        }
+      } else if (step.action === 'approval') {
+        await win.click('[data-nav="newchat"]');
+        await win.evaluate(() => { const c = chatById(S.route.id); c.tools = true; save(); render(); });
+        await win.fill('#input', step.ask.replace(/REPO/g, REPO));
+        const t = Date.now();
+        await win.keyboard.press('Enter');
+        const asked = await win.waitForSelector('[data-ap="deny"]', { timeout: LONG }).then(() => true).catch(() => false);
+        rec.approvalShown = asked;
+        if (asked) { await shot(`${String(i + 1).padStart(2, '0')}-approval`); await win.click('[data-ap="deny"]'); }
+        await idle();
+        Object.assign(rec, await lastAnswer(), { input: step.ask.replace(/REPO/g, REPO), wallMs: Date.now() - t });
+        await shot(`${String(i + 1).padStart(2, '0')}-approval-answer`);
+      }
       else if (step.action === 'followup') {
         const q = await win.evaluate(() => document.querySelector('.followups .fu:not(.ghost)')?.dataset.followup || '');
         rec.input = q;
@@ -194,7 +252,13 @@ async function session(p) {
         rec.text = (await win.evaluate(() => document.querySelector('#main').innerText)).slice(0, 1500);
         await shot(`${String(i + 1).padStart(2, '0')}-${step.view}`);
       }
-    } catch (err) { rec.error = String(err.message || err).split('\n')[0]; await shot(`${String(i + 1).padStart(2, '0')}-error`); }
+    } catch (err) {
+      rec.error = String(err.message || err).split('\n')[0];
+      await shot(`${String(i + 1).padStart(2, '0')}-error`);
+      // Don't let an open dialog block the next steps.
+      for (let k = 0; k < 3 && await win.locator('#modal:not([hidden])').count(); k++) await win.click('#modal [data-close], #modal [data-ap="deny"]').catch(() => win.keyboard.press('Escape'));
+      if (step.action === 'github') rec.dialog = await win.evaluate(() => document.querySelector('.toast')?.textContent || '').catch(() => '');
+    }
     if (rec.text) rec.text = rec.text.slice(0, 4000);
     results.push(rec);
     console.log(`TESTER-RESULT ${JSON.stringify({ persona: p.id, ...rec })}`);
@@ -205,7 +269,7 @@ async function session(p) {
 }
 
 (async () => {
-  for (const p of PERSONAS) {
+  for (const p of PERSONAS.filter((x) => !process.env.QS_TESTER_ONLY || process.env.QS_TESTER_ONLY.split(',').includes(x.id))) {
     const t = Date.now();
     try { await session(p); console.log(`✓ ${p.id}: done in ${Math.round((Date.now() - t) / 1000)} s`); }
     catch (err) { console.log(`✗ ${p.id}: ${err.message.split('\n')[0]}`); }
