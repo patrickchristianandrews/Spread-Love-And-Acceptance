@@ -122,6 +122,7 @@ function redPng(size = 64) {
     await win.fill('#input', 'Name the largest planet in our solar system and one fact about it.');
     await win.keyboard.press('Enter');
     await win.waitForSelector('.fact-chip', { timeout: LONG });
+    await win.waitForFunction(() => !document.querySelector('.fact-chip.k-run'), null, { timeout: LONG }).catch(() => {});
     await idle();
     const chip = await win.locator('.fact-chip').innerText();
     console.log(`  answer: ${(await lastAnswer()).replace(/\s+/g, ' ').slice(0, 140)}`);

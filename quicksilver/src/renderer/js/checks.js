@@ -194,10 +194,15 @@ function cachedAnswer(chat, q) {
   return hit && Date.now() - hit.t < 30 * 86400000 && targetValid(hit.target) ? hit : null;
 }
 
+// On a PC with no graphics card there is one slow model and one processor, so background work
+// (reading ahead, answering the next question in advance) competes with the answer the user is
+// waiting for. Skip it there; it's a clear win only when there's a GPU to spare.
+const hasGpu = () => (S.est?.hardware?.vramGB || 0) >= 2;
+
 // ---------- 6. reading ahead while you type ----------
 const prefilled = new Map(); // chat id -> what was last read ahead
 function prefillChat(chat, a, text) {
-  if (pending || S.data.prefs.readAhead === false || String(text || '').trim().length < 3) return;
+  if (pending || S.data.prefs.readAhead === false || !hasGpu() || String(text || '').trim().length < 3) return;
   const target = autoOn(chat, a) ? autoPick(chat, a, text, (drafts[chat.id] || []).some((x) => x.type === 'image')).target : resolveTarget(chat, a);
   if (!target || target.startsWith('api:')) return;
   const { messages, ctx } = chatHistory(chat, a, chat.messages.length);
@@ -215,7 +220,7 @@ function preanswer(chat, msg, alt) {
   const p = S.data.prefs;
   const a = assistantById(chat.assistantId);
   const q = alt.followups?.[0];
-  if (p.preanswer === false || !q || pending || alt.pre || chat.messages.at(-1) !== msg || FRESH_Q.test(q) || effortOf(chat, a) === 'max') return;
+  if (p.preanswer === false || !hasGpu() || !q || pending || alt.pre || alt.check?.running || chat.messages.at(-1) !== msg || FRESH_Q.test(q) || effortOf(chat, a) === 'max') return;
   let target = resolveTarget(chat, a);
   if (autoOn(chat, a)) target = autoPick(chat, a, q, false).target || target;
   if (!target || target.startsWith('api:') || webWanted(chat, a, q) || (chat.library ?? a.library) || toolsOn(chat, a)) return;
