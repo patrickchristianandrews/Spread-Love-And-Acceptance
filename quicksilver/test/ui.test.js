@@ -349,6 +349,29 @@ function redPng(size = 64) {
   await win.waitForFunction(() => S.route.view === 'models' && modelsTab === 'text', null, { timeout: 10000 });
   console.log('✓ no model: chatting opens a chooser to add a model, team, found models or a cloud AI');
   await win.evaluate((id) => go({ view: 'chat', id }), backTo2);
+
+  // Parental lock: a PIN gates uncensored AI, nothing else.
+  await win.evaluate(() => { S.stacks.push({ id: 'unf-test', name: 'Unfiltered', members: { drafters: ['local:qwen3-8b'] } }); S.targets.push({ target: 'stack:unf-test', label: 'Unfiltered' }); });
+  assert.ok(await win.evaluate(() => isUncensoredTarget('stack:unf-test')), 'the Unfiltered team is detected');
+  assert.ok(!(await win.evaluate(() => isUncensoredTarget('local:qwen3-8b'))), 'a normal model is not');
+  await win.evaluate(() => setLockPin('2468'));
+  await win.evaluate(() => relock());
+  assert.ok(await win.evaluate(() => uncensoredBlocked('stack:unf-test')), 'uncensored is blocked while locked');
+  assert.ok(!(await win.evaluate(() => uncensoredBlocked('local:qwen3-8b'))), 'normal models are never blocked');
+  // Wrong PIN keeps it locked; the right PIN unlocks for the session.
+  const unlockP = win.evaluate(() => askUnlock());
+  await win.waitForSelector('#unlock-pin');
+  await win.fill('#unlock-pin', '0000'); await win.click('#unlock-go');
+  await win.waitForSelector('#unlock-err:has-text("Wrong PIN")');
+  await win.fill('#unlock-pin', '2468'); await win.click('#unlock-go');
+  assert.equal(await unlockP, true, 'the right PIN unlocks');
+  assert.ok(!(await win.evaluate(() => uncensoredBlocked('stack:unf-test'))), 'unlocked for the session');
+  // Settings shows the lock as on, with a way to turn it off.
+  await win.evaluate(() => go({ view: 'settings' }));
+  await win.waitForSelector('#pl-box:has-text("On.")');
+  await win.evaluate(() => { clearLockPin(); S.stacks = S.stacks.filter((x) => x.id !== 'unf-test'); S.targets = S.targets.filter((t) => t.target !== 'stack:unf-test'); });
+  console.log('✓ parental lock: PIN gates uncensored models/teams only, wrong PIN blocks, right PIN unlocks for the session');
+  await win.evaluate((id) => go({ view: 'chat', id }), backTo2);
   console.log('✓ leverage: signals teach Automatic, connected apps used, cloud for hard questions (opt-in), next question answered in advance');
   console.log('✓ free checks: exact facts first, maths audit + code/page checks fix answers, unsure numbers double-checked, instant repeats, reading ahead');
   // The status light at the top right shows how the model is running.

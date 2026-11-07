@@ -33,9 +33,42 @@ function generalHTML() {
     <div class="field"><label>Appearance</label><div class="row">${[['dark', 'Dark'], ['light', 'Light'], ['system', 'Match Windows']].map(([k, l]) => `<button class="btn small ${(P().theme || 'dark') === k ? 'on' : ''}" data-theme-set="${k}">${l}</button>`).join('')}</div></div>
     <div class="field"><label>Text size</label><div class="row">${[['normal', 'Normal'], ['large', 'Large'], ['xl', 'Extra large']].map(([k, l]) => `<button class="btn small ${P().textSize === k ? 'on' : ''}" data-textsize="${k}">${l}</button>`).join('')}</div></div>
     <div><button class="btn primary" id="g-save">Save</button></div>
+    ${parentalLockHTML()}
     ${updateBoxHTML()}
     ${importHTML()}
   </div>`;
+}
+// Parental lock: a PIN that gates uncensored AI (see lock.js).
+function parentalLockHTML() {
+  const on = Boolean(S.data.prefs.parentalLock?.hash);
+  return `<div class="card set-card" id="pl-box" style="margin-top:16px"><h3>🔒 Parental lock</h3>
+    <p class="help" style="margin-top:0">Lock uncensored AI (community "unfiltered" models and teams that answer mature content with few refusals) behind a PIN. Everything else stays open. The PIN is stored only as a scrambled hash, and it's needed again each time Quicksilver reopens.</p>
+    ${on ? `<p class="small"><b style="color:var(--ok,#2fa36b)">On.</b> Uncensored models and teams ask for the PIN before they can be used.</p>
+      <div class="row"><button class="btn" id="pl-lock">Lock now</button><button class="btn" id="pl-change">Change PIN</button><button class="btn danger" id="pl-remove">Turn off</button></div>`
+    : `<div class="field" style="max-width:260px"><label for="pl-pin">Set a PIN (4+ digits)</label><input id="pl-pin" type="password" inputmode="numeric" autocomplete="off" placeholder="New PIN"></div>
+      <div class="field" style="max-width:260px"><label for="pl-pin2">Confirm PIN</label><input id="pl-pin2" type="password" inputmode="numeric" autocomplete="off" placeholder="Repeat it"></div>
+      <div class="small" id="pl-err" style="color:var(--danger);min-height:18px"></div>
+      <button class="btn primary" id="pl-set">Turn on parental lock</button>`}</div>`;
+}
+function bindParentalLock() {
+  const repaint = () => { const box = $('#pl-box'); if (box) { box.innerHTML = parentalLockHTML(); bindParentalLock(); } else render(); };
+  $('#pl-set')?.addEventListener('click', async () => {
+    const pin = $('#pl-pin').value.trim(); const pin2 = $('#pl-pin2').value.trim();
+    const err = $('#pl-err');
+    if (!/^\d{4,}$/.test(pin)) { err.textContent = 'Use at least 4 digits.'; return; }
+    if (pin !== pin2) { err.textContent = 'The two PINs do not match.'; return; }
+    await setLockPin(pin); toast('Parental lock is on. Uncensored AI now needs this PIN.'); repaint();
+  });
+  $('#pl-remove')?.addEventListener('click', async () => {
+    const pin = await askUnlock();
+    if (pin) { await clearLockPin(); toast('Parental lock turned off.'); repaint(); }
+  });
+  $('#pl-lock')?.addEventListener('click', () => { relock(); toast('Locked. Uncensored AI will ask for the PIN.'); });
+  $('#pl-change')?.addEventListener('click', async () => {
+    if (!(await askUnlock())) return;
+    await clearLockPin();
+    toast('Enter a new PIN.'); repaint();
+  });
 }
 const memSetHTML = () => `<p class="lede" style="margin-top:0">What your assistants remember about you, across all chats. Click a line to change it.</p><div id="mem-box">${memoryManagerHTML()}</div>`;
 function bindMemSet() { const box = $('#mem-box'); const repaint = () => { box.innerHTML = memoryManagerHTML(); bindMemoryManager(box, repaint); }; bindMemoryManager(box, repaint); }
@@ -45,6 +78,7 @@ function bindGeneral() {
   $('#g-autoweb').addEventListener('change', (e) => { P().autoWeb = e.target.checked; save(); });
   $('#g-autofix').addEventListener('change', (e) => { P().autoFix = e.target.checked; save(); });
   $('#g-cloudhard')?.addEventListener('change', (e) => { P().cloudHard = e.target.checked; save(); });
+  bindParentalLock();
   bindUpdateBox();
   bindImport();
   $$('[data-theme-set]').forEach((b) => b.addEventListener('click', () => { P().theme = b.dataset.themeSet; applyPrefs(); save(); render(); }));

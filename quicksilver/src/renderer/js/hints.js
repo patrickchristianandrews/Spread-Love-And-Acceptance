@@ -110,7 +110,10 @@ function hintsHTML(list) {
 
 function applyHint(chat, h) {
   const x = h.act || {};
-  if (x.use) { chat.target = x.use; save(); render(); toast(`This chat now uses ${targetLabel(x.use)}.`); return; }
+  if (x.use) {
+    if (uncensoredBlocked(x.use)) { askUnlock().then((ok) => { if (ok) { chat.target = x.use; save(); render(); toast(`This chat now uses ${targetLabel(x.use)}.`); } }); return; }
+    chat.target = x.use; save(); render(); toast(`This chat now uses ${targetLabel(x.use)}.`); return;
+  }
   if (x.web) { chat.web = true; save(); render(); toast('Web search is on for this chat.'); return; }
   if (x.online) { $('#net-pill')?.click(); return; }
   if (x.tools) { chat.tools = true; save(); render(); toast('Connected apps are on for this chat.'); return; }

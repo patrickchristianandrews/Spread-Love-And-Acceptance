@@ -582,6 +582,8 @@ async function generate(chat, rerollMsg, withTarget, opts = {}) {
     if (pick.target) { target = pick.target; autoWhy = pick.why || ''; }
   }
   if (!target) { needModel(chat); return; }
+  // Parental lock: uncensored models/teams need the PIN first.
+  if (uncensoredBlocked(target)) { askUnlock().then((ok) => { if (ok) generate(chat, rerollMsg, withTarget, opts); }); return; }
   // The follow-up you clicked was answered while you read: show it at once.
   if (!rerollMsg && !withTarget && !opts.fix) {
     const pre = takePreanswer(chat);
