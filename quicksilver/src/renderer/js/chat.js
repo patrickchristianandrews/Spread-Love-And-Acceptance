@@ -172,7 +172,7 @@ function messageHTML(chat, a, m, i) {
   return `<div class="msg assistant" data-msg="${m.id}">
     <div class="av" aria-hidden="true">${esc(a.emoji)}</div>
     <div class="msg-main">
-    <div class="who-line"><b>${esc(a.name)}</b>${model ? `<span class="who-model"${alt.autoWhy ? ` title="${esc(alt.autoWhy)}"` : ''}>${alt.autoWhy ? '✨ ' : ''}${esc(model)}</span>` : ''}${alt.skillId && skillById(alt.skillId) ? `<span class="badge b-peach">⚡ ${esc(skillById(alt.skillId).name)}</span>` : ''}${alt.imported ? `<span class="badge">From ${esc(alt.imported)}</span>` : ''}${etaNow}${alt.stats?.tps && !streaming ? `<span class="who-speed" title="${esc(statsTitle(alt))}">${Math.round(alt.stats.tps * 0.75)} words/s</span>` : ''}${m.t ? `<span class="who-time">${esc(msgTime(m))}</span>` : ''}</div>
+    <div class="who-line"><b>${esc(a.name)}</b>${model ? `<span class="who-model"${alt.autoWhy ? ` title="${esc(alt.autoWhy)}"` : ''}>${alt.autoWhy ? '✨ ' : ''}${esc(model)}</span>` : ''}${alt.skillId && skillById(alt.skillId) ? `<span class="badge b-peach">⚡ ${esc(skillById(alt.skillId).name)}</span>` : ''}${alt.imported ? `<span class="badge">From ${esc(alt.imported)}</span>` : ''}${alt.webEmpty ? '<span class="badge b-lemon" title="Web search was on but found nothing for this question, so this answer is from the model\'s own knowledge.">Web: nothing found</span>' : ''}${etaNow}${alt.stats?.tps && !streaming ? `<span class="who-speed" title="${esc(statsTitle(alt))}">${Math.round(alt.stats.tps * 0.75)} words/s</span>` : ''}${m.t ? `<span class="who-time">${esc(msgTime(m))}</span>` : ''}</div>
     ${metaRow(stepsHTML(alt, streaming) + toolsHTML(alt) + memoryChipHTML(alt) + (alt.reasoning ? `<details class="think chip-d"><summary>${streaming && !alt.text ? '<span class="pulse"></span>Thinking…' : '💭 Thought it through'}</summary><div>${esc(alt.reasoning)}</div></details>` : ''))}
     <div class="bubble md ${streaming ? 'streaming' : ''} ${alt.error ? 'error' : ''}">${body}</div>
     ${downloadHTML(m, alt, streaming)}
@@ -448,7 +448,9 @@ async function gatherSources(chat, a, query, force = {}) {
     } catch (err) { toast(`Knowledge: ${err.message}`); }
   }
   if ((force.web || (chat.web ?? a.web)) && query && S.config?.web?.provider !== 'none' && !S.config?.offline) {
+    const before = out.length;
     try { for (const r of await qs.call('web:search', query)) out.push({ title: r.title, url: r.url, text: r.text || r.snippet }); } catch (err) { toast(`Web search: ${err.message}`, 6000); }
+    if (out.length === before) out.webEmpty = true; // searched, found nothing: the answer must say so
   }
   return out;
 }
@@ -512,6 +514,7 @@ async function generate(chat, rerollMsg, withTarget) {
   if ((chat.library ?? a.library) || (chat.web ?? a.web) || force.web || force.knowledge) { alt.status = 'Searching sources…'; paintStreaming(chat, msg); }
   const sources = await gatherSources(chat, a, lastUser?.text || skill?.name || '', force);
   alt.sources = sources.map(({ title, url, path }) => ({ title, url, path }));
+  if (sources.webEmpty) alt.webEmpty = true;
   pending.sources = sources;
   const ctx = Number(a.contextSize || p.contextSize) || 16384;
   const docBudget = Math.max(4000, Math.floor((ctx * 3 * 0.6) / Math.max(1, chat.messages.slice(0, upTo).reduce((n, m) => n + (m.attachments || []).filter((x) => x.type === 'doc').length, 0))));
@@ -525,6 +528,8 @@ async function generate(chat, rerollMsg, withTarget) {
       if (mc.forgot) { alt.forgot = mc.forgot; memNote = `You have just deleted this from your memory of the user: "${mc.forgot.join('"; "')}". Confirm in one short sentence.`; }
     } else if (/^\s*(?:please\s+)?forget\b/i.test(lastUser.text) && memOn()) memNote = 'The user asked you to forget something, but nothing matching it was in your memory. Say so briefly, and mention they can see and edit everything you remember under Settings → Memory.';
   }
+  // Web search was on but found nothing: say so, and don't pretend to have checked.
+  if (sources.webEmpty) memNote = `${memNote ? `${memNote}\n` : ''}The user turned on web search, but the search found nothing for this question. Say in one short sentence at the start that you couldn't check the web this time, then answer from what you know. Don't claim anything is the "latest" or give publication dates or links you haven't seen.`;
   const messages = [{ role: 'system', content: systemPrompt(a, sources, Boolean(a.strict && (chat.library ?? a.library)), chat, lastUser?.text || '', ctx, memNote) + (skill ? `\n\n${skillPrompt(skill)}` : '') }];
   for (const m of chat.messages.slice(0, upTo)) {
     if (m.role === 'user') messages.push({ role: 'user', content: userContent(m, docBudget) });

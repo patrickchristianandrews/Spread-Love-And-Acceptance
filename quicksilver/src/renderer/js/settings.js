@@ -70,7 +70,7 @@ function bindChatSet() {
   $('#c-save').addEventListener('click', () => {
     Object.assign(P(), {
       defaultTarget: $('#c-default').value, autoAddFound: $('#c-auto').checked, preloadDefault: $('#c-preload').checked, effortLevel: $('#c-effort').value, factCheck: $('#c-fact').checked, factChecker: $('#c-checker').value,
-      temperature: Number($('#c-temp').value), contextSize: Number($('#c-ctx').value), maxTokens: Math.max(256, Number($('#c-max').value) || 4096),
+      temperature: Number($('#c-temp').value), contextSize: Number($('#c-ctx').value), maxTokens: Math.max(256, Number($('#c-max').value) || 2048), maxTokensSet: true,
       gpu: $('#c-gpu').value === '0' ? 0 : 'auto', sourcesPerAnswer: Number($('#c-src').value),
     });
     save(); toast('Saved.');
