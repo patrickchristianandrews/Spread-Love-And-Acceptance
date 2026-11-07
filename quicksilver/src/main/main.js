@@ -371,6 +371,8 @@ handle('kb:website', (collectionId, url, maxPages) => knowledge.addWebsite(colle
 handle('kb:search', async (q, k, ids) => { const r = await knowledge.search(q, { k, collectionIds: ids }); return { results: [...r], failures: r.failures || [] }; });
 handle('web:search', (q) => websearch.search(q));
 handle('kb:peek', (q) => knowledge.peek(q));
+// Paste text straight into a knowledge base (notes, a policy, an email).
+handle('kb:addText', (collectionId, name, text) => knowledge.addTexts(collectionId, [{ name: String(name || 'Note').slice(0, 120), text: String(text || '') }]));
 
 // ---------- studio (photo & video) ----------
 handle('media:gallery', () => media.gallery().map((g) => ({ ...g, url: `qsmedia://g/${g.id}` })));

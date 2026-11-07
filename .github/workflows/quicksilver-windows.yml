@@ -11,6 +11,12 @@ on:
     paths: ['quicksilver/**', '.github/workflows/quicksilver-windows.yml']
     tags: ['quicksilver-v*']
   workflow_dispatch:
+    inputs:
+      testers:
+        description: 'Which tester group runs: a (Maya, Dev, Rosa, Jay, Priya), b (Alex, Grace, Marcus, Lena, Omar) or all'
+        type: choice
+        options: [a, b, all]
+        default: a
 
 permissions:
   contents: write
@@ -200,6 +206,7 @@ jobs:
           # this repository; creating issues isn't allowed, and the tester declines the request).
           QS_TESTER_GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           QS_TESTER_GH_REPO: ${{ github.repository }}
+          QS_TESTER_GROUP: ${{ inputs.testers || 'a' }}
         run: node test/testers.js C:\QS\Quicksilver.exe tester-sessions
 
       - uses: actions/upload-artifact@v4

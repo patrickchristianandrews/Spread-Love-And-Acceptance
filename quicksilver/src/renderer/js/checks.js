@@ -78,6 +78,21 @@ function exactFacts(text) {
     const p = Number(m[1]); const v = num(m[4]);
     add(m[2].toLowerCase() === 'of' ? `${m[1]}% of ${m[3]}${m[4]} = ${m[3]}${fmtNum((p / 100) * v)}` : `${m[3]}${m[4]} with ${m[1]}% off = ${m[3]}${fmtNum(v * (1 - p / 100))}`);
   }
+  // "20% VAT on £2,340", "a 15% tip on $80"
+  for (const m of t.matchAll(/(\d+(?:\.\d+)?)\s*%\s*(vat|tax|tip|discount|interest|commission|deposit|service charge)\s+(?:on|of|for)\s+(?:an?\s+|the\s+)?([£$€]?)(\d[\d,]*(?:\.\d+)?)/gi)) {
+    const v = num(m[4]); const p = Number(m[1]);
+    add(/discount/i.test(m[2]) ? `${m[3]}${m[4]} with a ${m[1]}% discount = ${m[3]}${fmtNum(v * (1 - p / 100))}` : `${m[1]}% ${m[2]} on ${m[3]}${m[4]} = ${m[3]}${fmtNum((p / 100) * v)} (total ${m[3]}${fmtNum(v * (1 + p / 100))})`);
+  }
+  // "raise my £950 rent by 3.5%", "cut $1,200 by 10%": one amount and a percentage change.
+  const sentences = t.split(/(?<=[.?!])\s+/);
+  const ci = sentences.findIndex((x) => /\b(raise|raising|increase|increasing|rise|up|grow|cut|cutting|reduce|reducing|decrease|lower|drop)\b[^.?!]*?\bby\s+\d+(?:\.\d+)?\s*%/i.test(x));
+  const change = ci >= 0 && sentences[ci].match(/\b(raise|raising|increase|increasing|rise|up|grow|cut|cutting|reduce|reducing|decrease|lower|drop)\b[^.?!]*?\bby\s+(\d+(?:\.\d+)?)\s*%/i);
+  const money = (x) => [...String(x || '').matchAll(/([£$€])\s?(\d[\d,]*(?:\.\d+)?)/g)];
+  const amounts = change ? (money(sentences[ci]).length ? money(sentences[ci]) : money(sentences[ci - 1])) : [];
+  if (change && amounts.length === 1) {
+    const v = num(amounts[0][2]); const p = Number(change[2]); const down = /cut|reduc|decreas|lower|drop/i.test(change[1]);
+    add(`${amounts[0][1]}${amounts[0][2]} ${down ? 'reduced' : 'increased'} by ${p}% = ${amounts[0][1]}${fmtNum(Math.round(v * (1 + (down ? -p : p) / 100) * 100) / 100)}`);
+  }
   for (const m of t.matchAll(UNIT_RE)) {
     const u = UNITS.find(([re]) => re.test(m[2].trim()));
     if (!u) continue;
