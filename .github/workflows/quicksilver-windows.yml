@@ -212,6 +212,21 @@ jobs:
           path: quicksilver/install-shots/
           if-no-files-found: ignore
 
+      # Five tester sessions on the installed app with the real models: every answer, its speed
+      # and a screenshot are recorded for review. Informational: never blocks the build.
+      - name: Tester sessions (five people, real models)
+        continue-on-error: true
+        timeout-minutes: 90
+        shell: pwsh
+        run: node test/testers.js C:\QS\Quicksilver.exe tester-sessions
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: Quicksilver-tester-sessions
+          path: quicksilver/tester-sessions/
+          if-no-files-found: ignore
+
       # The installer's fingerprint, which the app's automatic updates check before installing.
       - name: Fingerprint the installer
         run: for f in dist/Quicksilver-Setup-*.exe; do (cd dist && sha256sum "$(basename "$f")" > "$(basename "$f").sha256" && cat "$(basename "$f").sha256"); done
