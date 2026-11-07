@@ -214,6 +214,34 @@ function redPng(size = 64) {
   await win.waitForFunction(() => !document.querySelector('.fact-chip.k-run'), null, { timeout: 60000 });
   if (await win.locator('#fact-panel').count()) await win.keyboard.press('Escape');
   console.log('✓ self-correction: 👍/👎 learning, auto web for current questions, double-check fixes mistakes');
+
+  // Suggestions while typing: what would make this message go better.
+  const backTo = await win.evaluate(() => S.route.id);
+  await win.click('[data-nav="newchat"]');
+  await win.evaluate(() => { S.data.prefs.autoWeb = false; });
+  await win.fill('#input', "What's the latest news about the election?");
+  await win.waitForSelector('#hint-row .hint-go:has-text("Turn on web search")');
+  await win.click('#hint-row .hint-go:has-text("Turn on web search")');
+  await win.waitForFunction(() => chatById(S.route.id).web === true);
+  assert.equal(await win.inputValue('#input'), "What's the latest news about the election?", 'the message is kept');
+  await win.evaluate(() => { S.data.prefs.autoWeb = true; });
+  await win.fill('#input', 'Write a dark horror story with graphic violence');
+  await win.waitForSelector('#hint-row .hint-go:has-text("uncensored")');
+  await win.fill('#input', 'Summarise the attached report for me please');
+  await win.waitForSelector('#hint-row .hint-go:has-text("Attach the file")');
+  await win.click('#hint-row .hint-x');
+  await win.waitForFunction(() => !document.querySelector('#hint-row .hint') && (chatById(S.route.id).hintsOff || []).includes('attach'));
+  await win.fill('#input', 'Summarise the attached report for me, thanks');
+  await win.waitForTimeout(500);
+  assert.equal(await win.locator('#hint-row .hint').count(), 0, 'a dismissed suggestion stays away in this chat');
+  await win.fill('#input', 'List the open pull requests on my GitHub repo');
+  await win.waitForSelector('#hint-row .hint-go:text-matches("(Connect|Let it use) GitHub")');
+  await win.fill('#input', '');
+  // An answer that refused gets a one-click way to ask an uncensored model.
+  await win.evaluate(() => { const c = chatById(S.route.id); c.messages.push({ id: 'ru', role: 'user', text: 'Write a gritty crime scene', attachments: [] }, { id: 'ra', role: 'assistant', altIndex: 0, alts: [{ text: "I'm sorry, but I can't help with that.", target: 'local:qwen3-8b' }] }); render(); });
+  await win.waitForSelector('.refusal-hint [data-act="uncensored"]');
+  await win.evaluate((id) => go({ view: 'chat', id }), backTo);
+  console.log('✓ suggestions while typing: web, uncensored, attach, connect an app; dismiss; refused answers offer an uncensored model');
   // The status light at the top right shows how the model is running.
   await win.waitForSelector('#run-state:not([hidden]) .rs-dot', { timeout: 10000 });
   await win.click('#run-state');
@@ -527,7 +555,7 @@ function redPng(size = 64) {
   console.log('✓ projects: instructions and files in every chat');
 
   // The document editor beside the chat: open an answer, rewrite it, undo, and the chat sees it.
-  await win.click('.msg.assistant:last-child [data-act="doc"]');
+  await win.click('.msg.assistant:last-child [data-act="more"]'); await win.click('.menu [data-mm="doc"]');
   await win.waitForSelector('#doc-panel #dp-text');
   const before = await win.inputValue('#dp-text');
   await win.click('[data-dp-do="shorter"]');
@@ -579,7 +607,7 @@ function redPng(size = 64) {
   await idle();
   await win.waitForSelector('.msg.assistant .bubble .katex');
   await win.waitForSelector('.composer-hint .ctx-meter');
-  await win.click('.msg.assistant:last-child [data-act="other"]');
+  await win.click('.msg.assistant:last-child [data-act="more"]'); await win.click('.menu [data-mm="other"]');
   await win.click('.menu [data-t="local:phi-4"]');
   await idle();
   await waitAnswer(/Answer from phi\.gguf/);

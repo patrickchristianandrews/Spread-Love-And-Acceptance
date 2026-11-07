@@ -84,7 +84,7 @@ function paintRunState() {
   const st = runState();
   if (!st) { el.hidden = true; return; }
   el.hidden = false;
-  el.className = `run-state rs-${st.level}${st.pulse ? ' live' : ''}`;
+  el.className = `run-state rs-${st.level}${st.pulse ? ' live' : ''}${!st.pulse && st.level !== 'warn' ? ' calm' : ''}`;
   el.innerHTML = `<span class="rs-dot"></span><b>${esc(st.label)}</b>${st.value ? `<span class="rs-val">${esc(st.value)}</span>` : ''}`;
   el.title = st.detail || '';
   if (runOpen) paintRunPanel(st);

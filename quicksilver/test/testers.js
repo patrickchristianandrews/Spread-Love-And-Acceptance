@@ -162,7 +162,7 @@ async function session(p) {
         Object.assign(rec, await lastAnswer(), { input: step.ask, wallMs: Date.now() - t, team: step.kind });
         await shot(`${String(i + 1).padStart(2, '0')}-powermove`);
       } else if (step.action === 'doc') {
-        await win.click('.msg.assistant:last-child [data-act="doc"]');
+        await win.click('.msg.assistant:last-child [data-act="more"]'); await win.click('.menu [data-mm="doc"]');
         await win.waitForSelector('#dp-text');
         const before = await win.inputValue('#dp-text');
         const t = Date.now();

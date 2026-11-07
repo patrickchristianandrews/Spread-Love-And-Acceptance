@@ -52,6 +52,7 @@ views.chat = {
       <button class="to-latest" id="to-latest" hidden aria-label="Jump to the latest message" title="Jump to the latest message">${icon('chevron', 18)}</button>
       <div class="messages" id="messages"><div class="messages-inner">${chat.messages.length ? chat.messages.map((m, i) => messageHTML(chat, a, m, i)).join('') : welcomeHTML(a)}</div></div>
       <div class="composer" id="composer">
+        <div class="hint-row" id="hint-row"></div>
         <div class="composer-card">
           <div class="attach-row" id="att-row">${attachmentsHTML(drafts[chat.id] || [], true)}</div>
           <div id="skill-row">${skillChipHTML(chat)}</div>
@@ -73,7 +74,7 @@ views.chat = {
             <button class="send-btn ${pending?.chatId === chat.id ? 'stop' : ''}" id="send" title="${pending?.chatId === chat.id ? 'Stop' : 'Send (Enter)'}" aria-label="${pending?.chatId === chat.id ? 'Stop' : 'Send'}">${icon(pending?.chatId === chat.id ? 'stop' : 'send', 20)}</button>
           </div>
         </div>
-        <div class="composer-hint">${autoOn(chat, a) ? 'Automatic: the best model for each question, quick answers first' : `Runs on ${esc(targetLabel(target))}${simpleOn() ? '' : chatEtaHint(target, a)}`}${chatHasSettings(chat) ? ' · <a href="#" data-chat-settings>custom settings</a>' : ''}${chat.messages.length ? ` · ${contextMeterHTML(chat, a)}` : ' · Drop or paste photos, video, PDF, Word, Excel or PowerPoint'}</div>
+        <div class="composer-hint">${simpleOn() && chat.messages.length ? `${/ctx-meter (warm|hot)/.test(contextMeterHTML(chat, a)) ? contextMeterHTML(chat, a) : ''}${chatHasSettings(chat) ? `${/ctx-meter (warm|hot)/.test(contextMeterHTML(chat, a)) ? ' · ' : ''}<a href="#" data-chat-settings>custom settings</a>` : ''}` : `${autoOn(chat, a) ? 'Automatic: the best model for each question, quick answers first' : `Runs on ${esc(targetLabel(target))}${simpleOn() ? '' : chatEtaHint(target, a)}`}${chatHasSettings(chat) ? ' · <a href="#" data-chat-settings>custom settings</a>' : ''}${chat.messages.length ? ` · ${contextMeterHTML(chat, a)}` : ' · Drop or paste photos, video, PDF, Word, Excel or PowerPoint'}`}</div>
       </div>
       </div>${docPanelHTML(chat) || factPanelHTML(chat)}</div>
     </div>`;
@@ -165,22 +166,24 @@ function messageHTML(chat, a, m, i) {
   if (!streaming && !pending) {
     if (alt.text) tools.push(tb('copy', m.id, 'copy', 'Copy'));
     if (alt.text && alt.target) tools.push(`<button class="tool icon rate ${alt.rating === 'up' ? 'on' : ''}" data-act="up" data-id="${m.id}" title="Good answer" aria-label="Good answer" aria-pressed="${alt.rating === 'up'}">👍</button>`, `<button class="tool icon rate ${alt.rating === 'down' ? 'on' : ''}" data-act="down" data-id="${m.id}" title="Not good" aria-label="Not good" aria-pressed="${alt.rating === 'down'}">👎</button>`);
-    if (isLast) tools.push(tb('regen', m.id, 'refresh', 'Regenerate'), tb('other', m.id, 'layers', 'Try another model'));
-    if (alt.text) tools.push(`<button class="tool icon ${speakingId === m.id ? 'on' : ''}" data-act="speak" data-id="${m.id}" title="${speakingId === m.id ? 'Stop reading' : 'Listen'}" aria-label="Listen">${icon('volume', 16)}</button>`, tb('doc', m.id, 'doc', 'Edit as document'));
-    tools.push(tb('more', m.id, 'more', 'More: continue, double-check, save as, branch, delete'));
+    if (isLast) tools.push(tb('regen', m.id, 'refresh', 'Regenerate'));
+    if (speakingId === m.id) tools.push(`<button class="tool icon on" data-act="speak" data-id="${m.id}" title="Stop reading" aria-label="Stop reading">${icon('volume', 16)}</button>`);
+    tools.push(tb('more', m.id, 'more', 'More: another model, listen, edit as document, double-check, save as, branch, delete'));
   }
   const model = alt.target ? targetLabel(alt.target) : alt.imported ? '' : '';
   return `<div class="msg assistant" data-msg="${m.id}">
     <div class="av" aria-hidden="true">${esc(a.emoji)}</div>
     <div class="msg-main">
-    <div class="who-line"><b>${esc(a.name)}</b>${model ? `<span class="who-model"${alt.autoWhy ? ` title="${esc(alt.autoWhy)}"` : ''}>${alt.autoWhy ? '✨ ' : ''}${esc(model)}</span>` : ''}${alt.skillId && skillById(alt.skillId) ? `<span class="badge b-peach">⚡ ${esc(skillById(alt.skillId).name)}</span>` : ''}${alt.imported ? `<span class="badge">From ${esc(alt.imported)}</span>` : ''}${alt.fixed ? '<span class="badge b-mint" title="A second model double-checked the first answer and this one fixes what it found.">✓ Corrected</span>' : ''}${alt.autoWeb ? '<span class="badge b-sky" title="This question is about something current, so the web was searched automatically. Turn it off in Settings → General.">🌐 Checked the web</span>' : ''}${alt.webEmpty ? '<span class="badge b-lemon" title="Web search was on but found nothing for this question, so this answer is from the model\'s own knowledge.">Web: nothing found</span>' : ''}${etaNow}${alt.stats?.tps && !streaming ? `<span class="who-speed" title="${esc(statsTitle(alt))}">${Math.round(alt.stats.tps * 0.75)} words/s</span>` : ''}${m.t ? `<span class="who-time">${esc(msgTime(m))}</span>` : ''}</div>
+    <div class="who-line"><b>${esc(a.name)}</b>${model ? `<span class="who-model"${alt.autoWhy ? ` title="${esc(alt.autoWhy)}"` : ''}>${alt.autoWhy ? '✨ ' : ''}${esc(model)}</span>` : ''}${alt.skillId && skillById(alt.skillId) ? `<span class="badge b-peach">⚡ ${esc(skillById(alt.skillId).name)}</span>` : ''}${alt.imported ? `<span class="badge">From ${esc(alt.imported)}</span>` : ''}${alt.fixed ? '<span class="badge b-mint" title="A second model double-checked the first answer and this one fixes what it found.">✓ Corrected</span>' : ''}${alt.autoWeb && !alt.sources?.length ? '<span class="badge b-sky" title="This question is about something current, so the web was searched automatically. Turn it off in Settings → General.">🌐 Checked the web</span>' : ''}${alt.webEmpty ? '<span class="badge b-lemon" title="Web search was on but found nothing for this question, so this answer is from the model\'s own knowledge.">Web: nothing found</span>' : ''}${etaNow}${alt.stats?.tps && !streaming ? `<span class="who-speed" title="${esc(statsTitle(alt))}">${Math.round(alt.stats.tps * 0.75)} words/s</span>` : ''}${m.t ? `<span class="who-time">${esc(msgTime(m))}</span>` : ''}</div>
     ${metaRow(stepsHTML(alt, streaming) + toolsHTML(alt) + memoryChipHTML(alt) + (alt.reasoning ? `<details class="think chip-d"><summary>${streaming && !alt.text ? '<span class="pulse"></span>Thinking…' : '💭 Thought it through'}</summary><div>${esc(alt.reasoning)}</div></details>` : ''))}
     <div class="bubble md ${streaming ? 'streaming' : ''} ${alt.error ? 'error' : ''}">${body}</div>
     ${downloadHTML(m, alt, streaming)}
     ${appButtonsHTML(m, alt, streaming)}
     ${skillMediaHTML(m, alt, streaming)}
-    ${checkHTML(m, alt)}
-    ${alt.sources?.length ? `<div class="sources"><span class="src-label">Sources</span>${alt.sources.map((s, k) => `<${s.url ? `a href="${esc(s.url)}"` : 'span'} class="src-chip" title="${esc(s.title || s.url || '')}"><span class="cite">${k + 1}</span>${esc(s.url ? domainOf(s.url) : s.title)}</${s.url ? 'a' : 'span'}>`).join('')}</div>` : ''}
+    ${refusalHTML(chat, m, alt, streaming)}
+    ${checkHTML(m, alt) || alt.sources?.length ? `<div class="answer-foot">${checkHTML(m, alt)}` : ''}
+    ${alt.sources?.length ? `<div class="sources"><span class="src-label" title="${alt.autoWeb ? 'This question is about something current, so the web was searched automatically.' : 'Where this answer comes from'}">${alt.autoWeb ? '🌐 ' : ''}Sources</span>${alt.sources.map((s, k) => `<${s.url ? `a href="${esc(s.url)}"` : 'span'} class="src-chip" title="${esc(s.title || s.url || '')}"><span class="cite">${k + 1}</span>${esc(s.url ? domainOf(s.url) : s.title)}</${s.url ? 'a' : 'span'}>`).join('')}</div>` : ''}
+    ${checkHTML(m, alt) || alt.sources?.length ? '</div>' : ''}
     ${tools.length ? `<div class="msg-tools">${tools.join('')}</div>` : ''}
     ${isLast && !pending && alt.text && !alt.error && !isMakerSkill(alt) && !alt.imported ? followupsHTML(alt) : ''}
     </div>
@@ -196,7 +199,10 @@ function moreMenu(chat, m, anchor) {
   const menu = document.createElement('div');
   menu.className = 'menu';
   menu.innerHTML = [
+    i === chat.messages.length - 1 ? '<button data-mm="other">⇄ Try another model…</button>' : '',
     i === chat.messages.length - 1 && alt.text ? '<button data-mm="continue">Continue writing</button>' : '',
+    alt.text ? '<button data-mm="speak">🔊 Listen</button>' : '',
+    alt.text ? '<button data-mm="doc">📝 Edit as document</button>' : '',
     alt.text && !alt.check && !checkRunning(m) ? '<button data-mm="check">✓ Double-check this answer</button>' : '',
     alt.text ? '<button data-mm="saveas">⬇ Save as Word, PDF, PowerPoint…</button>' : '',
     '<button data-mm="branch">↳ Branch: new chat from here</button>',
@@ -272,9 +278,10 @@ function bindChat() {
     if (e.target.closest('[data-skill-clear]')) { chat.pendingSkill = null; save(); $('#skill-row').innerHTML = skillChipHTML(chat); input.placeholder = `Message ${a.name}… (type / for skills)`; }
     const use = e.target.closest('[data-skill-use]');
     if (use) pickSkill(use.dataset.skillUse);
-    if (e.target.closest('[data-skill-dismiss]')) { chat.suggested = null; chat.dismissed = [...(chat.dismissed || []), use?.dataset.skillUse]; $('#skill-row').innerHTML = skillChipHTML(chat); }
+    if (e.target.closest('[data-skill-dismiss]')) { chat.dismissed = [...(chat.dismissed || []), chat.suggested]; chat.suggested = null; save(); $('#skill-row').innerHTML = skillChipHTML(chat); }
   });
   $('#send').addEventListener('click', sendOrStop);
+  bindHints(chat, a);
   $$('[data-goto]').forEach((b) => b.addEventListener('click', () => go({ view: b.dataset.goto })));
   $('#pick-assistant').addEventListener('change', (e) => { chat.assistantId = e.target.value; S.data.prefs.lastAssistant = e.target.value; save(); render(); });
   $('#pick-model').addEventListener('change', (e) => {
@@ -697,6 +704,7 @@ function messageAction(chat, act, id, el) {
   else if (act === 'continue') { chat.messages.push({ id: uid(), role: 'user', text: 'Continue.', attachments: [] }); generate(chat, null); }
   else if (act === 'copy') { navigator.clipboard?.writeText(msgText(m)); toast('Copied.'); }
   else if (act === 'up' || act === 'down') rateAnswer(chat, m, act);
+  else if (act === 'uncensored') askUncensored(chat, m);
   else if (act === 'fix') { if (pending) { toast('Wait for the answer to finish first.'); return; } const alt = m.alts[m.altIndex]; if (alt.check?.text) generate(chat, m, alt.target, { fix: alt.check.text }); }
   else if (act === 'speak') speakMessage(m);
   else if (act === 'other') tryOtherMenu(chat, m, el);
