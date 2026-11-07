@@ -128,7 +128,9 @@ async function collect(gen) {
       assert.ok(r.text.length > 10, `${mode} answered`);
     }
     const easyPm = await collect(complete.run('stack:pm-panel', { messages: [{ role: 'user', content: 'Hi!' }], maxTokens: 100, contextSize: 4096, level: 'thorough' }));
-    assert.equal(uniq(easyPm.steps).length, 0, 'easy questions skip the power move: quick answers first');
+    assert.ok(uniq(easyPm.steps).length >= 3, 'a power move you chose always runs, even on an easy question');
+    const instantPm = await collect(complete.run('stack:pm-panel', { messages: [{ role: 'user', content: 'Hi!' }], maxTokens: 100, contextSize: 4096, level: 'quick' }));
+    assert.equal(uniq(instantPm.steps).length, 0, 'Instant effort still answers with one model');
     console.log('✓ power moves: majority vote, red team, plan then solve, expert panel');
     // Speed: a small same-family model drafts for a big one (speculative decoding) when installed.
     assert.equal(catalog.draftFor('qwen3-8b', []), null, 'nothing to draft with yet');

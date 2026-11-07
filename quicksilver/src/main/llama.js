@@ -343,7 +343,9 @@ async function* chat(model, opts) {
     for await (const ev of oai.streamChat({
       baseUrl: `http://127.0.0.1:${s.port}/v1`,
       // Quick effort turns off "thinking" on models that support the switch (e.g. Qwen3).
-      body: { messages, temperature, max_tokens: maxTokens, cache_prompt: true, ...(tools?.length ? { tools } : {}), ...(level === 'quick' ? { chat_template_kwargs: { enable_thinking: false }, reasoning_budget: 0 } : {}) },
+      // Repetition guards: small models can loop ("wait, let me recheck…") until the length limit;
+      // a light repeat penalty and the DRY sampler stop that without changing normal answers.
+      body: { messages, temperature, max_tokens: maxTokens, cache_prompt: true, repeat_penalty: 1.07, dry_multiplier: 0.8, dry_base: 1.75, dry_allowed_length: 3, ...(tools?.length ? { tools } : {}), ...(level === 'quick' ? { chat_template_kwargs: { enable_thinking: false }, reasoning_budget: 0 } : {}) },
       signal,
     })) {
       produced = true;

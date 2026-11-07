@@ -454,13 +454,13 @@ async function gatherSources(chat, a, query, force = {}) {
 }
 
 // How answers should look: easy to scan, warm and direct.
-const ANSWER_STYLE = 'How to write answers: write like a thoughtful expert talking to a smart friend. Start with the direct answer in the first sentence; no openers like "Great question!" and no restating the question. Prefer clear, well-built paragraphs with varied sentence length; use a numbered list only for real steps, bullets only for genuinely list-like items, and a Markdown table only for comparisons. Use a few ## headings only for long answers. Bold sparingly, for the one or two things that matter most. Avoid stock phrases ("delve", "it\'s important to note", "in today\'s world", "in conclusion", "I hope this helps") and emoji unless the user uses them. Code goes in fenced blocks with the language. Keep short answers short.';
+const ANSWER_STYLE = 'How to write answers: write like a thoughtful expert talking to a smart friend. Start with the direct answer in the first sentence; no openers like "Great question!" and no restating the question. Prefer clear, well-built paragraphs with varied sentence length; use a numbered list only for real steps, bullets only for genuinely list-like items, and a Markdown table only for comparisons. Use a few ## headings only for long answers. Bold sparingly, for the one or two things that matter most. Avoid stock phrases ("delve", "it\'s important to note", "in today\'s world", "in conclusion", "I hope this helps") and emoji unless the user uses them. Code goes in fenced blocks with the right language. Use the currency, units and spelling the user uses (for example £ and UK spelling if they write that way). Check any arithmetic before you state a result. Keep short answers short, and never repeat yourself.';
 
 function systemPrompt(a, sources, strict, chat, question = '', ctx = 16384, note = '') {
   const p = S.data.prefs;
   const parts = [a.instructions || 'You are a helpful assistant.'];
   parts.push(ANSWER_STYLE);
-  parts.push(`Today is ${new Date().toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}.`);
+  parts.push(`(Background only: today's date is ${new Date().toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}. Don't mention it unless the question needs it.)`);
   if (p.userName) parts.push(`The user's name is ${p.userName}.`);
   if (p.about) parts.push(`About the user: ${p.about}`);
   for (const extra of [chat?.system ? `Instructions for this chat (follow them):\n${chat.system}` : '', memoryPrompt(chat, question), projectPrompt(chat, question, ctx), docPrompt(chat), note]) if (extra) parts.push(extra);
@@ -477,7 +477,7 @@ async function generate(chat, rerollMsg, withTarget) {
   const a = assistantById(chat.assistantId);
   let autoWhy = '';
   let target = withTarget || resolveTarget(chat, a);
-  if (!withTarget && autoOn(chat, a)) {
+  if (!withTarget && autoOn(chat, a) && effortOf(chat, a) !== 'max') {
     const q = [...chat.messages.slice(0, rerollMsg ? chat.messages.indexOf(rerollMsg) : chat.messages.length)].reverse().find((m) => m.role === 'user');
     const pick = autoPick(chat, a, q?.text || '', (q?.attachments || []).some((x) => x.type === 'image' || x.type === 'video'));
     if (pick.target) { target = pick.target; autoWhy = pick.why || ''; }

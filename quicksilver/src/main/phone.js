@@ -46,7 +46,7 @@ function systemFor(assistantId, question) {
   const d = appData();
   const a = (d.assistants || []).find((x) => x.id === assistantId) || (d.assistants || [])[0] || {};
   const p = d.prefs || {};
-  const parts = [a.instructions || 'You are a helpful assistant.', STYLE, `Today is ${new Date().toDateString()}.`];
+  const parts = [a.instructions || 'You are a helpful assistant.', STYLE, `(Background only: today's date is ${new Date().toDateString()}. Don't mention it unless the question needs it.)`];
   if (p.userName) parts.push(`The user's name is ${p.userName}.`);
   if (p.about) parts.push(`About the user: ${p.about}`);
   const mem = p.memory === false ? [] : (d.memory || []);

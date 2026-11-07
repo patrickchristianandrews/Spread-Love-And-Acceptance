@@ -303,9 +303,11 @@ async function writeFollowups(chat, msg, alt) {
   };
   try {
     const target = alt.target && targetValid(alt.target) ? alt.target : promptHelper();
-    const out = await askAI(target, 'You suggest what this person will most likely want to ask next, after reading the answer below. Write exactly 3 short follow-up messages (each 3 to 9 words), in the person\'s own voice, as they would type them. Make each one specific to this answer: name the actual thing, step, option or number it mentions. Cover different directions: go deeper on the most useful point, apply it to their situation, and the natural next step. No generic phrases like "tell me more". Reply with ONLY a JSON array of 3 strings.', `Their question: ${(q?.text || '').slice(0, 800)}\n\nThe answer:\n${brief}`, { temperature: 0.3, maxTokens: 120, level: 'quick', contextSize: 8192 });
+    const out = await askAI(target, 'You suggest what this person will most likely ask the assistant next, after reading the answer below. Write exactly 3 short follow-up requests (each 3 to 9 words) that THIS PERSON would type to the assistant (not replies from someone else, not questions to the person).'
+      + ' Write them in the person\'s own voice. Make each one specific to this answer: name the actual thing, step, option or number it mentions. Cover different directions: go deeper on the most useful point, apply it to their situation, and the natural next step. No generic phrases like "tell me more". Reply with ONLY a JSON array of 3 strings.', `Their question: ${(q?.text || '').slice(0, 800)}\n\nThe answer:\n${brief}`, { temperature: 0.3, maxTokens: 120, level: 'quick', contextSize: 8192 });
     const arr = JSON.parse((out.match(/\[[\s\S]*\]/) || ['[]'])[0]);
-    const clean = (Array.isArray(arr) ? arr : []).map((x) => String(x).replace(/^\s*[\d.)\-•*]+\s*|^["“]|["”]$/g, '').trim()).filter((x) => x.length >= 4 && x.length <= 90);
+    const asText = (x) => (typeof x === 'string' ? x : x && typeof x === 'object' ? String(x.question || x.text || x.message || Object.values(x).find((v) => typeof v === 'string') || '') : String(x ?? ''));
+    const clean = (Array.isArray(arr) ? arr : []).map((x) => asText(x).replace(/^\s*[\d.)\-•*]+\s*|^["“]|["”]$/g, '').trim()).filter((x) => x.length >= 4 && x.length <= 90);
     alt.followups = [...new Set(clean)].slice(0, 3);
   } catch {}
   delete alt.fuPending;

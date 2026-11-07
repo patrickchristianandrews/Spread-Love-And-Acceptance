@@ -354,7 +354,7 @@ async function* stack(stackDef, req) {
   // Easy questions don't need the whole team: the strongest member on this PC answers on its
   // own (Max effort always uses everyone). Saves loading and running the other models.
   const localLead = [judge, ...drafters].find((t) => t && parse(t).kind !== 'api');
-  if (level === 'thorough' && !req.forceTeam && members.mode !== 'auto' && members.mode !== 'debate' && !hasImages(req.messages) && !req.toolList && autoLevel(req) === 'quick' && localLead) {
+  if (level === 'thorough' && !req.forceTeam && members.mode !== 'auto' && members.mode !== 'debate' && !POWER_MOVES.includes(members.mode) && !hasImages(req.messages) && !req.toolList && autoLevel(req) === 'quick' && localLead) {
     drafters = [localLead]; judge = null; level = 'quick';
     yield { type: 'status', text: `A quick one: ${label(localLead)} answers on its own…` };
   }

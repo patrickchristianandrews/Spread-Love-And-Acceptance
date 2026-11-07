@@ -93,7 +93,7 @@ async function session(p) {
     const m = [...(c?.messages || [])].reverse().find((x) => x.role === 'assistant');
     const a = m?.alts[m.altIndex] || {};
     return { text: a.text || a.error || '', error: a.error || '', model: a.target ? targetLabel(a.target) : '', autoWhy: a.autoWhy || '', ttftMs: a.ttft ?? null, totalMs: a.ms ?? null, tokens: a.stats?.tokens ?? null, tps: a.stats?.tps ?? null,
-      steps: (a.steps || []).map((s) => `${s.label} (${s.model}${s.ms ? `, ${Math.round(s.ms / 1000)} s` : ''})`), check: a.check ? { text: (a.check.text || '').slice(0, 1200), error: a.check.error || '' } : null, followups: a.followups || [], remembered: a.remembered || [] };
+      steps: (a.steps || []).map((s) => `${s.label} (${s.model}${s.ms ? `, ${Math.round(s.ms / 1000)} s` : ''})`), check: a.check ? { text: (a.check.text || '').slice(0, 1200), error: a.check.error || '' } : null, followups: a.followups || [], remembered: a.remembered || [], sources: (a.sources || []).map((s) => s.url || s.title).slice(0, 8) };
   });
   const ask = async (step, i) => {
     await win.click('[data-nav="newchat"]');

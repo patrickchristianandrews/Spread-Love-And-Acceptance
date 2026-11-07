@@ -47,11 +47,18 @@ function autoPick(chat, a, text, hasImage) {
   if (!cands.length) return { target: base };
   const score = (t) => T[t].scores?.[job] ?? T[t].scores?.general ?? 0;
   const secs = (t) => etaFor(t, words, { hard }) ?? 999;
-  const quick = cands.filter((t) => secs(t) <= budget);
-  const pool = quick.length ? quick : [...cands].sort((x, y) => secs(x) - secs(y)).slice(0, 1);
+  // A photo the usual choice can already see stays with it.
+  if (hasImage && T[base]?.vision) return { target: base };
+  // Never trade away much quality for speed: a far weaker model answers fast but badly (testers
+  // saw a tiny model go round in circles for minutes). The usual team already answers easy
+  // questions with one model, so speed alone is no reason to leave it.
+  const floor = score(base) - 1;
+  const good = cands.filter((t) => t === base || score(t) >= floor || (hasImage && !T[base]?.vision));
+  const pool = good.filter((t) => secs(t) <= budget);
+  if (!pool.length) return { target: base };
   const best = [...pool].sort((x, y) => score(y) - score(x) || secs(x) - secs(y))[0];
   // Keep the usual choice unless the pick is clearly better for this question, or much quicker.
-  if (pool.includes(base) && score(base) >= score(best) - 0.5) return { target: base };
+  if ((pool.includes(base) && score(base) >= score(best) - 0.5) || score(best) < score(base) - 1) return { target: base };
   const why = hasImage && !T[base]?.vision ? 'it can see the photo' : !pool.includes(base) ? 'it answers much sooner on this PC' : `it's stronger ${AUTO_WHY[job] || 'for this question'}`;
   return { target: best, why: `Picked automatically: ${why}.` };
 }
