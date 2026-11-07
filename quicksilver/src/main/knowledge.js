@@ -302,6 +302,21 @@ function bm25(query, chunkFilter, k) {
   return out;
 }
 
+// A fast local check: do your stored documents clearly answer this? (Most of the question's
+// words in one passage.) Used to bring in your Library without you switching it on.
+function peek(query, k = 4) {
+  load();
+  if (!db.chunks.length) return [];
+  const words = [...new Set(tokenize(query))].filter((w) => w.length >= 4);
+  if (words.length < 2) return [];
+  return bm25(query, () => true, k * 2).filter((r) => {
+    const t = tokenize(r.text);
+    // Same word or same stem ("trip" / "trips", "booking" / "booked").
+    const hit = words.filter((w) => { const stem = w.slice(0, Math.max(4, w.length - 3)); return t.some((x) => x === w || x.startsWith(stem)); }).length;
+    return hit >= 2 && hit / words.length >= 0.6;
+  }).slice(0, k);
+}
+
 // Searches the given knowledge bases (all when none given): stored data plus every live source.
 async function search(query, { k = 8, collectionIds, perSource = 3 } = {}) {
   load();
@@ -339,4 +354,4 @@ function addTexts(collectionId, items) {
   return { added: items.length, errors: [] };
 }
 
-module.exports = { addTexts, collections, createCollection, updateCollection, deleteCollection, docs, addPaths, addWebsite, removeDoc, search, LIVE, FETCHERS };
+module.exports = { peek, addTexts, collections, createCollection, updateCollection, deleteCollection, docs, addPaths, addWebsite, removeDoc, search, LIVE, FETCHERS };

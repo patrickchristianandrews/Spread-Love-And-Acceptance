@@ -174,7 +174,7 @@ function messageHTML(chat, a, m, i) {
   return `<div class="msg assistant" data-msg="${m.id}">
     <div class="av" aria-hidden="true">${esc(a.emoji)}</div>
     <div class="msg-main">
-    <div class="who-line"><b>${esc(a.name)}</b>${model ? `<span class="who-model"${alt.autoWhy ? ` title="${esc(alt.autoWhy)}"` : ''}>${alt.autoWhy ? '✨ ' : ''}${esc(model)}</span>` : ''}${alt.skillId && skillById(alt.skillId) ? `<span class="badge b-peach">⚡ ${esc(skillById(alt.skillId).name)}</span>` : ''}${alt.imported ? `<span class="badge">From ${esc(alt.imported)}</span>` : ''}${alt.fixed ? '<span class="badge b-mint" title="A check of the first answer found a mistake (a sum, a code error or a wrong fact); this one fixes it. The first answer is still there with ‹ ›.">✓ Corrected</span>' : ''}${alt.cached ? '<span class="badge b-lemon" title="You rated this answer before (or it passed the double-check), so it was shown instantly. Regenerate for a fresh one.">⚡ Instant</span>' : ''}${alt.unsure && alt.check?.running ? '<span class="badge" title="The model was unsure of a number in this answer, so a second model is checking it.">Checking a number…</span>' : ''}${alt.autoWeb && !alt.sources?.length ? '<span class="badge b-sky" title="This question is about something current, so the web was searched automatically. Turn it off in Settings → General.">🌐 Checked the web</span>' : ''}${alt.webEmpty ? '<span class="badge b-lemon" title="Web search was on but found nothing for this question, so this answer is from the model\'s own knowledge.">Web: nothing found</span>' : ''}${etaNow}${alt.stats?.tps && !streaming ? `<span class="who-speed" title="${esc(statsTitle(alt))}">${Math.round(alt.stats.tps * 0.75)} words/s</span>` : ''}${m.t ? `<span class="who-time">${esc(msgTime(m))}</span>` : ''}</div>
+    <div class="who-line"><b>${esc(a.name)}</b>${model ? `<span class="who-model"${alt.autoWhy ? ` title="${esc(alt.autoWhy)}"` : ''}>${alt.autoWhy ? '✨ ' : ''}${esc(model)}</span>` : ''}${alt.skillId && skillById(alt.skillId) ? `<span class="badge b-peach">⚡ ${esc(skillById(alt.skillId).name)}</span>` : ''}${alt.imported ? `<span class="badge">From ${esc(alt.imported)}</span>` : ''}${alt.fixed ? '<span class="badge b-mint" title="A check of the first answer found a mistake (a sum, a code error or a wrong fact); this one fixes it. The first answer is still there with ‹ ›.">✓ Corrected</span>' : ''}${alt.pre ? '<span class="badge b-lemon" title="This was the most likely next question, so it was answered while you read the last answer.">⚡ Ready before you asked</span>' : ''}${alt.cached ? '<span class="badge b-lemon" title="You rated this answer before (or it passed the double-check), so it was shown instantly. Regenerate for a fresh one.">⚡ Instant</span>' : ''}${alt.unsure && alt.check?.running ? '<span class="badge" title="The model was unsure of a number in this answer, so a second model is checking it.">Checking a number…</span>' : ''}${alt.autoWeb && !alt.sources?.length ? '<span class="badge b-sky" title="This question is about something current, so the web was searched automatically. Turn it off in Settings → General.">🌐 Checked the web</span>' : ''}${alt.webEmpty ? '<span class="badge b-lemon" title="Web search was on but found nothing for this question, so this answer is from the model\'s own knowledge.">Web: nothing found</span>' : ''}${etaNow}${alt.stats?.tps && !streaming ? `<span class="who-speed" title="${esc(statsTitle(alt))}">${Math.round(alt.stats.tps * 0.75)} words/s</span>` : ''}${m.t ? `<span class="who-time">${esc(msgTime(m))}</span>` : ''}</div>
     ${metaRow(stepsHTML(alt, streaming) + toolsHTML(alt) + memoryChipHTML(alt) + (alt.reasoning ? `<details class="think chip-d"><summary>${streaming && !alt.text ? '<span class="pulse"></span>Thinking…' : '💭 Thought it through'}</summary><div>${esc(alt.reasoning)}</div></details>` : ''))}
     <div class="bubble md ${streaming ? 'streaming' : ''} ${alt.error ? 'error' : ''}">${body}</div>
     ${downloadHTML(m, alt, streaming)}
@@ -182,7 +182,7 @@ function messageHTML(chat, a, m, i) {
     ${skillMediaHTML(m, alt, streaming)}
     ${refusalHTML(chat, m, alt, streaming)}
     ${checkHTML(m, alt) || alt.sources?.length ? `<div class="answer-foot">${checkHTML(m, alt)}` : ''}
-    ${alt.sources?.length ? `<div class="sources"><span class="src-label" title="${alt.autoWeb ? 'This question is about something current, so the web was searched automatically.' : 'Where this answer comes from'}">${alt.autoWeb ? '🌐 ' : ''}Sources</span>${alt.sources.map((s, k) => `<${s.url ? `a href="${esc(s.url)}"` : 'span'} class="src-chip" title="${esc(s.title || s.url || '')}"><span class="cite">${k + 1}</span>${esc(s.url ? domainOf(s.url) : s.title)}</${s.url ? 'a' : 'span'}>`).join('')}</div>` : ''}
+    ${alt.sources?.length ? `<div class="sources"><span class="src-label" title="${alt.autoWeb ? 'This question is about something current, so the web was searched automatically.' : 'Where this answer comes from'}">${alt.autoWeb ? '🌐 ' : ''}${alt.autoLib ? '📚 ' : ''}Sources</span>${alt.sources.map((s, k) => `<${s.url ? `a href="${esc(s.url)}"` : 'span'} class="src-chip" title="${esc(s.title || s.url || '')}"><span class="cite">${k + 1}</span>${esc(s.url ? domainOf(s.url) : s.title)}</${s.url ? 'a' : 'span'}>`).join('')}</div>` : ''}
     ${checkHTML(m, alt) || alt.sources?.length ? '</div>' : ''}
     ${tools.length ? `<div class="msg-tools">${tools.join('')}</div>` : ''}
     ${isLast && !pending && alt.text && !alt.error && !isMakerSkill(alt) && !alt.imported ? followupsHTML(alt) : ''}
@@ -467,6 +467,10 @@ async function gatherSources(chat, a, query, force = {}) {
       if (r.failures.length) toast(`Some sources didn't respond: ${r.failures.join('; ')}`, 6000);
     } catch (err) { toast(`Knowledge: ${err.message}`); }
   }
+  // Your own documents, when they clearly match the question (a fast local search).
+  if (!own && query && !out.length && !(force.knowledge || (chat.library ?? a.library)) && chat.library !== false && S.data.prefs.autoLibrary !== false) {
+    try { const r = await qs.call('kb:peek', query); if (r.length) { for (const x of r) out.push({ title: x.title, text: x.text, path: x.path, url: x.url }); out.autoLib = true; } } catch {}
+  }
   const web = webWanted(chat, a, query, force);
   if (web) {
     const before = out.length;
@@ -543,6 +547,18 @@ async function generate(chat, rerollMsg, withTarget, opts = {}) {
     if (pick.target) { target = pick.target; autoWhy = pick.why || ''; }
   }
   if (!target) { toast('Get a model first: open the Setup Advisor.'); return; }
+  // The follow-up you clicked was answered while you read: show it at once.
+  if (!rerollMsg && !withTarget && !opts.fix) {
+    const pre = takePreanswer(chat);
+    if (pre) {
+      const m2 = { id: uid(), t: now(), role: 'assistant', altIndex: 0, alts: [{ text: pre.text, target: pre.target, pre: true, ms: 0 }] };
+      chat.messages.push(m2);
+      chat.updated = now(); save(); render();
+      const alt2 = m2.alts[0];
+      (async () => { if (await autoChecks(chat, m2, alt2).catch(() => false)) return; if (S.data.prefs.smartFollowups !== false) { alt2.fuPending = true; render(); writeFollowups(chat, m2, alt2); } })();
+      return;
+    }
+  }
   // Asked before and rated 👍 (or passed the double-check): answer instantly.
   if (!rerollMsg && !withTarget && !opts.fix && chat.messages.at(-1)?.role === 'user') {
     const hit = cachedAnswer(chat, chat.messages.at(-1));
@@ -589,6 +605,7 @@ async function generate(chat, rerollMsg, withTarget, opts = {}) {
   alt.sources = sources.map(({ title, url, path }) => ({ title, url, path }));
   if (sources.webEmpty) alt.webEmpty = true;
   if (sources.autoWeb && !sources.webEmpty) alt.autoWeb = true;
+  if (sources.autoLib) alt.autoLib = true;
   pending.sources = sources;
   // Building a site or app: a whole page is long, and later messages edit it, so allow a long
   // answer and enough memory to keep the current version in view.
@@ -638,7 +655,7 @@ async function generate(chat, rerollMsg, withTarget, opts = {}) {
     contextSize: ctx,
     // Writing a picture prompt or a beat pattern is quick work: one model, no debate.
     level: skill && HIDE_BLOCK.has(skill.output) ? 'quick' : effortOf(chat, a),
-    tools: toolsOn(chat, a),
+    tools: toolsOn(chat, a) || autoTools(chat, a, lastUser?.text),
     gpu: p.gpu,
     effort: p.effort,
   });
@@ -979,7 +996,8 @@ qs.onChat(({ requestId, ev }) => {
     ch.running = false;
     checks.delete(requestId);
     save();
-    if (!ch.error && !checkCounts(ch.text).bad && /accurate/i.test(parseCheck(ch.text).verdict) && !/mostly/i.test(parseCheck(ch.text).verdict)) rememberAnswer(chat, msg, c.alt);
+    if (!ch.error && !checkCounts(ch.text).bad && /accurate/i.test(parseCheck(ch.text).verdict) && !/mostly/i.test(parseCheck(ch.text).verdict)) { rememberAnswer(chat, msg, c.alt); learnSignal(jobOfMsg(chat, msg), c.alt.target, 'up', 0.5); }
+    if (!ch.error && checkCounts(ch.text).bad) learnSignal(jobOfMsg(chat, msg), c.alt.target, 'down', 1);
     // Self-correction: a definite error in the last answer gets fixed straight away, once.
     if (!ch.error && checkCounts(ch.text).bad && S.data.prefs.autoFix !== false && !c.alt.fixed && !msg.autoFixed && !pending && chat.messages[chat.messages.length - 1] === msg && msg.alts[msg.altIndex] === c.alt) {
       msg.autoFixed = true;

@@ -370,6 +370,7 @@ handle('kb:add', async (collectionId, kind) => {
 handle('kb:website', (collectionId, url, maxPages) => knowledge.addWebsite(collectionId, url, { maxPages, onProgress: (p) => emit('library:progress', p) }));
 handle('kb:search', async (q, k, ids) => { const r = await knowledge.search(q, { k, collectionIds: ids }); return { results: [...r], failures: r.failures || [] }; });
 handle('web:search', (q) => websearch.search(q));
+handle('kb:peek', (q) => knowledge.peek(q));
 
 // ---------- studio (photo & video) ----------
 handle('media:gallery', () => media.gallery().map((g) => ({ ...g, url: `qsmedia://g/${g.id}` })));

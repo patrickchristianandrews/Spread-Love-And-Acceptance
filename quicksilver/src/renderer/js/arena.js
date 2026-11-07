@@ -122,6 +122,8 @@ function arenaVote(v) {
     if (v === 'A') { A.w++; B.l++; } else if (v === 'B') { B.w++; A.l++; } else { A.t++; B.t++; }
   } else { A.l++; B.l++; A.elo -= 6; B.elo -= 6; }
   A.games++; B.games++;
+  if (v === 'A' || v === 'B') { learnSignal('general', v === 'A' ? a : b, 'up', 1); learnSignal('general', v === 'A' ? b : a, 'down', 0.5); }
+  else if (v === 'bad') { learnSignal('general', a, 'down', 0.5); learnSignal('general', b, 'down', 0.5); }
   A.label = targetLabel(a); B.label = targetLabel(b);
   d.games.push({ a, b, winner: v, prompt: r.prompt.slice(0, 200), t: now(), ms: r.sides.map((s) => s.ms) });
   if (d.games.length > 2000) d.games.splice(0, d.games.length - 2000);

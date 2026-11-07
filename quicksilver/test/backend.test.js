@@ -217,6 +217,9 @@ async function collect(gen) {
   const medHits = await knowledge.search('aspirin dose milligrams', { collectionIds: [med.id] });
   assert.equal(medHits[0].title, 'Aspirin dosing');
   assert.equal(knowledge.collections().find((c) => c.id === med.id).docs, 2);
+  // A quick local check brings your documents in when they clearly answer the question.
+  assert.ok(knowledge.peek('What is the mileage rate for a business trip?').length >= 1, 'documents that clearly match are found');
+  assert.equal(knowledge.peek('Write me a poem about autumn leaves').length, 0, 'unrelated questions leave the Library alone');
   console.log('✓ knowledge bases: files, website crawl, isolation');
 
   // Studio: image generation, AI edit, video generation and video editing.

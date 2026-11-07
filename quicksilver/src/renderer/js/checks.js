@@ -139,6 +139,7 @@ async function autoChecks(chat, msg, alt) {
   if (!findings.length || pending || chat.messages.at(-1) !== msg || msg.alts[msg.altIndex] !== alt) return false;
   msg.autoFixed = true;
   alt.auditFindings = findings;
+  learnSignal(jobOfMsg(chat, msg), alt.target, 'down', 1);
   toast(findings[0].startsWith('"') ? 'A sum in the answer was wrong, so it\'s being corrected.' : 'The code had an error, so it\'s being fixed.');
   generate(chat, msg, alt.target, { fix: findings.map((f) => `- ❌ ${f}`).join('\n') });
   return true;
@@ -187,4 +188,56 @@ function prefillChat(chat, a, text) {
   if (prefilled.get(chat.id) === sig) return;
   prefilled.set(chat.id, sig);
   qs.call('models:prefill', target, messages, { contextSize: ctx, gpu: S.data.prefs.gpu }).catch(() => prefilled.delete(chat.id));
+}
+
+// ---------- 7. the likely next question, answered while you read ----------
+// After an answer, the top follow-up suggestion is answered in the background (local models only,
+// and only when it needs no web or Library search). Click it and the answer is already there.
+// Anything you send stops this work at once.
+function preanswer(chat, msg, alt) {
+  const p = S.data.prefs;
+  const a = assistantById(chat.assistantId);
+  const q = alt.followups?.[0];
+  if (p.preanswer === false || !q || pending || alt.pre || chat.messages.at(-1) !== msg || FRESH_Q.test(q) || effortOf(chat, a) === 'max') return;
+  let target = resolveTarget(chat, a);
+  if (autoOn(chat, a)) target = autoPick(chat, a, q, false).target || target;
+  if (!target || target.startsWith('api:') || webWanted(chat, a, q) || (chat.library ?? a.library) || toolsOn(chat, a)) return;
+  const { messages, ctx, strict } = chatHistory(chat, a, chat.messages.length);
+  const facts = exactFacts(q);
+  messages.push({ role: 'user', content: withContext(q, turnContext(chat, [], strict, q, ctx, facts.length ? `Exact results worked out by the app for this question (use these numbers as they are):\n${facts.map((f) => `- ${f}`).join('\n')}` : '', '')) });
+  const requestId = uid();
+  alt.pre = { q, target, text: '', done: false };
+  bgJobs.add(requestId);
+  oneShots.set(requestId, {
+    text: '',
+    resolve: (t) => { bgJobs.delete(requestId); if (alt.pre) { alt.pre.text = t || ''; alt.pre.done = Boolean(t); } },
+    reject: () => { bgJobs.delete(requestId); delete alt.pre; },
+  });
+  qs.sendChat({ requestId, target, messages, temperature: Number(chat.temperature ?? a.temperature ?? p.temperature), maxTokens: Number(chat.maxTokens || a.maxTokens || p.maxTokens) || 2048, contextSize: ctx, level: effortOf(chat, a), gpu: p.gpu, effort: p.effort });
+}
+// Used by generate(): the question you sent is the one answered in advance.
+function takePreanswer(chat) {
+  const q = chat.messages.at(-1);
+  const prev = chat.messages.at(-2);
+  const pa = prev?.role === 'assistant' && prev.alts[prev.altIndex];
+  if (!pa?.pre?.done || !pa.pre.text || q?.role !== 'user' || (q.attachments || []).length || pa.pre.q.trim() !== String(q.text || '').trim()) return null;
+  const pre = pa.pre;
+  delete pa.pre;
+  return pre;
+}
+
+// ---------- 8. the model is ready before the first question ----------
+// At start-up, the usual model loads in the background and reads the assistant's instructions.
+function preloadDefault() {
+  if (S.data.prefs.preload === false || !S.data?.assistants?.length) return;
+  const a = assistantById(S.data.prefs.lastAssistant) || S.data.assistants[0];
+  const target = a.target || S.data.prefs.defaultTarget;
+  if (!target || target.startsWith('api:') || !targetValid(target)) return;
+  qs.call('models:prefill', target, [{ role: 'system', content: systemPrompt(a, false, {}) }], { contextSize: Number(a.contextSize || S.data.prefs.contextSize) || 16384, gpu: S.data.prefs.gpu }).catch(() => {});
+}
+
+// Which kind of question an answer was for (for learning which model suits what).
+function jobOfMsg(chat, msg) {
+  const q = chat.messages[chat.messages.indexOf(msg) - 1];
+  return jobOfQuestion(q?.text || '', assistantById(chat.assistantId));
 }

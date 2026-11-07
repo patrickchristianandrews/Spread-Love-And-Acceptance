@@ -277,6 +277,7 @@ async function ensure(model, { contextSize = 8192, gpu = 'auto', onStatus } = {}
     // Speculative decoding with a small same-family model (see catalog.draftFor).
     if (useDraft) { const da = await draftArgs(engine.bin, model.draft, layers > 0); if (da) args.push(...da); else useDraft = false; }
     if (model.mmproj) args.push('--mmproj', model.mmproj);
+    if (layers >= 999 && hw.vramGB - sizeGB >= 2 && (await engineHelp(engine.bin)).includes('--ubatch-size')) args.push('-b', '2048', '-ub', '1024');
     const proc = spawn(engine.bin, args, { windowsHide: true, stdio: ['ignore', 'pipe', 'pipe'] });
     const blocks = info.layers || 32;
     const vramGB = layers >= 999 ? sizeGB : layers ? (sizeGB * Math.min(layers, blocks)) / blocks : 0;

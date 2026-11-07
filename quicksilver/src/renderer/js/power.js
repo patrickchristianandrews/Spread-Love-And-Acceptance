@@ -313,4 +313,5 @@ async function writeFollowups(chat, msg, alt) {
   delete alt.fuPending;
   save();
   paint();
+  preanswer(chat, msg, alt);
 }

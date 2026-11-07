@@ -9,6 +9,11 @@
 - **Your next question goes first.** Suggestions, chat titles and memory notes running in the background stop the moment you ask something.
 - **Big "mixture of experts" models on small graphics cards** (like Qwen3 30B-A3B) keep their shared parts on the card and only the extra experts in normal memory: often 2–3× faster.
 - **GIF maker.** A new team and skill (type /gif): describe it and get a looping GIF made on your PC. Any video you make in chat also has a 🌀 GIF button.
+- **Uses everything you've set up, by itself.** Mention an app you've connected (GitHub, Slack, your calendar…) and it's used for that message. If your Library clearly has the answer, it's searched and cited (📚). Your 👍/👎, double-check results, answers that needed correcting and your blind votes in Compare models all teach Automatic which model suits each kind of question.
+- **The next answer is ready before you ask.** While you read an answer, the top suggested follow-up is answered in the background; click it and it appears at once. Typing anything else stops that work immediately.
+- **Ready at start-up.** Your usual model loads and reads its instructions as soon as Quicksilver opens, so the first answer starts sooner.
+- **Faster on graphics cards** with room to spare: long chats and sources are read in bigger batches.
+- **Your cloud AI for hard questions** (optional, in Settings → General, since it uses your API credits). Without it on, a hard question suggests it once with one click.
 - **Exact numbers first.** Sums, percentages, unit conversions and "days until…" in your question are worked out by the app and handed to the model, so even small models get the numbers right.
 - **Every sum is audited.** Each "a × b = c" in an answer is recomputed; a wrong one is corrected straight away (no second model needed). JavaScript and JSON in answers are compiled (never run) and web pages are opened in a hidden, sealed-off window: errors are fixed automatically, once.
 - **Checks where they matter.** When the model itself is unsure of a number it wrote, a second model double-checks the answer, even if Double-check is off.

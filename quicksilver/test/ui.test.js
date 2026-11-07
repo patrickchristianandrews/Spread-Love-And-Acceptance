@@ -286,7 +286,33 @@ function redPng(size = 64) {
   await win.fill('#input', 'And a limerick?');
   await win.waitForFunction(() => prefilled.has(S.route.id), null, { timeout: 10000 });
   await win.fill('#input', '');
+  // Everything available is used: learning from every signal, connected apps, the cloud option.
+  assert.ok(await win.evaluate(() => {
+    learnSignal('coding', 'local:phi-4', 'up', 3);
+    const up = learnBonus('coding', 'local:phi-4') > 0;
+    hintConnectors = [{ id: 'github', name: 'GitHub', enabled: true, hasToken: true }];
+    const tools = autoTools({}, {}, 'List my open pull requests on GitHub') && !autoTools({ tools: false }, {}, 'List my GitHub pull requests') && !autoTools({}, {}, 'Write a poem');
+    S.targets.push({ target: 'api:test:cloud-model', label: 'Test Cloud' });
+    S.data.prefs.cloudHard = true;
+    const cloud = autoPick({}, assistantById('as-general'), 'Prove that the square root of 2 is irrational, step by step', false).target === 'api:test:cloud-model';
+    S.data.prefs.cloudHard = false;
+    S.targets = S.targets.filter((t) => t.target !== 'api:test:cloud-model');
+    hintConnectors = null;
+    return up && tools && cloud;
+  }), 'signals, connected apps and the cloud option are used');
+  // The most likely next question is answered while you read; clicking it shows it at once.
+  await win.click('[data-nav="newchat"]');
+  await win.evaluate(() => { const c = chatById(S.route.id); c.library = false; c.web = false; c.tools = false; save(); render(); });
+  await win.fill('#input', 'Tell me about sourdough starters');
+  await win.keyboard.press('Enter');
+  await win.waitForSelector('.msg.assistant');
+  await idle();
+  await win.waitForFunction(() => chatById(S.route.id).messages.at(-1).alts.at(-1).pre?.done, null, { timeout: 60000 });
+  await win.click('.followups .fu >> nth=0');
+  await win.waitForSelector('.msg.assistant .badge:has-text("Ready before you asked")', { timeout: 10000 });
+  await idle();
   await win.evaluate((id) => go({ view: 'chat', id }), backTo2);
+  console.log('✓ leverage: signals teach Automatic, connected apps used, cloud for hard questions (opt-in), next question answered in advance');
   console.log('✓ free checks: exact facts first, maths audit + code/page checks fix answers, unsure numbers double-checked, instant repeats, reading ahead');
   // The status light at the top right shows how the model is running.
   await win.waitForSelector('#run-state:not([hidden]) .rs-dot', { timeout: 10000 });

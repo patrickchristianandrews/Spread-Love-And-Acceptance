@@ -68,7 +68,7 @@ function composerHints(chat, a, text, attachments = []) {
     if (!c) continue;
     const ready = c.enabled && (c.noToken || c.hasToken);
     if (!ready) add({ id: `app-${id}`, icon: c.icon || '🔌', label: `Connect ${c.name}`, why: `So it can read and act on your ${c.name} directly.`, act: { connect: id } });
-    else if (!(chat.tools ?? a.tools)) add({ id: `app-${id}`, icon: c.icon || '🔌', label: `Let it use ${c.name}`, why: `${c.name} is connected; turn on connected apps for this chat.`, act: { tools: true } });
+    else if (!(chat.tools ?? a.tools) && (S.data.prefs.autoTools === false || chat.tools === false)) add({ id: `app-${id}`, icon: c.icon || '🔌', label: `Let it use ${c.name}`, why: `${c.name} is connected; turn on connected apps for this chat.`, act: { tools: true } });
     break;
   }
   // A cloud AI it mentions.
@@ -93,6 +93,8 @@ function composerHints(chat, a, text, attachments = []) {
   // A hard question on a single model, or on Instant.
   if (looksHard(t)) {
     if (effortOf(chat, a) === 'quick') add({ id: 'effort', icon: '🧠', label: 'Think it through (Auto)', why: 'Instant uses one model with no checking; this question benefits from more care.', act: { effort: 'thorough' } });
+    const cloud = S.targets.find((x) => x.target.startsWith('api:') && targetValid(x.target));
+    if (cloud && !S.data.prefs.cloudHard && !S.config?.offline && !target.startsWith('api:')) add({ id: 'cloud', icon: '☁️', label: `Use ${cloud.label} for this one`, why: 'You have a cloud AI connected; it is stronger than local models on hard questions (uses your credits).', act: { use: cloud.target } });
     else if (!auto && !target.startsWith('stack:')) {
       const team = S.stacks.find((s) => s.id === 'quicksilver') || S.stacks[0];
       if (team && targetValid(`stack:${team.id}`)) add({ id: 'team', icon: '🧩', label: `Ask the ${team.name} team`, why: 'Two or more models compare notes on hard questions, which catches more mistakes.', act: { use: `stack:${team.id}` } });
@@ -120,8 +122,14 @@ function applyHint(chat, h) {
   if (x.getOpen) { go({ view: 'stacks' }); runAdvisor('open'); }
 }
 
+// Connected apps are used for a message that mentions them, without switching anything on.
+function autoTools(chat, a, text) {
+  if (chat.tools === false || S.data.prefs.autoTools === false || !text || !hintConnectors) return false;
+  return APP_Q.some(([re, id]) => re.test(text) && hintConnectors.some((c) => c.id === id && c.enabled && (c.noToken || c.hasToken)));
+}
+
 function bindHints(chat, a) {
-  if (!hintConnectors) loadHintConnectors();
+  loadHintConnectors();
   const row = $('#hint-row');
   const input = $('#input');
   if (!row || !input) return;

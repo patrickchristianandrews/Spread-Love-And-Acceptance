@@ -34,15 +34,29 @@ function jobOfQuestion(text, a) {
 }
 const AUTO_WHY = { coding: 'for code', reasoning: 'for working things out', writing: 'for writing', research: 'for research', office: 'for office work', general: '' };
 
-// Your 👍 / 👎 move a model up to two points for that kind of question; a couple of votes nudge,
-// many votes decide.
+// What Automatic learns from: your 👍 / 👎, double-check results, answers that needed a
+// correction, and your blind votes in Compare models. Each moves a model up to two points for
+// that kind of question; a few signals nudge, many decide.
 function learnBonus(job, t) {
   const r = S.data.learn?.[job]?.[t];
-  return r ? ((r.up - r.down) / (r.up + r.down + 2)) * 2 : 0;
+  const g = job !== 'general' ? S.data.learn?.general?.[t] : null;
+  const own = r ? ((r.up - r.down) / (r.up + r.down + 2)) * 2 : 0;
+  const all = g ? ((g.up - g.down) / (g.up + g.down + 4)) * 0.5 : 0;
+  return own + all;
+}
+function learnSignal(job, target, kind, w = 1) {
+  if (!target || !job) return;
+  const rec = (((S.data.learn ||= {})[job] ||= {})[target] ||= { up: 0, down: 0 });
+  rec[kind] = (rec[kind] || 0) + w;
 }
 
 function autoPick(chat, a, text, hasImage) {
   const base = resolveTarget(chat, a);
+  // Your own cloud AI for the hardest questions, if you switched that on (it uses your credits).
+  if (S.data.prefs.cloudHard && !S.config?.offline && !hasImage && looksHard(text || '')) {
+    const cloud = S.targets.find((t) => t.target.startsWith('api:') && targetValid(t.target));
+    if (cloud) return { target: cloud.target, why: 'Picked automatically: your cloud AI, for a hard question.' };
+  }
   const T = S.speed?.targets;
   if (!T || !base) return { target: base };
   const job = jobOfQuestion(text || '', a);
