@@ -94,6 +94,7 @@ async function readGguf(file) {
       name: meta['general.name'],
       architecture: arch,
       layers: meta[`${arch}.block_count`],
+      experts: Number(meta[`${arch}.expert_count`]) || 0,
       contextLength: meta[`${arch}.context_length`],
       isProjector: arch === 'clip' || Boolean(meta['clip.has_vision_encoder']),
       size,
@@ -183,6 +184,11 @@ async function draftArgs(bin, draftFile, onGpu) {
   return args;
 }
 
+// Whether this engine build can keep a mixture-of-experts model's experts in normal memory.
+const moeCache = new Map();
+function cpuMoe(bin) { return moeCache.get(bin); }
+async function checkCpuMoe(bin) { if (!moeCache.has(bin)) moeCache.set(bin, (await engineHelp(bin)).includes('--n-cpu-moe')); return moeCache.get(bin); }
+
 // Models that failed to start with an 8-bit KV cache (they get a normal cache from then on),
 // and models that failed to start with a draft model.
 const kvPlain = new Set();
@@ -249,6 +255,7 @@ async function ensure(model, { contextSize = 8192, gpu = 'auto', onStatus } = {}
   // noticeable change in answers. Engines that can't do it get a normal cache instead.
   let kvq = !kvPlain.has(model.file);
   let useDraft = Boolean(model.draft && fs.existsSync(model.draft));
+  if (info.experts > 1 && ngl > 0 && ngl < 999) await checkCpuMoe(engine.bin);
   const start = async (layers) => {
     const port = await freePort();
     // --cache-reuse lets follow-up messages and stack steps reuse text the model already read.
@@ -257,6 +264,15 @@ async function ensure(model, { contextSize = 8192, gpu = 'auto', onStatus } = {}
     // driver can otherwise still fail the load even with no layers on it).
     if (!layers) args.push('--device', 'none');
     if (kvq) args.push('--cache-type-k', 'q8_0', '--cache-type-v', 'q8_0');
+    // Mixture-of-experts models (like Qwen3 30B-A3B) that don't fit on the graphics card: keep
+    // every layer's shared part on the card and only the experts that don't fit in memory, instead
+    // of moving whole layers. Each word only uses a few experts, so this is often 2-3x faster.
+    if (layers > 0 && layers < 999 && info.experts > 1 && cpuMoe(engine.bin)) {
+      const blocks = info.layers || 32;
+      const onCard = Math.max(0, Math.floor((layers - 0.12 * blocks) / 0.88));
+      args[args.indexOf('-ngl') + 1] = '999';
+      args.push('--n-cpu-moe', String(Math.max(1, blocks - onCard)));
+    }
     // Speculative decoding with a small same-family model (see catalog.draftFor).
     if (useDraft) { const da = await draftArgs(engine.bin, model.draft, layers > 0); if (da) args.push(...da); else useDraft = false; }
     if (model.mmproj) args.push('--mmproj', model.mmproj);

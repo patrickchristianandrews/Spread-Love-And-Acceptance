@@ -83,7 +83,7 @@ async function learnFrom(chat, userText) {
   memBusy = true;
   try {
     const known = memList().slice(-30).map((m) => `- ${m.text}`).join('\n') || '(nothing yet)';
-    const out = await askAI(helper, `You keep a short memory about a user, for future conversations. From the user's message, list only LASTING facts worth remembering: their name, job, studies, location, family, pets, ongoing projects, tools and software they use, and how they like answers. Skip one-off requests, questions, opinions about this conversation, and secrets (passwords, card or account numbers). Don't repeat what is already known. Write each fact as a short sentence starting with "The user". Reply with ONLY a JSON array of strings, or [] if there is nothing lasting.\n\nAlready known:\n${known}`, userText.slice(0, 2000), { temperature: 0.1, maxTokens: 160, level: 'quick' });
+    const out = await askAI(helper, `You keep a short memory about a user, for future conversations. From the user's message, list only LASTING facts worth remembering: their name, job, studies, location, family, pets, ongoing projects, tools and software they use, and how they like answers. Skip one-off requests, questions, opinions about this conversation, and secrets (passwords, card or account numbers). Don't repeat what is already known. Write each fact as a short sentence starting with "The user". Reply with ONLY a JSON array of strings, or [] if there is nothing lasting.\n\nAlready known:\n${known}`, userText.slice(0, 2000), { temperature: 0.1, maxTokens: 160, level: 'quick', background: true });
     const arr = JSON.parse((out.match(/\[[\s\S]*\]/) || ['[]'])[0]);
     const saved = [];
     for (const f of Array.isArray(arr) ? arr.slice(0, 4) : []) {

@@ -114,7 +114,7 @@ function redPng(size = 64) {
   console.log('✓ stacks: how it works, three strengths with accuracy, cloud boost with savings');
   // Stacks for specific work: 27 ready-made teams; set one up and chat with it.
   await win.waitForSelector('.rx-card:has-text("Isolated medical journal")');
-  assert.equal(await win.locator('.rx-card').count(), 30);
+  assert.equal(await win.locator('.rx-card').count(), 31);
   await win.click('.rx-card:has-text("Invoices, receipt reading") [data-rx]');
   await win.waitForFunction(() => S.data.assistants.some((a) => a.id === 'as-rx-bookkeeping'), null, { timeout: 30000 });
   // Song creation: 13 teams, each tuned to this PC (no model that won't run here; a speed helper
@@ -135,7 +135,8 @@ function redPng(size = 64) {
   await win.click('[data-nav="stacks"]');
   await win.waitForSelector('[data-pm-chat="redteam"]');
   console.log('✓ power moves: built from your own models in one click');
-  console.log('✓ stacks for specific work: 30 teams incl. 3 song stacks (any genre), tuned to this PC, set up as a stack and an assistant');
+  assert.ok(await win.evaluate(() => STACK_RECIPES.some((r) => r.id === 'gif-maker' && r.skill === 'make-gif') && skillById('make-gif')?.media?.gif));
+  console.log(`✓ stacks for specific work: ${await win.evaluate(() => STACK_RECIPES.length)} teams incl. 3 song stacks and a GIF maker, tuned to this PC, set up as a stack and an assistant`);
 
   // Chat with the powerhouse stack, a spreadsheet attached and fact check on.
   await win.click('[data-nav="newchat"]');
@@ -311,6 +312,16 @@ function redPng(size = 64) {
   await win.waitForSelector('.skill-media-item img', { timeout: 60000 });
   assert.ok(await win.evaluate(() => [...document.querySelectorAll('.skill-media .muted')].some((e) => /SDXL Turbo/.test(e.textContent))), 'made with the installed image model');
   await shot(win, '10b-skill-picture');
+  // GIF maker: the video model animates it, then it's saved as a looping GIF.
+  await win.click('[data-nav="newchat"]');
+  await win.fill('#input', '/gif');
+  await win.waitForSelector('#skill-pop .skill-opt.hot:has-text("Make a GIF")');
+  await win.keyboard.press('Enter');
+  await win.fill('#input', 'A cat giving a thumbs up');
+  await win.keyboard.press('Enter');
+  await win.waitForFunction(() => { const it = [...document.querySelectorAll('.msg.assistant')].pop()?.querySelector('.skill-media-item img'); return it && /qsmedia:/.test(it.src); }, null, { timeout: 120000 });
+  assert.ok(await win.evaluate(() => { const c = chatById(S.route.id); const alt = c.messages.at(-1).alts.at(-1); return alt.media.items.every((x) => x.gif && x.kind === 'image') && S.gallery?.some?.((g) => /\.gif$/i.test(g.file || '')) !== false; }), 'the clip became a GIF');
+  await shot(win, '10c-gif-maker');
   // A tool skill on an attached photo: no text model, straight to the result.
   await win.click('[data-nav="newchat"]');
   await win.setInputFiles('#file-in', { name: 'red.png', mimeType: 'image/png', buffer: redPng() });
@@ -324,7 +335,7 @@ function redPng(size = 64) {
   assert.ok(/Done/.test(await win.evaluate(() => [...document.querySelectorAll('.msg.assistant .bubble')].pop().textContent)));
   // Apps open in their own window: the page is found in the answer.
   assert.ok(await win.evaluate(() => appHtmlOf('Here:\n```html\n<!doctype html><title>T</title>\n```') === '<!doctype html><title>T</title>\n'));
-  console.log('✓ skills: 9 areas, picture from chat, photo tool on an attachment, apps');
+  console.log('✓ skills: 9 areas, picture from chat, GIF maker, photo tool on an attachment, apps');
 
   // Integrations: add a real MCP server, then a chat uses its tools with an approval prompt.
   await win.click('[data-nav="integrations"]');

@@ -470,21 +470,39 @@ async function gatherSources(chat, a, query, force = {}) {
 // How answers should look: easy to scan, warm and direct.
 const ANSWER_STYLE = 'How to write answers: write like a thoughtful expert talking to a smart friend. Start with the direct answer in the first sentence; no openers like "Great question!" and no restating the question. Prefer clear, well-built paragraphs with varied sentence length; use a numbered list only for real steps, bullets only for genuinely list-like items, and a Markdown table only for comparisons. Use a few ## headings only for long answers. Bold sparingly, for the one or two things that matter most. Avoid stock phrases ("delve", "it\'s important to note", "in today\'s world", "in conclusion", "I hope this helps") and emoji unless the user uses them. Code goes in fenced blocks with the right language. Use the currency, units and spelling the user uses (for example £ and UK spelling if they write that way). Check any arithmetic before you state a result. Keep short answers short, and never repeat yourself.';
 
-function systemPrompt(a, sources, strict, chat, question = '', ctx = 16384, note = '') {
+// Speed: the system prompt stays exactly the same for the whole chat, so the model keeps the
+// conversation it has already read in memory and only reads the new message. Everything that
+// changes from question to question (memories picked for it, project files, the open document,
+// web or library sources, notes) goes in a <context> block at the top of the latest message.
+// Changing the system prompt each time made the model re-read the whole chat on every question,
+// which on a PC without a graphics card can take longer than writing the answer.
+function systemPrompt(a, strict, chat) {
   const p = S.data.prefs;
   const parts = [a.instructions || 'You are a helpful assistant.'];
   parts.push(ANSWER_STYLE);
   parts.push(`(Background only: today's date is ${new Date().toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}. Don't mention it unless the question needs it.)`);
   if (p.userName) parts.push(`The user's name is ${p.userName}.`);
   if (p.about) parts.push(`About the user: ${p.about}`);
-  for (const extra of [chat?.system ? `Instructions for this chat (follow them):\n${chat.system}` : '', memoryPrompt(chat, question), projectPrompt(chat, question, ctx), docPrompt(chat), note]) if (extra) parts.push(extra);
-  if (strict) parts.push('IMPORTANT: Answer ONLY from the reference material provided below. Do not use general knowledge or memory. Cite every factual statement with its source number. If the material does not contain the answer, reply that it was not found in the knowledge base, and say what kind of source would answer it.');
+  if (chat?.system) parts.push(`Instructions for this chat (follow them):\n${chat.system}`);
+  parts.push('The user\'s latest message may start with a <context> block added by the app (things you remember about the user, project files, the open document, reference material, notes for this answer). Use it as it says; the user didn\'t type it, so don\'t quote it back or mention it.');
+  if (strict) parts.push('IMPORTANT: Answer ONLY from the reference material in the <context> block. Do not use general knowledge or memory. Cite every factual statement with its source number. If the material does not contain the answer, reply that it was not found in the knowledge base, and say what kind of source would answer it.');
+  return parts.join('\n\n');
+}
+function turnContext(chat, sources, strict, question, ctx, note, extra) {
+  const parts = [memoryPrompt(chat, question), projectPrompt(chat, question, ctx), docPrompt(chat), note, extra].filter(Boolean);
   if (strict && !sources.length) parts.push('No reference material matched this question.');
   if (sources.length) {
-    parts.push('Reference material for this answer follows. Use it when relevant and cite it inline with its number, like [1] or [2]. If it does not answer the question, say so and answer from general knowledge, making clear which is which.');
+    parts.push('Reference material for this answer. Use it when relevant and cite it inline with its number, like [1] or [2]. If it does not answer the question, say so and answer from general knowledge, making clear which is which.');
     sources.forEach((s, k) => parts.push(`<source number="${k + 1}" title="${s.title}"${s.url ? ` url="${s.url}"` : ''}>\n${(s.text || '').slice(0, 5000)}\n</source>`));
   }
   return parts.join('\n\n');
+}
+function withContext(content, text) {
+  if (!text) return content;
+  const head = `<context>\n${text}\n</context>\n\n`;
+  if (typeof content === 'string') return head + content;
+  const i = content.findIndex((x) => x.type === 'text');
+  return i < 0 ? [{ type: 'text', text: head }, ...content] : content.map((x, k) => (k === i ? { ...x, text: head + x.text } : x));
 }
 
 async function generate(chat, rerollMsg, withTarget, opts = {}) {
@@ -525,6 +543,10 @@ async function generate(chat, rerollMsg, withTarget, opts = {}) {
   if (skill && DIRECT_OUTPUTS.has(skill.output)) { runDirectSkill(chat, msg, alt, skill, lastUser); return; }
   const force = skill?.tools || {};
   if ((chat.library ?? a.library) || webWanted(chat, a, lastUser?.text || '', force) || force.knowledge) { alt.status = 'Searching sources…'; paintStreaming(chat, msg); }
+  // Load the model at the same time as the search runs, instead of one after the other.
+  if (!target.startsWith('api:')) qs.call('models:warm', target, { contextSize: Number(a.contextSize || p.contextSize) || 16384, gpu: p.gpu }).catch(() => {});
+  // Small background jobs (suggestions, titles, memory notes) step aside for the new question.
+  stopBackgroundJobs();
   const sources = await gatherSources(chat, a, lastUser?.text || skill?.name || '', force);
   alt.sources = sources.map(({ title, url, path }) => ({ title, url, path }));
   if (sources.webEmpty) alt.webEmpty = true;
@@ -545,12 +567,14 @@ async function generate(chat, rerollMsg, withTarget, opts = {}) {
   // Web search was on but found nothing: say so, and don't pretend to have checked.
   if (opts.fix) memNote = `${memNote ? `${memNote}\n` : ''}A careful second model checked your previous answer to this question and found these problems:\n<check>\n${String(opts.fix).slice(0, 6000)}\n</check>\nWrite a corrected, complete answer that fixes every real problem it found (if a finding is itself wrong, keep what was right). Don't mention the check; just give the better answer.`;
   if (sources.webEmpty) memNote = `${memNote ? `${memNote}\n` : ''}${sources.autoWeb ? 'A web search ran for this question' : 'The user turned on web search'}, but the search found nothing for this question. Say in one short sentence at the start that you couldn't check the web this time, then answer from what you know. Don't claim anything is the "latest" or give publication dates or links you haven't seen.`;
-  const messages = [{ role: 'system', content: systemPrompt(a, sources, Boolean(a.strict && (chat.library ?? a.library)), chat, lastUser?.text || '', ctx, memNote) + (skill ? `\n\n${skillPrompt(skill)}` : '') }];
+  const strict = Boolean(a.strict && (chat.library ?? a.library));
+  const messages = [{ role: 'system', content: systemPrompt(a, strict, chat) }];
   for (const m of chat.messages.slice(0, upTo)) {
     if (m.role === 'user') messages.push({ role: 'user', content: userContent(m, docBudget) });
     else { const t = msgText(m).trim(); if (t) messages.push({ role: 'assistant', content: t }); }
   }
   if (messages.at(-1).role !== 'user') messages.push({ role: 'user', content: 'Please continue.' });
+  messages[messages.length - 1] = { ...messages.at(-1), content: withContext(messages.at(-1).content, turnContext(chat, sources, strict, lastUser?.text || '', ctx, memNote, skill ? skillPrompt(skill) : '')) };
   // Long chats: keep the instructions and the latest messages within the model's memory, so a
   // long conversation keeps working instead of failing once it outgrows it.
   {
@@ -558,8 +582,11 @@ async function generate(chat, rerollMsg, withTarget, opts = {}) {
     const budget = ctx * 3.2 * 0.75;
     let total = messages.reduce((n, x) => n + size(x), 0);
     let dropped = 0;
-    while (total > budget && messages.length > 3) { total -= size(messages[1]); messages.splice(1, 1); dropped++; }
-    if (dropped) messages[0] = { ...messages[0], content: `${messages[0].content}\n\n(Note: the ${dropped} oldest messages of this long conversation were left out to fit; ask the user if something from earlier is needed.)` };
+    // Old messages go in blocks of ten (down to 60% full), not one per question, so the start of
+    // the chat stays the same for several questions and the model doesn't re-read it each time.
+    if (total > budget) while ((total > budget * 0.6 || dropped % 10) && messages.length > 3) { total -= size(messages[1]); messages.splice(1, 1); dropped++; }
+    if (messages[1]?.role === 'assistant') { messages.splice(1, 1); dropped++; }
+    if (dropped) messages[0] = { ...messages[0], content: `${messages[0].content}\n\n(Note: the oldest messages of this long conversation were left out to fit; ask the user if something from earlier is needed.)` };
   }
   // Photo edits: a model that can't see still writes the edit; the photo goes to the image model.
   if (skill && ['edit', 'animate'].includes(skill.output) && !S.speed?.targets?.[target]?.vision) {

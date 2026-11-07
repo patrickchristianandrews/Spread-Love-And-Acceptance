@@ -162,7 +162,7 @@ function skillPrompt(s) {
 function skillPickerHTML(filter = '') {
   const f = filter.toLowerCase();
   // Best matches first: the name starts with it, then a word in the name does, then the description.
-  const score = (s) => { const n = s.name.toLowerCase(); return !f ? 0 : n.startsWith(f) ? 4 : n.split(/\W+/).some((w) => w.startsWith(f)) ? 3 : n.includes(f) || s.id.includes(f) ? 2 : s.description.toLowerCase().includes(f) ? 1 : -1; };
+  const score = (s) => { const n = s.name.toLowerCase(); return !f ? 0 : n === f || n.split(/\W+/).includes(f) ? 5 : n.startsWith(f) ? 4 : n.split(/\W+/).some((w) => w.startsWith(f)) ? 3 : n.includes(f) || s.id.includes(f) ? 2 : s.description.toLowerCase().includes(f) ? 1 : -1; };
   const list = allSkills().map((s, i) => ({ s, k: score(s), i })).filter((x) => x.k >= 0).sort((a, b) => b.k - a.k || a.i - b.i).map((x) => x.s);
   return list.length ? list.slice(0, 40).map((s, i) => `<button class="skill-opt ${i === 0 ? 'hot' : ''}" data-pick-skill="${esc(s.id)}"><span>${esc(s.icon)}</span><span class="grow"><b>${esc(s.name)}</b><span class="small muted"> · ${esc(s.description)}</span></span><span class="badge ${OUTPUT_BADGE[s.output]}">${esc(OUTPUT_LABEL[s.output])}</span></button>`).join('') : '<div class="small muted" style="padding:10px">No skills match.</div>';
 }

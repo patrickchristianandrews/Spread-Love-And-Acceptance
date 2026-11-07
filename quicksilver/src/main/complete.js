@@ -47,9 +47,12 @@ function saveKbModel(m) {
 function deleteKbModel(id) { store.writeJSON(KBM(), kbModels().filter((m) => m.id !== id)); }
 
 const STRICT = 'IMPORTANT: Answer ONLY from the reference material provided below. Do not use general knowledge or memory. Cite every factual statement with its source number. If the material does not contain the answer, say it was not found in the knowledge base, and what kind of source would answer it.';
+// The person's own words in the latest message (without the app's <context> block, so a long
+// list of sources doesn't make an easy question look hard).
 const lastUserText = (messages) => {
   const m = [...messages].reverse().find((x) => x.role === 'user');
-  return !m ? '' : typeof m.content === 'string' ? m.content : (m.content || []).filter((p) => p.type === 'text').map((p) => p.text).join('\n');
+  const t = !m ? '' : typeof m.content === 'string' ? m.content : (m.content || []).filter((p) => p.type === 'text').map((p) => p.text).join('\n');
+  return t.replace(/^<context>[\s\S]*?<\/context>\s*/, '');
 };
 
 async function* knowledgeModel(km, req) {
@@ -70,10 +73,15 @@ async function* knowledgeModel(km, req) {
   }
   const messages = [...req.messages];
   const add = parts.join('\n\n');
-  if (add) {
-    if (messages[0]?.role === 'system') messages[0] = { ...messages[0], content: `${messages[0].content}\n\n${add}` };
-    else messages.unshift({ role: 'system', content: add });
-  }
+  // Like the chat: what changes per question goes with the latest message, so the system prompt
+  // (and the conversation the model has already read) stays the same.
+  const li = messages.map((x) => x.role).lastIndexOf('user');
+  if (add && li >= 0) {
+    const put = (t) => (t.startsWith('<context>\n') ? `<context>\n${add}\n\n${t.slice(10)}` : `<context>\n${add}\n</context>\n\n${t}`);
+    const c = messages[li].content;
+    const k = Array.isArray(c) ? c.findIndex((x) => x.type === 'text') : -1;
+    messages[li] = { ...messages[li], content: typeof c === 'string' ? put(c) : k >= 0 ? c.map((x, j) => (j === k ? { ...x, text: put(x.text) } : x)) : [{ type: 'text', text: put('') }, ...c] };
+  } else if (add) messages.unshift({ role: 'system', content: add });
   yield { type: 'status', text: '' };
   const next = { ...req, messages };
   if (parse(km.base).kind === 'stack' || next.toolList) yield* run(km.base, next); else yield* single(km.base, next);

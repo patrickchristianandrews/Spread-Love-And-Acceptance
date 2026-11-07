@@ -91,15 +91,41 @@ async function search(query, { pages = 3 } = {}) {
   } else {
     throw new Error('Web search is off. Turn it on in Settings → Web search.');
   }
-  // Read the top pages for real content, not just snippets.
+  // Read the top pages for real content, not just snippets. Pages that are slow to open are
+  // skipped after a few seconds (their snippet is used instead), and only the passages that match
+  // the question are kept: the model reads about a third as much, so the answer starts sooner.
+  results = results.slice(0, 6);
   await Promise.all(results.slice(0, pages).map(async (r) => {
     try {
-      const res = await fetch(r.url, { headers: { 'User-Agent': UA }, signal: AbortSignal.timeout(10000), redirect: 'follow' });
+      const res = await fetch(r.url, { headers: { 'User-Agent': UA }, signal: AbortSignal.timeout(6000), redirect: 'follow' });
       if (!res.ok || !/text\/html|text\/plain/.test(res.headers.get('content-type') || '')) return;
-      r.text = stripHtml(await res.text()).slice(0, 6000);
+      r.text = bestPassages(stripHtml(await res.text()), query, 1800);
     } catch {}
   }));
   return results;
 }
 
-module.exports = { search, duckduckgo, mojeek, wikipedia };
+// The parts of a page that best match the question, in page order, within a length budget.
+function bestPassages(text, query, budget = 1800) {
+  const t = String(text || '').replace(/\s+/g, ' ').trim();
+  if (t.length <= budget) return t;
+  const words = [...new Set(String(query).toLowerCase().match(/[a-z0-9]{3,}/g) || [])].filter((w) => !STOP.has(w));
+  const chunks = t.match(/[^.!?]+[.!?]+["')\]]?\s*|[^.!?]+$/g) || [t];
+  // Group sentences into passages of ~300 characters, then score each by the question's words.
+  const passages = [];
+  let cur = '';
+  for (const c of chunks) { cur += c; if (cur.length >= 300) { passages.push(cur); cur = ''; } }
+  if (cur) passages.push(cur);
+  const scored = passages.map((p, i) => {
+    const low = p.toLowerCase();
+    const hits = words.reduce((n, w) => n + (low.includes(w) ? 1 : 0), 0);
+    return { i, p, s: hits + (/\d/.test(p) ? 0.3 : 0) - i * 0.002 };
+  });
+  const keep = [];
+  let used = 0;
+  for (const x of [...scored].sort((a, b) => b.s - a.s)) { if (used + x.p.length > budget) continue; keep.push(x); used += x.p.length; if (used > budget * 0.9) break; }
+  return keep.sort((a, b) => a.i - b.i).map((x) => x.p.trim()).join(' … ');
+}
+const STOP = new Set('the and for are but not you all any can had her was one our out day get has him his how man new now old see two way who boy did its let put say she too use what when where which with this that from they will would there their about into than then them these some your have more also just like been were what does'.split(' '));
+
+module.exports = { search, duckduckgo, mojeek, wikipedia, bestPassages };

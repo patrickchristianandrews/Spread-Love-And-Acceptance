@@ -524,7 +524,14 @@ async function collect(gen) {
     assert.equal(r[0].snippet, 'Normal blood pressure'); assert.match(r[0].text, /circulating blood/);
     global.fetch = real;
     store.saveConfig({ web: { provider: 'none' } });
-    console.log('✓ free web search: DuckDuckGo, Mojeek fallback, pages read');
+    // Only the passages that match the question are kept from a long page.
+    const page = `${'Unrelated filler about the weather and sports. '.repeat(120)}A normal resting blood pressure is below 120/80 mmHg. ${'More filler text about cooking. '.repeat(120)}`;
+    const kept = websearch.bestPassages(page, 'what is a normal blood pressure', 1800);
+    assert.ok(kept.length <= 1800 && kept.length < page.length / 3, 'much shorter');
+    assert.match(kept, /120\/80/, 'keeps the passage that answers it');
+    // The app's <context> block (sources, memories) doesn't make an easy question look hard.
+    assert.equal(complete.autoLevel({ messages: [{ role: 'user', content: `<context>\n${'Reference text. '.repeat(300)}\n</context>\n\nHi there!` }] }), 'quick');
+    console.log('✓ free web search: DuckDuckGo, Mojeek, Wikipedia fallbacks, pages read, only matching passages kept');
   }
 
   // A cut-off download is caught before loading, with a clear "Repair" message (not an engine log line).

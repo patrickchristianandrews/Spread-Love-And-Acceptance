@@ -71,6 +71,24 @@ async function runSkillMedia(chat, msg, alt, skill) {
     imageId = (await call('media:saveDataUrl', att.dataUrl, { title: att.name || 'Photo' })).id;
   }
   await makeMedia(chat, msg, alt, pick, { imageId, count: Math.min(4, Math.max(1, Number(spec.count) || skill.media?.count || 1)) }, repaint);
+  // GIF maker: the clip becomes a looping GIF (the video stays one click away under Trim & edit).
+  if (skill.media?.gif) { alt.media.gif = true; await gifify(alt.media, repaint, 0); }
+}
+async function gifify(md, repaint, from) {
+  if (!md.items.slice(from).some((x) => x.kind === 'video')) return;
+  md.status = 'Turning it into a GIF…'; repaint();
+  try {
+    md.items = [...md.items.slice(0, from), ...(await Promise.all(md.items.slice(from).map((x) => (x.kind === 'video' ? toGif(x) : x))))];
+  } catch (err) { md.error = `Couldn't make the GIF: ${err.message}`; }
+  delete md.status;
+  await refreshGallery().catch(() => {});
+  repaint();
+}
+
+// A video as a looping GIF: 12 frames a second, 480 px wide, up to 6 seconds, shared palette.
+async function toGif(it) {
+  const g = await call('media:editVideo', it.id, { format: 'gif', end: 6 }, uid());
+  return { id: g.id, url: g.url, kind: 'image', gif: true, video: it.id };
 }
 
 async function makeMedia(chat, msg, alt, pick, { imageId, count = 1 }, repaint) {
@@ -111,13 +129,13 @@ async function makeMedia(chat, msg, alt, pick, { imageId, count = 1 }, repaint) 
 function skillMediaHTML(m, alt, streaming) {
   const md = alt.media;
   if (!md || streaming) return '';
-  const word = MEDIA_WORD[md.kind];
+  const word = md.gif ? 'GIF' : MEDIA_WORD[md.kind];
   if (md.need) {
     const [cat, text] = MEDIA_NEED[md.need];
     return `<div class="notice info media-need"><b>One more thing:</b> ${esc(text)}<div class="row" style="margin-top:8px"><button class="btn primary small" data-act="m-get" data-cat="${cat}" data-id="${m.id}">Get a model</button><button class="btn small" data-act="m-copy" data-id="${m.id}">Copy the prompt</button></div></div>`;
   }
   const items = md.items.map((it, k) => `<figure class="skill-media-item ${it.kind === 'audio' ? 'audio' : ''}">${it.kind === 'audio' ? `<audio src="${esc(it.url)}" controls preload="metadata"></audio>` : it.kind === 'video' ? `<video src="${esc(it.url)}" controls loop playsinline></video>` : `<img src="${esc(it.url)}" alt="${esc(md.prompt.slice(0, 120))}" data-act="m-open" data-k="${k}" data-id="${m.id}">`}
-    <figcaption class="row"><button class="tool" data-act="m-save" data-k="${k}" data-id="${m.id}">${icon('download', 14)} Save</button>${it.kind === 'image' ? `<button class="tool" data-act="m-edit" data-k="${k}" data-id="${m.id}">🪄 Edit</button>` : it.kind === 'video' ? `<button class="tool" data-act="m-vedit" data-k="${k}" data-id="${m.id}">✂️ Trim & edit</button>` : ''}</figcaption></figure>`).join('');
+    <figcaption class="row"><button class="tool" data-act="m-save" data-k="${k}" data-id="${m.id}">${icon('download', 14)} Save</button>${it.kind === 'image' && !it.gif ? `<button class="tool" data-act="m-edit" data-k="${k}" data-id="${m.id}">🪄 Edit</button>` : it.kind === 'video' ? `<button class="tool" data-act="m-vedit" data-k="${k}" data-id="${m.id}">✂️ Trim & edit</button><button class="tool" data-act="m-gif" data-k="${k}" data-id="${m.id}" title="Save this clip as a looping GIF">🌀 GIF</button>` : ''}${it.gif && it.video ? `<button class="tool" data-act="m-vedit" data-k="${k}" data-id="${m.id}" title="Trim, crop or change the speed, then save as GIF again">✂️ Trim & edit</button>` : ''}</figcaption></figure>`).join('');
   return `<div class="skill-media">
     ${md.jobs.map((id) => jobBox(id)).join('')}
     ${md.status ? `<div class="progress-box"><span class="jt">${esc(md.status)}</span></div>` : ''}
@@ -136,7 +154,12 @@ async function skillMediaAction(chat, m, act, el) {
   if (act === 'm-save' && it) { if (await call('media:export', it.id)) toast('Saved.'); return; }
   if (act === 'm-open' && it) { openModal(`<img src="${esc(it.url)}" alt="" style="width:100%;border-radius:12px"><div class="modal-actions"><button class="btn" data-close>Close</button></div>`, { wide: true }); return; }
   if (act === 'm-edit' && it) { await refreshGallery(); await loadEditor(it.id); studioTab = 'edit'; go({ view: 'studio' }); return; }
-  if (act === 'm-vedit' && it) { vid = { id: it.id }; studioTab = 'vedit'; go({ view: 'studio' }); return; }
+  if (act === 'm-vedit' && it) { vid = { id: it.video || it.id }; studioTab = 'vedit'; go({ view: 'studio' }); return; }
+  if (act === 'm-gif' && it) {
+    toast('Making a GIF…');
+    try { md.items.push(await toGif(it)); await refreshGallery().catch(() => {}); save(); paintStreaming(chat, m); toast('GIF ready: it\'s in the chat and in Create.'); } catch (err) { toast(`Couldn't make the GIF: ${err.message}`, 6000); }
+    return;
+  }
   if (act === 'm-again') {
     const pick = pickMediaModel(md.kind);
     if (!pick) { md.need = md.kind; save(); render(); return; }
@@ -148,7 +171,9 @@ async function skillMediaAction(chat, m, act, el) {
       const att = (user?.attachments || []).find((x) => x.type === 'image' && x.dataUrl);
       if (att) imageId = (await call('media:saveDataUrl', att.dataUrl, { title: att.name || 'Photo' })).id;
     }
-    makeMedia(chat, m, alt, pick, { imageId, count: 1 }, repaint);
+    const before = md.items.length;
+    await makeMedia(chat, m, alt, pick, { imageId, count: 1 }, repaint);
+    if (md.gif) await gifify(md, repaint, before);
   }
 }
 

@@ -190,9 +190,15 @@ qs.onChat(({ requestId, ev }) => {
   }
 });
 // level: 'quick' keeps a team to one model (small jobs like titles and memory notes).
-function askAI(target, system, user, { temperature = 0.7, maxTokens = 400, level, onText, requestId = uid(), contextSize = 4096 } = {}) {
+// Background jobs (follow-up suggestions, chat titles, memory notes) share the model with your
+// next question; they're stopped the moment you ask it, so it starts right away.
+const bgJobs = new Set();
+function stopBackgroundJobs() { for (const id of bgJobs) qs.abortChat(id); bgJobs.clear(); }
+function askAI(target, system, user, { temperature = 0.7, maxTokens = 400, level, onText, requestId = uid(), contextSize = 4096, background = false } = {}) {
+  if (background) bgJobs.add(requestId);
   return new Promise((resolve, reject) => {
-    oneShots.set(requestId, { text: '', resolve, reject, onText });
+    const done = (fn) => (x) => { bgJobs.delete(requestId); fn(x); };
+    oneShots.set(requestId, { text: '', resolve: done(resolve), reject: done(reject), onText });
     qs.sendChat({ requestId, target, messages: [{ role: 'system', content: system }, { role: 'user', content: user }], temperature, maxTokens, contextSize, gpu: S.data.prefs.gpu, effort: 'quick', ...(level ? { level } : {}) });
   });
 }
