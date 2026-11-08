@@ -1206,3 +1206,4 @@ code.sel { user-select: all; background: var(--soft); padding: 1px 6px; border-r
 .sess-badge.sess-safe { border-color: var(--accent-line); background: var(--accent-tint); color: var(--accent); }
 .sess-badge.sess-warn { border-color: #e0a83a; color: #b07400; }
 :root[data-theme="dark"] .sess-badge.sess-warn { color: #f0c060; }
+.human-pitch { margin: 10px auto 0; max-width: 560px; padding: 9px 14px; border-radius: 12px; background: var(--accent-tint); border: 1px solid var(--accent-line); font-size: .92rem; line-height: 1.45; }

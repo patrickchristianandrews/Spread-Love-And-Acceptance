@@ -564,7 +564,7 @@ const ANSWER_STYLE = 'How to write answers: write like a thoughtful expert talki
 function systemPrompt(a, strict, chat) {
   const p = S.data.prefs;
   const parts = [a.instructions || 'You are a helpful assistant.'];
-  parts.push(ANSWER_STYLE);
+  parts.push(humanOn() ? HUMAN_STYLE : ANSWER_STYLE);
   parts.push(`(Background only: today's date is ${new Date().toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}. Don't mention it unless the question needs it.)`);
   if (p.userName) parts.push(`The user's name is ${p.userName}.`);
   if (p.about) parts.push(`About the user: ${p.about}`);
@@ -816,6 +816,7 @@ qs.onChat(({ requestId, ev }) => {
         msg.alts.splice(msg.altIndex, 1);
         if (!msg.alts.length) chat.messages = chat.messages.filter((m) => m !== msg); else msg.altIndex = msg.alts.length - 1;
       }
+      if (ev.type === 'done' && alt.text && !isMakerSkill(alt)) alt.text = humanize(alt.text); // no chatbot leftovers
       delete alt.status;
       if (alt.t0) { alt.ms = Date.now() - alt.t0; delete alt.t0; }
       const sourcesFull = pending.sources;

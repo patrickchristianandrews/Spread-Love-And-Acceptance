@@ -599,6 +599,11 @@ function redPng(size = 64) {
   await win.selectOption('#pick-length', 'long');
   assert.match(await win.evaluate(() => turnContext(chatById(S.route.id), [], false, 'hi', null, '', '')), /Answer length: LONG/);
   await win.selectOption('#pick-length', 'auto');
+  // Writes like a person: chatbot openers, sign-offs and em dashes are tidied; code is left alone.
+  const hum = await win.evaluate(() => [humanize('Certainly! Paris is the capital — and the largest city.\n\n```js\nconst a = 1; // x — y\n```\n\nI hope this helps! Let me know if you have any other questions.'), systemPrompt(assistantById('as-general'), false, chatById(S.route.id))]);
+  assert.equal(hum[0], 'Paris is the capital, and the largest city.\n\n```js\nconst a = 1; // x — y\n```');
+  assert.match(hum[1], /like a real person/); assert.match(hum[1], /Don't use em dashes/);
+  console.log('✓ human writing: conversational style asked for, chatbot leftovers tidied, code untouched');
   assert.doesNotMatch(await win.evaluate(() => turnContext(chatById(S.route.id), [], false, 'hi', null, '', '')), /Answer length/);
   await shot(win, '16-session-badge');
   console.log('✓ privacy modes: fully private, private online (Proton VPN free or your account), online; chats say Private / Protected session');

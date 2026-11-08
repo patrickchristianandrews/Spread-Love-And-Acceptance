@@ -184,7 +184,7 @@ function builtinModelHTML() {
   const qst = (S.stacks || []).find((x) => x.id === 'quicksilver');
   const team = qst ? [...new Set([qst.members.judge, ...(qst.members.drafters || []), qst.members.vision].filter(Boolean))].map((t) => S.installed.find((m) => `local:${m.id}` === t)?.name).filter(Boolean) : [];
   const can = [
-    ['💬', 'Chats naturally', 'quick, friendly answers in a second or two'],
+    ['💬', 'Sounds human', 'talks like a person and writes like one: no chatbot phrases or AI-looking formatting'],
     ['🧠', 'Reasons step by step', 'works hard questions out step by step first; see it under "Thought it through"'],
     ['✓', 'Double-checks', 'a second model checks answers claim by claim when you turn on Double-check'],
     ['✍️', 'Writes', 'emails, essays, summaries, rewrites in any tone'],

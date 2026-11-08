@@ -114,6 +114,7 @@ function teamStats(members) {
   const sees = all.some((t) => info(t).vision);
   const photo = sees && !info(lead).vision ? 250 / w(vision || all.find((t) => info(t).vision)) : 0;
   const caps = [
+    ['Sounds like a person, not a chatbot', humanOn()],
     ['Sees photos & screenshots', sees],
     ['Step-by-step reasoning', stars('reasoning') >= 4],
     ['Writes & fixes code', stars('coding') >= 3.5],

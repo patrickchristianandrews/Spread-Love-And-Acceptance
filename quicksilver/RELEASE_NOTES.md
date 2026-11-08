@@ -2,6 +2,12 @@
 
 A big release focused on accuracy and speed, plus exam coaches, a GIF maker and a vibe-hacking team. In short: answers now check and correct their own maths, code and facts; the app does more for you automatically (web, your apps, your documents); and it's noticeably quicker through reading ahead, instant repeats and better use of your hardware.
 
+- **Sounds like a person, not a chatbot.** Quicksilver talks the way people do and writes clean, natural text you can send as your own. No "Certainly!" or "Great question!", no "I hope this helps" sign-offs, no em dashes everywhere, and headings or bullet points only when they genuinely help. Anything that slips through is tidied before you see it (code is never touched). Prefer the structured AI style? Switch it off in Settings → General.
+- **Private, protected or online: your choice, shown as a picture.** Fully private (offline), Private online through Proton VPN (free plan, or sign in to your Proton account for more), or Online. Every chat says whether its session is private or protected, including cloud AI sent through the VPN.
+- **The built-in model reasons step by step** on hard questions, is uncensored (the parental lock keeps it family-safe), and Quicksilver keeps its team the best fast pick for your PC, adding better models as they come out.
+- **Better models and stacks arrive by themselves**, with a notice and one-click (or automatic) install, then swap into your stacks and chats. "Maybe later" reminds you again in a few days.
+- **Much quicker Double-check**, **Quick or Detailed answers**, **spell check** in the message box, a labelled **Fix my prompt** button, **stop a running model** to free memory, and a **next best model** offer when memory runs low.
+
 - **Parental lock.** Set a PIN (Settings → General) to put uncensored AI — the community "unfiltered" models and teams — behind it. Everything else stays open. Using one of those models or teams then asks for the PIN, which is needed again each time Quicksilver reopens. The PIN is stored only as a scrambled hash, never in plain text.
 - **Connect a cloud AI right from the message box.** A **＋ Cloud AI** option in the chat bar (and under ＋ in the simple view) takes you straight to connecting ChatGPT, Claude, Gemini and others, to use alongside your local models.
 - **Flash attention** in the engine: faster responses and less memory used, so your models stay loaded instead of reloading between questions (turned on automatically where it's known to be safe).

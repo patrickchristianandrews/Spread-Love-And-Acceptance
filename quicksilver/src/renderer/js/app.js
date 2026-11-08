@@ -132,6 +132,7 @@ function welcomeCardHTML() {
     <h2>Welcome${name ? `, ${esc(name)}` : ''}. Your own AI, on your own computer.</h2>
     ${nameAskHTML()}
     <p class="muted">Private, free and works offline: nothing you type leaves this PC unless you connect a cloud AI.</p>
+    <p class="human-pitch">✍️ <b>Sounds like a person, not a chatbot.</b> Quicksilver talks the way people do and writes clean, natural text you can send as your own: no "Certainly!", no sign-offs, none of the usual AI tells.</p>
     <div class="wc-steps">
       <button class="wc-step" id="wc-chat"><span class="wc-n">1</span><span><b>Ask anything</b><span class="small muted">It's ready now. Type, talk (mic) or drop in a photo or file.</span></span></button>
       <button class="wc-step" id="wc-import"><span class="wc-n">2</span><span><b>Bring your ChatGPT or Claude chats</b><span class="small muted">Carry on any conversation here, privately.</span></span></button>
