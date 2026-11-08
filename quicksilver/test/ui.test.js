@@ -825,16 +825,15 @@ function redPng(size = 64) {
   // Simple view: a short sidebar, a clean message box, and the best model picked per question.
   await win.evaluate(() => { S.data.prefs.simple = true; S.data.prefs.autoRoute = true; S.data.prefs.navMore = false; applyPrefs(); save(); });
   await win.click('[data-nav="newchat"]');
-  assert.ok(!(await win.isVisible('.nav [data-nav="models"]')), 'Models is under More');
-  assert.ok(!(await win.isVisible('#tog-web')) && !(await win.isVisible('#pick-effort')), 'options are tucked away');
-  await win.click('#nav-more');
-  await win.waitForSelector('.nav [data-nav="models"]', { state: 'visible' });
-  await win.click('#nav-more');
+  // Everything is findable: the menu shows Stacks, Models, Upgrades… and the chat options are in the bar.
+  for (const v of ['stacks', 'models', 'upgrades', 'assistants', 'skills', 'integrations']) assert.ok(await win.isVisible(`.nav [data-nav="${v}"]`), `${v} is in the menu`);
+  assert.ok(await win.isVisible('#tog-web') && await win.isVisible('#tog-fact') && await win.isVisible('#pick-effort'), 'chat options are in the message bar');
+  await win.waitForSelector('#side-stacks [data-stack-chat]');
+  assert.ok(await win.evaluate(() => getComputedStyle(document.querySelector('#side-scroll')).overflowY === 'auto'), 'the menu scrolls');
   await win.selectOption('#pick-assistant', 'as-general');
   assert.equal(await win.inputValue('#pick-model'), '__auto');
-  await win.click('#opts-btn');
-  await win.click('.opts-menu [data-o="tog-fact"]');
-  await win.waitForSelector('#tog-fact.on', { state: 'visible' }); // a switched-on option shows as a chip
+  await win.click('#tog-fact');
+  await win.waitForSelector('#tog-fact.on', { state: 'visible' });
   await win.click('#tog-fact');
   await shot(win, '20-simple-view');
   // A photo goes to a model that can see it.
@@ -845,7 +844,7 @@ function redPng(size = 64) {
   await idle();
   const picked = await win.evaluate(() => { const m = chatById(S.route.id).messages.at(-1); return m.alts[m.altIndex].target; });
   assert.ok(await win.evaluate((t) => S.speed.targets[t]?.vision, picked), `a model that can see answered (${picked})`);
-  console.log('✓ simple view: short sidebar, options under ＋, automatic model choice (photo →', picked + ')');
+  console.log('✓ simple view: everything in the menu (Stacks, Models, Upgrades…), your stacks listed, menu scrolls, options in the bar, automatic model choice (photo →', picked + ')');
 
   if (errors.length) console.log('PAGE ERRORS:', errors);
   assert.deepEqual(errors, []);

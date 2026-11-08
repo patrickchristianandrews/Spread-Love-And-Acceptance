@@ -172,9 +172,18 @@ function followupsHTML(alt) {
   return `<div class="followups">${list.map((q) => `<button class="fu" data-followup="${esc(q)}">${esc(q)}</button>`).join('')}</div>`;
 }
 
+// A message fades in once, when it first appears. Re-renders (streaming, finishing, switching
+// views) never replay it, so text doesn't bounce or flicker.
+const seenMsgs = new Set();
+function msgIn(m) {
+  const fresh = !seenMsgs.has(m.id) && (!m.t || Date.now() - m.t < 4000);
+  seenMsgs.add(m.id);
+  return fresh ? ' msg-in' : '';
+}
+
 function messageHTML(chat, a, m, i) {
   if (m.role === 'user') {
-    return `<div class="msg user" data-msg="${m.id}">
+    return `<div class="msg user${msgIn(m)}" data-msg="${m.id}">
       ${m.attachments?.length ? `<div class="attach-row" style="justify-content:flex-end">${attachmentsHTML(m.attachments, false)}</div>` : ''}
       ${m.text ? `<div class="bubble"${m.t ? ` title="${esc(msgTime(m))}"` : ''}>${esc(m.text)}</div>` : ''}
       <div class="msg-tools">${pending ? '' : tb('edit', m.id, 'edit', 'Edit and ask again') + tb('branch', m.id, 'branch', 'Branch: a new chat from this point') + tb('copy', m.id, 'copy', 'Copy') + tb('del', m.id, 'trash', 'Delete')}</div>
@@ -199,7 +208,7 @@ function messageHTML(chat, a, m, i) {
     tools.push(tb('more', m.id, 'more', 'More: another model, listen, edit as document, double-check, save as, branch, delete'));
   }
   const model = alt.target ? targetLabel(alt.target) : alt.imported ? '' : '';
-  return `<div class="msg assistant" data-msg="${m.id}">
+  return `<div class="msg assistant${msgIn(m)}" data-msg="${m.id}">
     <div class="av" aria-hidden="true">${esc(a.emoji)}</div>
     <div class="msg-main">
     <div class="who-line"><b>${esc(a.name)}</b>${model ? `<span class="who-model"${alt.autoWhy ? ` title="${esc(alt.autoWhy)}"` : ''}>${alt.autoWhy ? '✨ ' : ''}${esc(model)}</span>` : ''}${alt.skillId && skillById(alt.skillId) ? `<span class="badge b-peach">⚡ ${esc(skillById(alt.skillId).name)}</span>` : ''}${alt.imported ? `<span class="badge">From ${esc(alt.imported)}</span>` : ''}${alt.fixed ? '<span class="badge b-mint" title="A check of the first answer found a mistake (a sum, a code error or a wrong fact); this one fixes it. The first answer is still there with ‹ ›.">✓ Corrected</span>' : ''}${alt.preAnswered ? '<span class="badge b-lemon" title="This was the most likely next question, so it was answered while you read the last answer.">⚡ Ready before you asked</span>' : ''}${alt.cached ? '<span class="badge b-lemon" title="You rated this answer before (or it passed the double-check), so it was shown instantly. Regenerate for a fresh one.">⚡ Instant</span>' : ''}${alt.unsure && alt.check?.running ? '<span class="badge" title="The model was unsure of a number in this answer, so a second model is checking it.">Checking a number…</span>' : ''}${alt.autoWeb && !alt.sources?.length ? '<span class="badge b-sky" title="This question is about something current, so the web was searched automatically. Turn it off in Settings → General.">🌐 Checked the web</span>' : ''}${alt.webEmpty ? '<span class="badge b-lemon" title="Web search was on but found nothing for this question, so this answer is from the model\'s own knowledge.">Web: nothing found</span>' : ''}${etaNow}${alt.stats?.tps && !streaming ? `<span class="who-speed" title="${esc(statsTitle(alt))}">${Math.round(alt.stats.tps * 0.75)} words/s</span>` : ''}${m.t ? `<span class="who-time">${esc(msgTime(m))}</span>` : ''}</div>
@@ -715,7 +724,19 @@ function paintStreaming(chat, msg) {
     tmp.innerHTML = messageHTML(chat, a, msg, chat.messages.indexOf(msg));
     const fresh = tmp.firstElementChild;
     if (openSteps === false && fresh.querySelector('details.steps')) fresh.querySelector('details.steps').open = false;
-    el.replaceWith(fresh);
+    fresh.classList.remove('msg-in');
+    // Update in place: keep every part that hasn't changed (pictures, open panels, the text
+    // already shown), and swap only what did. Falls back to a full swap if the shape changed.
+    const oldMain = el.querySelector('.msg-main');
+    const newMain = fresh.querySelector('.msg-main');
+    if (oldMain && newMain && oldMain.children.length === newMain.children.length && el.className.replace(' msg-in', '') === fresh.className) {
+      [...newMain.children].forEach((n, k) => {
+        const o = oldMain.children[k];
+        if (o.outerHTML === n.outerHTML) return;
+        if (o.tagName === n.tagName && o.className === n.className && n.classList.contains('bubble')) o.innerHTML = n.innerHTML;
+        else o.replaceWith(n.cloneNode(true));
+      });
+    } else el.replaceWith(fresh);
     scrollDown(false);
   });
 }

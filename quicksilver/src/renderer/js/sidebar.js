@@ -11,7 +11,7 @@ function applySideSize() {
   if (!app || !S.data) return;
   const w = Number(S.data.prefs.sideWidth) || SIDE.def;
   app.style.setProperty('--side-w', `${Math.max(SIDE.min, Math.min(SIDE.max, w))}px`);
-  if (nav) {
+  if (nav && !nav.closest('.side-scroll')) {
     const h = Number(S.data.prefs.navHeight);
     nav.style.maxHeight = h ? `${Math.max(SIDE.navMin, h)}px` : '';
     nav.classList.toggle('sized', Boolean(h));
@@ -52,6 +52,7 @@ function setUpSidebarResize() {
     onMove: (ev) => { S.data.prefs.sideWidth = Math.round(Math.max(SIDE.min, Math.min(SIDE.max, ev.clientX - side.getBoundingClientRect().left))); },
     onReset: () => { delete S.data.prefs.sideWidth; },
   });
+  if (side.querySelector('.side-scroll')) { applySideSize(); return; } // one scrolling menu: no divider needed
   const split = document.createElement('div');
   split.className = 'side-split lbl';
   split.title = 'Drag to give the menu or the chat list more room (double-click to reset)';

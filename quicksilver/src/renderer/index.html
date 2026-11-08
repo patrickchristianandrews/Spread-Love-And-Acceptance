@@ -29,24 +29,27 @@
         <button class="icon-btn collapse-btn" id="collapse" title="Collapse the sidebar" aria-label="Collapse the sidebar"><span data-icon="left"></span></button>
       </div>
       <button class="nav-new" data-nav="newchat" title="New chat (Ctrl+N)"><span data-icon="plus"></span><span class="lbl">New chat</span><kbd class="lbl">Ctrl N</kbd></button>
+      <div class="dl-mini" id="dl-mini" hidden></div>
+      <div class="side-scroll" id="side-scroll">
       <nav class="nav">
         <button class="nav-item" data-nav="home" title="Home"><span data-icon="home"></span><span class="lbl">Home</span></button>
         <button class="nav-item" data-nav="projects" title="Projects"><span data-icon="folder"></span><span class="lbl">Projects</span></button>
-        <button class="nav-item" data-nav="studio" title="Studio: pictures, video and music"><span data-icon="image"></span><span class="lbl">Create</span></button>
-        <button class="nav-item" data-nav="stacks" title="AI teams: several AIs working as one"><span data-icon="sparkle"></span><span class="lbl">AI Teams</span></button>
-        <button class="nav-item nav-more" id="nav-more" title="More: assistants, skills, knowledge, models and more"><span data-icon="more"></span><span class="lbl">More</span></button>
-        <div class="nav-label lbl" data-adv>More</div>
-        <button class="nav-item" data-nav="assistants" data-adv title="Assistants"><span data-icon="users"></span><span class="lbl">Assistants</span></button>
-        <button class="nav-item" data-nav="skills" data-adv title="Skills"><span data-icon="zap"></span><span class="lbl">Skills</span></button>
-        <button class="nav-item" data-nav="library" data-adv title="Library: your files and knowledge bases"><span data-icon="book"></span><span class="lbl">Library</span></button>
-        <button class="nav-item" data-nav="models" data-adv title="Models"><span data-icon="box"></span><span class="lbl">Models</span></button>
-        <button class="nav-item" data-nav="integrations" data-adv title="Connectors"><span data-icon="plug"></span><span class="lbl">Connectors</span></button>
-        <button class="nav-item" data-nav="arena" data-adv title="Arena: blind test your models"><span data-icon="scale"></span><span class="lbl">Compare models</span></button>
+        <button class="nav-item" data-nav="studio" title="Create pictures, video and music"><span data-icon="image"></span><span class="lbl">Create</span></button>
+        <button class="nav-item" data-nav="library" title="Library: your files and knowledge bases"><span data-icon="book"></span><span class="lbl">Library</span></button>
+        <div class="nav-label lbl">Explore</div>
+        <button class="nav-item" data-nav="stacks" title="Stacks: several AIs working as one, ready-made stacks and the Setup Advisor"><span data-icon="layers"></span><span class="lbl">Stacks</span></button>
+        <button class="nav-item" data-nav="models" title="Models: free models rated for this PC, trending, Hugging Face, cloud AIs"><span data-icon="box"></span><span class="lbl">Models</span></button>
+        <button class="nav-item" data-nav="upgrades" title="Upgrades: what would make Quicksilver faster or smarter on this PC"><span data-icon="gauge"></span><span class="lbl">Upgrades</span></button>
+        <button class="nav-item" data-nav="assistants" title="Assistants for every kind of work"><span data-icon="users"></span><span class="lbl">Assistants</span></button>
+        <button class="nav-item" data-nav="skills" title="Skills: one-click abilities"><span data-icon="zap"></span><span class="lbl">Skills</span></button>
+        <button class="nav-item" data-nav="integrations" title="Connectors: your apps and services"><span data-icon="plug"></span><span class="lbl">Connectors</span></button>
+        <button class="nav-item" data-nav="arena" title="Compare models in a blind test"><span data-icon="scale"></span><span class="lbl">Compare models</span></button>
       </nav>
-      <div class="dl-mini" id="dl-mini" hidden></div>
+      <div class="side-stacks" id="side-stacks"></div>
       <div class="chats-head lbl"><span class="nav-label" style="padding:0">Chats</span></div>
       <div class="side-search-wrap lbl"><span data-icon="search"></span><input class="side-search" id="chat-search" type="search" placeholder="Search chats (Ctrl K)" aria-label="Search chats"></div>
       <div class="chat-list lbl" id="chat-list"></div>
+      </div>
       <button class="net-toggle" id="net-toggle" role="switch" aria-checked="true" title="Online: web search, cloud AIs and downloads are available"><span class="net-dot"></span><span class="lbl net-lbl">Online</span><span class="net-sw"><i></i></span></button>
       <div class="side-foot">
         <button class="nav-item" data-nav="pc" title="Your PC"><span data-icon="cpu"></span><span class="lbl">Your PC</span></button>

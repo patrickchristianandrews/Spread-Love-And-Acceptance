@@ -158,7 +158,11 @@ async function init() {
   save();
 
   paintIcons();
-  $$('.sidebar [data-nav]').forEach((b) => b.addEventListener('click', () => (b.dataset.nav === 'newchat' ? newChat() : go({ view: b.dataset.nav }))));
+  $$('.sidebar [data-nav]').forEach((b) => b.addEventListener('click', () => {
+    if (b.dataset.nav === 'newchat') newChat();
+    else if (b.dataset.nav === 'upgrades') { go({ view: 'pc' }); setTimeout(() => document.getElementById('upgrades')?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 300); }
+    else go({ view: b.dataset.nav });
+  }));
   $('#theme-btn').addEventListener('click', () => { S.data.prefs.theme = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'; applyPrefs(); save(); if (S.route.view === 'settings') render(); });
   paintNet();
   $('#net-toggle').addEventListener('click', toggleNet);

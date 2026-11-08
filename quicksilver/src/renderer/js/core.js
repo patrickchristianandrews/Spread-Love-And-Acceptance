@@ -290,6 +290,25 @@ function renderChatList() {
   $$('#chat-list [data-chat]').forEach((b) => b.addEventListener('click', () => go({ view: 'chat', id: b.dataset.chat })));
   $$('#chat-list [data-chat-menu]').forEach((b) => b.addEventListener('click', (e) => { e.stopPropagation(); chatMenu(b, chatById(b.dataset.chatMenu)); }));
   $$('#chat-list [data-chat-del]').forEach((b) => b.addEventListener('click', (e) => { e.stopPropagation(); deleteChat(chatById(b.dataset.chatDel)); }));
+  renderSideStacks();
+}
+
+// Your stacks, one click away in the menu: click one to start a chat with it.
+function renderSideStacks() {
+  const box = $('#side-stacks');
+  if (!box) return;
+  const all = (S.stacks || []).filter((s) => targetValid(`stack:${s.id}`));
+  const list = all.slice(0, 8);
+  const cur = S.route.view === 'chat' && chatById(S.route.id)?.target;
+  box.innerHTML = `<div class="nav-label lbl side-sec"><span>Your stacks</span><button class="side-sec-act" data-side-stacks title="${all.length > 8 ? 'See all stacks' : 'Build or add a stack'}">${all.length > 8 ? `All ${all.length}` : icon('plus', 13)}</button></div>
+    ${list.length ? list.map((s) => `<button class="nav-item side-stack ${cur === `stack:${s.id}` ? 'active' : ''}" data-stack-chat="${esc(s.id)}" title="Start a chat with ${esc(s.name)}"><span class="side-emoji">${esc(s.emoji || '🧩')}</span><span class="lbl">${esc(s.name)}</span></button>`).join('')
+    : `<button class="nav-item" data-side-stacks title="Build a stack"><span class="side-emoji">＋</span><span class="lbl">Build your first stack</span></button>`}`;
+  box.querySelectorAll('[data-stack-chat]').forEach((b) => b.addEventListener('click', () => {
+    newChat();
+    const c = chatById(S.route.id);
+    if (c) { c.target = `stack:${b.dataset.stackChat}`; save(); render(); }
+  }));
+  box.querySelectorAll('[data-side-stacks]').forEach((b) => b.addEventListener('click', () => go({ view: 'stacks' })));
 }
 
 // Deletes a chat straight away, with Undo for a few seconds (safer than a pop-up for every delete).
