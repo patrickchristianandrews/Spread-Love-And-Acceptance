@@ -92,6 +92,39 @@ function bindVpnCard() {
   if (!S.vpn) refreshVpn().then(repaint);
 }
 
+// How private this chat's session is right now, in plain words, for the chat header.
+function usesCloud(target) {
+  if (!target) return '';
+  const list = target.startsWith('stack:') ? membersOf(target) : [target];
+  const st = target.startsWith('stack:') && S.stacks.find((x) => `stack:${x.id}` === target);
+  const all = [...list, st?.members?.cloudHard, st?.members?.cloudCheck].filter(Boolean);
+  const api = all.find((t) => t.startsWith('api:'));
+  return api ? targetLabel(api) : '';
+}
+function sessionPrivacy(target) {
+  const mode = privacyMode();
+  const cloud = usesCloud(target);
+  if (mode === 'offline') return { kind: 'safe', icon: '🔒', label: 'Private session', tip: 'Offline: nothing leaves this PC. Every answer comes from the AI on this PC.' };
+  if (mode === 'vpn') {
+    if (!S.vpn?.connected) return { kind: 'safe', icon: '🔒', label: 'Private session · VPN paused', tip: 'Private online is on but no VPN is connected, so nothing leaves this PC until it reconnects.' };
+    return cloud
+      ? { kind: 'safe', icon: '🛡', label: 'Protected session · cloud AI via VPN', tip: `Messages in this chat go to ${cloud} through your VPN: it sees what you send, but not who you are or where you are. Your other chats and files stay on this PC.` }
+      : { kind: 'safe', icon: '🛡', label: 'Protected session', tip: 'Answers come from this PC; web searches and downloads go through your VPN, so websites can\'t trace them to you.' };
+  }
+  return cloud
+    ? { kind: 'warn', icon: '☁️', label: `Cloud AI: ${cloud}`, tip: `Messages in this chat are sent to ${cloud} over your normal connection. For a protected session, use Private online (Proton VPN) or Fully private in Settings.` }
+    : { kind: 'ok', icon: '🔒', label: 'Private chat', tip: 'Answers come from this PC. Web searches use your normal connection; turn on Private online (Proton VPN) to protect them too.' };
+}
+function sessionBadgeHTML(target) {
+  const p = sessionPrivacy(target);
+  return `<button class="sess-badge sess-${p.kind}" id="sess-badge" title="${esc(p.tip)} Click for privacy modes.">${p.icon} ${esc(p.label)}</button>`;
+}
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('#sess-badge')) return;
+  setTab = 'general'; go({ view: 'settings' });
+  setTimeout(() => document.getElementById('vpn-box')?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 250);
+});
+
 // Watch the VPN while Private online is on, so the sidebar and pages stay right.
 let vpnSeen = null;
 setInterval(async () => {
@@ -99,6 +132,7 @@ setInterval(async () => {
   const v = await refreshVpn();
   const now = Boolean(v?.connected);
   if (vpnSeen !== null && now !== vpnSeen && S.config?.vpnOnly) toast(now ? '🛡 VPN connected: Quicksilver can use the web privately.' : '🛡 VPN disconnected: Quicksilver stopped connecting until it\'s back.', 6000);
+  if (vpnSeen !== null && now !== vpnSeen && S.route?.view === 'chat') { const b = $('#sess-badge'); const c = chatById(S.route.id); if (b && c) b.outerHTML = sessionBadgeHTML(resolveTarget(c, assistantById(c.assistantId))); }
   vpnSeen = now;
   const box = $('#vpn-box');
   if (box && !box.contains(document.activeElement)) { box.innerHTML = vpnCardHTML(); bindVpnCard(); }

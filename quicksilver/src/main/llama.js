@@ -125,6 +125,8 @@ function stop(key) {
   try { s.proc.kill(); } catch {}
 }
 function stopAll() { for (const k of [...servers.keys()]) stop(k); }
+// Stops one model (every copy of it that's running), giving its memory back to the PC.
+function stopFile(file) { let n = 0; for (const [k, s] of [...servers.entries()]) if (s.file === file) { stop(k); n++; } return n; }
 
 async function waitReady(s, timeoutMs) {
   const until = Date.now() + timeoutMs;
@@ -403,4 +405,4 @@ function status() {
 }
 const isLoaded = (file) => [...servers.values()].some((s) => s.file === file && !s.exited);
 
-module.exports = { readGguf, ensure, prefill, chat, stop, stopAll, status, isLoaded, contextFor, prefetch };
+module.exports = { readGguf, ensure, prefill, chat, stop, stopAll, stopFile, status, isLoaded, contextFor, prefetch };

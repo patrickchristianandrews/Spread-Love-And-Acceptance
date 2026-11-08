@@ -108,7 +108,8 @@ function paintRunPanel(st) {
     ${L.cpu != null ? `<div class="rs-line"><span>Processor</span>${bar(L.cpu, 100, L.cpu > 90)}<b>${Math.round(L.cpu)}% busy</b></div>` : ''}
     ${L.memTotalGB ? `<div class="rs-line"><span>Memory</span>${bar(L.memTotalGB - L.memFreeGB, L.memTotalGB, L.memFreeGB / L.memTotalGB < 0.06)}<b>${L.memFreeGB.toFixed(1)} GB free</b></div>` : ''}
     <div class="label" style="margin:10px 0 4px">In use</div>
-    ${members.map((t) => `<div class="rs-model"><span class="rs-dot ${t.startsWith('api:') ? 'cloud' : loaded.has(fileOf(t)) ? 'on' : ''}"></span>${esc(targetLabel(t))}<span class="small muted">${t.startsWith('api:') ? 'cloud' : loaded.has(fileOf(t)) ? 'loaded, ready' : 'loads when needed'}</span></div>`).join('') || '<p class="small muted">Nothing yet.</p>'}`;
+    ${members.map((t) => `<div class="rs-model"><span class="rs-dot ${t.startsWith('api:') ? 'cloud' : loaded.has(fileOf(t)) ? 'on' : ''}"></span>${esc(targetLabel(t))}<span class="small muted">${t.startsWith('api:') ? 'cloud' : loaded.has(fileOf(t)) ? 'loaded, ready' : 'loads when needed'}</span>${!t.startsWith('api:') && loaded.has(fileOf(t)) ? `<button class="btn small ghost rs-stop" data-stop-model="${esc(fileOf(t))}" title="Stop this model and free its memory; it loads again when needed">Stop</button>` : ''}</div>`).join('') || '<p class="small muted">Nothing yet.</p>'}
+    ${loaded.size ? `<div class="row" style="margin-top:10px"><button class="btn small" data-stop-model="" title="Stop every running model and free the memory">⏹ Stop all models (${loaded.size}) and free memory</button></div>` : ''}`;
   const anchor = document.getElementById('run-state')?.getBoundingClientRect();
   if (anchor) { p.style.top = `${anchor.bottom + 8}px`; p.style.right = `${Math.max(8, window.innerWidth - anchor.right)}px`; }
   p.querySelector('#run-close').onclick = () => { runOpen = false; p.remove(); };

@@ -551,6 +551,18 @@ function redPng(size = 64) {
   assert.notEqual(await win.evaluate(() => chatById(S.route.id).messages.find((x) => x.id === 'a-lm').alts[1].target), 'local:phi-4');
   console.log('✓ low memory: next best model offered and used');
 
+  // Stop a running model: from the Models page (and the status panel), freeing its memory.
+  await win.click('[data-nav="models"]');
+  await win.click('[data-tab="installed"]');
+  await win.evaluate(async () => { await refreshModels(); render(); });
+  const runBadge = win.locator('.badge:has-text("● Running")').first();
+  await runBadge.waitFor({ timeout: 15000 });
+  const runningBefore = await win.evaluate(() => S.running.filter((x) => x.ready).length);
+  await win.locator('[data-stop-model]').first().click();
+  await win.waitForFunction((n) => S.running.filter((x) => x.ready).length < n, runningBefore, { timeout: 15000 });
+  await win.waitForSelector('#toast:has-text("stopped and the memory freed")');
+  console.log('✓ stop a running model: memory freed, loads again when needed');
+
   // Privacy modes, shown as a picture: fully private, private online through Proton VPN, online.
   await win.click('[data-nav="settings"]');
   await win.click('[data-set-tab="general"]');
@@ -564,13 +576,24 @@ function redPng(size = 64) {
   assert.match(await win.locator('#net-toggle').innerText(), /VPN off/);
   await win.locator('#vpn-box').scrollIntoViewIfNeeded();
   await shot(win, '15-privacy-vpn');
+  const vpnLabel = await win.evaluate(() => sessionPrivacy('local:qwen3-8b').label);
+  assert.match(vpnLabel, /Private session · VPN paused/);
   await win.click('#vpn-box [data-pv-mode="offline"]');
   await win.waitForSelector('#vpn-box .pv-link.cut:has-text("nothing leaves")');
+  assert.equal(await win.evaluate(() => sessionPrivacy('local:qwen3-8b').label), 'Private session');
+  await win.evaluate(() => { S.vpn = { connected: true, proton: true }; S.config.offline = false; S.config.vpnOnly = true; });
+  assert.equal(await win.evaluate(() => sessionPrivacy('local:qwen3-8b').label), 'Protected session');
+  await win.evaluate(() => { S.config.offline = true; S.config.vpnOnly = false; S.vpn = null; });
   assert.match(await win.locator('#net-toggle').innerText(), /Offline/);
   await win.click('#vpn-box [data-pv-mode="online"]');
   await win.waitForSelector('#vpn-box [data-pv-mode="online"].on');
   assert.match(await win.locator('#net-toggle').innerText(), /Online/);
-  console.log('✓ privacy modes: fully private, private online (Proton VPN free or your account), online');
+  await win.click('.nav-new');
+  await win.waitForSelector('#sess-badge:has-text("Private chat")');
+  assert.equal(await win.getAttribute('#input', 'spellcheck'), 'true', 'spell check in the message box');
+  await win.waitForSelector('#improve-btn:has-text("Fix my prompt")');
+  await shot(win, '16-session-badge');
+  console.log('✓ privacy modes: fully private, private online (Proton VPN free or your account), online; chats say Private / Protected session');
 
   // Deleting a chat: the bin icon in the sidebar deletes it at once, with Undo.
   await win.evaluate(() => { const t = Date.now(); S.data.chats.push({ id: 'del-me', assistantId: 'as-general', title: 'Delete me please', created: t, updated: t + 1e6, target: '', messages: [{ id: 'dm1', role: 'user', text: 'hi', attachments: [] }] }); save(); renderChatList(); });

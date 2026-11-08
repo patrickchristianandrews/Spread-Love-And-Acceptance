@@ -49,6 +49,28 @@ document.addEventListener('click', (e) => {
   if (chat) answerAgainWith(chat, b.dataset.lowmem, b.dataset.next, Boolean(b.dataset.keep));
 });
 
+// Stop a running model (or all), from the status panel or the Models page.
+document.addEventListener('click', async (e) => {
+  const b = e.target.closest('[data-stop-model]');
+  if (!b) return;
+  const file = b.dataset.stopModel;
+  const fileOf = (t) => S.installed.find((m) => `local:${m.id}` === t)?.files?.model;
+  // An answer being written by that model is stopped first.
+  if (pending) {
+    const c = chatById(pending.chatId);
+    const msg = c?.messages.find((x) => x.id === pending.msgId);
+    const t = msg?.alts[msg.altIndex]?.target;
+    if (!file || loadsOf(t).some((m) => m.files?.model === file) || fileOf(t) === file) qs.abortChat(pending.requestId);
+  }
+  await qs.call('models:stop', file || null).catch(() => {});
+  const name = file ? S.installed.find((m) => m.files?.model === file)?.name || 'The model' : 'All models';
+  toast(`${name} stopped and the memory freed. ${file ? 'It loads' : 'They load'} again when needed.`, 5000);
+  try { runLoad = await qs.call('system:load'); } catch {}
+  await refreshModels();
+  if (S.route.view === 'models') render();
+  if (typeof paintRunState === 'function') paintRunState();
+});
+
 // Before an answer: is there memory free for the model it needs? Never blocks the answer.
 async function lowMemPreflight(chat, msg, target) {
   try {

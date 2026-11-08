@@ -225,6 +225,8 @@ handle('models:download', async (req) => {
 handle('models:options', (repo) => models.ggufOptions(repo));
 handle('models:cancel', (id) => models.cancel(id));
 handle('models:remove', (id) => { llama.stopAll(); return models.remove(id); });
+// Stop a running model (or all of them) to free memory; it loads again the next time it's needed.
+handle('models:stop', (file) => (file ? llama.stopFile(file) : (llama.stopAll(), true)));
 handle('models:search', (q) => models.search(q));
 // This PC's load right now, for the status light in chats.
 let cpuPrev = null;
@@ -535,9 +537,35 @@ function createWindow() {
     title: 'Quicksilver',
     icon: path.join(__dirname, '..', '..', 'build', 'icon.png'),
     backgroundColor: '#0b1020',
-    webPreferences: { preload: path.join(__dirname, '..', 'preload.js'), contextIsolation: true, nodeIntegration: false, sandbox: true },
+    webPreferences: { preload: path.join(__dirname, '..', 'preload.js'), contextIsolation: true, nodeIntegration: false, sandbox: true, spellcheck: true },
   });
   win.setMenuBarVisibility(false);
+  // Spell check in the message box and every text field: misspelt words are underlined, and a
+  // right-click offers corrections, "Add to dictionary", and cut / copy / paste.
+  try {
+    const ses = win.webContents.session;
+    if (process.platform !== 'win32' && process.platform !== 'darwin') {
+      const want = [app.getLocale(), 'en-US'].filter((l) => ses.availableSpellCheckerLanguages.includes(l));
+      if (want.length) ses.setSpellCheckerLanguages([...new Set(want)]);
+    }
+  } catch {}
+  win.webContents.on('context-menu', (_e, params) => {
+    const { Menu, MenuItem } = require('electron');
+    const menu = new Menu();
+    if (params.misspelledWord) {
+      for (const s of (params.dictionarySuggestions || []).slice(0, 6)) menu.append(new MenuItem({ label: s, click: () => win.webContents.replaceMisspelling(s) }));
+      if (!params.dictionarySuggestions?.length) menu.append(new MenuItem({ label: 'No suggestions', enabled: false }));
+      menu.append(new MenuItem({ label: `Add "${params.misspelledWord}" to dictionary`, click: () => win.webContents.session.addWordToSpellCheckerDictionary(params.misspelledWord) }));
+      menu.append(new MenuItem({ type: 'separator' }));
+    }
+    if (params.isEditable) {
+      menu.append(new MenuItem({ role: 'cut', enabled: params.editFlags.canCut }));
+      menu.append(new MenuItem({ role: 'copy', enabled: params.editFlags.canCopy }));
+      menu.append(new MenuItem({ role: 'paste', enabled: params.editFlags.canPaste }));
+      menu.append(new MenuItem({ role: 'selectAll' }));
+    } else if (params.selectionText) menu.append(new MenuItem({ role: 'copy' }));
+    if (menu.items.length) menu.popup({ window: win });
+  });
   win.loadFile(path.join(__dirname, '..', 'renderer', 'index.html'));
   win.webContents.setWindowOpenHandler(({ url }) => { if (/^https?:/.test(url)) shell.openExternal(url); return { action: 'deny' }; });
   win.webContents.on('will-navigate', (ev) => ev.preventDefault());

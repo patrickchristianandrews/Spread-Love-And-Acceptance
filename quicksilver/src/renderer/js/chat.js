@@ -44,7 +44,7 @@ views.chat = {
           <label class="pill-select" title="Model or team">${icon(target.startsWith('stack:') ? 'layers' : 'cpu', 16)}<select id="pick-model" aria-label="Model or team">${!a.target && S.data.prefs.autoRoute !== false && S.targets.length > 1 ? `<option value="__auto" ${autoOn(chat, a) ? 'selected' : ''}>✨ Automatic</option>` : ''}${S.targets.length ? targetOptions(autoOn(chat, a) ? '' : target) : '<option value="">No models yet</option>'}<option value="__infuse">✨ Combine several AIs…</option><option value="__get">＋ Get more models…</option></select>${icon('chevron', 16)}</label>
           <button class="net-pill ${S.config?.offline ? 'off' : ''}" id="net-pill" role="switch" aria-checked="${!S.config?.offline}" title="${S.config?.offline ? 'Offline: nothing leaves this PC. Click to go online.' : 'Online: web search, cloud AIs and downloads are available. Click to go offline.'}"><span class="net-dot"></span><span>${S.config?.offline ? 'Offline' : 'Online'}</span><span class="net-sw"><i></i></span></button>
         </div>
-        <div class="chat-title" title="${esc(chat.title)}">${projectChipHTML(chat)}${chat.private ? '<span class="priv-chip" title="Private chat: memory is not used or added">🔒 Private</span>' : ''}<span class="ct">${chat.messages.length && chat.title !== 'New chat' ? esc(chat.title) : ''}</span></div>
+        <div class="chat-title" title="${esc(chat.title)}">${sessionBadgeHTML(target)}${projectChipHTML(chat)}${chat.private ? '<span class="priv-chip" title="Private chat: memory is not used or added">🔒 Private</span>' : ''}<span class="ct">${chat.messages.length && chat.title !== 'New chat' ? esc(chat.title) : ''}</span></div>
         <button class="run-state" id="run-state" hidden aria-label="How the model is running"></button>
         <button class="icon-btn" id="chat-more" title="Pin, rename, export or delete this chat" aria-label="More options">${icon('more')}</button>
       </header>
@@ -57,11 +57,11 @@ views.chat = {
           <div class="attach-row" id="att-row">${attachmentsHTML(drafts[chat.id] || [], true)}</div>
           <div id="skill-row">${skillChipHTML(chat)}</div>
           <div class="skill-pop" id="skill-pop" hidden></div>
-          <textarea id="input" rows="1" placeholder="${esc(chat.pendingSkill ? skillById(chat.pendingSkill)?.hint || 'Add details…' : `Message ${a.name}…  Type / for skills`)}" aria-label="Message"></textarea>
+          <textarea id="input" rows="1" spellcheck="true" placeholder="${esc(chat.pendingSkill ? skillById(chat.pendingSkill)?.hint || 'Add details…' : `Message ${a.name}…  Type / for skills`)}" aria-label="Message"></textarea>
           <div class="composer-bar">
             <button class="icon-btn opts-btn" id="opts-btn" title="Options: web search, knowledge, double-check, effort, skills" aria-label="Options">${icon('plus')}</button>
             <button class="icon-btn" id="skill-btn" title="Use a skill (or type /)" aria-label="Skills">${icon('zap')}</button>
-            <button class="icon-btn improve-btn" id="improve-btn" title="Improve my prompt: clearer and more complete, so the answer is better" aria-label="Improve my prompt">${icon('sparkle')}</button>
+            <button class="chip-tog improve-btn" id="improve-btn" title="Fix my prompt: rewrites what you typed so it's clear and complete (spelling too), for a better answer. You can edit it before sending." aria-label="Fix my prompt">${icon('sparkle', 16)}<span>Fix my prompt</span></button>
             <button class="icon-btn mic-btn ${voiceRec?.chatId === chat.id ? 'rec' : ''}" id="mic-btn" title="Voice typing: click and speak (Ctrl+Space)" aria-label="Voice typing">${icon('mic')}</button>
             <label class="icon-btn" title="Attach photos, videos or documents" aria-label="Attach">${icon('clip')}<input type="file" id="file-in" multiple hidden accept="image/*,video/*,.pdf,.docx,.xlsx,.xlsm,.csv,.tsv,.pptx,.txt,.md,.json,.html,.htm,.xml,.js,.ts,.py,.java,.c,.cpp,.cs,.go,.rs,.rb,.php,.sql"></label>
             <span class="bar-sep"></span>

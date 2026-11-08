@@ -113,6 +113,7 @@ document.addEventListener('click', async (e) => {
 async function refreshModels() {
   const r = await qs.call('models:list');
   S.installed = r.installed;
+  S.running = r.running || [];
   for (const d of r.downloading) S.downloads[d.id] = d;
   S.targets = await qs.call('targets:list');
   S.stacks = await qs.call('stacks:list');
