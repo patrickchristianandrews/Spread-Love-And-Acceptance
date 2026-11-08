@@ -874,6 +874,35 @@ async function collect(gen) {
 
   llama.stopAll();
   fs.rmSync(HOME, { recursive: true, force: true });
+  // The buying guide and upgrade prices refresh from the repository when online.
+  {
+    const guide = require('../src/main/guide');
+    const data = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'data', 'pc-guide.json'), 'utf8'));
+    assert.ok(guide.clean(data), 'the published guide file is valid');
+    assert.equal(guide.clean({ version: 2, tiers: [] }), null, 'unknown versions are ignored');
+    assert.equal(guide.clean({ version: 1, tiers: [{ name: 'x' }] }), null, 'incomplete tiers are ignored');
+    const real = global.fetch;
+    let calls = 0;
+    const changed = { ...data, updated: '2026-12', upgrades: { ram32: { cost: 'about $55–90' } }, tiers: data.tiers.map((t, i) => (i ? t : { ...t, name: '<b>Basic</b>', extra: 'dropped' })) };
+    global.fetch = async () => { calls++; return new Response(JSON.stringify(changed), { status: 200, headers: { 'content-type': 'application/json' } }); };
+    store.saveConfig({ offline: true });
+    await guide.refresh(true);
+    assert.equal(calls, 0, 'nothing is fetched while offline');
+    store.saveConfig({ offline: false });
+    const g = await guide.refresh(true);
+    assert.equal(calls, 1);
+    assert.equal(g.updated, '2026-12'); assert.ok(g.fetchedAt);
+    assert.equal(g.tiers[0].name, '<b>Basic</b>', 'kept as plain text (shown escaped, never as HTML)');
+    assert.equal(g.tiers[0].extra, undefined, 'unknown fields are dropped');
+    await guide.refresh();
+    assert.equal(calls, 1, 'a fresh copy is not fetched again within a day');
+    assert.equal(guide.applyUpgrades([{ id: 'ram32', cost: 'old', name: 'RAM' }])[0].cost, 'about $55–90', 'new upgrade prices are applied');
+    global.fetch = async () => new Response('nope', { status: 404 });
+    assert.equal((await guide.refresh(true)).updated, '2026-12', 'a failed fetch keeps the last good copy');
+    global.fetch = real;
+    console.log('✓ buying guide: refreshed online once a day, checked and kept as text, offline uses the cached or built-in copy');
+  }
+
   console.log('\nBACKEND TESTS PASSED');
   process.exit(0);
 })().catch((e) => { console.error('FAIL', e); llama.stopAll(); process.exit(1); });

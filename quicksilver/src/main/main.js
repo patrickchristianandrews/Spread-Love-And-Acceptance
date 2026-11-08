@@ -105,8 +105,11 @@ handle('catalog:estimates', async () => {
 // Low-cost upgrades and the difference each would make on this PC.
 handle('upgrades:advise', async () => {
   const hw = await hardware.detect();
-  return { hardware: hw, upgrades: catalog.upgradeAdvice(hw, { calib: store.config().calib.text, installed: models.list() }) };
+  return { hardware: hw, upgrades: require('./guide').applyUpgrades(catalog.upgradeAdvice(hw, { calib: store.config().calib.text, installed: models.list() })) };
 });
+// The buying guide: refreshed from the Quicksilver repository once a day when online.
+handle('guide:get', () => require('./guide').get());
+handle('guide:refresh', () => require('./guide').refresh(true));
 
 // Speeds on this PC, so every screen can say how long something will take:
 // models in words per second (stacks list each member), image/video models in seconds per item.
@@ -534,7 +537,7 @@ function createWindow() {
   win.webContents.on('will-navigate', (ev) => ev.preventDefault());
 }
 
-app.whenReady().then(() => {
+app.whenReady().then(() => { try { require('./guide').start(); } catch {} }).then(() => {
   // Gallery files are served to the interface by id only, never by arbitrary path.
   protocol.handle('qsmedia', (req) => {
     const id = decodeURIComponent(new URL(req.url).pathname.replace(/^\//, ''));
