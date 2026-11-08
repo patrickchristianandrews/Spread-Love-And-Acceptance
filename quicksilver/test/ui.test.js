@@ -618,7 +618,10 @@ function redPng(size = 64) {
   await win.click('[data-nav="pc"]');
   await win.waitForSelector('text=Speed test');
   await shot(win, '06-your-pc');
-  console.log('✓ models + your PC');
+  await win.waitForSelector('#new-pc');
+  assert.equal(await win.locator('.tier-grid .tier').count(), 4, 'four buying tiers');
+  assert.equal(await win.locator('.tier.mine').count(), 1, 'this PC is marked');
+  console.log('✓ models + your PC (incl. buying a new computer guide)');
 
   // Studio: create an image, edit it, make a video.
   await win.click('[data-nav="studio"]');

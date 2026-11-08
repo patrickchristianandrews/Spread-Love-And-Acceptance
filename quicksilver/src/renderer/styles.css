@@ -1139,3 +1139,22 @@ code.sel { user-select: all; background: var(--soft); padding: 1px 6px; border-r
 .tip-text { flex: 1; min-width: 200px; line-height: 1.45; }
 .tip-off { background: none; border: none; color: var(--faint); font: inherit; font-size: .78rem; cursor: pointer; text-decoration: underline; padding: 2px 4px; }
 .tip-off:hover { color: var(--text); }
+
+/* ---------- Buying a new computer (Your PC) ---------- */
+.tier-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; }
+.tier { display: flex; flex-direction: column; gap: 8px; }
+.tier.mine { border-color: var(--accent-line); box-shadow: 0 0 0 1px var(--accent-line); }
+.tier-n { flex: none; width: 26px; height: 26px; border-radius: 50%; background: var(--accent-tint); color: var(--accent); display: grid; place-items: center; font-weight: 800; font-size: .85rem; }
+.tier h3 { margin: 0; font-size: 1rem; }
+.tier-good { margin: 0; color: var(--muted); font-weight: 600; line-height: 1.45; }
+.tier-spec { display: grid; grid-template-columns: auto 1fr; gap: 4px 10px; margin: 0; font-size: .86rem; }
+.tier-spec dt { color: var(--faint); font-weight: 700; }
+.tier-spec dd { margin: 0; font-weight: 650; }
+.tier-tips { margin-top: 12px; }
+.tier-tips summary { cursor: pointer; }
+.tier-tips ul { margin: 10px 0 0; padding-left: 1.2em; line-height: 1.55; }
+.tier-tips li { margin: 4px 0; }
+
+.tier-ex { border-top: 1px solid var(--line-soft); padding-top: 8px; margin-top: auto; }
+.tier-ex ul { margin: 4px 0 0; padding-left: 1.1em; font-size: .84rem; line-height: 1.45; }
+.tier-ex li { margin: 2px 0; }
