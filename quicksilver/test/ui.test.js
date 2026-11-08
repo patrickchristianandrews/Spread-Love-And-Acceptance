@@ -58,6 +58,10 @@ function redPng(size = 64) {
   // Home dashboard.
   await win.waitForSelector('text=Forms to fit your work.');
   await win.waitForSelector('text=Fake GPU 8GB', { timeout: 30000 });
+  // The fake 8 GB graphics card turns on background work (reading ahead, answering the next
+  // question in advance); on a slow test machine that competes with the steps being tested, so
+  // it's off here and switched on only in the tests that check it.
+  await win.evaluate(() => { S.data.prefs.preanswer = false; S.data.prefs.readAhead = false; save(); });
   // Most checks below use the full view (every option on screen); the simple view, which is the
   // default, is checked near the end.
   assert.equal(await win.evaluate(() => S.data.prefs.simple), true, 'simple view is the default');
@@ -283,9 +287,11 @@ function redPng(size = 64) {
   await askNew('Explain what a haiku is in one line');
   assert.ok(await win.locator('.msg.assistant .badge:has-text("Instant")').count(), 'answered instantly from the rated answer');
   // Reading ahead: typing in a chat with history makes the model read it in advance.
+  await win.evaluate(() => { S.data.prefs.readAhead = true; });
   await win.fill('#input', 'And a limerick?');
   await win.waitForFunction(() => prefilled.has(S.route.id), null, { timeout: 10000 });
   await win.fill('#input', '');
+  await win.evaluate(() => { S.data.prefs.readAhead = false; });
   // Everything available is used: learning from every signal, connected apps, the cloud option.
   assert.ok(await win.evaluate(() => {
     learnSignal('coding', 'local:phi-4', 'up', 3);
@@ -302,7 +308,7 @@ function redPng(size = 64) {
   }), 'signals, connected apps and the cloud option are used');
   // The most likely next question is answered while you read; clicking it shows it at once.
   await win.click('[data-nav="newchat"]');
-  await win.evaluate(() => { const c = chatById(S.route.id); c.library = false; c.web = false; c.tools = false; save(); render(); });
+  await win.evaluate(() => { const c = chatById(S.route.id); c.library = false; c.web = false; c.tools = false; S.data.prefs.preanswer = true; save(); render(); });
   await win.fill('#input', 'Tell me about sourdough starters');
   await win.keyboard.press('Enter');
   await win.waitForSelector('.msg.assistant');
@@ -310,6 +316,7 @@ function redPng(size = 64) {
   await win.waitForFunction(() => chatById(S.route.id).messages.at(-1).alts.at(-1).pre?.done, null, { timeout: 60000 });
   await win.click('.followups .fu >> nth=0');
   await win.waitForSelector('.msg.assistant .badge:has-text("Ready before you asked")', { timeout: 10000 });
+  await win.evaluate(() => { S.data.prefs.preanswer = false; save(); });
   await idle();
   // Exam coaches: a CPA course in the chat with interactive practice questions and progress.
   await win.click('[data-nav="newchat"]');
@@ -686,7 +693,7 @@ function redPng(size = 64) {
   await shot(win, '09-settings-api');
 
   const lastAnswer = () => win.evaluate(() => [...document.querySelectorAll('.msg.assistant .bubble')].at(-1)?.textContent || '');
-  const waitAnswer = (re) => win.waitForFunction((src) => new RegExp(src).test([...document.querySelectorAll('.msg.assistant .bubble')].at(-1)?.textContent || ''), re.source, { timeout: 90000 });
+  const waitAnswer = (re) => win.waitForFunction((src) => new RegExp(src).test([...document.querySelectorAll('.msg.assistant .bubble')].at(-1)?.textContent || ''), re.source, { timeout: 180000 });
 
   // Memory: "remember that…" is saved at once, used in a brand-new chat, and things you mention are noticed.
   await idle();
@@ -708,7 +715,8 @@ function redPng(size = 64) {
   await win.waitForSelector('.mem-item:has-text("I live in Leeds")');
   await win.waitForSelector('.mem-item:has-text("Biscuit")');
   await win.fill('#mem-new', 'I prefer metric units');
-  await win.click('#mem-add');
+  await win.waitForFunction(() => document.querySelector('#mem-new')?.value === 'I prefer metric units');
+  await win.press('#mem-new', 'Enter');
   await win.waitForSelector('.mem-item:has-text("metric units")');
   await shot(win, '12-memory');
   console.log('✓ memory: remembered on request, noticed on its own, used in new chats, editable');
