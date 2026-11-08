@@ -1169,3 +1169,4 @@ code.sel { user-select: all; background: var(--soft); padding: 1px 6px; border-r
 .builtin-can > div { display: grid; grid-template-columns: 26px 1fr; column-gap: 6px; align-items: start; padding: 8px 10px; border-radius: 10px; background: var(--hover); }
 .builtin-can > div > span:first-child { grid-row: span 2; font-size: 1.1rem; }
 .builtin-can .small { line-height: 1.35; }
+.lowmem { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 10px; color: var(--text); }

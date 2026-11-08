@@ -535,6 +535,22 @@ function redPng(size = 64) {
   await win.waitForSelector('.chat-group:has-text("Pinned")');
   console.log('✓ chat menu');
 
+  // Low on memory: the error offers the next best model, which answers again.
+  await win.evaluate(() => {
+    newChat();
+    const c = chatById(S.route.id);
+    c.messages.push({ id: 'u-lm', t: Date.now(), role: 'user', text: 'Summarise the water cycle' });
+    c.messages.push({ id: 'a-lm', t: Date.now(), role: 'assistant', altIndex: 0, alts: [{ text: '', target: 'local:phi-4', error: 'Not enough memory to load this model. Try a smaller model, close other apps, or lower the context size.' }] });
+    save(); render();
+  });
+  const lmBtn = win.locator('[data-lowmem="a-lm"]:not([data-keep])');
+  await lmBtn.waitFor();
+  assert.match(await lmBtn.innerText(), /next best model: (Qwen3 8B|Gemma 3 4B)/);
+  await lmBtn.click();
+  await win.waitForFunction(() => { const m = chatById(S.route.id).messages.find((x) => x.id === 'a-lm'); return m.alts.length === 2 && /Answer from/.test(m.alts[1].text) && !pending; }, null, { timeout: 60000 });
+  assert.notEqual(await win.evaluate(() => chatById(S.route.id).messages.find((x) => x.id === 'a-lm').alts[1].target), 'local:phi-4');
+  console.log('✓ low memory: next best model offered and used');
+
   // Deleting a chat: the bin icon in the sidebar deletes it at once, with Undo.
   await win.evaluate(() => { const t = Date.now(); S.data.chats.push({ id: 'del-me', assistantId: 'as-general', title: 'Delete me please', created: t, updated: t + 1e6, target: '', messages: [{ id: 'dm1', role: 'user', text: 'hi', attachments: [] }] }); save(); renderChatList(); });
   await win.hover('.chat-row:has-text("Delete me please")');

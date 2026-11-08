@@ -217,7 +217,7 @@ function messageHTML(chat, a, m, i) {
   const isLast = i === chat.messages.length - 1;
   const left = streaming && alt.eta ? alt.eta.sec - (Date.now() - alt.eta.start) / 1000 : null;
   const etaNow = left == null ? '' : `<span class="who-eta" title="Estimated on this PC">${left > 2 ? `about ${fmtSec(left)} left` : 'almost done'}</span>`;
-  const body = alt.error ? esc(alt.error)
+  const body = alt.error ? esc(alt.error) + lowMemHTML(m, alt)
     : !alt.text && streaming ? `<span class="status-line">${esc(alt.status || 'Thinking…')}</span>`
     : HIDE_BLOCK.has(isMakerSkill(alt)?.output) ? (stripMediaBlock(alt.text) ? markdown(stripMediaBlock(alt.text)) : streaming ? `<span class="status-line">Writing the ${MEDIA_WORD[skillById(alt.skillId).output]} prompt…</span>` : '')
     : markdown(alt.text || '');
@@ -660,6 +660,7 @@ async function generate(chat, rerollMsg, withTarget, opts = {}) {
   pending = { requestId, chatId: chat.id, msgId: msg.id };
   chat.updated = now();
   render();
+  lowMemPreflight(chat, msg, target);
 
   const p = S.data.prefs;
   const lastUser = [...chat.messages.slice(0, upTo)].reverse().find((m) => m.role === 'user');
@@ -889,54 +890,67 @@ function membersOf(target) {
   return st ? [st.members.vision, ...(st.members.drafters || []), st.members.judge].filter(Boolean) : [];
 }
 
-// Picks the checker: your choice in Settings, else the strongest model that did NOT write the answer.
+// Picks the checker: your choice in Settings, else the QUICKEST good checker. A second model that
+// didn't write the answer is best, but loading a big model can take longer than the check itself,
+// so a model that's already in memory (often the one that just answered, whose reading of the chat
+// is still cached) wins unless another is clearly as quick.
+let loadedFiles = new Set();
 function pickChecker(answerTarget) {
   const used = new Set(membersOf(answerTarget));
   const own = stackOf(answerTarget)?.members.cloudCheck;
   if (own && targetValid(own) && !used.has(own)) return own;
   const pref = S.data.prefs.factChecker;
   if (pref && targetValid(pref) && !used.has(pref)) return pref;
-  const strength = (t) => {
-    if (t.target.startsWith('api:')) return 9;
-    const inst = S.installed.find((m) => `local:${m.id}` === t.target);
-    return S.catalog.text.find((c) => c.id === inst?.catalogId)?.judge ?? 5;
+  const info = (target) => {
+    if (target.startsWith('api:')) return { q: 9, sec: S.config?.offline ? Infinity : 6 };
+    const inst = S.installed.find((m) => `local:${m.id}` === target);
+    if (!inst || inst.kind !== 'text') return null;
+    const q = S.catalog.text.find((c) => c.id === inst.catalogId)?.judge ?? 5;
+    const wps = S.speed?.targets?.[target]?.wps || 5;
+    const loaded = loadedFiles.has(inst.files?.model);
+    return { q, sec: (loaded ? 0 : 4 + (inst.size || 4e9) / 1e9 * 1.5) + 300 / wps, loaded };
   };
-  const options = S.targets.filter((t) => !t.stack && !used.has(t.target)).sort((x, y) => strength(y) - strength(x));
-  if (options[0]) return options[0].target;
+  const self = [...used].map((t) => ({ t, ...info(t) })).filter((x) => x.q != null && x.sec != null).sort((a, b) => b.loaded - a.loaded || a.sec - b.sec)[0];
+  const others = S.targets.filter((t) => !t.stack && !used.has(t.target)).map((t) => ({ t: t.target, ...info(t.target) })).filter((x) => x.q != null && x.q >= 5);
+  // Another model if it's about as quick as checking with what's loaded; else the loaded one.
+  const best = others.sort((a, b) => a.sec - b.sec || b.q - a.q)[0];
+  if (best && (!self || best.sec <= self.sec * 1.5 + 3)) return best.t;
+  if (self) return self.t;
   const st = S.stacks.find((x) => `stack:${x.id}` === answerTarget);
   return st?.members.judge || [...used][0] || answerTarget;
 }
 
-const CHECK_PROMPT = `You are a rigorous, impartial fact-checker. Another AI wrote the answer below. Check it carefully against the sources and files provided (when given) and your own knowledge.
-- Break the answer into its key factual claims: facts, numbers, calculations, dates, names, quotes, code behaviour and conclusions.
-- Recompute any arithmetic and re-derive any numbers from the data yourself.
-- Do not trust the answer's confidence. Do not invent facts. If something can't be verified, say so.
-Reply in exactly this format:
+const CHECK_PROMPT = `You are a rigorous, impartial fact-checker. An AI wrote the answer below. Check it against the sources and files provided (when given) and your own knowledge. Be quick and brief.
+- Pick out the key factual claims (at most 8): facts, numbers, calculations, dates, names, quotes, code behaviour, conclusions.
+- Recompute any arithmetic yourself. Don't trust the answer's confidence; don't invent facts; if something can't be verified, say so.
+Reply in exactly this format, starting with the verdict, one short line per claim (under 15 words):
 VERDICT: Accurate | Mostly accurate | Has errors | Can't verify
 CONFIDENCE: <0-100>%
 ### Claims
-- ✅ <claim> — <why it is right>
-- ⚠️ <claim> — <why it is uncertain or misleading>
-- ❌ <claim> — <what is wrong, and the correct information>
+- ✅ <claim> — <why, briefly>
+- ⚠️ <claim> — <why it is uncertain>
+- ❌ <claim> — <what is wrong; the correct information>
 ### Corrections
-<Only if anything is wrong: the corrected facts in a few sentences. Otherwise write "None needed.">`;
+<Only if anything is wrong: the corrected facts in one or two sentences. Otherwise "None needed.">`;
 
-function factCheck(chat, msg, alt, sources) {
+async function factCheck(chat, msg, alt, sources) {
+  try { const r = await qs.call('models:list'); loadedFiles = new Set((r.running || []).filter((x) => x.ready).map((x) => x.file)); } catch {}
   const checker = pickChecker(alt.target || resolveTarget(chat, assistantById(chat.assistantId)));
   if (!checker) { toast('Install a second model to double-check with.'); return; }
   const idx = chat.messages.indexOf(msg);
   const q = [...chat.messages.slice(0, idx)].reverse().find((m) => m.role === 'user');
   const qText = q ? (q.text || '') : '';
-  const files = (q?.attachments || []).filter((x) => x.type === 'doc').map((d) => `<file name="${d.name}">\n${d.text.slice(0, 40000)}\n</file>`).join('\n');
+  const files = (q?.attachments || []).filter((x) => x.type === 'doc').map((d) => `<file name="${d.name}">\n${d.text.slice(0, 16000)}\n</file>`).join('\n');
   const media = (q?.attachments || []).filter((x) => x.type !== 'doc').map((x) => x.name);
-  const src = (sources || []).map((s, k) => `<source number="${k + 1}" title="${s.title}"${s.url ? ` url="${s.url}"` : ''}>\n${(s.text || '').slice(0, 4000)}\n</source>`).join('\n');
+  const src = (sources || []).slice(0, 6).map((s, k) => `<source number="${k + 1}" title="${s.title}"${s.url ? ` url="${s.url}"` : ''}>\n${(s.text || '').slice(0, 2500)}\n</source>`).join('\n');
   const user = `## Question\n${qText || '(no text)'}\n${media.length ? `\n(The user also attached: ${media.join(', ')}. You can't see these; judge claims about them as "can't verify" unless the answer quotes them consistently.)\n` : ''}${files ? `\n## Files the user provided\n${files}\n` : ''}${src ? `\n## Sources\n${src}\n` : ''}\n## Answer to check\n${alt.text}`;
   alt.check = { target: checker, text: '', running: true };
   if (S.data.prefs.factPanelPinned || factPanel?.chatId === chat.id) factPanel = { chatId: chat.id, msgId: msg.id };
   const requestId = uid();
   checks.set(requestId, { chatId: chat.id, msgId: msg.id, alt });
   if (S.route.view === 'chat' && S.route.id === chat.id) render();
-  qs.sendChat({ requestId, target: checker, messages: [{ role: 'system', content: CHECK_PROMPT }, { role: 'user', content: user }], temperature: 0.1, maxTokens: 3000, contextSize: Math.max(16384, Number(S.data.prefs.contextSize) || 16384), gpu: S.data.prefs.gpu, effort: S.data.prefs.effort });
+  // Quick effort: no long "thinking" first, one model (not a whole team), short reply.
+  qs.sendChat({ requestId, target: checker, messages: [{ role: 'system', content: CHECK_PROMPT }, { role: 'user', content: user }], temperature: 0.1, maxTokens: 900, contextSize: Math.max(16384, Number(S.data.prefs.contextSize) || 16384), gpu: S.data.prefs.gpu, effort: 'quick', level: 'quick' });
 }
 
 function parseCheck(text) {
