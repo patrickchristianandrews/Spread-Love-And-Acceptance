@@ -592,6 +592,14 @@ function redPng(size = 64) {
   await win.waitForSelector('#sess-badge:has-text("Private chat")');
   assert.equal(await win.getAttribute('#input', 'spellcheck'), 'true', 'spell check in the message box');
   await win.waitForSelector('#improve-btn:has-text("Fix my prompt")');
+  // Short or long answers.
+  await win.selectOption('#pick-length', 'short');
+  assert.equal(await win.evaluate(() => lengthOf(chatById(S.route.id))), 'short');
+  assert.match(await win.evaluate(() => turnContext(chatById(S.route.id), [], false, 'hi', null, '', '')), /Answer length: SHORT/);
+  await win.selectOption('#pick-length', 'long');
+  assert.match(await win.evaluate(() => turnContext(chatById(S.route.id), [], false, 'hi', null, '', '')), /Answer length: LONG/);
+  await win.selectOption('#pick-length', 'auto');
+  assert.doesNotMatch(await win.evaluate(() => turnContext(chatById(S.route.id), [], false, 'hi', null, '', '')), /Answer length/);
   await shot(win, '16-session-badge');
   console.log('✓ privacy modes: fully private, private online (Proton VPN free or your account), online; chats say Private / Protected session');
 
