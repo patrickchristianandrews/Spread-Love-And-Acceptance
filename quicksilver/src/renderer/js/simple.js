@@ -75,7 +75,8 @@ function autoPick(chat, a, text, hasImage) {
   // questions with one model, so speed alone is no reason to leave it.
   const floor = score(base) - 1;
   const good = cands.filter((t) => t === base || score(t) >= floor || (hasImage && !T[base]?.vision));
-  const pool = good.filter((t) => secs(t) <= budget);
+  // A photo the usual choice can't see goes to a model that can, even if that one is slower.
+  const pool = good.filter((t) => secs(t) <= budget || (hasImage && !T[base]?.vision));
   if (!pool.length) return { target: base };
   const best = [...pool].sort((x, y) => score(y) - score(x) || secs(x) - secs(y))[0];
   // Keep the usual choice unless the pick is clearly better for this question, or much quicker.

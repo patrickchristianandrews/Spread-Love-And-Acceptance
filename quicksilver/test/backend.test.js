@@ -618,8 +618,8 @@ async function collect(gen) {
     assert.deepEqual(r.added.map((m) => m.id), ['starter']); assert.ok(r.added[0].vision);
     assert.deepEqual(r.missing.map((m) => m.catalogId), ['qwen3-4b']);
     assert.equal(r.missing[0].repo, 'mradermacher/Huihui-Qwen3-4B-Instruct-2507-abliterated-GGUF', 'a missing brain is fetched from the same (uncensored) copy the installer uses');
-    // Quicksilver's team is picked from every model on the PC (here: three test models + the starter).
-    assert.equal(await complete.ensureQuicksilverStack(), 'stack:quicksilver');
+    // Until the brain arrives the small built-in model answers on its own: filtered models never stand in.
+    assert.equal(await complete.ensureQuicksilverStack(), null);
     // The installer copied the brain in (or it finished downloading).
     fs.copyFileSync(TINY, path.join(sd, 'brain.gguf'));
     r = models.registerStarter(sd);
@@ -663,6 +663,13 @@ async function collect(gen) {
     assert.ok(roles.includes('draft') && roles.includes('lead'), 'a hard one: drafted, then the lead checks and combines');
     const quick = await collect(complete.run('stack:quicksilver', { messages: [{ role: 'user', content: 'Compare solar and wind power.' }], contextSize: 2048, maxTokens: 30, level: 'quick' }));
     assert.equal(quick.steps.length, 0, 'Quick effort is always one model');
+    // Creative work: the Muse (the quick eyes model) sketches fresh angles, then the brain writes.
+    const poem = await collect(complete.run('stack:quicksilver', { messages: [{ role: 'user', content: 'Write a short poem about rain on a tin roof' }], contextSize: 2048, maxTokens: 60, level: 'thorough' }));
+    const museStep = poem.steps.find((x) => x.role === 'muse');
+    assert.ok(museStep && museStep.model, 'the Muse sketches angles first');
+    assert.match(poem.text, /Answer from/, 'then the brain writes the piece');
+    const plain = await collect(complete.run('stack:quicksilver', { messages: [{ role: 'user', content: 'Write a short poem about rain' }], contextSize: 2048, maxTokens: 30, level: 'quick' }));
+    assert.ok(!plain.steps.some((x) => x.role === 'muse'), 'Quick effort skips the Muse');
     // A photo with only the shipped pair (the 2B that sees is a drafter, not a separate vision
     // member): the quick route must still find it to read the picture. Caught by the install test.
     complete.saveStack({ id: 'pair', name: 'Pair', members: { drafters: ['local:starter-brain', 'local:starter'], judge: 'local:starter-brain', mode: 'auto' } });

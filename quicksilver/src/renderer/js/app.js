@@ -169,6 +169,7 @@ async function init() {
     else if (b.dataset.nav === 'upgrades') { go({ view: 'pc' }); setTimeout(() => document.getElementById('upgrades')?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 300); }
     else go({ view: b.dataset.nav });
   }));
+  $('#nav-explore')?.addEventListener('click', () => { S.data.prefs.exploreOpen = !exploreOpen(); save(); paintExplore(); });
   $('#theme-btn').addEventListener('click', () => { S.data.prefs.theme = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'; applyPrefs(); save(); if (S.route.view === 'settings') render(); });
   paintNet();
   if (S.config?.vpnOnly) refreshVpn();

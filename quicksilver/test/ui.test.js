@@ -61,7 +61,7 @@ function redPng(size = 64) {
   // The fake 8 GB graphics card turns on background work (reading ahead, answering the next
   // question in advance); on a slow test machine that competes with the steps being tested, so
   // it's off here and switched on only in the tests that check it.
-  await win.evaluate(() => { S.data.prefs.preanswer = false; S.data.prefs.readAhead = false; S.data.prefs.autoUpgrade = false; save(); });
+  await win.evaluate(() => { S.data.prefs.preanswer = false; S.data.prefs.readAhead = false; S.data.prefs.autoUpgrade = false; S.data.prefs.exploreOpen = true; save(); paintExplore(); });
   // Most checks below use the full view (every option on screen); the simple view, which is the
   // default, is checked near the end.
   assert.equal(await win.evaluate(() => S.data.prefs.simple), true, 'simple view is the default');
@@ -981,7 +981,12 @@ function redPng(size = 64) {
   // Everything is findable: the menu shows Stacks, Models, Upgrades… and the chat options are in the bar.
   for (const v of ['stacks', 'models', 'upgrades', 'assistants', 'skills', 'integrations']) assert.ok(await win.isVisible(`.nav [data-nav="${v}"]`), `${v} is in the menu`);
   assert.ok(await win.isVisible('#tog-web') && await win.isVisible('#tog-fact') && await win.isVisible('#pick-effort'), 'chat options are in the message bar');
-  await win.waitForSelector('#side-stacks [data-stack-chat]');
+  // A tidy menu: no list of stacks; the Explore pages fold into one section.
+  assert.equal(await win.locator('#side-stacks').count(), 0, 'stacks are not listed in the menu');
+  await win.click('#nav-explore');
+  await win.waitForSelector('#nav-explore-list', { state: 'hidden' });
+  await win.click('#nav-explore');
+  await win.waitForSelector('#nav-explore-list .nav-item[data-nav="stacks"]', { state: 'visible' });
   assert.ok(await win.evaluate(() => getComputedStyle(document.querySelector('#side-scroll')).overflowY === 'auto'), 'the menu scrolls');
   await win.selectOption('#pick-assistant', 'as-general');
   assert.equal(await win.inputValue('#pick-model'), '__auto');
@@ -997,7 +1002,7 @@ function redPng(size = 64) {
   await idle();
   const picked = await win.evaluate(() => { const m = chatById(S.route.id).messages.at(-1); return m.alts[m.altIndex].target; });
   assert.ok(await win.evaluate((t) => Boolean(S.speed.targets[t]?.vision || membersOf(t).some((x) => S.speed.targets[x]?.vision || S.installed.find((m) => `local:${m.id}` === x)?.vision)), picked), `a model that can see answered (${picked})`);
-  console.log('✓ simple view: everything in the menu (Stacks, Models, Upgrades…), your stacks listed, menu scrolls, options in the bar, automatic model choice (photo →', picked + ')');
+  console.log('✓ simple view: a tidy menu (Explore folds Stacks, Models, Upgrades…; no stacks list), menu scrolls, options in the bar, automatic model choice (photo →', picked + ')');
 
   if (errors.length) console.log('PAGE ERRORS:', errors);
   assert.deepEqual(errors, []);

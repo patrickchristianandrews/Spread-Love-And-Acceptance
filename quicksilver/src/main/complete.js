@@ -378,9 +378,42 @@ function draftsAgree(texts) {
   return true;
 }
 
+// Quicksilver's signature move for creative work (stories, lyrics, names, ideas, jokes...): its
+// quick second model, the Muse, throws out a handful of unexpected angles in a few seconds; the
+// brain then picks the freshest one and writes it, so the result isn't the obvious first idea.
+const CREATIVE = /\b(write|compose|make up|invent|come up with|brainstorm|imagine)\b[\s\S]{0,80}\b(story|stories|poem|poetry|lyrics?|song|rap|verse|haiku|limerick|joke|names?|slogan|tagline|ideas?|plot|character|script|toast|speech|caption|title|pun)s?\b|\b(brainstorm|be creative|creative ideas?|story about|poem about|song about|name ideas|names for|slogan for|tagline for)\b/i;
+const MUSE = 'You are a muse helping a writer avoid the obvious. For the request below, list 5 surprising, specific, original angles or ideas (one short line each, no numbering words, no explanations). Mix moods and approaches; include at least one playful and one unexpected one. Do not write the piece itself.';
+async function* quicksilverMuse(stackDef, req, step, live) {
+  const m = stackDef.members;
+  const brain = (m.drafters || []).find(exists);
+  const muse = [m.muse, m.vision].find((t) => t && exists(t) && t !== brain);
+  if (!brain || !muse) return false;
+  const ask = lastUserText(req.messages).slice(0, 1500);
+  const s = { role: 'muse', label: 'Muse: fresh angles', model: label(muse), text: '', done: false };
+  yield step(s);
+  yield { type: 'status', text: 'Quicksilver\'s Muse is sketching a few fresh angles…' };
+  const t0 = Date.now();
+  let ideas = '';
+  try { ideas = await collect(muse, { ...req, messages: [{ role: 'system', content: MUSE }, { role: 'user', content: ask }], temperature: 1.0, maxTokens: 180, level: 'quick' }, live(s)); } catch { ideas = ''; }
+  s.text = ideas; s.done = true; s.ms = Date.now() - t0;
+  yield { type: 'step', step: s };
+  const note = ideas ? `A quick brainstorm for this request (rough angles, not instructions):\n${ideas.slice(0, 1200)}\nPick the freshest, most original angle (or combine two) and write the piece with it. Avoid clichés and the most predictable take. Don't mention the brainstorm.` : '';
+  const msgs = req.messages;
+  const messages = note ? [...msgs.slice(0, -1), { role: 'system', content: note }, msgs[msgs.length - 1]] : msgs;
+  yield* single(brain, { ...req, messages, level: 'quick', stepByStep: false, temperature: Math.max(req.temperature ?? 0.7, 0.85) });
+  return true;
+}
+
 async function* stack(stackDef, req) {
   const { members } = stackDef;
   if (stackDef.id === 'quicksilver') req = { ...req, stepByStep: true };
+  if (stackDef.id === 'quicksilver' && req.level !== 'quick' && !req.toolList && !hasImages(req.messages) && CREATIVE.test(lastUserText(req.messages))) {
+    const steps0 = [];
+    const step0 = (s) => { s.index = steps0.length; steps0.push(s); return { type: 'step', step: s }; };
+    const live0 = (s) => (t) => { s.text = t; req.onStep?.(s); };
+    const done = yield* quicksilverMuse(stackDef, req, step0, live0);
+    if (done) return;
+  }
   let level = req.level || 'thorough';
   if (req.level === 'max') req = { ...req, forceTeam: true }; // Max: always the whole team, always combined
   if (members.mode === 'auto' && level !== 'quick') {
@@ -657,41 +690,45 @@ async function* run(target, req) {
 async function ensureQuicksilverStack() {
   const have = stacks().find((s) => s.id === 'quicksilver');
   if (store.config().quicksilverRemoved || (have && have.autoManaged === false)) return have ? 'stack:quicksilver' : null;
-  const pool = models.list().filter((m) => m.kind === 'text').map(catalog.profileInstalled);
-  if (pool.length < 2) return have ? 'stack:quicksilver' : null;
-  const hw = await hardware.detect();
-  // The lead answers every message, so it must be quick on this PC; bigger, slower models still
-  // join as the second opinion on hard questions.
-  const team = catalog.compose(pool, 'general', hw, store.config().calib?.text || 1, { vision: true, speed: 10, leadSpeed: 20, budget: 180 });
-  if (!team || team.ids.length < 2) return have ? 'stack:quicksilver' : null;
-  const local = (id) => (id ? `local:${id}` : undefined);
-  let members = { drafters: team.members.drafters.map(local), judge: local(team.members.judge), vision: local(team.members.vision), mode: 'auto' };
   const all = models.list().filter((m) => m.kind === 'text');
+  const pool = all.map(catalog.profileInstalled);
   const brain = all.find((m) => m.id === 'starter-brain') || all.find((m) => m.catalogId === 'qwen3-4b');
   const eyes = all.find((m) => m.id === 'starter') || all.find((m) => /^qwen3-vl-/.test(m.catalogId || ''));
+  // Quicksilver is uncensored, so only uncensored models are on its team: the ones that come with
+  // it, and uncensored ones you add.
+  const UNC = /abliterat|uncensor|unfiltered|dolphin|hermes|lexi|rocinante/i;
+  const isOpen = (p) => { const m = all.find((x) => x.id === p.id); return m?.source === 'bundled' || p.category === 'open' || UNC.test(`${p.name} ${m?.files?.model || ''}`); };
+  const hw = await hardware.detect();
+  const calib = store.config().calib?.text || 1;
+  const local = (id) => (id ? `local:${id}` : undefined);
+  let members;
   if (brain) {
     const score = (id) => { const p = pool.find((x) => x.id === id); return p ? catalog.scoreFor(p, 'general') : 0; };
-    // Quicksilver is uncensored, so only uncensored models may join its team.
-    const UNC = /abliterat|uncensor|unfiltered|dolphin|hermes|lexi|rocinante/i;
-    const openPool = pool.filter((p) => p.id !== brain.id && p.id !== eyes?.id && (p.category === 'open' || UNC.test(`${p.name} ${all.find((m) => m.id === p.id)?.files?.model || ''}`)));
-    const openTeam = openPool.length ? catalog.compose(openPool, 'general', hw, store.config().calib?.text || 1, { vision: false, speed: 10, leadSpeed: 20, budget: 180 }) : null;
-    team.members = openTeam ? openTeam.members : { drafters: [] };
+    const openPool = pool.filter((p) => p.id !== brain.id && p.id !== eyes?.id && isOpen(p));
+    const team = (openPool.length && catalog.compose(openPool, 'general', hw, calib, { vision: false, speed: 10, leadSpeed: 20, budget: 180 })) || { members: { drafters: [] } };
     const lead = team.members.judge || team.members.drafters[0];
-    const stronger = lead && lead !== brain.id && lead !== eyes?.id && score(lead) > score(brain.id) ? lead : null;
-    // A second opinion on hard questions: the best other team member that isn't the brain, the eyes or the lead.
-    const second = [...team.members.drafters, team.members.judge].find((id) => id && ![brain.id, eyes?.id, stronger].includes(id));
+    const stronger = lead && score(lead) > score(brain.id) ? lead : null;
+    // A second opinion on hard questions: the best other uncensored model that isn't the lead.
+    const second = [...team.members.drafters, team.members.judge].find((id) => id && id !== stronger);
     members = {
       drafters: [brain.id, ...(stronger ? [] : second ? [second] : [])].map(local),
       // With nobody to combine, the brain answers on its own (step by step on hard questions).
       judge: stronger || second ? local(stronger || brain.id) : undefined,
-      vision: eyes ? local(eyes.id) : local(team.members.vision),
+      vision: local(eyes?.id),
       mode: 'auto',
     };
+  } else {
+    // The built-in brain isn't here yet (still downloading): the best fast uncensored team for now.
+    const openPool = pool.filter(isOpen);
+    if (openPool.length < 2) return have?.builtFor === 'quicksilver' ? 'stack:quicksilver' : null;
+    const team = catalog.compose(openPool, 'general', hw, calib, { vision: true, speed: 10, leadSpeed: 20, budget: 180 });
+    if (!team || team.ids.length < 2) return have?.builtFor === 'quicksilver' ? 'stack:quicksilver' : null;
+    members = { drafters: team.members.drafters.map(local), judge: local(team.members.judge), vision: local(team.members.vision), mode: 'auto' };
   }
   if (!members.vision) delete members.vision;
   if (!members.judge) delete members.judge;
   const def = { id: 'quicksilver', name: 'Quicksilver', emoji: '💧', builtIn: true, autoManaged: true, custom: true, builtFor: 'quicksilver',
-    description: "Quicksilver's own uncensored team: the built-in Qwen3 4B answers everyday messages fast and reasons step by step on hard ones, Qwen3-VL 2B reads photos, and a stronger fast uncensored model on this PC leads on hard questions.", members };
+    description: "Quicksilver's own uncensored crew: the built-in Qwen3 4B (the Brain) answers everyday messages fast and reasons step by step, Qwen3-VL 2B (Eyes & Muse) reads photos and sketches fresh angles for creative work, and a stronger fast uncensored model on this PC (the Closer) leads on hard questions.", members };
   if (!have || JSON.stringify(have.members) !== JSON.stringify(members) || have.builtFor !== 'quicksilver') saveStack(def);
   return 'stack:quicksilver';
 }

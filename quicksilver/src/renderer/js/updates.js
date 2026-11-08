@@ -69,7 +69,23 @@ async function loadModelUpgrades() {
   return S.modelUpgrades;
 }
 
+// The left menu stays short: the Explore pages fold into one section (open it when you need it;
+// it opens by itself on those pages). Your stacks are on the Stacks page.
+const EXPLORE_VIEWS = ['stacks', 'models', 'assistants', 'skills', 'integrations', 'arena'];
+const exploreOpen = () => { const p = S.data?.prefs?.exploreOpen; return p === true || (p !== false && EXPLORE_VIEWS.includes(S.route?.view)); };
+function paintExplore() {
+  const list = document.getElementById('nav-explore-list');
+  const btn = document.getElementById('nav-explore');
+  if (!list || !btn) return;
+  const open = exploreOpen();
+  list.hidden = !open;
+  btn.setAttribute('aria-expanded', String(open));
+  btn.classList.toggle('open', open);
+  const n = shownUpgrades().filter((u) => !S.downloads[u.newCatalogId]).length + shownStackUpdates().length;
+  btn.classList.toggle('has-dot', Boolean(n) && !open);
+}
 function paintUpdateBadge() {
+  paintExplore();
   const n = shownUpgrades().filter((u) => !S.downloads[u.newCatalogId]).length + shownStackUpdates().length;
   $$('.sidebar [data-nav="models"]').forEach((b) => {
     let dot = b.querySelector('.nav-dot');
@@ -188,6 +204,7 @@ function builtinModelHTML() {
     ['🧠', 'Reasons step by step', 'works hard questions out step by step first; see it under "Thought it through"'],
     ['✓', 'Double-checks', 'a second model checks answers claim by claim when you turn on Double-check'],
     ['✍️', 'Writes', 'emails, essays, summaries, rewrites in any tone'],
+    ['✨', 'Creative spark', 'for stories, lyrics, names and ideas, its Muse throws out fresh angles first, so you don\'t get the obvious take'],
     ['🧮', 'Gets maths right', 'sums are worked out exactly, not guessed'],
     ['💻', 'Helps with code', 'explains, writes and fixes everyday code'],
     ['👁', 'Sees photos', `reads screenshots, receipts and pictures${eyes ? ` (${eyes.name})` : ''}`],
@@ -200,10 +217,27 @@ function builtinModelHTML() {
       <div class="small muted">${esc(brain.name)}${eyes ? ` + ${esc(eyes.name)} for eyes` : ''} · ${(brain.sizeGB + (eyes ? eyes.sizeGB + (eyes.mmprojGB || 0) : 0)).toFixed(1)} GB · comes with the app, works offline</div></div>
       ${open ? '<span class="badge b-peach" title="Answers plainly, without refusing. The parental lock keeps it family-safe.">Uncensored</span>' : ''}${est ? `<span class="badge rate-${est.rating}">${esc(est.label)}</span>` : ''}</div>
     <p style="margin:10px 0 6px"><b>Fast answers you can trust.</b> Chosen as the quickest model that's still accurate: it answers almost instantly on most PCs and double-checks facts and figures, so you can rely on it for everyday work.${open ? ' It\'s uncensored: it answers plainly instead of refusing (the parental lock in Settings keeps it family-safe).' : ''}</p>
-    ${team.length > 1 ? `<p class="small muted" style="margin:0 0 6px">Its team on this PC right now: <b>${team.map(esc).join(' + ')}</b>. It rebuilds itself around the fastest strong models you have, and new ones that make it smarter and still fast are added automatically.</p>` : ''}
+    ${qsRolesHTML(qst)}
     <div class="builtin-can">${can.map(([i, t, d]) => `<div><span>${i}</span><b>${esc(t)}</b><span class="small muted">${esc(d)}</span></div>`).join('')}</div>
     <div class="row" style="margin-top:10px">${have ? '<button class="btn small primary" id="builtin-chat">Start a chat</button>' : (S.downloads[brain.id] ? downloadBox(brain.id) : `<button class="btn small primary" data-get="${brain.id}">Download it (${brain.sizeGB} GB)</button>`)}<span class="grow"></span><span class="small muted">Want more power? Better models below run alongside it.</span></div>
   </div>`;
+}
+// Quicksilver's crew, by role: the Brain answers, the Eyes read photos and double as the Muse for
+// creative work, and a Closer (a stronger uncensored model, when this PC has one) finishes hard ones.
+function qsRolesHTML(qst) {
+  if (!qst) return '';
+  const nameOf = (t) => S.installed.find((m) => `local:${m.id}` === t)?.name || (t ? targetLabel(t) : '');
+  const m = qst.members || {};
+  const brain = m.drafters?.[0];
+  const roles = [
+    brain && ['🧠', 'Brain', nameOf(brain), 'answers everyday messages fast and reasons step by step'],
+    m.vision && ['👁', 'Eyes & Muse', nameOf(m.vision), 'reads photos, and sketches fresh angles before creative writing'],
+    m.judge && m.judge !== brain && ['🎯', 'Closer', nameOf(m.judge), 'leads on hard questions'],
+    m.drafters?.[1] && ['🗣', 'Second opinion', nameOf(m.drafters[1]), 'adds its view on hard questions'],
+  ].filter(Boolean);
+  if (!roles.length) return '';
+  return `<div class="qs-roles">${roles.map(([i, r, n, d]) => `<div class="qs-role"><span class="qs-role-ic">${i}</span><span><b>${esc(r)}</b> <span class="small">${esc(n)}</span><span class="small muted">${esc(d)}</span></span></div>`).join('')}</div>
+    <p class="small muted" style="margin:4px 0 6px">Quicksilver's own uncensored crew. It rebuilds itself as you add models: a stronger, still-fast uncensored model joins as the Closer automatically.</p>`;
 }
 function bindBuiltinModel() {
   $('#builtin-chat')?.addEventListener('click', () => {
