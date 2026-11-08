@@ -70,7 +70,7 @@ views.chat = {
             ${chip('tog-tools', 'plug', 'Tools', tools, 'Let the AI use your integrations (GitHub, Slack, MCP servers…)')}
             ${chip('tog-fact', 'shield', 'Double-check', fact, 'After each answer, a second model checks it claim by claim')}
             <button class="chip-tog" id="add-api-chip" title="Connect a cloud AI (ChatGPT, Claude, Gemini…) to use alongside your local models">${icon('plus', 16)}<span>Cloud AI${S.providers?.length ? ` (${S.providers.length})` : ''}</span></button>
-            <label class="pill-select small" title="Answer length: Auto fits the question; Short is a few sentences; Long is detailed, with explanation and examples">${icon('doc', 16)}<select id="pick-length" aria-label="Answer length">${Object.entries(LENGTHS).map(([k, l]) => `<option value="${k}" ${k === lengthOf(chat) ? 'selected' : ''}>${l.label}</option>`).join('')}</select>${icon('chevron', 14)}</label>
+            <label class="pill-select small" title="Answer length: Best length fits the question; Quick answer gets straight to the point; Detailed answer gives the full picture, with explanation and examples">${icon('doc', 16)}<select id="pick-length" aria-label="Answer length">${Object.entries(LENGTHS).map(([k, l]) => `<option value="${k}" ${k === lengthOf(chat) ? 'selected' : ''}>${l.label}</option>`).join('')}</select>${icon('chevron', 14)}</label>
             <label class="pill-select small" title="Instant: one model, fastest. Balanced: one model, then a check. Auto: the team works on hard questions only. Deep think: the whole team on every question, always double-checked.">${icon('gauge', 16)}<select id="pick-effort" aria-label="Effort">${Object.entries(EFFORTS).map(([k, e]) => `<option value="${k}" ${k === effortOf(chat, a) ? 'selected' : ''}>${e.replace(/^\S+\s/, '')}</option>`).join('')}</select>${icon('chevron', 14)}</label>
             <span class="grow"></span>
             <button class="send-btn ${pending?.chatId === chat.id ? 'stop' : ''}" id="send" title="${pending?.chatId === chat.id ? 'Stop' : 'Send (Enter)'}" aria-label="${pending?.chatId === chat.id ? 'Stop' : 'Send'}">${icon(pending?.chatId === chat.id ? 'stop' : 'send', 20)}</button>
@@ -574,11 +574,11 @@ function systemPrompt(a, strict, chat) {
   if (strict) parts.push('IMPORTANT: Answer ONLY from the reference material in the <context> block. Do not use general knowledge or memory. Cite every factual statement with its source number. If the material does not contain the answer, reply that it was not found in the knowledge base, and say what kind of source would answer it.');
   return parts.join('\n\n');
 }
-// Short or long answers: Auto lets the question decide.
+// Quick or detailed answers: Best length lets the question decide.
 const LENGTHS = {
-  auto: { label: 'Auto length', toast: 'Answers fit the question.' },
-  short: { label: 'Short', toast: 'Short answers: a few sentences.', note: 'Answer length: SHORT. Give the answer in a few sentences or a short list (about 120 words at most). Skip background and examples unless asked.', tokens: 700 },
-  long: { label: 'Long', toast: 'Long answers: detailed, with explanation and examples.', note: 'Answer length: LONG. Give a thorough, detailed answer: explain the reasoning, cover the important cases, and include examples, organised with headings where it helps.', tokens: 4096 },
+  auto: { label: 'Best length', toast: 'Answers are as long as the question needs.' },
+  short: { label: 'Quick answer', toast: '⚡ Quick answers: straight to the point, in a few sentences.', note: 'Answer length: SHORT. Give the answer in a few sentences or a short list (about 120 words at most). Skip background and examples unless asked.', tokens: 700 },
+  long: { label: 'Detailed answer', toast: '📖 Detailed answers: the full picture, with explanation and examples.', note: 'Answer length: LONG. Give a thorough, detailed answer: explain the reasoning, cover the important cases, and include examples, organised with headings where it helps.', tokens: 4096 },
 };
 const lengthOf = (chat) => (LENGTHS[chat?.length] ? chat.length : LENGTHS[S.data.prefs.answerLength] ? S.data.prefs.answerLength : 'auto');
 function turnContext(chat, sources, strict, question, ctx, note, extra) {
