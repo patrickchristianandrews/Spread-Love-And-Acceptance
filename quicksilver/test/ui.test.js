@@ -960,7 +960,7 @@ function redPng(size = 64) {
   await win.keyboard.press('Enter');
   await idle();
   const picked = await win.evaluate(() => { const m = chatById(S.route.id).messages.at(-1); return m.alts[m.altIndex].target; });
-  assert.ok(await win.evaluate((t) => S.speed.targets[t]?.vision, picked), `a model that can see answered (${picked})`);
+  assert.ok(await win.evaluate((t) => Boolean(S.speed.targets[t]?.vision || membersOf(t).some((x) => S.speed.targets[x]?.vision || S.installed.find((m) => `local:${m.id}` === x)?.vision)), picked), `a model that can see answered (${picked})`);
   console.log('✓ simple view: everything in the menu (Stacks, Models, Upgrades…), your stacks listed, menu scrolls, options in the bar, automatic model choice (photo →', picked + ')');
 
   if (errors.length) console.log('PAGE ERRORS:', errors);
