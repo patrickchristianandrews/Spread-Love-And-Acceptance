@@ -93,9 +93,32 @@ function chatEtaHint(target, a) {
   return ` · ⏱ ${etaLabel(easy)} per answer${hard != null && hard > easy * 1.4 ? ` (hard questions ${etaLabel(hard)})` : ''}${st != null ? ` · ${starText(st)} expected quality` : ''}`;
 }
 
+// At start-up: ask what to call the user (once; skippable). Changeable in Settings → General.
+function nameAskHTML() {
+  const p = S.data.prefs;
+  if (p.userName || p.askedName) return '';
+  return `<div class="name-ask" id="name-ask"><span class="name-ask-h">👋 What should I call you?</span>
+    <input id="name-ask-in" maxlength="40" placeholder="Your first name" autocomplete="given-name">
+    <button class="btn small primary" id="name-ask-ok">Save</button><button class="btn small ghost" id="name-ask-skip">Skip</button></div>`;
+}
+function bindNameAsk() {
+  const done = (name) => {
+    S.data.prefs.askedName = true;
+    if (name) S.data.prefs.userName = name;
+    save(); render();
+    if (name) toast(`Nice to meet you, ${name}. You can change your name any time in Settings.`);
+  };
+  $('#name-ask-ok')?.addEventListener('click', () => done($('#name-ask-in').value.trim().slice(0, 40)));
+  $('#name-ask-in')?.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); done(e.target.value.trim().slice(0, 40)); } });
+  $('#name-ask-skip')?.addEventListener('click', () => done(''));
+}
+
 function welcomeHTML(a) {
   const none = !S.targets.length;
+  const name = S.data.prefs.userName;
   return `<div class="welcome">
+    ${nameAskHTML()}
+    ${name ? `<p class="hello">Hi ${esc(name)} 👋</p>` : ''}
     <div class="emoji-badge" style="width:72px;height:72px;font-size:2.4rem;margin:0 auto 12px;border-radius:20px">${esc(a.emoji)}</div>
     <h1>${esc(a.name)}</h1>
     <p class="muted" style="font-size:1.05rem;font-weight:600">${esc(a.description || '')}</p>
@@ -223,6 +246,7 @@ function messageHTML(chat, a, m, i) {
     ${checkHTML(m, alt) || alt.sources?.length ? '</div>' : ''}
     ${tools.length ? `<div class="msg-tools">${tools.join('')}</div>` : ''}
     ${isLast && !pending && alt.text && !alt.error && !isMakerSkill(alt) && !alt.imported ? followupsHTML(alt) : ''}
+    ${tipHTML(m, alt)}
     </div>
   </div>`;
 }
@@ -321,6 +345,7 @@ function bindChat() {
     if (e.target.closest('[data-skill-dismiss]')) { chat.dismissed = [...(chat.dismissed || []), chat.suggested]; chat.suggested = null; save(); $('#skill-row').innerHTML = skillChipHTML(chat); }
   });
   $('#send').addEventListener('click', sendOrStop);
+  bindNameAsk();
   bindHints(chat, a);
   $$('[data-goto]').forEach((b) => b.addEventListener('click', () => go({ view: b.dataset.goto })));
   $('#pick-assistant').addEventListener('change', (e) => { chat.assistantId = e.target.value; S.data.prefs.lastAssistant = e.target.value; save(); render(); });
@@ -794,6 +819,7 @@ qs.onChat(({ requestId, ev }) => {
       (async () => {
         // Free checks first (maths, code, web pages): a wrong answer is corrected straight away.
         if (ok && alt.text && (!maker || maker.output === 'app') && await autoChecks(chat, msg, alt).catch(() => false)) return;
+        if (ok && !maker) { maybeTip(chat, msg, alt); if (alt.tip) paintStreaming(chat, msg); }
         if (fuOk) writeFollowups(chat, msg, alt);
         if (ok && maker && MEDIA_OUTPUTS.has(maker.output)) runSkillMedia(chat, msg, alt, maker);
         else if (ok && maker && AFTER_OUTPUTS.has(maker.output) && alt.text) runAfterText(chat, msg, alt, maker);

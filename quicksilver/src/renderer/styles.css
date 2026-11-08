@@ -1125,3 +1125,17 @@ code.sel { user-select: all; background: var(--soft); padding: 1px 6px; border-r
 .side-emoji { width: 18px; flex: none; text-align: center; font-size: 15px; line-height: 1; }
 .side-stack .lbl { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .app.collapsed .side-sec { display: none; }
+
+/* ---------- What should I call you? ---------- */
+.name-ask { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; justify-content: center; margin: 0 auto 18px; padding: 10px 14px; max-width: 560px; border-radius: 14px; border: 1px solid var(--accent-line); background: var(--accent-tint); }
+.name-ask-h { font-weight: 750; }
+.name-ask input { width: 180px; padding: 6px 10px; }
+.welcome-card .name-ask { justify-content: flex-start; margin: 10px 0 14px; }
+.hello { font-size: 1.05rem; font-weight: 700; color: var(--accent); margin: 0 0 6px; }
+
+/* ---------- Tips from the built-in model ---------- */
+.tip-card { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding: 9px 12px; border-radius: 12px; border: 1px dashed var(--accent-line); background: var(--accent-tint); font-size: .9rem; }
+.tip-ic { flex: none; }
+.tip-text { flex: 1; min-width: 200px; line-height: 1.45; }
+.tip-off { background: none; border: none; color: var(--faint); font: inherit; font-size: .78rem; cursor: pointer; text-decoration: underline; padding: 2px 4px; }
+.tip-off:hover { color: var(--text); }

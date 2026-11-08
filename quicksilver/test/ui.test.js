@@ -544,6 +544,32 @@ function redPng(size = 64) {
   await win.waitForFunction(() => !chatById('del-me'));
   console.log('✓ delete a chat: bin icon or ⋯ menu, with Undo');
 
+  // At start-up: "What should I call you?" (once), then a greeting by name; changeable in Settings.
+  await win.evaluate(() => { S.data.prefs.userName = ''; S.data.prefs.askedName = false; save(); newChat('as-general'); });
+  await win.waitForSelector('#name-ask-in');
+  await win.fill('#name-ask-in', 'Sam');
+  await win.click('#name-ask-ok');
+  await win.waitForSelector('.welcome .hello:has-text("Hi Sam")');
+  assert.equal(await win.evaluate(() => S.data.prefs.userName), 'Sam');
+  assert.equal(await win.locator('#name-ask').count(), 0, 'asked only once');
+  await win.evaluate(() => { S.data.prefs.userName = ''; save(); });
+  console.log('✓ name: asked at start-up, greeted by name, changeable in Settings');
+
+  // Tips from the built-in model: a fitting tip under a starter answer, and a way to turn them off.
+  await win.evaluate(() => {
+    S.data.prefs.tips = true; S.data.prefs.tipCount = 1; S.data.prefs.lastTip = '';
+    const t = Date.now();
+    const c = { id: 'tip-chat', assistantId: 'as-general', title: 'Tip test', created: t, updated: t, target: '', messages: [
+      { id: 'tq', t, role: 'user', text: 'Fix this javascript function bug', attachments: [] },
+      { id: 'ta', t, role: 'assistant', altIndex: 0, alts: [{ text: 'Here is the fix.', target: 'stack:quicksilver', ms: 5000 }] }] };
+    S.data.chats.push(c); maybeTip(c, c.messages[1], c.messages[1].alts[0]); save(); go({ view: 'chat', id: 'tip-chat' });
+  });
+  await win.waitForSelector('.tip-card:has-text("coding stack")');
+  await win.click('.tip-card [data-tip-off]');
+  await win.waitForFunction(() => S.data.prefs.tips === false && !document.querySelector('.tip-card'));
+  await win.evaluate(() => { S.data.prefs.tips = true; save(); });
+  console.log('✓ tips: built-in model suggests a fitting way to get more out of Quicksilver; can be turned off');
+
   // Knowledge.
   await win.click('[data-nav="library"]');
   await win.click('#kb-new');
