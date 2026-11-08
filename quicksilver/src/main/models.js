@@ -224,7 +224,7 @@ async function repair(id, emit) {
   if (!m) throw new Error('That model is not installed.');
   if (m.source === 'imported') throw new Error('This model came from another app or folder, so Quicksilver can\'t re-download it. Remove it, then download it from Models.');
   if (m.source === 'bundled') throw new Error('This model came with Quicksilver. If it stopped working, reinstall Quicksilver.');
-  const plan = m.catalogId ? await planCatalog(m.catalogId) : m.repo ? await planGguf(m.repo, { id: m.id, name: m.name, quant: m.quant }) : null;
+  const plan = m.repo ? await planGguf(m.repo, { id: m.id, name: m.name, quant: m.quant, catalogId: m.catalogId, vision: m.vision }) : m.catalogId ? await planCatalog(m.catalogId) : null;
   if (!plan) throw new Error('Quicksilver doesn\'t know where this model came from.');
   return start({ ...plan, id: m.id, name: m.name }, emit);
 }
@@ -304,7 +304,7 @@ function registerStarter(dir) {
     const files = Object.fromEntries(Object.entries(e.files).map(([role, f]) => [role, path.join(dir, f)]));
     if (!Object.values(files).every((f) => fs.existsSync(f))) {
       // Not shipped with this copy: fetch it from the catalog, unless you already have it.
-      if (e.pack && !reg.some((m) => m.catalogId === e.catalogId && Object.values(m.files || {}).every((f) => fs.existsSync(f)))) out.missing.push({ catalogId: e.catalogId, name: e.name });
+      if (e.pack && !reg.some((m) => m.catalogId === e.catalogId && Object.values(m.files || {}).every((f) => fs.existsSync(f)))) out.missing.push({ catalogId: e.catalogId, name: e.name, ...(e.repo ? { repo: e.repo, quant: e.quant } : {}) });
       continue;
     }
     const known = reg.find((m) => m.id === e.id);

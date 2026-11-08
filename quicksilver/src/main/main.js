@@ -219,7 +219,8 @@ handle('bench:run', async () => {
 // ---------- models ----------
 handle('models:list', () => ({ installed: models.list(), downloading: models.active(), running: llama.status() }));
 handle('models:download', async (req) => {
-  const plan = req.catalogId ? await models.planCatalog(req.catalogId) : await models.planGguf(req.repo, { quant: req.quant });
+  // A repository given with a catalog id (the built-in model's exact copy) is used as is.
+  const plan = req.repo ? await models.planGguf(req.repo, { quant: req.quant, ...(req.catalogId ? { catalogId: req.catalogId, id: req.catalogId, name: req.name } : {}) }) : await models.planCatalog(req.catalogId);
   return models.start(plan, emit);
 });
 handle('models:options', (repo) => models.ggufOptions(repo));

@@ -611,12 +611,13 @@ async function collect(gen) {
     fs.copyFileSync(TINY, path.join(sd, 'model.gguf')); fs.copyFileSync(TINY, path.join(sd, 'mmproj.gguf'));
     fs.writeFileSync(path.join(sd, 'STARTER.json'), JSON.stringify({ models: [
       { id: 'starter', catalogId: 'qwen3-vl-2b', name: 'Qwen3-VL 2B', files: { model: 'model.gguf', mmproj: 'mmproj.gguf' } },
-      { id: 'starter-brain', catalogId: 'qwen3-4b', name: 'Qwen3 4B Instruct 2507', files: { model: 'brain.gguf' }, pack: true },
+      { id: 'starter-brain', catalogId: 'qwen3-4b', name: 'Qwen3 4B Instruct 2507 (uncensored)', uncensored: true, repo: 'mradermacher/Huihui-Qwen3-4B-Instruct-2507-abliterated-GGUF', quant: 'Q4_K_M', files: { model: 'brain.gguf' }, pack: true },
     ] }));
     // Installed without the "Quicksilver models" folder: the small model works, the brain is fetched.
     let r = models.registerStarter(sd);
     assert.deepEqual(r.added.map((m) => m.id), ['starter']); assert.ok(r.added[0].vision);
     assert.deepEqual(r.missing.map((m) => m.catalogId), ['qwen3-4b']);
+    assert.equal(r.missing[0].repo, 'mradermacher/Huihui-Qwen3-4B-Instruct-2507-abliterated-GGUF', 'a missing brain is fetched from the same (uncensored) copy the installer uses');
     // Quicksilver's team is picked from every model on the PC (here: three test models + the starter).
     assert.equal(await complete.ensureQuicksilverStack(), 'stack:quicksilver');
     // The installer copied the brain in (or it finished downloading).

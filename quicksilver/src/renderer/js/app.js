@@ -221,7 +221,7 @@ async function setUpQuicksilver(firstLook) {
       : '👋 Quicksilver is ready to chat, privately on your PC, and it can see photos. Try an idea below.', 10000);
   }
   if (firstLook && r.missing.length && !S.config?.offline) {
-    for (const m of r.missing) if (!S.downloads[m.catalogId]) download({ catalogId: m.catalogId }, m.name).catch(() => {});
+    for (const m of r.missing) if (!S.downloads[m.catalogId]) download(m.repo ? { repo: m.repo, quant: m.quant, catalogId: m.catalogId, name: m.name } : { catalogId: m.catalogId }, m.name).catch(() => {});
     toast(`Finishing Quicksilver in the background (${r.missing.map((m) => m.name).join(', ')}). You can chat right away.`, 8000);
   }
   if (r.stack && !before?.startsWith('stack:quicksilver') && p.defaultTarget === r.stack && !firstLook) toast('💧 Quicksilver is fully ready: your models now work together as one.', 8000);
