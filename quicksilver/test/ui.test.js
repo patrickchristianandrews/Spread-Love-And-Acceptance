@@ -528,6 +528,22 @@ function redPng(size = 64) {
   await win.waitForSelector('.chat-group:has-text("Pinned")');
   console.log('✓ chat menu');
 
+  // Deleting a chat: the bin icon in the sidebar deletes it at once, with Undo.
+  await win.evaluate(() => { const t = Date.now(); S.data.chats.push({ id: 'del-me', assistantId: 'as-general', title: 'Delete me please', created: t, updated: t + 1e6, target: '', messages: [{ id: 'dm1', role: 'user', text: 'hi', attachments: [] }] }); save(); renderChatList(); });
+  await win.hover('.chat-row:has-text("Delete me please")');
+  await win.click('.chat-row:has-text("Delete me please") .chat-del');
+  await win.waitForFunction(() => !chatById('del-me'));
+  assert.equal(await win.locator('.chat-row:has-text("Delete me please")').count(), 0, 'gone from the list');
+  await win.click('#toast .toast-act');
+  await win.waitForFunction(() => Boolean(chatById('del-me')));
+  await win.waitForSelector('.chat-row:has-text("Delete me please")');
+  // ...and from the ⋯ menu.
+  await win.hover('.chat-row:has-text("Delete me please")');
+  await win.click('.chat-row:has-text("Delete me please") .chat-more');
+  await win.click('.menu [data-m="delete"]');
+  await win.waitForFunction(() => !chatById('del-me'));
+  console.log('✓ delete a chat: bin icon or ⋯ menu, with Undo');
+
   // Knowledge.
   await win.click('[data-nav="library"]');
   await win.click('#kb-new');

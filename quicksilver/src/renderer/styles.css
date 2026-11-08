@@ -1103,3 +1103,9 @@ code.sel { user-select: all; background: var(--soft); padding: 1px 6px; border-r
 .need-opt:hover { border-color: var(--accent-line); background: var(--accent-tint); }
 .need-opt b { display: flex; align-items: center; gap: 8px; font-size: 1rem; }
 .need-opt .muted { line-height: 1.45; }
+
+/* ---------- Deleting chats ---------- */
+.chat-del { flex: none; background: none; border: none; border-radius: 7px; width: 26px; height: 26px; display: grid; place-items: center; color: var(--muted); opacity: 0; transition: opacity .12s; cursor: pointer; }
+.chat-row:hover .chat-del, .chat-row.active .chat-del, .chat-del:focus-visible { opacity: 1; }
+.chat-del:hover { background: color-mix(in srgb, var(--danger) 14%, transparent); color: var(--danger); }
+.toast-act { margin-left: 10px; background: none; border: 1px solid currentColor; border-radius: 8px; padding: 2px 10px; color: inherit; font: inherit; font-weight: 750; cursor: pointer; }

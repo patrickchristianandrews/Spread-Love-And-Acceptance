@@ -41,6 +41,15 @@ function toast(msg, ms = 3600) {
   toast._t = setTimeout(() => { t.hidden = true; }, ms);
 }
 
+function toastAction(msg, label, fn, ms = 7000) {
+  const t = $('#toast');
+  t.innerHTML = `<span>${esc(msg)}</span> <button class="toast-act">${esc(label)}</button>`;
+  t.hidden = false;
+  t.querySelector('.toast-act').onclick = () => { t.hidden = true; clearTimeout(toast._t); fn(); };
+  clearTimeout(toast._t);
+  toast._t = setTimeout(() => { t.hidden = true; }, ms);
+}
+
 async function call(ch, ...args) {
   try { return await qs.call(ch, ...args); } catch (err) { toast(err.message, 6000); throw err; }
 }
@@ -272,6 +281,7 @@ function renderChatList() {
   ].filter(([, list]) => list.length);
   const row = (c) => `<div class="chat-row ${S.route.view === 'chat' && S.route.id === c.id ? 'active' : ''}">
       <button class="chat-link" data-chat="${c.id}" title="${esc(c.title)} · ${esc(assistantById(c.assistantId).name)}${c.projectId && projectById(c.projectId) ? ` · ${esc(projectById(c.projectId).name)}` : ''}${c.fromPhone ? ' · from your phone' : ''} · ${ago(c.updated)}"><span class="ce">${esc(c.projectId && projectById(c.projectId) ? projectById(c.projectId).emoji || '📁' : assistantById(c.assistantId).emoji)}</span><span class="t">${esc(c.title)}</span>${c.fromPhone ? `<span class="chat-badge" aria-label="from your phone">${icon('phone', 13)}</span>` : ''}</button>
+      <button class="chat-del" data-chat-del="${c.id}" title="Delete this chat" aria-label="Delete ${esc(c.title)}">${icon('trash', 14)}</button>
       <button class="chat-more" data-chat-menu="${c.id}" aria-label="Options for ${esc(c.title)}">⋯</button>
     </div>`;
   $('#chat-list').innerHTML = groups.length
@@ -279,6 +289,26 @@ function renderChatList() {
     : `<div class="small muted" style="padding:8px 10px">${q ? 'No matching chats.' : 'No chats yet.'}</div>`;
   $$('#chat-list [data-chat]').forEach((b) => b.addEventListener('click', () => go({ view: 'chat', id: b.dataset.chat })));
   $$('#chat-list [data-chat-menu]').forEach((b) => b.addEventListener('click', (e) => { e.stopPropagation(); chatMenu(b, chatById(b.dataset.chatMenu)); }));
+  $$('#chat-list [data-chat-del]').forEach((b) => b.addEventListener('click', (e) => { e.stopPropagation(); deleteChat(chatById(b.dataset.chatDel)); }));
+}
+
+// Deletes a chat straight away, with Undo for a few seconds (safer than a pop-up for every delete).
+function deleteChat(chat) {
+  if (!chat) return;
+  if (pending?.chatId === chat.id) { toast('Wait for the answer to finish, or stop it, before deleting this chat.'); return; }
+  const idx = S.data.chats.indexOf(chat);
+  const wasTab = (S.data.prefs.tabs || []).indexOf(chat.id);
+  const wasOpen = S.route.view === 'chat' && S.route.id === chat.id;
+  S.data.chats = S.data.chats.filter((c) => c !== chat);
+  S.data.prefs.tabs = (S.data.prefs.tabs || []).filter((id) => id !== chat.id);
+  save();
+  if (wasOpen) { const next = (S.data.prefs.tabs || [])[0]; go(next ? { view: 'chat', id: next } : { view: 'home' }); } else renderChatList();
+  toastAction(`Deleted "${chat.title}".`, 'Undo', () => {
+    S.data.chats.splice(Math.min(idx, S.data.chats.length), 0, chat);
+    if (wasTab >= 0) { const t = S.data.prefs.tabs || []; t.splice(Math.min(wasTab, t.length), 0, chat.id); S.data.prefs.tabs = t; }
+    save();
+    if (wasOpen) go({ view: 'chat', id: chat.id }); else renderChatList();
+  });
 }
 
 function chatMenu(anchor, chat) {
@@ -286,10 +316,17 @@ function chatMenu(anchor, chat) {
   const r = anchor.getBoundingClientRect();
   const m = document.createElement('div');
   m.className = 'menu';
-  m.style.top = `${Math.min(r.bottom + 4, window.innerHeight - 200)}px`;
   m.style.left = `${Math.max(8, r.left - 150)}px`;
+  m.style.visibility = 'hidden';
   m.innerHTML = `<button data-m="pin">${chat.pinned ? 'Unpin' : '📌 Pin to top'}</button><button data-m="rename">✏️ Rename</button><button data-m="project">📁 ${chat.projectId ? 'Change project' : 'Move to a project'}</button><button data-m="doc">📝 ${chat.doc ? 'Open the document' : 'New document beside the chat'}</button><button data-m="settings">⚙️ Chat settings</button><button data-m="private">${chat.private ? '🔓 Use memory in this chat' : '🔒 Private (no memory)'}</button><button data-m="export">⬇ Export as Markdown</button><button data-m="delete" class="danger">🗑 Delete</button>`;
   document.body.appendChild(m);
+  // Open below the button if the whole menu fits, else above it; never off-screen.
+  const h = m.offsetHeight;
+  const below = r.bottom + 4;
+  m.style.top = `${below + h <= window.innerHeight - 8 ? below : Math.max(8, Math.min(r.top - h - 4, window.innerHeight - h - 8))}px`;
+  m.style.maxHeight = `${window.innerHeight - 16}px`;
+  m.style.overflowY = 'auto';
+  m.style.visibility = '';
   m.querySelector('button').focus();
   m.addEventListener('click', async (e) => {
     const act = e.target.closest('[data-m]')?.dataset.m;
@@ -311,10 +348,7 @@ function chatMenu(anchor, chat) {
       const md = chat.messages.map((x) => `## ${x.role === 'user' ? (S.data.prefs.userName || 'You') : a.name}\n\n${x.role === 'assistant' ? x.alts[x.altIndex]?.text || '' : x.text}`).join('\n\n');
       if (await call('file:saveText', `${chat.title.replace(/[^\w -]/g, '').slice(0, 60) || 'chat'}.md`, `# ${chat.title}\n\n${md}\n`)) toast('Chat saved.');
     }
-    if (act === 'delete' && (await confirmBox(`Delete "${chat.title}"?`))) {
-      S.data.chats = S.data.chats.filter((c) => c.id !== chat.id); save();
-      if (S.route.id === chat.id) go({ view: 'home' }); else renderChatList();
-    }
+    if (act === 'delete') deleteChat(chat);
   });
 }
 function closeMenus() { $$('.menu').forEach((m) => m.parentNode.removeChild(m)); }

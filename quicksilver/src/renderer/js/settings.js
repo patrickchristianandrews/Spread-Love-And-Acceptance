@@ -34,6 +34,9 @@ function generalHTML() {
     <div class="field"><label>Text size</label><div class="row">${[['normal', 'Normal'], ['large', 'Large'], ['xl', 'Extra large']].map(([k, l]) => `<button class="btn small ${P().textSize === k ? 'on' : ''}" data-textsize="${k}">${l}</button>`).join('')}</div></div>
     <div><button class="btn primary" id="g-save">Save</button></div>
     ${parentalLockHTML()}
+    <div class="card set-card" style="margin-top:16px"><h3>🗑 Chats</h3>
+      <p class="help" style="margin-top:0">Delete a single chat with the bin icon next to it in the sidebar, or from the ⋯ menu. This removes every chat at once; pinned chats are kept.</p>
+      <button class="btn danger" id="del-all-chats">Delete all chats</button></div>
     ${updateBoxHTML()}
     ${importHTML()}
   </div>`;
@@ -79,6 +82,15 @@ function bindGeneral() {
   $('#g-autofix').addEventListener('change', (e) => { P().autoFix = e.target.checked; save(); });
   $('#g-cloudhard')?.addEventListener('change', (e) => { P().cloudHard = e.target.checked; save(); });
   bindParentalLock();
+  $('#del-all-chats')?.addEventListener('click', async () => {
+    const gone = S.data.chats.filter((c) => !c.pinned && c.id !== pending?.chatId);
+    if (!gone.length) { toast('No chats to delete (pinned chats are kept).'); return; }
+    if (!(await confirmBox(`Delete ${gone.length} chat${gone.length > 1 ? 's' : ''}? Pinned chats are kept. This can't be undone.`, { yes: 'Delete' }))) return;
+    const ids = new Set(gone.map((c) => c.id));
+    S.data.chats = S.data.chats.filter((c) => !ids.has(c.id));
+    S.data.prefs.tabs = (S.data.prefs.tabs || []).filter((id) => !ids.has(id));
+    save(); renderChatList(); toast(`Deleted ${gone.length} chat${gone.length > 1 ? 's' : ''}.`);
+  });
   bindUpdateBox();
   bindImport();
   $$('[data-theme-set]').forEach((b) => b.addEventListener('click', () => { P().theme = b.dataset.themeSet; applyPrefs(); save(); render(); }));
