@@ -964,6 +964,27 @@ async function collect(gen) {
     console.log('✓ model picks: refreshed online daily, checked, new models added, upgrades found for installed models');
   }
 
+  // Private network: with "only through a VPN" on, nothing leaves this PC until a VPN is connected.
+  {
+    const os = require('node:os');
+    const vpn = require('../src/main/vpn');
+    const realIf = os.networkInterfaces;
+    const eth = { eth0: [{ address: '192.168.1.5', family: 'IPv4', internal: false }] };
+    os.networkInterfaces = () => eth;
+    store.saveConfig({ offline: false, vpnOnly: true });
+    await new Promise((r) => setTimeout(r, 3100)); // past the adapter cache
+    assert.equal(vpn.status().connected, false);
+    await assert.rejects(fetch('https://example.com/'), /no VPN is connected/, 'blocked without a VPN');
+    os.networkInterfaces = () => ({ ...eth, ProtonVPN: [{ address: '10.2.0.2', family: 'IPv4', internal: false }] });
+    await new Promise((r) => setTimeout(r, 3100));
+    const st = vpn.status();
+    assert.equal(st.connected, true); assert.equal(st.proton, true); assert.equal(st.adapter, 'ProtonVPN');
+    assert.equal(vpn.blocked(), false, 'allowed once Proton VPN is connected');
+    store.saveConfig({ vpnOnly: false });
+    os.networkInterfaces = realIf;
+    console.log('✓ private network: blocked until a VPN is connected, Proton VPN recognised');
+  }
+
   console.log('\nBACKEND TESTS PASSED');
   process.exit(0);
 })().catch((e) => { console.error('FAIL', e); llama.stopAll(); process.exit(1); });

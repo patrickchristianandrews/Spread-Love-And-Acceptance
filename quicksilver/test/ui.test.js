@@ -551,6 +551,27 @@ function redPng(size = 64) {
   assert.notEqual(await win.evaluate(() => chatById(S.route.id).messages.find((x) => x.id === 'a-lm').alts[1].target), 'local:phi-4');
   console.log('✓ low memory: next best model offered and used');
 
+  // Privacy modes, shown as a picture: fully private, private online through Proton VPN, online.
+  await win.click('[data-nav="settings"]');
+  await win.click('[data-set-tab="general"]');
+  await win.waitForSelector('#vpn-box .pv-mode[data-pv-mode="online"].on');
+  assert.equal(await win.locator('#vpn-box .pv-mode').count(), 3);
+  await win.click('#vpn-box [data-pv-mode="vpn"]');
+  await win.waitForSelector('#vpn-box [data-pv-mode="vpn"].on');
+  await win.waitForSelector('#vpn-box .pv-link.cut:has-text("waiting for VPN")');
+  await win.waitForSelector('#vpn-box .pv-plan:has-text("Proton VPN Free")');
+  await win.waitForSelector('#vpn-box .pv-plan:has-text("Your Proton account")');
+  assert.match(await win.locator('#net-toggle').innerText(), /VPN off/);
+  await win.locator('#vpn-box').scrollIntoViewIfNeeded();
+  await shot(win, '15-privacy-vpn');
+  await win.click('#vpn-box [data-pv-mode="offline"]');
+  await win.waitForSelector('#vpn-box .pv-link.cut:has-text("nothing leaves")');
+  assert.match(await win.locator('#net-toggle').innerText(), /Offline/);
+  await win.click('#vpn-box [data-pv-mode="online"]');
+  await win.waitForSelector('#vpn-box [data-pv-mode="online"].on');
+  assert.match(await win.locator('#net-toggle').innerText(), /Online/);
+  console.log('✓ privacy modes: fully private, private online (Proton VPN free or your account), online');
+
   // Deleting a chat: the bin icon in the sidebar deletes it at once, with Undo.
   await win.evaluate(() => { const t = Date.now(); S.data.chats.push({ id: 'del-me', assistantId: 'as-general', title: 'Delete me please', created: t, updated: t + 1e6, target: '', messages: [{ id: 'dm1', role: 'user', text: 'hi', attachments: [] }] }); save(); renderChatList(); });
   await win.hover('.chat-row:has-text("Delete me please")');

@@ -36,6 +36,7 @@ function generalHTML() {
     <div class="field"><label>Text size</label><div class="row">${[['normal', 'Normal'], ['large', 'Large'], ['xl', 'Extra large']].map(([k, l]) => `<button class="btn small ${P().textSize === k ? 'on' : ''}" data-textsize="${k}">${l}</button>`).join('')}</div></div>
     <div><button class="btn primary" id="g-save">Save</button></div>
     ${parentalLockHTML()}
+    <div id="vpn-box">${vpnCardHTML()}</div>
     <div class="card set-card" style="margin-top:16px"><h3>🗑 Chats</h3>
       <p class="help" style="margin-top:0">Delete a single chat with the bin icon next to it in the sidebar, or from the ⋯ menu. This removes every chat at once; pinned chats are kept.</p>
       <button class="btn danger" id="del-all-chats">Delete all chats</button></div>
@@ -78,6 +79,7 @@ function bindParentalLock() {
 const memSetHTML = () => `<p class="lede" style="margin-top:0">What your assistants remember about you, across all chats. Click a line to change it.</p><div id="mem-box">${memoryManagerHTML()}</div>`;
 function bindMemSet() { const box = $('#mem-box'); const repaint = () => { box.innerHTML = memoryManagerHTML(); bindMemoryManager(box, repaint); }; bindMemoryManager(box, repaint); }
 function bindGeneral() {
+  bindVpnCard();
   $$('[data-simple]').forEach((b) => b.addEventListener('click', () => { P().simple = b.dataset.simple === 'true'; applyPrefs(); save(); render(); }));
   $('#g-auto').addEventListener('change', (e) => { P().autoRoute = e.target.checked; save(); });
   $('#g-autoweb').addEventListener('change', (e) => { P().autoWeb = e.target.checked; save(); });

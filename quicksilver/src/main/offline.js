@@ -16,6 +16,10 @@ globalThis.fetch = function guardedFetch(input, init) {
   if (isOffline() && !LOCAL.test(hostOf(input))) {
     return Promise.reject(new Error('Quicksilver is offline. Switch to Online (bottom of the sidebar) to use the internet.'));
   }
+  // Private network: "only go online through a VPN" is on and no VPN is connected.
+  if (!LOCAL.test(hostOf(input)) && require('./vpn').blocked()) {
+    return Promise.reject(new Error('Private network is on, but no VPN is connected. Connect Proton VPN (Settings → Private network), or turn the setting off.'));
+  }
   return realFetch(input, init);
 };
 

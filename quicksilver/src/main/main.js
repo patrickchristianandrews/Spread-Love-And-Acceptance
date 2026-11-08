@@ -52,6 +52,9 @@ handle('secret:set', (name, value) => {
   store.setSecret(name, value);
   return true;
 });
+handle('vpn:status', () => require('./vpn').status());
+handle('vpn:open', () => require('./vpn').open());
+handle('vpn:go', (kind) => require('./vpn').go(kind === 'signin' ? 'signin' : 'free'));
 handle('apiserver:newKey', () => {
   const key = `qs-${require('node:crypto').randomBytes(24).toString('base64url')}`;
   store.setSecret('apiServerKey', key);

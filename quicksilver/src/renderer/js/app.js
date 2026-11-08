@@ -59,8 +59,11 @@ function paintNet() {
   for (const b of [$('#net-toggle'), $('#net-pill')].filter(Boolean)) {
     b.classList.toggle('off', off);
     b.setAttribute('aria-checked', String(!off));
-    (b.querySelector('.net-lbl') || b.querySelector('span:nth-child(2)')).textContent = off ? 'Offline' : 'Online';
-    b.title = off ? 'Offline: nothing leaves this PC. Click to go online.' : 'Online: web search, cloud AIs and downloads are available. Click to go offline.';
+    const vpn = !off && S.config?.vpnOnly;
+    const tunnel = vpn && S.vpn?.connected;
+    b.classList.toggle('vpn', Boolean(vpn)); b.classList.toggle('vpn-wait', Boolean(vpn && !tunnel));
+    (b.querySelector('.net-lbl') || b.querySelector('span:nth-child(2)')).textContent = off ? 'Offline' : vpn ? (tunnel ? '🛡 Private (VPN)' : '🛡 VPN off: paused') : 'Online';
+    b.title = off ? 'Offline: nothing leaves this PC. Click to go online.' : vpn ? (tunnel ? 'Private online: everything goes through your VPN. Click to go offline. Privacy modes are in Settings → General.' : 'Private online is on, but no VPN is connected, so nothing leaves this PC. Connect Proton VPN, or change it in Settings → General.') : 'Online: web search, cloud AIs and downloads are available. Click to go offline. Private online (VPN) is in Settings → General.';
   }
   document.documentElement.classList.toggle('is-offline', off);
 }
@@ -167,6 +170,7 @@ async function init() {
   }));
   $('#theme-btn').addEventListener('click', () => { S.data.prefs.theme = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'; applyPrefs(); save(); if (S.route.view === 'settings') render(); });
   paintNet();
+  if (S.config?.vpnOnly) refreshVpn();
   $('#net-toggle').addEventListener('click', toggleNet);
   $('#collapse').addEventListener('click', () => { S.data.prefs.sidebarCollapsed = !S.data.prefs.sidebarCollapsed; applyPrefs(); save(); });
   $('#chat-search').addEventListener('input', renderChatList);
