@@ -75,7 +75,7 @@ handle('update:install', () => updater.install({ starterDir: app.isPackaged ? pa
 
 // ---------- hardware, catalog, estimates, advisor ----------
 handle('hw:detect', (fresh) => hardware.detect({ fresh }));
-handle('catalog:get', () => ({ text: catalog.TEXT_MODELS, textCategories: catalog.TEXT_CATEGORIES, media: catalog.MEDIA_MODELS, mediaCategories: catalog.MEDIA_CATEGORIES, jobs: catalog.JOBS }));
+handle('catalog:get', () => ({ picks: require('./catalog-remote').picks(), text: catalog.TEXT_MODELS, textCategories: catalog.TEXT_CATEGORIES, media: catalog.MEDIA_MODELS, mediaCategories: catalog.MEDIA_CATEGORIES, jobs: catalog.JOBS }));
 // Everything the model details view shows: how it runs here, why, and what it would need.
 handle('catalog:details', async (id) => {
   const hw = await hardware.detect();
@@ -109,6 +109,9 @@ handle('upgrades:advise', async () => {
 });
 // The buying guide: refreshed from the Quicksilver repository once a day when online.
 handle('guide:get', () => require('./guide').get());
+// Better models for what's installed (from the built-in and online model picks).
+handle('models:upgrades', async () => require('./catalog-remote').upgradesFor(models.list(), await hardware.detect(), store.config().calib?.text || 1));
+handle('catalog:refresh', () => require('./catalog-remote').refresh(true));
 handle('guide:refresh', () => require('./guide').refresh(true));
 
 // Speeds on this PC, so every screen can say how long something will take:
@@ -537,7 +540,7 @@ function createWindow() {
   win.webContents.on('will-navigate', (ev) => ev.preventDefault());
 }
 
-app.whenReady().then(() => { try { require('./guide').start(); } catch {} }).then(() => {
+app.whenReady().then(() => { try { require('./guide').start(); require('./catalog-remote').start(() => emit('app:event', { kind: 'catalog' })); } catch {} }).then(() => {
   // Gallery files are served to the interface by id only, never by arbitrary path.
   protocol.handle('qsmedia', (req) => {
     const id = decodeURIComponent(new URL(req.url).pathname.replace(/^\//, ''));

@@ -903,6 +903,54 @@ async function collect(gen) {
     console.log('✓ buying guide: refreshed online once a day, checked and kept as text, offline uses the cached or built-in copy');
   }
 
+  // Model picks refresh online: new models, featured picks, successors and stack ladders.
+  {
+    const remote = require('../src/main/catalog-remote');
+    const data = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'data', 'models.json'), 'utf8'));
+    const ok = remote.clean(data);
+    assert.ok(ok && Object.keys(ok.successors).length >= 5, 'the published picks file is valid');
+    for (const [a, b] of Object.entries(ok.successors)) assert.ok(catalog.TEXT_MODELS.some((m) => m.id === a) && catalog.TEXT_MODELS.some((m) => m.id === b), `successor ${a} → ${b} names real models`);
+    for (const l of Object.values(ok.featured)) for (const id of l) assert.ok(catalog.TEXT_MODELS.some((m) => m.id === id), `featured ${id} is in the catalog`);
+    assert.equal(remote.clean({ version: 2 }), null, 'unknown versions are ignored');
+    const bad = remote.clean({ version: 1, models: [{ id: 'x', repo: 'nope' }, { id: 'test-new-9b', name: '<b>New 9B</b>', maker: 'Test', category: 'general', repo: 'test/New-9B-GGUF', quant: 'q4_k_m', sizeGB: 5.5, jobs: { general: 9, coding: 8 }, evil: 'x' }], successors: { 'qwen3-8b': 'test-new-9b', 'bad id!': 'x' } });
+    assert.equal(bad.models.length, 1, 'broken model entries are dropped');
+    assert.equal(bad.models[0].quant, 'Q4_K_M'); assert.equal(bad.models[0].evil, undefined); assert.equal(bad.models[0].remote, true);
+    assert.deepEqual(Object.keys(bad.successors), ['qwen3-8b']);
+    const real = global.fetch;
+    let calls = 0;
+    global.fetch = async () => { calls++; return new Response(JSON.stringify({ ...data, updated: '2026-12', models: [{ id: 'test-new-9b', name: 'New 9B', maker: 'Test', category: 'general', repo: 'test/New-9B-GGUF', quant: 'Q4_K_M', sizeGB: 5.5, jobs: { general: 9, office: 9, research: 9, coding: 8 } }], successors: { ...data.successors, 'qwen3-8b': 'test-new-9b' }, ladders: { general: ['test-new-9b', 'qwen3-8b'] } }), { status: 200 }); };
+    let changed = 0;
+    remote.start(() => { changed++; });
+    store.saveConfig({ offline: true });
+    await remote.refresh(true);
+    assert.equal(calls, 0, 'nothing is fetched while offline');
+    store.saveConfig({ offline: false });
+    const got = await remote.refresh(true);
+    assert.equal(calls, 1); assert.equal(got.updated, '2026-12'); assert.equal(changed, 1, 'the app is told the picks changed');
+    assert.ok(catalog.TEXT_MODELS.some((m) => m.id === 'test-new-9b' && m.remote), 'a new model joins the catalog');
+    assert.equal(catalog.TEXT_MODELS.filter((m) => m.id === 'test-new-9b').length, 1);
+    assert.equal(remote.picks().successors['qwen3-8b'], 'test-new-9b');
+    assert.equal(remote.picks().successors['qwen2.5-7b'], 'qwen3-8b', 'built-in successors stay');
+    assert.deepEqual(remote.picks().ladders.general, ['test-new-9b', 'qwen3-8b']);
+    await remote.refresh();
+    assert.equal(calls, 1, 'not fetched again within a day');
+    // Better model for what's installed: followed through the chain, only if it runs well here.
+    const strong = { ramGB: 32, vramGB: 12, vramFreeGB: 12, gpuName: 'Test GPU', backend: 'cuda', cpuCores: 8 };
+    const inst = [{ id: 'm1', name: 'Qwen2.5 7B', kind: 'text', catalogId: 'qwen2.5-7b', source: 'download' }, { id: 'b1', name: 'Starter', kind: 'text', catalogId: 'qwen3-4b', source: 'bundled' }];
+    const ups = remote.upgradesFor(inst, strong);
+    assert.equal(ups.length, 1, 'the bundled model is never replaced');
+    assert.equal(ups[0].oldId, 'm1'); assert.equal(ups[0].newCatalogId, 'test-new-9b', 'qwen2.5-7b → qwen3-8b → the newer model');
+    assert.match(ups[0].why, /stronger/);
+    assert.equal(remote.upgradesFor([...inst, { id: 'm2', kind: 'text', catalogId: 'test-new-9b' }], strong).length, 0, 'nothing suggested once you have it');
+    assert.equal(remote.upgradesFor(inst, { ramGB: 4, vramGB: 0, cpuCores: 2 }).length, 0, "not suggested when it wouldn't run well");
+    global.fetch = async () => new Response('nope', { status: 500 });
+    assert.equal((await remote.refresh(true)).updated, '2026-12', 'a failed fetch keeps the last good copy');
+    global.fetch = real;
+    catalog.TEXT_MODELS.splice(catalog.TEXT_MODELS.findIndex((m) => m.id === 'test-new-9b'), 1);
+    remote.apply({ successors: {}, featured: {}, ladders: {} });
+    console.log('✓ model picks: refreshed online daily, checked, new models added, upgrades found for installed models');
+  }
+
   console.log('\nBACKEND TESTS PASSED');
   process.exit(0);
 })().catch((e) => { console.error('FAIL', e); llama.stopAll(); process.exit(1); });

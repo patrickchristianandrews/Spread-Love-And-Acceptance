@@ -16,12 +16,16 @@ views.models = {
         <button class="btn" id="find-models">Find models on this PC</button><button class="btn" id="import-gguf">Import a .gguf file</button><button class="btn ghost" id="open-folder">Open models folder</button></div>
       <p class="lede">Free, open models run on your PC: private, offline, no account. Ratings show how each one will run on <b>your</b> hardware. Not sure? Let the <a href="#" data-goto-stacks>Setup Advisor</a> choose.</p>
       ${foundBanner()}
+      ${(S.modelUpgrades || []).length || stackUpdates().length || modelsTab === 'installed' ? modelUpdatesHTML() : ''}
+      ${['installed', 'text'].includes(modelsTab) ? builtinModelHTML() : ''}
       <div class="tabs" role="tablist">${Object.entries(tabs).map(([k, l]) => `<button class="tab ${modelsTab === k ? 'active' : ''}" data-tab="${k}" role="tab">${esc(l)}</button>`).join('')}</div>
       ${({ installed: installedHTML, text: textHTML, media: mediaHTML, trending: trendingHTML, hf: hfHTML, api: apiHTML })[modelsTab]()}
     </div>`;
   },
   bind() {
     if (!S.est) refreshEstimates().then(() => S.route.view === 'models' && render());
+    if (!S.modelUpgrades) loadModelUpgrades().then(() => S.route.view === 'models' && $('#modal').hidden && render());
+    bindModelUpdates(); bindBuiltinModel();
     $$('[data-tab]').forEach((b) => b.addEventListener('click', () => { modelsTab = b.dataset.tab; render(); }));
     $$('[data-goto-stacks]').forEach((b) => b.addEventListener('click', (e) => { e.preventDefault(); go({ view: 'stacks' }); }));
     $('#import-gguf').addEventListener('click', async () => { const m = await call('models:import'); if (m) { await refreshModels(); render(); toast(`${m.name} added${m.vision ? ' (with vision)' : ''}.`); } });
@@ -114,6 +118,8 @@ function modelProfileHTML(m, kind) {
 function modelCard(m, est, kind) {
   const inst = S.installed.some((x) => x.catalogId === m.id);
   const tags = [];
+  if (isFeatured(m.id)) tags.push('<span class="badge b-lemon" title="One of the best models right now; this list updates online">⭐ Featured</span>');
+  if (m.remote) tags.push('<span class="badge b-mint">🆕 New</span>');
   if (m.vision) tags.push('<span class="badge b-sky">👁 vision</span>');
   if (m.reasoning) tags.push('<span class="badge b-lav">🧠 thinks</span>');
   if (m.activeGB) tags.push('<span class="badge b-mint">⚡ mixture-of-experts</span>');
@@ -143,7 +149,7 @@ function textHTML() {
   return `${filterBar(cats)}${Object.entries(cats).filter(([k]) => catFilter === 'all' || catFilter === k).map(([k, c]) => {
     const list = S.catalog.text.filter((m) => m.category === k && (!fitsOnly || S.est?.text[m.id]?.fit !== 'no'));
     if (!list.length) return '';
-    return `<div class="section"><h2>${esc(c.label)} <span class="small muted" style="font-weight:600">· ${list.length}</span></h2>${c.note ? `<span class="small muted">${esc(c.note)}</span>` : ''}</div><div class="cards">${list.sort((a, b) => (order[S.est?.text[a.id]?.rating] ?? 5) - (order[S.est?.text[b.id]?.rating] ?? 5) || a.sizeGB - b.sizeGB).map((m) => modelCard(m, S.est?.text[m.id], 'text')).join('')}</div>`;
+    return `<div class="section"><h2>${esc(c.label)} <span class="small muted" style="font-weight:600">· ${list.length}</span></h2>${c.note ? `<span class="small muted">${esc(c.note)}</span>` : ''}</div><div class="cards">${list.sort((a, b) => (order[S.est?.text[a.id]?.rating] ?? 5) - (order[S.est?.text[b.id]?.rating] ?? 5) || isFeatured(b.id) - isFeatured(a.id) || a.sizeGB - b.sizeGB).map((m) => modelCard(m, S.est?.text[m.id], 'text')).join('')}</div>`;
   }).join('')}`;
 }
 

@@ -201,16 +201,23 @@ const RX_RATE = { great: 4, good: 3, ok: 2, slow: 1, wont: 0 };
 const RX_SPEED = [[/^qwen3-(4b|8b|14b|32b)(-thinking)?$/, 'qwen3-1.7b'], [/^llama-3\.(1-8b|3-70b)$/, 'llama-3.2-1b'], [/^qwen2\.5-(coder-)?(7b|14b|32b)$/, 'qwen2.5-coder-1.5b']];
 
 function rxResolve(r) {
-  if (r._resolved && r._resolvedAt === S.est && r._inst === S.installed.length) return r._resolved;
+  if (r._resolved && r._resolvedAt === S.est && r._inst === S.installed.length && r._cat === S.catalog) return r._resolved;
+  // Picks refreshed online: newer ladders, and newer models standing in for older ones.
+  const picks = S.catalog.picks || {};
+  const inCat = (id) => S.catalog.text.some((x) => x.id === id);
+  const ladders = Object.fromEntries(Object.entries({ ...RX_LADDERS, ...(picks.ladders || {}) }).map(([k, l]) => [k, (l.length ? l : RX_LADDERS[k] || []).filter(inCat)]));
+  const succ = (id) => { const n = picks.successors?.[id]; const a = S.catalog.text.find((x) => x.id === id); const b = n && S.catalog.text.find((x) => x.id === n); return b && a && b.sizeGB <= a.sizeGB * 1.6 ? n : id; };
   const taken = new Set();
   const rate = (id) => RX_RATE[S.est?.text?.[id]?.rating] ?? -1;
   const size = (id) => S.catalog.text.find((x) => x.id === id)?.sizeGB || 0;
   const leadId = r.lead || r.parts.filter((p) => p.kind === 'model' && S.catalog.text.some((x) => x.id === p.id)).at(-1)?.id;
-  const parts = r.parts.map((p) => {
+  const parts = r.parts.map((p0) => {
+    const nid = p0.kind === 'model' && !S.data.prefs.rxExact ? succ(p0.id) : p0.id;
+    const p = nid === p0.id ? p0 : { ...p0, id: nid, from: p0.id, up: true };
     const cm = p.kind === 'model' && S.catalog.text.find((x) => x.id === p.id);
     if (!cm || !S.est?.text || S.data.prefs.rxExact) { if (p.kind === 'model') taken.add(p.id); return p; }
-    const ladder = RX_LADDERS[p.ladder || RX_CLASS[cm.category]] || [];
-    const isLead = p.id === leadId;
+    const ladder = ladders[p.ladder || RX_CLASS[cm.category]] || [];
+    const isLead = p0.id === leadId;
     // The lead (who writes the final answer) gets the strongest model that runs smoothly; the
     // helpers step up too, within a sensible size, so the whole team stays quick.
     const cap = isLead ? Infinity : Math.max(cm.sizeGB * 3, 9);
@@ -221,13 +228,13 @@ function rxResolve(r) {
       || [...ladder].reverse().find((id) => fits(id, 2))
       || p.id;
     taken.add(pick);
-    return pick === p.id ? p : { ...p, id: pick, from: p.id, up: ladder.indexOf(pick) < ladder.indexOf(p.id) };
+    return pick === p.id ? p : { ...p, id: pick, from: p.from || p.id, up: ladder.indexOf(pick) < ladder.indexOf(p0.id) || Boolean(p.up && pick === p.id) };
   });
   const leadPart = parts.find((p, i) => r.parts[i].id === leadId);
   const helper = leadPart && RX_SPEED.find(([re]) => re.test(leadPart.id))?.[1];
   if (helper && !taken.has(helper) && rate(helper) >= 3) parts.push({ kind: 'model', id: helper, role: 'Speed helper: drafts ahead so the lead writes 1.5–2.5× faster', helper: true });
   r._resolved = { parts, lead: leadPart?.id || leadId };
-  r._resolvedAt = S.est; r._inst = S.installed.length;
+  r._resolvedAt = S.est; r._inst = S.installed.length; r._cat = S.catalog;
   return r._resolved;
 }
 

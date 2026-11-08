@@ -27,6 +27,7 @@ function generalHTML() {
     <label class="row"><input type="checkbox" id="g-auto" ${S.data.prefs.autoRoute !== false ? 'checked' : ''}> <span><b>Pick the best model for each question automatically</b> <span class="help">quick answers first; the team works on hard questions when it can still answer in about a minute</span></span></label>
     <label class="row"><input type="checkbox" id="g-autoweb" ${S.data.prefs.autoWeb !== false ? 'checked' : ''}> <span><b>Check the web for questions about current things</b> <span class="help">news, prices, weather, the latest guidance; switch web search off in a chat to skip it there</span></span></label>
     <label class="row"><input type="checkbox" id="g-autofix" ${S.data.prefs.autoFix !== false ? 'checked' : ''}> <span><b>Fix mistakes automatically</b> <span class="help">wrong sums, code that doesn't compile, web pages with errors, or a clear error found by the double-check: the answer is rewritten once with the correction</span></span></label>
+    <label class="row"><input type="checkbox" id="g-autoupgrade" ${S.data.prefs.autoUpgrade !== false ? 'checked' : ''}> <span><b>Install better models and stacks automatically</b> <span class="help">Quicksilver checks online every day for newer, stronger models that run well on this PC, installs them in the background and switches your stacks and chats over (you can remove the old ones). Off: it only tells you.</span></span></label>
     <label class="row"><input type="checkbox" id="g-tips" ${S.data.prefs.tips !== false ? 'checked' : ''}> <span><b>Show tips for getting more out of Quicksilver</b> <span class="help">now and then, under an answer from the built-in model: a short tip matched to what you asked (a coding stack, upgrades, the Library…)</span></span></label>
     ${S.providers.length ? `<label class="row"><input type="checkbox" id="g-cloudhard" ${S.data.prefs.cloudHard ? 'checked' : ''}> <span><b>Use my cloud AI for hard questions</b> <span class="help">${esc(S.providers.map((x) => x.name).join(', '))}: stronger on hard questions; uses your API credits</span></span></label>` : ''}
     <div class="field"><label for="g-name">Your name</label><input id="g-name" value="${esc(P().userName)}" placeholder="Optional"></div>
@@ -81,6 +82,7 @@ function bindGeneral() {
   $('#g-auto').addEventListener('change', (e) => { P().autoRoute = e.target.checked; save(); });
   $('#g-autoweb').addEventListener('change', (e) => { P().autoWeb = e.target.checked; save(); });
   $('#g-autofix').addEventListener('change', (e) => { P().autoFix = e.target.checked; save(); });
+  $('#g-autoupgrade')?.addEventListener('change', (e) => { P().autoUpgrade = e.target.checked; save(); });
   $('#g-tips')?.addEventListener('change', (e) => { P().tips = e.target.checked; save(); });
   $('#g-cloudhard')?.addEventListener('change', (e) => { P().cloudHard = e.target.checked; save(); });
   bindParentalLock();

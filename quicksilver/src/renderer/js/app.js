@@ -3,7 +3,7 @@
 
 const DEFAULT_PREFS = {
   userName: '', about: '', textSize: 'normal', defaultTarget: '', temperature: 0.6, contextSize: 16384, maxTokens: 2048,
-  gpu: 'auto', effort: 'medium', effortLevel: 'thorough', simple: true, autoRoute: true, autoWeb: true, autoFix: true, cloudHard: false, theme: 'dark', factCheck: false, factChecker: '', lastAssistant: 'as-general', sourcesPerAnswer: 8,
+  gpu: 'auto', effort: 'medium', effortLevel: 'thorough', simple: true, autoRoute: true, autoUpgrade: true, autoWeb: true, autoFix: true, cloudHard: false, theme: 'dark', factCheck: false, factChecker: '', lastAssistant: 'as-general', sourcesPerAnswer: 8,
 };
 
 // More ready-made assistants for everyday uses. Each borrows the settings of the team type that
@@ -184,7 +184,7 @@ async function init() {
     delete S.downloads[id];
     await refreshModels();
     S.est = null;
-    toast(`${model.name} is ready.`);
+    if (!(await applyPendingUpgrades(model).catch(() => false))) toast(`${model.name} is ready.`);
     if (!targetValid(S.data.prefs.defaultTarget) && model.kind === 'text') { S.data.prefs.defaultTarget = `local:${model.id}`; save(); }
     // Load the default model in the background so the first reply is quick.
     if (model.kind === 'text') await setUpQuicksilver(false).catch(() => {}); // a new model can join Quicksilver's team
@@ -196,6 +196,7 @@ async function init() {
 
   go({ view: 'home' });
   refreshEstimates().then(() => { if (['home', 'stacks', 'models', 'pc'].includes(S.route.view)) render(); });
+  setTimeout(() => checkForUpdates().then(() => { if (['stacks', 'models'].includes(S.route.view) && $('#modal').hidden) render(); }).catch(() => {}), 30000);
   startupModels();
 }
 

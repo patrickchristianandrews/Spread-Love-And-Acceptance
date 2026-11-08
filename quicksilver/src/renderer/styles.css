@@ -1158,3 +1158,14 @@ code.sel { user-select: all; background: var(--soft); padding: 1px 6px; border-r
 .tier-ex { border-top: 1px solid var(--line-soft); padding-top: 8px; margin-top: auto; }
 .tier-ex ul { margin: 4px 0 0; padding-left: 1.1em; font-size: .84rem; line-height: 1.45; }
 .tier-ex li { margin: 2px 0; }
+
+/* better models and stacks, and the built-in model */
+.nav-dot { margin-left: auto; min-width: 18px; height: 18px; padding: 0 5px; border-radius: 9px; background: var(--accent); color: var(--bg, #fff); font-size: .7rem; font-weight: 800; display: inline-grid; place-items: center; }
+.up-card { margin-bottom: 14px; border-color: var(--accent-line); background: var(--accent-tint); }
+.up-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; padding: 8px 0; border-top: 1px solid var(--line, rgba(127,127,127,.2)); }
+.up-none { margin-bottom: 14px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.builtin-card { margin-bottom: 16px; }
+.builtin-can { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 8px; margin-top: 8px; }
+.builtin-can > div { display: grid; grid-template-columns: 26px 1fr; column-gap: 6px; align-items: start; padding: 8px 10px; border-radius: 10px; background: var(--hover); }
+.builtin-can > div > span:first-child { grid-row: span 2; font-size: 1.1rem; }
+.builtin-can .small { line-height: 1.35; }

@@ -672,4 +672,24 @@ function capabilities(profiles, { local = true } = {}) {
   ];
 }
 
-module.exports = { TEXT_MODELS, TEXT_CATEGORIES, MEDIA_MODELS, MEDIA_CATEGORIES, JOBS, CLOUD_BOOST, cloudPlan, accuracyLevel, requirements, smallerAlternative, draftFor, DRAFT_FAMILIES, estimateText, estimateMedia, advise, compose, gpuBandwidth, profileInstalled, matchCatalog, scoreFor, familyOf, starsFor, capabilities, upgradeAdvice };
+// Newer models that replace older ones (old catalog id -> new). Only pairs where the new one is
+// at least as good at the same job and similar in size; the online file can add more.
+const SUCCESSORS = {
+  'qwen2.5-3b': 'qwen3-4b', 'phi-3.5-mini': 'qwen3-4b',
+  'qwen2.5-7b': 'qwen3-8b', 'mistral-7b': 'qwen3-8b', 'llama-3.1-8b': 'qwen3-8b',
+  'qwen2.5-14b': 'qwen3-14b',
+  'deepseek-r1-qwen-7b': 'deepseek-r1-qwen3-8b', 'deepseek-r1-qwen-14b': 'phi-4-reasoning-plus',
+  'deepseek-r1-qwen-32b': 'qwen3-30b-a3b-thinking', 'qwq-32b': 'qwen3-30b-a3b-thinking',
+  'qwen2.5-coder-32b': 'qwen3-coder-30b',
+  'qwen2.5-vl-7b': 'qwen3-vl-8b',
+};
+// Featured picks per kind of work (best first). The online file can replace any list.
+const FEATURED = {
+  general: ['qwen3-30b-a3b', 'qwen3-14b', 'qwen3-8b', 'qwen3-4b'],
+  coding: ['qwen3-coder-30b', 'qwen2.5-coder-14b', 'qwen2.5-coder-7b'],
+  reasoning: ['qwen3-30b-a3b-thinking', 'phi-4-reasoning-plus', 'deepseek-r1-qwen3-8b'],
+  vision: ['gemma-3-27b', 'qwen3-vl-8b', 'gemma-3-12b', 'qwen3-vl-4b'],
+  open: ['dolphin-3-mistral-24b', 'hermes-4-14b', 'rocinante-12b'],
+};
+
+module.exports = { SUCCESSORS, FEATURED, TEXT_MODELS, TEXT_CATEGORIES, MEDIA_MODELS, MEDIA_CATEGORIES, JOBS, CLOUD_BOOST, cloudPlan, accuracyLevel, requirements, smallerAlternative, draftFor, DRAFT_FAMILIES, estimateText, estimateMedia, advise, compose, gpuBandwidth, profileInstalled, matchCatalog, scoreFor, familyOf, starsFor, capabilities, upgradeAdvice };

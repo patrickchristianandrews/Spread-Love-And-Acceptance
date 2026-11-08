@@ -61,7 +61,7 @@ function redPng(size = 64) {
   // The fake 8 GB graphics card turns on background work (reading ahead, answering the next
   // question in advance); on a slow test machine that competes with the steps being tested, so
   // it's off here and switched on only in the tests that check it.
-  await win.evaluate(() => { S.data.prefs.preanswer = false; S.data.prefs.readAhead = false; save(); });
+  await win.evaluate(() => { S.data.prefs.preanswer = false; S.data.prefs.readAhead = false; S.data.prefs.autoUpgrade = false; save(); });
   // Most checks below use the full view (every option on screen); the simple view, which is the
   // default, is checked near the end.
   assert.equal(await win.evaluate(() => S.data.prefs.simple), true, 'simple view is the default');
@@ -616,6 +616,43 @@ function redPng(size = 64) {
   assert.match(await win.locator('.modal-box, #modal').first().innerText(), /The least it needs|To run it smoothly/);
   await shot(win, '05c-model-details');
   await win.click('#modal [data-close]');
+  // The built-in model and what it can do; featured picks; better models swap in when installed.
+  await win.waitForSelector('#builtin-model:has-text("Built in: Quicksilver")');
+  assert.match(await win.locator('#builtin-model').innerText(), /Gets maths right[\s\S]*Sees photos/);
+  assert.ok(await win.locator('.model-card .badge:has-text("Featured")').count() >= 3, 'featured picks are marked');
+  const up = await win.evaluate(async () => {
+    const before = S.data.prefs.defaultTarget;
+    const keep = { as: S.data.assistants.map((x) => [x, x.target]), ch: S.data.chats.map((x) => [x, x.target]), pj: (S.data.projects || []).map((x) => [x, x.target]) };
+    const stacksBefore = await qs.call('stacks:list');
+    await qs.call('stacks:save', { id: 't-up', name: 'Upgrade test', members: { drafters: ['local:phi-4', 'local:gemma-3-4b'], judge: 'local:phi-4' } });
+    S.data.chats.push({ id: 'c-up', title: 'Upgrade test', target: 'local:phi-4', messages: [], assistantId: 'as-general', created: Date.now(), updated: Date.now() });
+    S.modelUpgrades = [{ oldId: 'phi-4', oldName: 'Phi-4 14B', oldCatalogId: 'phi-4', newCatalogId: 'qwen3-8b', newName: 'Qwen3 8B', why: 'stronger for everyday use (6 → 8 out of 10)', rating: 'great', speed: 'Fast', sizeGB: 5 }];
+    paintUpdateBadge(); render();
+    const card = document.querySelector('#model-updates')?.textContent || '';
+    const dot = document.querySelector('[data-nav="models"] .nav-dot:not([hidden])')?.textContent;
+    const dotWant = String(1 + stackUpdates().length);
+    S.data.prefs.pendingUpgrades = { 'qwen3-8b': 'phi-4' };
+    const swapped = await applyPendingUpgrades(S.installed.find((m) => m.id === 'qwen3-8b'));
+    const st = (await qs.call('stacks:list')).find((x) => x.id === 't-up');
+    const chat = S.data.chats.find((c) => c.id === 'c-up');
+    const out = { card, dot, dotWant, swapped, members: st.members, chat: chat.target, toast: document.querySelector('#toast')?.textContent || document.body.innerText.match(/Upgraded to[^\n]*/)?.[0] || '' };
+    await qs.call('stacks:delete', 't-up');
+    S.data.chats = S.data.chats.filter((c) => c.id !== 'c-up');
+    for (const l of Object.values(keep)) for (const [x, t] of l) x.target = t;
+    for (const st0 of stacksBefore) await qs.call('stacks:save', st0);
+    S.data.prefs.defaultTarget = before; S.modelUpgrades = []; paintUpdateBadge(); save(); await refreshModels(); render();
+    return out;
+  });
+  assert.match(up.card, /Better models available[\s\S]*Phi-4 14B[\s\S]*Qwen3 8B/);
+  assert.equal(up.dot, up.dotWant, 'the Models menu item shows the updates');
+  assert.equal(up.swapped, true);
+  assert.deepEqual(up.members.drafters, ['local:qwen3-8b', 'local:gemma-3-4b']);
+  assert.equal(up.members.judge, 'local:qwen3-8b');
+  assert.equal(up.chat, 'local:qwen3-8b', 'chats switch to the new model');
+  assert.match(up.toast, /Upgraded to Qwen3 8B/);
+  await win.click('[data-tab="installed"]');
+  await win.waitForSelector('#model-updates');
+  console.log('✓ built-in model card, featured picks, better-model upgrade swaps into stacks and chats');
   await win.click('[data-tab="api"]');
   await win.waitForSelector('text=Anthropic (Claude)');
   await win.waitForSelector('#presets h3:has-text("Free to start")');
