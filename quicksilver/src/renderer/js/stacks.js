@@ -24,7 +24,7 @@ views.stacks = {
       <div class="page-head"><h1>Stacks</h1><button class="btn" data-goto="compare">Compare teams</button><button class="btn" id="infuse">${icon('sparkle', 16)} Build a team from any AIs, including cloud</button></div>
       <p class="lede">A team makes several AI models work as one: they answer separately, then a lead combines the best of each and fixes mistakes. <b>Pick what you want to do</b>, and Quicksilver shows the best team for this PC, how strong and fast each option is, and which cloud AI (optional) would make it even better.</p>
       ${foundBanner()}
-      ${(S.modelUpgrades || []).length || stackUpdates().length ? modelUpdatesHTML() : ''}
+      ${shownUpgrades().length || shownStackUpdates().length ? modelUpdatesHTML() : ''}
       <div class="section"><h2>1. Choose a team</h2>${hwLine()}</div>
       <div class="goal-group"><div class="label">Think &amp; work</div><div class="goal-grid">${jobs.filter(([, j]) => j.kind === 'text').map(goal).join('')}</div></div>
       <div class="goal-group"><div class="label">Create</div><div class="goal-grid">${jobs.filter(([, j]) => j.kind === 'media').map(goal).join('')}</div></div>

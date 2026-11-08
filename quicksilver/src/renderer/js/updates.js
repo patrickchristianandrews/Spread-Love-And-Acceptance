@@ -8,12 +8,22 @@
 S.modelUpgrades = null; // [{ oldId, oldName, newCatalogId, newName, why, rating, speed, sizeGB }]
 const AUTO_CAP_GB = 30; // at most this much downloaded automatically per check
 
+const LATER_DAYS = 3; // "Maybe later" puts a suggestion off for this long, then it's back
 const upgradePrefs = () => {
   const p = S.data.prefs;
   p.pendingUpgrades ||= {}; // newCatalogId → old installed model id
-  p.upgradeSkipped ||= [];   // "old→new" pairs you said no to
+  p.upgradeLater ||= {};    // suggestion key → when to suggest it again
+  delete p.upgradeSkipped;  // older builds hid suggestions for good
   return p;
 };
+const upKey = (u) => (u.quicksilver ? `qs:${u.models[0].id}` : u.recipe ? `stack:${u.recipe}:${u.models.map((m) => m.id).join(',')}` : `${u.oldCatalogId}>${u.newCatalogId}`);
+const putOff = (u) => (upgradePrefs().upgradeLater[upKey(u)] || 0) > Date.now();
+function maybeLater(key) {
+  const p = upgradePrefs();
+  for (const [k, t] of Object.entries(p.upgradeLater)) if (t <= Date.now()) delete p.upgradeLater[k];
+  p.upgradeLater[key] = Date.now() + LATER_DAYS * 24 * 60 * 60 * 1000;
+  save();
+}
 const isFeatured = (id) => Object.values(S.catalog?.picks?.featured || {}).some((l) => l.includes(id));
 const autoUpdates = () => S.data.prefs.autoUpgrade !== false;
 
@@ -29,17 +39,38 @@ function stackUpdates() {
       && ['great', 'good'].includes(S.est.text[p.id]?.rating));
     if (add.length) out.push({ recipe: r.id, name: st.name, emoji: st.emoji || r.icon, models: add.map((p) => ({ id: p.id, name: catModel(p.id)?.name || p.id, from: catModel(p.from)?.name || p.from })) });
   }
-  return out.filter((u) => !upgradePrefs().upgradeSkipped.includes(`stack:${u.recipe}:${u.models.map((m) => m.id).join(',')}`));
+  const boost = quicksilverBoost();
+  if (boost) out.push(boost);
+  return out;
 }
+// The built-in Quicksilver model is a team of your best models: its lead answers every message, so
+// it must be fast. When a clearly stronger model from the featured picks also runs fast on this PC,
+// adding it makes Quicksilver both quick and more accurate (the team rebuilds itself around it).
+function quicksilverBoost() {
+  const st = (S.stacks || []).find((x) => x.id === 'quicksilver');
+  if (!st || st.autoManaged === false || !S.est?.text) return null;
+  const score = (id) => S.catalog.text.find((x) => x.id === id)?.jobs?.general || 0;
+  const leadInst = S.installed.find((m) => `local:${m.id}` === st.members?.judge);
+  const best = Math.max(0, ...S.installed.filter((m) => m.kind === 'text' && S.est.text[m.catalogId]?.rating === 'great').map((m) => score(m.catalogId)), score(leadInst?.catalogId));
+  const f = S.catalog.picks?.featured || {};
+  const pick = [...new Set([...(f.general || []), ...(f.reasoning || [])])]
+    .filter((id) => S.catalog.text.some((x) => x.id === id) && !haveModel(id) && S.est.text[id]?.rating === 'great' && score(id) >= best + 1)
+    .sort((a, b) => score(b) - score(a))[0];
+  if (!pick) return null;
+  const c = catModel(pick);
+  return { quicksilver: true, name: 'Quicksilver (built in)', emoji: '💧', models: [{ id: pick, name: c.name, from: leadInst?.name || 'its lead' }], why: `stronger (${best} → ${score(pick)} out of 10) and still fast on this PC, ${c.sizeGB} GB` };
+}
+const shownUpgrades = () => (S.modelUpgrades || []).filter((u) => !putOff(u));
+const shownStackUpdates = () => stackUpdates().filter((u) => !putOff(u));
 
 async function loadModelUpgrades() {
-  try { S.modelUpgrades = (await qs.call('models:upgrades')).filter((u) => !upgradePrefs().upgradeSkipped.includes(`${u.oldCatalogId}>${u.newCatalogId}`)); } catch { S.modelUpgrades = []; }
+  try { S.modelUpgrades = await qs.call('models:upgrades'); } catch { S.modelUpgrades = []; }
   paintUpdateBadge();
   return S.modelUpgrades;
 }
 
 function paintUpdateBadge() {
-  const n = (S.modelUpgrades || []).filter((u) => !S.downloads[u.newCatalogId]).length + stackUpdates().length;
+  const n = shownUpgrades().filter((u) => !S.downloads[u.newCatalogId]).length + shownStackUpdates().length;
   $$('.sidebar [data-nav="models"]').forEach((b) => {
     let dot = b.querySelector('.nav-dot');
     if (n && !dot) { dot = document.createElement('span'); dot.className = 'nav-dot'; b.appendChild(dot); }
@@ -53,14 +84,15 @@ function startUpgrade(u, quiet = false) {
   download({ catalogId: u.newCatalogId }, u.newName).catch((e) => !quiet && toast(e.message, 8000));
 }
 async function startStackUpdate(u) {
+  if (u.quicksilver) { const m = u.models[0]; if (!S.downloads[m.id] && !haveModel(m.id)) await download({ catalogId: m.id }, m.name).catch(() => {}); return; } // joins the team when it's ready
   await setUpRecipe(u.recipe); // downloads the stronger models and rebuilds the stack around them
 }
 
 // Checks for better models and stacks; installs them automatically when that's on.
 async function checkForUpdates({ auto = true } = {}) {
   if (!S.est) await refreshEstimates().catch(() => {});
-  const ups = await loadModelUpgrades();
-  const stacks = stackUpdates();
+  await loadModelUpgrades();
+  const ups = shownUpgrades(); const stacks = shownStackUpdates();
   if (!auto || !autoUpdates() || S.config?.offline) return { ups, stacks };
   let budget = AUTO_CAP_GB;
   const fresh = [];
@@ -109,25 +141,28 @@ async function applyPendingUpgrades(model) {
 }
 
 function modelUpdatesHTML() {
-  const ups = S.modelUpgrades || [];
-  const stacks = stackUpdates();
+  const ups = shownUpgrades();
+  const stacks = shownStackUpdates();
+  const later = (S.modelUpgrades || []).length + stackUpdates().length - ups.length - stacks.length;
+  const laterNote = later ? ` <span class="small muted">${later} put off for later.</span> <button class="btn small ghost" id="up-later-show">Show ${later === 1 ? 'it' : 'them'} now</button>` : '';
   const picks = S.catalog?.picks || {};
   const when = picks.fetchedAt ? `checked ${new Date(picks.fetchedAt).toLocaleDateString()}` : 'built-in picks';
   if (!ups.length && !stacks.length) {
-    return `<div class="notice ok up-none" id="model-updates"><b>✓ Your models are the best picks for this PC.</b> <span class="small">Quicksilver checks online every day for newer, better models and stacks (${esc(when)}).</span> <button class="btn small ghost" id="up-check">Check now</button></div>`;
+    return `<div class="notice ok up-none" id="model-updates"><b>✓ Your models are the best picks for this PC.</b> <span class="small">Quicksilver checks online every day for newer, better models and stacks (${esc(when)}).</span> <button class="btn small ghost" id="up-check">Check now</button>${laterNote}</div>`;
   }
   const row = (u) => `<div class="up-row"><div class="grow"><b>${esc(u.oldName)}</b> → <b>${esc(u.newName)}</b><div class="small muted">${esc(u.why)} · ${esc(u.speed)} on this PC</div></div>
-    ${S.downloads[u.newCatalogId] ? '<span class="badge b-sky">Installing…</span>' : `<button class="btn small primary" data-up-get="${esc(u.newCatalogId)}">Upgrade</button><button class="btn small ghost" data-up-skip="${esc(`${u.oldCatalogId}>${u.newCatalogId}`)}" title="Don't suggest this one again">Not now</button>`}</div>`;
-  const srow = (s) => `<div class="up-row"><div class="grow">${esc(s.emoji || '🧩')} <b>${esc(s.name)}</b><div class="small muted">Stronger now: ${s.models.map((m) => `${esc(m.from)} → <b>${esc(m.name)}</b>`).join(', ')}</div></div>
-    ${s.models.some((m) => S.downloads[m.id]) ? '<span class="badge b-sky">Installing…</span>' : `<button class="btn small primary" data-up-stack="${esc(s.recipe)}">Update stack</button><button class="btn small ghost" data-up-skip="${esc(`stack:${s.recipe}:${s.models.map((m) => m.id).join(',')}`)}">Not now</button>`}</div>`;
+    ${S.downloads[u.newCatalogId] ? '<span class="badge b-sky">Installing…</span>' : `<button class="btn small primary" data-up-get="${esc(u.newCatalogId)}">Upgrade</button><button class="btn small ghost" data-up-later="${esc(upKey(u))}" title="Suggest it again in ${LATER_DAYS} days">Maybe later</button>`}</div>`;
+  const srow = (s) => `<div class="up-row"><div class="grow">${esc(s.emoji || '🧩')} <b>${esc(s.name)}</b><div class="small muted">${s.quicksilver ? `Add <b>${esc(s.models[0].name)}</b> to the team: ${esc(s.why)}` : `Stronger now: ${s.models.map((m) => `${esc(m.from)} → <b>${esc(m.name)}</b>`).join(', ')}`}</div></div>
+    ${s.models.some((m) => S.downloads[m.id]) ? '<span class="badge b-sky">Installing…</span>' : `<button class="btn small primary" data-up-stack="${esc(upKey(s))}">${s.quicksilver ? 'Add it' : 'Update stack'}</button><button class="btn small ghost" data-up-later="${esc(upKey(s))}" title="Suggest it again in ${LATER_DAYS} days">Maybe later</button>`}</div>`;
   return `<div class="card up-card" id="model-updates"><div class="row"><h3 class="grow" style="margin:0">✨ Better models available</h3><span class="small muted">${esc(when)}</span></div>
     <p class="small muted" style="margin:4px 0 10px">${autoUpdates() ? 'These install by themselves in the background' : 'Automatic installs are off in Settings'}; when one is ready, your stacks, chats and assistants switch to it and you can remove the old one.</p>
-    ${ups.map(row).join('')}${stacks.map(srow).join('')}</div>`;
+    ${ups.map(row).join('')}${stacks.map(srow).join('')}${laterNote ? `<div class="up-row">${laterNote}</div>` : ''}</div>`;
 }
 function bindModelUpdates() {
   $$('[data-up-get]').forEach((b) => b.addEventListener('click', () => { const u = S.modelUpgrades.find((x) => x.newCatalogId === b.dataset.upGet); if (u) { startUpgrade(u); toast(`Installing ${u.newName}. Everything switches over when it's ready.`); render(); } }));
-  $$('[data-up-stack]').forEach((b) => b.addEventListener('click', async () => { b.disabled = true; const s = stackUpdates().find((x) => x.recipe === b.dataset.upStack); if (s) await startStackUpdate(s); }));
-  $$('[data-up-skip]').forEach((b) => b.addEventListener('click', () => { upgradePrefs().upgradeSkipped.push(b.dataset.upSkip); save(); S.modelUpgrades = (S.modelUpgrades || []).filter((u) => `${u.oldCatalogId}>${u.newCatalogId}` !== b.dataset.upSkip); paintUpdateBadge(); render(); }));
+  $$('[data-up-stack]').forEach((b) => b.addEventListener('click', async () => { b.disabled = true; const s = stackUpdates().find((x) => upKey(x) === b.dataset.upStack); if (s) await startStackUpdate(s); }));
+  $$('[data-up-later]').forEach((b) => b.addEventListener('click', () => { maybeLater(b.dataset.upLater); paintUpdateBadge(); render(); toast(`OK, I'll suggest it again in ${LATER_DAYS} days.`); }));
+  $('#up-later-show')?.addEventListener('click', () => { upgradePrefs().upgradeLater = {}; save(); paintUpdateBadge(); render(); });
   $('#up-check')?.addEventListener('click', async (e) => {
     e.target.disabled = true; e.target.textContent = 'Checking…';
     await qs.call('catalog:refresh').catch(() => {});
@@ -145,9 +180,13 @@ function builtinModelHTML() {
   if (!brain) return '';
   const est = S.est?.text?.[brain.id];
   const have = S.installed.some((m) => m.source === 'bundled' || m.catalogId === brain.id);
+  const open = S.installed.some((m) => m.source === 'bundled' && /uncensored|abliterat/i.test(`${m.name} ${m.files?.model || ''}`));
+  const qst = (S.stacks || []).find((x) => x.id === 'quicksilver');
+  const team = qst ? [...new Set([qst.members.judge, ...(qst.members.drafters || []), qst.members.vision].filter(Boolean))].map((t) => S.installed.find((m) => `local:${m.id}` === t)?.name).filter(Boolean) : [];
   const can = [
     ['💬', 'Chats naturally', 'quick, friendly answers in a second or two'],
-    ['🧠', 'Thinks things through', 'steps up for hard questions, and checks its own numbers'],
+    ['🧠', 'Reasons step by step', 'works hard questions out step by step first; see it under "Thought it through"'],
+    ['✓', 'Double-checks', 'a second model checks answers claim by claim when you turn on Double-check'],
     ['✍️', 'Writes', 'emails, essays, summaries, rewrites in any tone'],
     ['🧮', 'Gets maths right', 'sums are worked out exactly, not guessed'],
     ['💻', 'Helps with code', 'explains, writes and fixes everyday code'],
@@ -159,8 +198,9 @@ function builtinModelHTML() {
   return `<div class="card builtin-card" id="builtin-model">
     <div class="row"><span class="emoji-badge">💧</span><div class="grow"><h3 style="margin:0">Built in: Quicksilver</h3>
       <div class="small muted">${esc(brain.name)}${eyes ? ` + ${esc(eyes.name)} for eyes` : ''} · ${(brain.sizeGB + (eyes ? eyes.sizeGB + (eyes.mmprojGB || 0) : 0)).toFixed(1)} GB · comes with the app, works offline</div></div>
-      ${est ? `<span class="badge rate-${est.rating}">${esc(est.label)}</span>` : ''}</div>
-    <p style="margin:10px 0 6px"><b>Fast answers you can trust.</b> Chosen as the quickest model that's still accurate: it answers almost instantly on most PCs and double-checks facts and figures, so you can rely on it for everyday work.</p>
+      ${open ? '<span class="badge b-peach" title="Answers plainly, without refusing. The parental lock keeps it family-safe.">Uncensored</span>' : ''}${est ? `<span class="badge rate-${est.rating}">${esc(est.label)}</span>` : ''}</div>
+    <p style="margin:10px 0 6px"><b>Fast answers you can trust.</b> Chosen as the quickest model that's still accurate: it answers almost instantly on most PCs and double-checks facts and figures, so you can rely on it for everyday work.${open ? ' It\'s uncensored: it answers plainly instead of refusing (the parental lock in Settings keeps it family-safe).' : ''}</p>
+    ${team.length > 1 ? `<p class="small muted" style="margin:0 0 6px">Its team on this PC right now: <b>${team.map(esc).join(' + ')}</b>. It rebuilds itself around the fastest strong models you have, and new ones that make it smarter and still fast are added automatically.</p>` : ''}
     <div class="builtin-can">${can.map(([i, t, d]) => `<div><span>${i}</span><b>${esc(t)}</b><span class="small muted">${esc(d)}</span></div>`).join('')}</div>
     <div class="row" style="margin-top:10px">${have ? '<button class="btn small primary" id="builtin-chat">Start a chat</button>' : (S.downloads[brain.id] ? downloadBox(brain.id) : `<button class="btn small primary" data-get="${brain.id}">Download it (${brain.sizeGB} GB)</button>`)}<span class="grow"></span><span class="small muted">Want more power? Better models below run alongside it.</span></div>
   </div>`;

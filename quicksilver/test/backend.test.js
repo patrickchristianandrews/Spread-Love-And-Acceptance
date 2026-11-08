@@ -62,6 +62,19 @@ async function collect(gen) {
   assert.match(r1.reasoning, /thinking/);
   assert.equal(r1.stats.tps, 42.5);
   console.log('✓ local chat:', r1.text);
+  // The built-in model reasons step by step on questions that need care; easy ones stay quick.
+  {
+    models.add({ id: 'test-bundled', name: 'Built-in', kind: 'text', catalogId: 'qwen3-4b', files: { model: copy('qwen.gguf') }, size: 2.5e9, source: 'bundled' });
+    const hard = await collect(complete.run('local:test-bundled', { messages: [{ role: 'user', content: 'Calculate 17 × 23 and explain why' }], maxTokens: 200, contextSize: 4096, level: 'thorough' }));
+    assert.match(hard.reasoning, /Step 1: read the question/, 'its steps show as reasoning');
+    assert.match(hard.text, /\[steps\]/); assert.doesNotMatch(hard.text, /<think>|Step 1/, 'the answer is kept separate from the steps');
+    const easy = await collect(complete.run('local:test-bundled', { messages: [{ role: 'user', content: 'Hi there!' }], maxTokens: 200, contextSize: 4096, level: 'thorough' }));
+    assert.doesNotMatch(easy.text + easy.reasoning, /Step 1|\[steps\]/, 'easy messages skip the steps');
+    const other = await collect(complete.run('local:qwen3-8b', { messages: [{ role: 'user', content: 'Calculate 17 × 23 and explain why' }], maxTokens: 200, contextSize: 4096, level: 'thorough' }));
+    assert.doesNotMatch(other.text, /\[steps\]/, 'models that think on their own are left alone');
+    models.remove('test-bundled');
+    console.log('✓ built-in model reasons step by step on hard questions');
+  }
 
   // A text-only model refuses images clearly.
   const img = { type: 'image_url', image_url: { url: 'data:image/png;base64,iVBORw0KGgo=' } };

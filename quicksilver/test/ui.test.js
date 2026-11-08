@@ -618,7 +618,7 @@ function redPng(size = 64) {
   await win.click('#modal [data-close]');
   // The built-in model and what it can do; featured picks; better models swap in when installed.
   await win.waitForSelector('#builtin-model:has-text("Built in: Quicksilver")');
-  assert.match(await win.locator('#builtin-model').innerText(), /Gets maths right[\s\S]*Sees photos/);
+  assert.match(await win.locator('#builtin-model').innerText(), /Reasons step by step[\s\S]*Double-checks[\s\S]*Gets maths right[\s\S]*Sees photos/);
   assert.ok(await win.locator('.model-card .badge:has-text("Featured")').count() >= 3, 'featured picks are marked');
   const up = await win.evaluate(async () => {
     const before = S.data.prefs.defaultTarget;
@@ -630,12 +630,16 @@ function redPng(size = 64) {
     paintUpdateBadge(); render();
     const card = document.querySelector('#model-updates')?.textContent || '';
     const dot = document.querySelector('[data-nav="models"] .nav-dot:not([hidden])')?.textContent;
-    const dotWant = String(1 + stackUpdates().length);
+    const dotWant = String(1 + shownStackUpdates().length);
+    document.querySelector('[data-up-later="phi-4>qwen3-8b"]').click();
+    const laterCard = document.querySelector('#model-updates')?.textContent || '';
+    S.data.prefs.upgradeLater['phi-4>qwen3-8b'] = Date.now() - 1; render();
+    const backCard = document.querySelector('#model-updates')?.textContent || '';
     S.data.prefs.pendingUpgrades = { 'qwen3-8b': 'phi-4' };
     const swapped = await applyPendingUpgrades(S.installed.find((m) => m.id === 'qwen3-8b'));
     const st = (await qs.call('stacks:list')).find((x) => x.id === 't-up');
     const chat = S.data.chats.find((c) => c.id === 'c-up');
-    const out = { card, dot, dotWant, swapped, members: st.members, chat: chat.target, toast: document.querySelector('#toast')?.textContent || document.body.innerText.match(/Upgraded to[^\n]*/)?.[0] || '' };
+    const out = { card, dot, dotWant, laterCard, backCard, swapped, members: st.members, chat: chat.target, toast: document.querySelector('#toast')?.textContent || document.body.innerText.match(/Upgraded to[^\n]*/)?.[0] || '' };
     await qs.call('stacks:delete', 't-up');
     S.data.chats = S.data.chats.filter((c) => c.id !== 'c-up');
     for (const l of Object.values(keep)) for (const [x, t] of l) x.target = t;
@@ -645,6 +649,8 @@ function redPng(size = 64) {
   });
   assert.match(up.card, /Better models available[\s\S]*Phi-4 14B[\s\S]*Qwen3 8B/);
   assert.equal(up.dot, up.dotWant, 'the Models menu item shows the updates');
+  assert.ok(!/Phi-4 14B/.test(up.laterCard) && /put off for later/.test(up.laterCard), 'Maybe later hides it for now');
+  assert.match(up.backCard, /Phi-4 14B[\s\S]*Maybe later/, 'and it is suggested again later');
   assert.equal(up.swapped, true);
   assert.deepEqual(up.members.drafters, ['local:qwen3-8b', 'local:gemma-3-4b']);
   assert.equal(up.members.judge, 'local:qwen3-8b');

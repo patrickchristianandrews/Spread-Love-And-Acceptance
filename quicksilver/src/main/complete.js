@@ -131,6 +131,27 @@ function localSpec(m, messages = []) {
   return { id: m.id, name: m.name, file: m.files.model, mmproj: m.files.mmproj, draft: d?.files.model };
 }
 
+// Step-by-step reasoning for the Quicksilver model on questions that need care. Its fast model
+// has no built-in "thinking" mode, so it's asked to work it out first inside <think> tags; that
+// part shows under "Thought it through" and the answer follows. Easy questions skip it.
+const STEPS = 'This question needs care. First reason step by step inside <think> and </think>: say what is being asked, work through it in short numbered steps, recompute every number yourself and check the result against the question. Keep the reasoning concise. Then, after </think>, write the final answer for the user: clear and complete, without repeating all the steps.';
+function wantsSteps(m, req, level) {
+  if (level === 'quick' || req.points || req.tools?.length || req.toolList || hasImages(req.messages)) return false;
+  if (!(req.stepByStep || m.source === 'bundled')) return false;
+  const c = catalog.TEXT_MODELS.find((x) => x.id === m.catalogId);
+  return !c?.reasoning; // models that think on their own already do this
+}
+async function* withSteps(gen) {
+  let text = ''; let reasoning = '';
+  for await (const ev of gen) {
+    if (ev.type === 'text') text += ev.text;
+    if (ev.type === 'reasoning') reasoning += ev.text;
+    yield ev;
+  }
+  // It never closed its reasoning: show what it wrote as the answer rather than nothing.
+  if (!text.trim() && reasoning.trim()) yield { type: 'text', text: reasoning.trim() };
+}
+
 async function* single(target, req) {
   const t = parse(target);
   if (t.kind === 'local') {
@@ -139,6 +160,13 @@ async function* single(target, req) {
     // Thinking takes time: models that can switch it off skip it for easy questions (Deep think
     // always thinks). Hard questions still get the full think.
     const level = req.level === 'max' || req.points ? req.level : (req.level === 'quick' || autoLevel(req) === 'quick' ? 'quick' : req.level);
+    if (wantsSteps(m, req, level)) {
+      const msgs = req.messages;
+      const messages = [...msgs.slice(0, -1), { role: 'system', content: STEPS }, msgs[msgs.length - 1]];
+      yield { type: 'status', text: 'Thinking it through step by step…' };
+      yield* withSteps(llama.chat(localSpec(m, messages), { ...req, messages, level, maxTokens: (req.maxTokens || 2048) + 1024 }));
+      return;
+    }
     yield* llama.chat(localSpec(m, req.messages), { ...req, level: req.points ? 'quick' : level });
   } else if (t.kind === 'api') {
     yield* providers.chat(t.providerId, t.model, req);
@@ -352,6 +380,7 @@ function draftsAgree(texts) {
 
 async function* stack(stackDef, req) {
   const { members } = stackDef;
+  if (stackDef.id === 'quicksilver') req = { ...req, stepByStep: true };
   let level = req.level || 'thorough';
   if (req.level === 'max') req = { ...req, forceTeam: true }; // Max: always the whole team, always combined
   if (members.mode === 'auto' && level !== 'quick') {

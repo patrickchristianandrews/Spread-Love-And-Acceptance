@@ -34,7 +34,7 @@ function isUncensoredTarget(target) {
   if (st && (st.builtFor === 'open' || /unfiltered|uncensored/i.test(st.name || ''))) return true;
   return members.some((t) => {
     const inst = S.installed.find((m) => `local:${m.id}` === t);
-    if (!inst) return false;
+    if (!inst || inst.source === 'bundled') return false; // the built-in model follows the family-safe rules instead
     const c = S.catalog?.text?.find((x) => x.id === inst.catalogId);
     return c?.category === 'open' || /dolphin|hermes|abliterat|uncensor|unfiltered|lexi|rocinante|nsfw/i.test(`${inst.name} ${inst.files?.model || ''}`);
   });

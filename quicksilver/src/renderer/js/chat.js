@@ -567,6 +567,7 @@ function systemPrompt(a, strict, chat) {
   if (p.userName) parts.push(`The user's name is ${p.userName}.`);
   if (p.about) parts.push(`About the user: ${p.about}`);
   if (chat?.system) parts.push(`Instructions for this chat (follow them):\n${chat.system}`);
+  if (typeof lockOn === 'function' && lockOn() && !unlockedUntilClose) parts.push('Family-safe mode is on (set by a parent): keep everything suitable for children. Kindly decline sexual content, graphic violence, and instructions for anything dangerous or illegal.');
   parts.push('The user\'s latest message may start with a <context> block added by the app (things you remember about the user, project files, the open document, reference material, notes for this answer). Use it as it says; the user didn\'t type it, so don\'t quote it back or mention it.');
   if (strict) parts.push('IMPORTANT: Answer ONLY from the reference material in the <context> block. Do not use general knowledge or memory. Cite every factual statement with its source number. If the material does not contain the answer, reply that it was not found in the knowledge base, and say what kind of source would answer it.');
   return parts.join('\n\n');

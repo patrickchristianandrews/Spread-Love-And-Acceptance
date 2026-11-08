@@ -16,7 +16,7 @@ views.models = {
         <button class="btn" id="find-models">Find models on this PC</button><button class="btn" id="import-gguf">Import a .gguf file</button><button class="btn ghost" id="open-folder">Open models folder</button></div>
       <p class="lede">Free, open models run on your PC: private, offline, no account. Ratings show how each one will run on <b>your</b> hardware. Not sure? Let the <a href="#" data-goto-stacks>Setup Advisor</a> choose.</p>
       ${foundBanner()}
-      ${(S.modelUpgrades || []).length || stackUpdates().length || modelsTab === 'installed' ? modelUpdatesHTML() : ''}
+      ${shownUpgrades().length || shownStackUpdates().length || modelsTab === 'installed' ? modelUpdatesHTML() : ''}
       ${['installed', 'text'].includes(modelsTab) ? builtinModelHTML() : ''}
       <div class="tabs" role="tablist">${Object.entries(tabs).map(([k, l]) => `<button class="tab ${modelsTab === k ? 'active' : ''}" data-tab="${k}" role="tab">${esc(l)}</button>`).join('')}</div>
       ${({ installed: installedHTML, text: textHTML, media: mediaHTML, trending: trendingHTML, hf: hfHTML, api: apiHTML })[modelsTab]()}
