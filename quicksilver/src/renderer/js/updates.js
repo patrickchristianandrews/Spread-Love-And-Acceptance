@@ -53,7 +53,7 @@ function quicksilverBoost() {
   const leadInst = S.installed.find((m) => `local:${m.id}` === st.members?.judge);
   const best = Math.max(0, ...S.installed.filter((m) => m.kind === 'text' && S.est.text[m.catalogId]?.rating === 'great').map((m) => score(m.catalogId)), score(leadInst?.catalogId));
   const f = S.catalog.picks?.featured || {};
-  const pick = [...new Set([...(f.general || []), ...(f.reasoning || [])])]
+  const pick = [...new Set([...(f.open || [])])] // Quicksilver is uncensored: only uncensored models join it
     .filter((id) => S.catalog.text.some((x) => x.id === id) && !haveModel(id) && S.est.text[id]?.rating === 'great' && score(id) >= best + 1)
     .sort((a, b) => score(b) - score(a))[0];
   if (!pick) return null;

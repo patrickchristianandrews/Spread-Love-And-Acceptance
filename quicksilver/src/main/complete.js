@@ -645,10 +645,14 @@ async function* run(target, req) {
 }
 
 // ---------- the built-in Quicksilver model ----------
-// The best team this PC can field from every model you have (the ones that come with Quicksilver,
-// ones you download, ones found in LM Studio, Ollama and so on): the strongest model leads and
-// writes the answer, the next best from a different maker drafts alongside it on hard questions,
-// and the best model that can see reads photos. Smart routing keeps simple messages quick.
+// Quicksilver's own custom stack, uncensored, built around the models that come with it:
+//  - the built-in Qwen3 4B Instruct 2507 (uncensored) answers every everyday message, fast, and
+//    works hard questions out step by step;
+//  - the built-in Qwen3-VL 2B is its eyes: it reads photos and screenshots;
+//  - when this PC has a clearly stronger model that still runs fast (one you downloaded, or one
+//    found in LM Studio, Ollama and so on) that is also uncensored, it joins: it leads on hard questions, with the Qwen
+//    brain's key points, so hard answers get better without slowing down everyday ones.
+// Without the built-in brain (e.g. still downloading), the best fast team from your models is used.
 // Rebuilt whenever your models change, unless you edit it yourself; never rebuilt if you delete it.
 async function ensureQuicksilverStack() {
   const have = stacks().find((s) => s.id === 'quicksilver');
@@ -661,9 +665,34 @@ async function ensureQuicksilverStack() {
   const team = catalog.compose(pool, 'general', hw, store.config().calib?.text || 1, { vision: true, speed: 10, leadSpeed: 20, budget: 180 });
   if (!team || team.ids.length < 2) return have ? 'stack:quicksilver' : null;
   const local = (id) => (id ? `local:${id}` : undefined);
-  const members = { drafters: team.members.drafters.map(local), judge: local(team.members.judge), vision: local(team.members.vision), mode: 'auto' };
+  let members = { drafters: team.members.drafters.map(local), judge: local(team.members.judge), vision: local(team.members.vision), mode: 'auto' };
+  const all = models.list().filter((m) => m.kind === 'text');
+  const brain = all.find((m) => m.id === 'starter-brain') || all.find((m) => m.catalogId === 'qwen3-4b');
+  const eyes = all.find((m) => m.id === 'starter') || all.find((m) => /^qwen3-vl-/.test(m.catalogId || ''));
+  if (brain) {
+    const score = (id) => { const p = pool.find((x) => x.id === id); return p ? catalog.scoreFor(p, 'general') : 0; };
+    // Quicksilver is uncensored, so only uncensored models may join its team.
+    const UNC = /abliterat|uncensor|unfiltered|dolphin|hermes|lexi|rocinante/i;
+    const openPool = pool.filter((p) => p.id !== brain.id && p.id !== eyes?.id && (p.category === 'open' || UNC.test(`${p.name} ${all.find((m) => m.id === p.id)?.files?.model || ''}`)));
+    const openTeam = openPool.length ? catalog.compose(openPool, 'general', hw, store.config().calib?.text || 1, { vision: false, speed: 10, leadSpeed: 20, budget: 180 }) : null;
+    team.members = openTeam ? openTeam.members : { drafters: [] };
+    const lead = team.members.judge || team.members.drafters[0];
+    const stronger = lead && lead !== brain.id && lead !== eyes?.id && score(lead) > score(brain.id) ? lead : null;
+    // A second opinion on hard questions: the best other team member that isn't the brain, the eyes or the lead.
+    const second = [...team.members.drafters, team.members.judge].find((id) => id && ![brain.id, eyes?.id, stronger].includes(id));
+    members = {
+      drafters: [brain.id, ...(stronger ? [] : second ? [second] : [])].map(local),
+      // With nobody to combine, the brain answers on its own (step by step on hard questions).
+      judge: stronger || second ? local(stronger || brain.id) : undefined,
+      vision: eyes ? local(eyes.id) : local(team.members.vision),
+      mode: 'auto',
+    };
+  }
   if (!members.vision) delete members.vision;
-  if (!have || JSON.stringify(have.members) !== JSON.stringify(members)) saveStack({ id: 'quicksilver', name: 'Quicksilver', emoji: '💧', builtIn: true, autoManaged: true, builtFor: 'general', members });
+  if (!members.judge) delete members.judge;
+  const def = { id: 'quicksilver', name: 'Quicksilver', emoji: '💧', builtIn: true, autoManaged: true, custom: true, builtFor: 'quicksilver',
+    description: "Quicksilver's own uncensored team: the built-in Qwen3 4B answers everyday messages fast and reasons step by step on hard ones, Qwen3-VL 2B reads photos, and a stronger fast uncensored model on this PC leads on hard questions.", members };
+  if (!have || JSON.stringify(have.members) !== JSON.stringify(members) || have.builtFor !== 'quicksilver') saveStack(def);
   return 'stack:quicksilver';
 }
 

@@ -628,18 +628,29 @@ async function collect(gen) {
     const qsStack = complete.stacks().find((x) => x.id === 'quicksilver');
     const ids = [...qsStack.members.drafters, qsStack.members.judge, qsStack.members.vision].filter(Boolean);
     assert.equal(qsStack.members.mode, 'auto'); assert.ok(qsStack.autoManaged);
+    assert.equal(qsStack.builtFor, 'quicksilver'); assert.ok(qsStack.custom, "Quicksilver's own custom stack");
+    assert.equal(qsStack.members.drafters[0], 'local:starter-brain', 'the built-in Qwen3 4B answers everyday messages');
+    assert.equal(qsStack.members.vision, 'local:starter', 'the built-in Qwen3-VL 2B reads photos');
     assert.notEqual(qsStack.members.judge, 'local:phi-4', 'the lead must be quick here (Phi-4 does not fit this 8 GB card)');
     const how = await complete.explainStack('quicksilver');
     assert.ok(how.members.find((m) => m.roles.includes('lead')) && how.members.filter((m) => m.roles.includes('lead')).length === 1, 'exactly one lead');
     assert.ok(how.times.simple < how.times.hard, 'simple questions are quicker than hard ones');
     assert.ok(how.stars >= 3 && how.caps.find((c) => c.key === 'check').on);
-    assert.ok(new Set(ids).size >= 3, 'a real team: lead, drafter and eyes');
-    assert.ok(ids.some((t) => ['local:starter', 'local:gemma-3-4b'].includes(t)), 'a model that can see is on the team');
+    assert.ok(!ids.some((t) => ['local:qwen3-8b', 'local:phi-4', 'local:gemma-3-4b'].includes(t)), 'Quicksilver is uncensored: filtered models never join it');
+    assert.ok(ids.includes('local:starter-brain') && ids.includes('local:starter'), 'the built-in brain and eyes');
+    // An uncensored model on this PC joins the team for hard questions.
+    models.add({ id: 'dolphin-test', name: 'Dolphin 3.0 8B', kind: 'text', catalogId: 'dolphin-3-llama-3.1-8b', files: { model: copy('dolphin.gguf') }, size: 4.9e9 });
+    await complete.ensureQuicksilverStack();
+    const qs2 = complete.stacks().find((x) => x.id === 'quicksilver');
+    const ids2 = [...qs2.members.drafters, qs2.members.judge, qs2.members.vision].filter(Boolean);
+    assert.ok(ids2.includes('local:dolphin-test'), 'an uncensored model joins');
+    assert.equal(qs2.members.drafters[0], 'local:starter-brain', 'the brain still answers everyday messages');
+    assert.ok(new Set(ids2).size >= 3, 'a real team: brain, the uncensored helper and eyes');
     // Your own edits are kept: no automatic rebuild.
     complete.saveStack({ ...qsStack, autoManaged: false, members: { ...qsStack.members, drafters: ['local:qwen3-8b', 'local:starter-brain'] } });
     await complete.ensureQuicksilverStack();
     assert.deepEqual(complete.stacks().find((x) => x.id === 'quicksilver').members.drafters, ['local:qwen3-8b', 'local:starter-brain']);
-    complete.saveStack({ ...qsStack });
+    complete.saveStack({ ...qs2 });
     assert.deepEqual(models.registerStarter(sd).added, [], 'announced only once');
     // Smart routing: simple → one answer from the brain; hard → both draft, the brain combines.
     assert.equal(complete.autoLevel({ messages: [{ role: 'user', content: 'Hi! Recommend a good sci-fi film.' }] }), 'quick');
@@ -658,6 +669,8 @@ async function collect(gen) {
     const pic = await collect(complete.run('stack:pair', { messages: [{ role: 'user', content: [{ type: 'text', text: 'What colour is this?' }, img] }], contextSize: 2048, maxTokens: 30, level: 'thorough' }));
     assert.ok(pic.steps.some((x) => x.role === 'vision') && pic.text.length > 0, 'the photo is read by the member that can see');
     complete.deleteStack('pair');
+    models.remove('dolphin-test');
+    await complete.ensureQuicksilverStack();
     // Kept safe: never deleted, never repaired from the internet, stays removed.
     await assert.rejects(models.repair('starter', () => {}), /came with Quicksilver/);
     models.remove('starter');
