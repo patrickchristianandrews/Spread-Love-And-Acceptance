@@ -87,6 +87,10 @@ const TEXT_MODELS = [
     blurb: 'Lightly filtered and great at writing and fiction, with a long memory.', jobs: { general: 7, office: 7, research: 6, coding: 6, vision: 0, fast: 4 }, judge: 6 },
 
   // Vision (see photos, scans, charts and video frames)
+  { id: 'qwen3.5-4b', name: 'Qwen3.5 4B', maker: 'Alibaba', params: '4B', category: 'small', repo: 'unsloth/Qwen3.5-4B-GGUF', quant: 'Q4_K_M', sizeGB: 2.74, mmprojGB: 0.67, vision: true, reasoning: true, ctx: 262144,
+    blurb: 'The Liquid Edition\'s Brain (2026): sees photos and switches its own thinking on for hard questions. Far ahead of older 4B models, on par with many 8B ones.', jobs: { general: 8, office: 8, research: 8, coding: 7, vision: 7, fast: 7 }, judge: 7 },
+  { id: 'qwen3.5-2b', name: 'Qwen3.5 2B', maker: 'Alibaba', params: '2B', category: 'small', repo: 'unsloth/Qwen3.5-2B-GGUF', quant: 'Q4_K_M', sizeGB: 1.3, mmprojGB: 0.67, vision: true, ctx: 262144,
+    blurb: 'Comes with Quicksilver: small and quick on any PC, sees photos, and sketches fresh angles as the Liquid Edition\'s Muse.', jobs: { general: 6, office: 5, research: 5, coding: 5, vision: 6, fast: 9 }, judge: 4 },
   { id: 'qwen3-vl-2b', name: 'Qwen3-VL 2B', maker: 'Alibaba', params: '2B', category: 'vision', repo: 'Qwen/Qwen3-VL-2B-Instruct-GGUF', quant: 'Q4_K_M', sizeGB: 1.1, mmprojGB: 0.45, vision: true, ctx: 262144,
     blurb: 'Comes with Quicksilver. Small and quick on any PC, and it sees photos, screenshots and charts.', jobs: { general: 5, office: 5, research: 4, coding: 4, vision: 6, fast: 9 }, judge: 3 },
   { id: 'gemma-3-4b', name: 'Gemma 3 4B (vision)', maker: 'Google', params: '4B', category: 'vision', repo: 'unsloth/gemma-3-4b-it-GGUF', quant: 'Q4_K_M', sizeGB: 2.5, mmprojGB: 0.8, vision: true, ctx: 131072,
@@ -684,7 +688,7 @@ function capabilities(profiles, { local = true } = {}) {
 // Newer models that replace older ones (old catalog id -> new). Only pairs where the new one is
 // at least as good at the same job and similar in size; the online file can add more.
 const SUCCESSORS = {
-  'qwen2.5-3b': 'qwen3-4b', 'phi-3.5-mini': 'qwen3-4b', 'gemma-2-9b': 'gemma-3-12b',
+  'qwen2.5-3b': 'qwen3.5-4b', 'phi-3.5-mini': 'qwen3.5-4b', 'gemma-2-9b': 'gemma-3-12b', 'qwen3-4b': 'qwen3.5-4b', 'qwen3-4b-thinking': 'qwen3.5-4b', 'qwen3-vl-2b': 'qwen3.5-2b', 'qwen3-vl-4b': 'qwen3.5-4b',
   'qwen2.5-7b': 'qwen3-8b', 'mistral-7b': 'qwen3-8b', 'llama-3.1-8b': 'qwen3-8b',
   'qwen2.5-14b': 'qwen3-14b',
   'deepseek-r1-qwen-7b': 'deepseek-r1-qwen3-8b', 'deepseek-r1-qwen-14b': 'phi-4-reasoning-plus',

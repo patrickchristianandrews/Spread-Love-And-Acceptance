@@ -416,6 +416,22 @@ handle('docs:extract', (name, bytes) => docs.extract(name, Buffer.from(bytes)));
 handle('kb:list', () => ({ collections: knowledge.collections(), live: knowledge.LIVE }));
 knowledge.onProgress = (p) => emit('library:progress', p);
 handle('kb:semantic', () => knowledge.semanticStatus());
+// Smart memory: the memories that matter for a question, found by meaning (the same small embedding
+// model as Your knowledge). Vectors are cached by text; without the model, it says so and the
+// app falls back to matching words.
+const memVec = new Map();
+handle('memory:rank', async (question, items) => {
+  const e = require('./embed');
+  if (!e.installed() || !Array.isArray(items) || !items.length) return null;
+  const need = items.filter((m) => !memVec.has(m.text)).map((m) => m.text);
+  for (let i = 0; i < need.length; i += 32) {
+    const vs = await e.embed(need.slice(i, i + 32), 'document');
+    need.slice(i, i + 32).forEach((t, j) => memVec.set(t, vs[j]));
+  }
+  const [qv] = await e.embed([String(question || '').slice(0, 2000)], 'query');
+  if (!qv) return null;
+  return items.map((m) => ({ id: m.id, s: e.cosine(qv, memVec.get(m.text)) })).sort((a, b) => b.s - a.s).map((x) => x.id);
+});
 handle('kb:semanticOn', async () => {
   const e = require('./embed');
   if (e.installed()) { knowledge.indexPending((p) => emit('library:progress', p)).catch(() => {}); return { started: false, installed: true }; }

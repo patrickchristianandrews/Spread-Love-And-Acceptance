@@ -260,7 +260,7 @@ function palMark(text, q) {
 }
 function openPalette() {
   const items = paletteItems().map((it) => ({ label: it[0], hint: it[1], run: it[2], ...palKind(it[0]) }));
-  const b = openModal(`<div class="pal"><div class="pal-in">${icon('search', 18)}<input id="pal-q" placeholder="Search commands, pages, chats, models and skills…" autocomplete="off" spellcheck="false"><kbd>Esc</kbd></div><div class="pal-list" id="pal-list" role="listbox"></div>
+  const b = openModal(`<div class="pal"><div class="pal-in">${icon('search', 18)}<input id="pal-q" placeholder="Quick search: jump to any page, chat, model, skill or setting…" autocomplete="off" spellcheck="false"><kbd>Esc</kbd></div><div class="pal-list" id="pal-list" role="listbox"></div>
     <div class="pal-foot small muted"><span><kbd>↑</kbd><kbd>↓</kbd> choose</span><span><kbd>↵</kbd> run</span><span><kbd>Esc</kbd> close</span><span class="grow"></span><span>Open any time with <kbd>Ctrl</kbd> <kbd>P</kbd></span></div></div>`);
   b.classList.add('pal-modal');
   const q = b.querySelector('#pal-q');
@@ -282,11 +282,12 @@ function openPalette() {
     shown = pick;
     hot = Math.min(hot, Math.max(0, shown.length - 1));
     let last = '';
-    list.innerHTML = shown.length ? shown.map((it, i) => {
+    const intro = text ? '' : '<div class="pal-intro">⚡ <b>Quick search</b>: type a few letters to jump anywhere in Quicksilver or run a command, without clicking through menus. Try "voice", "dark", "new chat" or the name of a chat.</div>';
+    list.innerHTML = intro + (shown.length ? shown.map((it, i) => {
       const head = text && i === 0 ? '<div class="pal-group">Best match</div>' : it.group !== last && !(text && i === 0) ? `<div class="pal-group">${esc(it.group)}</div>` : '';
       if (!(text && i === 0)) last = it.group;
       return `${head}<button class="pal-item ${i === hot ? 'hot' : ''}" data-i="${i}" role="option" aria-selected="${i === hot}"><span class="pal-ic">${it.icon}</span><span class="grow">${palMark(it.text, text)}</span>${it.hint ? `<span class="pal-hint">${esc(it.hint)}</span>` : ''}${i === hot ? '<kbd class="pal-enter">↵</kbd>' : ''}</button>`;
-    }).join('') : `<div class="pal-empty">Nothing matches "${esc(text)}". Try fewer words, or the name of a page, chat, model or skill.</div>`;
+    }).join('') : `<div class="pal-empty">Nothing matches "${esc(text)}". Try fewer words, or the name of a page, chat, model or skill.</div>`);
     list.querySelector('.hot')?.scrollIntoView({ block: 'nearest' });
   };
   const run = (i) => { const it = shown[i]; if (!it) return; closeModal(); setTimeout(() => it.run(), 10); };

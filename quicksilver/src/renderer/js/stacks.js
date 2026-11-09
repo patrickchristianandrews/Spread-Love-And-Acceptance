@@ -352,7 +352,7 @@ function fusionPageHTML() {
       <p style="margin:0 0 10px">Mix 2 to 4 AIs, on this PC and in the cloud, into one custom AI with its own name. Save it, use it anywhere like any model, and share it with everyone if you like.</p>
       <div class="sf-steps"><div><b>1</b><span>Pick the AIs<br><span class="small muted">mix makers: Qwen + Llama + Claude catch each other's mistakes</span></span></div><div><b>2</b><span>Pick how they work together<br><span class="small muted">blend, debate, vote, red team…</span></span></div><div><b>3</b><span>Name it and save it<br><span class="small muted">it's yours, under ⚗️ Fusions in every model menu</span></span></div><div><b>4</b><span>Share it (optional)<br><span class="small muted">📤 Publish it to User-submitted stacks</span></span></div></div>
       <div class="small muted" style="margin-top:8px">How it differs from a stack: Quicksilver picks a stack's models for you; in your custom AI you pick them, cloud AIs included.</div></div>
-      <button class="btn primary" id="fusion-new-main">⚗️ Build a custom AI</button></div></div>
+      <div class="stack-v" style="gap:6px"><button class="btn primary" id="fusion-new-main">⚗️ Build a custom AI</button><button class="btn" data-import-ai>⬇ Import one</button></div></div></div>
     <div class="section"><h2>Your custom AIs</h2><span class="small muted">Rename with Edit; share with 📤 Publish.</span></div>
     ${mine.length ? `<div class="cards">${mine.map(stackCard).join('')}</div>` : '<p class="muted">No custom AIs yet. Press ⚗️ Build a custom AI, or start with a one-click fusion below.</p>'}
     ${powerMovesHTML()}

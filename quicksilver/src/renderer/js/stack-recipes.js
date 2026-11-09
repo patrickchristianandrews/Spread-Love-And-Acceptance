@@ -200,10 +200,10 @@ const STACK_RECIPES = [
 // Models you already have are preferred, so nothing is downloaded twice.
 const RX_LADDERS = {
   creative: ['gemma-3-27b', 'mistral-small-3.2', 'qwen3-30b-a3b', 'mistral-nemo-12b', 'gemma-3-12b', 'qwen3-14b', 'qwen3-8b', 'llama-3.1-8b', 'qwen3-4b', 'gemma-3-4b', 'llama-3.2-3b'],
-  general: ['qwen3-30b-a3b', 'qwen3-32b', 'qwen3-14b', 'phi-4', 'qwen2.5-14b', 'qwen3-8b', 'qwen2.5-7b', 'llama-3.1-8b', 'qwen3-4b', 'llama-3.2-3b'],
+  general: ['qwen3-30b-a3b', 'qwen3-32b', 'qwen3-14b', 'phi-4', 'qwen2.5-14b', 'qwen3-8b', 'qwen3.5-4b', 'qwen2.5-7b', 'llama-3.1-8b', 'qwen3-4b', 'llama-3.2-3b'],
   reasoning: ['qwen3-30b-a3b-thinking', 'qwq-32b', 'deepseek-r1-qwen-32b', 'phi-4-reasoning-plus', 'deepseek-r1-qwen-14b', 'deepseek-r1-qwen3-8b', 'qwen3-4b-thinking'],
   coding: ['qwen3-coder-30b', 'qwen2.5-coder-32b', 'devstral-small', 'qwen2.5-coder-14b', 'qwen2.5-coder-7b', 'qwen2.5-coder-3b'],
-  vision: ['gemma-3-27b', 'mistral-small-3.2', 'qwen3-vl-8b', 'gemma-3-12b', 'qwen2.5-vl-7b', 'qwen3-vl-4b', 'gemma-3-4b', 'qwen3-vl-2b'],
+  vision: ['gemma-3-27b', 'mistral-small-3.2', 'qwen3-vl-8b', 'gemma-3-12b', 'qwen2.5-vl-7b', 'qwen3-vl-4b', 'qwen3.5-4b', 'gemma-3-4b', 'qwen3-vl-2b'],
   open: ['qwen3-30b-a3b-uncensored', 'dolphin-3-mistral-24b', 'qwen3-14b-uncensored', 'hermes-4-14b', 'rocinante-12b', 'mistral-nemo-12b', 'qwen3-8b-uncensored', 'hermes-3-llama-3.1-8b', 'dolphin-3-llama-3.1-8b', 'hermes-3-llama-3.2-3b'],
 };
 const RX_CLASS = { small: 'general', general: 'general', large: 'general', reasoning: 'reasoning', coding: 'coding', vision: 'vision', open: 'open' };

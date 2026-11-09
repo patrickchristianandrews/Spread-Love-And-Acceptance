@@ -48,10 +48,22 @@ function publishModal(s) {
       <div class="field"><label for="pub-name">Name</label><input id="pub-name" maxlength="60" value="${esc(s.name)}"></div>
       <div class="field"><label for="pub-desc">What is it good at?</label><textarea id="pub-desc" rows="3" maxlength="400" placeholder="e.g. Tough coding questions: Qwen writes, Claude hunts for bugs, and the answer comes back checked."></textarea></div>
       <div class="field"><label for="pub-by">Your name as it should appear (optional)</label><input id="pub-by" maxlength="40" placeholder="Leave empty to use your GitHub name"></div>
+      <div class="pub-alt"><b>Share it directly, no account needed</b><div class="small muted">A share code or a small file you can send to anyone (message, email, forum). They press ⬇ Import on the Fusion tab. Nothing is checked or listed for everyone.</div>
+        <div class="row" style="gap:6px;margin-top:6px"><button class="btn small" id="pub-code">📋 Copy share code</button><button class="btn small" id="pub-file">💾 Save as a file</button></div></div>
       <div class="card" style="padding:10px 12px"><div class="small"><b>Exactly what's shared:</b> ${pf.parts.map((p, i) => `${esc(partLabel(p))}${i === pf.lead ? ' (lead)' : ''}`).join(' + ')} · ${mode.icon} ${esc(mode.name)}</div>
         <div class="small muted">Never shared: your API keys, chats, files or anything else on this PC.</div></div>
     </div>
-    <div class="modal-actions"><span class="small muted grow">Needs a free GitHub account.</span><button class="btn" data-close>Cancel</button><button class="btn primary" id="pub-go">Publish on GitHub</button></div>`);
+    <div class="modal-actions"><span class="small muted grow">For everyone: listed under User-submitted after a quick check. Needs a free GitHub account.</span><button class="btn" data-close>Cancel</button><button class="btn primary" id="pub-go">Publish for everyone</button></div>`);
+  const entryNow = () => ({ v: 1, name: b.querySelector('#pub-name').value.trim() || s.name, emoji: s.emoji || '⚗️', description: b.querySelector('#pub-desc').value.trim(), author: b.querySelector('#pub-by').value.trim(), mode: s.members.mode || 'blend', parts: pf.parts, lead: pf.lead });
+  b.querySelector('#pub-code').addEventListener('click', () => { navigator.clipboard?.writeText(shareCode(entryNow())); toast('Share code copied. Paste it anywhere; whoever gets it presses ⬇ Import on the Fusion tab.', 7000); });
+  b.querySelector('#pub-file').addEventListener('click', () => {
+    const e = entryNow();
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([JSON.stringify({ quicksilverCustomAI: e }, null, 1)], { type: 'application/json' }));
+    a.download = `${e.name.replace(/[^\w .-]/g, '').trim() || 'custom-ai'}.quicksilver.json`;
+    document.body.appendChild(a); a.click(); a.remove();
+    toast('Saved. Send the file to anyone; they press ⬇ Import on the Fusion tab.', 7000);
+  });
   b.querySelector('#pub-go').addEventListener('click', () => {
     const name = b.querySelector('#pub-name').value.trim();
     const description = b.querySelector('#pub-desc').value.trim();
@@ -127,3 +139,51 @@ document.addEventListener('click', (e) => {
   const b = e.target.closest('[data-publish]');
   if (b) publishModal(S.stacks.find((s) => s.id === b.dataset.publish));
 });
+
+// ---------- sharing directly: a share code or a file, no account ----------
+const b64u = (str) => btoa(String.fromCharCode(...new TextEncoder().encode(str))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+const unb64u = (str) => new TextDecoder().decode(Uint8Array.from(atob(str.replace(/-/g, '+').replace(/_/g, '/')), (c) => c.charCodeAt(0)));
+function shareCode(e) { return `QS1-${b64u(JSON.stringify(e))}`; }
+// Reads a share code or a saved file's text; checks it the same way published ones are checked.
+function readShared(text) {
+  const t = String(text || '').trim();
+  let raw;
+  const code = t.match(/QS1-([A-Za-z0-9_-]+)/);
+  if (code) raw = JSON.parse(unb64u(code[1]));
+  else { const j = JSON.parse(t); raw = j.quicksilverCustomAI || j; }
+  const name = String(raw?.name || '').slice(0, 60).trim();
+  const MODES = ['blend', 'debate', 'consensus', 'vote', 'redteam', 'plan', 'panel'];
+  const presets = new Set(Object.keys(S.providerPresets || {}));
+  const parts = (Array.isArray(raw?.parts) ? raw.parts : []).slice(0, 4).map((p) => {
+    if (p?.kind === 'local' && S.catalog.text.some((m) => m.id === p.model)) return { kind: 'local', model: p.model };
+    if (p?.kind === 'cloud' && typeof p.preset === 'string' && (!presets.size || presets.has(p.preset)) && typeof p.model === 'string') return { kind: 'cloud', preset: p.preset, model: p.model.slice(0, 80) };
+    throw new Error('It uses a model Quicksilver doesn\'t know.');
+  });
+  if (!name || parts.length < 2) throw new Error('That isn\'t a complete custom AI.');
+  const id = `shared-${name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 30)}-${Date.now().toString(36).slice(-4)}`;
+  return { id, name, emoji: String(raw.emoji || '⚗️').slice(0, 4), description: String(raw.description || '').slice(0, 400) || 'Shared with you directly.', author: String(raw.author || '').slice(0, 40), mode: MODES.includes(raw.mode) ? raw.mode : 'blend', parts, lead: Number.isInteger(raw.lead) && raw.lead < parts.length ? raw.lead : 0 };
+}
+async function importModal() {
+  try { S.providerPresets ||= await qs.call('providers:presets'); } catch {}
+  const b = openModal(`<h2>⬇ Import a custom AI</h2>
+    <p class="help" style="margin-top:0">Paste a share code someone sent you, or open the file they saved. You'll see what it uses before anything is added.</p>
+    <div class="field"><label for="imp-code">Share code</label><textarea id="imp-code" rows="3" placeholder="QS1-…"></textarea></div>
+    <div class="row" style="gap:8px"><button class="btn small" id="imp-file-btn">📂 Open a file…</button><input type="file" id="imp-file" accept=".json" hidden></div>
+    <div id="imp-preview" style="margin-top:10px"></div>
+    <div class="modal-actions"><button class="btn" data-close>Close</button><button class="btn primary" id="imp-read">Check it</button></div>`);
+  const show = (text) => {
+    const el = b.querySelector('#imp-preview');
+    try {
+      const e = readShared(text);
+      communityData ||= { stacks: [] };
+      communityData.stacks = [e, ...communityData.stacks.filter((x) => x.id !== e.id)];
+      el.innerHTML = communityCard(e);
+      el.querySelector('[data-us-add]')?.addEventListener('click', async (ev) => { ev.target.disabled = true; try { await addCommunity(e); closeModal(); stacksTab = 'fusion'; render(); } catch (err) { ev.target.disabled = false; toast(err.message); } });
+      el.querySelector('[data-us-connect]')?.addEventListener('click', async () => editProvider({ preset: e.parts.find((p) => p.kind === 'cloud' && !S.providers.some((x) => x.preset === p.preset))?.preset }, S.providerPresets));
+    } catch (err) { el.innerHTML = `<div class="notice">Couldn't read that: ${esc(err.message)}</div>`; }
+  };
+  b.querySelector('#imp-read').addEventListener('click', () => show(b.querySelector('#imp-code').value));
+  b.querySelector('#imp-file-btn').addEventListener('click', () => b.querySelector('#imp-file').click());
+  b.querySelector('#imp-file').addEventListener('change', async (ev) => { const f = ev.target.files?.[0]; if (f) show(await f.text()); });
+}
+document.addEventListener('click', (e) => { if (e.target.closest('[data-import-ai]')) importModal(); });

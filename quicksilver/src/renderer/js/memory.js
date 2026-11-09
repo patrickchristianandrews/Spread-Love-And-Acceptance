@@ -43,9 +43,21 @@ function forgetMatching(text) {
 
 // The few memories that matter for this question: everything when there are only a handful,
 // otherwise the ones sharing the most words with it, plus the most recent.
+// Smart memory: when the embedding model is installed, the ranking by meaning (prepared just
+// before the question is sent) is used; otherwise memories are matched by shared words.
+let memRank = { q: null, ids: null };
+async function prepareMemory(question) {
+  const list = memList();
+  if (!memOn() || list.length <= 15) return;
+  try { memRank = { q: question, ids: await qs.call('memory:rank', question, list.map((m) => ({ id: m.id, text: m.text }))) }; } catch { memRank = { q: null, ids: null }; }
+}
 function memoryFor(question) {
   const list = memList();
   if (list.length <= 15) return list;
+  if (memRank.q === question && memRank.ids?.length) {
+    const byId = new Map(list.map((m) => [m.id, m]));
+    return memRank.ids.slice(0, 12).map((id) => byId.get(id)).filter(Boolean).concat(list.slice(-3)).filter((m, i, a) => a.indexOf(m) === i);
+  }
   const q = memWords(question);
   const scored = list.map((m, i) => ({ m, s: [...memWords(m.text)].filter((w) => q.has(w) && !MEM_STOP.has(w)).length * 3 + i / list.length }));
   return scored.sort((a, b) => b.s - a.s).slice(0, 15).map((x) => x.m);

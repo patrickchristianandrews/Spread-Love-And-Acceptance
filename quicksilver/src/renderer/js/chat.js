@@ -690,6 +690,7 @@ async function generate(chat, rerollMsg, withTarget, opts = {}) {
 
   const p = S.data.prefs;
   const lastUser = [...chat.messages.slice(0, upTo)].reverse().find((m) => m.role === 'user');
+  if (!chat.private) await prepareMemory(lastUser?.text || '').catch(() => {});
   const skill = lastUser?.skillId ? skillById(lastUser.skillId) : null;
   if (skill) { alt.skillId = skill.id; alt.forceFact = Boolean(skill.tools?.factCheck); }
   // Tools that work straight on your files (and reading aloud) don't need a text model.

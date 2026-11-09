@@ -17,7 +17,7 @@ views.models = {
       <p class="lede">Free, open models run on your PC: private, offline, no account. Ratings show how each one will run on <b>your</b> hardware. Not sure? Let the <a href="#" data-goto-stacks>Setup Advisor</a> choose.</p>
       ${foundBanner()}
       ${shownUpgrades().length || shownStackUpdates().length || modelsTab === 'installed' ? modelUpdatesHTML() : ''}
-      ${['installed', 'text'].includes(modelsTab) ? builtinModelHTML() : ''}
+      ${['installed', 'text'].includes(modelsTab) ? builtinModelHTML() + addonsHTML() : ''}
       <div class="tabs" role="tablist">${Object.entries(tabs).map(([k, l]) => `<button class="tab ${modelsTab === k ? 'active' : ''}" data-tab="${k}" role="tab">${esc(l)}</button>`).join('')}</div>
       ${({ installed: installedHTML, text: textHTML, media: mediaHTML, trending: trendingHTML, hf: hfHTML, api: apiHTML })[modelsTab]()}
     </div>`;
@@ -111,7 +111,7 @@ function modelProfileHTML(m, kind) {
   return `<div class="mp">
     <div class="mp-row"><span class="mp-k">Output</span><span class="mp-v">${esc(modelOutput(m, kind))}</span></div>
     <div class="mp-row"><span class="mp-k">Accuracy</span><span class="mp-v"><span class="acc-dots">${'●'.repeat(acc.dots)}<i>${'●'.repeat(5 - acc.dots)}</i></span> ${acc.label}</span></div>
-    <div class="mp-rates">${modelRatings(m, kind).map(([k, v]) => `<span class="mp-rate"><span>${k}</span><b>★ ${Number.isInteger(v) ? v : v.toFixed(1)}</b></span>`).join('')}</div>
+    <div class="mp-rates">${modelRatings(m, kind).map(([k, v]) => `<span class="mp-rate"><span>${k}</span><b>${tenText(v)}</b></span>`).join('')}</div>
     ${kind === 'text' ? scoreChipsHTML(scoresFor(m.id)) || '<div class="sc-row"><span class="sc-k">Tested</span><span class="small muted">No published test scores for this model.</span></div>' : ''}
     ${createRowHTML(modelCreate(m), { all: true })}
   </div>`;

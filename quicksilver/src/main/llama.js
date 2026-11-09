@@ -356,7 +356,7 @@ const GPU_FAILURE = /decode|eval|vk::|vulkan|device lost|ErrorDeviceLost|CUDA er
 // If the graphics card fails before any text arrives, the model restarts on the processor
 // and the request is retried once.
 async function* chat(model, opts) {
-  const { messages, temperature, maxTokens, contextSize, gpu, signal, onStatus, level, tools } = opts;
+  const { messages, temperature, maxTokens, contextSize, gpu, signal, onStatus, level, tools, noThink } = opts;
   const hasImages = messages.some((m) => Array.isArray(m.content) && m.content.some((p) => p.type === 'image_url'));
   if (hasImages && !model.mmproj) throw new Error(`${model.name} can't see images. Use a vision model or a stack with a vision member.`);
   const useGpu = cpuOnly.has(model.file) ? 0 : gpu;
@@ -370,7 +370,7 @@ async function* chat(model, opts) {
       // Quick effort turns off "thinking" on models that support the switch (e.g. Qwen3).
       // Repetition guards: small models can loop ("wait, let me recheck…") until the length limit;
       // a light repeat penalty and the DRY sampler stop that without changing normal answers.
-      body: { messages, temperature, max_tokens: maxTokens, cache_prompt: true, ...(noLogprobs.has(model.file) || tools?.length ? {} : { logprobs: true }), repeat_penalty: 1.07, dry_multiplier: 0.8, dry_base: 1.75, dry_allowed_length: 3, ...(tools?.length ? { tools } : {}), ...(level === 'quick' ? { chat_template_kwargs: { enable_thinking: false }, reasoning_budget: 0 } : {}) },
+      body: { messages, temperature, max_tokens: maxTokens, cache_prompt: true, ...(noLogprobs.has(model.file) || tools?.length ? {} : { logprobs: true }), repeat_penalty: 1.07, dry_multiplier: 0.8, dry_base: 1.75, dry_allowed_length: 3, ...(tools?.length ? { tools } : {}), ...(level === 'quick' || noThink ? { chat_template_kwargs: { enable_thinking: false }, reasoning_budget: 0 } : {}) },
       signal,
     })) {
       produced = true;

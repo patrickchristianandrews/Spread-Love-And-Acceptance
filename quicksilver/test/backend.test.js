@@ -866,6 +866,26 @@ async function collect(gen) {
     complete.answerNow('rq-skip');
     const skipped = await collect(complete.run('stack:quicksilver', { requestId: 'rq-skip', messages: [{ role: 'user', content: 'Prove that there are infinitely many primes' }], contextSize: 2048, maxTokens: 60, level: 'thorough' }));
     assert.ok(skipped.status.some((t) => /Answering now/.test(t)) && skipped.text.length > 0, 'Answer now hands over to the Brain');
+    // Liquid Edition 2: a Qwen3.5 Brain sees photos and thinks for itself, so it's also the Eyes and the
+    // Thinker; the small model is the Muse. Questions that need working out switch its thinking on
+    // (with a budget); everything else is answered with thinking off.
+    {
+      const nd = fs.mkdtempSync(path.join(os.tmpdir(), 'qs-l2-'));
+      const cp = (n) => { const f = path.join(nd, n); fs.copyFileSync(TINY, f); return f; };
+      models.add({ id: 'b35', name: 'Qwen3.5 4B (uncensored)', kind: 'text', catalogId: 'qwen3.5-4b', files: { model: cp('b.gguf'), mmproj: cp('bp.gguf') }, size: 3.1e9 });
+      await complete.ensureQuicksilverStack();
+      const l2 = complete.stacks().find((x) => x.id === 'quicksilver').members;
+      assert.equal(l2.drafters[0], 'local:b35', 'the Qwen3.5 Brain leads');
+      assert.equal(l2.thinker, 'local:b35', 'it is also the Thinker');
+      assert.ok(!l2.vision, 'it reads photos itself');
+      assert.equal(l2.muse, 'local:starter', 'the small model is the Muse');
+      const think = await collect(complete.run('stack:quicksilver', { messages: [{ role: 'user', content: 'Why do leaves change colour in autumn?' }], contextSize: 2048, maxTokens: 60, level: 'thorough' }));
+      assert.ok(think.status.some((t) => /Thinking it through/.test(t)) && think.text.length > 0, 'a question that needs working out switches its thinking on');
+      const easy2 = await collect(complete.run('stack:quicksilver', { messages: [{ role: 'user', content: 'Hello!' }], contextSize: 2048, maxTokens: 30, level: 'thorough' }));
+      assert.ok(!easy2.status.some((t) => /Thinking/.test(t)) && easy2.text.length > 0, 'an easy one is answered straight away');
+      models.remove('b35');
+      await complete.ensureQuicksilverStack();
+    }
     // The Liquid Edition's core follows the online picks: a newer uncensored Brain takes over once you have it.
     const remoteP = require('../src/main/catalog-remote');
     remoteP.apply({ successors: {}, featured: {}, ladders: {}, liquid: { brain: 'qwen3-8b-uncensored' } });

@@ -73,7 +73,7 @@ function redPng(size = 64) {
     await win.waitForFunction(() => S.data.prefs.defaultTarget === 'local:starter', null, { timeout: 30000 })
       .catch(async () => { throw new Error(`the small model should answer until the main one arrives (default: ${(await state()).def || 'none'})`); });
     // The download starts once the app has looked the model up online (a second or so later).
-    await win.waitForFunction(() => Boolean(S.downloads['qwen3-4b']) || S.installed.some((m) => m.catalogId === 'qwen3-4b'), null, { timeout: 60000 })
+    await win.waitForFunction(() => Boolean(S.downloads['qwen3.5-4b']) || S.installed.some((m) => m.catalogId === 'qwen3.5-4b'), null, { timeout: 60000 })
       .catch(() => { throw new Error('the main model should start downloading in the background'); });
     s = await state();
     console.log(`  downloading: ${JSON.stringify(s.downloads)}`);
@@ -91,7 +91,7 @@ function redPng(size = 64) {
 
   if (mode === 'fallback') {
     // The main model finishes downloading in the background, then Quicksilver is complete.
-    await win.waitForFunction(() => S.installed.some((m) => m.catalogId === 'qwen3-4b'), null, { timeout: 15 * 60 * 1000, polling: 2000 });
+    await win.waitForFunction(() => S.installed.some((m) => m.catalogId === 'qwen3.5-4b'), null, { timeout: 15 * 60 * 1000, polling: 2000 });
     await win.waitForFunction(() => S.data.prefs.defaultTarget === 'stack:quicksilver', null, { timeout: 120000 });
     s = await state();
     ok(`background download finished: ${s.installed.map((m) => m.name).join(' + ')}; default ${s.def}`);

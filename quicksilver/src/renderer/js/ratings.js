@@ -72,7 +72,7 @@ function createRowHTML(r, opts = {}) {
   const keys = CREATE_KEYS.filter(([k]) => r[k] || (k !== 'editing' && opts.all));
   if (!keys.length) return '';
   return `<div class="sc-row"><span class="sc-k">Creates</span><span class="sc-chips">${keys.map(([k, i, l]) => (r[k]
-    ? `<span class="cr-chip" title="${esc(`${r[k].who}${r[k].note ? ` (${r[k].note})` : ''}`)}">${i} ${l} <b>★ ${Number.isInteger(r[k].v) ? r[k].v : r[k].v.toFixed(1)}</b></span>`
+    ? `<span class="cr-chip" title="${esc(`${r[k].who}${r[k].note ? ` (${r[k].note})` : ''}`)}">${i} ${l} <b>${tenText(r[k].v)}</b></span>`
     : `<span class="cr-chip off" title="${CREATE_NONE[k]}">${i} ${l} <b>–</b></span>`)).join('')}<a href="#" class="sc-info" data-guide="scores" title="What these ratings mean">ⓘ</a></span></div>`;
 }
 // A catalog model's own create ratings (text models compose music for the synth).
@@ -105,8 +105,8 @@ function gainsOf(fromId, toId) {
   if (b.kind === 'image' || b.kind === 'video') {
     const qa = a?.quality ?? 0;
     const qb = b.quality ?? 0;
-    if (b.kind === 'video' && qb > qa) out.push([40, '🎬', `Better video${a ? ` (★ ${stars5(qa)} → ★ ${stars5(qb)})` : ''}`]);
-    if (b.kind === 'image' && b.category !== 'edit' && qb > qa) out.push([40, '📸', `Improved picture generation${a ? ` (★ ${stars5(qa)} → ★ ${stars5(qb)})` : ''}`]);
+    if (b.kind === 'video' && qb > qa) out.push([40, '🎬', `Better video${a ? ` (${tenText(stars5(qa))} → ${tenText(stars5(qb))})` : ''}`]);
+    if (b.kind === 'image' && b.category !== 'edit' && qb > qa) out.push([40, '📸', `Improved picture generation${a ? ` (${tenText(stars5(qa))} → ${tenText(stars5(qb))})` : ''}`]);
     if (b.category === 'edit' && a?.category !== 'edit') out.push([30, '🪄', 'Edits photos from a description']);
     if (b.animate && !a?.animate) out.push([30, '📷', 'Brings photos to life']);
   } else {

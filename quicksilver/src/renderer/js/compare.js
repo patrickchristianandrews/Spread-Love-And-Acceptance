@@ -13,7 +13,7 @@ function loadOverview() {
 const starsHTML = (n) => {
   if (n == null) return '';
   const full = Math.floor(n); const half = n - full >= 0.5;
-  return `<span class="stars" title="${n} out of 5" aria-label="${n} out of 5 stars">${'★'.repeat(full)}${half ? '<span class="half">★</span>' : ''}<span class="off">${'★'.repeat(5 - full - (half ? 1 : 0))}</span></span>`;
+  return `<span class="stars" title="${tenText(n)}" aria-label="${tenText(n)}">${'★'.repeat(full)}${half ? '<span class="half">★</span>' : ''}<span class="off">${'★'.repeat(5 - full - (half ? 1 : 0))}</span><b class="st-ten">${tenText(n)}</b></span>`;
 };
 const timeChip = (sec, per = 'answer') => {
   if (sec == null || !isFinite(sec)) return '<span class="small muted">n/a</span>';
@@ -245,7 +245,7 @@ function fusionRatings(members) {
 function fusionRatingsHTML(members, { compact = false } = {}) {
   const r = fusionRatings(members);
   if (!r) return '';
-  const st = (v) => `★ ${Number.isInteger(v) ? v : v.toFixed(1)}`;
+  const st = (v) => tenText(v);
   if (compact) return `<div class="fz-compact small"><span title="${esc(r.why.power)}">⚡ Power <b>${st(r.power)}</b></span><span title="${esc(r.why.eff)}">🍃 Efficiency <b>${st(r.eff)}</b></span><span title="${esc(r.why.acc)}">🎯 Accuracy <b>${st(r.acc)}</b></span><span class="fz-run ${r.runs.cls}" title="${esc(r.runs.text)}">${r.runs.icon} ${r.runs.cls === 'ok' ? 'Runs well here' : r.runs.cls === 'warn' ? 'Runs slowly here' : 'Won\'t run here'}</span></div>`;
   return `<div class="fz-ratings">
     <div class="fz-r"><span>⚡ Power</span><b>${st(r.power)}</b><small>${esc(r.why.power)}</small></div>

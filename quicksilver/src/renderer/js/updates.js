@@ -209,9 +209,8 @@ function bindModelUpdates() {
 
 // The model that comes with Quicksilver, and what it can do.
 function builtinModelHTML() {
-  const brain = S.catalog.text.find((m) => m.id === 'qwen3-4b');
-  const eyes = S.catalog.text.find((m) => m.id === 'qwen3-vl-2b');
-  const thinker = S.catalog.text.find((m) => m.id === 'qwen3-4b-thinking');
+  const brain = S.catalog.text.find((m) => m.id === 'qwen3.5-4b');
+  const eyes = S.catalog.text.find((m) => m.id === 'qwen3.5-2b');
   if (!brain) return '';
   const est = S.est?.text?.[brain.id];
   const have = S.installed.some((m) => m.source === 'bundled' || m.catalogId === brain.id);
@@ -226,18 +225,18 @@ function builtinModelHTML() {
     ['✨', 'Creative spark', 'for stories, lyrics, names and ideas, its Muse throws out fresh angles first, so you don\'t get the obvious take'],
     ['🧮', 'Gets maths right', 'sums are worked out exactly, not guessed'],
     ['💻', 'Helps with code', 'explains, writes and fixes everyday code'],
-    ['👁', 'Sees photos', `reads screenshots, receipts and pictures${eyes ? ` (${eyes.name})` : ''}`],
+    ['👁', 'Sees photos', `reads screenshots, receipts and pictures itself`],
     ['📄', 'Reads your files', 'answers from your PDFs, Word and Excel files'],
     ['🌐', 'Looks things up', 'searches the web for fresh facts when you are online'],
     ['🎙', 'Talks', 'speak to it and hear it answer'],
   ];
   return `<div class="card builtin-card" id="builtin-model">
     <div class="row"><span class="emoji-badge">💧</span><div class="grow"><h3 style="margin:0">Built in: Quicksilver Liquid Edition</h3>
-      <div class="small muted">${esc(brain.name)}${thinker ? ` + ${esc(thinker.name)} for hard maths` : ''}${eyes ? ` + ${esc(eyes.name)} for eyes` : ''} · ${(brain.sizeGB + (thinker?.sizeGB || 0) + (eyes ? eyes.sizeGB + (eyes.mmprojGB || 0) : 0)).toFixed(1)} GB · comes with the app, works offline</div></div>
+      <div class="small muted">${esc(brain.name)} (sees photos, thinks hard ones through)${eyes ? ` + ${esc(eyes.name)} as the Muse` : ''} · ${(brain.sizeGB + (brain.mmprojGB || 0) + (eyes ? eyes.sizeGB + (eyes.mmprojGB || 0) : 0)).toFixed(1)} GB · comes with the app, works offline</div></div>
       ${open ? '<span class="badge b-peach" title="Answers plainly, without refusing. The parental lock keeps it family-safe.">Uncensored</span>' : ''}${est ? `<span class="badge rate-${est.rating}">${esc(est.label)}</span>` : ''}</div>
     <p style="margin:10px 0 6px"><b>Fast answers you can trust.</b> Chosen as the quickest model that's still accurate: it answers almost instantly on most PCs and double-checks facts and figures, so you can rely on it for everyday work.${open ? ' It\'s uncensored: it answers plainly instead of refusing (the parental lock in Settings keeps it family-safe).' : ''}</p>
     ${qsRolesHTML(qst)}
-    ${stackScoresHTML(qst ? [...(qst.members.drafters || []), qst.members.judge, qst.members.vision, qst.members.thinker].filter(Boolean) : ['qwen3-4b', 'qwen3-4b-thinking', 'qwen3-vl-2b'])}
+    ${stackScoresHTML(qst ? [...(qst.members.drafters || []), qst.members.judge, qst.members.vision, qst.members.muse, qst.members.thinker].filter(Boolean) : ['qwen3.5-4b', 'qwen3.5-2b'])}
     ${dolphinOfferHTML(qst)}
     ${cloudPartnerHTML()}
     <div class="builtin-can">${can.map(([i, t, d]) => `<div><span>${i}</span><b>${esc(t)}</b><span class="small muted">${esc(d)}</span></div>`).join('')}</div>
@@ -287,9 +286,10 @@ function qsRolesHTML(qst) {
   const m = qst.members || {};
   const brain = m.drafters?.[0];
   const roles = [
-    brain && ['🧠', 'Brain', nameOf(brain), 'answers everyday messages fast and reasons step by step'],
-    m.vision && ['👁', 'Eyes & Muse', nameOf(m.vision), 'reads photos, and sketches fresh angles before creative writing'],
-    m.thinker && ['🧮', 'Thinker', nameOf(m.thinker), 'thinks hard maths and logic through before answering (press Answer now to skip)'],
+    brain && ['🧠', 'Brain', nameOf(brain), m.thinker === brain ? `answers everyday messages fast${m.vision ? '' : ', reads photos itself,'} and switches its own thinking on for hard questions (press Answer now to skip)` : 'answers everyday messages fast and reasons step by step'],
+    m.vision && ['👁', 'Eyes', nameOf(m.vision), 'reads photos'],
+    (m.muse || m.vision) && ['✨', 'Muse', nameOf(m.muse || m.vision), 'sketches fresh angles before creative writing'],
+    m.thinker && m.thinker !== brain && ['🧮', 'Thinker', nameOf(m.thinker), 'thinks hard maths and logic through before answering (press Answer now to skip)'],
     m.judge && m.judge !== brain && ['🎯', 'Closer', nameOf(m.judge), 'leads on hard questions'],
     m.drafters?.[1] && [/dolphin/i.test(nameOf(m.drafters[1])) ? '🐬' : '🗣', 'Second opinion', nameOf(m.drafters[1]), 'writes its key points on hard questions, then the Brain answers from both views'],
     qst.bench && [/dolphin/i.test(nameOf(qst.bench)) ? '🐬' : '🪑', 'On the Council', nameOf(qst.bench), 'too slow on this PC to join every hard question, so it adds its view when you pick Council, and you can chat with it directly'],
@@ -320,4 +320,54 @@ qs.onApp?.(async (d) => {
   await reloadCatalog();
   await checkForUpdates();
   if (['models', 'stacks'].includes(S.route.view) && $('#modal').hidden) render();
+});
+
+// ---------- add-ons: what each addition does for your stack ----------
+// Shown under the main models: memory (Mem0-style), local RAG and the rest, each with what it adds
+// (accuracy, speed, privacy), whether it's on, and one button.
+function addonsHTML() {
+  const sem = S.kbSemantic;
+  if (!sem) { qs.call('kb:semantic').then((r) => { S.kbSemantic = r; if (S.route.view === 'models') render(); }).catch(() => {}); }
+  const mems = (S.data.memory || []).length;
+  const bases = S.kbSummary?.bases || 0;
+  const voiceOn = Boolean(S.voiceReady);
+  const cloud = (S.providers || []).some((p) => p.hasKey || p.noKey);
+  const A = [
+    ['🧠', 'Memory', 'like Mem0', S.data.prefs.memory !== false ? `On · ${mems} thing${mems === 1 ? '' : 's'} remembered${sem?.on ? ' · found by meaning' : ''}` : 'Off',
+      'Remembers facts about you across chats (your job, tools, how you like answers) and gives the stack only the ones that matter for each question. With Smarter search on, it finds them by meaning, the way Mem0 does, all on this PC.',
+      'Accuracy ↑ on anything personal · no extra time', ['data-addon-memory', 'Manage memory']],
+    ['📚', 'Your knowledge', 'local RAG', bases ? `${bases} knowledge base${bases === 1 ? '' : 's'}` : 'Not set up yet',
+      'Retrieval-augmented generation on your own files: before answering, the stack looks up the best passages from your files, folders and websites and answers from them, citing the source. Everything stays on this PC.',
+      'Accuracy ↑↑ on your own material · a second or two per question', ['data-addon-go="library"', 'Open Your knowledge']],
+    ['🔎', 'Smarter search', 'Nomic Embed v1.5, 0.15 GB', sem?.on ? 'On' : 'Off',
+      'A tiny embedding model that searches by meaning, not just words: "time off" finds "annual leave". It powers both Your knowledge and Memory.',
+      'Finds the right passage and memory far more often · tiny download', sem?.on ? null : ['data-addon-semantic', 'Turn on']],
+    ['🌐', 'Web search', 'free, no account', S.config?.offline ? 'Off (offline)' : 'Ready', 'For anything current (news, prices, today\'s facts) the stack searches the web first and answers with sources. Used automatically when a question needs it.', 'Up-to-date answers · a few seconds', null],
+    ['✓', 'Double-check', 'a second opinion', S.data.prefs.factCheck ? 'On for every answer' : 'Off (on per chat)', 'A second model checks each claim in an answer and fixes clear mistakes. Worth it for health, money, legal and work answers.', 'Accuracy ↑ · roughly doubles the time', null],
+    ['🎙', 'Voice', 'Whisper, runs here', voiceOn ? 'Ready' : 'Downloads when first used', 'Speak to the stack and hear it answer; your voice never leaves this PC.', 'Hands-free · no change to answers', null],
+    ['🔌', 'Connectors', 'your apps', 'Gmail, Drive, Outlook, Spotify and 40 more', 'Lets the stack read and act on your apps (it asks before sending, creating or changing anything).', 'Answers from your real data', ['data-addon-go="integrations"', 'Open Connectors']],
+    ['⚔️', 'Council', 'three views, one verdict', 'Pick Council in Effort', 'A Structurer, a Critic and a Pragmatist each look at a big question, then one answer is written from all three, with how much they agreed.', 'Accuracy ↑ on big decisions · 3–4× the time', null],
+    ['🗳️', 'One-click fusions', 'vote, red team, plan, panel', `${(S.stacks || []).filter((x) => x.builtFor === 'power').length} set up`, 'Proven ways of making your own models work together: answer three times and keep the majority, hunt for mistakes before you see them, plan then solve, or an expert panel.', 'Accuracy ↑ (vote is best for maths) · 2–3× the time', ['data-addon-fusion', 'Open Fusion']],
+    ['✨', 'Fix my prompt', 'one click', 'In the message bar', 'Turns a quick note into a clear, complete request before it\'s sent, using your model, so the stack knows exactly what you want.', 'Better answers first time · a few seconds', null],
+    ['⚡', 'Speed helpers', 'speculative decoding', 'Used automatically when one is installed', 'A tiny model from the same family writes ahead and the main model checks its guesses, so bigger models (Qwen3 8B–32B, Llama) answer faster with exactly the same answers. Suggested on a model\'s card when it helps.', 'Up to about 2× faster on a graphics card · same answers', null],
+    ['📁', 'Projects', 'shared background', 'In the menu', 'Instructions and files for a piece of work that every chat in the project knows, so you don\'t repeat yourself.', 'Answers that fit your work · no extra time', ['data-addon-go="projects"', 'Open Projects']],
+    ['⚡', 'Skills', 'ready-made tasks', 'Type / in the message bar', 'One-click tasks with the right settings built in: research brief, music finder, SWOT, summaries, code review and dozens more.', 'Better-shaped answers for common jobs', ['data-addon-go="skills"', 'Open Skills']],
+    ['🧩', 'MCP tool servers', 'the open standard', 'Add in Connectors', 'Hundreds of extra tools from the Model Context Protocol world: files, databases, browsers, design tools and more, used by the stack when a chat needs them.', 'New abilities · asks before changing anything', ['data-addon-go="integrations"', 'Add a tool server']],
+    ['♻️', 'Free rotation', 'free cloud AIs', `${(S.providers || []).filter((p) => ['cerebras', 'groq', 'mistral', 'google', 'openrouter', 'sambanova', 'github'].includes(p.preset)).length} free services connected`, 'Connect two or more free cloud AIs and, when one hits its daily limit, the next takes over automatically.', 'Keeps the cloud free · no waiting', null],
+    ['🛡️', 'Private online', 'Proton VPN', typeof privacyMode === 'function' ? ({ offline: 'Fully private (offline)', vpn: 'On', online: 'Off' })[privacyMode()] : '', 'Web search and cloud AIs only through Proton VPN (a free plan is available), so sites and services can\'t see where you are.', 'Privacy ↑ · a little slower online', null],
+    ['☁️', 'A cloud AI', 'optional', cloud ? 'Connected' : 'None', 'A big cloud model for the hardest questions, or as the lead of a custom AI. Everyday messages stay on this PC.', 'Accuracy ↑↑ on hard questions · needs internet', ['data-guide="apis"', 'Compare cloud AIs']],
+  ];
+  return `<div class="section"><h2>Add-ons for your stack</h2><span class="small muted">Not models: everything that makes a model or stack better. What each one adds, whether it's on, and where to find it.</span></div>
+    <div class="cards addon-grid">${A.map(([ic, name, tag, status, what, effect, btn]) => `<div class="card addon"><div class="row"><span class="emoji-badge">${ic}</span><div class="grow"><b>${esc(name)}</b> <span class="small muted">${esc(tag)}</span><div class="small addon-status">${esc(status)}</div></div></div>
+      <p class="small" style="margin:8px 0 6px">${esc(what)}</p><div class="small addon-effect">➕ ${esc(effect)}</div>
+      ${btn ? `<div class="row" style="margin-top:8px"><button class="btn small" ${btn[0]}>${esc(btn[1])}</button></div>` : ''}</div>`).join('')}</div>`;
+}
+document.addEventListener('click', async (e) => {
+  if (e.target.closest('[data-addon-memory]')) { openMemory(); return; }
+  if (e.target.closest('[data-addon-fusion]')) { stacksTab = 'fusion'; go({ view: 'stacks' }); return; }
+  const g = e.target.closest('[data-addon-go]');
+  if (g) { go({ view: g.dataset.addonGo }); return; }
+  if (e.target.closest('[data-addon-semantic]')) {
+    try { const r = await call('kb:semanticOn'); if (r?.id) { S.downloads[r.id] = { ...r, name: 'Nomic Embed v1.5' }; paintDownloads(); } toast('Turning on smarter search: a small download, then your files and memories are found by meaning.'); } catch {}
+  }
 });

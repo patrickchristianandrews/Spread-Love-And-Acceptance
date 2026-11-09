@@ -516,9 +516,9 @@ async function* quicksilverThink(stackDef, req) {
     yield* powerMove('vote', thinker, [], { ...inner, maxTokens: 8000 }, () => req.messages, step, live);
     return;
   }
-  yield { type: 'status', text: '🧮 A tricky one: thinking it through carefully… (press Answer now to skip)' };
+  yield { type: 'status', text: `${req.thinkBudget === 'short' ? '🧠 Thinking it through…' : '🧮 A tricky one: thinking it through carefully…'} (press Answer now to skip)` };
   // Thinking is long; on a PC without a graphics card it's kept to a sensible length.
-  const budget = gpu ? 8000 : 3000;
+  const budget = req.thinkBudget === 'short' ? (gpu ? 3000 : 1200) : gpu ? 8000 : 3000;
   let reasoning = ''; let answer = ''; let skipped = false; let emitted = 0;
   try {
     for await (const ev of single(thinker, { ...inner, maxTokens: budget, level: 'thorough' })) {
@@ -542,16 +542,25 @@ async function* quicksilverThink(stackDef, req) {
   yield { type: 'status', text: skipped ? 'Answering now from the working so far…' : 'Writing the answer from the working…' };
   const msgs = req.messages;
   const withSys = [...msgs.slice(0, -1), { role: 'system', content: working ? STEPS_ANSWER(working) : 'Answer the question directly and carefully.' }, msgs[msgs.length - 1]];
-  yield* single(brain || thinker, { ...inner, messages: withSys, level: 'thorough' });
+  yield* single(brain || thinker, { ...inner, messages: withSys, level: 'quick', noThink: true });
 }
 
 async function* stack(stackDef, req) {
   const { members } = stackDef;
   // The Liquid Edition's Thinker takes hard maths and logic (not quick answers, photos or app work).
-  if (stackDef.id === 'quicksilver' && members.thinker && exists(members.thinker) && req.level !== 'quick' && !req.points && !req.toolList && !hasImages(req.messages) && req.stepByStep !== false && thinkWorthy(lastUserText(req.messages))) {
-    yield* quicksilverThink(stackDef, req);
-    return;
+  if (stackDef.id === 'quicksilver' && members.thinker && exists(members.thinker) && req.level !== 'quick' && !req.points && !req.toolList && !hasImages(req.messages) && req.stepByStep !== false) {
+    const hardMaths = thinkWorthy(lastUserText(req.messages));
+    // A Brain that thinks for itself thinks through every question that needs working out, unless
+    // a stronger model or a second opinion is on the team (then the team handles those).
+    const selfThinker = members.thinker === (members.drafters || [])[0];
+    const crewOfOne = !members.judge && (members.drafters || []).filter(exists).length <= 1;
+    if (hardMaths || (selfThinker && crewOfOne && stepWorthy(req))) {
+      yield* quicksilverThink(stackDef, { ...req, thinkBudget: hardMaths ? null : 'short' });
+      return;
+    }
   }
+  // Everything else from a Brain that can think: answered straight away, without thinking.
+  if (stackDef.id === 'quicksilver' && members.thinker && members.thinker === (members.drafters || [])[0]) req = { ...req, noThink: true };
   if (stackDef.id === 'quicksilver' && req.stepByStep !== false) req = { ...req, stepByStep: true };
   if (stackDef.id === 'quicksilver' && req.level !== 'quick' && !req.toolList && !hasImages(req.messages) && CREATIVE.test(lastUserText(req.messages))) {
     const steps0 = [];
@@ -955,10 +964,13 @@ async function ensureQuicksilverStack() {
   // The Liquid Edition's core follows the online picks: when a newer, better uncensored Brain or
   // Eyes is named there and you have it, it takes over; until then, the built-in ones.
   const core = require('./catalog-remote').picks().liquid || {};
-  const brain = all.find((m) => core.brain && m.catalogId === core.brain && m.source !== 'bundled') || all.find((m) => m.id === 'starter-brain') || all.find((m) => m.catalogId === 'qwen3-4b');
-  const eyes = all.find((m) => core.eyes && m.catalogId === core.eyes && m.source !== 'bundled') || all.find((m) => m.id === 'starter') || all.find((m) => /^qwen3-vl-/.test(m.catalogId || ''));
+  const brain = all.find((m) => core.brain && m.catalogId === core.brain && m.source !== 'bundled') || all.find((m) => m.id === 'starter-brain') || all.find((m) => /^qwen3(\.5)?-4b$/.test(m.catalogId || ''));
+  const eyes = all.find((m) => core.eyes && m.catalogId === core.eyes && m.source !== 'bundled') || all.find((m) => m.id === 'starter') || all.find((m) => /^qwen3(\.5-2b|-vl-)/.test(m.catalogId || ''));
+  // A Brain that thinks for itself (Qwen3.5) is also the Thinker; one that sees is also the Eyes.
+  const brainThinks = Boolean(brain && catalog.TEXT_MODELS.find((c) => c.id === brain.catalogId)?.reasoning);
+  const brainSees = Boolean(brain?.files?.mmproj);
   // The Thinker: an uncensored thinking model for hard maths and logic (comes with Quicksilver).
-  const thinker = all.find((m) => m.id === 'starter-thinker') || all.find((m) => /^qwen3-4b-thinking/.test(m.catalogId || '') && isUncensored(`local:${m.id}`));
+  const thinker = brainThinks ? brain : all.find((m) => m.id === 'starter-thinker') || all.find((m) => /^qwen3-4b-thinking/.test(m.catalogId || '') && isUncensored(`local:${m.id}`));
   // Quicksilver is uncensored, so only uncensored models are on its team: the ones that come with
   // it, and uncensored ones you add.
   const isOpen = (p) => isUncensored(`local:${p.id}`);
@@ -969,7 +981,8 @@ async function ensureQuicksilverStack() {
   let bench;
   if (brain) {
     const score = (id) => { const p = pool.find((x) => x.id === id); return p ? catalog.scoreFor(p, 'general') : 0; };
-    const openPool = pool.filter((p) => p.id !== brain.id && p.id !== eyes?.id && p.id !== thinker?.id && isOpen(p));
+    // Helpers are uncensored models you added; an older built-in model never joins as a helper.
+    const openPool = pool.filter((p) => p.id !== brain.id && p.id !== eyes?.id && p.id !== thinker?.id && all.find((x) => x.id === p.id)?.source !== 'bundled' && isOpen(p));
     const team = (openPool.length && catalog.compose(openPool, 'general', hw, calib, { vision: false, speed: 10, leadSpeed: 20, budget: 180 })) || { members: { drafters: [] } };
     const lead = team.members.judge || team.members.drafters[0];
     const stronger = lead && score(lead) > score(brain.id) ? lead : null;
@@ -983,7 +996,9 @@ async function ensureQuicksilverStack() {
       drafters: [brain.id, ...(stronger ? [] : second ? [second] : [])].map(local),
       // With nobody to combine, the brain answers on its own (step by step on hard questions).
       judge: stronger || second ? local(stronger || brain.id) : undefined,
-      vision: local(eyes?.id),
+      // The Brain reads photos itself when it can (no hand-over, no second model to load).
+      vision: brainSees ? undefined : local(eyes?.id),
+      muse: local(eyes?.id),
       thinker: local(thinker?.id),
       mode: 'auto',
     };
@@ -998,6 +1013,7 @@ async function ensureQuicksilverStack() {
   if (!members.vision) delete members.vision;
   if (!members.judge) delete members.judge;
   if (!members.thinker) delete members.thinker;
+  if (!members.muse || members.muse === members.drafters?.[0]) delete members.muse;
   const def = { id: 'quicksilver', name: 'Quicksilver Liquid Edition', emoji: '💧', builtIn: true, autoManaged: true, custom: true, builtFor: 'quicksilver', ...(bench ? { bench } : {}),
     description: "Quicksilver Liquid Edition, Quicksilver's own uncensored crew: the built-in Qwen3 4B (the Brain) answers everyday messages fast and reasons step by step, Qwen3-VL 2B (Eyes & Muse) reads photos and sketches fresh angles for creative work, and a stronger fast uncensored model on this PC (the Closer) leads on hard questions.", members };
   if (!have || JSON.stringify(have.members) !== JSON.stringify(members) || have.builtFor !== 'quicksilver' || have.name !== def.name || (have.bench || null) !== (def.bench || null)) saveStack(def);

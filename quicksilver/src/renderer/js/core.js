@@ -153,7 +153,10 @@ function starsOf(target, job = 'general') {
   if (q == null) return null;
   return Math.max(0.5, Math.min(5, Math.round((q / 2 + (s.team ? 0.5 : 0)) * 2) / 2));
 }
-const starText = (n) => (n == null ? '' : `★ ${Number.isInteger(n) ? n : n.toFixed(1)}`);
+// Ratings are shown out of 10 (most are kept out of 5 inside, in half steps).
+const tenOf = (n5) => Math.round(n5 * 2 * 10) / 10;
+const tenText = (n5) => (n5 == null ? '' : `${Number.isInteger(tenOf(n5)) ? tenOf(n5) : tenOf(n5).toFixed(1)}/10`);
+const starText = (n) => tenText(n);
 const etaBadge = (sec, what = '', stars = null) => (sec == null && stars == null ? '' : `<span class="badge b-lav eta" title="Estimated on this PC: time and expected quality (out of 5)">${sec != null ? `⏱ ${etaLabel(sec)}${what ? ` ${what}` : ''}` : ''}${sec != null && stars != null ? ' · ' : ''}${stars != null ? starText(stars) : ''}</span>`);
 const SKILL_JOB = { code: 'coding', writing: 'writing', career: 'writing', voice: 'writing', music: 'writing', office: 'office', finance: 'office', research: 'research', life: 'general', fun: 'general', vision: 'general', media: 'general', editing: 'general' };
 // How many words a job usually needs, from an assistant's kind of work or a skill's output.

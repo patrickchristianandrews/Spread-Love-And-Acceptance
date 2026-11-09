@@ -1347,3 +1347,14 @@ code.sel { user-select: all; background: var(--soft); padding: 1px 6px; border-r
 .cc-a { background: #f0a43a; } .cc-q { background: var(--accent); }
 .cc-sum { margin: 10px 0 0; padding: 10px 12px; border-radius: 10px; background: var(--accent-tint); }
 @media (max-width: 640px) { .cc-h, .cc-r { grid-template-columns: 1fr; } }
+
+.st-ten { margin-left: 6px; font-size: .8em; color: var(--text); font-weight: 800; letter-spacing: 0; }
+
+.cc-l { background: #2fbf71; }
+.cc-kinds { margin: 4px 0 10px; }
+.pub-alt { padding: 10px 12px; border-radius: 12px; border: 1px dashed var(--line-soft); }
+
+.addon-grid { grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
+.addon-status { color: var(--accent); font-weight: 700; }
+.addon-effect { padding: 5px 8px; border-radius: 8px; background: var(--hover); font-weight: 600; }
+.pal-intro { margin: 6px 4px 4px; padding: 10px 12px; border-radius: 10px; background: var(--accent-tint); font-size: .85rem; line-height: 1.4; }

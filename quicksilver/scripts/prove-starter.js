@@ -26,7 +26,8 @@ function png(r, g, b, size = 64) {
 async function ask(content, maxTokens = 80) {
   const res = await fetch(`http://127.0.0.1:${PORT}/v1/chat/completions`, {
     method: 'POST', headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ messages: [{ role: 'user', content }], max_tokens: maxTokens, temperature: 0 }),
+    // Plain answers: a model that can think (Qwen3.5) answers directly here; thinking is checked in the app test.
+    body: JSON.stringify({ messages: [{ role: 'user', content }], max_tokens: maxTokens, temperature: 0, chat_template_kwargs: { enable_thinking: false } }),
   });
   if (!res.ok) throw new Error(`HTTP ${res.status}: ${await res.text()}`);
   const j = await res.json();

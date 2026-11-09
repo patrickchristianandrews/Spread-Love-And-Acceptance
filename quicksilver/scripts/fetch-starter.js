@@ -1,7 +1,6 @@
 // Downloads the models that come with Quicksilver, so it works the moment it's installed:
-//   starter/ (inside the installer)  Qwen3-VL 2B: quick on any PC, sees photos   (Apache 2.0)
-//   pack/    (next to the installer) Qwen3 4B Instruct 2507: the brain           (Apache 2.0)
-//            and Qwen3 4B Thinking 2507: the Thinker, for hard maths and logic (Apache 2.0)
+//   starter/ (inside the installer)  Qwen3.5 2B: quick on any PC, sees photos; the Muse  (Apache 2.0)
+//   pack/    (next to the installer) Qwen3.5 4B: the Brain; sees photos, thinks hard ones through (Apache 2.0)
 // Together they make the built-in "Quicksilver" model (a stack with smart routing).
 // The 4B model is too big for a Windows installer (about 2 GB at most), so it ships in a folder
 // beside it; the installer copies it in. Writes starter/STARTER.json and the licences.
@@ -23,13 +22,12 @@ const QUANTS = ['Q4_K_M', 'Q4_K_S', 'IQ4_XS'];
 const PROJ_ORDER = [/q8_0/i, /(^|[-_.])f16/i, /bf16/i];
 
 const MODELS = [
-  { id: 'starter', catalogId: 'qwen3-vl-2b', name: 'Qwen3-VL 2B', vision: true, where: 'starter', limit: 1.7e9, file: 'model.gguf',
-    licenseRepo: 'Qwen/Qwen3-VL-2B-Instruct', repos: ['mradermacher/Huihui-Qwen3-VL-2B-Instruct-abliterated-GGUF', 'huihui-ai/Huihui-Qwen3-VL-2B-Instruct-abliterated-GGUF', 'noctrex/Huihui-Qwen3-VL-2B-Instruct-abliterated-GGUF', 'Qwen/Qwen3-VL-2B-Instruct-GGUF', 'ggml-org/Qwen3-VL-2B-Instruct-GGUF', 'unsloth/Qwen3-VL-2B-Instruct-GGUF'] },
-  { id: 'starter-brain', catalogId: 'qwen3-4b', name: 'Qwen3 4B Instruct 2507', vision: false, where: 'pack', limit: 3e9, file: 'qwen3-4b-instruct-2507.gguf', pack: true,
-    licenseRepo: 'Qwen/Qwen3-4B-Instruct-2507', repos: ['mradermacher/Huihui-Qwen3-4B-Instruct-2507-abliterated-GGUF', 'bartowski/huihui-ai_Huihui-Qwen3-4B-Instruct-2507-abliterated-GGUF', 'huihui-ai/Huihui-Qwen3-4B-Instruct-2507-abliterated-GGUF', 'unsloth/Qwen3-4B-Instruct-2507-GGUF', 'Qwen/Qwen3-4B-Instruct-2507-GGUF', 'bartowski/Qwen_Qwen3-4B-Instruct-2507-GGUF'] },
-  // The Thinker: thinks hard maths and logic through before answering (uncensored copies only).
-  { id: 'starter-thinker', catalogId: 'qwen3-4b-thinking', name: 'Qwen3 4B Thinking 2507', vision: false, where: 'pack', limit: 3e9, file: 'qwen3-4b-thinking-2507.gguf', pack: true,
-    licenseRepo: 'Qwen/Qwen3-4B-Thinking-2507', repos: ['mradermacher/Huihui-Qwen3-4B-Thinking-2507-abliterated-GGUF', 'mradermacher/Qwen3-4B-Thinking-2507-abliterated-GGUF', 'DevQuasar/huihui-ai.Huihui-Qwen3-4B-Thinking-2507-abliterated-GGUF'] },
+  // Inside the installer: small, quick on any PC, sees photos. The Muse, and the instant fallback.
+  { id: 'starter', catalogId: 'qwen3.5-2b', name: 'Qwen3.5 2B', vision: true, where: 'starter', limit: 1.75e9, file: 'model.gguf', proj: 'mmproj.gguf',
+    licenseRepo: 'Qwen/Qwen3.5-2B', repos: ['mradermacher/Huihui-Qwen3.5-2B-abliterated-GGUF', 'mradermacher/Qwen3.5-2B_Abliterated-GGUF'] },
+  // Next to the installer: the Brain. Sees photos itself and switches its own thinking on for hard questions.
+  { id: 'starter-brain', catalogId: 'qwen3.5-4b', name: 'Qwen3.5 4B', vision: true, where: 'pack', limit: 3.6e9, file: 'qwen3.5-4b.gguf', proj: 'qwen3.5-4b-mmproj.gguf', pack: true,
+    licenseRepo: 'Qwen/Qwen3.5-4B', repos: ['mradermacher/Huihui-Qwen3.5-4B-abliterated-GGUF', 'mradermacher/Qwen3.5-4B-abliterated-GGUF'] },
 ];
 
 async function choose(m) {
@@ -72,12 +70,12 @@ async function get(repo, f, dest) {
     console.log(`${m.name}: ${pick.quant} from ${pick.repo}`);
     const dir = path.join(ROOT, m.where);
     await get(pick.repo, pick.model, path.join(dir, m.file));
-    if (pick.mmproj) await get(pick.repo, pick.mmproj, path.join(dir, 'mmproj.gguf'));
+    if (pick.mmproj) await get(pick.repo, pick.mmproj, path.join(dir, m.proj || 'mmproj.gguf'));
     const open = m.uncensored || /abliterat|uncensor/i.test(pick.repo);
     // The Liquid Edition is completely uncensored: no filtered stand-in, ever.
     if (!open) throw new Error(`No uncensored copy of ${m.name} could be downloaded (tried ${m.repos.filter((r) => /abliterat|uncensor/i.test(r)).join(', ')}).`);
     console.log(`  ✓ uncensored copy: ${pick.repo}`);
-    entries.push({ id: m.id, catalogId: m.catalogId, name: open ? `${m.name} (uncensored)` : m.name, ...(open ? { uncensored: true } : {}), repo: pick.repo, quant: pick.quant, files: { model: m.file, ...(pick.mmproj ? { mmproj: 'mmproj.gguf' } : {}) }, ...(m.pack ? { pack: true } : {}), ...(m.optional ? { optional: true } : {}) });
+    entries.push({ id: m.id, catalogId: m.catalogId, name: open ? `${m.name} (uncensored)` : m.name, ...(open ? { uncensored: true } : {}), repo: pick.repo, quant: pick.quant, files: { model: m.file, ...(pick.mmproj ? { mmproj: m.proj || 'mmproj.gguf' } : {}) }, ...(m.pack ? { pack: true } : {}), ...(m.optional ? { optional: true } : {}) });
     let text = m.licenceText;
     if (!text) try {
       const tmp = path.join(os.tmpdir(), `licence-${m.id}.txt`);

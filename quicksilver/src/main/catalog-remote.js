@@ -89,7 +89,7 @@ function picks() {
     successors: { ...catalog.SUCCESSORS, ...applied.successors },
     featured: { ...catalog.FEATURED, ...applied.featured },
     ladders: applied.ladders,
-    liquid: { brain: 'qwen3-4b', eyes: 'qwen3-vl-2b', ...applied.liquid },
+    liquid: { brain: 'qwen3.5-4b', eyes: 'qwen3.5-2b', ...applied.liquid },
     recipes: applied.recipes,
     scores: applied.scores,
     updated: applied.updated, fetchedAt: applied.fetchedAt,

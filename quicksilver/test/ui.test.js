@@ -188,7 +188,7 @@ function redPng(size = 64) {
   // The builder rates the custom AI: power, efficiency, accuracy, and whether it runs on this PC.
   await win.waitForSelector('#inf-preview .fz-ratings .fz-run');
   const fz = await win.locator('#inf-preview .fz-ratings').innerText();
-  assert.match(fz, /Power[\s\S]*★[\s\S]*Efficiency[\s\S]*★[\s\S]*Accuracy[\s\S]*★/);
+  assert.match(fz, /Power[\s\S]*\/10[\s\S]*Efficiency[\s\S]*\/10[\s\S]*Accuracy[\s\S]*\/10/);
   assert.match(fz, /Runs well on this PC|Runs, but|Won't run/);
   await shot(win, '13-infuse');
   await win.click('#inf-go');
@@ -198,6 +198,13 @@ function redPng(size = 64) {
   await win.click('.card:has-text("Analyst Supreme") [data-publish]');
   await win.waitForSelector('#modal h2:has-text("Publish your custom AI")');
   assert.match(await win.locator('#modal').innerText(), /Exactly what's shared[\s\S]*Never shared: your API keys/);
+  const code = await win.evaluate(() => shareCode({ name: 'Code Duo', emoji: '🧪', description: 'Shared directly.', mode: 'debate', parts: [{ kind: 'local', model: 'qwen3-8b' }, { kind: 'local', model: 'phi-4' }], lead: 0 }));
+  assert.match(code, /^QS1-/);
+  await win.click('#modal [data-close]');
+  await win.click('[data-import-ai]');
+  await win.fill('#imp-code', code);
+  await win.click('#imp-read');
+  await win.waitForSelector('#imp-preview .us-card:has-text("Code Duo")');
   await win.click('#modal [data-close]');
   // User-submitted stacks: add one; its models are already here, so it's ready to chat with.
   await win.evaluate(() => { communityData = { fetchedAt: Date.now(), stacks: [{ id: 'test-duo', name: 'Test Duo', emoji: '🧪', description: 'Two local models debating hard questions.', author: 'octo', mode: 'debate', parts: [{ kind: 'local', model: 'qwen3-8b' }, { kind: 'local', model: 'phi-4' }], lead: 1, added: '2026-11-09' }, { id: 'needs-cloud', name: 'Needs Cloud', emoji: '☁️', description: 'Fuses a local model with a cloud AI you have not connected.', mode: 'blend', parts: [{ kind: 'local', model: 'qwen3-8b' }, { kind: 'cloud', preset: 'xai', model: 'grok-4' }], lead: 0 }] }; stacksTab = 'community'; render(); });
@@ -716,6 +723,15 @@ function redPng(size = 64) {
   await win.selectOption('#cc-mode', 'fusion');
   await win.waitForFunction(() => /As a lead/.test(document.querySelector('#cc-out').innerText));
   await win.selectOption('#cc-mode', 'hard');
+  await win.selectOption('#cc-svc', 'gemini-argon');
+  await win.waitForFunction(() => document.querySelector('#cc-pin').value === '4');
+  await win.click('[data-cc-kind="image"]');
+  await win.selectOption('#cc-isvc', 'ideogram');
+  await win.waitForFunction(() => /Ideogram 4\.5 alone/.test(document.querySelector('#cc-out').innerText) && /\/10/.test(document.querySelector('#cc-out').innerText));
+  await win.click('[data-cc-kind="video"]');
+  await win.selectOption('#cc-vsvc', 'kling');
+  await win.waitForFunction(() => /Kling 3\.0 alone/.test(document.querySelector('#cc-out').innerText));
+  await win.click('[data-cc-kind="chat"]');
   assert.ok(await win.locator('.og-sec h3:has-text("Developer (dev) plans")').count() === 1);
   await win.locator('#cloud-calc').scrollIntoViewIfNeeded();
   await shot(win, '17d2-cloud-calculator');
@@ -869,8 +885,8 @@ function redPng(size = 64) {
       stack: stackScoresHTML(['local:qwen3-4b', 'local:qwen3-vl-2b', 'local:flux-schnell']), unc: scoresFor('qwen3-8b-uncensored'), none: modelProfileHTML(S.catalog.text.find((x) => x.id === 'rocinante-12b'), 'text'),
       cloud: scoreChipsHTML(cloudScoresFor('groq')) };
   });
-  assert.match(sc.model, /Maths <b>52%<\/b>/); assert.match(sc.model, /Music <b>★ 1<\/b>|Music <b>★ 2<\/b>/);
-  assert.match(sc.img, /Photos <b>★/); assert.match(sc.img, /Video <b>–/); assert.match(sc.vid, /Video <b>★/);
+  assert.match(sc.model, /Maths <b>52%<\/b>/); assert.match(sc.model, /Music <b>4\/10<\/b>/);
+  assert.match(sc.img, /Photos <b>\d+(\.\d)?\/10/); assert.match(sc.img, /Video <b>–/); assert.match(sc.vid, /Video <b>\d+(\.\d)?\/10/);
   assert.match(sc.stack, /Best member/); assert.match(sc.stack, /Science <b>\d+%/);
   assert.equal(sc.unc.basedOn, 'qwen3-8b', 'uncensored versions are scored by the model they come from');
   assert.match(sc.none, /No published test scores/); assert.match(sc.cloud, /Maths <b>93%/);
@@ -941,6 +957,11 @@ function redPng(size = 64) {
   await win.waitForSelector('#presets .card:has-text("Groq") .badge:has-text("Dev plan")');
   await win.waitForSelector('.fusion-card #fusion-open');
   await shot(win, '05b-api-free');
+  await win.evaluate(() => { modelsTab = 'text'; render(); });
+  await win.waitForSelector('.addon:has-text("Memory"):has-text("like Mem0")');
+  assert.ok(await win.locator('.addon:has-text("local RAG")').count() === 1 && await win.locator('.addon .addon-effect').count() >= 8);
+  await win.locator('.addon-grid').scrollIntoViewIfNeeded();
+  await shot(win, '05d-addons');
   await win.click('[data-nav="pc"]');
   await win.waitForSelector('text=Speed test');
   await shot(win, '06-your-pc');
