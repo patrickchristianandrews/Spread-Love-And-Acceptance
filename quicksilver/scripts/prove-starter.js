@@ -60,8 +60,10 @@ async function prove(m) {
     if (!/paris/i.test(text)) throw new Error(`${m.name} did not answer a simple question correctly`);
     if (m.pack && !thinks) {
       // The way Quicksilver asks: work it out step by step, then answer.
-      const sum = await ask('What is 17 × 23? Work it out step by step, then give the final answer.', 300);
-      const final = (sum.match(/\d[\d,]*/g) || []).pop(); // the last number in the answer
+      // Room for the full working (Qwen3.5 lays out long multiplication in detail), then the answer
+      // on its own last line, so a cut-off half-way through can't be mistaken for the answer.
+      const sum = await ask('What is 17 × 23? Work it out step by step, then give the final answer on the last line as "Answer: <number>".', 1200);
+      const final = (sum.match(/Answer:\**\s*\**\s*(\d[\d,]*)/i) || [])[1]?.replace(/,/g, '') || (sum.match(/\d[\d,]*/g) || []).pop(); // the stated answer, else the last number
       console.log(`  Q: 17 × 23 (step by step) → ${final}`);
       if (final !== '391') throw new Error(`${m.name} got 17 × 23 wrong:\n${sum}`);
     }

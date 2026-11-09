@@ -62,9 +62,9 @@ function redPng(size = 64) {
   await win.waitForSelector('text=Forms to fit your work.', { timeout: 60000 });
   await win.waitForFunction(() => S.installed.some((m) => m.id === 'starter'), null, { timeout: 60000 });
   let s = await state();
-  assert.ok(s.installed.find((m) => m.id === 'starter' && m.source === 'bundled'), 'Qwen3-VL 2B registered from the installer');
+  assert.ok(s.installed.find((m) => m.id === 'starter' && m.source === 'bundled'), 'Qwen3.5 2B registered from the installer');
   if (mode === 'full') {
-    assert.ok(s.installed.find((m) => m.id === 'starter-brain' && m.source === 'bundled'), 'Qwen3 4B copied in by the installer and registered');
+    assert.ok(s.installed.find((m) => m.id === 'starter-brain' && m.source === 'bundled'), 'Qwen3.5 4B copied in by the installer and registered');
     await win.waitForFunction(() => S.stacks.some((x) => x.id === 'quicksilver') && S.data.prefs.defaultTarget === 'stack:quicksilver', null, { timeout: 60000 });
     s = await state();
     ok(`first launch: ${s.installed.map((m) => m.name).join(' + ')}; default ${s.def}; team ${JSON.stringify(s.stacks.find((x) => x.id === 'quicksilver').members)}`);
@@ -98,9 +98,12 @@ function redPng(size = 64) {
   }
 
   r = await ask('What is 17 × 23? Work it out step by step.', null, 'stack:quicksilver');
+  // The answer is 391: as the last number, or stated in the closing lines (a model may add a check
+  // such as "391 ÷ 23 = 17" after it).
   const final = ((r.a.match(/\d[\d,]*/g) || []).pop() || '').replace(/,+$/, '');
-  console.log(`  steps: ${r.steps.join(' → ') || '(none)'}; final number: ${final}`);
-  assert.equal(final, '391', 'the hard question is answered correctly');
+  const closing = r.a.trim().split('\n').filter((l) => l.trim()).slice(-3).join(' ');
+  console.log(`  steps: ${r.steps.join(' → ') || '(none)'}; final number: ${final}; closing: ${closing.slice(0, 160)}`);
+  assert.ok(final === '391' || /\b391\b/.test(closing), `the hard question is answered correctly (got: ${r.a.slice(-400)})`);
   console.log(`  step-by-step reasoning: ${r.reasoning ? r.reasoning.replace(/\s+/g, ' ').slice(0, 300) : '(none)'}`);
   assert.ok(r.reasoning.trim().length > 20, 'the built-in model shows its step-by-step reasoning');
   // The bundled 2B helper is much weaker than the 4B lead, so on Auto the lead answers alone
