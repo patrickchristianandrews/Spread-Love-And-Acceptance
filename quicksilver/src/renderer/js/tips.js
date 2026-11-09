@@ -54,12 +54,24 @@ function maybeTip(chat, msg, alt) {
 function tipHTML(m, alt) {
   const t = alt.tip && S.data.prefs.tips !== false && TIPS.find((x) => x.id === alt.tip);
   if (!t) return '';
-  return `<div class="tip-card" data-tip-for="${m.id}"><span class="tip-ic">💡</span><span class="tip-text">${esc(t.text)}</span>${t.go ? `<button class="btn small" data-tip-go="${t.id}">${esc(t.label)}</button>` : ''}<button class="tip-off" data-tip-off title="You can turn tips back on in Settings → General">Turn off tips</button></div>`;
+  return `<div class="tip-card" data-tip-for="${m.id}">
+    <span class="tip-ic" aria-hidden="true">💡</span>
+    <div class="tip-body"><span class="tip-label">Tip</span><span class="tip-text">${esc(t.text)}</span>
+      <div class="tip-acts">${t.go ? `<button class="btn small primary" data-tip-go="${t.id}">${esc(t.label)}</button>` : ''}<button class="tip-off" data-tip-off title="You can turn tips back on in Settings → General">Turn off tips</button></div></div>
+    <button class="tip-x" data-tip-close="${m.id}" title="Hide this tip" aria-label="Hide this tip">×</button></div>`;
 }
 
 document.addEventListener('click', (e) => {
   const goBtn = e.target.closest('[data-tip-go]');
   if (goBtn) { TIPS.find((t) => t.id === goBtn.dataset.tipGo)?.go?.(); return; }
+  const close = e.target.closest('[data-tip-close]');
+  if (close) {
+    const chat = chatById(S.route.id);
+    const msg = chat?.messages.find((x) => x.id === close.dataset.tipClose);
+    if (msg) { const alt = msg.alts?.[msg.altIndex]; if (alt) delete alt.tip; save(); }
+    close.closest('.tip-card')?.remove();
+    return;
+  }
   if (e.target.closest('[data-tip-off]')) {
     S.data.prefs.tips = false; save();
     $$('.tip-card').forEach((x) => x.remove());

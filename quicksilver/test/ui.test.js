@@ -931,6 +931,14 @@ function redPng(size = 64) {
 
   // Arena: a blind test between two models, then the leaderboard.
   await win.click('[data-nav="arena"]');
+  // By task (the default): pick tasks, see every model good at them with skill, accuracy and speed.
+  await win.waitForSelector('.cmp-task[data-cmp-job="general"].on');
+  await win.click('.cmp-task[data-cmp-job="coding"]');
+  await win.waitForFunction(() => document.querySelectorAll('.cmp-table tbody tr').length > 0 && /Coding/.test(document.querySelector('.cmp-table thead')?.textContent || ''), null, { timeout: 15000 });
+  const head = await win.locator('.cmp-table thead').innerText();
+  assert.match(head, /Skill for Everyday chat \+ Coding[\s\S]*Accuracy[\s\S]*Speed on this PC/i);
+  await shot(win, '15b-compare-by-task');
+  await win.click('[data-cmp-tab="blind"]');
   await win.selectOption('#ar-pool', 'local:qwen3-8b');
   await win.fill('#ar-q', 'Name a colour');
   await win.click('#ar-go');

@@ -112,6 +112,25 @@ handle('upgrades:advise', async () => {
 });
 // The buying guide: refreshed from the Quicksilver repository once a day when online.
 handle('guide:get', () => require('./guide').get());
+// Compare models by task: every model (catalog and yours) scored for the chosen tasks, with its
+// accuracy and how fast it runs on this PC.
+handle('compare:byTask', async (jobs) => {
+  const hw = await hardware.detect();
+  const calib = store.config().calib?.text || 1;
+  const list = Array.isArray(jobs) && jobs.length ? jobs : ['general'];
+  const installed = models.list().filter((m) => m.kind === 'text');
+  const pool = [...catalog.TEXT_MODELS.map((m) => ({ m, inst: installed.find((x) => x.catalogId === m.id) })),
+    ...installed.filter((x) => !catalog.TEXT_MODELS.some((m) => m.id === x.catalogId)).map((x) => ({ m: catalog.profileInstalled(x), inst: x }))];
+  return pool.map(({ m, inst }) => {
+    const scores = Object.fromEntries(list.map((j) => [j, catalog.scoreFor(m, j)]));
+    const skill = list.reduce((t, j) => t + scores[j], 0) / list.length;
+    const est = catalog.estimateText(m, hw, calib);
+    const accuracy = Math.min(10, Math.round(((m.judge ?? 5) + (m.jobs?.research ?? m.jobs?.general ?? 5)) / 2 + (m.reasoning ? 0.5 : 0)));
+    return { id: m.id, name: inst?.name || m.name, maker: m.maker || '', sizeGB: m.sizeGB, open: Boolean(m.open || m.category === 'open'), vision: Boolean(m.vision), reasoning: Boolean(m.reasoning),
+      installed: inst ? inst.id : null, catalog: catalog.TEXT_MODELS.some((x) => x.id === m.id), skill: Math.round(skill * 10) / 10, scores, accuracy,
+      speed: { rating: est.rating, label: est.label, wps: Math.round(est.wordsPerSec || 0), fit: est.fit } };
+  }).sort((a, b) => b.skill - a.skill || b.accuracy - a.accuracy || b.speed.wps - a.speed.wps);
+});
 // How fast Quicksilver would be on each kind of computer in the buying guide, next to this PC.
 handle('guide:speeds', async (tiers) => {
   const hw = await hardware.detect();

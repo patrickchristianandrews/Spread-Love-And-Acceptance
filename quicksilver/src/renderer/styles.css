@@ -364,7 +364,9 @@ figure.chart svg { display: block; width: 100%; height: auto; }
 .modal.wide { width: min(1040px, 100%); }
 .modal h2 { font-size: 1.3rem; }
 .modal-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 20px; flex-wrap: wrap; }
-.toast { position: fixed; bottom: 26px; left: 50%; transform: translateX(-50%); background: var(--toast-bg); color: var(--toast-ink); padding: 12px 20px; border-radius: 14px; font-weight: 650; z-index: 30; box-shadow: var(--sh-3); max-width: min(680px, 90vw); }
+.toast { position: fixed; bottom: 26px; left: 50%; transform: translateX(-50%); background: var(--toast-bg); color: var(--toast-ink); padding: 13px 22px; border-radius: 16px; font-weight: 600; line-height: 1.45; z-index: 30; box-shadow: var(--sh-3), 0 0 0 1px rgba(127, 127, 127, .18); max-width: min(640px, 90vw); display: flex; align-items: center; gap: 12px; }
+.toast.toast-in { animation: toastIn .28s cubic-bezier(.2, .8, .2, 1) both; }
+@keyframes toastIn { from { opacity: 0; transform: translate(-50%, 12px); } to { opacity: 1; transform: translate(-50%, 0); } }
 
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; animation: none !important; } }
 @media (max-width: 1080px) {
@@ -1109,7 +1111,8 @@ code.sel { user-select: all; background: var(--soft); padding: 1px 6px; border-r
 .chat-del { flex: none; background: none; border: none; border-radius: 7px; width: 26px; height: 26px; display: grid; place-items: center; color: var(--muted); opacity: 0; transition: opacity .12s; cursor: pointer; }
 .chat-row:hover .chat-del, .chat-row.active .chat-del, .chat-del:focus-visible { opacity: 1; }
 .chat-del:hover { background: color-mix(in srgb, var(--danger) 14%, transparent); color: var(--danger); }
-.toast-act { margin-left: 10px; background: none; border: 1px solid currentColor; border-radius: 8px; padding: 2px 10px; color: inherit; font: inherit; font-weight: 750; cursor: pointer; }
+.toast-act { flex: none; background: var(--accent); border: none; border-radius: 10px; padding: 5px 12px; color: var(--bg); font: inherit; font-weight: 750; cursor: pointer; }
+.toast-act:hover { filter: brightness(1.08); }
 
 /* ---------- Left menu: one scrolling column (menu, your stacks, chats) ---------- */
 .side-scroll { flex: 1; min-height: 0; overflow-y: auto; overflow-x: hidden; display: flex; flex-direction: column; gap: 2px; margin-right: -6px; padding-right: 4px; scrollbar-width: thin; scrollbar-color: var(--line) transparent; scrollbar-gutter: stable; }
@@ -1134,11 +1137,17 @@ code.sel { user-select: all; background: var(--soft); padding: 1px 6px; border-r
 .hello { font-size: 1.05rem; font-weight: 700; color: var(--accent); margin: 0 0 6px; }
 
 /* ---------- Tips from the built-in model ---------- */
-.tip-card { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding: 9px 12px; border-radius: 12px; border: 1px dashed var(--accent-line); background: var(--accent-tint); font-size: .9rem; }
-.tip-ic { flex: none; }
-.tip-text { flex: 1; min-width: 200px; line-height: 1.45; }
-.tip-off { background: none; border: none; color: var(--faint); font: inherit; font-size: .78rem; cursor: pointer; text-decoration: underline; padding: 2px 4px; }
-.tip-off:hover { color: var(--text); }
+.tip-card { position: relative; display: flex; align-items: flex-start; gap: 12px; padding: 12px 40px 12px 14px; border-radius: 14px; border: 1px solid var(--accent-line); border-left: 4px solid var(--accent); background: linear-gradient(135deg, var(--accent-tint), var(--panel) 70%); box-shadow: var(--sh-1); font-size: .9rem; animation: tipIn .35s ease both; }
+.tip-ic { flex: none; width: 34px; height: 34px; border-radius: 10px; display: grid; place-items: center; font-size: 1.1rem; background: var(--panel); border: 1px solid var(--accent-line); }
+.tip-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
+.tip-label { font-size: .68rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); }
+.tip-text { line-height: 1.5; color: var(--text); }
+.tip-acts { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-top: 4px; }
+.tip-off { background: none; border: none; color: var(--faint); font: inherit; font-size: .76rem; cursor: pointer; padding: 2px 0; }
+.tip-off:hover { color: var(--text); text-decoration: underline; }
+.tip-x { position: absolute; top: 8px; right: 8px; width: 26px; height: 26px; border-radius: 8px; border: none; background: none; color: var(--faint); font-size: 1.15rem; line-height: 1; cursor: pointer; }
+.tip-x:hover { background: var(--hover); color: var(--text); }
+@keyframes tipIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
 
 /* ---------- Buying a new computer (Your PC) ---------- */
 .tier-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; }
@@ -1241,3 +1250,13 @@ code.sel { user-select: all; background: var(--soft); padding: 1px 6px; border-r
 .tier-speed { padding: 8px 10px; border-radius: 10px; background: var(--accent-tint); border: 1px solid var(--accent-line); display: flex; flex-direction: column; gap: 2px; }
 .fusion-card { margin-bottom: 14px; border-color: var(--accent-line); background: linear-gradient(135deg, var(--accent-tint), var(--panel)); }
 .og-where { display: block; margin-top: 3px; font-size: .76rem; color: var(--accent); font-weight: 600; }
+.cmp-tasks { display: flex; flex-wrap: wrap; gap: 8px; margin: 6px 0 12px; }
+.cmp-task { padding: 8px 14px; border-radius: 999px; border: 1px solid var(--line-soft); background: var(--panel); color: var(--text); font: inherit; font-weight: 650; cursor: pointer; }
+.cmp-task:hover { border-color: var(--accent-line); }
+.cmp-task.on { background: var(--accent-tint); border-color: var(--accent); color: var(--accent); }
+.cmp-filters { gap: 14px; margin-bottom: 10px; flex-wrap: wrap; }
+.cmp-dots { color: var(--accent); letter-spacing: 1px; margin-right: 4px; }
+.cmp-table td { vertical-align: top; }
+.og-how { margin-top: 4px; }
+.og-how summary { cursor: pointer; font-size: .78rem; font-weight: 700; color: var(--text); }
+.og-how p { margin: 6px 0 2px; color: var(--muted); line-height: 1.55; }

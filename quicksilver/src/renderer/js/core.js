@@ -37,6 +37,7 @@ function toast(msg, ms = 3600) {
   const t = $('#toast');
   t.textContent = msg;
   t.hidden = false;
+  t.classList.remove('toast-in'); void t.offsetWidth; t.classList.add('toast-in');
   clearTimeout(toast._t);
   toast._t = setTimeout(() => { t.hidden = true; }, ms);
 }
@@ -45,6 +46,7 @@ function toastAction(msg, label, fn, ms = 7000) {
   const t = $('#toast');
   t.innerHTML = `<span>${esc(msg)}</span> <button class="toast-act">${esc(label)}</button>`;
   t.hidden = false;
+  t.classList.remove('toast-in'); void t.offsetWidth; t.classList.add('toast-in');
   t.querySelector('.toast-act').onclick = () => { t.hidden = true; clearTimeout(toast._t); fn(); };
   clearTimeout(toast._t);
   toast._t = setTimeout(() => { t.hidden = true; }, ms);
