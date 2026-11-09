@@ -1,6 +1,7 @@
 // Downloads the models that come with Quicksilver, so it works the moment it's installed:
 //   starter/ (inside the installer)  Qwen3-VL 2B: quick on any PC, sees photos   (Apache 2.0)
 //   pack/    (next to the installer) Qwen3 4B Instruct 2507: the brain           (Apache 2.0)
+//            and Dolphin 3.0 8B: the second opinion on hard questions        (Llama 3.1 licence)
 // Together they make the built-in "Quicksilver" model (a stack with smart routing).
 // The 4B model is too big for a Windows installer (about 2 GB at most), so it ships in a folder
 // beside it; the installer copies it in. Writes starter/STARTER.json and the licences.
@@ -26,6 +27,12 @@ const MODELS = [
     licenseRepo: 'Qwen/Qwen3-VL-2B-Instruct', repos: ['mradermacher/Huihui-Qwen3-VL-2B-Instruct-abliterated-GGUF', 'huihui-ai/Huihui-Qwen3-VL-2B-Instruct-abliterated-GGUF', 'noctrex/Huihui-Qwen3-VL-2B-Instruct-abliterated-GGUF', 'Qwen/Qwen3-VL-2B-Instruct-GGUF', 'ggml-org/Qwen3-VL-2B-Instruct-GGUF', 'unsloth/Qwen3-VL-2B-Instruct-GGUF'] },
   { id: 'starter-brain', catalogId: 'qwen3-4b', name: 'Qwen3 4B Instruct 2507', vision: false, where: 'pack', limit: 3e9, file: 'qwen3-4b-instruct-2507.gguf', pack: true,
     licenseRepo: 'Qwen/Qwen3-4B-Instruct-2507', repos: ['mradermacher/Huihui-Qwen3-4B-Instruct-2507-abliterated-GGUF', 'bartowski/huihui-ai_Huihui-Qwen3-4B-Instruct-2507-abliterated-GGUF', 'huihui-ai/Huihui-Qwen3-4B-Instruct-2507-abliterated-GGUF', 'unsloth/Qwen3-4B-Instruct-2507-GGUF', 'Qwen/Qwen3-4B-Instruct-2507-GGUF', 'bartowski/Qwen_Qwen3-4B-Instruct-2507-GGUF'] },
+  // Dolphin is uncensored by design and from another family (Llama), so on hard questions it adds a
+  // genuinely different view. "optional": a copy without it doesn't download it on first run.
+  { id: 'starter-dolphin', catalogId: 'dolphin-3-llama-3.1-8b', name: 'Dolphin 3.0 8B', vision: false, where: 'pack', limit: 5.5e9, file: 'dolphin-3-llama-3.1-8b.gguf', pack: true, optional: true, uncensored: true,
+    by: 'Cognitive Computations; Built with Llama', licenseRepo: 'cognitivecomputations/Dolphin3.0-Llama3.1-8B',
+    licenceText: 'Dolphin 3.0 8B is built on Llama 3.1 and licensed under the Llama 3.1 Community License Agreement: https://www.llama.com/llama3_1/license/\nBuilt with Llama. Llama 3.1 is licensed under the Llama 3.1 Community License, Copyright © Meta Platforms, Inc. All Rights Reserved.\n',
+    repos: ['bartowski/Dolphin3.0-Llama3.1-8B-GGUF', 'cognitivecomputations/Dolphin3.0-Llama3.1-8B-GGUF'] },
 ];
 
 async function choose(m) {
@@ -69,16 +76,16 @@ async function get(repo, f, dest) {
     const dir = path.join(ROOT, m.where);
     await get(pick.repo, pick.model, path.join(dir, m.file));
     if (pick.mmproj) await get(pick.repo, pick.mmproj, path.join(dir, 'mmproj.gguf'));
-    const open = /abliterat|uncensor/i.test(pick.repo);
+    const open = m.uncensored || /abliterat|uncensor/i.test(pick.repo);
     console.log(open ? `  ✓ uncensored copy: ${pick.repo}` : `  ⚠ no uncensored copy found for ${m.name}; using the original`);
-    entries.push({ id: m.id, catalogId: m.catalogId, name: open ? `${m.name} (uncensored)` : m.name, ...(open ? { uncensored: true } : {}), repo: pick.repo, quant: pick.quant, files: { model: m.file, ...(pick.mmproj ? { mmproj: 'mmproj.gguf' } : {}) }, ...(m.pack ? { pack: true } : {}) });
-    let text;
-    try {
+    entries.push({ id: m.id, catalogId: m.catalogId, name: open ? `${m.name} (uncensored)` : m.name, ...(open ? { uncensored: true } : {}), repo: pick.repo, quant: pick.quant, files: { model: m.file, ...(pick.mmproj ? { mmproj: 'mmproj.gguf' } : {}) }, ...(m.pack ? { pack: true } : {}), ...(m.optional ? { optional: true } : {}) });
+    let text = m.licenceText;
+    if (!text) try {
       const tmp = path.join(os.tmpdir(), `licence-${m.id}.txt`);
       await downloadTo(`${HF}/${m.licenseRepo}/resolve/main/LICENSE`, tmp);
       text = fs.readFileSync(tmp, 'utf8');
     } catch { text = 'Licensed under the Apache License, Version 2.0: https://www.apache.org/licenses/LICENSE-2.0\n'; }
-    licences.push(`==== ${m.name} (${m.licenseRepo}) by Alibaba Cloud (Qwen)${open ? `; uncensored version from ${pick.repo}` : ''} ====\n\n${text}`);
+    licences.push(`==== ${m.name} (${m.licenseRepo}) by ${m.by || 'Alibaba Cloud (Qwen)'}${open && !m.by ? `; uncensored version from ${pick.repo}` : ''} ====\n\n${text}`);
   }
   fs.writeFileSync(path.join(ROOT, 'starter', 'STARTER.json'), JSON.stringify({ models: entries }, null, 2));
   fs.writeFileSync(path.join(ROOT, 'starter', 'MODEL-LICENCES.txt'), licences.join('\n\n'));

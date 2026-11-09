@@ -318,7 +318,7 @@ function registerStarter(dir) {
     const files = Object.fromEntries(Object.entries(e.files).map(([role, f]) => [role, path.join(dir, f)]));
     if (!Object.values(files).every((f) => fs.existsSync(f))) {
       // Not shipped with this copy: fetch it from the catalog, unless you already have it.
-      if (e.pack && !reg.some((m) => m.catalogId === e.catalogId && Object.values(m.files || {}).every((f) => fs.existsSync(f)))) out.missing.push({ catalogId: e.catalogId, name: e.name, ...(e.repo ? { repo: e.repo, quant: e.quant } : {}) });
+      if (e.pack && !e.optional && !reg.some((m) => m.catalogId === e.catalogId && Object.values(m.files || {}).every((f) => fs.existsSync(f)))) out.missing.push({ catalogId: e.catalogId, name: e.name, ...(e.repo ? { repo: e.repo, quant: e.quant } : {}) });
       continue;
     }
     const known = reg.find((m) => m.id === e.id);

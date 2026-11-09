@@ -628,6 +628,7 @@ async function collect(gen) {
     fs.writeFileSync(path.join(sd, 'STARTER.json'), JSON.stringify({ models: [
       { id: 'starter', catalogId: 'qwen3-vl-2b', name: 'Qwen3-VL 2B', files: { model: 'model.gguf', mmproj: 'mmproj.gguf' } },
       { id: 'starter-brain', catalogId: 'qwen3-4b', name: 'Qwen3 4B Instruct 2507 (uncensored)', uncensored: true, repo: 'mradermacher/Huihui-Qwen3-4B-Instruct-2507-abliterated-GGUF', quant: 'Q4_K_M', files: { model: 'brain.gguf' }, pack: true },
+      { id: 'starter-dolphin', catalogId: 'dolphin-3-llama-3.1-8b', name: 'Dolphin 3.0 8B (uncensored)', uncensored: true, files: { model: 'dolphin.gguf' }, pack: true, optional: true },
     ] }));
     // Installed without the "Quicksilver models" folder: the small model works, the brain is fetched.
     let r = models.registerStarter(sd);
@@ -663,6 +664,14 @@ async function collect(gen) {
     assert.ok(ids2.includes('local:dolphin-test'), 'an uncensored model joins');
     assert.equal(qs2.members.drafters[0], 'local:starter-brain', 'the brain still answers everyday messages');
     assert.ok(new Set(ids2).size >= 3, 'a real team: brain, the uncensored helper and eyes');
+    // Dolphin joins hard questions only where it runs smoothly; on a slow PC it waits on the bench.
+    {
+      const hwNow = await hardware.detect();
+      const dol = catalog.TEXT_MODELS.find((m) => m.id === 'dolphin-3-llama-3.1-8b');
+      assert.ok(complete.smoothHelper(dol, hwNow), 'smooth on the 8 GB graphics card');
+      assert.ok(!complete.smoothHelper(dol, { ...hwNow, vramGB: 0, gpus: [], ramGB: 8, freeRamGB: 6 }), 'too slow on an 8 GB laptop without a graphics card');
+      assert.ok(!qs2.bench, 'nothing on the bench when it runs smoothly');
+    }
     // Your own edits are kept: no automatic rebuild.
     complete.saveStack({ ...qsStack, autoManaged: false, members: { ...qsStack.members, drafters: ['local:qwen3-8b', 'local:starter-brain'] } });
     await complete.ensureQuicksilverStack();

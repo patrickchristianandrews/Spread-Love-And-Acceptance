@@ -286,7 +286,8 @@ function qsRolesHTML(qst) {
     brain && ['🧠', 'Brain', nameOf(brain), 'answers everyday messages fast and reasons step by step'],
     m.vision && ['👁', 'Eyes & Muse', nameOf(m.vision), 'reads photos, and sketches fresh angles before creative writing'],
     m.judge && m.judge !== brain && ['🎯', 'Closer', nameOf(m.judge), 'leads on hard questions'],
-    m.drafters?.[1] && ['🗣', 'Second opinion', nameOf(m.drafters[1]), 'adds its view on hard questions'],
+    m.drafters?.[1] && [/dolphin/i.test(nameOf(m.drafters[1])) ? '🐬' : '🗣', 'Second opinion', nameOf(m.drafters[1]), 'writes its key points on hard questions, then the Brain answers from both views'],
+    qst.bench && [/dolphin/i.test(nameOf(qst.bench)) ? '🐬' : '🪑', 'On the Council', nameOf(qst.bench), 'too slow on this PC to join every hard question, so it adds its view when you pick Council, and you can chat with it directly'],
   ].filter(Boolean);
   if (!roles.length) return '';
   return `<div class="qs-roles">${roles.map(([i, r, n, d]) => `<div class="qs-role"><span class="qs-role-ic">${i}</span><span><b>${esc(r)}</b> <span class="small">${esc(n)}</span><span class="small muted">${esc(d)}</span></span></div>`).join('')}</div>
@@ -297,7 +298,7 @@ function bindBuiltinModel() {
     newChat();
     const c = chatById(S.route.id);
     const st = S.stacks.find((s) => s.id === 'quicksilver');
-    const b = S.installed.find((m) => m.source === 'bundled' && m.kind === 'text' && !m.vision) || S.installed.find((m) => m.source === 'bundled' || m.catalogId === 'qwen3-4b');
+    const b = S.installed.find((m) => m.id === 'starter-brain') || S.installed.find((m) => m.source === 'bundled' && m.kind === 'text' && !m.vision) || S.installed.find((m) => m.source === 'bundled' || m.catalogId === 'qwen3-4b');
     if (c) { c.target = st ? 'stack:quicksilver' : b ? `local:${b.id}` : ''; save(); render(); }
   });
 }

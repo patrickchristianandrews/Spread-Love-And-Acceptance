@@ -846,6 +846,14 @@ async function* run(target, req) {
 //    brain's key points, so hard answers get better without slowing down everyday ones.
 // Without the built-in brain (e.g. still downloading), the best fast team from your models is used.
 // Rebuilt whenever your models change, unless you edit it yourself; never rebuilt if you delete it.
+// A helper on hard questions must run smoothly here (10+ words a second) with room for the Brain
+// beside it: on a graphics card, or with 16 GB of memory.
+function smoothHelper(p, hw, calib = 1) {
+  if (!p) return false;
+  const e = catalog.estimateText(p, hw, calib);
+  return ['great', 'good'].includes(e.rating) && (e.fit === 'gpu' || (hw.ramGB || 0) >= 15);
+}
+
 async function ensureQuicksilverStack() {
   const have = stacks().find((s) => s.id === 'quicksilver');
   if (store.config().quicksilverRemoved || (have && have.autoManaged === false)) return have ? 'stack:quicksilver' : null;
@@ -864,6 +872,7 @@ async function ensureQuicksilverStack() {
   const calib = store.config().calib?.text || 1;
   const local = (id) => (id ? `local:${id}` : undefined);
   let members;
+  let bench;
   if (brain) {
     const score = (id) => { const p = pool.find((x) => x.id === id); return p ? catalog.scoreFor(p, 'general') : 0; };
     const openPool = pool.filter((p) => p.id !== brain.id && p.id !== eyes?.id && isOpen(p));
@@ -871,7 +880,11 @@ async function ensureQuicksilverStack() {
     const lead = team.members.judge || team.members.drafters[0];
     const stronger = lead && score(lead) > score(brain.id) ? lead : null;
     // A second opinion on hard questions: the best other uncensored model that isn't the lead.
-    const second = [...team.members.drafters, team.members.judge].find((id) => id && id !== stronger);
+    // It joins only where it runs smoothly, so hard answers don't get much slower; on a slower PC
+    // it waits on the bench (it still sits on the Council, and you can chat with it directly).
+    const candidate = [...team.members.drafters, team.members.judge].find((id) => id && id !== stronger);
+    const second = candidate && smoothHelper(pool.find((p) => p.id === candidate), hw, calib) ? candidate : null;
+    bench = candidate && !second ? local(candidate) : undefined;
     members = {
       drafters: [brain.id, ...(stronger ? [] : second ? [second] : [])].map(local),
       // With nobody to combine, the brain answers on its own (step by step on hard questions).
@@ -889,9 +902,9 @@ async function ensureQuicksilverStack() {
   }
   if (!members.vision) delete members.vision;
   if (!members.judge) delete members.judge;
-  const def = { id: 'quicksilver', name: 'Quicksilver Liquid Edition', emoji: '💧', builtIn: true, autoManaged: true, custom: true, builtFor: 'quicksilver',
+  const def = { id: 'quicksilver', name: 'Quicksilver Liquid Edition', emoji: '💧', builtIn: true, autoManaged: true, custom: true, builtFor: 'quicksilver', ...(bench ? { bench } : {}),
     description: "Quicksilver Liquid Edition, Quicksilver's own uncensored crew: the built-in Qwen3 4B (the Brain) answers everyday messages fast and reasons step by step, Qwen3-VL 2B (Eyes & Muse) reads photos and sketches fresh angles for creative work, and a stronger fast uncensored model on this PC (the Closer) leads on hard questions.", members };
-  if (!have || JSON.stringify(have.members) !== JSON.stringify(members) || have.builtFor !== 'quicksilver' || have.name !== def.name) saveStack(def);
+  if (!have || JSON.stringify(have.members) !== JSON.stringify(members) || have.builtFor !== 'quicksilver' || have.name !== def.name || (have.bench || null) !== (def.bench || null)) saveStack(def);
   return 'stack:quicksilver';
 }
 
@@ -993,4 +1006,4 @@ async function warm(target, { contextSize, gpu } = {}) {
   return true;
 }
 
-module.exports = { warm, prefill, run, targets, stacks, saveStack, deleteStack, kbModels, saveKbModel, deleteKbModel, label, exists, canSee, parse, autoLevel, ensureQuicksilverStack, explainStack };
+module.exports = { smoothHelper, warm, prefill, run, targets, stacks, saveStack, deleteStack, kbModels, saveKbModel, deleteKbModel, label, exists, canSee, parse, autoLevel, ensureQuicksilverStack, explainStack };
