@@ -57,6 +57,7 @@ const server = http.createServer((req, res) => {
     else if (/Describe each image/.test(lastText)) reply = imgs.map((_, i) => `### Image ${i + 1}\nA chart showing sales rising, described by ${model}.`).join('\n\n');
     else if (/<draft number/.test(lastText)) reply = `FINAL from ${model} combining ${(lastText.match(/<draft number/g) || []).length} drafts.`;
     else reply = `Answer from ${model}: you said "${lastText.slice(0, 40)}"${msgs.some((m) => typeof m.content === 'string' && m.content.includes('[Image 1:')) ? ' (saw image description)' : ''}${imgs.length ? ' (saw real image)' : ''}.${tags}`;
+    if (/You chair a council of three AIs/.test(sys)) reply = `AGREEMENT: 90%\nCouncil answer from ${model}.`;
     if (/reason step by step inside <think>/.test(sys)) reply = `<think>Step 1: read the question. Step 2: work it out. </think>${reply} [steps]`;
     const words = reply.split(/(?<= )/);
     if (!j.stream) { res.writeHead(200, { 'Content-Type': 'application/json' }); return res.end(JSON.stringify({ choices: [{ message: { content: reply } }] })); }

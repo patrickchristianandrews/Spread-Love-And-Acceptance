@@ -62,6 +62,18 @@ async function collect(gen) {
   assert.match(r1.reasoning, /thinking/);
   assert.equal(r1.stats.tps, 42.5);
   console.log('✓ local chat:', r1.text);
+  // The 3-AI Council: three roles look at the question, then one verdict with an agreement score.
+  {
+    const evs = [];
+    for await (const ev of complete.run('local:qwen3-8b', { messages: [{ role: 'user', content: 'Should I rent or buy a house?' }], maxTokens: 100, contextSize: 4096, council: true })) evs.push(ev);
+    const steps = [...new Map(evs.filter((e) => e.type === 'step').map((e) => [e.step.index, e.step])).values()];
+    assert.deepEqual(steps.map((x) => x.label), ['🏛️ Structurer', '🔍 Critic', '⚡ Pragmatist', '🏛️ Council verdict']);
+    const c = evs.find((e) => e.type === 'council');
+    assert.equal(c?.agreement, 90, 'the agreement score is read from the verdict');
+    const text = evs.filter((e) => e.type === 'text').map((e) => e.text).join('');
+    assert.match(text, /^Council answer from/); assert.doesNotMatch(text, /AGREEMENT/, 'the score line is not part of the answer');
+    console.log('✓ 3-AI Council: Structurer, Critic, Pragmatist, then one verdict with', c.agreement + '% agreement');
+  }
   // The built-in model reasons step by step on questions that need care; easy ones stay quick.
   {
     models.add({ id: 'test-bundled', name: 'Built-in', kind: 'text', catalogId: 'qwen3-4b', files: { model: copy('qwen.gguf') }, size: 2.5e9, source: 'bundled' });

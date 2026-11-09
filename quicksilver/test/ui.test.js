@@ -390,7 +390,7 @@ function redPng(size = 64) {
   // Dropdowns are drawn by Quicksilver (readable in both themes): click, see the choices, pick one.
   await win.click('#pick-effort');
   await win.waitForSelector('.sel-pop .sel-item.sel:has-text("Instant")');
-  assert.equal(await win.locator('.sel-pop .sel-item').count(), 4);
+  assert.equal(await win.locator('.sel-pop .sel-item').count(), 5, 'Instant, Balanced, Auto, Deep think, Council');
   const look = await win.evaluate(() => { const p = getComputedStyle(document.querySelector('.sel-pop')); const i = getComputedStyle(document.querySelector('.sel-pop .sel-item')); return { bg: p.backgroundColor, fg: i.color }; });
   assert.notEqual(look.bg, look.fg, 'text and background differ');
   await shot(win, '09b-dropdown');
@@ -604,6 +604,45 @@ function redPng(size = 64) {
   assert.equal(hum[0], 'Paris is the capital, and the largest city.\n\n```js\nconst a = 1; // x — y\n```');
   assert.match(hum[1], /like a real person/); assert.match(hum[1], /Don't use em dashes/);
   console.log('✓ human writing: conversational style asked for, chatbot leftovers tidied, code untouched');
+
+  // Share an answer or the whole chat.
+  await win.evaluate(() => {
+    const c = chatById(S.route.id);
+    c.title = 'Share test';
+    c.messages.push({ id: 'u-sh', t: Date.now(), role: 'user', text: 'What is the boiling point of water?' });
+    c.messages.push({ id: 'a-sh', t: Date.now(), role: 'assistant', altIndex: 0, alts: [{ text: '**100 °C** at sea level.', target: 'local:qwen3-8b' }] });
+    save(); render();
+  });
+  await win.click('[data-act="share"][data-id="a-sh"]');
+  await win.waitForSelector('#modal .share-opt[data-sh="email"]');
+  assert.equal(await win.locator('#modal .share-opt').count(), 6);
+  await win.click('#modal [data-sh="text"]');
+  await win.waitForSelector('#toast:has-text("Copied")');
+  await win.click('#chat-more');
+  await win.click('.menu [data-m="share"]');
+  await win.waitForSelector('#modal h2:has-text("Share this chat")');
+  assert.match(await win.evaluate(() => chatMarkdown(chatById(S.route.id))), /# Share test[\s\S]*boiling point[\s\S]*100 °C/);
+  assert.equal(await win.evaluate(() => plainText('**100 °C** at sea level.')), '100 °C at sea level.');
+  await win.click('#modal [data-close]');
+  console.log('✓ share: an answer or the whole chat (copy, email, PDF, Word, Markdown)');
+
+  // The 3-AI Council is an Effort option; the answer says whether the three agreed.
+  await win.selectOption('#pick-effort', 'council');
+  await win.fill('#input', 'Should I rent or buy a house?');
+  await win.keyboard.press('Enter');
+  await win.waitForSelector('.council-badge:has-text("Council: agreed")', { timeout: 90000 });
+  await idle();
+  assert.match(await win.evaluate(() => { const m = chatById(S.route.id).messages.at(-1); return m.alts[m.altIndex].text; }), /^Council answer from/);
+  await shot(win, '17-council');
+  await win.selectOption('#pick-effort', 'thorough');
+  console.log('✓ 3-AI Council: an Effort option, three views, one verdict that says whether they agreed');
+  // Every option explained in one place: Settings → Options guide, linked from the message box.
+  await win.click('[data-open-guide]');
+  await win.waitForSelector('.og-sec h3:has-text("Effort")');
+  assert.ok(await win.locator('.og-row dt:has-text("Council")').count() === 1 && await win.locator('.og-sec').count() >= 6);
+  await shot(win, '17b-options-guide');
+  await win.click('.nav-new');
+  console.log('✓ options guide: every option explained in Settings, linked from the message box');
   assert.doesNotMatch(await win.evaluate(() => turnContext(chatById(S.route.id), [], false, 'hi', null, '', '')), /Answer length/);
   await shot(win, '16-session-badge');
   console.log('✓ privacy modes: fully private, private online (Proton VPN free or your account), online; chats say Private / Protected session');

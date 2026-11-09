@@ -320,7 +320,7 @@ function chatMenu(anchor, chat) {
   m.className = 'menu';
   m.style.left = `${Math.max(8, r.left - 150)}px`;
   m.style.visibility = 'hidden';
-  m.innerHTML = `<button data-m="pin">${chat.pinned ? 'Unpin' : '📌 Pin to top'}</button><button data-m="rename">✏️ Rename</button><button data-m="project">📁 ${chat.projectId ? 'Change project' : 'Move to a project'}</button><button data-m="doc">📝 ${chat.doc ? 'Open the document' : 'New document beside the chat'}</button><button data-m="settings">⚙️ Chat settings</button><button data-m="private">${chat.private ? '🔓 Use memory in this chat' : '🔒 Private (no memory)'}</button><button data-m="export">⬇ Export as Markdown</button><button data-m="delete" class="danger">🗑 Delete</button>`;
+  m.innerHTML = `<button data-m="pin">${chat.pinned ? 'Unpin' : '📌 Pin to top'}</button><button data-m="rename">✏️ Rename</button><button data-m="project">📁 ${chat.projectId ? 'Change project' : 'Move to a project'}</button><button data-m="doc">📝 ${chat.doc ? 'Open the document' : 'New document beside the chat'}</button><button data-m="settings">⚙️ Chat settings</button><button data-m="private">${chat.private ? '🔓 Use memory in this chat' : '🔒 Private (no memory)'}</button><button data-m="share">📤 Share chat…</button><button data-m="export">⬇ Export as Markdown</button><button data-m="delete" class="danger">🗑 Delete</button>`;
   document.body.appendChild(m);
   // Open below the button if the whole menu fits, else above it; never off-screen.
   const h = m.offsetHeight;
@@ -350,6 +350,7 @@ function chatMenu(anchor, chat) {
       const md = chat.messages.map((x) => `## ${x.role === 'user' ? (S.data.prefs.userName || 'You') : a.name}\n\n${x.role === 'assistant' ? x.alts[x.altIndex]?.text || '' : x.text}`).join('\n\n');
       if (await call('file:saveText', `${chat.title.replace(/[^\w -]/g, '').slice(0, 60) || 'chat'}.md`, `# ${chat.title}\n\n${md}\n`)) toast('Chat saved.');
     }
+    if (act === 'share') shareChat(chat);
     if (act === 'delete') deleteChat(chat);
   });
 }

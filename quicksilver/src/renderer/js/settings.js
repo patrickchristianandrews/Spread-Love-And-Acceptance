@@ -7,15 +7,15 @@ const engineProg = {};
 
 views.settings = {
   html() {
-    const tabs = { general: 'General', chat: 'Chat & accuracy', memory: 'Memory', voice: 'Voice', phone: 'Phone', web: 'Web search', api: 'API server', engines: 'Engines', accounts: 'Accounts' };
+    const tabs = { general: 'General', guide: 'Options guide', chat: 'Chat & accuracy', memory: 'Memory', voice: 'Voice', phone: 'Phone', web: 'Web search', api: 'API server', engines: 'Engines', accounts: 'Accounts' };
     const adv = new Set(['web', 'api', 'engines', 'accounts', 'phone']);
     return `<div class="page"><div class="page-head"><h1>Settings</h1></div>
       <div class="tabs">${Object.entries(tabs).filter(([k]) => !simpleOn() || !adv.has(k) || setTab === k).map(([k, l]) => `<button class="tab ${setTab === k ? 'active' : ''}" data-set-tab="${k}">${l}</button>`).join('')}</div>
-      <div style="max-width:860px">${({ general: generalHTML, chat: chatSetHTML, memory: memSetHTML, voice: voiceSetHTML, phone: phoneSetHTML, web: webHTML, api: apiSrvHTML, engines: enginesHTML, accounts: accountsHTML })[setTab]()}</div></div>`;
+      <div style="max-width:860px">${({ general: generalHTML, guide: optionsGuideHTML, chat: chatSetHTML, memory: memSetHTML, voice: voiceSetHTML, phone: phoneSetHTML, web: webHTML, api: apiSrvHTML, engines: enginesHTML, accounts: accountsHTML })[setTab]()}</div></div>`;
   },
   bind() {
     $$('[data-set-tab]').forEach((b) => b.addEventListener('click', () => { setTab = b.dataset.setTab; render(); }));
-    ({ general: bindGeneral, chat: bindChatSet, memory: bindMemSet, voice: bindVoiceSet, phone: bindPhoneSet, web: bindWeb, api: bindApiSrv, engines: bindEngines, accounts: bindAccounts })[setTab]();
+    ({ general: bindGeneral, guide: bindOptionsGuide, chat: bindChatSet, memory: bindMemSet, voice: bindVoiceSet, phone: bindPhoneSet, web: bindWeb, api: bindApiSrv, engines: bindEngines, accounts: bindAccounts })[setTab]();
   },
 };
 

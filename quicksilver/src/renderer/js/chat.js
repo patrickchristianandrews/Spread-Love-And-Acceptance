@@ -15,7 +15,7 @@ function newChat(assistantId, projectId) {
   go({ view: 'chat', id: chat.id });
 }
 
-const EFFORTS = { quick: '⚡ Instant', balanced: '⚖️ Balanced', thorough: '✨ Auto', max: '🧠 Deep think' };
+const EFFORTS = { quick: '⚡ Instant', balanced: '⚖️ Balanced', thorough: '✨ Auto', max: '🧠 Deep think', council: '⚔️ Council' };
 const effortOf = (chat, a) => chat.effort || a.effort || S.data.prefs.effortLevel || 'thorough';
 
 const msgText = (m) => (m.role === 'assistant' ? m.alts[m.altIndex]?.text || '' : m.text || '');
@@ -46,7 +46,7 @@ views.chat = {
         </div>
         <div class="chat-title" title="${esc(chat.title)}">${sessionBadgeHTML(target)}${projectChipHTML(chat)}${chat.private ? '<span class="priv-chip" title="Private chat: memory is not used or added">🔒 Private</span>' : ''}<span class="ct">${chat.messages.length && chat.title !== 'New chat' ? esc(chat.title) : ''}</span></div>
         <button class="run-state" id="run-state" hidden aria-label="How the model is running"></button>
-        <button class="icon-btn" id="chat-more" title="Pin, rename, export or delete this chat" aria-label="More options">${icon('more')}</button>
+        <button class="icon-btn" id="chat-more" title="Share, pin, rename, export or delete this chat" aria-label="More options">${icon('more')}</button>
       </header>
       <div class="chat-body" id="chat-body"><div class="chat-col">
       <button class="to-latest" id="to-latest" hidden aria-label="Jump to the latest message" title="Jump to the latest message">${icon('chevron', 18)}</button>
@@ -71,12 +71,12 @@ views.chat = {
             ${chip('tog-fact', 'shield', 'Double-check', fact, 'After each answer, a second model checks it claim by claim')}
             <button class="chip-tog" id="add-api-chip" title="Connect a cloud AI (ChatGPT, Claude, Gemini…) to use alongside your local models">${icon('plus', 16)}<span>Cloud AI${S.providers?.length ? ` (${S.providers.length})` : ''}</span></button>
             <label class="pill-select small" title="Answer length: Best length fits the question; Quick answer gets straight to the point; Detailed answer gives the full picture, with explanation and examples">${icon('doc', 16)}<select id="pick-length" aria-label="Answer length">${Object.entries(LENGTHS).map(([k, l]) => `<option value="${k}" ${k === lengthOf(chat) ? 'selected' : ''}>${l.label}</option>`).join('')}</select>${icon('chevron', 14)}</label>
-            <label class="pill-select small" title="Instant: one model, fastest. Balanced: one model, then a check. Auto: the team works on hard questions only. Deep think: the whole team on every question, always double-checked.">${icon('gauge', 16)}<select id="pick-effort" aria-label="Effort">${Object.entries(EFFORTS).map(([k, e]) => `<option value="${k}" ${k === effortOf(chat, a) ? 'selected' : ''}>${e.replace(/^\S+\s/, '')}</option>`).join('')}</select>${icon('chevron', 14)}</label>
+            <label class="pill-select small" title="Instant: one model, fastest. Balanced: one model, then a check. Auto: the team works on hard questions only. Deep think: the whole team on every question, always double-checked. Council: three AIs (Structurer, Critic, Pragmatist), then one verdict. See Settings → Options guide.">${icon('gauge', 16)}<select id="pick-effort" aria-label="Effort">${Object.entries(EFFORTS).map(([k, e]) => `<option value="${k}" ${k === effortOf(chat, a) ? 'selected' : ''}>${e.replace(/^\S+\s/, '')}</option>`).join('')}</select>${icon('chevron', 14)}</label>
             <span class="grow"></span>
             <button class="send-btn ${pending?.chatId === chat.id ? 'stop' : ''}" id="send" title="${pending?.chatId === chat.id ? 'Stop' : 'Send (Enter)'}" aria-label="${pending?.chatId === chat.id ? 'Stop' : 'Send'}">${icon(pending?.chatId === chat.id ? 'stop' : 'send', 20)}</button>
           </div>
         </div>
-        <div class="composer-hint">${simpleOn() && chat.messages.length ? `${/ctx-meter (warm|hot)/.test(contextMeterHTML(chat, a)) ? contextMeterHTML(chat, a) : ''}${chatHasSettings(chat) ? `${/ctx-meter (warm|hot)/.test(contextMeterHTML(chat, a)) ? ' · ' : ''}<a href="#" data-chat-settings>custom settings</a>` : ''}` : `${autoOn(chat, a) ? 'Automatic: the best model for each question, quick answers first' : `Runs on ${esc(targetLabel(target))}${simpleOn() ? '' : chatEtaHint(target, a)}`}${chatHasSettings(chat) ? ' · <a href="#" data-chat-settings>custom settings</a>' : ''}${chat.messages.length ? ` · ${contextMeterHTML(chat, a)}` : ' · Drop or paste photos, video, PDF, Word, Excel or PowerPoint'}`}</div>
+        <div class="composer-hint">${simpleOn() && chat.messages.length ? `${/ctx-meter (warm|hot)/.test(contextMeterHTML(chat, a)) ? contextMeterHTML(chat, a) : ''}${chatHasSettings(chat) ? `${/ctx-meter (warm|hot)/.test(contextMeterHTML(chat, a)) ? ' · ' : ''}<a href="#" data-chat-settings>custom settings</a>` : ''}` : `${autoOn(chat, a) ? 'Automatic: the best model for each question, quick answers first' : `Runs on ${esc(targetLabel(target))}${simpleOn() ? '' : chatEtaHint(target, a)}`}${chatHasSettings(chat) ? ' · <a href="#" data-chat-settings>custom settings</a>' : ''}${chat.messages.length ? ` · ${contextMeterHTML(chat, a)}` : ' · Drop or paste photos, video, PDF, Word, Excel or PowerPoint'}`}<a href="#" class="og-link" data-open-guide title="What every option does">ⓘ What do these do?</a></div>
       </div>
       </div>${docPanelHTML(chat) || factPanelHTML(chat)}</div>
     </div>`;
@@ -167,7 +167,7 @@ function attachmentsHTML(list, removable) {
 
 function stepsHTML(alt, streaming) {
   if (!alt.steps?.length) return '';
-  const roleBadge = { vision: '<span class="badge b-sky">👁 Sees</span>', draft: '<span class="badge b-lav">✏️ Drafts</span>', critique: '<span class="badge b-peach">⚔️ Debates</span>', tools: '<span class="badge b-lemon">🔌 Tools</span>', lead: '<span class="badge b-mint">★ Lead</span>' };
+  const roleBadge = { council: '<span class="badge b-peach">⚔️ Council</span>', muse: '<span class="badge b-lemon">✨ Muse</span>', vision: '<span class="badge b-sky">👁 Sees</span>', draft: '<span class="badge b-lav">✏️ Drafts</span>', critique: '<span class="badge b-peach">⚔️ Debates</span>', tools: '<span class="badge b-lemon">🔌 Tools</span>', lead: '<span class="badge b-mint">★ Lead</span>' };
   const models = new Set(alt.steps.map((s) => s.model).filter(Boolean)).size;
   const now = streaming ? alt.steps.find((s) => !s.done) : null;
   return `<details class="steps chip-d"><summary>${now ? `<span class="pulse"></span>${esc(now.label)} · ${esc(now.model || '')}` : `🧩 ${models > 1 ? `Team of ${models}` : '1 model'} · ${alt.steps.length} step${alt.steps.length > 1 ? 's' : ''}`}</summary>
@@ -176,6 +176,15 @@ function stepsHTML(alt, streaming) {
   </details>`;
 }
 
+// The Council's verdict: how much the three agreed, and who sat on it (their notes are in the steps).
+function councilBadgeHTML(alt) {
+  const c = alt.council;
+  if (!c) return '';
+  const kind = c.agreement >= 80 ? 'b-mint' : c.agreement >= 55 ? 'b-lemon' : 'b-peach';
+  const word = c.agreement >= 80 ? 'agreed' : c.agreement >= 55 ? 'mostly agreed' : 'split decision';
+  const who = (c.members || []).map((x) => `${x.icon} ${x.role}: ${x.model}`).join('\n');
+  return `<span class="badge ${kind} council-badge" title="${esc(`3-AI Council\n${who}\nThe chair's estimate of how much they agreed: about ${c.agreement}%.\nOpen the steps to read each member's view.`)}">⚔️ Council: ${word}</span>`;
+}
 const metaRow = (html) => (html.trim() ? `<div class="meta-row">${html}</div>` : '');
 const domainOf = (u) => { try { return new URL(u).hostname.replace(/^www\./, ''); } catch { return u; } };
 
@@ -225,7 +234,7 @@ function messageHTML(chat, a, m, i) {
   const tools = [];
   if (m.alts.length > 1) tools.push(`<span class="alt-switch" title="${m.alts.length} answers to this question${alt.target ? `; this one is by ${esc(targetLabel(alt.target))}` : ''}"><button class="tool icon" data-act="prev" data-id="${m.id}" aria-label="Previous answer">‹</button><span>${m.altIndex + 1} / ${m.alts.length}</span><button class="tool icon" data-act="next" data-id="${m.id}" aria-label="Next answer">›</button></span>`);
   if (!streaming && !pending) {
-    if (alt.text) tools.push(tb('copy', m.id, 'copy', 'Copy'));
+    if (alt.text) tools.push(tb('copy', m.id, 'copy', 'Copy'), tb('share', m.id, 'send', 'Share: copy, email, PDF or Word'));
     if (alt.text && alt.target) tools.push(`<button class="tool icon rate ${alt.rating === 'up' ? 'on' : ''}" data-act="up" data-id="${m.id}" title="Good answer" aria-label="Good answer" aria-pressed="${alt.rating === 'up'}">👍</button>`, `<button class="tool icon rate ${alt.rating === 'down' ? 'on' : ''}" data-act="down" data-id="${m.id}" title="Not good" aria-label="Not good" aria-pressed="${alt.rating === 'down'}">👎</button>`);
     if (isLast) tools.push(tb('regen', m.id, 'refresh', 'Regenerate'));
     if (speakingId === m.id) tools.push(`<button class="tool icon on" data-act="speak" data-id="${m.id}" title="Stop reading" aria-label="Stop reading">${icon('volume', 16)}</button>`);
@@ -236,7 +245,7 @@ function messageHTML(chat, a, m, i) {
     <div class="av" aria-hidden="true">${esc(a.emoji)}</div>
     <div class="msg-main">
     <div class="who-line"><b>${esc(a.name)}</b>${model ? `<span class="who-model"${alt.autoWhy ? ` title="${esc(alt.autoWhy)}"` : ''}>${alt.autoWhy ? '✨ ' : ''}${esc(model)}</span>` : ''}${alt.skillId && skillById(alt.skillId) ? `<span class="badge b-peach">⚡ ${esc(skillById(alt.skillId).name)}</span>` : ''}${alt.imported ? `<span class="badge">From ${esc(alt.imported)}</span>` : ''}${alt.fixed ? '<span class="badge b-mint" title="A check of the first answer found a mistake (a sum, a code error or a wrong fact); this one fixes it. The first answer is still there with ‹ ›.">✓ Corrected</span>' : ''}${alt.preAnswered ? '<span class="badge b-lemon" title="This was the most likely next question, so it was answered while you read the last answer.">⚡ Ready before you asked</span>' : ''}${alt.cached ? '<span class="badge b-lemon" title="You rated this answer before (or it passed the double-check), so it was shown instantly. Regenerate for a fresh one.">⚡ Instant</span>' : ''}${alt.unsure && alt.check?.running ? '<span class="badge" title="The model was unsure of a number in this answer, so a second model is checking it.">Checking a number…</span>' : ''}${alt.autoWeb && !alt.sources?.length ? '<span class="badge b-sky" title="This question is about something current, so the web was searched automatically. Turn it off in Settings → General.">🌐 Checked the web</span>' : ''}${alt.webEmpty ? '<span class="badge b-lemon" title="Web search was on but found nothing for this question, so this answer is from the model\'s own knowledge.">Web: nothing found</span>' : ''}${etaNow}${alt.stats?.tps && !streaming ? `<span class="who-speed" title="${esc(statsTitle(alt))}">${Math.round(alt.stats.tps * 0.75)} words/s</span>` : ''}${m.t ? `<span class="who-time">${esc(msgTime(m))}</span>` : ''}</div>
-    ${metaRow(stepsHTML(alt, streaming) + toolsHTML(alt) + memoryChipHTML(alt) + (alt.reasoning ? `<details class="think chip-d"><summary>${streaming && !alt.text ? '<span class="pulse"></span>Thinking…' : '💭 Thought it through'}</summary><div>${esc(alt.reasoning)}</div></details>` : ''))}
+    ${metaRow(councilBadgeHTML(alt) + stepsHTML(alt, streaming) + toolsHTML(alt) + memoryChipHTML(alt) + (alt.reasoning ? `<details class="think chip-d"><summary>${streaming && !alt.text ? '<span class="pulse"></span>Thinking…' : '💭 Thought it through'}</summary><div>${esc(alt.reasoning)}</div></details>` : ''))}
     <div class="bubble md ${streaming ? 'streaming' : ''} ${alt.error ? 'error' : ''}">${body}</div>
     ${downloadHTML(m, alt, streaming)}
     ${appButtonsHTML(m, alt, streaming)}
@@ -361,7 +370,7 @@ function bindChat() {
     if (next && S.config?.web?.provider === 'none') toast('Turn on a web search service in Settings → Web search first.');
     chat.web = next; save(); render();
   });
-  $('#pick-effort').addEventListener('change', (e) => { chat.effort = e.target.value; save(); render(); });
+  $('#pick-effort').addEventListener('change', (e) => { chat.effort = e.target.value; save(); render(); if (e.target.value === 'council') toast('⚔️ Council: a Structurer, a Critic and a Pragmatist each look at your question, then one answer is written from all three. Slower, for when it matters.', 7000); });
   $('#pick-length').addEventListener('change', (e) => { chat.length = e.target.value; S.data.prefs.answerLength = e.target.value; save(); toast(LENGTHS[e.target.value].toast); });
   $('#tog-tools').addEventListener('click', () => { chat.tools = !toolsOn(chat, a); save(); render(); if (chat.tools && !S.hasIntegrations) toast('Connect GitHub, Slack, Notion, Jira, Linear or an MCP server under Connectors first.', 6000); });
   $('#tog-fact').addEventListener('click', () => { chat.factCheck = !factOn(chat, a); save(); render(); });
@@ -741,10 +750,12 @@ async function generate(chat, rerollMsg, withTarget, opts = {}) {
     maxTokens: ((n) => (lengthOf(chat) === 'short' && !appWork ? Math.min(n, LENGTHS.short.tokens) : lengthOf(chat) === 'long' ? Math.max(n, LENGTHS.long.tokens) : n))(Math.max(appWork && chat.maxTokens == null ? 8192 : 0, Math.round(Number(chat.maxTokens || a.maxTokens || p.maxTokens) * (effortOf(chat, a) === 'max' && chat.maxTokens == null ? 1.5 : 1)))),
     contextSize: ctx,
     // Writing a picture prompt or a beat pattern is quick work: one model, no debate.
-    level: skill && HIDE_BLOCK.has(skill.output) ? 'quick' : effortOf(chat, a),
+    level: skill && HIDE_BLOCK.has(skill.output) ? 'quick' : effortOf(chat, a) === 'council' ? 'thorough' : effortOf(chat, a),
     tools: toolsOn(chat, a) || autoTools(chat, a, lastUser?.text),
     gpu: p.gpu,
     effort: p.effort,
+    council: effortOf(chat, a) === 'council' && !(skill && HIDE_BLOCK.has(skill.output)),
+    councilCloud: Boolean(p.cloudHard),
   });
 }
 
@@ -809,6 +820,7 @@ qs.onChat(({ requestId, ev }) => {
     }
     case 'approve': askToolApproval(ev); break;
     case 'sources': alt.sources = [...(alt.sources || []), ...ev.sources.map(({ title, url, path }) => ({ title, url, path }))]; pending.sources = [...(pending.sources || []), ...ev.sources]; break;
+    case 'council': alt.council = { agreement: ev.agreement, members: ev.members || [] }; break;
     case 'stats': alt.stats = { tps: ev.tps, tokens: ev.tokens }; if (ev.minDigitP != null) alt.minDigitP = ev.minDigitP; if (ev.finish === 'length') toast('The answer hit the length limit. Press Continue for more.'); break;
     case 'error':
     case 'done': {
@@ -857,6 +869,7 @@ function messageAction(chat, act, id, el) {
   else if (act === 'regen') generate(chat, m);
   else if (act === 'continue') { chat.messages.push({ id: uid(), role: 'user', text: 'Continue.', attachments: [] }); generate(chat, null); }
   else if (act === 'copy') { navigator.clipboard?.writeText(msgText(m)); toast('Copied.'); }
+  else if (act === 'share') shareAnswer(chat, m);
   else if (act === 'up' || act === 'down') rateAnswer(chat, m, act);
   else if (act === 'uncensored') askUncensored(chat, m);
   else if (act === 'fix') { if (pending) { toast('Wait for the answer to finish first.'); return; } const alt = m.alts[m.altIndex]; if (alt.check?.text) generate(chat, m, alt.target, { fix: alt.check.text }); }

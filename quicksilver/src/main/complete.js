@@ -660,7 +660,84 @@ async function* agent(target, req) {
   yield* single(target, { ...req, messages: [...messages, { role: 'user', content: 'Please give your final answer now, without using more tools.' }] });
 }
 
+// ---------- the 3-AI Council ----------
+// Three models look at the same question, each in its own role, then one writes a single answer
+// from all three and says how much they agreed. Local models take turns (they share this PC's
+// memory); a cloud AI joins only if you've opted in to cloud help for hard questions.
+const COUNCIL_ROLES = [
+  { key: 'structurer', icon: '🏛️', label: 'Structurer', prompt: 'You are the Lead Structurer on a council of three AIs. Lay out the clearest, most complete answer to the user\'s latest message: the key facts, the steps or structure, and any code, table or numbers needed. Be concise: key points only, at most about 200 words.' },
+  { key: 'critic', icon: '🔍', label: 'Critic', prompt: 'You are the Critic on a council of three AIs. Think carefully about the user\'s latest message and find what could go wrong: wrong assumptions, edge cases, mistakes in maths or facts, risks, and what a quick answer would miss. Recompute any numbers yourself. Key points only, at most about 200 words.' },
+  { key: 'pragmatist', icon: '⚡', label: 'Pragmatist', prompt: 'You are the Pragmatist on a council of three AIs. Say what the user should actually do: the most practical, immediately usable answer, simplest first, with any shortcut or caveat that matters in real life. Key points only, at most about 150 words.' },
+];
+const COUNCIL_LEAD = 'You chair a council of three AIs who each looked at the user\'s latest message: a Structurer, a Critic and a Pragmatist. Their notes are below. Write the single best final answer for the user: keep what is correct and useful from each, fix anything the Critic showed to be wrong, and make it practical. Where they genuinely disagree, say so briefly and give your judgement. Do not mention the council or the notes. Your reply MUST start with one line exactly like "AGREEMENT: 85%" (how much the three agreed on the substance, 0-100), then the answer on the next line.';
+
+function councilMembers(target, req) {
+  const textTargets = targets().filter((t) => t.target.startsWith('local:') && exists(t.target) && !t.mediaOnly);
+  const score = (t, job = 'general') => { const m = models.get(parse(t).id); return m ? catalog.scoreFor(catalog.profileInstalled(m), job) : 0; };
+  const fits = (t) => { const m = models.get(parse(t).id); return m && m.kind === 'text'; };
+  const local = textTargets.map((t) => t.target).filter(fits);
+  // The chat's own model (or its team's lead) structures; a thinker critiques; a quick one keeps it practical.
+  const own = parse(target).kind === 'stack' ? (stacks().find((x) => `stack:${x.id}` === target)?.members?.drafters || []).find((t) => exists(t) && fits(t)) : (exists(target) && fits(target) ? target : null);
+  const byGeneral = [...local].sort((a, b) => score(b) - score(a));
+  const structurer = own || byGeneral[0];
+  const thinkers = local.filter((t) => { const m = models.get(parse(t).id); const c = catalog.TEXT_MODELS.find((x) => x.id === m?.catalogId); return c?.reasoning; });
+  const critic = [...thinkers, ...byGeneral].find((t) => t !== structurer) || structurer;
+  let pragmatist = [...byGeneral].reverse().find((t) => t !== structurer && t !== critic) || byGeneral.find((t) => t !== structurer) || structurer;
+  const cloud = store.config().offline ? null : targets().find((t) => t.target.startsWith('api:') && exists(t.target))?.target;
+  if (req.councilCloud && cloud) pragmatist = cloud;
+  return { structurer, critic, pragmatist, lead: structurer && score(critic) > score(structurer) + 1 ? critic : structurer };
+}
+
+async function* council(target, req) {
+  const m = councilMembers(target, req);
+  if (!m.structurer) throw new Error('The Council needs at least one model on this PC.');
+  const steps = [];
+  const step = (s) => { s.index = steps.length; steps.push(s); return { type: 'step', step: s }; };
+  const notes = [];
+  yield { type: 'status', text: '⚔️ The Council is meeting: three views on your question…' };
+  for (const role of COUNCIL_ROLES) {
+    const who = m[role.key];
+    const s = { role: 'council', label: `${role.icon} ${role.label}`, model: label(who), text: '', done: false };
+    yield step(s);
+    const t0 = Date.now();
+    const msgs = req.messages;
+    const messages = [...msgs.slice(0, -1), { role: 'system', content: role.prompt }, msgs[msgs.length - 1]];
+    try {
+      s.text = await collect(who, { ...req, messages, level: role.key === 'critic' ? req.level : 'quick', maxTokens: 450, temperature: role.key === 'pragmatist' ? 0.6 : 0.4 }, (t) => { s.text = t; req.onStep?.(s); });
+    } catch (err) { s.error = String(err?.message || err); }
+    s.done = true; s.ms = Date.now() - t0;
+    yield { type: 'step', step: s };
+    if (s.text) notes.push(`<note role="${role.label}">\n${s.text.slice(0, 2500)}\n</note>`);
+  }
+  if (!notes.length) throw new Error('The Council couldn\'t meet: none of its models answered.');
+  const s = { role: 'lead', label: '🏛️ Council verdict', model: label(m.lead), text: '', done: false };
+  yield step(s);
+  const t0 = Date.now();
+  const msgs = req.messages;
+  const messages = [...msgs.slice(0, -1), { role: 'system', content: `${COUNCIL_LEAD}\n\n${notes.join('\n')}` }, msgs[msgs.length - 1]];
+  // The first line carries the agreement score; it's shown as a badge, not in the answer.
+  let head = ''; let headDone = false;
+  for await (const ev of single(m.lead, { ...req, messages, level: 'quick' })) {
+    if (ev.type !== 'text' || headDone) { yield ev; continue; }
+    head += ev.text;
+    const nl = head.indexOf('\n');
+    if (nl < 0 && head.length < 40) continue;
+    headDone = true;
+    const first = nl < 0 ? head : head.slice(0, nl);
+    const mm = first.match(/AGREEMENT:\s*\**\s*(\d{1,3})\s*%/i);
+    if (mm) {
+      yield { type: 'council', agreement: Math.min(100, Number(mm[1])), members: COUNCIL_ROLES.map((r) => ({ role: r.label, icon: r.icon, model: label(m[r.key]) })) };
+      const rest = nl < 0 ? '' : head.slice(nl + 1).replace(/^\s+/, '');
+      if (rest) yield { type: 'text', text: rest };
+    } else yield { type: 'text', text: head };
+  }
+  if (!headDone && head) yield { type: 'text', text: head.replace(/^\s*AGREEMENT:[^\n]*\n?/i, '') };
+  s.done = true; s.ms = Date.now() - t0;
+  yield { type: 'step', step: s };
+}
+
 async function* run(target, req) {
+  if (req.council && !hasImages(req.messages)) { yield* council(target, req); return; }
   if (req.useTools) {
     const list = await toolbox.available();
     if (list.length) req = { ...req, toolList: list };

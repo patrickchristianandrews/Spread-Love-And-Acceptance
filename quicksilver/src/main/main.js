@@ -313,7 +313,7 @@ ipcMain.on('chat:send', async (_e, p) => {
     const cfg = store.config();
     for await (const ev of complete.run(p.target, {
       messages: p.messages, temperature: p.temperature, maxTokens: p.maxTokens, contextSize: p.contextSize, gpu: p.gpu,
-      effort: p.effort, level: p.level, signal: controller.signal, useTools: Boolean(p.tools),
+      effort: p.effort, level: p.level, signal: controller.signal, useTools: Boolean(p.tools), council: Boolean(p.council), councilCloud: Boolean(p.councilCloud),
       approve: (q) => askApproval(p.requestId, q, controller.signal),
       onStatus: (text) => send({ type: 'status', text }),
       onStep: (step) => send({ type: 'step', step: { ...step } }),
@@ -530,6 +530,8 @@ handle('export:file', async (format, { markdown, html, title }) => {
   return true;
 });
 handle('shell:open', (url) => { if (/^https?:\/\//.test(url)) shell.openExternal(url); });
+// Share by email: opens your email app with the subject and text filled in (nothing is sent by Quicksilver).
+handle('share:email', ({ subject, body }) => shell.openExternal(`mailto:?subject=${encodeURIComponent(String(subject || '').slice(0, 200))}&body=${encodeURIComponent(String(body || '').slice(0, 2400))}`));
 
 // ---------- window ----------
 function createWindow() {
