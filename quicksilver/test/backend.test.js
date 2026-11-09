@@ -346,6 +346,67 @@ async function collect(gen) {
   global.fetch = realFetch;
   console.log('✓ GitHub connector: connect, list issues, create issue (approved)');
 
+  // Google: one browser sign-in (OAuth with PKCE, loopback) turns on every Google connector.
+  {
+    const gCalls = [];
+    const googleMod = require('../src/main/integrations-google');
+    let authUrl = '';
+    googleMod.openBrowser = (url) => { // the "browser": Google sends you straight back with a code
+      authUrl = url;
+      const u = new URL(url);
+      setTimeout(() => realFetch(`${u.searchParams.get('redirect_uri')}/?code=good-code&state=${u.searchParams.get('state')}`).catch(() => {}), 20);
+    };
+    global.fetch = async (url, opts = {}) => {
+      const u = String(url);
+      if (!/googleapis\.com|oauth2\.googleapis/.test(u)) return realFetch(url, opts);
+      gCalls.push(`${opts.method || 'GET'} ${u.split('?')[0]}`);
+      const json = (o, status = 200) => new Response(JSON.stringify(o), { status, headers: { 'Content-Type': 'application/json' } });
+      if (u === 'https://oauth2.googleapis.com/token') {
+        const p = new URLSearchParams(String(opts.body));
+        if (p.get('grant_type') === 'authorization_code') return p.get('code') === 'good-code' && p.get('code_verifier') ? json({ access_token: 'at1', refresh_token: 'rt1', expires_in: 3600 }) : json({ error: 'invalid_grant' }, 400);
+        return json({ access_token: 'at2', expires_in: 3600 });
+      }
+      if (!u.includes('/pagespeedonline/') && opts.headers?.Authorization !== 'Bearer at1' && opts.headers?.Authorization !== 'Bearer at2') return json({ error: { message: 'no auth' } }, 401);
+      if (u.includes('/userinfo')) return json({ email: 'me@gmail.com' });
+      if (u.includes('/messages?')) return json({ messages: [{ id: 'm1' }] });
+      if (u.includes('/messages/m1?format=metadata')) return json({ id: 'm1', snippet: 'See you at 3', payload: { headers: [{ name: 'From', value: 'Anna <anna@x.com>' }, { name: 'Subject', value: 'Lunch' }, { name: 'Date', value: 'Mon, 9 Nov 2026' }] } });
+      if (u.includes('/messages/send')) return json({ id: 'sent1' });
+      if (u.includes('/calendars/primary/events')) return json({ items: [{ summary: 'Dentist', start: { date: '2026-11-12' } }] });
+      if (u.includes(':runReport')) return json({ rows: [{ dimensionValues: [{ value: '/pricing' }], metricValues: [{ value: '120' }, { value: '150' }, { value: '300' }] }] });
+      if (u.endsWith('/tagmanager/v2/accounts')) return json({ account: [{ name: 'Shop', path: 'accounts/1' }] });
+      if (u.endsWith('/accounts/1/containers')) return json({ container: [{ name: 'shop.com', publicId: 'GTM-ABC', usageContext: ['web'], path: 'accounts/1/containers/2' }] });
+      if (u.includes('/searchAnalytics/query')) return json({ rows: [{ keys: ['blue shoes'], clicks: 40, impressions: 1000, ctr: 0.04, position: 3.2 }] });
+      if (u.includes('/pagespeedonline/')) return json({ lighthouseResult: { finalUrl: 'https://shop.com/', categories: { performance: { score: 0.62 } }, audits: { 'largest-contentful-paint': { displayValue: '3.9 s' }, 'render-blocking': { title: 'Eliminate render-blocking resources', details: { type: 'opportunity', overallSavingsMs: 900 } } } } });
+      return json({});
+    };
+    const gl = integrations.list().find((c) => c.id === 'google');
+    assert.ok(gl && gl.google && !gl.hasToken, 'Google: every service, one sign-in');
+    assert.equal(await integrations.save('google', { client: 'cid.apps.googleusercontent.com' }, 'csecret'), 'me@gmail.com');
+    const scopes = new URL(authUrl).searchParams.get('scope');
+    assert.ok(/gmail\.readonly/.test(scopes) && /calendar\.events/.test(scopes) && /youtube\.readonly/.test(scopes) && /forms/.test(scopes), 'one sign-in asks for every service');
+    assert.equal(new URL(authUrl).searchParams.get('code_challenge_method'), 'S256');
+    const on = integrations.list().filter((c) => c.group === 'Google' && c.enabled).map((c) => c.id);
+    assert.deepEqual(on.sort(), ['gadsense', 'ganalytics', 'gcalendar', 'gcontacts', 'gdrive', 'gforms', 'gmail', 'google', 'gsearchconsole', 'gtagmanager', 'gtasks', 'youtube']);
+    assert.equal(integrations.list().find((c) => c.id === 'gmail').values.client, 'cid.apps.googleusercontent.com', 'the client ID is reused');
+    const gt = integrations.tools();
+    assert.match(await gt.find((t) => t.name === 'gmail_search').run({ query: 'lunch' }), /\[m1\].*Anna.*Lunch/);
+    assert.match(await gt.find((t) => t.name === 'gcal_events').run({}), /Dentist/);
+    assert.match(await gt.find((t) => t.name === 'ga_report').run({ property: '123', dimensions: 'pagePath' }), /pagePath \| activeUsers[\s\S]*\/pricing \| 120/);
+    assert.match(await gt.find((t) => t.name === 'gtm_containers').run({}), /shop\.com \(GTM-ABC\)/);
+    assert.match(await gt.find((t) => t.name === 'gsc_performance').run({ site: 'sc-domain:shop.com' }), /blue shoes \| 40 \| 1000 \| 4\.0% \| 3\.2/);
+    await integrations.save('pagespeed', {}, '');
+    assert.match(await integrations.tools().find((t) => t.name === 'pagespeed_check').run({ url: 'shop.com' }), /performance 62\/100[\s\S]*render-blocking/);
+    integrations.disable('pagespeed');
+    const send = gt.find((t) => t.name === 'gmail_send');
+    assert.ok(send.write, 'sending asks first');
+    assert.match((await toolbox.execute(send, { to: 'anna@x.com', subject: 'Re: Lunch', body: 'Yes!' }, { approve: async () => ({ ok: true }) })).result, /Sent/);
+    integrations.disable('google');
+    assert.equal(integrations.list().filter((c) => c.group === 'Google' && c.enabled).length, 0, 'signing out of every service turns them all off');
+    assert.ok(!integrations.tools().some((t) => t.sourceId === 'gmail'));
+    global.fetch = realFetch;
+    console.log('✓ Google: one browser sign-in turns on Gmail, Calendar, Drive, Docs, Sheets, Tasks, Contacts, YouTube and Forms; sending asks first');
+  }
+
   // Models downloaded with Quicksilver 1.0 (older format) show up and work in this version.
   {
     const old = path.join(HOME, 'v1-qwen2.5-7b.gguf');

@@ -40,8 +40,8 @@ const secret = (id) => store.getSecret(`int:${id}`);
 function list() {
   const c = cfg();
   return Object.entries(CONNECTORS).map(([id, def]) => ({
-    id, ...def, enabled: Boolean(c[id]?.enabled), values: Object.fromEntries(def.fields.filter((f) => !f.secret).map((f) => [f.key, c[id]?.[f.key] || ''])),
-    hasToken: store.hasSecret(`int:${id}`), account: c[id]?.account || '', noToken: Boolean(def.noToken), group: def.group || 'Other',
+    id, ...def, enabled: Boolean(c[id]?.enabled), values: Object.fromEntries(def.fields.filter((f) => !f.secret).map((f) => [f.key, c[id]?.[f.key] || (def.google && f.key === 'client' ? google.clientOf(id).id || '' : '')])),
+    hasToken: def.google ? google.hasClient(id) : store.hasSecret(`int:${id}`), account: c[id]?.account || '', noToken: Boolean(def.noToken), group: def.group || 'Other',
   }));
 }
 
@@ -52,12 +52,14 @@ async function save(id, values, token) {
   c[id] = { ...(c[id] || {}), ...values, enabled: true };
   store.saveConfig({ integrations: c });
   const account = await test(id);
-  c[id].account = account;
-  store.saveConfig({ integrations: c });
+  const after = cfg(); // test() may have changed other connectors (Google: every service)
+  after[id] = { ...(after[id] || c[id]), account };
+  store.saveConfig({ integrations: after });
   return account;
 }
 
 function disable(id) {
+  if (google.isGoogle(id)) google.forget(id);
   const c = cfg();
   delete c[id];
   store.saveConfig({ integrations: c });
@@ -67,7 +69,7 @@ function disable(id) {
 // ---------- HTTP helpers ----------
 
 async function http(url, { method = 'GET', headers = {}, body, raw = false } = {}) {
-  const res = await fetch(url, { method, headers: { 'User-Agent': 'Quicksilver', ...headers, ...(body && !(body instanceof Buffer) ? { 'Content-Type': 'application/json' } : {}) }, body: body ? (typeof body === 'string' ? body : JSON.stringify(body)) : undefined, signal: AbortSignal.timeout(30000) });
+  const res = await fetch(url, { method, headers: { 'User-Agent': 'Quicksilver', ...headers, ...(body && !(body instanceof Buffer) ? { 'Content-Type': 'application/json' } : {}) }, body: body ? (typeof body === 'string' || body instanceof Buffer ? body : JSON.stringify(body)) : undefined, signal: AbortSignal.timeout(30000) });
   if (raw) return res;
   const text = await res.text();
   let data;
@@ -234,8 +236,12 @@ const TOOLS = { github: GITHUB_TOOLS, notion: NOTION_TOOLS, slack: SLACK_TOOLS, 
 const more = require('./integrations-more')({ http, clip, secret, cfg });
 Object.assign(CONNECTORS, more.CONNECTORS);
 Object.assign(TOOLS, more.TOOLS);
+const google = require('./integrations-google')({ http, clip, cfg });
+Object.assign(CONNECTORS, google.CONNECTORS);
+Object.assign(TOOLS, google.TOOLS);
 
 async function test(id) {
+  if (google.isGoogle(id)) return google.test(id);
   // A personal token knows its user; a GitHub App or Actions token doesn't, but can list its repos.
   if (id === 'github') {
     try { return (await gh('/user')).login; } catch (err) {
@@ -254,7 +260,7 @@ async function test(id) {
 // Tools from every enabled connector.
 function tools() {
   const c = cfg();
-  return Object.entries(TOOLS).filter(([id]) => c[id]?.enabled && (CONNECTORS[id].noToken || store.hasSecret(`int:${id}`))).flatMap(([id, list]) => list.map((t) => ({ ...t, source: CONNECTORS[id].name, sourceId: id })));
+  return Object.entries(TOOLS).filter(([id]) => c[id]?.enabled && (CONNECTORS[id].noToken || (google.isGoogle(id) ? google.ready(id) : store.hasSecret(`int:${id}`)))).flatMap(([id, list]) => list.map((t) => ({ ...t, source: CONNECTORS[id].name, sourceId: id })));
 }
 
 module.exports = { CONNECTORS, list, save, disable, test, tools, githubRepoFiles, clip };

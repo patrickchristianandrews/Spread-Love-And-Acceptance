@@ -11,6 +11,8 @@ module.exports = ({ http, clip, secret, cfg }) => {
   const stripHtml = (h) => String(h || '').replace(/<style[\s\S]*?<\/style>|<script[\s\S]*?<\/script>/gi, '').replace(/<br\s*\/?>|<\/p>|<\/h\d>|<\/li>/gi, '\n').replace(/<[^>]+>/g, '').replace(/&nbsp;/g, ' ').replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/\n{3,}/g, '\n\n').trim();
 
   const CONNECTORS = {
+    pagespeed: { name: 'Google PageSpeed Insights', icon: '⚡', group: 'Google', blurb: 'How fast a web page loads on phones and computers (Core Web Vitals), and what to fix. Free, no sign-in.', noToken: true,
+      fields: [{ key: 'key', label: 'API key (optional)', placeholder: 'Leave empty to start', help: 'Works without one for a few checks a day. For more, create a free API key in Google Cloud (enable PageSpeed Insights API).', url: 'https://console.cloud.google.com/apis/credentials' }] },
     weather: { name: 'Weather', icon: '⛅', group: 'Everyday', blurb: 'Current weather and a 7-day forecast anywhere. Free, no account (Open-Meteo).', noToken: true,
       fields: [{ key: 'units', label: 'Units', placeholder: 'celsius or fahrenheit', help: 'Type "fahrenheit" for °F and mph; anything else uses °C and km/h.' }, { key: 'home', label: 'Your town (optional)', placeholder: 'e.g. Leeds', help: 'Used when you ask about the weather without saying where.' }] },
     wikipedia: { name: 'Wikipedia', icon: '📖', group: 'Everyday', blurb: 'Search and read Wikipedia articles. Free, no account.', noToken: true,
@@ -42,6 +44,24 @@ module.exports = ({ http, clip, secret, cfg }) => {
     webhook: { name: 'Zapier, Make, n8n or IFTTT', icon: '⚡', group: 'Messaging & automation', blurb: 'Start any automation (thousands of apps) by calling its webhook.',
       fields: [{ key: 'token', label: 'Webhook URL', secret: true, help: 'Zapier: "Webhooks by Zapier" → Catch Hook. Make: Webhooks → Custom webhook. n8n: Webhook node. The AI sends a JSON message to it.' }] },
   };
+
+  // ---------- PageSpeed Insights ----------
+  const PAGESPEED_TOOLS = [
+    { name: 'pagespeed_check', description: 'Check how fast a web page loads (Google PageSpeed Insights / Lighthouse): performance score, Core Web Vitals and the biggest things to fix.', parameters: { type: 'object', properties: { url: { type: 'string' }, device: { type: 'string', description: 'mobile (default) or desktop' } }, required: ['url'] },
+      run: async ({ url, device = 'mobile' }) => {
+        const q = new URLSearchParams({ url: /^https?:/.test(url) ? url : `https://${url}`, strategy: device === 'desktop' ? 'desktop' : 'mobile', category: 'performance' });
+        if (C('pagespeed').key) q.set('key', C('pagespeed').key);
+        const r = await http(`https://www.googleapis.com/pagespeedonline/v5/runPagespeed?${q}`);
+        const lh = r.lighthouseResult || {};
+        const a = lh.audits || {};
+        const v = (k) => a[k]?.displayValue || '-';
+        const fixes = Object.values(a).filter((x) => x.details?.type === 'opportunity' && (x.details.overallSavingsMs || 0) > 100).sort((x, y) => y.details.overallSavingsMs - x.details.overallSavingsMs).slice(0, 6);
+        const field = r.loadingExperience?.overall_category;
+        return [`${lh.finalUrl || url} on ${device}: performance ${Math.round((lh.categories?.performance?.score || 0) * 100)}/100${field ? ` · real visitors: ${field.toLowerCase()}` : ''}`,
+          `Largest content shown: ${v('largest-contentful-paint')} · Layout shift: ${v('cumulative-layout-shift')} · Blocking time: ${v('total-blocking-time')} · First content: ${v('first-contentful-paint')} · Speed index: ${v('speed-index')}`,
+          fixes.length ? `Biggest fixes:\n${fixes.map((x) => `- ${x.title} (saves about ${(x.details.overallSavingsMs / 1000).toFixed(1)} s)`).join('\n')}` : 'No big fixes found.'].join('\n');
+      } },
+  ];
 
   // ---------- Weather (Open-Meteo) ----------
   const WMO = { 0: 'clear', 1: 'mostly clear', 2: 'partly cloudy', 3: 'overcast', 45: 'fog', 48: 'freezing fog', 51: 'light drizzle', 53: 'drizzle', 55: 'heavy drizzle', 61: 'light rain', 63: 'rain', 65: 'heavy rain', 66: 'freezing rain', 67: 'freezing rain', 71: 'light snow', 73: 'snow', 75: 'heavy snow', 77: 'snow grains', 80: 'showers', 81: 'showers', 82: 'violent showers', 85: 'snow showers', 86: 'snow showers', 95: 'thunderstorm', 96: 'thunderstorm with hail', 99: 'thunderstorm with hail' };
@@ -257,10 +277,11 @@ module.exports = ({ http, clip, secret, cfg }) => {
       run: async ({ message, data = {} }) => { const r = await http(secret('webhook'), { method: 'POST', body: { message, ...data, sentBy: 'Quicksilver', at: new Date().toISOString() }, raw: true }); if (!r.ok) throw new Error(`The webhook returned ${r.status}.`); return 'Sent to the automation.'; } },
   ];
 
-  const TOOLS = { weather: WEATHER_TOOLS, wikipedia: WIKI_TOOLS, calendar: CAL_TOOLS, rss: RSS_TOOLS, notes: NOTES_TOOLS, confluence: CONFLUENCE_TOOLS, todoist: TODOIST_TOOLS, trello: TRELLO_TOOLS, asana: ASANA_TOOLS, airtable: AIRTABLE_TOOLS, gitlab: GITLAB_TOOLS, homeassistant: HA_TOOLS, discord: DISCORD_TOOLS, telegram: TELEGRAM_TOOLS, webhook: WEBHOOK_TOOLS };
+  const TOOLS = { pagespeed: PAGESPEED_TOOLS, weather: WEATHER_TOOLS, wikipedia: WIKI_TOOLS, calendar: CAL_TOOLS, rss: RSS_TOOLS, notes: NOTES_TOOLS, confluence: CONFLUENCE_TOOLS, todoist: TODOIST_TOOLS, trello: TRELLO_TOOLS, asana: ASANA_TOOLS, airtable: AIRTABLE_TOOLS, gitlab: GITLAB_TOOLS, homeassistant: HA_TOOLS, discord: DISCORD_TOOLS, telegram: TELEGRAM_TOOLS, webhook: WEBHOOK_TOOLS };
 
   // Checks the connection and returns a short "connected as" label.
   async function test(id) {
+    if (id === 'pagespeed') return C('pagespeed').key ? 'with your API key' : 'ready';
     if (id === 'weather') return C('weather').home || 'ready';
     if (id === 'wikipedia') return `${C('wikipedia').lang || 'en'}.wikipedia.org`;
     if (id === 'calendar') { const r = await CAL_TOOLS[0].run({ days: 30 }); return /Nothing/.test(r) ? 'connected (no events in 30 days)' : `${r.split('\n').length} upcoming events`; }
