@@ -298,6 +298,7 @@ function render() {
   if (typeof paintIcons === 'function') paintIcons(main);
   if (!same) main.firstElementChild?.classList.add('enter');
   v.bind?.();
+  if (typeof paintPrivacyBar === 'function') paintPrivacyBar();
   if (keep) { const nb = document.getElementById('messages'); if (nb) nb.scrollTop = keep.bottom ? nb.scrollHeight : keep.top; }
 }
 

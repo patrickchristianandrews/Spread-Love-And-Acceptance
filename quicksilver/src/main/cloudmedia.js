@@ -40,6 +40,9 @@ const SERVICES = {
   replicate: { name: 'Replicate', models: {
     image: [['black-forest-labs/flux-schnell', 'FLUX.1 Schnell (Replicate)', 7, 'about $0.003 a picture ($5 free credits)', 'Fast, good pictures; the free credits last a long time']],
   }, custom: true },
+  venice: { name: 'Venice AI (uncensored)', models: {
+    image: [['hidream', 'HiDream (Venice, uncensored)', 8, 'Venice credits; small free allowance', 'Detailed pictures with safe mode off'], ['venice-sd35', 'Stable Diffusion 3.5 (Venice, uncensored)', 7, 'Venice credits', 'Many styles, safe mode off']],
+  }, custom: true },
   stability: { name: 'Stability AI', models: {
     image: [['core', 'Stable Image Core (Stability AI)', 7, '3 credits a picture (25 free credits a month)', 'Reliable pictures in many styles'], ['ultra', 'Stable Image Ultra (Stability AI)', 8, '8 credits a picture', 'Stability\'s most detailed pictures']],
   } },
@@ -115,6 +118,17 @@ async function stability(provider, key, model, opts, onStatus) {
   if (!res.ok) { const t = await res.text().catch(() => ''); let m = t; try { const j = JSON.parse(t); m = j.errors?.join(' ') || j.message || j.name || t; } catch { /* plain text */ } throw new Error(`Stability AI: ${String(m).slice(0, 300) || `HTTP ${res.status}`}`); }
   return saveResult(Buffer.from(await res.arrayBuffer()), 'x.png', 'image/png', 'image', model, opts, provider);
 }
+// Venice: uncensored pictures (safe mode off); the picture comes back in the answer.
+async function venice(provider, key, model, opts, onStatus) {
+  onStatus('Creating with Venice (uncensored)…');
+  const [w, h] = String(opts.size || '1024x1024').split('x').map(Number);
+  const res = await fetch('https://api.venice.ai/api/v1/image/generate', { method: 'POST', headers: { Authorization: `Bearer ${key}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ model, prompt: String(opts.prompt || '').slice(0, 1500), width: w || 1024, height: h || 1024, format: 'png', safe_mode: false }), signal: AbortSignal.timeout(180000) });
+  const j = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(`Venice: ${j.error || j.message || `HTTP ${res.status}`}`);
+  const b64 = j.images?.[0];
+  if (!b64) throw new Error('Venice returned no picture.');
+  return saveResult(Buffer.from(String(b64).replace(/^data:[^,]+,/, ''), 'base64'), 'x.png', 'image/png', 'image', model, opts, provider);
+}
 // Replicate: start a prediction, wait for it, download the output.
 async function replicate(provider, key, kind, model, opts, onStatus) {
   const headers = { Authorization: `Bearer ${key}`, 'Content-Type': 'application/json', Prefer: 'wait=60' };
@@ -148,6 +162,7 @@ async function generate(provider, key, kind, model, opts, onStatus = () => {}) {
   if (!key) throw new Error(`Add your ${provider.name} key first (Models → Connect an API).`);
   if (provider.preset === 'stability') return stability(provider, key, model, opts, onStatus);
   if (provider.preset === 'replicate') return replicate(provider, key, kind, model, opts, onStatus);
+  if (provider.preset === 'venice') return venice(provider, key, model, opts, onStatus);
   const headers = { Authorization: `Key ${key}`, 'Content-Type': 'application/json' };
   const base = (provider.baseUrl || QUEUE).replace(/\/+$/, '');
   const sub = await fetch(`${base}/${model}`, { method: 'POST', headers, body: JSON.stringify(inputFor(kind, model, opts)), signal: AbortSignal.timeout(60000) });

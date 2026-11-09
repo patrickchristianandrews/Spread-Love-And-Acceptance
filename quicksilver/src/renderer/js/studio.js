@@ -12,12 +12,30 @@ let vid = { id: null, info: null };
 
 async function refreshGallery() { gallery = await qs.call('media:gallery'); }
 
+// A short explanation at the top of each Create tab: what it does, how, and where things are saved.
+const STUDIO_INTRO = {
+  create: ['🎨', 'Make a picture from a description', 'Type what you want and Quicksilver writes a detailed prompt, then your picture model draws it on this PC (private and free). Press ✨ Improve to expand a rough idea. For top quality without a graphics card, use the ☁️ Cloud tab. Pictures are saved in the Gallery.'],
+  edit: ['🪄', 'Edit a photo', 'Crop, rotate, filters and adjustments by hand, or describe a change ("remove the background", "make it sunset") and an AI edit model does it. Everything stays on this PC. Edited copies are saved in the Gallery.'],
+  video: ['🎬', 'Make a short video clip', 'Describe the shot; a video model makes a few seconds of clip on this PC. This needs a graphics card with about 8 GB or more. No graphics card? Use the ☁️ Cloud tab (Veo, Kling) instead. Clips are saved in the Gallery.'],
+  vedit: ['✂️', 'Trim and edit video', 'Cut, crop, change speed, add captions and convert clips you made or uploaded. Save a single frame as a photo to edit it. All on this PC.'],
+  music: ['🎵', 'Make music & beats', 'The built-in synth makes instrumental beats and melodies from a style you pick (drums, bass, chords), saved as MP3. For full songs with vocals, use the ☁️ Cloud → Full songs tab (your lyrics, or Quicksilver writes them).'],
+  voice: ['🎙️', 'Text to speech & podcasts', 'Type text and hear it read aloud in a Windows voice, or write two speakers for a podcast. Audio is saved in the Gallery. Your voice typing (speech to text) is the mic button in any chat.'],
+  cloud: ['☁️', 'Top-quality cloud creation', 'The best hosted photo, video and music models through one key (or free with Pollinations). Use this when this PC can\'t make something itself, or for the highest quality. You pay the service per picture, second or song.'],
+  tools: ['🧰', 'Quick fixes', 'One-click fixes for a photo, video or sound: upscale 4×, smooth to 60 fps, remove background, master audio, remove vocals, extract sound, read aloud. Pick an item, then a fix.'],
+  gallery: ['🖼️', 'Everything you\'ve made', 'Every picture, video and sound you create or upload is kept here on this PC. Click one to edit, convert, animate or fix it; nothing is sent anywhere unless you use a cloud tab.'],
+};
+function studioIntro(tab) {
+  const i = STUDIO_INTRO[tab];
+  if (!i) return '';
+  return `<div class="studio-intro"><span class="si-ic">${i[0]}</span><span><b>${esc(i[1])}.</b> <span class="small muted">${esc(i[2])}</span></span></div>`;
+}
 views.studio = {
   html() {
     const tabs = { create: '🎨 Create image', edit: '🪄 Edit photo', video: '🎬 Create video', vedit: '✂️ Edit video', music: '🎵 Music', voice: '🎙️ Voice', cloud: '☁️ Cloud (top quality)', tools: '🧰 Quick fixes', gallery: `🖼️ Gallery (${gallery.length})` };
     return `<div class="page">
       <div class="page-head"><h1>Create</h1><label class="btn">⬆ Upload photo, video or sound<input type="file" id="upload" accept="image/*,video/*,audio/*" multiple hidden></label></div>
       <div class="tabs">${Object.entries(tabs).map(([k, l]) => `<button class="tab ${studioTab === k ? 'active' : ''}" data-stab="${k}">${l}</button>`).join('')}</div>
+      ${studioIntro(studioTab)}
       ${({ create: createHTML, edit: editHTML, video: videoHTML, vedit: veditHTML, music: musicHTML, voice: voiceHTML, cloud: cloudStudioHTML, tools: fixesHTML, gallery: galleryHTML })[studioTab]()}
     </div>`;
   },

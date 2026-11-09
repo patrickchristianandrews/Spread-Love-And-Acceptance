@@ -40,7 +40,7 @@ views.stacks = {
       <div id="adv-out">${advResult ? advisorHTML(advResult) : '<div class="empty">Checking your PC and your models…</div>'}</div>
       <div class="section"><h2>Your stacks</h2><span class="small muted">Stacks you've set up. Your fusions are on the <a href="#" data-sf-tab="fusion">⚗️ Fusion</a> tab.</span></div>
       ${yourStacksHTML()}
-      ${suggestSectionHTML()}
+      ${suggestSectionHTML('stacks')}
       ${recipesHTML()}
       ${kitsHTML()}
     </div>`;
@@ -59,7 +59,7 @@ views.stacks = {
     $('#found-review')?.addEventListener('click', foundModal);
     if (stacksTab === 'stacks') bindAdvisor(); // the Setup Advisor is only on the Stacks tab
     bindRecipes();
-    $$('[data-edit-stack]').forEach((b) => b.addEventListener('click', () => editStack(S.stacks.find((s) => s.id === b.dataset.editStack))));
+    $$('[data-edit-stack]').forEach((b) => b.addEventListener('click', () => { const st = S.stacks.find((s) => s.id === b.dataset.editStack); if (isFusion(st) && st.infused) infuseModal(() => render(), st); else editStack(st); }));
     $$('[data-fz-rate]').forEach((b) => b.addEventListener('click', () => fusionRateModal(b.dataset.fzRate)));
     $$('[data-del-stack]').forEach((b) => b.addEventListener('click', async () => {
       if (!(await confirmBox(`Delete this ${S.stacks.find((s) => s.id === b.dataset.delStack) && isFusion(S.stacks.find((s) => s.id === b.dataset.delStack)) ? 'fusion' : 'stack'}? The models stay installed.`))) return;
@@ -359,7 +359,7 @@ function fusionPageHTML() {
       <div class="stack-v" style="gap:6px"><button class="btn primary" id="fusion-new-main">⚗️ Build a custom AI</button><button class="btn" data-import-ai>⬇ Import one</button></div></div></div>
     <div class="section"><h2>Your custom AIs</h2><span class="small muted">Rename with Edit; share with 📤 Publish.</span></div>
     ${mine.length ? `<div class="cards">${mine.map(stackCard).join('')}</div>` : '<p class="muted">No custom AIs yet. Press ⚗️ Build a custom AI, or start with a one-click fusion below.</p>'}
-    ${suggestSectionHTML()}
+    ${suggestSectionHTML('fusion')}
     ${powerMovesHTML()}
     <div class="section"><h2>Ways they can work together</h2><span class="small muted">You choose one when you make a fusion.</span></div>
     <div class="cards sf-modes">${Object.values(INFUSE_MODES).map((m) => `<div class="card"><div class="row"><span style="font-size:1.3rem">${m.icon}</span><b class="grow">${esc(m.name)}</b><span class="badge b-lav">${esc(m.cost)}</span></div><p class="small" style="margin:6px 0 0">${esc(m.blurb)}</p></div>`).join('')}</div>`;
@@ -390,6 +390,7 @@ function stackCard(s) {
     <div class="row"><span class="emoji-badge">${esc(s.emoji || '🧩')}</span><h3 class="grow">${esc(s.name)}</h3>${mode ? `<span class="badge b-lav">${mode.icon} ${esc(mode.name)}</span>` : ''}</div>
     <div class="stack-v" style="gap:6px;margin:12px 0">${rows.map(([role, t]) => `<div class="row">${ROLE[role]}<b class="small">${esc(targetLabel(t))}</b>${targetValid(t) ? '' : '<span class="badge b-pink">not installed yet</span>'}</div>`).join('')}</div>
     ${isFusion(s) ? fusionRatingsHTML(s.members, { compact: true }) : ''}
+    ${timesHTML(etaFor(`stack:${s.id}`))}
     ${boostsHTML(rows.map(([, t]) => t), { compact: true, liquid: s.builtFor === 'quicksilver' })}
     ${stackScoresHTML(rows.map(([, t]) => t))}
     <div class="row"><button class="btn small primary" data-chat-stack="${s.id}">Chat</button><button class="btn small" data-edit-stack="${s.id}">Edit</button>${isFusion(s) ? `<button class="btn small" data-fz-rate="${s.id}">📊 Rating &amp; tips</button>` : ''}${boostBtn(`stack:${s.id}`)}<button class="btn small ghost" data-sug-open="stack:${s.id}" title="The best model to join and API to add for a task you pick">💡 What to add</button>${isFusion(s) && !s.community ? `<button class="btn small" data-publish="${s.id}">📤 Publish</button>` : ''}<button class="btn small danger" data-del-stack="${s.id}">Delete</button></div>
@@ -445,13 +446,13 @@ function strengthOf(t) {
   return S.catalog.text.find((c) => c.id === inst?.catalogId)?.judge ?? 5;
 }
 
-function infuseModal(onCreated) {
+function infuseModal(onCreated, existing) {
   const options = S.targets.filter((t) => !t.stack);
   if (options.length < 2) { toast('A fusion needs at least two AIs: install a model or connect a cloud AI (Models).', 6000); return; }
-  const b = openModal(`<h2>⚗️ Build a custom AI</h2>
+  const b = openModal(`<h2>⚗️ ${existing ? `Edit ${esc(existing.name)}` : 'Build a custom AI'}</h2>
     <p class="help">Choose 2 to 4 AIs. Mixing different makers (for example Qwen + Llama + Claude) gives the biggest boost: they make different mistakes, so they catch each other's.</p>
     <div class="stack-v">
-      <div class="label">1. Pick the AIs to fuse (2 to 4)</div>
+      <div class="row" style="justify-content:space-between;flex-wrap:wrap;gap:6px"><div class="label">1. Pick the AIs to fuse (2 to 4)</div><label class="row small" style="gap:6px"><input type="checkbox" id="inf-unc"> 🔓 Uncensored only</label></div>
       <div class="infuse-pick">${options.map((t) => `<label class="infuse-opt"><input type="checkbox" value="${esc(t.target)}"> <span class="grow">${esc(t.label)}${t.vision ? ' 👁' : ''}<div class="small muted">${esc(t.group)}</div></span></label>`).join('')}</div>
       <div class="label">2. How should they work together?</div>
       <div class="infuse-modes">${Object.entries(INFUSE_MODES).map(([k, m], i) => `<label class="infuse-mode"><input type="radio" name="im" value="${k}" ${i === 0 ? 'checked' : ''}><div style="font-size:1.4rem">${m.icon}</div><b>${m.name}</b><div class="small muted" style="font-weight:600;margin:4px 0">${esc(m.blurb)}</div><span class="badge b-lav">${esc(m.cost)}</span></label>`).join('')}</div>
@@ -464,6 +465,18 @@ function infuseModal(onCreated) {
     <div id="inf-suggest" class="inf-suggest"></div>
     <div class="modal-actions"><span class="small muted grow" id="inf-count">Pick 2 to 4 AIs.</span><button class="btn" data-close>Cancel</button><button class="btn primary" id="inf-go">${icon('sparkle', 16)} Save custom AI</button></div>`, { wide: true });
   const picked = () => [...b.querySelectorAll('.infuse-opt input:checked')].map((x) => x.value);
+  // Uncensored only: hide the AIs that refuse (keeps uncensored local models and Venice).
+  b.querySelector('#inf-unc').addEventListener('change', (e) => {
+    b.querySelectorAll('.infuse-opt').forEach((l) => { const v = l.querySelector('input').value; const ok = !e.target.checked || liquidOk(v); l.hidden = !ok; if (!ok) l.querySelector('input').checked = false; });
+    b.querySelector('.infuse-pick').dispatchEvent(new Event('change', { bubbles: true }));
+  });
+  if (existing) {
+    const m = existing.members || {};
+    for (const t of m.drafters || []) { const cb = b.querySelector(`.infuse-opt input[value="${CSS.escape(t)}"]`); if (cb) cb.checked = true; }
+    const r = b.querySelector(`input[name="im"][value="${m.mode || 'blend'}"]`); if (r) r.checked = true;
+    if (m.judge) b.querySelector('#inf-lead').value = m.judge;
+    b.querySelector('#inf-name').value = existing.name;
+  }
   b.querySelector('.infuse-pick').addEventListener('change', () => {
     const n = picked().length;
     b.querySelector('#inf-count').textContent = n < 2 ? 'Pick 2 to 4 AIs.' : n > 4 ? 'Four is the most that helps; extra AIs mostly add time.' : `${n} AIs selected.`;
@@ -493,7 +506,7 @@ function infuseModal(onCreated) {
     const vision = drafters.some(canSee) ? undefined : S.targets.find((t) => t.vision && !t.stack)?.target;
     const short = (t) => (S.targets.find((x) => x.target === t)?.label || '').split(/[ (]/)[0];
     const name = b.querySelector('#inf-name').value.trim() || `${drafters.map(short).join(' + ')} ${INFUSE_MODES[mode].name}`;
-    const stack = { id: `inf-${uid()}`, name, emoji: '⚗️', infused: true, members: { drafters, judge, vision, mode } };
+    const stack = { ...(existing || {}), id: existing?.id || `inf-${uid()}`, name, emoji: existing?.emoji || '⚗️', infused: true, members: { drafters, judge, vision, mode } };
     await call('stacks:save', stack);
     await refreshModels();
     closeModal();

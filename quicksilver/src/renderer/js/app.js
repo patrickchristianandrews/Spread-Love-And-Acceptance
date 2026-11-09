@@ -61,11 +61,38 @@ function paintNet() {
     b.setAttribute('aria-checked', String(!off));
     const vpn = !off && S.config?.vpnOnly;
     const tunnel = vpn && S.vpn?.connected;
+    // Online without a VPN = not private: what you search and send can be seen by the sites and
+    // services you use. Marked clearly so it's never a surprise.
+    const exposed = !off && !vpn;
     b.classList.toggle('vpn', Boolean(vpn)); b.classList.toggle('vpn-wait', Boolean(vpn && !tunnel));
-    (b.querySelector('.net-lbl') || b.querySelector('span:nth-child(2)')).textContent = off ? 'Offline' : vpn ? (tunnel ? '🛡 Private (VPN)' : '🛡 VPN off: paused') : 'Online';
-    b.title = off ? 'Offline: nothing leaves this PC. Click to go online.' : vpn ? (tunnel ? 'Private online: everything goes through your VPN. Click to go offline. Privacy modes are in Settings → General.' : 'Private online is on, but no VPN is connected, so nothing leaves this PC. Connect Proton VPN, or change it in Settings → General.') : 'Online: web search, cloud AIs and downloads are available. Click to go offline. Private online (VPN) is in Settings → General.';
+    b.classList.toggle('exposed', exposed);
+    (b.querySelector('.net-lbl') || b.querySelector('span:nth-child(2)')).textContent = off ? 'Offline' : vpn ? (tunnel ? '🛡 Private (VPN)' : '🛡 VPN off: paused') : '🌐 Online · not private';
+    b.title = off ? 'Offline: nothing leaves this PC. Click to go online.' : vpn ? (tunnel ? 'Private online: everything goes through your VPN. Click to go offline. Privacy modes are in Settings → General.' : 'Private online is on, but no VPN is connected, so nothing leaves this PC. Connect Proton VPN, or change it in Settings → General.') : 'Online, not private: web search and any cloud AI you use can see what you send, and sites see your location. Everyday chats still run on this PC. Click to go offline, or turn on Private online (Proton VPN) in Settings → General.';
   }
   document.documentElement.classList.toggle('is-offline', off);
+  document.documentElement.classList.toggle('is-exposed', !off && !S.config?.vpnOnly);
+  paintPrivacyBar();
+}
+// A one-line banner at the top of the page whenever you're online without a VPN. It sits inside the
+// page (it never covers anything); ✕ hides it until Quicksilver restarts.
+function paintPrivacyBar() {
+  const main = document.getElementById('main');
+  if (!main) return;
+  const show = !S.config?.offline && !S.config?.vpnOnly && !S.privacyBarHidden;
+  let bar = document.getElementById('privacy-bar');
+  if (!show) { bar?.remove(); return; }
+  if (!bar || bar.parentNode !== main) {
+    bar?.remove();
+    bar = Object.assign(document.createElement('div'), { id: 'privacy-bar', className: 'privacy-bar' });
+    bar.innerHTML = `<span class="grow">🌐 <b>Online — not private.</b> <span class="small">Web searches and anything sent to a cloud AI can be seen by those services, and sites see your location. Chats with models on this PC stay private.</span></span><button class="btn small" data-pb="vpn">🛡 Make private (VPN)</button><button class="btn small ghost" data-pb="off">Go offline</button><button class="pb-x" data-pb="x" title="Hide until restart" aria-label="Hide">✕</button>`;
+    bar.addEventListener('click', (e) => {
+      const k = e.target.closest('[data-pb]')?.dataset.pb;
+      if (k === 'off') toggleNet();
+      else if (k === 'vpn') { setTab = 'general'; go({ view: 'settings' }); }
+      else if (k === 'x') { S.privacyBarHidden = true; bar.remove(); }
+    });
+  }
+  if (main.firstChild !== bar) main.prepend(bar);
 }
 async function toggleNet() {
   const off = !S.config?.offline;

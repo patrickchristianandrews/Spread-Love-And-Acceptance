@@ -3,6 +3,21 @@
 // results (science is GPQA Diamond, graduate-level questions; facts are short factual questions).
 'use strict';
 
+// ---------- response time three ways ----------
+// On this PC alone (private), with web search (search + reading the pages adds a few seconds and more
+// for the model to read), and with a connected cloud AI answering (most write 60–100+ words a second).
+const CLOUD_WPS = 80;
+function threeTimes(sec, words = WORDS.chat) {
+  if (sec == null || !isFinite(sec)) return null;
+  return { priv: sec, web: sec * 1.35 + 5, cloud: 1.5 + words / CLOUD_WPS };
+}
+function timesHTML(sec, { words = WORDS.chat, label = true } = {}) {
+  const t = threeTimes(sec, words);
+  if (!t) return '';
+  return `<span class="rt3" title="Estimated time for a typical answer: on this PC alone (private, nothing leaves it), with web search, and with a connected cloud AI answering. Exact once Quicksilver has timed a few answers.">${label ? '<span class="rt3-l">Response time</span>' : ''}<span>🔒 Private <b>${etaLabel(t.priv)}</b></span><span>🌐 With web <b>${etaLabel(t.web)}</b></span><span>☁️ With API <b>${etaLabel(t.cloud)}</b></span></span>`;
+}
+const timesText = (sec, words = WORDS.chat) => { const t = threeTimes(sec, words); return t ? `🔒 ${etaLabel(t.priv)} private · 🌐 ${etaLabel(t.web)} with web · ☁️ ${etaLabel(t.cloud)} with an API` : ''; };
+
 // Cloud AIs that answer questions (fal.ai is for photos, video and music only).
 const MEDIA_PRESETS = ['fal', 'replicate', 'stability'];
 const connectedClouds = () => (S.providers || []).filter((p) => (p.hasKey || p.noKey) && !MEDIA_PRESETS.includes(p.preset));
@@ -97,10 +112,10 @@ function recommendFor(job, own, { liquid = false } = {}) {
     case 'Writing': return text('Google Gemini (free plan)', 'Anthropic Claude (paid, most natural writing)', own >= 8 ? 'this already writes well; a cloud AI adds polish' : pcNote);
     case 'Coding': return text('Groq gpt-oss-120b (free plan, 88% coding test)', 'Anthropic Claude (paid)', pcNote);
     case 'Reading photos & screenshots': return text('Google Gemini (free plan)', 'OpenAI GPT-6 (paid)', own ? 'this already sees photos; the cloud reads small print better' : 'adds the ability to see photos');
-    case 'Photo creation': return { pick: `fal.ai Nano Banana 2.1 (about $0.04 a picture, 9/10) · ${fal}`, best: 'OpenAI GPT Image (10/10)', note: gpu ? 'draft free on your graphics card, finish the keepers in the cloud' : 'this PC makes pictures slowly, so the cloud is much quicker' };
-    case 'Photo editing': return { pick: `fal.ai Nano Banana 2.1 Edit (about $0.04 an edit, 9/10) · ${fal}`, best: 'OpenAI GPT Image edits', note: 'keeps faces and details when you change a photo by description' };
-    case 'Video creation': return { pick: `fal.ai Veo 3.1 Fast or Kling 3 Pro (9/10) · ${fal}`, best: 'fal.ai Veo 3.1 (10/10, with sound, about $0.40 a second)', note: vram >= 12 ? 'preview free on your graphics card, make the final clip in the cloud' : 'this PC can\'t make good video itself, so the cloud does it' };
-    case 'Music (full songs)': return { pick: `fal.ai MiniMax Music 2.6 (songs with vocals, about $0.15 a song) · ${fal}`, best: 'fal.ai ElevenLabs Music (9/10, full songs of any length, about $0.80 a minute)', note: 'full compositions with verses, chorus and vocals; the built-in synth only makes instrumentals' };
+    case 'Photo creation': return { pick: liquid ? 'Venice AI pictures (uncensored, small free allowance)' : 'Pollinations (free, no key, 6/10) in Create → Cloud', best: liquid ? 'Venice AI pictures with safe mode off' : `fal.ai Nano Banana 2.1 (about $0.04 a picture, 9/10) or OpenAI GPT Image (10/10) · ${fal}`, note: own ? (gpu ? 'draft free on your graphics card, finish the keepers in the cloud' : 'this PC makes pictures slowly, so the cloud is much quicker') : 'this can\'t make pictures itself: an API (or a picture model on this PC) is needed' };
+    case 'Photo editing': return { pick: own ? 'Your PC (free, private)' : 'Replicate ($5 free credits; type black-forest-labs/flux-kontext-pro in Create → Cloud)', best: `fal.ai Nano Banana 2.1 Edit (about $0.04 an edit, 9/10) · ${fal}`, note: own ? 'keeps faces and details when you change a photo by description' : 'this can\'t edit photos itself: an API is needed (or a graphics card for FLUX Kontext here)' };
+    case 'Video creation': return { pick: 'Kling AI free daily credits (on Kling\'s site) or Replicate $5 credits', best: `fal.ai Veo 3.1 (10/10, with sound, about $0.40 a second) · ${fal}`, note: vram >= 12 ? 'preview free on your graphics card, make the final clip in the cloud' : 'this can\'t make good video itself: an API is needed, and Quicksilver writes the shot list' };
+    case 'Music (full songs)': return { pick: `Free: Suno, about 5 songs a day (on Suno's site) · in Quicksilver: fal.ai MiniMax Music 2.6 (about $0.15 a song) · ${fal}`, best: 'fal.ai ElevenLabs Music (9/10, full songs of any length, about $0.80 a minute)', note: 'full compositions with verses, chorus and vocals; the built-in synth only makes instrumentals' };
     default: return null;
   }
 }

@@ -28,6 +28,12 @@ const MODELS = [
   // Next to the installer: the Brain. Sees photos itself and switches its own thinking on for hard questions.
   { id: 'starter-brain', catalogId: 'qwen3.5-4b', name: 'Qwen3.5 4B', vision: true, where: 'pack', limit: 3.6e9, file: 'qwen3.5-4b.gguf', proj: 'qwen3.5-4b-mmproj.gguf', pack: true,
     licenseRepo: 'Qwen/Qwen3.5-4B', repos: ['mradermacher/Huihui-Qwen3.5-4B-abliterated-GGUF', 'mradermacher/Qwen3.5-4B-abliterated-GGUF'] },
+  // Inside the installer: Smarter search. A tiny embedding model so Your knowledge and Memory are
+  // found by meaning out of the box (not uncensored because it writes no text — it only measures
+  // how close two pieces of text are in meaning).
+  { id: 'starter-embed', catalogId: 'nomic-embed-v1.5', name: 'Nomic Embed v1.5', kind: 'embed', where: 'starter', limit: 0.2e9, file: 'embed.gguf',
+    by: 'Nomic AI', licenseRepo: 'nomic-ai/nomic-embed-text-v1.5-GGUF', licenceText: 'Licensed under the Apache License, Version 2.0: https://www.apache.org/licenses/LICENSE-2.0\n',
+    repos: ['nomic-ai/nomic-embed-text-v1.5-GGUF', 'second-state/Nomic-embed-text-v1.5-Embedding-GGUF'] },
 ];
 
 async function choose(m) {
@@ -72,17 +78,18 @@ async function get(repo, f, dest) {
     await get(pick.repo, pick.model, path.join(dir, m.file));
     if (pick.mmproj) await get(pick.repo, pick.mmproj, path.join(dir, m.proj || 'mmproj.gguf'));
     const open = m.uncensored || /abliterat|uncensor/i.test(pick.repo);
-    // The Liquid Edition is completely uncensored: no filtered stand-in, ever.
-    if (!open) throw new Error(`No uncensored copy of ${m.name} could be downloaded (tried ${m.repos.filter((r) => /abliterat|uncensor/i.test(r)).join(', ')}).`);
-    console.log(`  ✓ uncensored copy: ${pick.repo}`);
-    entries.push({ id: m.id, catalogId: m.catalogId, name: open ? `${m.name} (uncensored)` : m.name, ...(open ? { uncensored: true } : {}), repo: pick.repo, quant: pick.quant, files: { model: m.file, ...(pick.mmproj ? { mmproj: m.proj || 'mmproj.gguf' } : {}) }, ...(m.pack ? { pack: true } : {}), ...(m.optional ? { optional: true } : {}) });
+    // The Liquid Edition's chat models are completely uncensored: no filtered stand-in, ever. The
+    // search model (embeddings) writes no text, so it's exempt.
+    if (m.kind !== 'embed' && !open) throw new Error(`No uncensored copy of ${m.name} could be downloaded (tried ${m.repos.filter((r) => /abliterat|uncensor/i.test(r)).join(', ')}).`);
+    if (m.kind === 'embed') console.log('  ✓ smarter-search model'); else console.log(`  ✓ uncensored copy: ${pick.repo}`);
+    entries.push({ id: m.id, catalogId: m.catalogId, name: m.kind ? m.name : open ? `${m.name} (uncensored)` : m.name, ...(m.kind ? { kind: m.kind } : {}), ...(open && !m.kind ? { uncensored: true } : {}), repo: pick.repo, quant: pick.quant, files: { model: m.file, ...(pick.mmproj ? { mmproj: m.proj || 'mmproj.gguf' } : {}) }, ...(m.pack ? { pack: true } : {}), ...(m.optional ? { optional: true } : {}) });
     let text = m.licenceText;
     if (!text) try {
       const tmp = path.join(os.tmpdir(), `licence-${m.id}.txt`);
       await downloadTo(`${HF}/${m.licenseRepo}/resolve/main/LICENSE`, tmp);
       text = fs.readFileSync(tmp, 'utf8');
     } catch { text = 'Licensed under the Apache License, Version 2.0: https://www.apache.org/licenses/LICENSE-2.0\n'; }
-    licences.push(`==== ${m.name} (${m.licenseRepo}) by ${m.by || 'Alibaba Cloud (Qwen)'}${open && !m.by ? `; uncensored version from ${pick.repo}` : ''} ====\n\n${text}`);
+    licences.push(`==== ${m.name} (${m.licenseRepo}) by ${m.by || 'Alibaba Cloud (Qwen)'}${open && !m.by && !m.kind ? `; uncensored version from ${pick.repo}` : ''} ====\n\n${text}`);
   }
   fs.writeFileSync(path.join(ROOT, 'starter', 'STARTER.json'), JSON.stringify({ models: entries }, null, 2));
   fs.writeFileSync(path.join(ROOT, 'starter', 'MODEL-LICENCES.txt'), licences.join('\n\n'));

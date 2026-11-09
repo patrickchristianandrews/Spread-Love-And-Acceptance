@@ -46,6 +46,16 @@ views.pc = {
     </div>`;
   },
   bind() {
+    $$('[data-tier-pick]').forEach((b) => b.addEventListener('click', () => { S.tierPick = Number(b.dataset.tierPick); render(); }));
+    $$('[data-upg-to]').forEach((b) => b.addEventListener('click', (e) => {
+      e.preventDefault();
+      const card = document.querySelector(`.upg[data-upg-id="${b.dataset.upgTo}"]`);
+      if (!card) return;
+      document.querySelectorAll('.upg.flash').forEach((c) => c.classList.remove('flash'));
+      card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      card.classList.add('flash');
+      setTimeout(() => card.classList.remove('flash'), 1600);
+    }));
     if (!S.est) refreshEstimates().then(() => S.route.view === 'pc' && render());
     if (S.pcGuide === undefined) { S.pcGuide = null; qs.call('guide:get').then((g) => { if (g) { S.pcGuide = g; if (S.route.view === 'pc') render(); } }).catch(() => {}); }
     if (!S.upgrades) qs.call('upgrades:advise').then((u) => { S.upgrades = u; if (S.route.view === 'pc') render(); }).catch(() => {});
@@ -90,18 +100,40 @@ function tierSpeedHTML(t, isMine) {
   return `<div class="tier-speed"><div class="small"><b>⚡ Quicksilver here:</b> ~${s.wps} words a second, a typical answer in ~${fmtSec(s.answerSec)} (${vs})</div>
     ${s.best ? `<div class="small muted">Also runs ${esc(s.best.name)} smoothly (~${s.best.wps} words/s)</div>` : ''}</div>`;
 }
+// What you could actually do on the selected computer: the strongest setup it runs, its abilities,
+// and picture / video generation. Updates when you pick a tier card above.
+function tierAbilityHTML(n, h) {
+  const t = pcTiers().find((x) => x.n === n) || pcTiers()[0];
+  const s = S.tierSpeeds?.tiers?.[t.n];
+  if (!s) return '<div class="tier-ability empty">Working out what each computer could do…</div>';
+  const caps = s.caps || [];
+  return `<div class="tier-ability"><div class="row" style="gap:10px;align-items:baseline;flex-wrap:wrap"><h3 style="margin:0">On a <b>Tier ${t.n} · ${esc(t.name)}</b> computer, Quicksilver could:</h3>${t.n === (h ? pcTierOf(h) : 0) ? '<span class="badge b-mint">about what you have now</span>' : ''}</div>
+    <div class="ta-grid">
+      <div class="ta-col"><h4>💬 Answers</h4>
+        ${s.bestSetup ? `<div class="small"><b>Best setup:</b> ${esc(s.bestSetup.names.join(' + '))} ${starsHTML(s.bestSetup.stars)}</div>` : ''}
+        <div class="small muted">~${s.wps} words a second · a typical answer in ~${fmtSec(s.answerSec)}</div>
+        ${s.best ? `<div class="small muted">Runs big uncensored models like ${esc(s.best.name)} smoothly</div>` : '<div class="small muted">Big 14B–30B models need a graphics card (Tier 3+).</div>'}
+        ${caps.length ? `<ul class="ta-caps">${caps.map((c) => `<li>✅ ${esc(c)}</li>`).join('')}</ul>` : ''}</div>
+      <div class="ta-col"><h4>🎨 Pictures &amp; video</h4>
+        ${s.image ? `<div class="small">🖼️ <b>${esc(s.image.name)}</b> — about ${fmtSec(s.image.sec)} a picture</div>` : '<div class="small muted">🖼️ Pictures: slow on the processor; a free cloud API (Pollinations) is quicker.</div>'}
+        ${s.video ? `<div class="small">🎬 <b>${esc(s.video.name)}</b> — about ${fmtSec(s.video.sec)} a short clip</div>` : '<div class="small muted">🎬 Local video needs a graphics card with ~12 GB+ (Tier 4); otherwise use a cloud API.</div>'}
+        <div class="small muted" style="margin-top:4px">Top cloud models (Nano Banana, Veo, full-song music) work on any tier with an API key.</div></div>
+    </div>
+    <p class="small muted">Pick a computer above to see what it could do. Estimates use the same speed model as the rest of the app.</p></div>`;
+}
 function newPcGuideHTML(h) {
   const mine = h ? pcTierOf(h) : 0;
   const g = pcGuide();
   const when = g?.fetchedAt ? `Updated online ${new Date(g.fetchedAt).toLocaleDateString(undefined, { day: 'numeric', month: 'short', year: 'numeric' })}` : 'Built-in guide; refreshes automatically when you\'re online';
   return `<div class="section" id="new-pc"><h2>🖥️ Buying a new computer?</h2><span class="small muted">What to get, by what you want Quicksilver to do. For local AI, graphics memory (VRAM) matters most, then RAM, then fast storage; the processor matters least. · ${esc(when)}</span></div>
-    <div class="tier-grid">${pcTiers().map((t) => `<div class="card tier ${t.n === mine ? 'mine' : ''}">
+    <div class="tier-grid">${pcTiers().map((t) => `<button class="card tier ${t.n === mine ? 'mine' : ''} ${t.n === (S.tierPick ?? mine) ? 'picked' : ''}" data-tier-pick="${t.n}">
       <div class="row"><span class="tier-n">${t.n}</span><h3 class="grow">${esc(t.name)}</h3>${t.n === mine ? '<span class="badge b-mint">This PC</span>' : ''}</div>
       <p class="small tier-good">${esc(t.good)}</p>
       <dl class="tier-spec"><dt>Graphics card</dt><dd>${esc(t.gpu)}</dd><dt>RAM</dt><dd>${esc(t.ram)}</dd><dt>Storage</dt><dd>${esc(t.disk)}</dd><dt>Processor</dt><dd>${esc(t.cpu)}</dd></dl>
       ${tierSpeedHTML(t, t.n === mine)}
       ${t.ex?.length ? `<div class="tier-ex"><span class="small muted"><b>Examples</b></span><ul>${t.ex.map((x) => `<li>${esc(x)}</li>`).join('')}</ul></div>` : ''}
-    </div>`).join('')}</div>
+    </button>`).join('')}</div>
+    ${tierAbilityHTML(S.tierPick ?? mine, h)}
     <details class="card tier-tips"><summary><b>Buying tips</b></summary><ul>
       ${(pcGuide()?.tips?.length ? pcGuide().tips : PC_TIPS_BUILTIN).map((t) => `<li>${t.b ? `<b>${esc(t.b)}</b> ` : ''}${esc(t.t)}</li>`).join('')}
     </ul></details>`;
@@ -114,22 +146,28 @@ function upgradesHTML() {
   if (!u.upgrades.length) return '<div class="section" id="upgrades"><h2>💡 Upgrades</h2></div><p class="muted">This PC is already well equipped for local AI. A bigger graphics card is the only step up left.</p>';
   const arrow = (a, b, fmt) => (a == null || b == null ? '' : `${fmt(a)} → <b>${fmt(b)}</b>`);
   const pct = (a, b) => (a && b && a / b >= 1.2 ? ` <span class="up">${(a / b).toFixed(a / b >= 3 ? 0 : 1)}× faster</span>` : '');
+  const nameOf = Object.fromEntries(u.upgrades.map((x) => [x.id, x.name]));
   const lines = (x) => {
+    if (x.id === 'ssd') return ['💾 <b>More room for models</b> — hold many more models (they\'re 1–25 GB each) and load them faster. Doesn\'t change answer speed.'];
     const g0 = x.now.general; const g1 = x.then.general; const c0 = x.now.coding; const c1 = x.then.coding;
     const out = [];
-    if (g0.chat && g1.chat && g0.chat / g1.chat >= 1.15) out.push(`💬 Chat replies with your models: ${arrow(g0.chat, g1.chat, (v) => `~${fmtSec(v)}`)}${pct(g0.chat, g1.chat)}`);
-    if (g1.stars > (g0.stars || 0)) out.push(`🚀 Best setup this PC could run: ${starsHTML(g0.stars)} → ${starsHTML(g1.stars)} <span class="small muted">(${esc(g1.names.join(' + '))}, ~${fmtSec(g1.seconds)} per answer)</span>`);
-    else if (g0.seconds && g1.seconds && g0.seconds / g1.seconds >= 1.2) out.push(`🚀 The best setup gets faster: ${arrow(g0.seconds, g1.seconds, (v) => `~${fmtSec(v)}`)} per answer${pct(g0.seconds, g1.seconds)}`);
-    if (c1.stars > (c0.stars || 0)) out.push(`💻 Code quality: ${starsHTML(c0.stars)} → ${starsHTML(c1.stars)}`);
-    if (x.newlyFast.length) out.push(`✅ Newly runs fast: ${x.newlyFast.map(esc).join(', ')}`);
+    // 1. Speed: the SAME models you run now, but faster (a fair, like-for-like comparison).
+    if (x.sameModel && x.sameModel.now / x.sameModel.then >= 1.15) out.push(`⚡ <b>Faster</b> — your current best (${esc(x.sameModel.name)}) answers ${arrow(x.sameModel.now, x.sameModel.then, (v) => `~${fmtSec(v)}`)}${pct(x.sameModel.now, x.sameModel.then)}${x.sameModel.fits ? ' (now fully on the graphics card)' : ''}`);
+    else if (g0.chat && g1.chat && g0.chat / g1.chat >= 1.15) out.push(`⚡ <b>Faster</b> chat replies with your models: ${arrow(g0.chat, g1.chat, (v) => `~${fmtSec(v)}`)}${pct(g0.chat, g1.chat)}`);
+    // 2. Smarter: a bigger, stronger model becomes possible (its answers take longer because it's a
+    //    bigger model — that's the quality you gain, not a slowdown).
+    if (g1.stars > (g0.stars || 0)) out.push(`🚀 <b>Smarter</b> — unlocks a stronger model: ${starsHTML(g0.stars)} → ${starsHTML(g1.stars)} <span class="small muted">(${esc(g1.names.join(' + '))} — a bigger model, so ~${fmtSec(g1.seconds)} per answer)</span>`);
+    if (c1.stars > (c0.stars || 0)) out.push(`💻 <b>Better code</b>: ${starsHTML(c0.stars)} → ${starsHTML(c1.stars)}`);
+    if (x.newlyFast.length) out.push(`✅ <b>Newly runs well</b>: ${x.newlyFast.map(esc).join(', ')}`);
     return out;
   };
-  return `<div class="section" id="upgrades"><h2>💡 Low-cost upgrades</h2><span class="small muted">What each upgrade would change on this PC, worked out with the same estimates as everywhere else</span></div>
-    <div class="upg-grid">${u.upgrades.map((x) => { const l = lines(x); return `<div class="card upg ${x.bestValue ? 'best' : ''} ${x.bigger ? 'bigger' : ''}">
+  return `<div class="section" id="upgrades"><h2>💡 Upgrades for this PC</h2><span class="small muted">What each would change, with rough US prices. Two different things: <b>⚡ Faster</b> runs the models you have now quicker; <b>🚀 Smarter</b> unlocks a bigger model (its answers take a little longer because it's a bigger model — that's the quality, not a slowdown).</span></div>
+    <div class="upg-grid">${u.upgrades.map((x) => { const l = lines(x); return `<div class="card upg ${x.bestValue ? 'best' : ''} ${x.bigger ? 'bigger' : ''}" data-upg-id="${esc(x.id)}">
       <div class="row"><span class="upg-ic">${x.icon}</span><h3 class="grow">${esc(x.name)}</h3>${x.bestValue ? '<span class="badge b-mint">Best value</span>' : x.bigger ? '<span class="badge b-lav">Bigger step</span>' : ''}</div>
       <div class="upg-cost">${esc(x.cost)}</div>
       ${l.length ? `<ul class="upg-list">${l.map((t) => `<li>${t}</li>`).join('')}</ul>` : '<p class="muted small" style="font-weight:650">Little difference for AI on this PC: something else is the limit.</p>'}
       <p class="small muted upg-note">${esc(x.note)}</p>
+      ${x.cheaper && nameOf[x.cheaper] ? `<p class="small upg-cheaper">💸 On a budget? <a href="#" data-upg-to="${esc(x.cheaper)}">${esc(nameOf[x.cheaper].split(' (')[0])}</a> is cheaper.</p>` : ''}
     </div>`; }).join('')}</div>
     <p class="small muted">Prices are rough US ranges and change often; check current prices and that a part fits your PC before buying. Most laptops can only upgrade memory (and some not even that).</p>`;
 }

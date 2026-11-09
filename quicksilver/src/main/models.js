@@ -324,7 +324,7 @@ function registerStarter(dir) {
     const known = reg.find((m) => m.id === e.id);
     const size = Object.values(files).reduce((t, f) => t + fs.statSync(f).size, 0);
     if (known && known.files?.model === files.model && known.name === e.name && known.size === size) continue;
-    const entry = add({ id: e.id, name: e.name, kind: 'text', catalogId: e.catalogId, files, size, vision: Boolean(files.mmproj), source: 'bundled' });
+    const entry = add({ id: e.id, name: e.name, kind: e.kind || 'text', catalogId: e.catalogId, files, size, vision: e.kind ? false : Boolean(files.mmproj), source: 'bundled' });
     if (!known) out.added.push(entry);
   }
   return out;

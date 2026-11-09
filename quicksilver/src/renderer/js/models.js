@@ -134,7 +134,8 @@ function modelCard(m, est, kind) {
     <p class="desc" style="margin:0 0 10px">${esc(m.blurb)}</p>
     ${modelProfileHTML(m, kind)}
     <div class="row" style="margin-bottom:10px">${tags.join('')}</div>
-    <div class="row" style="margin-bottom:12px"><span class="small" style="font-weight:700">On your PC:</span>${rateBadge(est, kind)}</div>
+    <div class="row" style="margin-bottom:${kind === 'text' && est?.wordsPerSec ? 2 : 12}px"><span class="small" style="font-weight:700">On your PC:</span>${rateBadge(est, kind)}</div>
+    ${kind === 'text' && est?.wordsPerSec ? timesHTML(WORDS.chat / Math.max(0.1, est.wordsPerSec), { label: false }) : ''}
     <div class="row">${S.downloads[m.id] ? downloadBox(m.id) : inst ? '<span class="badge b-mint">✓ Installed</span>' : `<button class="btn primary small" data-get="${m.id}">Download</button>`}<span class="grow"></span>${kind === 'text' ? boostBtn(m.id) : ''}<button class="btn small ghost" data-details="${esc(m.id)}">${est?.rating === 'wont' ? 'Why? What would it need?' : 'Details'}</button></div>
   </div>`;
 }

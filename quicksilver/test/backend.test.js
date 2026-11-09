@@ -788,6 +788,17 @@ async function collect(gen) {
     fs.copyFileSync(TINY, path.join(sd, 'thinker.gguf'));
     r = models.registerStarter(sd);
     assert.deepEqual(r.added.map((m) => m.id), ['starter-brain', 'starter-thinker']); assert.equal(r.missing.length, 0);
+    // Smarter search ships with Quicksilver: a bundled embedding entry registers as kind 'embed'.
+    fs.copyFileSync(TINY, path.join(sd, 'embed.gguf'));
+    fs.writeFileSync(path.join(sd, 'STARTER.json'), JSON.stringify({ models: [
+      { id: 'starter', catalogId: 'qwen3-vl-2b', name: 'Qwen3-VL 2B', files: { model: 'model.gguf', mmproj: 'mmproj.gguf' } },
+      { id: 'starter-embed', catalogId: 'nomic-embed-v1.5', name: 'Nomic Embed v1.5', kind: 'embed', files: { model: 'embed.gguf' } },
+    ] }));
+    const re = models.registerStarter(sd);
+    assert.deepEqual(re.added.map((m) => m.id), ['starter-embed']);
+    assert.equal(models.list().find((m) => m.id === 'starter-embed').kind, 'embed', 'the search model is bundled as an embed model');
+    assert.ok(require('../src/main/embed').installed(), 'smarter search is on out of the box');
+    models.remove('starter-embed');
     assert.equal(await complete.ensureQuicksilverStack(), 'stack:quicksilver');
     const qsStack = complete.stacks().find((x) => x.id === 'quicksilver');
     const ids = [...qsStack.members.drafters, qsStack.members.judge, qsStack.members.vision].filter(Boolean);

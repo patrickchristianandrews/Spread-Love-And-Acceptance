@@ -208,7 +208,7 @@ jobs:
           Start-Process -Wait -FilePath $setup.FullName -ArgumentList '/S','/D=C:\QS'
           if (!(Test-Path 'C:\QS\Quicksilver.exe')) { throw 'Quicksilver.exe was not installed' }
           if (!(Test-Path 'C:\QS\resources\engine\llama\llama-server.exe')) { throw 'the text engine is missing' }
-          foreach ($f in 'STARTER.json','model.gguf','mmproj.gguf','qwen3.5-4b.gguf','qwen3.5-4b-mmproj.gguf') { if (!(Test-Path "C:\QS\resources\starter\$f")) { throw "missing resources\starter\$f" } }
+          foreach ($f in 'STARTER.json','model.gguf','mmproj.gguf','embed.gguf','qwen3.5-4b.gguf','qwen3.5-4b-mmproj.gguf') { if (!(Test-Path "C:\QS\resources\starter\$f")) { throw "missing resources\starter\$f" } }
           Get-ChildItem C:\QS\resources\starter | ForEach-Object { '{0,-34} {1,8:N0} MB' -f $_.Name, ($_.Length / 1MB) }
           Write-Host '✓ installed, and the installer copied the Quicksilver model in'
           node test/installed.test.js C:\QS\Quicksilver.exe full install-shots

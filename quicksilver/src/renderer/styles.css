@@ -1458,3 +1458,33 @@ code.sel { user-select: all; background: var(--soft); padding: 1px 6px; border-r
 .tier-card .best-row .have { white-space: nowrap; }
 .inf-suggest { margin-top: 12px; padding: 12px; border-radius: 12px; border: 1px dashed var(--line); }
 .sug-head { margin-bottom: 4px; }
+
+.rt3 { display: flex; flex-wrap: wrap; gap: 4px 10px; font-size: .78rem; color: var(--muted); align-items: baseline; margin: 4px 0 8px; }
+.rt3 b { color: var(--text); font-weight: 750; }
+.rt3-l { font-weight: 800; font-size: .7rem; text-transform: uppercase; letter-spacing: .04em; }
+.sug-free, .sug-api { margin: 6px 0; font-size: .85rem; }
+.sug-unc { margin-bottom: 6px; }
+.upg-cheaper { margin: 4px 0 0; }
+.upg.flash { outline: 2px solid var(--accent); transition: outline .3s; }
+.tier.picked { outline: 2px solid var(--accent); }
+.tier-ability { margin-top: 14px; padding: 14px; border-radius: 14px; background: var(--soft); border: 1px solid var(--line-soft); }
+.tier-ability.empty { color: var(--muted); }
+.ta-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 10px; }
+.ta-col h4 { margin: 0 0 6px; }
+.ta-col > div { margin: 3px 0; }
+.ta-caps { list-style: none; margin: 8px 0 0; padding: 0; display: grid; gap: 3px; font-size: .82rem; }
+@media (max-width: 720px) { .ta-grid { grid-template-columns: 1fr; } }
+.studio-intro { display: flex; gap: 10px; align-items: flex-start; padding: 10px 12px; margin: 0 0 12px; border-radius: 10px; background: var(--soft); border: 1px solid var(--line-soft); }
+.studio-intro .si-ic { font-size: 1.2rem; line-height: 1.4; }
+.speed-tip { position: fixed; right: 16px; bottom: 16px; z-index: 60; max-width: 360px; background: var(--bg-elev, var(--card)); border: 1px solid var(--line); border-radius: 14px; padding: 14px 14px 12px; box-shadow: 0 12px 40px rgba(0,0,0,.28); }
+.speed-tip .st-x { position: absolute; top: 8px; right: 8px; background: transparent; border: 0; color: var(--muted); cursor: pointer; font-size: .9rem; }
+.speed-tip p { margin: 6px 0 8px; }
+.st-opts { display: grid; gap: 6px; }
+.st-opt { display: flex; gap: 8px; align-items: center; padding: 7px 9px; border-radius: 10px; background: var(--hover); }
+.st-opt .grow { display: flex; flex-direction: column; gap: 1px; }
+/* Online without a VPN: a slim notice at the top of every page (inside the page, never covering it). */
+.privacy-bar { flex: none; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; padding: 7px 14px; font-size: .84rem; background: color-mix(in srgb, #f2b01e 16%, var(--bg, transparent)); border-bottom: 1px solid color-mix(in srgb, #f2b01e 40%, transparent); }
+.privacy-bar .grow { flex: 1 1 320px; min-width: 0; }
+.privacy-bar .pb-x { background: transparent; border: 0; color: var(--muted); cursor: pointer; font-size: .9rem; padding: 2px 6px; }
+.main > .chat { height: auto; flex: 1 1 auto; min-height: 0; }
+.net-toggle.exposed .net-lbl, #net-pill.exposed .net-lbl { color: #c98a00; }

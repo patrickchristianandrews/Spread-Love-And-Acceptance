@@ -350,5 +350,6 @@ function fusionRatingsHTML(members, { compact = false } = {}) {
     <div class="fz-r"><span>🍃 Efficiency</span><b>${st(r.eff)}</b><small>${esc(r.why.eff)}</small></div>
     <div class="fz-r"><span>🎯 Accuracy</span><b>${st(r.acc)}</b><small>${esc(r.why.acc)}</small></div>
     <div class="fz-run ${r.runs.cls}">${r.runs.icon} ${esc(r.runs.text)}</div>
+    <div style="grid-column:1/-1">${timesHTML(teamStats(members)?.time(WORDS.chat))}</div>
   </div>`;
 }

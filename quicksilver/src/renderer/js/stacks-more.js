@@ -27,7 +27,7 @@ function tiersHTML(r) {
     return `<div class="card tier-card ${k === 'balanced' ? 'hl' : ''}">
       <div class="row"><h3 class="grow">${t.name}</h3>${k === 'balanced' ? '<span class="badge b-mint">Recommended</span>' : ''}</div>
       <p class="small muted" style="font-weight:600;margin:4px 0 10px">${t.note}</p>
-      <div class="tier-stats"><div><span class="label">Accuracy</span>${accDots(s.accuracy)}</div><div><span class="label">Per answer</span><b>⏱ ${fmtSec(s.secondsPerAnswer)}</b></div><div><span class="label">Download</span><b>${s.missingGB ? `${s.missingGB.toFixed(1)} GB` : 'Nothing'}</b></div></div>
+      <div class="tier-stats"><div><span class="label">Accuracy</span>${accDots(s.accuracy)}</div><div><span class="label">Per answer</span><b>🔒 ${fmtSec(s.secondsPerAnswer)}</b><span class="small muted" style="display:block">🌐 ${fmtSec(threeTimes(s.secondsPerAnswer).web)} · ☁️ ${fmtSec(threeTimes(s.secondsPerAnswer).cloud)}</span></div><div><span class="label">Download</span><b>${s.missingGB ? `${s.missingGB.toFixed(1)} GB` : 'Nothing'}</b></div></div>
       <div class="best-rows">${tierRows(s)}</div>
       <button class="btn ${k === 'balanced' ? 'primary' : ''}" data-tier="${k}" style="margin-top:10px">${s.missingGB ? 'Download & set up' : 'Set up'}</button>
     </div>`;

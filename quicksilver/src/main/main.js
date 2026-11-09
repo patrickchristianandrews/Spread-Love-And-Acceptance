@@ -146,10 +146,19 @@ handle('guide:speeds', async (tiers) => {
     const h = { ramGB: ram, freeRamGB: ram * 0.7, vramGB: vram, vramFreeGB: vram ? vram - 0.5 : 0, cpuCores: vram >= 16 ? 12 : 8, gpuName: vram ? `${vram} GB graphics card` : '', backend: vram ? 'cuda' : 'cpu' };
     const q = est(brain, h);
     const best = big.find((m) => ['great', 'good'].includes(est(m, h).rating));
+    // The strongest setup this kind of PC could run, and what it would be able to do.
+    const adv = catalog.advise('general', h, { calib: 1, installed: [] }).best;
+    const profiles = adv ? adv.ids.map((id) => catalog.TEXT_MODELS.find((m) => m.id === id)).filter(Boolean) : [];
+    const topImg = catalog.MEDIA_MODELS.filter((m) => m.kind === 'image' && catalog.estimateMedia(m, h).fit !== 'no').sort((a, b) => (b.quality || 0) - (a.quality || 0))[0];
+    const topVid = catalog.MEDIA_MODELS.filter((m) => m.kind === 'video' && catalog.estimateMedia(m, h).fit !== 'no').sort((a, b) => (b.quality || 0) - (a.quality || 0))[0];
     out[t.n] = {
       wps: Math.round(q.wordsPerSec || 0), answerSec: q.wordsPerSec ? Math.round(300 / q.wordsPerSec) : null,
       times: here.wordsPerSec && q.wordsPerSec ? q.wordsPerSec / here.wordsPerSec : null,
       best: best ? { name: best.name, wps: Math.round(est(best, h).wordsPerSec || 0) } : null,
+      bestSetup: adv ? { names: profiles.map((m) => m.name), stars: Math.min(5, Math.round((adv.quality / 2 + (adv.ids.length >= 2 ? 0.5 : 0)) * 2) / 2) } : null,
+      caps: catalog.capabilities(profiles.length ? profiles : [catalog.TEXT_MODELS.find((m) => m.id === 'qwen3.5-4b')].filter(Boolean)).filter((c) => c.on).map((c) => c.label),
+      image: topImg ? { name: topImg.name, sec: Math.round(catalog.estimateMedia(topImg, h).sec || 0) } : null,
+      video: topVid ? { name: topVid.name, sec: Math.round(catalog.estimateMedia(topVid, h).sec || 0) } : null,
     };
   }
   return { here: { wps: Math.round(here.wordsPerSec || 0), answerSec: here.wordsPerSec ? Math.round(300 / here.wordsPerSec) : null, measured: Boolean(store.config().calib?.text) }, tiers: out };

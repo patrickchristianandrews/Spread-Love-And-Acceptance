@@ -622,15 +622,27 @@ const UPGRADES = [
   { id: 'ram64', icon: '🧠', name: 'Memory (RAM) to 64 GB', cost: 'about $80–180',
     note: 'Lets bigger "mixture-of-experts" models run from memory. Match your PC\'s memory type (DDR4 or DDR5).',
     applies: (hw) => !hw.unifiedMemory && hw.ramGB >= 30 && hw.ramGB < 60, apply: (hw) => ({ ...hw, ramGB: 64 }) },
-  { id: 'gpu12', icon: '🎮', name: 'A 12 GB graphics card (for example a used RTX 3060 12 GB)', cost: 'about $200–280 used',
-    note: 'Desktops only. Needs a free full-length (PCIe x16) slot and about a 550 W power supply.',
+  { id: 'ssd', icon: '💾', name: 'A larger / faster SSD (1–2 TB NVMe)', cost: 'about $60–140',
+    note: 'Models are 1–25 GB each and add up fast. A fast NVMe SSD also loads models quicker. Cheapest way to hold more models; won\'t make answers faster.',
+    applies: (hw) => true, apply: (hw) => hw },
+  { id: 'gpu8', icon: '🎮', name: 'An 8 GB graphics card (cheapest: used RTX 3050 8 GB or RTX 2060)', cost: 'about $110–170 used', cheaper: 'gpu12',
+    note: 'Desktops only (needs a PCIe x16 slot, ~450 W power supply). The cheapest way onto a graphics card: runs 7–8B models well and makes pictures far faster than a processor.',
+    applies: (hw) => !hw.unifiedMemory && (hw.vramGB || 0) < 7.5, apply: (hw) => ({ ...hw, vramGB: 8, vramFreeGB: 7.4, gpuName: '8 GB graphics card' }) },
+  { id: 'gpu12', icon: '🎮', name: 'A 12 GB graphics card (used RTX 3060 12 GB)', cost: 'about $200–280 used',
+    note: 'Desktops only. Needs a free full-length (PCIe x16) slot and about a 550 W power supply. Cheaper alternative: an 8 GB card above.',
     applies: (hw) => !hw.unifiedMemory && (hw.vramGB || 0) < 11.5, apply: (hw) => ({ ...hw, vramGB: 12, vramFreeGB: 11.5, gpuName: '12 GB graphics card' }) },
-  { id: 'gpu16', icon: '🎮', name: 'A 16 GB graphics card (for example RTX 4060 Ti 16 GB or Radeon RX 7600 XT)', cost: 'about $330–450',
-    note: 'Desktops only. Fits most 14B models entirely on the card, the sweet spot for quality and speed.',
+  { id: 'gpu16', icon: '🎮', name: 'A 16 GB graphics card (RTX 5060 Ti 16 GB, RTX 4060 Ti 16 GB or Radeon RX 7600 XT)', cost: 'about $330–450',
+    note: 'Desktops only. Fits most 14B models entirely on the card, the sweet spot for quality and speed. Cheaper alternative: a used 12 GB RTX 3060.',
     applies: (hw) => !hw.unifiedMemory && (hw.vramGB || 0) < 15.5, apply: (hw) => ({ ...hw, vramGB: 16, vramFreeGB: 15.4, gpuName: '16 GB graphics card' }) },
-  { id: 'gpu24', icon: '🚀', name: 'A 24 GB graphics card (for example a used RTX 3090)', cost: 'about $650–850 used', bigger: true,
-    note: 'Not low-cost, but the biggest jump: 30B-class models fully on the card. Desktops only; needs a 750 W+ power supply.',
+  { id: 'gpu24', icon: '🚀', name: 'A 24 GB graphics card (used RTX 3090 — best value, or RTX 4090)', cost: 'about $650–850 used (RTX 3090)', bigger: true, cheaper: 'gpu16',
+    note: 'The biggest jump: 30B-class models fully on the card. A used RTX 3090 is the best-value way in; desktops only, needs a 750 W+ power supply. Cheaper alternative: a 16 GB card runs 14B models.',
     applies: (hw) => !hw.unifiedMemory && (hw.vramGB || 0) < 23, apply: (hw) => ({ ...hw, vramGB: 24, vramFreeGB: 23.4, gpuName: '24 GB graphics card' }) },
+  { id: 'gpu32', icon: '🏆', name: 'A 32 GB graphics card (RTX 5090)', cost: 'about $2,000+', bigger: true, cheaper: 'gpu24',
+    note: 'Top end: the largest models and the fastest image/video generation, all on one card. Desktops only, needs a 1000 W power supply. Much cheaper alternative: a used 24 GB RTX 3090 handles 30B models.',
+    applies: (hw) => !hw.unifiedMemory && (hw.vramGB || 0) < 31, apply: (hw) => ({ ...hw, vramGB: 32, vramFreeGB: 31, gpuName: '32 GB graphics card' }) },
+  { id: 'egpu', icon: '🔌', name: 'An external graphics card (eGPU, for laptops with Thunderbolt/USB4)', cost: 'about $200 enclosure + the card', bigger: true,
+    note: 'A way to add a real graphics card to a laptop that has Thunderbolt 4 or USB4. Slower than the same card in a desktop, but far faster than a laptop\'s built-in graphics for AI. Cheaper alternative: use free cloud APIs for the heavy work.',
+    applies: (hw) => !hw.unifiedMemory && (hw.vramGB || 0) < 8, apply: (hw) => ({ ...hw, vramGB: 16, vramFreeGB: 15, gpuName: '16 GB external graphics card' }) },
 ];
 
 function upgradeAdvice(hw, { calib = 1, installed = [] } = {}) {
@@ -650,17 +662,28 @@ function upgradeAdvice(hw, { calib = 1, installed = [] } = {}) {
   };
   const look = (h) => ({ general: sum(advise('general', h, { calib, installed }), 'general'), coding: sum(advise('coding', h, { calib, installed }), 'coding') });
   const now = look(hw);
+  // The model the balanced setup leads with now, so we can time the SAME model on the upgraded PC
+  // (a true like-for-like speedup, separate from running a bigger, smarter model).
+  const nowBest = advise('general', hw, { calib, installed }).best;
+  const nowLead = nowBest && (nowBest.members.judge || nowBest.members.drafters[0]);
+  const nowLeadModel = nowLead && TEXT_MODELS.find((m) => m.id === nowLead);
   const fastNow = new Set(TEXT_MODELS.filter((m) => ['great', 'good'].includes(estimateText(m, hw, calib).rating)).map((m) => m.id));
   const out = [];
   for (const u of UPGRADES) {
     if (!u.applies(hw)) continue;
     const h2 = u.apply(hw);
     const then = look(h2);
+    // Same model, upgraded PC: how much faster your current best answers come (fair comparison).
+    let sameModel = null;
+    if (nowLeadModel && now.general.chat) {
+      const e = estimateText(nowLeadModel, h2, calib);
+      if (e.wordsPerSec) sameModel = { name: nowLeadModel.name, now: now.general.chat, then: JOBS.general.words / e.wordsPerSec, fits: e.fit !== 'cpu' && e.fit !== 'no' };
+    }
     const newlyFast = live(TEXT_MODELS).filter((m) => !fastNow.has(m.id) && ['great', 'good'].includes(estimateText(m, h2, calib).rating))
       .sort((a, b) => scoreFor(b, 'general') - scoreFor(a, 'general')).slice(0, 5).map((m) => m.name);
     const gain = (then.general.stars || 0) - (now.general.stars || 0) + (then.coding.stars || 0) - (now.coding.stars || 0)
       + (now.general.chat && then.general.chat ? Math.min(2, Math.log2(now.general.chat / then.general.chat)) : 0) + newlyFast.length * 0.15;
-    out.push({ id: u.id, icon: u.icon, name: u.name, cost: u.cost, note: u.note, bigger: Boolean(u.bigger), now, then, newlyFast, gain: Math.round(gain * 100) / 100 });
+    out.push({ id: u.id, icon: u.icon, name: u.name, cost: u.cost, note: u.note, bigger: Boolean(u.bigger), cheaper: u.cheaper || null, now, then, newlyFast, sameModel, gain: Math.round(gain * 100) / 100 });
   }
   // Best value first: the most noticeable difference among the low-cost ones.
   out.sort((a, b) => (a.bigger - b.bigger) || b.gain - a.gain);

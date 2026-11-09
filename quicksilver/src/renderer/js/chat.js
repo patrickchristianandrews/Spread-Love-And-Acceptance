@@ -89,7 +89,8 @@ function chatEtaHint(target, a) {
   if (easy == null) return '';
   const hard = etaFor(target, Math.max(words, WORDS.hard), { hard: true });
   const st = starsOf(target, a.job || 'general');
-  return ` · ⏱ ${etaLabel(easy)} per answer${hard != null && hard > easy * 1.4 ? ` (hard questions ${etaLabel(hard)})` : ''}${st != null ? ` · ${starText(st)} expected quality` : ''}`;
+  const t = threeTimes(easy, words);
+  return ` · ⏱ ${etaLabel(easy)} per answer${hard != null && hard > easy * 1.4 ? ` (hard questions ${etaLabel(hard)})` : ''}${t ? ` · 🌐 ${etaLabel(t.web)} with web · ☁️ ${etaLabel(t.cloud)} with an API` : ''}${st != null ? ` · ${starText(st)} expected quality` : ''}`;
 }
 
 // At start-up: ask what to call the user (once; skippable). Changeable in Settings → General.
@@ -887,11 +888,15 @@ qs.onChat(({ requestId, ev }) => {
         // Free checks first (maths, code, web pages): a wrong answer is corrected straight away.
         if (ok && alt.text && (!maker || maker.output === 'app') && await autoChecks(chat, msg, alt).catch(() => false)) return;
         if (ok && !maker) { maybeTip(chat, msg, alt); if (alt.tip) paintStreaming(chat, msg); }
+        if (ok) try { speedNudge(chat, msg, alt); } catch {}
         if (fuOk) writeFollowups(chat, msg, alt);
         if (ok && maker && MEDIA_OUTPUTS.has(maker.output)) runSkillMedia(chat, msg, alt, maker);
         else if (ok && maker && AFTER_OUTPUTS.has(maker.output) && alt.text) runAfterText(chat, msg, alt, maker);
         else if (ok && alt.text && !maker && (alt.forceFact || factOn(chat, assistantById(chat.assistantId)))) factCheck(chat, msg, alt, sourcesFull);
-        else if (ok && alt.text && !maker) unsureCheck(chat, msg, alt);
+        // The automatic second-model double-check only runs when you've turned on "notice uncertain
+        // numbers" (off by default). Double-check otherwise runs only when the feature is on, or when
+        // you pick "Double-check" from an answer's menu.
+        else if (ok && alt.text && !maker && S.data.prefs.checkUnsure === true) unsureCheck(chat, msg, alt);
       })();
       return;
     }

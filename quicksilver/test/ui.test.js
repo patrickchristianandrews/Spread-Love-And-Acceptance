@@ -122,8 +122,8 @@ function redPng(size = 64) {
   console.log('✓ stacks: how it works, three strengths with accuracy, cloud boost with savings');
   // Stacks for specific work: 27 ready-made teams; set one up and chat with it.
   await win.waitForSelector('.rx-card:has-text("Isolated medical journal")');
-  assert.equal(await win.locator('.rx-card').count(), 34, '32 specialist stacks plus the two uncensored ones');
-  assert.equal(await win.locator('.rx-card .rx-why').count(), 34, 'each says why it is good');
+  assert.ok(await win.locator('.rx-card').count() >= 70, 'a large library of ready-made stacks');
+  assert.equal(await win.locator('.rx-card .rx-why').count(), await win.locator('.rx-card').count(), 'each says why it is good');
   await win.click('.rx-card:has-text("Invoices, receipt reading") [data-rx]');
   await win.waitForFunction(() => S.data.assistants.some((a) => a.id === 'as-rx-bookkeeping'), null, { timeout: 30000 });
   // Song creation: 13 teams, each tuned to this PC (no model that won't run here; a speed helper
@@ -376,15 +376,24 @@ function redPng(size = 64) {
   // The app works out the numbers in the question and hands them to the model.
   await askNew('What is 17 × 23 exactly?');
   assert.match(await win.locator('.msg.assistant .bubble').last().innerText(), /\[facts: 17 × 23 = 391\]/);
-  // An unsure number gets the double-check (and only then).
+  // Double-check only runs when turned on: with it off, an unsure number is NOT auto double-checked.
   await win.click('[data-nav="newchat"]');
-  await win.evaluate(() => { const c = chatById(S.route.id); c.factCheck = false; save(); render(); });
+  await win.evaluate(() => { const c = chatById(S.route.id); c.factCheck = false; S.data.prefs.checkUnsure = false; save(); render(); });
+  await win.fill('#input', 'UNSURE what is six times seven, 6 or 7 digits');
+  await win.keyboard.press('Enter');
+  await win.waitForSelector('.msg.assistant');
+  await idle();
+  assert.equal(await win.evaluate(() => { const a = chatById(S.route.id).messages.at(-1).alts.at(-1); return Boolean(a.unsure || a.check); }), false, 'no automatic double-check when the feature is off');
+  // Opt in (Settings → Features) and it does double-check an unsure number.
+  await win.click('[data-nav="newchat"]');
+  await win.evaluate(() => { const c = chatById(S.route.id); c.factCheck = false; S.data.prefs.checkUnsure = true; save(); render(); });
   await win.fill('#input', 'UNSURE what is six times seven, 6 or 7 digits');
   await win.keyboard.press('Enter');
   await win.waitForSelector('.msg.assistant');
   await idle();
   await win.waitForFunction(() => { const c = chatById(S.route.id); const a = c.messages.at(-1).alts.at(-1); return a.unsure === true && a.check; }, null, { timeout: 60000 });
   await win.waitForFunction(() => !document.querySelector('.fact-chip.k-run'), null, { timeout: 60000 });
+  await win.evaluate(() => { S.data.prefs.checkUnsure = false; save(); });
   // 👍 makes the same question instant next time.
   await askNew('Explain what a haiku is in one line');
   await win.locator('[data-act="up"]').last().click();
@@ -623,6 +632,9 @@ function redPng(size = 64) {
   await shot(win, '11b-google-signin');
   await win.click('.modal [data-close]');
   assert.ok(await win.evaluate(() => skillById('music-finder')?.tools?.apps), 'the Spotify music finder skill');
+  // The product finder (vision + web) and vibe-hack skills.
+  assert.ok(await win.evaluate(() => { const s = skillById('find-product'); return s && s.category === 'vision' && s.tools?.web; }), 'find a product by photo, across the web');
+  assert.ok(await win.evaluate(() => { const s = skillById('vibe-hack'); return s && s.output === 'app'; }), 'vibe hack builds an app');
   // Send to cloud: with nothing connected it points to Connectors.
   await win.evaluate(() => cloudSendModal({ mediaId: 'x' }));
   await win.waitForSelector('#cloud-connect');
@@ -710,7 +722,13 @@ function redPng(size = 64) {
   await win.click('#vpn-box [data-pv-mode="online"]');
   await win.waitForSelector('#vpn-box [data-pv-mode="online"].on');
   assert.match(await win.locator('#net-toggle').innerText(), /Online/);
+  // Online without a VPN: the top of the page says it's not private.
   await win.click('.nav-new');
+  await win.waitForSelector('#privacy-bar:has-text("not private")');
+  assert.match(await win.locator('#net-toggle').innerText(), /not private/);
+  await shot(win, '18b-not-private-bar');
+  await win.click('#privacy-bar [data-pb="x"]');
+  await win.waitForSelector('#privacy-bar', { state: 'detached' });
   await win.waitForSelector('#sess-badge:has-text("Runs on this PC")');
   assert.equal(await win.getAttribute('#input', 'spellcheck'), 'true', 'spell check in the message box');
   await win.waitForSelector('#improve-btn:has-text("Fix my prompt")');
@@ -1071,9 +1089,26 @@ function redPng(size = 64) {
   assert.equal(await win.locator('.tier.mine').count(), 1, 'this PC is marked');
   await win.waitForFunction(() => document.querySelectorAll('.tier-speed').length === 4, null, { timeout: 15000 });
   assert.match(await win.locator('.tier-speed').last().innerText(), /words a second[\s\S]*faster than this PC/);
+  // Picking a computer tier changes what the models below could do.
+  await win.waitForSelector('.tier-ability .ta-caps, .tier-ability .ta-col');
+  await win.click('.tier[data-tier-pick="4"]');
+  await win.waitForSelector('.tier.picked[data-tier-pick="4"]');
+  assert.match(await win.locator('.tier-ability').innerText(), /Tier 4[\s\S]*(Best setup|words a second)[\s\S]*Pictures/);
+  const t4 = await win.locator('.tier-ability').innerText();
+  await win.click('.tier[data-tier-pick="1"]');
+  await win.waitForFunction(() => /Tier 1/.test(document.querySelector('.tier-ability')?.innerText || ''));
+  assert.notEqual(t4, await win.locator('.tier-ability').innerText(), 'the abilities change with the chosen computer');
+  // Upgrades: faster (same models) vs smarter (a bigger model), with cost and cheaper alternatives.
+  await win.waitForSelector('.upg-grid .upg', { timeout: 20000 });
+  await win.locator('#upgrades').scrollIntoViewIfNeeded();
+  const upg = await win.locator('.upg-grid').innerText();
+  assert.match(upg, /Faster|Smarter|More room for models/);
+  assert.ok(await win.locator('.upg-cheaper').count() >= 1, 'cheaper alternatives offered');
+  assert.ok(await win.locator('.upg').count() >= 5, 'several upgrade options');
+  await shot(win, '06c-upgrades');
   await win.locator('#new-pc').scrollIntoViewIfNeeded();
   await shot(win, '06b-new-pc-speeds');
-  console.log('✓ models + your PC (incl. buying a new computer guide)');
+  console.log('✓ models + your PC (buying guide changes model abilities; clearer upgrades with costs)');
 
   // Studio: create an image, edit it, make a video.
   await win.click('[data-nav="studio"]');
@@ -1103,7 +1138,10 @@ function redPng(size = 64) {
   await win.waitForSelector('#mu-chords');
   await shot(win, '11b-music');
   // Cloud: the best hosted photo, video and music models, rated out of 10 next to this PC's own.
+  // Each Create tab explains itself.
+  assert.match(await win.locator('.studio-intro').first().innerText(), /\w+.{20,}/, 'the tab explains what it does');
   await win.click('[data-stab="cloud"]');
+  await win.waitForSelector('.studio-intro:has-text("cloud")');
   await win.waitForSelector('.cs-model .ten-stars');
   assert.ok(await win.locator('[data-cs-connect="fal"]').count(), 'asks to connect fal.ai for its models');
   assert.match(await win.locator('.cs-models').innerText(), /FLUX via Pollinations[\s\S]*Free/);

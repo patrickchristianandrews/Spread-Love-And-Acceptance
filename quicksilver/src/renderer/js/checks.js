@@ -165,7 +165,7 @@ async function autoChecks(chat, msg, alt) {
 // ---------- 4. unsure numbers get the double-check ----------
 function unsureCheck(chat, msg, alt) {
   const a = assistantById(chat.assistantId);
-  if (S.data.prefs.checkUnsure === false || alt.minDigitP == null || alt.minDigitP >= 0.35 || effortOf(chat, a) === 'quick' || factOn(chat, a) || alt.check) return false;
+  if (S.data.prefs.checkUnsure !== true || alt.minDigitP == null || alt.minDigitP >= 0.35 || effortOf(chat, a) === 'quick' || factOn(chat, a) || alt.check) return false;
   const checker = pickChecker(alt.target);
   if (!checker || checker === alt.target) return false;
   alt.unsure = true;
@@ -264,4 +264,39 @@ function preloadDefault() {
 function jobOfMsg(chat, msg) {
   const q = chat.messages[chat.messages.indexOf(msg) - 1];
   return jobOfQuestion(q?.text || '', assistantById(chat.assistantId));
+}
+
+// ---------- 8. a gentle nudge when turned-on options are making answers slow ----------
+// After a slow answer, if features that cost time are on, show a dismissible box suggesting what to
+// turn off (or, if nothing is, what would make it faster). Shows once per session; the X closes it
+// and it won't come back until you restart.
+function speedNudge(chat, msg, alt) {
+  if (S.speedNagged || !alt || alt.ms == null || alt.error || alt.cached || alt.preAnswered) return;
+  const a = assistantById(chat.assistantId);
+  const slow = alt.ms / 1000;
+  const limit = hasGpu() ? 35 : 60; // a graphics card should be quicker
+  if (slow < limit || effortOf(chat, a) === 'quick') return;
+  const P = S.data.prefs;
+  // Options that are ON and cost time, each with a one-click way to turn it off.
+  const opts = [];
+  if (factOn(chat, a) && effortOf(chat, a) !== 'max') opts.push(['Double-check every answer', 'checks every claim with a second model — about twice the time', () => { chat.factCheck = false; P.factCheck = false; }]);
+  if (effortOf(chat, a) === 'council') opts.push(['Council effort', 'runs three AIs then writes one verdict — 3–4× the time', () => { chat.effort = 'auto'; }]);
+  if (P.thinking !== false) opts.push(['Thinking for hard questions', 'the model works hard questions out first — slower, but more accurate', () => { P.thinking = false; }]);
+  if (P.checkUnsure === true) opts.push(['Double-check uncertain numbers', 'a second model re-checks shaky figures', () => { P.checkUnsure = false; }]);
+  if (!hasGpu() && P.preanswer !== false) opts.push(['Answers in advance', 'prepares likely follow-ups in the background — competes with your answer on a PC with no graphics card', () => { P.preanswer = false; }]);
+  const box = document.getElementById('speed-tip') || Object.assign(document.createElement('div'), { id: 'speed-tip' });
+  box.className = 'speed-tip';
+  if (opts.length) {
+    box.innerHTML = `<button class="st-x" title="Dismiss">✕</button><b>⏳ That answer took a while.</b><p class="small muted">These turned-on options add time. Turn any off to speed up (change them any time in Settings → Features):</p>
+      <div class="st-opts">${opts.map(([name, why], i) => `<div class="st-opt"><span class="grow"><b>${esc(name)}</b><span class="small muted">${esc(why)}</span></span><button class="btn small" data-st="${i}">Turn off</button></div>`).join('')}</div>`;
+  } else {
+    box.innerHTML = `<button class="st-x" title="Dismiss">✕</button><b>⏳ That answer took a while.</b><p class="small muted">Your options are already lean. To go faster: ${hasGpu() ? 'pick a smaller model for everyday chats, or use a free cloud AI for hard questions' : 'this PC has no graphics card, so big models are slow — try a smaller model, or connect a free cloud AI (Groq, Gemini, Cerebras) for the hard ones'}.</p>
+      <div class="st-opts"><div class="st-opt"><span class="grow"><b>Add a free cloud AI</b><span class="small muted">much faster on hard questions; everyday chats stay on your PC</span></span><button class="btn small" data-st-api>Connect</button></div></div>`;
+  }
+  if (!box.parentNode) document.body.appendChild(box);
+  box.hidden = false;
+  const close = () => { box.hidden = true; S.speedNagged = true; };
+  box.querySelector('.st-x').onclick = close;
+  box.querySelectorAll('[data-st]').forEach((b) => b.addEventListener('click', () => { opts[Number(b.dataset.st)][2](); save(); toast(`${opts[Number(b.dataset.st)][0]} turned off.`); close(); render(); }));
+  box.querySelector('[data-st-api]')?.addEventListener('click', () => { close(); modelsTab = 'api'; go({ view: 'models' }); });
 }

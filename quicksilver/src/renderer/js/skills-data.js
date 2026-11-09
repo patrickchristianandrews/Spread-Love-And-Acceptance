@@ -156,6 +156,16 @@ const BUILTIN_SKILLS = [
     description: 'Read the numbers out of a chart, table image or screenshot.',
     hint: 'Attach the chart or screenshot…',
     instructions: 'Extract the data from the chart or table image into a Markdown table with the axis or column labels as headers. Give exact values where printed, and careful estimates otherwise (mark estimates with ~). State the chart type, units, time period and source if shown, then summarize the main trend in two sentences.' },
+  { id: 'find-product', name: 'Find this product (from a photo)', icon: '🔍', category: 'vision', output: 'text', tools: { web: true }, triggers: ['find (this|the) product', 'identify (this|the) product', 'what (product|item) is this', 'where (can i|to) buy (this|it)', 'shop for (this|it)', 'same product', 'find (this|it) (online|to buy|cheaper)'],
+    description: 'Identify the exact product in a photo and find it (and the same one) to buy across the web.',
+    hint: 'Attach a photo of the product, and say what you want (buy it, find it cheaper, the same one)…',
+    instructions: `You identify a specific product from a photo and find the SAME product across the web, accurately. Work carefully:
+1. Look closely at the image and list every identifying detail: any visible brand name, logo, model number, text or label; the product type and category; exact colour/finish/material; distinctive shape, pattern, buttons, stitching, sole, trim or markings; and anything printed on packaging or tags. Read all text exactly.
+2. State your best identification: brand, product line and specific model/variant (and size/colour if visible). Give a confidence level (high / medium / low) and say what details drove it. If you can't be sure of the exact model, name the closest candidates and say what extra angle or detail (the tag, the underside, the model number) would confirm it.
+3. Search the web for that exact product using the most specific terms (brand + model + distinctive words). Prefer the brand's own site and well-known retailers. Confirm each result is the SAME product, not just similar, by matching the identifying details above — be strict: reject look-alikes, different generations or different colourways unless the user wants alternatives.
+4. Reply with: the identified product; a short bullet list of the matching details that make you confident; and a list of places it's sold with the retailer name, the exact variant, the price if shown, and the link. Put the official/most trustworthy source first. Flag any listing you're unsure is genuinely the same.
+5. If the user asked to find it cheaper or alternatives, add a clearly separated "Similar options" section. Never invent prices, links or model numbers; only report what the search and the image actually support, and say when a detail is uncertain.`,
+    tip: 'Best with a vision model and web search on. A clear photo of the label, logo or model number helps most.' },
   { id: 'describe', name: 'Describe a photo', icon: '🖼️', category: 'vision', output: 'text', triggers: ['describe (this|the) (image|photo|picture)', 'what is in (this|the) (image|photo|picture)'],
     description: 'A detailed, accurate description of what is in the picture.',
     hint: 'Attach a photo…',
