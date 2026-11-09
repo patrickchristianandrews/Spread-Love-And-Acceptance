@@ -195,7 +195,11 @@ function localSpec(m, messages = []) {
 // Step-by-step reasoning for the Quicksilver model on questions that need care. Its fast model
 // has no built-in "thinking" mode, so it's asked to work it out first inside <think> tags; that
 // part shows under "Thought it through" and the answer follows. Easy questions skip it.
-const STEPS = 'This question needs care. First reason inside <think> and </think> in at most 6 short numbered steps (about 80 words in all): what is asked, the working, and a check of the result; recompute every number yourself. Then, after </think>, give the final answer for the user, clear and complete, without repeating the steps.';
+// Two short passes, so the steps always show whatever the model's habits: first it writes only its
+// working (shown under "Thought it through"), then the answer from that working. The second pass
+// re-reads only the new lines, so together they take about as long as one thinking pass.
+const STEPS_PLAN = 'Work out the user\'s latest message step by step, briefly: at most 6 short numbered steps (about 80 words in all): what is asked, the working, and a check of the result. Recompute every number yourself. Write only the numbered steps, not the final answer.';
+const STEPS_ANSWER = (steps) => `Your working for the user's latest message (the user can see it under "Thought it through"):\n${steps}\nNow write the final answer for the user: clear and complete, consistent with the working (if a step was wrong, fix it). Don't repeat all the steps.`;
 // Real questions get the steps (anything with a number, a 'why / how / explain' kind of question,
 // or any question of some length); greetings, thanks and one-line chat don't, so they stay instant.
 // Instant effort (you chose speed) skips them.
@@ -213,16 +217,6 @@ function wantsSteps(m, req) {
   if (c?.reasoning) return false; // models that think on their own already do this
   return stepWorthy(req);
 }
-async function* withSteps(gen) {
-  let text = ''; let reasoning = '';
-  for await (const ev of gen) {
-    if (ev.type === 'text') text += ev.text;
-    if (ev.type === 'reasoning') reasoning += ev.text;
-    yield ev;
-  }
-  // It never closed its reasoning: show what it wrote as the answer rather than nothing.
-  if (!text.trim() && reasoning.trim()) yield { type: 'text', text: reasoning.trim() };
-}
 
 async function* single(target, req) {
   const t = parse(target);
@@ -234,9 +228,17 @@ async function* single(target, req) {
     const level = req.level === 'max' || req.points ? req.level : (req.level === 'quick' || autoLevel(req) === 'quick' ? 'quick' : req.level);
     if (wantsSteps(m, req)) {
       const msgs = req.messages;
-      const messages = [...msgs.slice(0, -1), { role: 'system', content: STEPS }, msgs[msgs.length - 1]];
+      const withSys = (content) => [...msgs.slice(0, -1), { role: 'system', content }, msgs[msgs.length - 1]];
       yield { type: 'status', text: 'Thinking it through step by step…' };
-      yield* withSteps(llama.chat(localSpec(m, messages), { ...req, messages, level: 'thorough', maxTokens: (req.maxTokens || 2048) + 400 }));
+      let steps = '';
+      const planMsgs = withSys(STEPS_PLAN);
+      for await (const ev of llama.chat(localSpec(m, planMsgs), { ...req, messages: planMsgs, level: 'thorough', maxTokens: 320, temperature: 0.2 })) {
+        if (ev.type === 'text' || ev.type === 'reasoning') { steps += ev.text; yield { type: 'reasoning', text: ev.text }; }
+        else if (ev.type === 'status') yield ev;
+      }
+      steps = steps.replace(/<\/?think>/g, '').trim();
+      const answerMsgs = steps ? withSys(STEPS_ANSWER(steps.slice(0, 2500))) : msgs;
+      yield* llama.chat(localSpec(m, answerMsgs), { ...req, messages: answerMsgs, level: 'thorough' });
       return;
     }
     yield* llama.chat(localSpec(m, req.messages), { ...req, level: req.points ? 'quick' : level });
