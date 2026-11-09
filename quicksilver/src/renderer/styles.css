@@ -1393,3 +1393,16 @@ code.sel { user-select: all; background: var(--soft); padding: 1px 6px; border-r
 .fz-tip { display: flex; gap: 10px; align-items: center; padding: 8px 10px; border-radius: 10px; background: var(--hover); flex-wrap: wrap; }
 .fz-tip .grow { display: flex; flex-direction: column; gap: 2px; min-width: 200px; }
 .cc-r .small.muted { display: block; font-weight: 400; margin-top: 2px; }
+
+.bz { display: grid; gap: 8px; margin: 10px 0; padding: 12px; border-radius: 12px; border: 1px dashed color-mix(in srgb, var(--accent) 45%, transparent); }
+.bz-title { font-weight: 800; }
+.bz-row { display: flex; gap: 10px; align-items: flex-start; }
+.bz-row .grow { display: flex; flex-direction: column; gap: 3px; }
+.bz-ic { font-size: 1.1rem; line-height: 1.4; }
+.bz-num b { font-size: .95rem; }
+.bz-bar { position: relative; display: block; height: 7px; border-radius: 4px; background: var(--line-soft); margin-top: 4px; max-width: 320px; overflow: hidden; }
+.bz-bar i { position: absolute; top: 0; height: 100%; }
+.bz-from { left: 0; background: color-mix(in srgb, var(--accent) 55%, transparent); }
+.bz-to { background: #2fbf71; }
+.bz-compact { display: flex; flex-wrap: wrap; gap: 4px 12px; margin: 0 0 8px; color: var(--muted); }
+.bz-row .grow > b + .badge, .bz-row .badge { align-self: flex-start; }

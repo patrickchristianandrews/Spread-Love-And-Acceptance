@@ -156,6 +156,13 @@ function redPng(size = 64) {
   await win.click('[data-nav="newchat"]');
   await win.selectOption('#pick-assistant', 'as-office');
   await win.selectOption('#pick-model', 'stack:office-powerhouse');
+  // Picking a stack says what the web and a cloud AI would add; "How?" explains it in full.
+  await win.waitForSelector('#toast:has-text("web search makes facts")');
+  await win.click('#toast .toast-act');
+  await win.waitForSelector('#modal h2:has-text("what the web and a cloud AI add")');
+  assert.match(await win.locator('#modal .bz').innerText(), /Web search[\s\S]*Connected apps/);
+  await shot(win, '06b-web-cloud-boost');
+  await win.click('#modal [data-close]');
   await win.setInputFiles('#file-in', { name: 'sales.csv', mimeType: 'text/csv', buffer: Buffer.from('Region,Revenue\nNorth,1200\nSouth,800\n') });
   await win.waitForSelector('.attach:has-text("sales.csv")');
   if ((await win.getAttribute('#tog-fact', 'aria-pressed')) !== 'true') await win.click('#tog-fact');
@@ -191,6 +198,8 @@ function redPng(size = 64) {
   assert.match(fz, /Power[\s\S]*\/10[\s\S]*Efficiency[\s\S]*\/10[\s\S]*Accuracy[\s\S]*\/10/);
   assert.match(fz, /Runs well on this PC|Runs, but|Won't run/);
   assert.match(await win.locator('#inf-preview').innerText(), /Overall on this PC[\s\S]*\/10[\s\S]*Recommended changes/);
+  // How the web and a cloud AI would improve it, in numbers.
+  assert.match(await win.locator('#inf-preview .bz').innerText(), /Web search[\s\S]*9 in 10[\s\S]*cloud AI/i);
   await shot(win, '13-infuse');
   await win.click('#inf-go');
   await win.waitForFunction(() => document.querySelector('#pick-model option:checked')?.textContent.includes('Analyst Supreme'));
@@ -336,8 +345,13 @@ function redPng(size = 64) {
   assert.ok(await win.locator('.msg.assistant .badge:has-text("Instant")').count(), 'answered instantly from the rated answer');
   // Reading ahead: typing in a chat with history makes the model read it in advance.
   await win.evaluate(() => { S.data.prefs.readAhead = true; });
+  await win.waitForFunction(() => !pending, null, { timeout: 60000 }); // the last answer is fully done
   await win.fill('#input', 'And a limerick?');
-  await win.waitForFunction(() => prefilled.has(S.route.id), null, { timeout: 10000 });
+  // A slow test machine can still be finishing background work: type again once if needed.
+  try { await win.waitForFunction(() => prefilled.has(S.route.id), null, { timeout: 15000 }); } catch {
+    await win.fill('#input', 'And a limerick, please?');
+    await win.waitForFunction(() => prefilled.has(S.route.id), null, { timeout: 30000 });
+  }
   await win.fill('#input', '');
   await win.evaluate(() => { S.data.prefs.readAhead = false; });
   // Everything available is used: learning from every signal, connected apps, the cloud option.

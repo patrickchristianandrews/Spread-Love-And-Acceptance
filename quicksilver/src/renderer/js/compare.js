@@ -326,7 +326,7 @@ function fusionRateModal(id) {
   if (!s) return;
   const b = openModal(`<h2>${esc(s.emoji || '⚗️')} ${esc(s.name)}: rating on this PC</h2>
     <p class="small muted">How well this custom AI runs on ${S.est?.hardware ? `this PC (${hwText(S.est.hardware)})` : 'this PC'}, and what would make it better.</p>
-    ${fusionRatingsHTML(s.members)}${fusionAdviceHTML(s.members, { apply: true })}${teamPreviewHTML(s.members, { title: 'How it works on this PC' })}
+    ${fusionRatingsHTML(s.members)}${fusionAdviceHTML(s.members, { apply: true })}${boostsHTML([...(s.members.drafters || []), s.members.judge].filter(Boolean), { fusion: true })}${teamPreviewHTML(s.members, { title: 'How it works on this PC' })}
     <div class="modal-actions"><button class="btn" data-close>Close</button></div>`, { wide: true });
   const tips = fusionAdvice(s.members);
   b.querySelectorAll('[data-fz-apply]').forEach((btn) => btn.addEventListener('click', async () => {

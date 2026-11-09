@@ -362,6 +362,9 @@ function bindChat() {
     if (e.target.value === '__get') { go({ view: 'stacks' }); return; }
     if (e.target.value === '__infuse') { e.target.value = resolveTarget(chat, a); infuseModal((st) => { chat.target = `stack:${st.id}`; save(); render(); }); return; }
     chat.target = e.target.value === '__auto' ? '' : e.target.value; save(); render();
+    // What the web and a cloud AI would add to the one you picked.
+    const tip = chat.target && boostToastText(chat.target);
+    if (tip) toastAction(tip, 'How?', () => boostModal(chat.target), 9000);
   });
   $('#tog-lib').addEventListener('click', () => { chat.library = !(chat.library ?? a.library); save(); render(); });
   $('#tog-web')?.addEventListener('click', () => {
