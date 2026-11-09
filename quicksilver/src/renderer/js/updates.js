@@ -236,6 +236,7 @@ function builtinModelHTML() {
       ${open ? '<span class="badge b-peach" title="Answers plainly, without refusing. The parental lock keeps it family-safe.">Uncensored</span>' : ''}${est ? `<span class="badge rate-${est.rating}">${esc(est.label)}</span>` : ''}</div>
     <p style="margin:10px 0 6px"><b>Fast answers you can trust.</b> Chosen as the quickest model that's still accurate: it answers almost instantly on most PCs and double-checks facts and figures, so you can rely on it for everyday work.${open ? ' It\'s uncensored: it answers plainly instead of refusing (the parental lock in Settings keeps it family-safe).' : ''}</p>
     ${qsRolesHTML(qst)}
+    ${stackScoresHTML(qst ? [...(qst.members.drafters || []), qst.members.judge, qst.members.vision].filter(Boolean) : ['qwen3-4b', 'qwen3-vl-2b'])}
     ${dolphinOfferHTML(qst)}
     ${cloudPartnerHTML()}
     <div class="builtin-can">${can.map(([i, t, d]) => `<div><span>${i}</span><b>${esc(t)}</b><span class="small muted">${esc(d)}</span></div>`).join('')}</div>

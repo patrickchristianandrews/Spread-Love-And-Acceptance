@@ -332,6 +332,11 @@ function kitCard(k, kit) {
   </div>`;
 }
 
+// A stack's best tested scores (its strongest member on each test) and what it can create.
+function stackScoresHTML(targets) {
+  const sc = bestScores(stackScoreIds(targets.filter((t) => !String(t).startsWith('api:'))));
+  return `<div class="mp sc-stack">${scoreChipsHTML(sc, { label: 'Best member', note: sc ? 'Each score is its strongest member on that test; working as a team usually adds a little on hard questions.' : '' })}${createRowHTML(stackRatings(targets), { all: true })}</div>`;
+}
 function stackCard(s) {
   const rows = [];
   if (s.members.vision) rows.push(['vision', s.members.vision]);
@@ -341,6 +346,7 @@ function stackCard(s) {
   return `<div class="card">
     <div class="row"><span class="emoji-badge">${esc(s.emoji || '🧩')}</span><h3 class="grow">${esc(s.name)}</h3>${mode ? `<span class="badge b-lav">${mode.icon} ${esc(mode.name)}</span>` : ''}</div>
     <div class="stack-v" style="gap:6px;margin:12px 0">${rows.map(([role, t]) => `<div class="row">${ROLE[role]}<b class="small">${esc(targetLabel(t))}</b>${targetValid(t) ? '' : '<span class="badge b-pink">not installed yet</span>'}</div>`).join('')}</div>
+    ${stackScoresHTML(rows.map(([, t]) => t))}
     <div class="row"><button class="btn small primary" data-chat-stack="${s.id}">Chat</button><button class="btn small" data-edit-stack="${s.id}">Edit</button><button class="btn small danger" data-del-stack="${s.id}">Delete</button></div>
   </div>`;
 }

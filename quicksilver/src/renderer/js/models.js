@@ -112,6 +112,8 @@ function modelProfileHTML(m, kind) {
     <div class="mp-row"><span class="mp-k">Output</span><span class="mp-v">${esc(modelOutput(m, kind))}</span></div>
     <div class="mp-row"><span class="mp-k">Accuracy</span><span class="mp-v"><span class="acc-dots">${'●'.repeat(acc.dots)}<i>${'●'.repeat(5 - acc.dots)}</i></span> ${acc.label}</span></div>
     <div class="mp-rates">${modelRatings(m, kind).map(([k, v]) => `<span class="mp-rate"><span>${k}</span><b>★ ${Number.isInteger(v) ? v : v.toFixed(1)}</b></span>`).join('')}</div>
+    ${kind === 'text' ? scoreChipsHTML(scoresFor(m.id)) || '<div class="sc-row"><span class="sc-k">Tested</span><span class="small muted">No published test scores for this model.</span></div>' : ''}
+    ${createRowHTML(modelCreate(m), { all: true })}
   </div>`;
 }
 
@@ -282,6 +284,8 @@ async function bindApi() {
       <div class="row"><h3 class="grow">${esc(p.name)}</h3>${FREE_BADGE[p.free] || ''}</div>
       <div class="small muted" style="font-weight:600;margin-top:6px">${esc(p.freeNote || (k === 'custom' ? 'Any OpenAI-compatible endpoint' : 'Needs an API key'))}</div>
       ${p.best ? `<div class="small" style="margin-top:6px">⭐ <b>Best to link:</b> <code>${esc(p.best)}</code>${p.bestWhy ? ` <span class="muted">· ${esc(p.bestWhy)}</span>` : ''}</div>` : ''}
+      ${scoreChipsHTML(cloudScoresFor(k), { label: 'Tested', note: cloudScoresFor(k)?.model ? `Scores of ${cloudScoresFor(k).model}.` : '' })}
+      ${(p.imageModels || []).length ? createRowHTML(createRatings(p.imageModels.map((x) => ({ cloudImage: x })))) : ''}
       ${S.providers.some((x) => x.preset === k) ? '<div class="small" style="margin-top:4px"><span class="badge b-mint">✓ connected</span> · click to connect another account</div>' : ''}</button>`).join('')}</div>` : '';
   }).join('');
   $$('[data-preset]').forEach((b) => b.addEventListener('click', () => editProvider({ preset: b.dataset.preset }, presets)));

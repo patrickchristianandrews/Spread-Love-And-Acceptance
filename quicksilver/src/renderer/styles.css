@@ -1275,3 +1275,17 @@ code.sel { user-select: all; background: var(--soft); padding: 1px 6px; border-r
 .tip-item { display: flex; gap: 10px; align-items: flex-start; padding: 8px 10px; border-radius: 10px; background: var(--hover); }
 .tip-n { flex: none; width: 24px; height: 24px; border-radius: 50%; display: grid; place-items: center; font-size: .78rem; font-weight: 800; background: var(--accent-tint); color: var(--accent); }
 .xp-where { margin-top: 2px; padding: 6px 8px; border-radius: 8px; background: var(--hover); }
+
+.sc-row { display: flex; gap: 8px; align-items: flex-start; margin-top: 6px; }
+.sc-k { flex: none; min-width: 74px; font-size: .74rem; font-weight: 800; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; padding-top: 4px; }
+.sc-chips { display: flex; flex-wrap: wrap; gap: 4px; align-items: center; }
+.sc-chip, .cr-chip { font-size: .76rem; padding: 2px 8px; border-radius: 999px; background: var(--hover); white-space: nowrap; }
+.sc-chip b, .cr-chip b { font-weight: 800; }
+.sc-hi { background: color-mix(in srgb, #2fbf71 22%, transparent); }
+.sc-mid { background: color-mix(in srgb, #4a8cff 20%, transparent); }
+.sc-lo { background: color-mix(in srgb, #f0a43a 22%, transparent); }
+.sc-vlo { background: var(--hover); color: var(--muted); }
+.cr-chip.off { opacity: .55; }
+.sc-info { font-size: .8rem; text-decoration: none; opacity: .7; margin-left: 2px; }
+.sc-note { margin: 3px 0 0 82px; line-height: 1.35; }
+.sc-stack { margin: 4px 0 10px; }

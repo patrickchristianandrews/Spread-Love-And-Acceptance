@@ -1,7 +1,6 @@
 // Downloads the models that come with Quicksilver, so it works the moment it's installed:
 //   starter/ (inside the installer)  Qwen3-VL 2B: quick on any PC, sees photos   (Apache 2.0)
 //   pack/    (next to the installer) Qwen3 4B Instruct 2507: the brain           (Apache 2.0)
-//            and Dolphin 3.0 8B: the second opinion on hard questions        (Llama 3.1 licence)
 // Together they make the built-in "Quicksilver" model (a stack with smart routing).
 // The 4B model is too big for a Windows installer (about 2 GB at most), so it ships in a folder
 // beside it; the installer copies it in. Writes starter/STARTER.json and the licences.
@@ -27,12 +26,6 @@ const MODELS = [
     licenseRepo: 'Qwen/Qwen3-VL-2B-Instruct', repos: ['mradermacher/Huihui-Qwen3-VL-2B-Instruct-abliterated-GGUF', 'huihui-ai/Huihui-Qwen3-VL-2B-Instruct-abliterated-GGUF', 'noctrex/Huihui-Qwen3-VL-2B-Instruct-abliterated-GGUF', 'Qwen/Qwen3-VL-2B-Instruct-GGUF', 'ggml-org/Qwen3-VL-2B-Instruct-GGUF', 'unsloth/Qwen3-VL-2B-Instruct-GGUF'] },
   { id: 'starter-brain', catalogId: 'qwen3-4b', name: 'Qwen3 4B Instruct 2507', vision: false, where: 'pack', limit: 3e9, file: 'qwen3-4b-instruct-2507.gguf', pack: true,
     licenseRepo: 'Qwen/Qwen3-4B-Instruct-2507', repos: ['mradermacher/Huihui-Qwen3-4B-Instruct-2507-abliterated-GGUF', 'bartowski/huihui-ai_Huihui-Qwen3-4B-Instruct-2507-abliterated-GGUF', 'huihui-ai/Huihui-Qwen3-4B-Instruct-2507-abliterated-GGUF', 'unsloth/Qwen3-4B-Instruct-2507-GGUF', 'Qwen/Qwen3-4B-Instruct-2507-GGUF', 'bartowski/Qwen_Qwen3-4B-Instruct-2507-GGUF'] },
-  // Dolphin is uncensored by design and from another family (Llama), so on hard questions it adds a
-  // genuinely different view. "optional": a copy without it doesn't download it on first run.
-  { id: 'starter-dolphin', catalogId: 'dolphin-3-llama-3.1-8b', name: 'Dolphin 3.0 8B', vision: false, where: 'pack', limit: 5.5e9, file: 'dolphin-3-llama-3.1-8b.gguf', pack: true, optional: true, uncensored: true,
-    by: 'Cognitive Computations; Built with Llama', licenseRepo: 'cognitivecomputations/Dolphin3.0-Llama3.1-8B',
-    licenceText: 'Dolphin 3.0 8B is built on Llama 3.1 and licensed under the Llama 3.1 Community License Agreement: https://www.llama.com/llama3_1/license/\nBuilt with Llama. Llama 3.1 is licensed under the Llama 3.1 Community License, Copyright © Meta Platforms, Inc. All Rights Reserved.\n',
-    repos: ['bartowski/Dolphin3.0-Llama3.1-8B-GGUF', 'cognitivecomputations/Dolphin3.0-Llama3.1-8B-GGUF'] },
 ];
 
 async function choose(m) {

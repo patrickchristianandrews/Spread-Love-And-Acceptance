@@ -701,4 +701,14 @@ const FEATURED = {
   open: ['qwen3-30b-a3b-uncensored', 'qwen3-14b-uncensored', 'qwen3-8b-uncensored', 'dolphin-3-mistral-24b', 'hermes-4-14b', 'rocinante-12b'],
 };
 
-module.exports = { SUCCESSORS, FEATURED, TEXT_MODELS, TEXT_CATEGORIES, MEDIA_MODELS, MEDIA_CATEGORIES, JOBS, CLOUD_BOOST, cloudPlan, accuracyLevel, requirements, smallerAlternative, draftFor, DRAFT_FAMILIES, estimateText, estimateMedia, advise, compose, gpuBandwidth, profileInstalled, matchCatalog, scoreFor, familyOf, starsFor, capabilities, upgradeAdvice };
+// ---------- tested scores ----------
+// Percent of questions answered correctly on four well-known tests:
+//   math = AIME 2025 (competition maths), science = GPQA Diamond (expert science),
+//   knowledge = MMLU-Pro (broad knowledge), coding = LiveCodeBench.
+// Independent results from Artificial Analysis where they exist ("aa"), otherwise the maker's own
+// ("maker"). null = not published. The online picks file can correct or add to these.
+const SCORES = require('./scores.json');
+// Uncensored versions are scored by the model they're made from (usually a point or two lower).
+const SCORE_BASE = { 'qwen3-8b-uncensored': 'qwen3-8b', 'qwen3-14b-uncensored': 'qwen3-14b', 'qwen3-30b-a3b-uncensored': 'qwen3-30b-a3b' };
+
+module.exports = { SCORES, SCORE_BASE, SUCCESSORS, FEATURED, TEXT_MODELS, TEXT_CATEGORIES, MEDIA_MODELS, MEDIA_CATEGORIES, JOBS, CLOUD_BOOST, cloudPlan, accuracyLevel, requirements, smallerAlternative, draftFor, DRAFT_FAMILIES, estimateText, estimateMedia, advise, compose, gpuBandwidth, profileInstalled, matchCatalog, scoreFor, familyOf, starsFor, capabilities, upgradeAdvice };

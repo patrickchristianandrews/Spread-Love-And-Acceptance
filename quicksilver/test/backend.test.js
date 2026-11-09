@@ -711,6 +711,12 @@ async function collect(gen) {
     assert.equal(complete.stacks().find((x) => x.id === 'quicksilver').members.drafters[0], 'local:newbrain', 'the newer Brain named online takes over');
     models.remove('newbrain');
     remoteP.apply({ successors: {}, featured: {}, ladders: {}, liquid: {} });
+    // Tested scores can be corrected online: percentages only, unknown keys and bad values dropped.
+    const sc = remoteP.clean({ version: 1, scores: { local: { 'qwen3-4b': { math: 47.4, science: 'x', knowledge: null, coding: 140, src: 'maker' }, 'bad id!': { math: 5 } }, cloud: { cerebras: { model: 'Qwen3 235B', math: 70 } } } }).scores;
+    assert.deepEqual(sc.local['qwen3-4b'], { math: 47, knowledge: null, src: 'maker' });
+    assert.ok(!sc.local['bad id!'] && sc.cloud.cerebras.math === 70 && sc.cloud.cerebras.model === 'Qwen3 235B');
+    const cat = require('../src/shared/catalog');
+    assert.ok(cat.SCORES.local && cat.SCORES.cloud && cat.SCORE_BASE['qwen3-8b-uncensored'] === 'qwen3-8b');
     await complete.ensureQuicksilverStack();
     assert.equal(complete.stacks().find((x) => x.id === 'quicksilver').members.drafters[0], 'local:starter-brain');
     // Kept safe: never deleted, never repaired from the internet, stays removed.

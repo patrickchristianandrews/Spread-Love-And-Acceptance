@@ -55,10 +55,23 @@ function clean(j) {
       parts, ...(ID.test(r.lead || '') ? { lead: r.lead } : {}), instructions: str(r.instructions, 1500), why: str(r.why, 300), added: str(r.added, 20),
       ...(num(r.temperature, 0, 1.5) != null ? { temperature: r.temperature } : {}), ...(r.uncensored ? { uncensored: true } : {}) };
   }).filter(Boolean);
-  return { version: 1, updated: str(j.updated, 20), models, successors, featured, ladders, liquid, recipes };
+  const scores = { local: {}, cloud: {} };
+  // A score is a percentage, or null for "not published"; anything else is dropped.
+  const pct = (v) => (v === null ? null : num(v, 0, 100) ?? undefined);
+  for (const side of ['local', 'cloud']) {
+    const src = j.scores?.[side];
+    if (!src || typeof src !== 'object') continue;
+    for (const [id, v] of Object.entries(src).slice(0, 200)) {
+      if (!/^[a-z0-9][\w.-]{0,80}$/i.test(id) || !v || typeof v !== 'object') continue;
+      const e = {};
+      for (const k of ['math', 'science', 'knowledge', 'coding']) if (k in v) { const n = pct(v[k]); if (n !== undefined) e[k] = n == null ? null : Math.round(n); }
+      if (Object.keys(e).length) scores[side][id] = { ...e, ...(str(v.model, 80) ? { model: str(v.model, 80) } : {}), src: v.src === 'maker' ? 'maker' : 'aa' };
+    }
+  }
+  return { version: 1, updated: str(j.updated, 20), models, successors, featured, ladders, liquid, recipes, scores };
 }
 
-let applied = { successors: {}, featured: {}, ladders: {}, liquid: {}, recipes: [], updated: '', fetchedAt: 0 };
+let applied = { successors: {}, featured: {}, ladders: {}, liquid: {}, recipes: [], scores: { local: {}, cloud: {} }, updated: '', fetchedAt: 0 };
 // Adds new models to the catalog (never replaces a built-in one) and keeps the picks for get().
 function apply(data) {
   if (!data) return;
@@ -67,7 +80,7 @@ function apply(data) {
     if (i < 0) catalog.TEXT_MODELS.push(m);
     else if (catalog.TEXT_MODELS[i].remote) catalog.TEXT_MODELS[i] = m; // a newer copy of a model added online
   }
-  applied = { successors: data.successors || {}, featured: data.featured || {}, ladders: data.ladders || {}, liquid: data.liquid || {}, recipes: data.recipes || [], updated: data.updated || '', fetchedAt: data.fetchedAt || 0 };
+  applied = { successors: data.successors || {}, featured: data.featured || {}, ladders: data.ladders || {}, liquid: data.liquid || {}, recipes: data.recipes || [], scores: data.scores || { local: {}, cloud: {} }, updated: data.updated || '', fetchedAt: data.fetchedAt || 0 };
 }
 
 // What the app uses: built-in picks, with the online ones on top.
@@ -78,6 +91,7 @@ function picks() {
     ladders: applied.ladders,
     liquid: { brain: 'qwen3-4b', eyes: 'qwen3-vl-2b', ...applied.liquid },
     recipes: applied.recipes,
+    scores: applied.scores,
     updated: applied.updated, fetchedAt: applied.fetchedAt,
   };
 }
