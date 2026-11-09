@@ -89,6 +89,9 @@ jobs:
       - name: Download the models that come with Quicksilver
         run: node scripts/fetch-starter.js
 
+      - name: Check the uncensored Qwen3 models in the catalog can be downloaded
+        run: node scripts/check-model-repos.js
+
       # Quicksilver stores the model's working memory (KV cache) at 8-bit to save memory, and uses
       # a small same-family model to draft ahead (speculative decoding) when one is installed; it
       # falls back if the engine refuses either. This shows which ones users get, with a real model.

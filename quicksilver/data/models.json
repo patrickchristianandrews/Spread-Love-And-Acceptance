@@ -41,6 +41,9 @@
       "qwen3-vl-4b"
     ],
     "open": [
+      "qwen3-30b-a3b-uncensored",
+      "qwen3-14b-uncensored",
+      "qwen3-8b-uncensored",
       "dolphin-3-mistral-24b",
       "hermes-4-14b",
       "rocinante-12b"

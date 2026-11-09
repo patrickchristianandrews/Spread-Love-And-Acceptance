@@ -192,7 +192,13 @@ function active() { return [...jobs.values()].map((j) => j.public); }
 // Builds a download plan for a catalog model (text, image or video).
 async function planCatalog(catalogId) {
   const t = catalog.TEXT_MODELS.find((m) => m.id === catalogId);
-  if (t) return planGguf(t.repo, { id: t.id, name: t.name, quant: t.quant, catalogId: t.id, vision: t.vision });
+  if (t) {
+    let last;
+    for (const repo of [t.repo, ...(t.alt || [])]) {
+      try { return await planGguf(repo, { id: t.id, name: t.name, quant: t.quant, catalogId: t.id, vision: t.vision }); } catch (err) { last = err; }
+    }
+    throw last;
+  }
   const m = catalog.MEDIA_MODELS.find((x) => x.id === catalogId);
   if (!m) throw new Error('Unknown model.');
   const items = [];

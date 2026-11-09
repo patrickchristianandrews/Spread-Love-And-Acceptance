@@ -118,7 +118,7 @@ function redPng(size = 64) {
   console.log('✓ stacks: how it works, three strengths with accuracy, cloud boost with savings');
   // Stacks for specific work: 27 ready-made teams; set one up and chat with it.
   await win.waitForSelector('.rx-card:has-text("Isolated medical journal")');
-  assert.equal(await win.locator('.rx-card').count(), 32);
+  assert.equal(await win.locator('.rx-card').count(), 34, '32 specialist stacks plus the two uncensored ones');
   await win.click('.rx-card:has-text("Invoices, receipt reading") [data-rx]');
   await win.waitForFunction(() => S.data.assistants.some((a) => a.id === 'as-rx-bookkeeping'), null, { timeout: 30000 });
   // Song creation: 13 teams, each tuned to this PC (no model that won't run here; a speed helper
@@ -643,6 +643,15 @@ function redPng(size = 64) {
   await shot(win, '17b-options-guide');
   await win.click('.nav-new');
   console.log('✓ options guide: every option explained in Settings, linked from the message box');
+
+  // Your knowledge stands out on Home; the top uncensored stack leads the ready-made stacks.
+  await win.click('[data-nav="home"]');
+  await win.waitForSelector('#kn-hero [data-kn="files"]');
+  assert.match(await win.locator('#kn-hero h2').innerText(), /knowledge/i);
+  assert.match(await win.locator('.sidebar [data-nav="library"]').innerText(), /Your knowledge/);
+  assert.ok(await win.evaluate(() => { const r = STACK_RECIPES[0]; return r.id === 'uncensored-top' && r.top && RX_GROUPS[0][0] === 'uncensored'; }), 'the top uncensored stack comes first');
+  await win.click('.nav-new');
+  console.log('✓ your knowledge: front and centre on Home and in the menu; top uncensored stack first in the ready-made stacks');
   assert.doesNotMatch(await win.evaluate(() => turnContext(chatById(S.route.id), [], false, 'hi', null, '', '')), /Answer length/);
   await shot(win, '16-session-badge');
   console.log('✓ privacy modes: fully private, private online (Proton VPN free or your account), online; chats say Private / Protected session');
@@ -1045,9 +1054,12 @@ function redPng(size = 64) {
 
   if (errors.length) console.log('PAGE ERRORS:', errors);
   assert.deepEqual(errors, []);
-  await app.close();
+  // Closing can occasionally stall on a slow machine; don't let that hang the run.
+  await Promise.race([app.close().catch(() => {}), new Promise((r) => setTimeout(r, 15000))]);
+  try { app.process()?.kill('SIGKILL'); } catch {}
   fs.rmSync(HOME, { recursive: true, force: true });
   console.log('\nUI TESTS PASSED');
+  process.exit(0);
 })().catch(async (e) => {
   console.error('FAIL', e.message.split('\n').slice(0, 3).join(' | '));
   if (WIN) { try { if (shots) await WIN.screenshot({ path: path.join(shots, 'FAIL.png') }); console.error('PAGE:', (await WIN.evaluate(() => document.body.innerText)).slice(0, 1500)); } catch {} }

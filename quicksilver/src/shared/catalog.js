@@ -70,6 +70,15 @@ const TEXT_MODELS = [
     blurb: 'Top open coding model that still runs fast. Handles whole codebases.', jobs: { general: 7, office: 7, research: 7, coding: 10, vision: 0, fast: 5 }, judge: 8 },
 
   // Unfiltered: community models that follow your instructions with far fewer refusals.
+  // Uncensored Qwen3 (abliterated by huihui-ai, the same source as Quicksilver's built-in models).
+  // They join the Quicksilver crew, and the built-in Qwen3-VL 2B drafts ahead for the 8B and 14B.
+  // 'alt' lists other copies to try if the first isn't available; the installer build checks them.
+  { id: 'qwen3-8b-uncensored', name: 'Qwen3 8B (uncensored)', maker: 'Alibaba · uncensored by huihui-ai', params: '8B', category: 'open', repo: 'mradermacher/Huihui-Qwen3-8B-abliterated-v2-GGUF', alt: ['mradermacher/Qwen3-8B-abliterated-GGUF', 'mradermacher/Huihui-Qwen3-8B-abliterated-GGUF'], verify: true, quant: 'Q4_K_M', sizeGB: 5.0, ctx: 32768, reasoning: true, open: true,
+    blurb: 'Qwen3 8B with the refusals taken out: answers plainly, thinks through hard questions. Joins the Quicksilver crew, and the built-in model speeds it up.', jobs: { general: 7, office: 7, research: 7, coding: 7, vision: 0, fast: 5 }, judge: 6 },
+  { id: 'qwen3-14b-uncensored', name: 'Qwen3 14B (uncensored)', maker: 'Alibaba · uncensored by huihui-ai', params: '14B', category: 'open', repo: 'mradermacher/Huihui-Qwen3-14B-abliterated-v2-GGUF', alt: ['mradermacher/Qwen3-14B-abliterated-GGUF', 'mradermacher/Huihui-Qwen3-14B-abliterated-GGUF'], verify: true, quant: 'Q4_K_M', sizeGB: 9.0, ctx: 32768, reasoning: true, open: true,
+    blurb: 'Qwen3 14B uncensored: a big step up in knowledge and judgment. Leads the Quicksilver crew on hard questions on a 12 GB graphics card.', jobs: { general: 8, office: 8, research: 8, coding: 8, vision: 0, fast: 3 }, judge: 8 },
+  { id: 'qwen3-30b-a3b-uncensored', name: 'Qwen3 30B-A3B Instruct 2507 (uncensored)', maker: 'Alibaba · uncensored by huihui-ai', params: '30B (3B active)', category: 'open', repo: 'mradermacher/Huihui-Qwen3-30B-A3B-Instruct-2507-abliterated-GGUF', alt: ['mradermacher/Qwen3-30B-A3B-Instruct-2507-abliterated-GGUF'], verify: true, quant: 'Q4_K_M', sizeGB: 18.6, activeGB: 2.0, ctx: 262144, open: true,
+    blurb: 'Big-model quality at small-model speed, uncensored. The strongest Closer for the Quicksilver crew.', jobs: { general: 9, office: 9, research: 9, coding: 8, vision: 0, fast: 6 }, judge: 9 },
   { id: 'hermes-3-llama-3.1-8b', name: 'Hermes 3 8B', maker: 'Nous Research', params: '8B', category: 'open', repo: 'NousResearch/Hermes-3-Llama-3.1-8B-GGUF', quant: 'Q4_K_M', sizeGB: 4.9, ctx: 131072, open: true,
     blurb: 'Highly steerable: follows your instructions and persona closely, with few refusals.', jobs: { general: 7, office: 6, research: 6, coding: 5, vision: 0, fast: 5 }, judge: 6 },
   { id: 'dolphin-3-llama-3.1-8b', name: 'Dolphin 3.0 8B', maker: 'Cognitive Computations', params: '8B', category: 'open', repo: 'bartowski/Dolphin3.0-Llama3.1-8B-GGUF', quant: 'Q4_K_M', sizeGB: 4.9, ctx: 131072, open: true,
@@ -323,7 +332,7 @@ function smallerAlternative(m, hw) {
 // words and the big model checks them all at once, which is often 1.5-2.5x faster with exactly
 // the same answers. Mixture-of-experts models are already fast, so they don't use one.
 const DRAFT_FAMILIES = [
-  { targets: /^qwen3-(4b|8b|14b|32b)(-thinking)?$/, drafts: ['qwen3-1.7b', 'qwen3-vl-2b'] },
+  { targets: /^qwen3-(4b|8b|14b|32b)(-thinking)?(-uncensored)?$/, drafts: ['qwen3-1.7b', 'qwen3-vl-2b'] },
   { targets: /^llama-3\.(1-8b|3-70b)$/, drafts: ['llama-3.2-1b'] },
   { targets: /^qwen2\.5-(coder-)?(7b|14b|32b)$/, drafts: ['qwen2.5-coder-1.5b'] },
 ];
@@ -689,7 +698,7 @@ const FEATURED = {
   coding: ['qwen3-coder-30b', 'qwen2.5-coder-14b', 'qwen2.5-coder-7b'],
   reasoning: ['qwen3-30b-a3b-thinking', 'phi-4-reasoning-plus', 'deepseek-r1-qwen3-8b'],
   vision: ['gemma-3-27b', 'qwen3-vl-8b', 'gemma-3-12b', 'qwen3-vl-4b'],
-  open: ['dolphin-3-mistral-24b', 'hermes-4-14b', 'rocinante-12b'],
+  open: ['qwen3-30b-a3b-uncensored', 'qwen3-14b-uncensored', 'qwen3-8b-uncensored', 'dolphin-3-mistral-24b', 'hermes-4-14b', 'rocinante-12b'],
 };
 
 module.exports = { SUCCESSORS, FEATURED, TEXT_MODELS, TEXT_CATEGORIES, MEDIA_MODELS, MEDIA_CATEGORIES, JOBS, CLOUD_BOOST, cloudPlan, accuracyLevel, requirements, smallerAlternative, draftFor, DRAFT_FAMILIES, estimateText, estimateMedia, advise, compose, gpuBandwidth, profileInstalled, matchCatalog, scoreFor, familyOf, starsFor, capabilities, upgradeAdvice };

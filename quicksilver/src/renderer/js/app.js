@@ -86,6 +86,7 @@ views.home = {
     const tile = (icon, k, v, sub, view) => `<button class="card" ${view ? `data-goto="${view}"` : ''} style="text-align:left"><div class="k" style="font-size:.8rem;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.05em">${icon} ${k}</div><div style="font-size:1.5rem;font-weight:800;margin:4px 0">${v}</div><div class="small muted" style="font-weight:600">${sub}</div></button>`;
     return `<div class="page">
       ${welcomeCardHTML()}
+      ${knowledgeHeroHTML()}
       ${bestSetupHTML()}
       <div class="row feature-row">
         <span class="feature">${cloud ? 'Local by default, cloud only where you choose' : 'Everything runs on this PC'}</span><span class="feature">Several models as one team</span><span class="feature">Double-checking built in</span><span class="feature">Photo, video and music studio</span><span class="feature">Private knowledge bases</span><span class="feature">OpenAI-compatible local API</span>

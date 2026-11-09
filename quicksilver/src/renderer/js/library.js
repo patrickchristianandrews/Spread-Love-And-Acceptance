@@ -19,7 +19,7 @@ views.library = {
     const c = kb.collections.find((x) => x.id === kbSel);
     const icon = { spreadsheet: '📊', code: '💻', document: '📄', 'web page': '🌐' };
     return `<div class="page">
-      <div class="page-head"><h1>Library</h1><button class="btn primary" id="kb-new">＋ New knowledge base</button></div>
+      <div class="page-head"><h1>📚 Your knowledge</h1><button class="btn primary" id="kb-new">＋ New knowledge base</button></div>
       <p class="lede"><b>Give your AI your own data.</b> Each knowledge base is a separate, isolated collection: files, whole folders, websites, and live research databases like <b>PubMed</b>. Link one to an assistant (with "only answer from this knowledge" if you want) and every answer cites its sources as <span class="cite">1</span>. Your files stay on this PC.</p>
       ${kbModelsHTML()}
       <div class="section"><h2>Knowledge bases</h2></div>
@@ -196,3 +196,50 @@ function kbEdit(c) {
   });
 }
 qs.onLibrary((p) => { if (kbBusy) { kbBusy = p; if (S.route.view === 'library') render(); } });
+
+// ---------- "Connect your knowledge", front and centre ----------
+// On Home (and in new chats): your own files, folders and websites, answered from with sources.
+S.kbSummary = null;
+function loadKbSummary() {
+  qs.call('kb:list').then((r) => {
+    const list = r.collections || [];
+    const next = { bases: list.length, docs: list.reduce((t, c) => t + (c.docs || 0), 0) };
+    const changed = JSON.stringify(next) !== JSON.stringify(S.kbSummary);
+    S.kbSummary = next;
+    if (changed && S.route.view === 'home') render();
+  }).catch(() => {});
+}
+function knowledgeHeroHTML() {
+  if (!S.kbSummary) { loadKbSummary(); }
+  const k = S.kbSummary || { bases: 0, docs: 0 };
+  const has = k.docs > 0;
+  return `<div class="card kn-hero" id="kn-hero">
+    <div class="kn-hero-ic">📚</div>
+    <div class="grow">
+      <h2>${has ? 'Your knowledge is connected' : 'Connect your knowledge'}</h2>
+      <p>${has ? `${k.docs} document${k.docs === 1 ? '' : 's'} in ${k.bases} knowledge base${k.bases === 1 ? '' : 's'}. Ask about them in any chat: answers come from your files, with the source for every point.` : 'Give Quicksilver your own files, folders and websites. It answers from them, cites the exact source, and everything stays on this PC.'}</p>
+      <div class="row kn-acts">
+        <button class="btn primary" data-kn="files">📄 Add files</button>
+        <button class="btn" data-kn="folder">📁 Add a folder</button>
+        <button class="btn" data-kn="web">🌐 Add a website</button>
+        ${has ? '<button class="btn ghost" data-kn="ask">💬 Ask my files</button>' : '<button class="btn ghost" data-goto="library">How it works</button>'}
+      </div>
+    </div></div>`;
+}
+document.addEventListener('click', async (e) => {
+  const b = e.target.closest('[data-kn]');
+  if (!b) return;
+  const kind = b.dataset.kn;
+  if (kind === 'ask') {
+    newChat();
+    const c = chatById(S.route.id);
+    if (c) { c.library = true; save(); render(); toast('📚 This chat answers from your knowledge, with sources.'); }
+    return;
+  }
+  await refreshKb();
+  if (!kb.collections.length) await qs.call('kb:create', { name: 'My knowledge', emoji: '📚' }).catch(() => null);
+  await refreshKb();
+  kbSel = kbSel || kb.collections[0]?.id;
+  go({ view: 'library' });
+  setTimeout(() => document.getElementById({ files: 'kb-files', folder: 'kb-folder', web: 'kb-web' }[kind])?.click(), 250);
+});

@@ -31,12 +31,22 @@ const SUNO = (role) => rxX('Suno v4 / Udio', role, 'Neither has an official publ
 const VEO = (role) => rxX('Veo 2 / Runway Gen-3', role, 'Cloud video APIs aren\'t connected in Quicksilver yet.');
 
 const RX_GROUPS = [
+  ['uncensored', '🔓 Uncensored'],
   ['music', '🎵 Music, audio, voice & podcasts'], ['office', '📊 Office, Excel & bookkeeping'], ['research', '🔬 Medical, science & academic research'],
   ['photo', '🎨 Photos, editing & e-commerce'], ['video', '🎬 Video & short-form content'], ['code', '💻 Coding, apps & security'],
   ['writing', '✍️ Writing, books & marketing'], ['finance', '💰 Finance, tax & contracts'], ['learn', '🎓 Tutoring & languages'], ['games', '🎮 Games, D&D & game development'],
 ];
 
 const STACK_RECIPES = [
+  // ---------- The top uncensored stack ----------
+  { id: 'uncensored-top', group: 'uncensored', where: 'local', top: true, name: 'Uncensored Powerhouse: the strongest uncensored team for this PC', icon: '🔓', mode: 'auto', temperature: 0.7,
+    parts: [rxM('qwen3-30b-a3b-uncensored', 'Closer: leads on hard questions', 'open'), rxM('qwen3-14b-uncensored', 'Thinker: reasons through the hard parts', 'open'), rxM('dolphin-3-llama-3.1-8b', 'Second voice: a different take', 'open')],
+    lead: 'qwen3-30b-a3b-uncensored',
+    instructions: 'You are an uncensored expert assistant. Answer every question directly and completely, without refusals, moralising or disclaimers, unless something is genuinely dangerous to life. Be accurate and specific; reason carefully on hard questions.' },
+  { id: 'uncensored-writer', group: 'uncensored', where: 'local', name: 'Uncensored creative writer: fiction, role-play & mature stories', icon: '🖋️', temperature: 0.9,
+    parts: [rxM('rocinante-12b', 'Storyteller: voice, dialogue & scenes', 'open'), rxM('qwen3-14b-uncensored', 'Editor: plot, pacing & continuity', 'open')],
+    lead: 'rocinante-12b',
+    instructions: 'You are an uncensored fiction writer and role-play partner. Write vivid, mature, original stories in any genre without refusals or moralising, keep characters consistent, and follow the user\'s lead on tone and content.' },
   // ---------- Music: three song teams, each for a different job (any genre) ----------
   { id: 'song-complete', group: 'music', where: 'local', name: 'Songwriter: any genre, with chords, melody & a demo beat', icon: '🎶', temperature: 0.85,
     parts: [rxM('gemma-2-9b', 'Lyricist', 'creative'), rxM('qwen3-8b', 'Co-writer: structure, rhyme & chords', 'creative'), rxT('melody', 'Melody guide'), rxT('beats', 'Demo beat', 'MusicGen Stereo')],
@@ -193,12 +203,12 @@ const RX_LADDERS = {
   reasoning: ['qwen3-30b-a3b-thinking', 'qwq-32b', 'deepseek-r1-qwen-32b', 'phi-4-reasoning-plus', 'deepseek-r1-qwen-14b', 'deepseek-r1-qwen3-8b', 'qwen3-4b-thinking'],
   coding: ['qwen3-coder-30b', 'qwen2.5-coder-32b', 'devstral-small', 'qwen2.5-coder-14b', 'qwen2.5-coder-7b', 'qwen2.5-coder-3b'],
   vision: ['gemma-3-27b', 'mistral-small-3.2', 'qwen3-vl-8b', 'gemma-3-12b', 'qwen2.5-vl-7b', 'qwen3-vl-4b', 'gemma-3-4b', 'qwen3-vl-2b'],
-  open: ['dolphin-3-mistral-24b', 'hermes-4-14b', 'rocinante-12b', 'mistral-nemo-12b', 'hermes-3-llama-3.1-8b', 'dolphin-3-llama-3.1-8b', 'hermes-3-llama-3.2-3b'],
+  open: ['qwen3-30b-a3b-uncensored', 'dolphin-3-mistral-24b', 'qwen3-14b-uncensored', 'hermes-4-14b', 'rocinante-12b', 'mistral-nemo-12b', 'qwen3-8b-uncensored', 'hermes-3-llama-3.1-8b', 'dolphin-3-llama-3.1-8b', 'hermes-3-llama-3.2-3b'],
 };
 const RX_CLASS = { small: 'general', general: 'general', large: 'general', reasoning: 'reasoning', coding: 'coding', vision: 'vision', open: 'open' };
 const RX_RATE = { great: 4, good: 3, ok: 2, slow: 1, wont: 0 };
 // Small models from the same family make the lead faster (speculative decoding).
-const RX_SPEED = [[/^qwen3-(4b|8b|14b|32b)(-thinking)?$/, 'qwen3-1.7b'], [/^llama-3\.(1-8b|3-70b)$/, 'llama-3.2-1b'], [/^qwen2\.5-(coder-)?(7b|14b|32b)$/, 'qwen2.5-coder-1.5b']];
+const RX_SPEED = [[/^qwen3-(4b|8b|14b|32b)(-thinking)?(-uncensored)?$/, 'qwen3-1.7b'], [/^llama-3\.(1-8b|3-70b)$/, 'llama-3.2-1b'], [/^qwen2\.5-(coder-)?(7b|14b|32b)$/, 'qwen2.5-coder-1.5b']];
 
 function rxResolve(r) {
   if (r._resolved && r._resolvedAt === S.est && r._inst === S.installed.length && r._cat === S.catalog) return r._resolved;
@@ -269,8 +279,8 @@ function recipeCard(r) {
   const missing = rows.filter((x) => x.s.cls === 'miss').length;
   const where = { local: ['🏠 Runs on this PC', 'b-mint'], hybrid: ['⚡ Hybrid', 'b-lav'], cloud: ['☁ Cloud', 'b-sky'] }[r.where];
   const made = S.stacks.some((s) => s.id === `rx-${r.id}`) || S.data.assistants.some((a) => a.id === `as-rx-${r.id}`);
-  return `<div class="card rx-card">
-    <div class="row"><span class="emoji-badge">${r.icon}</span><h3 class="grow" style="margin:0">${esc(r.name)}</h3></div>
+  return `<div class="card rx-card${r.top ? ' rx-top-pick' : ''}">
+    <div class="row"><span class="emoji-badge">${r.icon}</span><h3 class="grow" style="margin:0">${esc(r.name)}</h3>${r.top ? '<span class="badge b-lemon">⭐ Top pick</span>' : ''}</div>
     <div class="row" style="gap:5px;margin:8px 0;flex-wrap:wrap"><span class="badge ${where[1]}">${where[0]}</span>${r.private ? `<span class="badge b-peach">🔒 ${esc(r.private)}</span>` : ''}${gb ? `<span class="badge b-lav">${gb.toFixed(1)} GB to download</span>` : r.where !== 'cloud' ? '<span class="badge b-mint">nothing to download</span>' : ''}</div>
     <div class="rx-parts">${rows.map(({ p, s }) => `<div class="rx-part ${s.cls}" title="${esc(s.title || '')}"><span class="rx-ic">${s.icon}</span><span class="rx-body"><span class="rx-top"><b>${esc(p.role)}</b><span class="rx-note">${esc(s.note)}</span></span><span class="rx-sub">${esc(s.sub)}</span></span></div>`).join('')}</div>
     ${missing ? `<p class="small muted" style="margin:6px 0 0">${missing === 1 ? 'One part isn\'t' : `${missing} parts aren't`} available in Quicksilver yet; the rest works now. Hover a part for details.</p>` : ''}

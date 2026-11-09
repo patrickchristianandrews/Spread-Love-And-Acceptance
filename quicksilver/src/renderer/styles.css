@@ -1230,3 +1230,11 @@ code.sel { user-select: all; background: var(--soft); padding: 1px 6px; border-r
 .og-row dt { font-weight: 700; }
 .og-row dd { margin: 0; color: var(--muted); line-height: 1.45; }
 @media (max-width: 640px) { .og-row { grid-template-columns: 1fr; gap: 2px; } }
+.rx-top-pick { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
+.kn-hero { display: flex; gap: 16px; align-items: flex-start; margin-bottom: 18px; padding: 18px 20px; border: 1px solid var(--accent-line); background: linear-gradient(135deg, var(--accent-tint), var(--panel)); }
+.kn-hero h2 { margin: 0 0 4px; font-size: 1.25rem; }
+.kn-hero p { margin: 0 0 12px; color: var(--muted); line-height: 1.5; max-width: 760px; }
+.kn-hero-ic { flex: none; width: 56px; height: 56px; border-radius: 16px; display: grid; place-items: center; font-size: 1.9rem; background: var(--panel); border: 1px solid var(--accent-line); }
+.kn-acts { gap: 8px; flex-wrap: wrap; }
+.nav-item.nav-knowledge { color: var(--text); }
+.nav-item.nav-knowledge [data-icon] { color: var(--accent); }

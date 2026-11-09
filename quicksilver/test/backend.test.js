@@ -1018,6 +1018,24 @@ async function collect(gen) {
     console.log('✓ private network: blocked until a VPN is connected, Proton VPN recognised');
   }
 
+  // Uncensored Qwen3 models: in the catalog, featured, sped up by the built-in 2B, and fetched from a
+  // backup copy when the first isn't there.
+  {
+    const ids = ['qwen3-8b-uncensored', 'qwen3-14b-uncensored', 'qwen3-30b-a3b-uncensored'];
+    for (const id of ids) { const m = catalog.TEXT_MODELS.find((x) => x.id === id); assert.ok(m && m.category === 'open' && m.verify && m.alt?.length, `${id} is in the catalog with backup copies`); }
+    assert.deepEqual(catalog.FEATURED.open.slice(0, 3), ['qwen3-30b-a3b-uncensored', 'qwen3-14b-uncensored', 'qwen3-8b-uncensored']);
+    assert.equal(catalog.draftFor('qwen3-14b-uncensored', [{ id: 'starter', catalogId: 'qwen3-vl-2b' }])?.id, 'starter', 'the built-in 2B drafts ahead for it');
+    const real = global.fetch;
+    const m8 = catalog.TEXT_MODELS.find((x) => x.id === 'qwen3-8b-uncensored');
+    global.fetch = async (url) => (String(url).includes(m8.repo + '/') ? new Response('{}', { status: 404 })
+      : new Response(JSON.stringify([{ type: 'file', path: 'Qwen3-8B-abliterated.Q4_K_M.gguf', size: 5e9 }]), { status: 200 }));
+    const plan = await models.planCatalog('qwen3-8b-uncensored');
+    global.fetch = real;
+    assert.equal(plan.repo, m8.alt[0], 'a backup copy is used when the first is missing');
+    assert.equal(plan.catalogId, 'qwen3-8b-uncensored'); assert.equal(plan.quant, 'Q4_K_M');
+    console.log('✓ uncensored Qwen3 8B / 14B / 30B-A3B: featured, sped up by the built-in 2B, backup copies used if needed');
+  }
+
   console.log('\nBACKEND TESTS PASSED');
   process.exit(0);
 })().catch((e) => { console.error('FAIL', e); llama.stopAll(); process.exit(1); });
