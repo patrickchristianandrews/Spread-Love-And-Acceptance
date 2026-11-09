@@ -250,7 +250,7 @@ function apiHTML() {
       <div class="row small" style="margin-bottom:10px">${(p.models || []).slice(0, 8).map((m) => `<span class="badge b-lav">${esc(m)}</span>`).join('')}${(p.models || []).length > 8 ? `<span class="small muted">+${p.models.length - 8} more</span>` : ''}${(p.imageModels || []).map((m) => `<span class="badge b-peach">🎨 ${esc(m)}</span>`).join('')}</div>
       <div class="row"><button class="btn small" data-api-refresh="${p.id}">Refresh models</button><button class="btn small" data-api-edit="${p.id}">Edit</button><button class="btn small danger" data-api-del="${p.id}">Remove</button></div>
     </div>`).join('')}</div>` : ''}
-    <div class="section"><h2>Add a connection</h2><span class="small muted">Every cloud AI that works with Quicksilver, marked free or paid, with the best model to use.</span></div>
+    <div class="section"><h2>Add a connection</h2><span class="small muted">Every cloud AI that works with Quicksilver, marked free or paid, with the best model to use. <a href="#" data-guide="apis">Which should I choose?</a></span></div>
     <div id="presets"></div>`;
 }
 

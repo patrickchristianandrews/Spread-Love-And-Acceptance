@@ -1,4 +1,4 @@
-// Settings → Options guide: every feature in one tidy place, in plain words, and where to find it.
+// Settings → Guide & tips: every feature in one tidy place, in plain words, and where to find it.
 // Nothing to set here. "What do these do?" under the message box opens it.
 'use strict';
 
@@ -89,5 +89,104 @@ function bindOptionsGuide() {}
 document.addEventListener('click', (e) => {
   if (!e.target.closest('[data-open-guide]')) return;
   e.preventDefault();
-  setTab = 'guide'; go({ view: 'settings' });
+  guideTab = 'options'; setTab = 'guide'; go({ view: 'settings' });
+});
+
+// ---------- Guide & tips: understanding stacks, the best cloud AIs, tips and tricks ----------
+// More tabs on the same page (Settings → Guide & tips), so nothing new goes in the menu. The
+// Stacks page and the cloud AI list link straight to the right tab.
+let guideTab = 'options';
+const GUIDE_TABS = { options: '📖 Every option', stacks: '🧩 Understanding stacks', apis: '☁️ Best cloud AIs', tips: '💡 Tips & tricks' };
+
+const STACKS_GUIDE = [
+  ['What a stack is', 'A stack (or team) is several AI models working as one. Different models make different mistakes, so when they answer separately and a lead combines the best of each, the result is more accurate than any one of them alone. You pick a stack like any model, in the model menu of a chat.'],
+  ['How a stack answers', 'Easy messages go to one fast model, so you don\'t wait for the whole team. Hard ones (maths, why / how / compare / plan, long problems) bring in the team: the helpers write their key points or drafts, then the lead writes the final answer from all of them. If the drafts already agree, the combining step is skipped. You can watch each step under the answer.'],
+  ['Ways of working together', 'Blend: the lead keeps the best of each draft. Debate: they critique each other, then the lead judges. Consensus: builds on what they agree on and flags disagreements. Majority vote: answers three times and keeps what agrees (great for maths). Red team: a second model hunts for mistakes before you see it (code, facts, advice). Plan, then solve: a planner breaks the job into steps first (long tasks). Expert panel: an expert, a sceptic and a creative thinker weigh in (decisions). Auto: one fast answer for easy questions, the team for hard ones.'],
+  ['Quicksilver Liquid Edition', 'The built-in stack. The Brain (uncensored Qwen3 4B) answers everyday messages fast and reasons step by step on hard ones; the Eyes & Muse (uncensored Qwen3-VL 2B) reads photos and sketches fresh angles for creative work. Stronger uncensored models you add join automatically (as the Closer or a second opinion, Dolphin for example), and its core updates itself as better uncensored models come out.'],
+  ['Ready-made stacks', 'Explore → Stacks has teams for specific work (music, office, research, coding, writing, uncensored…). Each is fitted to your PC: a model too big to run well is swapped for the strongest one that does, and stronger ones are used when your PC can. Every card says why it\'s good. New ones arrive online, marked 🆕.'],
+  ['Fusion: your own mix', 'Combine 2 to 4 AIs, local and cloud together, and pick how they work together. Mix makers (say Qwen + Llama + Claude) for the biggest gain, since they catch each other\'s mistakes. Explore → Models → Connect an API, or Explore → Stacks.'],
+  ['Council (an Effort option)', 'For one big question: a Structurer, a Critic and a Pragmatist each look at it, then one answer is written from all three, with a note on whether they agreed. It\'s 3 to 4 times slower, so keep it for decisions that matter.'],
+  ['Speed versus accuracy', 'Local models take turns on your PC (they share its memory), so each extra local model adds time; cloud models run at the same time, so a cloud helper costs little extra. On a PC without a graphics card, keep teams small (two models). With a graphics card, a strong lead with one or two helpers is the sweet spot. Explore → Compare models shows each model\'s skill, accuracy and speed on your PC by task.'],
+];
+
+// [name, tag, best model, what it's best for, notes]
+const API_GUIDE = {
+  free: [
+    ['Cerebras', 'Best free partner', 'Qwen3 235B (or gpt-oss-120b)', 'Pairs with the Liquid Edition: the big sibling of its Brain, extremely fast, with a large free daily allowance.', 'No card needed.'],
+    ['Groq', 'Fastest backup', 'gpt-oss-120b or Llama 3.3 70B', 'Very fast answers; a great second free AI so free rotation can switch when one hits its limit.', 'No card needed.'],
+    ['Google Gemini (AI Studio)', 'Smart, sees images', 'Gemini 2.5 Flash', 'Strong all-rounder that reads photos and very long documents.', 'Free-plan prompts may be used by Google to improve its models; more filtered than the uncensored local models.'],
+    ['Mistral (Experiment plan)', 'Generous', 'Mistral Large', 'Good writing and multilingual work, with high free limits.', 'Needs a verified phone number; free-plan prompts may be used for training.'],
+    ['OpenRouter', 'Many models, one key', 'openrouter/auto, or any ":free" model', 'Try hundreds of models; the ":free" ones cost nothing.', 'A daily cap on free requests.'],
+    ['GitHub Models', 'With your GitHub account', 'GPT-4.1', 'Try well-known models with a GitHub token.', 'Low daily limits.'],
+  ],
+  paid: [
+    ['Anthropic (Claude)', 'Best for writing and code', 'Claude Opus 5.5 (Sonnet 5.5 for value, Haiku 5.5 for speed)', 'Excellent writing, careful reasoning, long documents and coding; a superb lead for hard questions or Council.', 'Pay as you go.'],
+    ['OpenAI', 'Strong all-rounder', 'GPT-5 (gpt-5-mini is much cheaper)', 'Reasoning, coding and broad knowledge.', 'The API is separate from a ChatGPT subscription.'],
+    ['Google Gemini (paid)', 'Huge context', 'Gemini 2.5 Pro', 'Very long documents and video; paid use isn\'t used to train Google\'s models.', 'Pay as you go.'],
+    ['DeepSeek', 'Cheapest strong reasoning', 'deepseek-reasoner', 'Strong maths and reasoning at a very low price.', 'Pay as you go.'],
+    ['Perplexity', 'Answers with sources', 'sonar-pro', 'Searches the web and cites sources in every answer.', 'Pay as you go.'],
+    ['xAI (Grok)', 'Up to date', 'Grok 4', 'Strong reasoning and current events.', 'Pay as you go.'],
+    ['Venice AI', 'Uncensored and private', 'venice-uncensored', 'Uncensored cloud answers; Venice says it doesn\'t store prompts.', 'Small free allowance, then Pro or credits.'],
+    ['Featherless', 'Flat monthly price', 'Thousands of open and uncensored models', 'Unlimited use of open fine-tunes for one monthly price.', 'Subscription.'],
+  ],
+};
+
+const TIPS_GUIDE = [
+  ['Leave Effort on Auto', 'Easy questions come back fast, hard ones get the team. Switch to Council only for big decisions.'],
+  ['Turn on Double-check for facts', 'A second model checks every claim and fixes clear mistakes. Worth it for health, money, legal and work answers.'],
+  ['Give it your files', 'Add documents to Your knowledge, turn on Smarter search, and switch on Library in a chat: answers come from your files with sources.'],
+  ['Use Fix my prompt', 'One click turns a quick note into a clear, complete request, which gives a noticeably better answer.'],
+  ['Pick the length', 'Quick answer for a fast fact, Detailed answer when you want the full picture.'],
+  ['Tell it about you once', 'Say "remember that I…" (your job, your tools, how you like answers) and every new chat uses it.'],
+  ['Use Projects for ongoing work', 'Put the instructions and files for a piece of work in a project; every chat in it knows the background.'],
+  ['Rate answers', '👍 and 👎 teach Automatic which model suits you for each kind of question.'],
+  ['Pair a free cloud AI', 'Connect Cerebras plus Groq or Mistral (free) and turn on "use my cloud AI for hard questions": everyday stays private on your PC, hard ones get a big model, and free rotation keeps it free.'],
+  ['Add Dolphin or a stronger uncensored model', 'The Liquid Edition adds it to its crew by itself: a second opinion or a Closer on hard questions.'],
+  ['Mix makers in a Fusion', 'Qwen + Llama + Claude catch more mistakes than three models from the same family.'],
+  ['Free memory when you need it', 'Stop a model from the chat\'s status light before gaming or video editing; it reloads when needed.'],
+  ['Check Your PC', 'See how fast each model runs, the cheapest upgrade that would help most, and how much faster a new PC would be.'],
+  ['Shortcuts', 'Ctrl+N new chat, Ctrl+K search chats, Ctrl+Space voice, and / in the message box for skills.'],
+  ['Keep it private when it matters', 'Go offline for a fully private session, or use Private online with Proton VPN; each chat\'s header tells you which.'],
+  ['Bring your history', 'Import your chats from ChatGPT, Claude, Gemini and others (Settings → General) and carry on any of them here.'],
+];
+
+function stacksGuideHTML() {
+  return `<div class="og"><p class="help" style="margin-top:0">How stacks work, and how to get the most from them.</p>
+    <section class="card og-sec"><dl>${STACKS_GUIDE.map(([k, v]) => `<div class="og-row"><dt>${esc(k)}</dt><dd>${esc(v)}</dd></div>`).join('')}</dl>
+    <div class="row" style="margin-top:10px;gap:8px;flex-wrap:wrap"><button class="btn small primary" data-goto="stacks">Open Stacks</button><button class="btn small" data-goto="arena">Compare models by task</button></div></section></div>`;
+}
+function apisGuideHTML() {
+  const row = ([name, tag, best, what, note]) => `<div class="api-row"><div class="row" style="gap:8px;flex-wrap:wrap"><b>${esc(name)}</b><span class="badge b-lav">${esc(tag)}</span></div>
+    <div class="small">⭐ <b>Best model:</b> ${esc(best)}</div><div class="small">${esc(what)}</div><div class="small muted">${esc(note)}</div></div>`;
+  return `<div class="og"><p class="help" style="margin-top:0">Quicksilver works without any cloud AI. These are the best ones to add, as of this version. Prices and free limits change often, so each service's card in Connect an API links to its current prices.</p>
+    <section class="card og-sec"><h3>✓ Free</h3><div class="api-grid">${API_GUIDE.free.map(row).join('')}</div></section>
+    <section class="card og-sec"><h3>$ Paid</h3><div class="api-grid">${API_GUIDE.paid.map(row).join('')}</div></section>
+    <section class="card og-sec"><h3>Which to choose</h3><dl>
+      <div class="og-row"><dt>Most private</dt><dd>Your PC (offline or with Proton VPN). Nothing leaves it.</dd></div>
+      <div class="og-row"><dt>Best free setup</dt><dd>Cerebras + Groq + Mistral, with free rotation and "cloud for hard questions" on.</dd></div>
+      <div class="og-row"><dt>Best writing and code</dt><dd>Claude (paid), as the lead in a Fusion or for hard questions.</dd></div>
+      <div class="og-row"><dt>Web research with sources</dt><dd>Perplexity (paid), or Quicksilver's own web search (free).</dd></div>
+      <div class="og-row"><dt>Uncensored in the cloud</dt><dd>Venice or Featherless; for full privacy, the uncensored models on your PC.</dd></div>
+      <div class="og-row"><dt>Lowest cost</dt><dd>DeepSeek for paid reasoning; the free plans above for everything else.</dd></div>
+    </dl><div class="row" style="margin-top:10px"><button class="btn small primary" id="guide-connect">Connect a cloud AI</button></div></section></div>`;
+}
+function tipsGuideHTML() {
+  return `<div class="og"><p class="help" style="margin-top:0">Small habits that make Quicksilver your best AI.</p>
+    <section class="card og-sec"><div class="tips-grid">${TIPS_GUIDE.map(([k, v], i) => `<div class="tip-item"><span class="tip-n">${i + 1}</span><div><b>${esc(k)}</b><div class="small muted">${esc(v)}</div></div></div>`).join('')}</div></section></div>`;
+}
+function guidePageHTML() {
+  const body = { options: optionsGuideHTML, stacks: stacksGuideHTML, apis: apisGuideHTML, tips: tipsGuideHTML }[guideTab] || optionsGuideHTML;
+  return `<div class="tabs guide-tabs">${Object.entries(GUIDE_TABS).map(([k, l]) => `<button class="tab ${guideTab === k ? 'active' : ''}" data-guide-tab="${k}">${l}</button>`).join('')}</div>${body()}`;
+}
+function bindGuidePage() {
+  $$('[data-guide-tab]').forEach((b) => b.addEventListener('click', () => { guideTab = b.dataset.guideTab; render(); }));
+  $$('#main [data-goto]').forEach((b) => b.addEventListener('click', () => go({ view: b.dataset.goto })));
+  $('#guide-connect')?.addEventListener('click', () => { modelsTab = 'api'; go({ view: 'models' }); });
+}
+// Links from elsewhere: data-guide="stacks" / "apis" / "tips" opens that tab of the guide.
+document.addEventListener('click', (e) => {
+  const b = e.target.closest('[data-guide]');
+  if (!b) return;
+  e.preventDefault();
+  guideTab = b.dataset.guide; setTab = 'guide'; go({ view: 'settings' });
 });

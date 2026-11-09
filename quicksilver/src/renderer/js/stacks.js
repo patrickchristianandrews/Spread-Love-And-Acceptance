@@ -21,7 +21,7 @@ views.stacks = {
     const goal = ([k, j]) => `<button class="goal ${advJob === k ? 'on' : ''}" data-job="${k}" aria-pressed="${advJob === k}">
       <span class="goal-ic">${j.icon}</span><span><b>${esc(j.label)}</b><span class="small muted">${esc(j.pitch)}</span></span></button>`;
     return `<div class="page">
-      <div class="page-head"><h1>Stacks</h1><button class="btn" data-goto="compare">Compare teams</button><button class="btn" id="infuse">⚗️ Fusion: combine any AIs, including cloud</button></div>
+      <div class="page-head"><h1>Stacks</h1><a href="#" class="small og-link" data-guide="stacks" style="align-self:center">ⓘ How stacks work</a><button class="btn" data-goto="compare">Compare teams</button><button class="btn" id="infuse">⚗️ Fusion: combine any AIs, including cloud</button></div>
       <p class="lede">A team makes several AI models work as one: they answer separately, then a lead combines the best of each and fixes mistakes. <b>Pick what you want to do</b>, and Quicksilver shows the best team for this PC, how strong and fast each option is, and which cloud AI (optional) would make it even better.</p>
       ${foundBanner()}
       ${shownUpgrades().length || shownStackUpdates().length ? modelUpdatesHTML() : ''}

@@ -653,6 +653,23 @@ function redPng(size = 64) {
   await win.waitForSelector('.og-sec h3:has-text("Effort")');
   assert.ok(await win.locator('.og-row dt:has-text("Council")').count() === 1 && await win.locator('.og-sec').count() >= 6);
   await shot(win, '17b-options-guide');
+  // Guide & tips: more tabs on the same page (no new menu items).
+  assert.strictEqual(await win.locator('[data-guide-tab]').count(), 4);
+  await win.click('[data-guide-tab="stacks"]');
+  await win.waitForSelector('.og-row dt:has-text("What a stack is")');
+  await shot(win, '17c-guide-stacks');
+  await win.click('[data-guide-tab="apis"]');
+  await win.waitForSelector('.api-row b:has-text("Cerebras")');
+  assert.ok(await win.locator('.api-row').count() >= 12);
+  assert.ok(await win.locator('#guide-connect').count() === 1);
+  await shot(win, '17d-guide-apis');
+  await win.click('[data-guide-tab="tips"]');
+  assert.ok(await win.locator('.tip-item').count() >= 12);
+  await shot(win, '17e-guide-tips');
+  // The Stacks page links straight to its tab.
+  await win.evaluate(() => go({ view: 'stacks' }));
+  await win.click('#main [data-guide="stacks"]');
+  await win.waitForSelector('[data-guide-tab="stacks"].active');
   await win.click('.nav-new');
   console.log('✓ options guide: every option explained in Settings, linked from the message box');
 

@@ -1267,3 +1267,10 @@ code.sel { user-select: all; background: var(--soft); padding: 1px 6px; border-r
 
 .rx-why { margin: 6px 0 8px; line-height: 1.45; color: var(--text); }
 .rx-why b { color: var(--accent); }
+
+.guide-tabs { margin-bottom: 12px; }
+.api-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 10px; }
+.api-row { display: flex; flex-direction: column; gap: 4px; padding: 10px 12px; border-radius: 12px; border: 1px solid var(--line-soft); background: var(--panel); }
+.tips-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 10px; }
+.tip-item { display: flex; gap: 10px; align-items: flex-start; padding: 8px 10px; border-radius: 10px; background: var(--hover); }
+.tip-n { flex: none; width: 24px; height: 24px; border-radius: 50%; display: grid; place-items: center; font-size: .78rem; font-weight: 800; background: var(--accent-tint); color: var(--accent); }
