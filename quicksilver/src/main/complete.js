@@ -562,7 +562,7 @@ async function* stack(stackDef, req) {
   // Everything else from a Brain that can think: answered straight away, without thinking.
   if (stackDef.id === 'quicksilver' && members.thinker && members.thinker === (members.drafters || [])[0]) req = { ...req, noThink: true };
   if (stackDef.id === 'quicksilver' && req.stepByStep !== false) req = { ...req, stepByStep: true };
-  if (stackDef.id === 'quicksilver' && req.level !== 'quick' && !req.toolList && !hasImages(req.messages) && CREATIVE.test(lastUserText(req.messages))) {
+  if (stackDef.id === 'quicksilver' && !req.noMuse && req.level !== 'quick' && !req.toolList && !hasImages(req.messages) && CREATIVE.test(lastUserText(req.messages))) {
     const steps0 = [];
     const step0 = (s) => { s.index = steps0.length; steps0.push(s); return { type: 'step', step: s }; };
     const live0 = (s) => (t) => { s.text = t; req.onStep?.(s); };

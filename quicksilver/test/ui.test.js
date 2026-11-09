@@ -1015,6 +1015,18 @@ function redPng(size = 64) {
   await shot(win, '11c-quick-fixes');
   console.log('✓ studio: music, voice, quick fixes');
 
+  // Settings → Features: every feature on or off, with what you gain or lose.
+  await win.click('[data-nav="settings"]');
+  await win.click('[data-set-tab="features"]');
+  await win.waitForSelector('.feat [data-feature="thinking"]');
+  assert.ok(await win.locator('.feat').count() >= 12, 'every feature has a switch');
+  assert.match(await win.locator('.feat:has([data-feature="autoWeb"])').innerText(), /With it on:[\s\S]*With it off:/);
+  await win.click('[data-feature="thinking"]');
+  await win.waitForSelector('.toast:has-text("Thinking for hard questions off")');
+  assert.equal(await win.evaluate(() => S.data.prefs.thinking), false);
+  await shot(win, '09b-features');
+  await win.click('[data-feature="thinking"]');
+  assert.equal(await win.evaluate(() => S.data.prefs.thinking), true);
   // Settings: API server on.
   await win.click('[data-nav="settings"]');
   await win.click('[data-set-tab="advanced"]');

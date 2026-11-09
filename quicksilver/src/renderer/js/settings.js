@@ -20,15 +20,15 @@ views.settings = {
   html() {
     // Phone, API server and Engines are rarely needed, so they share one Advanced tab.
     if (ADV_PARTS.some(([k]) => k === setTab)) { advFocus = setTab; setTab = 'advanced'; }
-    const tabs = { general: 'General', guide: 'Guide & tips', chat: 'Chat & accuracy', memory: 'Memory', voice: 'Voice', web: 'Web search', accounts: 'Accounts', advanced: 'Advanced' };
+    const tabs = { general: 'General', features: 'Features', guide: 'Guide & tips', chat: 'Chat & accuracy', memory: 'Memory', voice: 'Voice', web: 'Web search', accounts: 'Accounts', advanced: 'Advanced' };
     const adv = new Set(['web', 'accounts', 'advanced']);
     return `<div class="page"><div class="page-head"><h1>Settings</h1></div>
       <div class="tabs">${Object.entries(tabs).filter(([k]) => !simpleOn() || !adv.has(k) || setTab === k).map(([k, l]) => `<button class="tab ${setTab === k ? 'active' : ''}" data-set-tab="${k}">${l}</button>`).join('')}</div>
-      <div style="max-width:860px">${({ general: generalHTML, guide: guidePageHTML, chat: chatSetHTML, memory: memSetHTML, voice: voiceSetHTML, web: webHTML, accounts: accountsHTML, advanced: advancedHTML })[setTab]()}</div></div>`;
+      <div style="max-width:860px">${({ general: generalHTML, guide: guidePageHTML, chat: chatSetHTML, memory: memSetHTML, voice: voiceSetHTML, web: webHTML, accounts: accountsHTML, advanced: advancedHTML, features: featuresHTML })[setTab]()}</div></div>`;
   },
   bind() {
     $$('[data-set-tab]').forEach((b) => b.addEventListener('click', () => { setTab = b.dataset.setTab; render(); }));
-    ({ general: bindGeneral, guide: bindGuidePage, chat: bindChatSet, memory: bindMemSet, voice: bindVoiceSet, web: bindWeb, accounts: bindAccounts, advanced: bindAdvanced })[setTab]();
+    ({ general: bindGeneral, guide: bindGuidePage, chat: bindChatSet, memory: bindMemSet, voice: bindVoiceSet, web: bindWeb, accounts: bindAccounts, advanced: bindAdvanced, features: bindFeatures })[setTab]();
   },
 };
 
@@ -38,13 +38,7 @@ function generalHTML() {
   return `<div class="stack-v">
     ${updateBoxHTML()}
     <div class="field"><label>View</label><div class="row">${[[true, 'Simple'], [false, 'Full']].map(([v, l]) => `<button class="btn small ${simpleOn() === v ? 'on' : ''}" data-simple="${v}">${l}</button>`).join('')}</div><span class="help">Simple shows what most people need; everything else is under More in the sidebar and the ＋ in the message box. Full shows every option.</span></div>
-    <label class="row"><input type="checkbox" id="g-auto" ${S.data.prefs.autoRoute !== false ? 'checked' : ''}> <span><b>Pick the best model for each question automatically</b> <span class="help">quick answers first; the team works on hard questions when it can still answer in about a minute</span></span></label>
-    <label class="row"><input type="checkbox" id="g-autoweb" ${S.data.prefs.autoWeb !== false ? 'checked' : ''}> <span><b>Check the web for questions about current things</b> <span class="help">news, prices, weather, the latest guidance; switch web search off in a chat to skip it there</span></span></label>
-    <label class="row"><input type="checkbox" id="g-autofix" ${S.data.prefs.autoFix !== false ? 'checked' : ''}> <span><b>Fix mistakes automatically</b> <span class="help">wrong sums, code that doesn't compile, web pages with errors, or a clear error found by the double-check: the answer is rewritten once with the correction</span></span></label>
-    <label class="row"><input type="checkbox" id="g-human" ${S.data.prefs.humanWriting !== false ? 'checked' : ''}> <span><b>Write like a person, not a chatbot</b> <span class="help">conversational, clear answers with no AI tells: no "Certainly!", no sign-offs, no em dashes, and headings or bullet points only when they really help. Off: the usual structured AI style.</span></span></label>
-    <label class="row"><input type="checkbox" id="g-autoupgrade" ${S.data.prefs.autoInstallModels === true ? 'checked' : ''}> <span><b>Install better models and stacks automatically</b> <span class="help">Quicksilver checks online every day for newer, stronger models that run well on this PC, installs them in the background and switches your stacks and chats over (you can remove the old ones). Off (the default): it tells you, and you choose what to download.</span></span></label>
-    <label class="row"><input type="checkbox" id="g-tips" ${S.data.prefs.tips !== false ? 'checked' : ''}> <span><b>Show tips for getting more out of Quicksilver</b> <span class="help">now and then, under an answer from the built-in model: a short tip matched to what you asked (a coding stack, upgrades, the Library…)</span></span></label>
-    ${S.providers.length ? `<label class="row"><input type="checkbox" id="g-cloudhard" ${S.data.prefs.cloudHard ? 'checked' : ''}> <span><b>Use my cloud AI for hard questions</b> <span class="help">${esc(S.providers.map((x) => x.name).join(', '))}: stronger on hard questions; uses your API credits</span></span></label>` : ''}
+    <div class="notice info">Automatic model choice, thinking, web search, memory, double-check and the other features can each be turned on or off in <a href="#" data-set-tab-link="features">Settings → Features</a>, which says what you gain or lose.</div>
     <div class="field"><label for="g-name">Your name</label><input id="g-name" value="${esc(P().userName)}" placeholder="Optional"></div>
     <div class="field"><label for="g-about">About you</label><span class="help">Optional. Shared with your assistants so answers fit you (for example your role, company or preferences).</span><textarea id="g-about" rows="3">${esc(P().about)}</textarea></div>
     <div class="field"><label>Appearance</label><div class="row">${[['dark', 'Dark'], ['light', 'Light'], ['system', 'Match Windows']].map(([k, l]) => `<button class="btn small ${(P().theme || 'dark') === k ? 'on' : ''}" data-theme-set="${k}">${l}</button>`).join('')}</div></div>
@@ -95,14 +89,8 @@ function bindMemSet() { const box = $('#mem-box'); const repaint = () => { box.i
 function bindGeneral() {
   bindVpnCard();
   $$('[data-simple]').forEach((b) => b.addEventListener('click', () => { P().simple = b.dataset.simple === 'true'; applyPrefs(); save(); render(); }));
-  $('#g-auto').addEventListener('change', (e) => { P().autoRoute = e.target.checked; save(); });
-  $('#g-autoweb').addEventListener('change', (e) => { P().autoWeb = e.target.checked; save(); });
-  $('#g-autofix').addEventListener('change', (e) => { P().autoFix = e.target.checked; save(); });
-  $('#g-human')?.addEventListener('change', (e) => { P().humanWriting = e.target.checked; save(); });
-  $('#g-autoupgrade')?.addEventListener('change', (e) => { P().autoInstallModels = e.target.checked; save(); });
-  $('#g-tips')?.addEventListener('change', (e) => { P().tips = e.target.checked; save(); });
-  $('#g-cloudhard')?.addEventListener('change', (e) => { P().cloudHard = e.target.checked; save(); });
   bindParentalLock();
+  $$('[data-set-tab-link]').forEach((b) => b.addEventListener('click', (e) => { e.preventDefault(); setTab = b.dataset.setTabLink; render(); }));
   $('#del-all-chats')?.addEventListener('click', async () => {
     const gone = S.data.chats.filter((c) => !c.pinned && c.id !== pending?.chatId);
     if (!gone.length) { toast('No chats to delete (pinned chats are kept).'); return; }

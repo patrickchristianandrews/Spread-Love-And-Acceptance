@@ -1358,3 +1358,15 @@ code.sel { user-select: all; background: var(--soft); padding: 1px 6px; border-r
 .addon-status { color: var(--accent); font-weight: 700; }
 .addon-effect { padding: 5px 8px; border-radius: 8px; background: var(--hover); font-weight: 600; }
 .pal-intro { margin: 6px 4px 4px; padding: 10px 12px; border-radius: 10px; background: var(--accent-tint); font-size: .85rem; line-height: 1.4; }
+
+.feat { padding: 10px 0; border-top: 1px solid var(--line-soft); }
+.feat:first-of-type { border-top: 0; }
+.feat-top { display: flex; gap: 10px; align-items: flex-start; cursor: pointer; }
+.feat-top input { margin-top: 4px; }
+.feat-state { font-size: .72rem; font-weight: 800; padding: 1px 7px; border-radius: 999px; background: var(--hover); margin-left: 6px; }
+.feat.on .feat-state { background: color-mix(in srgb, #2fbf71 22%, transparent); }
+.feat-what { display: block; margin-top: 2px; }
+.feat-ab { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin: 6px 0 0 26px; }
+.feat-ab > div { padding: 6px 9px; border-radius: 8px; background: var(--hover); opacity: .7; }
+.feat-ab > div.now { opacity: 1; outline: 1.5px solid color-mix(in srgb, var(--accent) 50%, transparent); }
+@media (max-width: 640px) { .feat-ab { grid-template-columns: 1fr; } }
