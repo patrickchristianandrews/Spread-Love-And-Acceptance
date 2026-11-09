@@ -161,6 +161,11 @@ function redPng(size = 64) {
   await win.click('#toast .toast-act');
   await win.waitForSelector('#modal h2:has-text("what the web and a cloud AI add")');
   assert.match(await win.locator('#modal .bz').innerText(), /Web search[\s\S]*Connected apps/);
+  // Every major job rated out of 10: on its own, with the web, with a cloud AI.
+  const jobs = await win.locator('#modal .bz-jobs').innerText();
+  for (const j of ['Reasoning & maths', 'Complex tasks', 'Research & current facts', 'Coding', 'Photo creation', 'Photo editing', 'Video creation', 'Music']) assert.ok(jobs.includes(j), j);
+  assert.match(jobs, /On its own[\s\S]*\+ Web[\s\S]*\+ Cloud AI[\s\S]*\/10/);
+  await win.evaluate(() => { document.querySelector('#modal-body').scrollTop = 0; });
   await shot(win, '06b-web-cloud-boost');
   await win.click('#modal [data-close]');
   await win.setInputFiles('#file-in', { name: 'sales.csv', mimeType: 'text/csv', buffer: Buffer.from('Region,Revenue\nNorth,1200\nSouth,800\n') });

@@ -28,6 +28,55 @@ function boostCloud({ uncensoredOnly = false } = {}) {
 }
 const boostBar = (from, to) => `<span class="bz-bar"><i class="bz-from" style="width:${from}%"></i><i class="bz-to" style="left:${from}%;width:${Math.max(0, to - from)}%"></i></span>`;
 
+// ---------- every major job, rated out of 10: on its own, with the web, with a cloud AI ----------
+// Text jobs use each model's job ratings and independent test scores; pictures, editing and video
+// use Quicksilver's quality ratings for the models on this PC and for the best cloud services.
+function jobOf(targets, key) {
+  let best = null;
+  for (const t of targets || []) {
+    const v = String(t).startsWith('api:') ? 9 : targetModel(t)?.jobs?.[key];
+    if (v != null && !(best >= v)) best = v;
+  }
+  return best;
+}
+const r10 = (v) => (v == null ? null : Math.max(0, Math.min(10, Math.round(v * 2) / 2)));
+function boostJobs(targets, { liquid = false } = {}) {
+  const sci = boostBase(targets);
+  const cloud = boostCloud({ uncensoredOnly: liquid });
+  const ccode = connectedClouds().map((p) => cloudScoresFor(p.preset)?.coding).filter((x) => x != null).sort((a, b) => b - a)[0];
+  const cloudText = cloud.science != null ? cloud.science / 10 : liquid ? 7 : 9;
+  const sees = (targets || []).some((t) => String(t).startsWith('api:') || targetModel(t)?.vision);
+  // Pictures, editing, video and music: this team's own models, or the best installed on this PC (Create).
+  const own = stackRatings(targets || []);
+  const pc = createRatings(S.installed.filter((m) => m.kind && m.kind !== 'text').map((m) => ({ model: catModel(m.catalogId) })).filter((x) => x.model));
+  const media = (k) => { const v = Math.max(own[k]?.v ?? -1, pc[k]?.v ?? -1); return v < 0 ? null : v * 2; };
+  const maxOf = (table, i) => Math.max(...Object.entries(table).filter(([k]) => k !== 'other').map(([, v]) => v[i]));
+  const research = jobOf(targets, 'research') ?? jobOf(targets, 'general');
+  // [icon, job, on its own, with the web, with a cloud AI or service, how it improves]
+  return [
+    ['🧠', 'Reasoning & maths', sci != null ? sci / 10 : jobOf(targets, 'general'), null, cloudText, 'Multi-step logic, maths and "why" questions: a big cloud model gets far more of the hardest ones right.'],
+    ['🧩', 'Complex tasks', jobOf(targets, 'office'), null, Math.max(cloudText, 8.5), 'Plans, reports and analysis with many steps: a cloud AI keeps track of more at once and misses fewer steps.'],
+    ['🔎', 'Research & current facts', research != null ? research * 0.4 : null, 9, 9.5, 'On its own a model only knows facts from before its training; with the web it reads today\'s pages and cites them.'],
+    ['✍️', 'Writing', jobOf(targets, 'general'), null, Math.max(cloudText, 8.5), 'Emails, stories and essays: a cloud AI writes with more polish and range; the web adds facts to cite.'],
+    ['💻', 'Coding', jobOf(targets, 'coding'), null, ccode != null ? ccode / 10 : liquid ? 7 : 9, 'Bigger programs and harder bugs: a cloud AI writes working code first time more often; the web finds current docs.'],
+    ['👁️', 'Reading photos & screenshots', sees ? jobOf(targets, 'vision') : 0, null, liquid ? 7 : 9, sees ? 'Reads charts, receipts and handwriting more accurately with a cloud AI.' : 'This one can\'t see photos on its own; a cloud AI (or a model that sees) can.'],
+    ['🖼️', 'Photo creation', media('photo'), null, maxOf(IMAGE_SERVICES, 2), 'A connected picture service (GPT Image, Nano Banana, FLUX) makes sharper, more detailed pictures with readable text; Quicksilver writes the prompt.'],
+    ['🪄', 'Photo editing', media('editing'), null, IMAGE_SERVICES.nano[2], 'Edits from a description ("remove the person", "make it sunset") keep faces and details better with Nano Banana or GPT Image.'],
+    ['🎬', 'Video creation', media('video'), null, maxOf(VIDEO_SERVICES, 2), 'Cloud video (Veo, Kling) is sharper, longer and has sound; it\'s used on the service\'s site and Quicksilver writes the shot list and prompts.'],
+    ['🎵', 'Music', media('music') ?? SYNTH_MUSIC * 2, null, null, 'The built-in synth makes instrumentals; for songs with vocals, Quicksilver writes the lyrics and style prompt for a cloud music app.'],
+  ].map(([ic, job, a, w, c, how]) => [ic, job, r10(a), r10(w), r10(c), how]);
+}
+function boostJobsHTML(targets, opts = {}) {
+  const rows = boostJobs(targets, opts);
+  const cell = (v, base) => (v == null ? '<span class="muted">–</span>' : `<b class="${v > (base ?? 0) ? 'bz-up' : ''}">${v}/10</b>`);
+  return `<div class="bz-jobs"><div class="bz-jh"><span>What it does</span><span>On its own</span><span>+ Web</span><span>+ Cloud AI</span></div>
+    ${rows.map(([ic, job, a, w, c, how]) => {
+      const best = Math.max(a ?? 0, w ?? 0, c ?? 0);
+      return `<div class="bz-jr"><span><b>${ic} ${esc(job)}</b>${boostBar((a ?? 0) * 10, best * 10)}<span class="small muted">${esc(how)}</span></span><span>${a ? `<b>${a}/10</b>` : '<span class="muted">Can’t</span>'}</span><span>${cell(w, a)}</span><span>${cell(c, a)}</span></div>`;
+    }).join('')}
+    <p class="small muted" style="margin:4px 0 0">Quality of the output out of 10. Reasoning and coding come from independent tests; the rest are Quicksilver's ratings. "+ Cloud AI" is ${esc(boostCloud({ uncensoredOnly: opts.liquid }).name)}${opts.liquid ? ' (the Liquid Edition only uses uncensored cloud AIs)' : ''} for words, and the best cloud picture and video services for media.</p></div>`;
+}
+
 // targets: what answers (local:/api: targets or catalogue ids). opts.liquid: the Liquid Edition
 // (uses only uncensored cloud AIs). opts.compact: one short line for cards.
 function boostsHTML(targets, { liquid = false, compact = false, fusion = false } = {}) {
@@ -54,7 +103,7 @@ function boostsHTML(targets, { liquid = false, compact = false, fusion = false }
       <span class="small muted">Cost: needs internet; hard questions leave your PC; free plans have daily limits. ${cloud.connected ? (cloudOn || fusion ? '' : 'Turn it on in Settings → Features → Cloud AI for hard questions.') : 'Connect one in Models → Connect an API (free plans available).'}</span></span></div>`);
   }
   rows.push(`<div class="bz-row"><span class="bz-ic">🔌</span><span class="grow"><b>Connected apps</b><span class="small">With Gmail, Calendar, Drive, Spotify and others connected, answers come from your real data instead of general advice ("what's on my calendar Friday?"). It asks before sending or changing anything.</span></span></div>`);
-  return `<div class="bz"><div class="bz-title">⚡ How the web and a cloud AI improve ${fusion ? 'this custom AI' : 'it'}</div>${rows.join('')}</div>`;
+  return `<div class="bz"><div class="bz-title">⚡ How the web and a cloud AI improve ${fusion ? 'this custom AI' : 'it'}</div>${boostJobsHTML(targets, { liquid })}${rows.join('')}</div>`;
 }
 // The full explanation for a model or stack you picked.
 function boostModal(target) {

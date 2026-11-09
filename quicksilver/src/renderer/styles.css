@@ -1406,3 +1406,12 @@ code.sel { user-select: all; background: var(--soft); padding: 1px 6px; border-r
 .bz-to { background: #2fbf71; }
 .bz-compact { display: flex; flex-wrap: wrap; gap: 4px 12px; margin: 0 0 8px; color: var(--muted); }
 .bz-row .grow > b + .badge, .bz-row .badge { align-self: flex-start; }
+
+.bz-jobs { display: grid; gap: 4px; margin-bottom: 6px; }
+.bz-jh, .bz-jr { display: grid; grid-template-columns: minmax(0, 2.6fr) repeat(3, minmax(64px, .6fr)); gap: 8px; align-items: center; padding: 6px 8px; border-radius: 8px; }
+.bz-jh { font-size: .75rem; font-weight: 800; color: var(--muted); }
+.bz-jr:nth-child(even) { background: var(--hover); }
+.bz-jr > span:first-child { display: flex; flex-direction: column; gap: 3px; }
+.bz-jr > span:not(:first-child) { text-align: center; font-size: .9rem; }
+.bz-up { color: #2fbf71; }
+@media (max-width: 640px) { .bz-jh, .bz-jr { grid-template-columns: 1fr repeat(3, 52px); } }
