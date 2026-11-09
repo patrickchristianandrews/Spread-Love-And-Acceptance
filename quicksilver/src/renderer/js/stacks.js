@@ -40,6 +40,7 @@ views.stacks = {
       <div id="adv-out">${advResult ? advisorHTML(advResult) : '<div class="empty">Checking your PC and your models…</div>'}</div>
       <div class="section"><h2>Your stacks</h2><span class="small muted">Stacks you've set up. Your fusions are on the <a href="#" data-sf-tab="fusion">⚗️ Fusion</a> tab.</span></div>
       ${yourStacksHTML()}
+      ${suggestSectionHTML()}
       ${recipesHTML()}
       ${kitsHTML()}
     </div>`;
@@ -48,6 +49,8 @@ views.stacks = {
     if (!S.est) refreshEstimates().then(() => S.route.view === 'stacks' && render());
     loadFound();
     $$('[data-sf-tab]').forEach((b) => b.addEventListener('click', (e) => { e.preventDefault(); stacksTab = b.dataset.sfTab; render(); }));
+    if (stacksTab !== 'community' && document.querySelector('.sug-sec')) bindSuggest(document.querySelector('.sug-sec'));
+    $$('[data-sug-open]').forEach((b) => b.addEventListener('click', () => suggestModal(b.dataset.sugOpen)));
     $$('#fusion-new-main').forEach((b) => b.addEventListener('click', () => infuseModal(() => render())));
     if (stacksTab === 'community') bindCommunity();
     if (!advJob) { runAdvisor('general'); return; }
@@ -356,6 +359,7 @@ function fusionPageHTML() {
       <div class="stack-v" style="gap:6px"><button class="btn primary" id="fusion-new-main">⚗️ Build a custom AI</button><button class="btn" data-import-ai>⬇ Import one</button></div></div></div>
     <div class="section"><h2>Your custom AIs</h2><span class="small muted">Rename with Edit; share with 📤 Publish.</span></div>
     ${mine.length ? `<div class="cards">${mine.map(stackCard).join('')}</div>` : '<p class="muted">No custom AIs yet. Press ⚗️ Build a custom AI, or start with a one-click fusion below.</p>'}
+    ${suggestSectionHTML()}
     ${powerMovesHTML()}
     <div class="section"><h2>Ways they can work together</h2><span class="small muted">You choose one when you make a fusion.</span></div>
     <div class="cards sf-modes">${Object.values(INFUSE_MODES).map((m) => `<div class="card"><div class="row"><span style="font-size:1.3rem">${m.icon}</span><b class="grow">${esc(m.name)}</b><span class="badge b-lav">${esc(m.cost)}</span></div><p class="small" style="margin:6px 0 0">${esc(m.blurb)}</p></div>`).join('')}</div>`;
@@ -388,7 +392,7 @@ function stackCard(s) {
     ${isFusion(s) ? fusionRatingsHTML(s.members, { compact: true }) : ''}
     ${boostsHTML(rows.map(([, t]) => t), { compact: true, liquid: s.builtFor === 'quicksilver' })}
     ${stackScoresHTML(rows.map(([, t]) => t))}
-    <div class="row"><button class="btn small primary" data-chat-stack="${s.id}">Chat</button><button class="btn small" data-edit-stack="${s.id}">Edit</button>${isFusion(s) ? `<button class="btn small" data-fz-rate="${s.id}">📊 Rating &amp; tips</button>` : ''}${boostBtn(`stack:${s.id}`)}${isFusion(s) && !s.community ? `<button class="btn small" data-publish="${s.id}">📤 Publish</button>` : ''}<button class="btn small danger" data-del-stack="${s.id}">Delete</button></div>
+    <div class="row"><button class="btn small primary" data-chat-stack="${s.id}">Chat</button><button class="btn small" data-edit-stack="${s.id}">Edit</button>${isFusion(s) ? `<button class="btn small" data-fz-rate="${s.id}">📊 Rating &amp; tips</button>` : ''}${boostBtn(`stack:${s.id}`)}<button class="btn small ghost" data-sug-open="stack:${s.id}" title="The best model to join and API to add for a task you pick">💡 What to add</button>${isFusion(s) && !s.community ? `<button class="btn small" data-publish="${s.id}">📤 Publish</button>` : ''}<button class="btn small danger" data-del-stack="${s.id}">Delete</button></div>
   </div>`;
 }
 
@@ -457,6 +461,7 @@ function infuseModal(onCreated) {
       </div>
     </div>
     <div id="inf-preview"></div>
+    <div id="inf-suggest" class="inf-suggest"></div>
     <div class="modal-actions"><span class="small muted grow" id="inf-count">Pick 2 to 4 AIs.</span><button class="btn" data-close>Cancel</button><button class="btn primary" id="inf-go">${icon('sparkle', 16)} Save custom AI</button></div>`, { wide: true });
   const picked = () => [...b.querySelectorAll('.infuse-opt input:checked')].map((x) => x.value);
   b.querySelector('.infuse-pick').addEventListener('change', () => {
@@ -467,6 +472,9 @@ function infuseModal(onCreated) {
   const preview = () => {
     const drafters = picked();
     const el = b.querySelector('#inf-preview');
+    const sugBox = b.querySelector('#inf-suggest');
+    // Redrawn only when the picked AIs change, so a click on a task is never lost to a refresh.
+    if (sugBox && sugBox.dataset.for !== JSON.stringify(drafters)) { sugBox.dataset.for = JSON.stringify(drafters); sugBox.innerHTML = `<div class="sug-head"><b>💡 Suggested additions</b> <span class="small muted">for the task you pick: the best model to add that runs well on this PC, and the best API</span></div>${sugPanelHTML({ fixedTargets: drafters })}`; bindSuggest(sugBox); }
     if (drafters.length < 2) { el.innerHTML = '<div class="preview muted">Pick 2 to 4 AIs to see how fast and how good your fusion will be on this PC.</div>'; return; }
     const judge = b.querySelector('#inf-lead').value || [...drafters].sort((x, y) => strengthOf(y) - strengthOf(x))[0];
     const sees = (t) => S.targets.find((x) => x.target === t)?.vision;

@@ -1441,3 +1441,20 @@ code.sel { user-select: all; background: var(--soft); padding: 1px 6px; border-r
 .ar-n { font-weight: 800; color: var(--muted); }
 @media (max-width: 900px) { .ar-h { display: none; } .ar-r { grid-template-columns: 28px 1fr; } .ar-r > span:nth-child(n+3) { grid-column: 2; } }
 .start-note { margin: -4px 0 12px; max-width: 900px; line-height: 1.5; }
+
+.sug-base select { margin-left: 6px; max-width: 320px; }
+.sug-now { margin: 6px 0 10px; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.sug-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.sug-cols h4 { margin: 0 0 6px; }
+.sug-item { display: flex; gap: 8px; align-items: center; padding: 7px 9px; border-radius: 10px; background: var(--hover); margin-bottom: 5px; flex-wrap: wrap; }
+.sug-item .grow { display: flex; flex-direction: column; gap: 2px; min-width: 170px; }
+@media (max-width: 760px) { .sug-cols { grid-template-columns: 1fr; } }
+/* Tier cards: accuracy gets its own row so the three stats never overflow; model names stay on one line. */
+.tier-stats { grid-template-columns: 1fr 1fr; }
+.tier-stats > div { min-width: 0; overflow-wrap: anywhere; }
+.tier-stats > div:first-child { grid-column: 1 / -1; display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+.tier-stats > div:first-child .label { display: inline; margin: 0; }
+.tier-card .best-row > b.grow { flex: 1 1 140px; min-width: 120px; }
+.tier-card .best-row .have { white-space: nowrap; }
+.inf-suggest { margin-top: 12px; padding: 12px; border-radius: 12px; border: 1px dashed var(--line); }
+.sug-head { margin-bottom: 4px; }

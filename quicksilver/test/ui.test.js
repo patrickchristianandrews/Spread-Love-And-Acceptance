@@ -216,6 +216,13 @@ function redPng(size = 64) {
   // How the web and a cloud AI would improve it, in numbers.
   assert.match(await win.locator('#inf-preview .bz').innerText(), /Web search[\s\S]*9 in 10[\s\S]*cloud AI/i);
   await shot(win, '13-infuse');
+  // The builder suggests what to add for a task you pick.
+  await win.waitForSelector('#inf-suggest .sug-now');
+  await win.click('#inf-suggest [data-sug-task="coding"]');
+  await win.waitForFunction(() => /Now for Coding/.test(document.querySelector('#inf-suggest .sug-now')?.textContent || ''));
+  assert.match(await win.locator('#inf-suggest').innerText(), /Suggested additions[\s\S]*Best model to join[\s\S]*Best API to add/);
+  await win.locator('#inf-suggest').scrollIntoViewIfNeeded();
+  await shot(win, '13a-infuse-suggestions');
   await win.click('#inf-go');
   await win.waitForFunction(() => document.querySelector('#pick-model option:checked')?.textContent.includes('Analyst Supreme'));
   // Publish the custom AI: shows exactly what's shared (never keys), then opens a GitHub issue.
@@ -236,6 +243,19 @@ function redPng(size = 64) {
   await win.waitForSelector('#modal .bz-jobs');
   assert.match(await win.locator('#modal').innerText(), /For this model, on this PC[\s\S]*Photo creation[\s\S]*Music \(full songs\)/);
   await shot(win, '13c-model-web-cloud');
+  await win.click('#modal [data-close]');
+  // Model suggester: pick a task, see the best model to join (that runs here) and the best API to add.
+  await win.evaluate(() => { stacksTab = 'fusion'; go({ view: 'stacks' }); });
+  await win.waitForSelector('.sug-sec .sug-now');
+  await win.click('.card:has-text("Analyst Supreme") [data-sug-open]');
+  await win.waitForSelector('#modal .sug');
+  await win.click('#modal [data-sug-task="coding"]');
+  await win.waitForFunction(() => /Now for Coding/.test(document.querySelector('#modal .sug-now')?.textContent || ''));
+  assert.match(await win.locator('#modal .sug').innerText(), /Best model to join[\s\S]*Best API to add[\s\S]*(Groq|Anthropic|Gemini)/);
+  await win.click('#modal [data-sug-task="video"]');
+  await win.waitForFunction(() => /Now for Video/.test(document.querySelector('#modal .sug-now')?.textContent || ''));
+  assert.match(await win.locator('#modal .sug').innerText(), /fal\.ai|Kling|Replicate/);
+  await shot(win, '13d-model-suggester');
   await win.click('#modal [data-close]');
   await win.evaluate(() => { stacksTab = 'fusion'; go({ view: 'stacks' }); });
   await win.click('.card:has-text("Analyst Supreme") [data-publish]');
