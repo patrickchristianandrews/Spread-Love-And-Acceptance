@@ -369,11 +369,13 @@ function redPng(size = 64) {
   // Reading ahead: typing in a chat with history makes the model read it in advance.
   await win.evaluate(() => { S.data.prefs.readAhead = true; });
   await win.waitForFunction(() => !pending, null, { timeout: 60000 }); // the last answer is fully done
+  const sentBefore = await win.evaluate(() => prefillsSent);
   await win.fill('#input', 'And a limerick?');
   // A slow test machine can still be finishing background work: type again once if needed.
-  try { await win.waitForFunction(() => prefilled.has(S.route.id), null, { timeout: 15000 }); } catch {
+  try { await win.waitForFunction((n) => prefillsSent > n, sentBefore, { timeout: 15000 }); } catch {
+    console.log('  read-ahead retry:', JSON.stringify(await win.evaluate(() => ({ pending: Boolean(pending), gpu: hasGpu(), readAhead: S.data.prefs.readAhead, input: $('#input')?.value, focused: document.activeElement?.id, sent: prefillsSent }))));
     await win.fill('#input', 'And a limerick, please?');
-    await win.waitForFunction(() => prefilled.has(S.route.id), null, { timeout: 30000 });
+    await win.waitForFunction((n) => prefillsSent > n, sentBefore, { timeout: 30000 });
   }
   await win.fill('#input', '');
   await win.evaluate(() => { S.data.prefs.readAhead = false; });

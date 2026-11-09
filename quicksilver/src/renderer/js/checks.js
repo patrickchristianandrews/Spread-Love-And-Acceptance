@@ -201,6 +201,7 @@ const hasGpu = () => (S.est?.hardware?.vramGB || 0) >= 2;
 
 // ---------- 6. reading ahead while you type ----------
 const prefilled = new Map(); // chat id -> what was last read ahead
+let prefillsSent = 0;         // how many times a chat was read ahead (shown in diagnostics)
 function prefillChat(chat, a, text) {
   if (pending || S.data.prefs.readAhead === false || !hasGpu() || String(text || '').trim().length < 3) return;
   const target = autoOn(chat, a) ? autoPick(chat, a, text, (drafts[chat.id] || []).some((x) => x.type === 'image')).target : resolveTarget(chat, a);
@@ -209,6 +210,7 @@ function prefillChat(chat, a, text) {
   const sig = `${target}|${chat.messages.length}|${chat.messages.at(-1)?.id || ''}|${messages[0].content.length}`;
   if (prefilled.get(chat.id) === sig) return;
   prefilled.set(chat.id, sig);
+  prefillsSent++;
   qs.call('models:prefill', target, messages, { contextSize: ctx, gpu: S.data.prefs.gpu }).catch(() => prefilled.delete(chat.id));
 }
 
