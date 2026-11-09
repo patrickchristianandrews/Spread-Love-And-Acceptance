@@ -204,6 +204,8 @@ async function init() {
   qs.onModelError(({ id, message, cancelled }) => { delete S.downloads[id]; paintDownloads(); if (!cancelled) toast(message, 8000); else toast(message); if (['models', 'stacks', 'studio'].includes(S.route.view)) render(); });
 
   go({ view: 'home' });
+  // People updating get the short tour once too (new people see it after the name question).
+  if ((S.data.prefs.askedName || S.data.prefs.userName) && !S.data.prefs.tourDone) setTimeout(() => { if ($('#modal').hidden) startTour(); }, 1500);
   refreshEstimates().then(() => { if (['home', 'stacks', 'models', 'pc'].includes(S.route.view)) render(); });
   setTimeout(() => checkForUpdates().then(() => { if (['stacks', 'models'].includes(S.route.view) && $('#modal').hidden) render(); }).catch(() => {}), 30000);
   startupModels();

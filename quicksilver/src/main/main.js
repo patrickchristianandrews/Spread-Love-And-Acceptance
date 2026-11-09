@@ -119,7 +119,7 @@ handle('compare:byTask', async (jobs) => {
   const calib = store.config().calib?.text || 1;
   const list = Array.isArray(jobs) && jobs.length ? jobs : ['general'];
   const installed = models.list().filter((m) => m.kind === 'text');
-  const pool = [...catalog.TEXT_MODELS.map((m) => ({ m, inst: installed.find((x) => x.catalogId === m.id) })),
+  const pool = [...catalog.TEXT_MODELS.map((m) => ({ m, inst: installed.find((x) => x.catalogId === m.id) })).filter((x) => !x.m.retired || x.inst),
     ...installed.filter((x) => !catalog.TEXT_MODELS.some((m) => m.id === x.catalogId)).map((x) => ({ m: catalog.profileInstalled(x), inst: x }))];
   return pool.map(({ m, inst }) => {
     const scores = Object.fromEntries(list.map((j) => [j, catalog.scoreFor(m, j)]));
@@ -356,7 +356,7 @@ ipcMain.on('chat:send', async (_e, p) => {
     for await (const ev of complete.run(p.target, {
       messages: p.messages, temperature: p.temperature, maxTokens: p.maxTokens, contextSize: p.contextSize, gpu: p.gpu,
       effort: p.effort, level: p.level, signal: controller.signal, useTools: Boolean(p.tools), council: Boolean(p.council), councilCloud: Boolean(p.councilCloud), ...(p.noSteps ? { stepByStep: false } : {}),
-      approve: (q) => askApproval(p.requestId, q, controller.signal),
+      approve: (q) => askApproval(p.requestId, q, controller.signal), requestId: p.requestId,
       onStatus: (text) => send({ type: 'status', text }),
       onStep: (step) => send({ type: 'step', step: { ...step } }),
       calib: cfg.calib,
@@ -369,6 +369,8 @@ ipcMain.on('chat:send', async (_e, p) => {
   }
 });
 ipcMain.on('chat:abort', (_e, id) => chats.get(id)?.abort());
+// "Answer now" while the Thinker is working: the Brain answers straight away.
+handle('chat:answerNow', (id) => complete.answerNow(id));
 
 // Approvals: a tool that changes something waits here until you allow or deny it.
 const approvals = new Map();
@@ -576,6 +578,38 @@ handle('export:file', async (format, { markdown, html, title }) => {
   else if (format === 'pptx') await exporters.toPptx(markdown, r.filePath, { title });
   else if (format === 'pdf') await exporters.toPdf(html, r.filePath, { title });
   else fs.writeFileSync(r.filePath, markdown);
+  shell.showItemInFolder(r.filePath);
+  return true;
+});
+// ---------- diagnostics ----------
+// Recent errors and warnings (no chats, no files, no keys) so a problem report can include them.
+const recentErrors = [];
+for (const level of ['error', 'warn']) {
+  const orig = console[level].bind(console);
+  console[level] = (...a) => { recentErrors.push(`${new Date().toISOString()} ${level}: ${a.map((x) => (x instanceof Error ? x.stack || x.message : typeof x === 'string' ? x : JSON.stringify(x))).join(' ').slice(0, 600)}`); if (recentErrors.length > 100) recentErrors.shift(); orig(...a); };
+}
+process.on('uncaughtException', (e) => console.error('uncaught', e));
+async function diagnostics() {
+  const os = require('node:os');
+  const hw = await hardware.detect().catch(() => null);
+  const lines = [`Quicksilver ${app.getVersion()} · ${os.type()} ${os.release()} ${os.arch()} · Electron ${process.versions.electron}`, `Made: ${new Date().toISOString()}`, ''];
+  if (hw) lines.push('## This PC', `CPU: ${os.cpus()[0]?.model} (${os.cpus().length} threads)`, `Memory: ${hw.ramGB.toFixed(1)} GB (${(hw.freeRamGB || 0).toFixed(1)} GB free)`, `Graphics: ${(hw.gpus || []).map((g) => `${g.name} ${g.vramGB.toFixed(1)} GB`).join(', ') || 'none found'}`, '');
+  const cfg = store.config();
+  lines.push('## Settings', `Offline: ${Boolean(cfg.offline)} · VPN only: ${Boolean(cfg.vpnOnly)} · Calibration: ${JSON.stringify(cfg.calib || {})}`, '');
+  lines.push('## Engines', ...['llama', 'sd', 'whisper'].map((k) => { try { const e = engines.resolve(k, hw || {}); return `${k}: ${e ? `${e.variant || ''} ${e.source || ''} ${e.bin ? engines.version(e.bin) : ''}` : 'none'}`; } catch (err) { return `${k}: ${err.message}`; } }), '');
+  lines.push('## Models', ...models.list().map((m) => `${m.name} · ${m.kind} · ${m.catalogId || 'custom'} · ${((m.size || 0) / 1e9).toFixed(2)} GB · ${m.source || 'downloaded'} · files ${Object.values(m.files || {}).every((f) => fs.existsSync(f)) ? 'ok' : 'MISSING'}`), '');
+  lines.push('## Stacks and fusions', ...complete.stacks().map((s) => `${s.name}: ${[...(s.members?.drafters || []), s.members?.judge, s.members?.vision].filter(Boolean).join(', ')} (${s.members?.mode || 'blend'})`), '');
+  lines.push('## Connectors on', integrations.list().filter((c) => c.enabled).map((c) => c.name).join(', ') || 'none', '');
+  lines.push('## Running engines', ...llama.status().map((s) => `${path.basename(s.file)} · ${s.layers} layers on GPU · ctx ${s.ctx} · ${s.ready ? 'running' : 'stopped'}`), '');
+  for (const t of llama.logTails()) lines.push(`## Engine log: ${t.file}`, t.lines, '');
+  lines.push('## Recent errors', ...(recentErrors.length ? recentErrors : ['none']));
+  return lines.join('\n');
+}
+handle('diag:text', () => diagnostics());
+handle('diag:save', async () => {
+  const r = await dialog.showSaveDialog(win, { defaultPath: `Quicksilver-diagnostics-${new Date().toISOString().slice(0, 10)}.txt`, filters: [{ name: 'Text', extensions: ['txt'] }] });
+  if (r.canceled || !r.filePath) return false;
+  fs.writeFileSync(r.filePath, await diagnostics());
   shell.showItemInFolder(r.filePath);
   return true;
 });

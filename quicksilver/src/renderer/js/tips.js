@@ -78,3 +78,34 @@ document.addEventListener('click', (e) => {
     toast('Tips are off. Turn them back on any time in Settings → General.');
   }
 });
+
+// ---------- first-run tour: three screens, once ----------
+// Shown after the name question (and once to people updating), skippable, never again after.
+const TOUR = [
+  { icon: '💧', title: 'Meet Quicksilver Liquid Edition', body: 'Your own AI, built in and running on this PC. It\'s fully uncensored, answers everyday questions fast, works hard ones out step by step, reads photos, and needs no account or internet.', more: 'Want more power? <b>Explore → Stacks &amp; Fusion</b>: ready-made stacks of models for a job, or your own fusion of AIs, cloud ones included.' },
+  { icon: '📚', title: 'Connect your knowledge', body: 'Add your files, folders and websites, and Quicksilver answers from them with the exact source. Everything stays on this PC.', act: ['Add my files now', () => go({ view: 'library' })] },
+  { icon: '🔒', title: 'Choose your privacy', body: 'Pick how Quicksilver uses the internet. You can change it any time from the switch at the bottom of the menu.', privacy: true },
+];
+let tourStep = 0;
+function startTour() {
+  if (S.data.prefs.tourDone || document.querySelector('#modal .tour')) return;
+  tourStep = 0;
+  S.data.prefs.tourDone = true; save(); // shown once, however it's closed
+  const b = openModal('<div class="tour"></div>');
+  const finish = () => { S.data.prefs.tourDone = true; save(); };
+  const paint = () => {
+    const t = TOUR[tourStep];
+    const mode = typeof privacyMode === 'function' ? privacyMode() : 'online';
+    b.querySelector('.tour').innerHTML = `<div class="tour-dots">${TOUR.map((_, i) => `<span class="${i === tourStep ? 'on' : ''}"></span>`).join('')}</div>
+      <div class="tour-ic">${t.icon}</div><h2>${esc(t.title)}</h2><p>${esc(t.body)}</p>${t.more ? `<p class="small muted">${t.more}</p>` : ''}
+      ${t.privacy ? `<div class="tour-priv">${[['offline', '🔒 Fully private', 'Nothing leaves this PC. No web search or cloud AI.'], ['vpn', '🛡️ Private online', 'Web and cloud AI only through Proton VPN (free plan available).'], ['online', '🌐 Online', 'Web search and cloud AI when you turn them on.']].map(([k, n, d]) => `<button class="tour-opt ${mode === k ? 'on' : ''}" data-tour-priv="${k}"><b>${n}</b><span class="small muted">${d}</span></button>`).join('')}</div>` : ''}
+      <div class="modal-actions">${tourStep ? '<button class="btn ghost" id="tour-back">Back</button>' : '<button class="btn ghost" id="tour-skip">Skip</button>'}<span class="grow"></span>${t.act ? `<button class="btn" id="tour-act">${esc(t.act[0])}</button>` : ''}<button class="btn primary" id="tour-next">${tourStep === TOUR.length - 1 ? 'Start chatting' : 'Next'}</button></div>`;
+    b.querySelector('#tour-skip')?.addEventListener('click', () => { finish(); closeModal(); });
+    b.querySelector('#tour-back')?.addEventListener('click', () => { tourStep--; paint(); });
+    b.querySelector('#tour-next').addEventListener('click', () => { if (tourStep < TOUR.length - 1) { tourStep++; paint(); } else { finish(); closeModal(); } });
+    b.querySelector('#tour-act')?.addEventListener('click', () => { finish(); closeModal(); t.act[1](); });
+    b.querySelectorAll('[data-tour-priv]').forEach((x) => x.addEventListener('click', async () => { try { await setPrivacyMode(x.dataset.tourPriv); } catch {} paint(); }));
+  };
+  paint();
+  b.querySelector('[data-close]')?.addEventListener('click', finish);
+}

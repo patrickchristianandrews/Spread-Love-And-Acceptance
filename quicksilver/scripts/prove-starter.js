@@ -52,10 +52,12 @@ async function prove(m) {
       await new Promise((r) => setTimeout(r, 1000));
     }
     console.log(`${m.name} loaded in ${((Date.now() - t0) / 1000).toFixed(1)} s`);
-    const text = await ask('In one sentence, what is the capital of France?');
+    // A thinking model writes its working first, so it gets room for that.
+    const thinks = /thinking/i.test(m.files.model);
+    const text = (await ask('In one sentence, what is the capital of France?', thinks ? 1500 : undefined)).replace(/<think>[\s\S]*?<\/think>/g, '');
     console.log(`  Q: capital of France → ${text}`);
     if (!/paris/i.test(text)) throw new Error(`${m.name} did not answer a simple question correctly`);
-    if (m.pack) {
+    if (m.pack && !thinks) {
       // The way Quicksilver asks: work it out step by step, then answer.
       const sum = await ask('What is 17 × 23? Work it out step by step, then give the final answer.', 300);
       const final = (sum.match(/\d[\d,]*/g) || []).pop(); // the last number in the answer

@@ -2,20 +2,33 @@
 'use strict';
 
 let setTab = 'general';
+let advFocus = '';
+const ADV_PARTS = [['phone', '📱 Use from your phone'], ['api', '🔌 API server (for other apps)'], ['engines', '⚙️ Engines']];
+function advancedHTML() {
+  const parts = { phone: phoneSetHTML, api: apiSrvHTML, engines: enginesHTML };
+  return `<p class="help" style="margin-top:0">Settings most people never need: using Quicksilver from your phone, letting other apps use your models, and the engines that run them.</p>
+    ${ADV_PARTS.map(([k, title]) => `<section class="card adv-sec" id="adv-${k}"><h2 style="margin-top:0">${title}</h2>${parts[k]()}</section>`).join('')}`;
+}
+function bindAdvanced() {
+  bindPhoneSet(); bindApiSrv(); bindEngines();
+  if (advFocus) { const f = advFocus; advFocus = ''; setTimeout(() => $(`#adv-${f}`)?.scrollIntoView({ block: 'start' }), 30); }
+}
 let engineInfo = null;
 const engineProg = {};
 
 views.settings = {
   html() {
-    const tabs = { general: 'General', guide: 'Guide & tips', chat: 'Chat & accuracy', memory: 'Memory', voice: 'Voice', phone: 'Phone', web: 'Web search', api: 'API server', engines: 'Engines', accounts: 'Accounts' };
-    const adv = new Set(['web', 'api', 'engines', 'accounts', 'phone']);
+    // Phone, API server and Engines are rarely needed, so they share one Advanced tab.
+    if (ADV_PARTS.some(([k]) => k === setTab)) { advFocus = setTab; setTab = 'advanced'; }
+    const tabs = { general: 'General', guide: 'Guide & tips', chat: 'Chat & accuracy', memory: 'Memory', voice: 'Voice', web: 'Web search', accounts: 'Accounts', advanced: 'Advanced' };
+    const adv = new Set(['web', 'accounts', 'advanced']);
     return `<div class="page"><div class="page-head"><h1>Settings</h1></div>
       <div class="tabs">${Object.entries(tabs).filter(([k]) => !simpleOn() || !adv.has(k) || setTab === k).map(([k, l]) => `<button class="tab ${setTab === k ? 'active' : ''}" data-set-tab="${k}">${l}</button>`).join('')}</div>
-      <div style="max-width:860px">${({ general: generalHTML, guide: guidePageHTML, chat: chatSetHTML, memory: memSetHTML, voice: voiceSetHTML, phone: phoneSetHTML, web: webHTML, api: apiSrvHTML, engines: enginesHTML, accounts: accountsHTML })[setTab]()}</div></div>`;
+      <div style="max-width:860px">${({ general: generalHTML, guide: guidePageHTML, chat: chatSetHTML, memory: memSetHTML, voice: voiceSetHTML, web: webHTML, accounts: accountsHTML, advanced: advancedHTML })[setTab]()}</div></div>`;
   },
   bind() {
     $$('[data-set-tab]').forEach((b) => b.addEventListener('click', () => { setTab = b.dataset.setTab; render(); }));
-    ({ general: bindGeneral, guide: bindGuidePage, chat: bindChatSet, memory: bindMemSet, voice: bindVoiceSet, phone: bindPhoneSet, web: bindWeb, api: bindApiSrv, engines: bindEngines, accounts: bindAccounts })[setTab]();
+    ({ general: bindGeneral, guide: bindGuidePage, chat: bindChatSet, memory: bindMemSet, voice: bindVoiceSet, web: bindWeb, accounts: bindAccounts, advanced: bindAdvanced })[setTab]();
   },
 };
 
@@ -180,7 +193,7 @@ function apiSrvHTML() {
   </div>`;
 }
 function bindApiSrv() {
-  qs.call('apiserver:status').then((s) => { const changed = JSON.stringify(s) !== JSON.stringify(S.apiStatus); S.apiStatus = s; if (changed && setTab === 'api' && S.route.view === 'settings') render(); });
+  qs.call('apiserver:status').then((s) => { const changed = JSON.stringify(s) !== JSON.stringify(S.apiStatus); S.apiStatus = s; if (changed && setTab === 'advanced' && S.route.view === 'settings') render(); });
   $('#a-save').addEventListener('click', async () => {
     S.config = await call('config:set', { apiServer: { enabled: $('#a-on').checked, port: Number($('#a-port').value) || 1337, requireKey: $('#a-key').checked } });
     S.apiStatus = await qs.call('apiserver:status'); render(); toast(S.apiStatus.running ? 'API server running.' : S.apiStatus.error || 'API server off.');
@@ -206,7 +219,7 @@ function enginesHTML() {
   </div>`;
 }
 function bindEngines() {
-  if (!engineInfo) { qs.call('engines:list').then((e) => { engineInfo = e; if (setTab === 'engines') render(); }); return; }
+  if (!engineInfo) { qs.call('engines:list').then((e) => { engineInfo = e; if (setTab === 'advanced') render(); }); return; }
   $$('[data-eng-choice]').forEach((s) => s.addEventListener('change', async () => {
     S.config = await call('config:set', { engine: { ...S.config.engine, [s.dataset.engChoice]: s.value } });
     engineInfo = await qs.call('engines:list'); render(); toast('Engine choice saved.');
@@ -218,7 +231,7 @@ function bindEngines() {
   }));
   $$('[data-eng-del]').forEach((b) => b.addEventListener('click', async () => { const [kind, variant] = b.dataset.engDel.split(':'); await call('engines:remove', kind, variant); engineInfo = await qs.call('engines:list'); render(); }));
 }
-qs.onEngine((p) => { engineProg[`${p.kind}-${p.variant}`] = p; if (setTab === 'engines' && S.route.view === 'settings') { const bars = $$('.bar i'); if (bars.length) render(); } });
+qs.onEngine((p) => { engineProg[`${p.kind}-${p.variant}`] = p; if (setTab === 'advanced' && S.route.view === 'settings') { const bars = $$('.bar i'); if (bars.length) render(); } });
 
 function accountsHTML() {
   return `<div class="stack-v">

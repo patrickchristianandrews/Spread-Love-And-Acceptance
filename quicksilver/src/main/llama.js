@@ -406,4 +406,6 @@ function status() {
 }
 const isLoaded = (file) => [...servers.values()].some((s) => s.file === file && !s.exited);
 
-module.exports = { readGguf, ensure, prefill, chat, stop, stopAll, stopFile, status, isLoaded, contextFor, prefetch };
+// The last lines each running engine printed (for "Save diagnostics").
+const logTails = () => [...servers.values()].map((s) => ({ file: require('node:path').basename(s.file), lines: s.log.join('').split('\n').slice(-40).join('\n') }));
+module.exports = { readGguf, ensure, prefill, chat, stop, stopAll, stopFile, status, isLoaded, contextFor, prefetch, logTails };

@@ -27,7 +27,9 @@ async function openFeedback() {
     <div class="field" style="margin-top:12px"><textarea id="fb-text" rows="6" placeholder="Tell us in your own words. If something went wrong: what did you do, what did you expect, and what happened?" autofocus></textarea></div>
     <label class="row"><input type="checkbox" id="fb-details" checked> <span><b>Include details about this PC</b> <span class="help">version, memory, graphics card and model names. Never your chats or files.</span></span></label>
     <details class="small" style="margin-top:6px"><summary class="muted" style="cursor:pointer">See exactly what's included</summary><pre class="fb-pre">${esc(feedbackDetails())}</pre></details>
+    <div class="fb-diag small"><button class="btn small" id="fb-diag">💾 Save diagnostics file</button> <span class="muted">For problems: a text file with this PC's specs, models, engine logs and recent errors (never your chats, files or keys). Read it if you like, then drag it into the GitHub page.</span></div>
     <div class="modal-actions"><button class="btn" id="fb-copy">Copy</button><button class="btn primary" id="fb-send">Send on GitHub</button></div>`);
+  b.querySelector('#fb-diag').onclick = async () => { if (await qs.call('diag:save')) toast('Diagnostics saved. Drag the file into the GitHub page when you send this.', 7000); };
   b.querySelectorAll('[data-fb]').forEach((x) => { x.onclick = () => { kind = x.dataset.fb; b.querySelectorAll('[data-fb]').forEach((y) => y.classList.toggle('on', y === x)); }; });
   const compose = () => {
     const t = b.querySelector('#fb-text').value.trim();

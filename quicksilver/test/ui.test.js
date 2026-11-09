@@ -745,6 +745,20 @@ function redPng(size = 64) {
   await win.waitForSelector('#name-ask-in');
   await win.fill('#name-ask-in', 'Sam');
   await win.click('#name-ask-ok');
+  // The short first-run tour follows: three screens, the last one picks privacy.
+  await win.waitForSelector('#modal .tour h2:has-text("Liquid Edition")');
+  await win.click('#tour-next');
+  await win.waitForSelector('#modal .tour h2:has-text("Connect your knowledge")');
+  await win.click('#tour-next');
+  await win.waitForSelector('#modal [data-tour-priv="offline"]');
+  await shot(win, '20b-tour');
+  await win.click('#tour-next');
+  await win.waitForSelector('#modal', { state: 'hidden' });
+  assert.ok(await win.evaluate(() => S.data.prefs.tourDone), 'the tour shows once');
+  // Diagnostics for problem reports: specs, models, engines and recent errors, never chats.
+  const diag = await win.evaluate(() => qs.call('diag:text'));
+  assert.match(diag, /## This PC[\s\S]*## Models[\s\S]*## Recent errors/);
+  assert.doesNotMatch(diag, /Sam/, 'no personal details');
   await win.waitForSelector('.welcome .hello:has-text("Hi Sam")');
   assert.equal(await win.evaluate(() => S.data.prefs.userName), 'Sam');
   assert.equal(await win.locator('#name-ask').count(), 0, 'asked only once');
@@ -945,7 +959,7 @@ function redPng(size = 64) {
 
   // Settings: API server on.
   await win.click('[data-nav="settings"]');
-  await win.click('[data-set-tab="api"]');
+  await win.click('[data-set-tab="advanced"]');
   await win.waitForTimeout(800);
   await win.check('#a-on', { timeout: 8000 }).catch(async (e) => { console.log('CHECKLOG', e.message.split('\n').slice(0, 25).join('\n')); throw e; });
   await win.fill('#a-port', '18440');
@@ -1054,7 +1068,7 @@ function redPng(size = 64) {
   await win.click('[data-nav="settings"]');
   await win.click('[data-set-tab="voice"]');
   await win.waitForFunction(() => !/Checking/.test(document.querySelector('#vt-status')?.textContent || 'Checking'));
-  await win.click('[data-set-tab="phone"]');
+  await win.click('[data-set-tab="advanced"]');
   await win.check('#ph-on');
   await win.waitForFunction(() => document.querySelector('.phone-qr svg') || document.querySelector('#ph-on')?.checked, null, { timeout: 15000 });
   await win.waitForTimeout(500);

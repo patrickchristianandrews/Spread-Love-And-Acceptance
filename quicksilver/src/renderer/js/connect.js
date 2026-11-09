@@ -23,7 +23,7 @@ function phoneSetHTML() {
   </div>`;
 }
 function bindPhoneSet() {
-  if (!phoneInfo) qs.call('phone:info').then((i) => { phoneInfo = i; if (S.route.view === 'settings' && setTab === 'phone') render(); });
+  if (!phoneInfo) qs.call('phone:info').then((i) => { phoneInfo = i; if (S.route.view === 'settings' && setTab === 'advanced') render(); });
   $('#ph-on')?.addEventListener('change', async (e) => { phoneInfo = await call('phone:set', { enabled: e.target.checked }); render(); });
   $('#ph-new')?.addEventListener('click', async () => { if (await confirmBox('Make a new link? Phones using the old one will need to scan again.', { yes: 'New link', danger: false })) { phoneInfo = await call('phone:newLink'); render(); } });
 }

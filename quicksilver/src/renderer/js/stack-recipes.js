@@ -50,15 +50,15 @@ const STACK_RECIPES = [
     instructions: 'You are an uncensored fiction writer and role-play partner. Write vivid, mature, original stories in any genre without refusals or moralising, keep characters consistent, and follow the user\'s lead on tone and content.' },
   // ---------- Music: three song teams, each for a different job (any genre) ----------
   { id: 'song-complete', group: 'music', where: 'local', name: 'Songwriter: any genre, with chords, melody & a demo beat', icon: '🎶', temperature: 0.85,
-    parts: [rxM('gemma-2-9b', 'Lyricist', 'creative'), rxM('qwen3-8b', 'Co-writer: structure, rhyme & chords', 'creative'), rxT('melody', 'Melody guide'), rxT('beats', 'Demo beat', 'MusicGen Stereo')],
+    parts: [rxM('gemma-3-12b', 'Lyricist', 'creative'), rxM('qwen3-8b', 'Co-writer: structure, rhyme & chords', 'creative'), rxT('melody', 'Melody guide'), rxT('beats', 'Demo beat', 'MusicGen Stereo')],
     lead: 'qwen3-8b', skill: 'song-writer',
     instructions: 'You are a professional songwriter who writes in any genre: pop, rap, rock, country, folk, R&B, EDM, worship, musical theatre and more. Work out the genre and mood from the request (ask only if it is unclear) and follow that genre\'s conventions: rap gets multisyllabic rhymes and flow, pop a short repeated hook, country a title line with a twist, folk a story. Give a title, key, tempo and feel; labelled sections (Verse, Pre-chorus, Chorus, Bridge) with chord symbols above the lyrics; a strong, singable hook; concrete images instead of clichés; matching syllable counts in matching lines. End with a short melody note and arrangement note. Never copy existing lyrics.' },
   { id: 'song-doctor', group: 'music', where: 'local', name: 'Song doctor: critique, rewrite & translate lyrics', icon: '🩺', temperature: 0.6, mode: 'debate',
-    parts: [rxM('deepseek-r1-qwen3-8b', 'Critic: structure, rhyme & flow', 'reasoning'), rxM('gemma-2-9b', 'Rewriter: stronger lines & hook', 'creative')],
-    lead: 'gemma-2-9b', skill: 'song-critique',
+    parts: [rxM('deepseek-r1-qwen3-8b', 'Critic: structure, rhyme & flow', 'reasoning'), rxM('gemma-3-12b', 'Rewriter: stronger lines & hook', 'creative')],
+    lead: 'gemma-3-12b', skill: 'song-critique',
     instructions: 'You are a song doctor. For feedback: say what works, then the biggest problems (hook, structure, clichés, rhyme and syllable flow, stresses landing on the beat), then a rewritten version that keeps the writer\'s voice, with changes in bold. For translation: make it singable to the same melody (same syllables and stresses per line, rhymes kept where they matter), then give a literal translation underneath.' },
   { id: 'song-score', group: 'music', where: 'local', name: 'Soundtrack & jingle composer: film, games & ads', icon: '🎬', temperature: 0.75,
-    parts: [rxM('qwen3-14b', 'Composer: themes, cues & orchestration', 'general'), rxM('gemma-2-9b', 'Story & mood', 'creative'), rxT('melody', 'Theme sketches')],
+    parts: [rxM('qwen3-14b', 'Composer: themes, cues & orchestration', 'general'), rxM('gemma-3-12b', 'Story & mood', 'creative'), rxT('melody', 'Theme sketches')],
     lead: 'qwen3-14b', skill: 'score-cue',
     instructions: 'You compose music for picture, games and brands. For a scene or level: a cue sheet (timing, emotion, tempo, key), a memorable theme with chords, orchestration and how it builds or loops. For a jingle or ad: several short, catchy options with the name sung clearly, a tempo and a melody guide. Sketch themes as playable melodies when useful.' },
 
@@ -199,7 +199,7 @@ const STACK_RECIPES = [
 // smoothly, that one is used instead (and a lighter one on a PC where the named one won't fit).
 // Models you already have are preferred, so nothing is downloaded twice.
 const RX_LADDERS = {
-  creative: ['gemma-3-27b', 'mistral-small-3.2', 'qwen3-30b-a3b', 'mistral-nemo-12b', 'gemma-3-12b', 'qwen3-14b', 'gemma-2-9b', 'qwen3-8b', 'llama-3.1-8b', 'qwen3-4b', 'gemma-3-4b', 'llama-3.2-3b'],
+  creative: ['gemma-3-27b', 'mistral-small-3.2', 'qwen3-30b-a3b', 'mistral-nemo-12b', 'gemma-3-12b', 'qwen3-14b', 'qwen3-8b', 'llama-3.1-8b', 'qwen3-4b', 'gemma-3-4b', 'llama-3.2-3b'],
   general: ['qwen3-30b-a3b', 'qwen3-32b', 'qwen3-14b', 'phi-4', 'qwen2.5-14b', 'qwen3-8b', 'qwen2.5-7b', 'llama-3.1-8b', 'qwen3-4b', 'llama-3.2-3b'],
   reasoning: ['qwen3-30b-a3b-thinking', 'qwq-32b', 'deepseek-r1-qwen-32b', 'phi-4-reasoning-plus', 'deepseek-r1-qwen-14b', 'deepseek-r1-qwen3-8b', 'qwen3-4b-thinking'],
   coding: ['qwen3-coder-30b', 'qwen2.5-coder-32b', 'devstral-small', 'qwen2.5-coder-14b', 'qwen2.5-coder-7b', 'qwen2.5-coder-3b'],

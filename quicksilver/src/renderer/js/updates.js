@@ -211,6 +211,7 @@ function bindModelUpdates() {
 function builtinModelHTML() {
   const brain = S.catalog.text.find((m) => m.id === 'qwen3-4b');
   const eyes = S.catalog.text.find((m) => m.id === 'qwen3-vl-2b');
+  const thinker = S.catalog.text.find((m) => m.id === 'qwen3-4b-thinking');
   if (!brain) return '';
   const est = S.est?.text?.[brain.id];
   const have = S.installed.some((m) => m.source === 'bundled' || m.catalogId === brain.id);
@@ -232,11 +233,11 @@ function builtinModelHTML() {
   ];
   return `<div class="card builtin-card" id="builtin-model">
     <div class="row"><span class="emoji-badge">💧</span><div class="grow"><h3 style="margin:0">Built in: Quicksilver Liquid Edition</h3>
-      <div class="small muted">${esc(brain.name)}${eyes ? ` + ${esc(eyes.name)} for eyes` : ''} · ${(brain.sizeGB + (eyes ? eyes.sizeGB + (eyes.mmprojGB || 0) : 0)).toFixed(1)} GB · comes with the app, works offline</div></div>
+      <div class="small muted">${esc(brain.name)}${thinker ? ` + ${esc(thinker.name)} for hard maths` : ''}${eyes ? ` + ${esc(eyes.name)} for eyes` : ''} · ${(brain.sizeGB + (thinker?.sizeGB || 0) + (eyes ? eyes.sizeGB + (eyes.mmprojGB || 0) : 0)).toFixed(1)} GB · comes with the app, works offline</div></div>
       ${open ? '<span class="badge b-peach" title="Answers plainly, without refusing. The parental lock keeps it family-safe.">Uncensored</span>' : ''}${est ? `<span class="badge rate-${est.rating}">${esc(est.label)}</span>` : ''}</div>
     <p style="margin:10px 0 6px"><b>Fast answers you can trust.</b> Chosen as the quickest model that's still accurate: it answers almost instantly on most PCs and double-checks facts and figures, so you can rely on it for everyday work.${open ? ' It\'s uncensored: it answers plainly instead of refusing (the parental lock in Settings keeps it family-safe).' : ''}</p>
     ${qsRolesHTML(qst)}
-    ${stackScoresHTML(qst ? [...(qst.members.drafters || []), qst.members.judge, qst.members.vision].filter(Boolean) : ['qwen3-4b', 'qwen3-vl-2b'])}
+    ${stackScoresHTML(qst ? [...(qst.members.drafters || []), qst.members.judge, qst.members.vision, qst.members.thinker].filter(Boolean) : ['qwen3-4b', 'qwen3-4b-thinking', 'qwen3-vl-2b'])}
     ${dolphinOfferHTML(qst)}
     ${cloudPartnerHTML()}
     <div class="builtin-can">${can.map(([i, t, d]) => `<div><span>${i}</span><b>${esc(t)}</b><span class="small muted">${esc(d)}</span></div>`).join('')}</div>
@@ -288,6 +289,7 @@ function qsRolesHTML(qst) {
   const roles = [
     brain && ['🧠', 'Brain', nameOf(brain), 'answers everyday messages fast and reasons step by step'],
     m.vision && ['👁', 'Eyes & Muse', nameOf(m.vision), 'reads photos, and sketches fresh angles before creative writing'],
+    m.thinker && ['🧮', 'Thinker', nameOf(m.thinker), 'thinks hard maths and logic through before answering (press Answer now to skip)'],
     m.judge && m.judge !== brain && ['🎯', 'Closer', nameOf(m.judge), 'leads on hard questions'],
     m.drafters?.[1] && [/dolphin/i.test(nameOf(m.drafters[1])) ? '🐬' : '🗣', 'Second opinion', nameOf(m.drafters[1]), 'writes its key points on hard questions, then the Brain answers from both views'],
     qst.bench && [/dolphin/i.test(nameOf(qst.bench)) ? '🐬' : '🪑', 'On the Council', nameOf(qst.bench), 'too slow on this PC to join every hard question, so it adds its view when you pick Council, and you can chat with it directly'],

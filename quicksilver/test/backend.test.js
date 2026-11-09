@@ -752,19 +752,21 @@ async function collect(gen) {
     fs.writeFileSync(path.join(sd, 'STARTER.json'), JSON.stringify({ models: [
       { id: 'starter', catalogId: 'qwen3-vl-2b', name: 'Qwen3-VL 2B', files: { model: 'model.gguf', mmproj: 'mmproj.gguf' } },
       { id: 'starter-brain', catalogId: 'qwen3-4b', name: 'Qwen3 4B Instruct 2507 (uncensored)', uncensored: true, repo: 'mradermacher/Huihui-Qwen3-4B-Instruct-2507-abliterated-GGUF', quant: 'Q4_K_M', files: { model: 'brain.gguf' }, pack: true },
+      { id: 'starter-thinker', catalogId: 'qwen3-4b-thinking', name: 'Qwen3 4B Thinking 2507 (uncensored)', uncensored: true, repo: 'mradermacher/Huihui-Qwen3-4B-Thinking-2507-abliterated-GGUF', quant: 'Q4_K_M', files: { model: 'thinker.gguf' }, pack: true },
       { id: 'starter-dolphin', catalogId: 'dolphin-3-llama-3.1-8b', name: 'Dolphin 3.0 8B (uncensored)', uncensored: true, files: { model: 'dolphin.gguf' }, pack: true, optional: true },
     ] }));
     // Installed without the "Quicksilver models" folder: the small model works, the brain is fetched.
     let r = models.registerStarter(sd);
     assert.deepEqual(r.added.map((m) => m.id), ['starter']); assert.ok(r.added[0].vision);
-    assert.deepEqual(r.missing.map((m) => m.catalogId), ['qwen3-4b']);
+    assert.deepEqual(r.missing.map((m) => m.catalogId), ['qwen3-4b', 'qwen3-4b-thinking'], 'the Brain and the Thinker are fetched when the folder is missing');
     assert.equal(r.missing[0].repo, 'mradermacher/Huihui-Qwen3-4B-Instruct-2507-abliterated-GGUF', 'a missing brain is fetched from the same (uncensored) copy the installer uses');
     // Until the brain arrives the small built-in model answers on its own: filtered models never stand in.
     assert.equal(await complete.ensureQuicksilverStack(), null);
     // The installer copied the brain in (or it finished downloading).
     fs.copyFileSync(TINY, path.join(sd, 'brain.gguf'));
+    fs.copyFileSync(TINY, path.join(sd, 'thinker.gguf'));
     r = models.registerStarter(sd);
-    assert.deepEqual(r.added.map((m) => m.id), ['starter-brain']); assert.equal(r.missing.length, 0);
+    assert.deepEqual(r.added.map((m) => m.id), ['starter-brain', 'starter-thinker']); assert.equal(r.missing.length, 0);
     assert.equal(await complete.ensureQuicksilverStack(), 'stack:quicksilver');
     const qsStack = complete.stacks().find((x) => x.id === 'quicksilver');
     const ids = [...qsStack.members.drafters, qsStack.members.judge, qsStack.members.vision].filter(Boolean);
@@ -773,6 +775,10 @@ async function collect(gen) {
     assert.equal(qsStack.builtFor, 'quicksilver'); assert.ok(qsStack.custom, "Quicksilver's own custom stack");
     assert.equal(qsStack.members.drafters[0], 'local:starter-brain', 'the built-in Qwen3 4B answers everyday messages');
     assert.equal(qsStack.members.vision, 'local:starter', 'the built-in Qwen3-VL 2B reads photos');
+    assert.equal(qsStack.members.thinker, 'local:starter-thinker', 'the Thinker takes hard maths and logic');
+    // Only hard maths and logic go to the Thinker; plain sums and everyday questions don't.
+    assert.ok(complete.thinkWorthy('How many ways can 5 people sit in a row?') && complete.thinkWorthy('Solve the equation 3x + 5 = 20') && complete.thinkWorthy('Prove that there are infinitely many primes'));
+    assert.ok(!complete.thinkWorthy('What is 17 × 23?') && !complete.thinkWorthy('Why is the sky blue?') && !complete.thinkWorthy('Write me a poem about rain'));
     assert.notEqual(qsStack.members.judge, 'local:phi-4', 'the lead must be quick here (Phi-4 does not fit this 8 GB card)');
     const how = await complete.explainStack('quicksilver');
     assert.ok(how.members.find((m) => m.roles.includes('lead')) && how.members.filter((m) => m.roles.includes('lead')).length === 1, 'exactly one lead');
@@ -832,6 +838,13 @@ async function collect(gen) {
     assert.ok(pic.steps.some((x) => x.role === 'vision') && pic.text.length > 0, 'the photo is read by the member that can see');
     complete.deleteStack('pair');
     models.remove('dolphin-test');
+    // On a graphics card, maths gets three attempts and the majority.
+    const voted = await collect(complete.run('stack:quicksilver', { messages: [{ role: 'user', content: 'Solve the equation 3x + 5 = 20' }], contextSize: 2048, maxTokens: 60, level: 'thorough' }));
+    assert.ok(voted.steps.some((x) => /Attempt 1 of 3/.test(x.label)) && voted.text.length > 0, 'the Thinker votes on maths');
+    // Answer now: the Thinker stops and the Brain answers from its working.
+    complete.answerNow('rq-skip');
+    const skipped = await collect(complete.run('stack:quicksilver', { requestId: 'rq-skip', messages: [{ role: 'user', content: 'Prove that there are infinitely many primes' }], contextSize: 2048, maxTokens: 60, level: 'thorough' }));
+    assert.ok(skipped.status.some((t) => /Answering now/.test(t)) && skipped.text.length > 0, 'Answer now hands over to the Brain');
     // The Liquid Edition's core follows the online picks: a newer uncensored Brain takes over once you have it.
     const remoteP = require('../src/main/catalog-remote');
     remoteP.apply({ successors: {}, featured: {}, ladders: {}, liquid: { brain: 'qwen3-8b-uncensored' } });

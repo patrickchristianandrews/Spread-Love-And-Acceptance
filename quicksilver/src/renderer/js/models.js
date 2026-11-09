@@ -149,7 +149,7 @@ function textHTML() {
   if (catFilter !== 'all' && !cats[catFilter]) catFilter = 'all';
   const order = { great: 0, good: 1, ok: 2, slow: 3, wont: 4 };
   return `${filterBar(cats)}${Object.entries(cats).filter(([k]) => catFilter === 'all' || catFilter === k).map(([k, c]) => {
-    const list = S.catalog.text.filter((m) => m.category === k && (!fitsOnly || S.est?.text[m.id]?.fit !== 'no'));
+    const list = S.catalog.text.filter((m) => m.category === k && !m.retired && (!fitsOnly || S.est?.text[m.id]?.fit !== 'no'));
     if (!list.length) return '';
     return `<div class="section"><h2>${esc(c.label)} <span class="small muted" style="font-weight:600">· ${list.length}</span></h2>${c.note ? `<span class="small muted">${esc(c.note)}</span>` : ''}</div><div class="cards">${list.sort((a, b) => (order[S.est?.text[a.id]?.rating] ?? 5) - (order[S.est?.text[b.id]?.rating] ?? 5) || isFeatured(b.id) - isFeatured(a.id) || a.sizeGB - b.sizeGB).map((m) => modelCard(m, S.est?.text[m.id], 'text')).join('')}</div>`;
   }).join('')}`;
@@ -160,7 +160,7 @@ function mediaHTML() {
   if (catFilter !== 'all' && !cats[catFilter]) catFilter = 'all';
   return `<div class="notice info" style="margin-bottom:14px">Image and video models run with stable-diffusion.cpp on your graphics card. Video generation needs a strong card (8 GB+); on the processor alone it takes a very long time.</div>
     ${filterBar(cats)}${Object.entries(cats).filter(([k]) => catFilter === 'all' || catFilter === k).map(([k, c]) => {
-      const list = S.catalog.media.filter((m) => m.category === k && (!fitsOnly || S.est?.media[m.id]?.fit !== 'no'));
+      const list = S.catalog.media.filter((m) => !m.retired && m.category === k && (!fitsOnly || S.est?.media[m.id]?.fit !== 'no'));
       if (!list.length) return '';
       return `<div class="section"><h2>${esc(c.label)}</h2></div><div class="cards">${list.map((m) => modelCard(m, S.est?.media[m.id], 'media')).join('')}</div>`;
     }).join('')}`;

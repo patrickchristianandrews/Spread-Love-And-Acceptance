@@ -324,7 +324,7 @@ function requirements(m, hw, kind = 'text') {
 function smallerAlternative(m, hw) {
   const fam = familyOf(m);
   const fits = (x) => estimateText(x, hw).fit !== 'no';
-  const same = TEXT_MODELS.filter((x) => x.id !== m.id && x.category !== 'large' && (familyOf(x) === fam || x.category === m.category) && x.sizeGB < m.sizeGB && fits(x));
+  const same = live(TEXT_MODELS).filter((x) => x.id !== m.id && x.category !== 'large' && (familyOf(x) === fam || x.category === m.category) && x.sizeGB < m.sizeGB && fits(x));
   return same.sort((a, b) => (familyOf(b) === fam) - (familyOf(a) === fam) || (b.jobs?.general || 0) - (a.jobs?.general || 0))[0] || null;
 }
 
@@ -559,7 +559,7 @@ function advise(job, hw, opts = {}) {
     const media = installed.filter((m) => m.kind !== 'text').map((m) => { const c = MEDIA_MODELS.find((x) => x.id === m.catalogId); return c ? { ...c, id: m.id, catalogId: c.id, name: m.name } : null; }).filter(Boolean);
     const mine = media.some((m) => MEDIA_ROLES[j.roles[0]].pick(m)) ? composeMedia(job, hw, calib, media, text) : null;
     // The prompt writer only needs a small model: reuse one you have, else a small download.
-    const best = composeMedia(job, hw, calib, MEDIA_MODELS, text.length ? text : TEXT_MODELS.filter((m) => m.sizeGB <= 3.5));
+    const best = composeMedia(job, hw, calib, live(MEDIA_MODELS), text.length ? text : live(TEXT_MODELS).filter((m) => m.sizeGB <= 3.5));
     const haveCat = (id) => (media.find((m) => m.catalogId === id) || text.find((m) => m.catalogId === id))?.id || null;
     best.have = Object.fromEntries(best.ids.map((id) => [id, text.some((m) => m.id === id) ? id : haveCat(id)]));
     best.missingGB = best.ids.filter((id) => !best.have[id]).reduce((t, id) => { const m = MEDIA_MODELS.find((x) => x.id === id) || TEXT_MODELS.find((x) => x.id === id); return t + m.sizeGB + (m.mmprojGB || 0); }, 0);
@@ -572,7 +572,7 @@ function advise(job, hw, opts = {}) {
   const fits = (m) => !j.only || m[j.only]; // e.g. the Unfiltered stack only uses unfiltered models
   const pool = text.filter(fits);
   const mine = pool.length ? compose(pool, job, hw, calib, tune) : null;
-  const best = compose(TEXT_MODELS.filter(fits), job, hw, calib, tune);
+  const best = compose(live(TEXT_MODELS).filter(fits), job, hw, calib, tune);
   const finish = (s) => {
     if (!s) return s;
     // Already installed? Use the installed copy instead of downloading again.
@@ -587,7 +587,7 @@ function advise(job, hw, opts = {}) {
   }
   if (mine) mine.accuracy = accuracyLevel(mine.quality, { stack: mine.members.drafters.length > 1 || Boolean(mine.members.judge) });
   // Three ways to run it on this PC: quickest, balanced (the recommendation) and most accurate.
-  const all = TEXT_MODELS.filter(fits);
+  const all = live(TEXT_MODELS).filter(fits);
   const tiers = {
     quick: finish(compose(all, job, hw, calib, { ...tune, single: true, speed: Math.max(25, j.speed), budget: Math.max(15, j.budget * 0.25) })),
     balanced: best,
@@ -650,7 +650,7 @@ function upgradeAdvice(hw, { calib = 1, installed = [] } = {}) {
     if (!u.applies(hw)) continue;
     const h2 = u.apply(hw);
     const then = look(h2);
-    const newlyFast = TEXT_MODELS.filter((m) => !fastNow.has(m.id) && ['great', 'good'].includes(estimateText(m, h2, calib).rating))
+    const newlyFast = live(TEXT_MODELS).filter((m) => !fastNow.has(m.id) && ['great', 'good'].includes(estimateText(m, h2, calib).rating))
       .sort((a, b) => scoreFor(b, 'general') - scoreFor(a, 'general')).slice(0, 5).map((m) => m.name);
     const gain = (then.general.stars || 0) - (now.general.stars || 0) + (then.coding.stars || 0) - (now.coding.stars || 0)
       + (now.general.chat && then.general.chat ? Math.min(2, Math.log2(now.general.chat / then.general.chat)) : 0) + newlyFast.length * 0.15;
@@ -684,7 +684,7 @@ function capabilities(profiles, { local = true } = {}) {
 // Newer models that replace older ones (old catalog id -> new). Only pairs where the new one is
 // at least as good at the same job and similar in size; the online file can add more.
 const SUCCESSORS = {
-  'qwen2.5-3b': 'qwen3-4b', 'phi-3.5-mini': 'qwen3-4b',
+  'qwen2.5-3b': 'qwen3-4b', 'phi-3.5-mini': 'qwen3-4b', 'gemma-2-9b': 'gemma-3-12b',
   'qwen2.5-7b': 'qwen3-8b', 'mistral-7b': 'qwen3-8b', 'llama-3.1-8b': 'qwen3-8b',
   'qwen2.5-14b': 'qwen3-14b',
   'deepseek-r1-qwen-7b': 'deepseek-r1-qwen3-8b', 'deepseek-r1-qwen-14b': 'phi-4-reasoning-plus',
@@ -701,6 +701,14 @@ const FEATURED = {
   open: ['qwen3-30b-a3b-uncensored', 'qwen3-14b-uncensored', 'qwen3-8b-uncensored', 'dolphin-3-mistral-24b', 'hermes-4-14b', 'rocinante-12b'],
 };
 
+// ---------- retired models ----------
+// Beaten by newer models of the same size, so they're no longer offered or recommended. Installed
+// copies keep working (and get an upgrade suggestion). Llama 3.2 1B stays as a hidden speed helper
+// for Llama 3.1 8B / 3.3 70B.
+const RETIRED = new Set(['llama-3.2-1b', 'phi-3.5-mini', 'qwen2.5-3b', 'mistral-7b', 'gemma-2-9b', 'sd15']);
+for (const m of [...TEXT_MODELS, ...MEDIA_MODELS]) if (RETIRED.has(m.id)) m.retired = true;
+const live = (list) => list.filter((m) => !m.retired);
+
 // ---------- tested scores ----------
 // Percent of questions answered correctly on four well-known tests:
 //   math = AIME 2025 (competition maths), science = GPQA Diamond (expert science),
@@ -711,4 +719,4 @@ const SCORES = require('./scores.json');
 // Uncensored versions are scored by the model they're made from (usually a point or two lower).
 const SCORE_BASE = { 'qwen3-8b-uncensored': 'qwen3-8b', 'qwen3-14b-uncensored': 'qwen3-14b', 'qwen3-30b-a3b-uncensored': 'qwen3-30b-a3b' };
 
-module.exports = { SCORES, SCORE_BASE, SUCCESSORS, FEATURED, TEXT_MODELS, TEXT_CATEGORIES, MEDIA_MODELS, MEDIA_CATEGORIES, JOBS, CLOUD_BOOST, cloudPlan, accuracyLevel, requirements, smallerAlternative, draftFor, DRAFT_FAMILIES, estimateText, estimateMedia, advise, compose, gpuBandwidth, profileInstalled, matchCatalog, scoreFor, familyOf, starsFor, capabilities, upgradeAdvice };
+module.exports = { RETIRED, SCORES, SCORE_BASE, SUCCESSORS, FEATURED, TEXT_MODELS, TEXT_CATEGORIES, MEDIA_MODELS, MEDIA_CATEGORIES, JOBS, CLOUD_BOOST, cloudPlan, accuracyLevel, requirements, smallerAlternative, draftFor, DRAFT_FAMILIES, estimateText, estimateMedia, advise, compose, gpuBandwidth, profileInstalled, matchCatalog, scoreFor, familyOf, starsFor, capabilities, upgradeAdvice };

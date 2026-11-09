@@ -480,8 +480,70 @@ async function* quicksilverMuse(stackDef, req, step, live) {
   return true;
 }
 
+// Hard maths and logic go to the Thinker; plain sums and everyday "why" questions don't.
+const THINK_Q = /\b(prove|proof|solve (for|the)|equations?|inequalit|integral|integrate|derivative|differentiat|probability|odds of|how many (ways|different|possible|combinations|arrangements|times)|combinatori|permutation|puzzle|riddle|logic (problem|question)|brain ?teaser|minimi[sz]e|maximi[sz]e|optimi[sz]e|remainder|modulo|divisible|prime factor|theorem|geometric|arithmetic (progression|sequence)|sequence|matrix|matrices|polynomial|quadratic|simultaneous)\b/i;
+function thinkWorthy(text) {
+  const t = String(text || '');
+  if (THINK_Q.test(t)) return true;
+  // A worded maths problem: several numbers, a question, and enough words to need working out.
+  return (t.match(/\d+(\.\d+)?/g) || []).length >= 3 && /\?/.test(t) && t.length > 140 && /\b(how (much|many|long|far|fast)|what is the|find|calculate|work out)\b/i.test(t);
+}
+// "Answer now": the Thinker stops and the Brain answers straight away from its working so far.
+const skipThinking = new Set();
+function answerNow(requestId) { if (requestId) skipThinking.add(requestId); }
+
+async function* quicksilverThink(stackDef, req) {
+  const m = stackDef.members;
+  const thinker = m.thinker;
+  const brain = (m.drafters || []).find(exists);
+  const hw = await hardware.detect().catch(() => ({}));
+  const gpu = (hw.vramGB || 0) >= 4;
+  const steps = [];
+  const step = (s) => { s.index = steps.length; steps.push(s); return { type: 'step', step: s }; };
+  const live = (s) => (t) => { s.text = t; req.onStep?.(s); };
+  const inner = { ...req, stepByStep: false };
+  // On a graphics card, pure maths gets three independent attempts and the majority answer.
+  if (gpu && /\d/.test(lastUserText(req.messages)) && !/\b(prove|proof|explain why)\b/i.test(lastUserText(req.messages))) {
+    yield { type: 'status', text: '🧮 A tricky one: the Thinker is solving it three times and taking the majority…' };
+    yield* powerMove('vote', thinker, [], { ...inner, maxTokens: 8000 }, () => req.messages, step, live);
+    return;
+  }
+  yield { type: 'status', text: '🧮 A tricky one: thinking it through carefully… (press Answer now to skip)' };
+  // Thinking is long; on a PC without a graphics card it's kept to a sensible length.
+  const budget = gpu ? 8000 : 3000;
+  let reasoning = ''; let answer = ''; let skipped = false; let emitted = 0;
+  try {
+    for await (const ev of single(thinker, { ...inner, maxTokens: budget, level: 'thorough' })) {
+      if (req.requestId && skipThinking.has(req.requestId)) { skipped = true; break; }
+      if (ev.type === 'reasoning') { reasoning += ev.text; yield ev; }
+      else if (ev.type === 'text') {
+        // Some engines send the thinking inline in <think> tags.
+        answer += ev.text;
+        const open = answer.lastIndexOf('<think>');
+        if (open >= 0 && answer.indexOf('</think>', open) < 0) continue;
+        const clean = answer.replace(/<think>[\s\S]*?<\/think>/g, '').replace(/^\s+/, '');
+        const add = clean.slice(emitted); emitted = clean.length;
+        if (add) yield { type: 'text', text: add };
+      } else yield ev;
+    }
+  } finally { if (req.requestId) skipThinking.delete(req.requestId); }
+  const said = answer.replace(/<think>[\s\S]*?(<\/think>|$)/g, '').trim();
+  if (said && !skipped) return;
+  // Skipped, or the thinking ran out of room before an answer: the Brain answers from the working.
+  const working = `${reasoning}\n${(answer.match(/<think>([\s\S]*?)(<\/think>|$)/) || [])[1] || ''}`.trim().slice(-3000);
+  yield { type: 'status', text: skipped ? 'Answering now from the working so far…' : 'Writing the answer from the working…' };
+  const msgs = req.messages;
+  const withSys = [...msgs.slice(0, -1), { role: 'system', content: working ? STEPS_ANSWER(working) : 'Answer the question directly and carefully.' }, msgs[msgs.length - 1]];
+  yield* single(brain || thinker, { ...inner, messages: withSys, level: 'thorough' });
+}
+
 async function* stack(stackDef, req) {
   const { members } = stackDef;
+  // The Liquid Edition's Thinker takes hard maths and logic (not quick answers, photos or app work).
+  if (stackDef.id === 'quicksilver' && members.thinker && exists(members.thinker) && req.level !== 'quick' && !req.points && !req.toolList && !hasImages(req.messages) && req.stepByStep !== false && thinkWorthy(lastUserText(req.messages))) {
+    yield* quicksilverThink(stackDef, req);
+    return;
+  }
   if (stackDef.id === 'quicksilver' && req.stepByStep !== false) req = { ...req, stepByStep: true };
   if (stackDef.id === 'quicksilver' && req.level !== 'quick' && !req.toolList && !hasImages(req.messages) && CREATIVE.test(lastUserText(req.messages))) {
     const steps0 = [];
@@ -887,6 +949,8 @@ async function ensureQuicksilverStack() {
   const core = require('./catalog-remote').picks().liquid || {};
   const brain = all.find((m) => core.brain && m.catalogId === core.brain && m.source !== 'bundled') || all.find((m) => m.id === 'starter-brain') || all.find((m) => m.catalogId === 'qwen3-4b');
   const eyes = all.find((m) => core.eyes && m.catalogId === core.eyes && m.source !== 'bundled') || all.find((m) => m.id === 'starter') || all.find((m) => /^qwen3-vl-/.test(m.catalogId || ''));
+  // The Thinker: an uncensored thinking model for hard maths and logic (comes with Quicksilver).
+  const thinker = all.find((m) => m.id === 'starter-thinker') || all.find((m) => /^qwen3-4b-thinking/.test(m.catalogId || '') && isUncensored(`local:${m.id}`));
   // Quicksilver is uncensored, so only uncensored models are on its team: the ones that come with
   // it, and uncensored ones you add.
   const isOpen = (p) => isUncensored(`local:${p.id}`);
@@ -897,7 +961,7 @@ async function ensureQuicksilverStack() {
   let bench;
   if (brain) {
     const score = (id) => { const p = pool.find((x) => x.id === id); return p ? catalog.scoreFor(p, 'general') : 0; };
-    const openPool = pool.filter((p) => p.id !== brain.id && p.id !== eyes?.id && isOpen(p));
+    const openPool = pool.filter((p) => p.id !== brain.id && p.id !== eyes?.id && p.id !== thinker?.id && isOpen(p));
     const team = (openPool.length && catalog.compose(openPool, 'general', hw, calib, { vision: false, speed: 10, leadSpeed: 20, budget: 180 })) || { members: { drafters: [] } };
     const lead = team.members.judge || team.members.drafters[0];
     const stronger = lead && score(lead) > score(brain.id) ? lead : null;
@@ -912,6 +976,7 @@ async function ensureQuicksilverStack() {
       // With nobody to combine, the brain answers on its own (step by step on hard questions).
       judge: stronger || second ? local(stronger || brain.id) : undefined,
       vision: local(eyes?.id),
+      thinker: local(thinker?.id),
       mode: 'auto',
     };
   } else {
@@ -924,6 +989,7 @@ async function ensureQuicksilverStack() {
   }
   if (!members.vision) delete members.vision;
   if (!members.judge) delete members.judge;
+  if (!members.thinker) delete members.thinker;
   const def = { id: 'quicksilver', name: 'Quicksilver Liquid Edition', emoji: '💧', builtIn: true, autoManaged: true, custom: true, builtFor: 'quicksilver', ...(bench ? { bench } : {}),
     description: "Quicksilver Liquid Edition, Quicksilver's own uncensored crew: the built-in Qwen3 4B (the Brain) answers everyday messages fast and reasons step by step, Qwen3-VL 2B (Eyes & Muse) reads photos and sketches fresh angles for creative work, and a stronger fast uncensored model on this PC (the Closer) leads on hard questions.", members };
   if (!have || JSON.stringify(have.members) !== JSON.stringify(members) || have.builtFor !== 'quicksilver' || have.name !== def.name || (have.bench || null) !== (def.bench || null)) saveStack(def);
@@ -1033,4 +1099,4 @@ async function warm(target, { contextSize, gpu } = {}) {
   return true;
 }
 
-module.exports = { smoothHelper, isUncensored, councilMembers, warm, prefill, run, targets, stacks, saveStack, deleteStack, kbModels, saveKbModel, deleteKbModel, label, exists, canSee, parse, autoLevel, ensureQuicksilverStack, explainStack };
+module.exports = { smoothHelper, isUncensored, councilMembers, thinkWorthy, answerNow, warm, prefill, run, targets, stacks, saveStack, deleteStack, kbModels, saveKbModel, deleteKbModel, label, exists, canSee, parse, autoLevel, ensureQuicksilverStack, explainStack };

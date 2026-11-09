@@ -106,6 +106,7 @@ function bindNameAsk() {
     if (name) S.data.prefs.userName = name;
     save(); render();
     if (name) toast(`Nice to meet you, ${name}. You can change your name any time in Settings.`);
+    if (!S.data.prefs.tourDone) setTimeout(startTour, 400);
   };
   $('#name-ask-ok')?.addEventListener('click', () => done($('#name-ask-in').value.trim().slice(0, 40)));
   $('#name-ask-in')?.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); done(e.target.value.trim().slice(0, 40)); } });
@@ -226,7 +227,7 @@ function messageHTML(chat, a, m, i) {
   const left = streaming && alt.eta ? alt.eta.sec - (Date.now() - alt.eta.start) / 1000 : null;
   const etaNow = left == null ? '' : `<span class="who-eta" title="Estimated on this PC">${left > 2 ? `about ${fmtSec(left)} left` : 'almost done'}</span>`;
   const body = alt.error ? esc(alt.error) + lowMemHTML(m, alt)
-    : !alt.text && streaming ? `<span class="status-line">${esc(alt.status || 'Thinking…')}</span>`
+    : !alt.text && streaming ? `<span class="status-line">${esc(String(alt.status || 'Thinking…').replace(/ \(press Answer now to skip\)/, ''))}</span>${/Answer now/.test(alt.status || '') ? ' <button class="btn small" data-answer-now>Answer now</button>' : ''}`
     : HIDE_BLOCK.has(isMakerSkill(alt)?.output) ? (stripMediaBlock(alt.text) ? markdown(stripMediaBlock(alt.text)) : streaming ? `<span class="status-line">Writing the ${MEDIA_WORD[skillById(alt.skillId).output]} prompt…</span>` : '')
     : markdown(streaming && humanOn() ? humanize(alt.text || '') : alt.text || '');
   const tools = [];
@@ -1299,3 +1300,11 @@ function rateAnswer(chat, m, v) {
   if (alt.rating === 'up') toast('Thanks: Automatic will lean on this model more for questions like this.');
   else if (alt.rating === 'down') toast('Noted: Automatic will try other models more for questions like this. You can also click “Try another model”.', 5000);
 }
+
+// "Answer now": stop the Thinker and let the Brain answer from its working so far.
+document.addEventListener('click', (e) => {
+  const b = e.target.closest('[data-answer-now]');
+  if (!b || !pending) return;
+  b.disabled = true; b.textContent = 'Answering…';
+  qs.call('chat:answerNow', pending.requestId).catch(() => {});
+});

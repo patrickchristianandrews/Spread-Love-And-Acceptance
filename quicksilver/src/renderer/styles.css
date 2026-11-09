@@ -1301,3 +1301,14 @@ code.sel { user-select: all; background: var(--soft); padding: 1px 6px; border-r
 .sf-steps > div { display: flex; gap: 8px; align-items: flex-start; }
 .sf-steps b { flex: none; width: 24px; height: 24px; border-radius: 50%; display: grid; place-items: center; background: var(--accent-tint); color: var(--accent); font-size: .8rem; }
 .sf-modes { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+
+.adv-sec { margin-bottom: 14px; }
+.tour { text-align: center; max-width: 520px; margin: 0 auto; }
+.tour-ic { font-size: 2.6rem; margin: 6px 0 2px; }
+.tour h2 { margin: 6px 0 8px; }
+.tour-dots { display: flex; gap: 6px; justify-content: center; }
+.tour-dots span { width: 8px; height: 8px; border-radius: 50%; background: var(--line-soft); }
+.tour-dots span.on { background: var(--accent); }
+.tour-priv { display: grid; gap: 8px; margin: 12px 0 4px; text-align: left; }
+.tour-opt { display: flex; flex-direction: column; gap: 2px; padding: 10px 12px; border-radius: 12px; border: 1.5px solid var(--line-soft); background: var(--panel); cursor: pointer; color: var(--text); }
+.tour-opt.on { border-color: var(--accent); background: var(--accent-tint); }
