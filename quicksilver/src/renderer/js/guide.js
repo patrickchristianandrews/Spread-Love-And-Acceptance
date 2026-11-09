@@ -114,15 +114,15 @@ const API_GUIDE = {
   free: [
     ['Cerebras', 'Best free partner', 'Qwen3 235B (or gpt-oss-120b)', 'Pairs with the Liquid Edition: the big sibling of its Brain, extremely fast, with a large free daily allowance.', 'No card needed.'],
     ['Groq', 'Fastest backup', 'gpt-oss-120b or Llama 3.3 70B', 'Very fast answers; a great second free AI so free rotation can switch when one hits its limit.', 'No card needed.'],
-    ['Google Gemini (AI Studio)', 'Smart, sees images', 'Gemini 2.5 Flash', 'Strong all-rounder that reads photos and very long documents.', 'Free-plan prompts may be used by Google to improve its models; more filtered than the uncensored local models.'],
+    ['Google Gemini (AI Studio)', 'Smart, sees images', 'The newest Gemini Flash', 'Strong all-rounder that reads photos and very long documents.', 'Free-plan prompts may be used by Google to improve its models; more filtered than the uncensored local models.'],
     ['Mistral (Experiment plan)', 'Generous', 'Mistral Large', 'Good writing and multilingual work, with high free limits.', 'Needs a verified phone number; free-plan prompts may be used for training.'],
     ['OpenRouter', 'Many models, one key', 'openrouter/auto, or any ":free" model', 'Try hundreds of models; the ":free" ones cost nothing.', 'A daily cap on free requests.'],
     ['GitHub Models', 'With your GitHub account', 'GPT-4.1', 'Try well-known models with a GitHub token.', 'Low daily limits.'],
   ],
   paid: [
     ['Anthropic (Claude)', 'Best for writing and code', 'Claude Opus 5.5 (Sonnet 5.5 for value, Haiku 5.5 for speed)', 'Excellent writing, careful reasoning, long documents and coding; a superb lead for hard questions or Council.', 'Pay as you go.'],
-    ['OpenAI', 'Strong all-rounder', 'GPT-5 (gpt-5-mini is much cheaper)', 'Reasoning, coding and broad knowledge.', 'The API is separate from a ChatGPT subscription.'],
-    ['Google Gemini (paid)', 'Huge context', 'Gemini 2.5 Pro', 'Very long documents and video; paid use isn\'t used to train Google\'s models.', 'Pay as you go.'],
+    ['OpenAI', 'Strong all-rounder', 'GPT-6 Astra (GPT-6 Luna is much cheaper)', 'Reasoning, coding and broad knowledge.', 'The API is separate from a ChatGPT subscription.'],
+    ['Google Gemini (paid)', 'Huge context', 'Gemini 4 Argon', 'Very long documents and video; paid use isn\'t used to train Google\'s models.', 'Pay as you go.'],
     ['DeepSeek', 'Cheapest strong reasoning', 'deepseek-reasoner', 'Strong maths and reasoning at a very low price.', 'Pay as you go.'],
     ['Perplexity', 'Answers with sources', 'sonar-pro', 'Searches the web and cites sources in every answer.', 'Pay as you go.'],
     ['xAI (Grok)', 'Up to date', 'Grok 4', 'Strong reasoning and current events.', 'Pay as you go.'],
@@ -155,10 +155,33 @@ function stacksGuideHTML() {
     <section class="card og-sec"><dl>${STACKS_GUIDE.map(([k, v]) => `<div class="og-row"><dt>${esc(k)}</dt><dd>${esc(v)}</dd></div>`).join('')}</dl>
     <div class="row" style="margin-top:10px;gap:8px;flex-wrap:wrap"><button class="btn small primary" data-goto="stacks">Open Stacks</button><button class="btn small" data-goto="arena">Compare models by task</button></div></section></div>`;
 }
+// Where a cloud AI is worth paying for: the big jobs a PC can't do well.
+// [icon, need, why the cloud, best pick, also great, where you use it]
+const EXPANDED_GUIDE = [
+  ['🧠', 'Hard, multi-step work', 'Long plans, deep analysis, tricky maths and decisions with many moving parts need a model hundreds of times bigger than one a PC can hold.', 'Claude Opus 5.5', 'GPT-6 Astra · Gemini 4 Argon', 'In Quicksilver: connect it, then pick it in a chat or turn on "cloud for hard questions".'],
+  ['💻', 'Coding and big projects', 'Reads a whole project at once, writes and fixes code across many files, and explains why.', 'Claude Opus 5.5 (Sonnet 5.5 for value)', 'GPT-6 Astra · Kimi · DeepSeek for low cost', 'In Quicksilver: chats, Fusion, or as the lead in a coding stack.'],
+  ['📚', 'Huge documents and long video', 'Reads hundreds of pages, contracts or hour-long recordings in one go.', 'Gemini 4 Argon', 'Claude Opus 5.5', 'In Quicksilver: chats with files attached.'],
+  ['📸', 'Professional pictures', 'Photo-real product shots, ads, portraits and scenes at high resolution, and edits that follow instructions closely. Local image models are good for drafts; these are print- and client-ready.', 'GPT Image (OpenAI, newest version)', 'Nano Banana 2 (Google, cheaper, great at edits) · FLUX (Black Forest Labs, artistic styles)', 'In Quicksilver: connect OpenAI, then Create → Image and pick the cloud model. FLUX via Together AI works the same way.'],
+  ['🔤', 'Logos, posters and text in images', 'Gets spelling and lettering right, which most image models (and every small local one) still get wrong.', 'Ideogram 4.5', 'GPT Image', 'On Ideogram\'s own site; bring the result into Create to edit.'],
+  ['🎬', 'Video', 'Makes sharp, smooth clips with sound in minutes. On a PC, video needs a big graphics card and still gives short, low-resolution clips.', 'Gemini Omni (Google; top of the video arena now) or Veo 3.1', 'Seedance 2.5 (best for bringing a photo to life) · Kling · Runway · Sora 2', 'On each service\'s own site or app for now; bring clips into Create → Video to trim and edit.'],
+  ['🎙', 'Studio-quality voice', 'Natural narration, voice-overs and dubbing in many languages and voices.', 'ElevenLabs (v3)', 'Gemini TTS · Cartesia', 'On ElevenLabs\' site; Quicksilver\'s built-in voice stays free and private for everyday reading aloud.'],
+  ['🎵', 'Music and songs', 'Full songs with vocals, or polished background tracks, from a short description.', 'Suno (songs with vocals)', 'Lyria 3 (Google, instrumentals) · ElevenLabs Music', 'On each service\'s own site; Create → Music makes quick tracks on your PC.'],
+  ['🔎', 'Research with sources', 'Searches the live web and cites every claim.', 'Perplexity sonar-pro', 'Quicksilver\'s own free web search', 'In Quicksilver: connect Perplexity, or switch on Web in a chat.'],
+];
+function expandedGuideHTML() {
+  return `<section class="card og-sec"><h3>🚀 When a cloud AI is worth it</h3>
+    <p class="small" style="margin:0 0 10px">Your PC handles everyday chat, writing, photos and files privately and for free. Cloud AIs run on data-centre hardware, so they shine at the big jobs: harder thinking, professional pictures, video, studio voice and music. You only pay for what you use, and everything else stays on your PC. The catch: what you send leaves your PC, and most cloud services have content filters.</p>
+    <div class="api-grid">${EXPANDED_GUIDE.map(([icon, need, why, best, also, where]) => `<div class="api-row"><b>${icon} ${esc(need)}</b>
+      <div class="small muted">${esc(why)}</div>
+      <div class="small">⭐ <b>Best:</b> ${esc(best)}</div><div class="small">➕ <b>Also great:</b> ${esc(also)}</div>
+      <div class="small xp-where">${esc(where)}</div></div>`).join('')}</div>
+    <p class="small muted" style="margin:10px 0 0">The best picks as of November 2026, from public blind-vote leaderboards. These change every few months; Quicksilver's update check tells you when a better model is out.</p></section>`;
+}
 function apisGuideHTML() {
   const row = ([name, tag, best, what, note]) => `<div class="api-row"><div class="row" style="gap:8px;flex-wrap:wrap"><b>${esc(name)}</b><span class="badge b-lav">${esc(tag)}</span></div>
     <div class="small">⭐ <b>Best model:</b> ${esc(best)}</div><div class="small">${esc(what)}</div><div class="small muted">${esc(note)}</div></div>`;
   return `<div class="og"><p class="help" style="margin-top:0">Quicksilver works without any cloud AI. These are the best ones to add, as of this version. Prices and free limits change often, so each service's card in Connect an API links to its current prices.</p>
+    ${expandedGuideHTML()}
     <section class="card og-sec"><h3>✓ Free</h3><div class="api-grid">${API_GUIDE.free.map(row).join('')}</div></section>
     <section class="card og-sec"><h3>$ Paid</h3><div class="api-grid">${API_GUIDE.paid.map(row).join('')}</div></section>
     <section class="card og-sec"><h3>Which to choose</h3><dl>

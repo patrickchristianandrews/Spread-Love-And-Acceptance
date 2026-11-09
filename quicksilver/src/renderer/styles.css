@@ -1274,3 +1274,4 @@ code.sel { user-select: all; background: var(--soft); padding: 1px 6px; border-r
 .tips-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 10px; }
 .tip-item { display: flex; gap: 10px; align-items: flex-start; padding: 8px 10px; border-radius: 10px; background: var(--hover); }
 .tip-n { flex: none; width: 24px; height: 24px; border-radius: 50%; display: grid; place-items: center; font-size: .78rem; font-weight: 800; background: var(--accent-tint); color: var(--accent); }
+.xp-where { margin-top: 2px; padding: 6px 8px; border-radius: 8px; background: var(--hover); }

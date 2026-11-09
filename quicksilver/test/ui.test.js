@@ -662,6 +662,7 @@ function redPng(size = 64) {
   await win.waitForSelector('.api-row b:has-text("Cerebras")');
   assert.ok(await win.locator('.api-row').count() >= 12);
   assert.ok(await win.locator('#guide-connect').count() === 1);
+  assert.ok(await win.locator('.og-sec h3:has-text("When a cloud AI is worth it")').count() === 1 && await win.locator('.xp-where').count() >= 8);
   await shot(win, '17d-guide-apis');
   await win.click('[data-guide-tab="tips"]');
   assert.ok(await win.locator('.tip-item').count() >= 12);
