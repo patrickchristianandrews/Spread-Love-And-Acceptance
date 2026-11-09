@@ -399,14 +399,16 @@ function redPng(size = 64) {
   await win.locator('[data-act="up"]').last().click();
   await askNew('Explain what a haiku is in one line');
   assert.ok(await win.locator('.msg.assistant .badge:has-text("Instant")').count(), 'answered instantly from the rated answer');
-  // Reading ahead: typing in a chat with history makes the model read it in advance.
-  await win.evaluate(() => { S.data.prefs.readAhead = true; });
+  // Reading ahead: typing in a chat with history makes the model read it in advance. This only
+  // happens on a PC with a graphics card (the CI runner has none), so give the estimate a GPU.
+  await win.evaluate(() => { S.data.prefs.readAhead = true; if (S.est?.hardware) S.est.hardware.vramGB = Math.max(8, S.est.hardware.vramGB || 0); });
   await win.waitForFunction(() => !pending, null, { timeout: 60000 }); // the last answer is fully done
   const sentBefore = await win.evaluate(() => prefillsSent);
   await win.fill('#input', 'And a limerick?');
   // A slow test machine can still be finishing background work: type again once if needed.
   try { await win.waitForFunction((n) => prefillsSent > n, sentBefore, { timeout: 15000 }); } catch {
     console.log('  read-ahead retry:', JSON.stringify(await win.evaluate(() => ({ pending: Boolean(pending), gpu: hasGpu(), readAhead: S.data.prefs.readAhead, input: $('#input')?.value, focused: document.activeElement?.id, sent: prefillsSent }))));
+    await win.evaluate(() => { if (S.est?.hardware) S.est.hardware.vramGB = 8; });
     await win.fill('#input', 'And a limerick, please?');
     await win.waitForFunction((n) => prefillsSent > n, sentBefore, { timeout: 30000 });
   }
