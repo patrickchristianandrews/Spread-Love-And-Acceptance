@@ -50,6 +50,16 @@ function stackUpdates() {
 function quicksilverBoost() {
   const st = (S.stacks || []).find((x) => x.id === 'quicksilver');
   if (!st || st.autoManaged === false || !S.est?.text) return null;
+  // A newer core for the Liquid Edition (named in the online picks): suggested first.
+  const core = S.catalog.picks?.liquid || {};
+  for (const [role, label] of [['brain', 'Brain'], ['eyes', 'Eyes & Muse']]) {
+    const id = core[role];
+    const c = id && catModel(id);
+    if (!c || haveModel(id) || !['great', 'good'].includes(S.est.text[id]?.rating)) continue;
+    const now = S.installed.find((m) => m.source === 'bundled' && (role === 'brain' ? m.id === 'starter-brain' : m.id === 'starter'));
+    if (now?.catalogId === id) continue;
+    return { quicksilver: true, core: role, name: 'Quicksilver Liquid Edition: new ' + label, emoji: '💧', models: [{ id, name: c.name, from: now?.name || 'the built-in one' }], why: `a newer, better uncensored ${label} for the Liquid Edition, ${c.sizeGB} GB, runs well on this PC` };
+  }
   const score = (id) => S.catalog.text.find((x) => x.id === id)?.jobs?.general || 0;
   const leadInst = S.installed.find((m) => `local:${m.id}` === st.members?.judge);
   const best = Math.max(0, ...S.installed.filter((m) => m.kind === 'text' && S.est.text[m.catalogId]?.rating === 'great').map((m) => score(m.catalogId)), score(leadInst?.catalogId));
@@ -59,7 +69,7 @@ function quicksilverBoost() {
     .sort((a, b) => score(b) - score(a))[0];
   if (!pick) return null;
   const c = catModel(pick);
-  return { quicksilver: true, name: 'Quicksilver (built in)', emoji: '💧', models: [{ id: pick, name: c.name, from: leadInst?.name || 'its lead' }], why: `stronger (${best} → ${score(pick)} out of 10) and still fast on this PC, ${c.sizeGB} GB` };
+  return { quicksilver: true, name: 'Quicksilver Liquid Edition (built in)', emoji: '💧', models: [{ id: pick, name: c.name, from: leadInst?.name || 'its lead' }], why: `stronger (${best} → ${score(pick)} out of 10) and still fast on this PC, ${c.sizeGB} GB` };
 }
 const shownUpgrades = () => (S.modelUpgrades || []).filter((u) => !putOff(u));
 const shownStackUpdates = () => stackUpdates().filter((u) => !putOff(u));
@@ -169,7 +179,7 @@ function modelUpdatesHTML() {
   }
   const row = (u) => `<div class="up-row"><div class="grow"><b>${esc(u.oldName)}</b> → <b>${esc(u.newName)}</b><div class="small muted">${esc(u.why)} · ${esc(u.speed)} on this PC</div></div>
     ${S.downloads[u.newCatalogId] ? '<span class="badge b-sky">Installing…</span>' : `<button class="btn small primary" data-up-get="${esc(u.newCatalogId)}">Upgrade</button><button class="btn small ghost" data-up-later="${esc(upKey(u))}" title="Suggest it again in ${LATER_DAYS} days">Maybe later</button>`}</div>`;
-  const srow = (s) => `<div class="up-row"><div class="grow">${esc(s.emoji || '🧩')} <b>${esc(s.name)}</b><div class="small muted">${s.quicksilver ? `Add <b>${esc(s.models[0].name)}</b> to the team: ${esc(s.why)}` : `Stronger now: ${s.models.map((m) => `${esc(m.from)} → <b>${esc(m.name)}</b>`).join(', ')}`}</div></div>
+  const srow = (s) => `<div class="up-row"><div class="grow">${esc(s.emoji || '🧩')} <b>${esc(s.name)}</b><div class="small muted">${s.quicksilver ? `${s.core ? 'Switch to' : 'Add'} <b>${esc(s.models[0].name)}</b>${s.core ? ` (replaces ${esc(s.models[0].from)})` : ' to the team'}: ${esc(s.why)}` : `Stronger now: ${s.models.map((m) => `${esc(m.from)} → <b>${esc(m.name)}</b>`).join(', ')}`}</div></div>
     ${s.models.some((m) => S.downloads[m.id]) ? '<span class="badge b-sky">Installing…</span>' : `<button class="btn small primary" data-up-stack="${esc(upKey(s))}">${s.quicksilver ? 'Add it' : 'Update stack'}</button><button class="btn small ghost" data-up-later="${esc(upKey(s))}" title="Suggest it again in ${LATER_DAYS} days">Maybe later</button>`}</div>`;
   return `<div class="card up-card" id="model-updates"><div class="row"><h3 class="grow" style="margin:0">✨ Better models available</h3><span class="small muted">${esc(when)}</span></div>
     <p class="small muted" style="margin:4px 0 10px">${autoUpdates() ? 'These install by themselves in the background' : 'Press Upgrade to download one (or switch on automatic installs in Settings → General)'}; when one is ready, your stacks, chats and assistants switch to it and you can remove the old one.</p>
@@ -214,15 +224,33 @@ function builtinModelHTML() {
     ['🎙', 'Talks', 'speak to it and hear it answer'],
   ];
   return `<div class="card builtin-card" id="builtin-model">
-    <div class="row"><span class="emoji-badge">💧</span><div class="grow"><h3 style="margin:0">Built in: Quicksilver</h3>
+    <div class="row"><span class="emoji-badge">💧</span><div class="grow"><h3 style="margin:0">Built in: Quicksilver Liquid Edition</h3>
       <div class="small muted">${esc(brain.name)}${eyes ? ` + ${esc(eyes.name)} for eyes` : ''} · ${(brain.sizeGB + (eyes ? eyes.sizeGB + (eyes.mmprojGB || 0) : 0)).toFixed(1)} GB · comes with the app, works offline</div></div>
       ${open ? '<span class="badge b-peach" title="Answers plainly, without refusing. The parental lock keeps it family-safe.">Uncensored</span>' : ''}${est ? `<span class="badge rate-${est.rating}">${esc(est.label)}</span>` : ''}</div>
     <p style="margin:10px 0 6px"><b>Fast answers you can trust.</b> Chosen as the quickest model that's still accurate: it answers almost instantly on most PCs and double-checks facts and figures, so you can rely on it for everyday work.${open ? ' It\'s uncensored: it answers plainly instead of refusing (the parental lock in Settings keeps it family-safe).' : ''}</p>
     ${qsRolesHTML(qst)}
+    ${cloudPartnerHTML()}
     <div class="builtin-can">${can.map(([i, t, d]) => `<div><span>${i}</span><b>${esc(t)}</b><span class="small muted">${esc(d)}</span></div>`).join('')}</div>
     <div class="row" style="margin-top:10px">${have ? '<button class="btn small primary" id="builtin-chat">Start a chat</button>' : (S.downloads[brain.id] ? downloadBox(brain.id) : `<button class="btn small primary" data-get="${brain.id}">Download it (${brain.sizeGB} GB)</button>`)}<span class="grow"></span><span class="small muted">Want more power? Better models below run alongside it.</span></div>
   </div>`;
 }
+// The best free cloud partner for the Liquid Edition: Cerebras runs Qwen3 235B (the big sibling of
+// the built-in Qwen3) very fast with a generous free daily allowance; Groq and Mistral as backups
+// make free rotation work. Shown until a free cloud AI is connected.
+function cloudPartnerHTML() {
+  const free = (S.providers || []).filter((p) => ['cerebras', 'groq', 'mistral', 'google', 'openrouter', 'sambanova', 'github'].includes(p.preset) && (p.hasKey || p.noKey));
+  if (free.length >= 2) return `<p class="small muted" style="margin:6px 0">☁️ Paired with ${free.map((p) => esc(p.name)).join(' + ')}: hard questions can use the cloud (if switched on in Settings), and free rotation takes over when one hits its limit.</p>`;
+  return `<div class="pair-card"><div class="grow"><b>☁️ Best free cloud partner: Cerebras · Qwen3 235B</b>
+      <div class="small muted">The big sibling of the built-in Qwen3, very fast, with a large free daily allowance and no card. Add <b>Groq</b> and <b>Mistral</b> (also free) as backups and free rotation keeps you going when one hits its limit. Then switch on "use my cloud AI for hard questions" in Settings → General.</div></div>
+    <div class="row" style="gap:6px;flex-wrap:wrap">${['cerebras', 'groq', 'mistral'].filter((k) => !free.some((p) => p.preset === k)).map((k, i) => `<button class="btn small ${i ? '' : 'primary'}" data-pair="${k}">Connect ${({ cerebras: 'Cerebras', groq: 'Groq', mistral: 'Mistral' })[k]}</button>`).join('')}</div></div>`;
+}
+document.addEventListener('click', async (e) => {
+  const b = e.target.closest('[data-pair]');
+  if (!b) return;
+  const presets = await qs.call('providers:presets');
+  editProvider({ preset: b.dataset.pair }, presets);
+});
+
 // Quicksilver's crew, by role: the Brain answers, the Eyes read photos and double as the Muse for
 // creative work, and a Closer (a stronger uncensored model, when this PC has one) finishes hard ones.
 function qsRolesHTML(qst) {
@@ -238,7 +266,7 @@ function qsRolesHTML(qst) {
   ].filter(Boolean);
   if (!roles.length) return '';
   return `<div class="qs-roles">${roles.map(([i, r, n, d]) => `<div class="qs-role"><span class="qs-role-ic">${i}</span><span><b>${esc(r)}</b> <span class="small">${esc(n)}</span><span class="small muted">${esc(d)}</span></span></div>`).join('')}</div>
-    <p class="small muted" style="margin:4px 0 6px">Quicksilver's own uncensored crew. It rebuilds itself as you add models: a stronger, still-fast uncensored model joins as the Closer automatically.</p>`;
+    <p class="small muted" style="margin:4px 0 6px">Liquid Edition's own uncensored crew. It rebuilds itself as you add models: a stronger, still-fast uncensored model joins as the Closer automatically.</p>`;
 }
 function bindBuiltinModel() {
   $('#builtin-chat')?.addEventListener('click', () => {

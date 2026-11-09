@@ -41,10 +41,13 @@ function clean(j) {
   const featured = {}; const ladders = {};
   for (const [k, v] of Object.entries(j.featured && typeof j.featured === 'object' ? j.featured : {})) if (/^[a-z]{2,20}$/.test(k)) featured[k] = idList(v, 12);
   for (const [k, v] of Object.entries(j.ladders && typeof j.ladders === 'object' ? j.ladders : {})) if (/^[a-z]{2,20}$/.test(k)) ladders[k] = idList(v, 20);
-  return { version: 1, updated: str(j.updated, 20), models, successors, featured, ladders };
+  // The Liquid Edition's core: which uncensored models are its Brain and Eyes right now.
+  const liquid = {};
+  if (j.liquid && typeof j.liquid === 'object') for (const k of ['brain', 'eyes']) if (typeof j.liquid[k] === 'string' && ID.test(j.liquid[k])) liquid[k] = j.liquid[k];
+  return { version: 1, updated: str(j.updated, 20), models, successors, featured, ladders, liquid };
 }
 
-let applied = { successors: {}, featured: {}, ladders: {}, updated: '', fetchedAt: 0 };
+let applied = { successors: {}, featured: {}, ladders: {}, liquid: {}, updated: '', fetchedAt: 0 };
 // Adds new models to the catalog (never replaces a built-in one) and keeps the picks for get().
 function apply(data) {
   if (!data) return;
@@ -53,7 +56,7 @@ function apply(data) {
     if (i < 0) catalog.TEXT_MODELS.push(m);
     else if (catalog.TEXT_MODELS[i].remote) catalog.TEXT_MODELS[i] = m; // a newer copy of a model added online
   }
-  applied = { successors: data.successors || {}, featured: data.featured || {}, ladders: data.ladders || {}, updated: data.updated || '', fetchedAt: data.fetchedAt || 0 };
+  applied = { successors: data.successors || {}, featured: data.featured || {}, ladders: data.ladders || {}, liquid: data.liquid || {}, updated: data.updated || '', fetchedAt: data.fetchedAt || 0 };
 }
 
 // What the app uses: built-in picks, with the online ones on top.
@@ -62,6 +65,7 @@ function picks() {
     successors: { ...catalog.SUCCESSORS, ...applied.successors },
     featured: { ...catalog.FEATURED, ...applied.featured },
     ladders: applied.ladders,
+    liquid: { brain: 'qwen3-4b', eyes: 'qwen3-vl-2b', ...applied.liquid },
     updated: applied.updated, fetchedAt: applied.fetchedAt,
   };
 }

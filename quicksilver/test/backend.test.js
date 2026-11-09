@@ -640,6 +640,7 @@ async function collect(gen) {
     const qsStack = complete.stacks().find((x) => x.id === 'quicksilver');
     const ids = [...qsStack.members.drafters, qsStack.members.judge, qsStack.members.vision].filter(Boolean);
     assert.equal(qsStack.members.mode, 'auto'); assert.ok(qsStack.autoManaged);
+    assert.equal(qsStack.name, 'Quicksilver Liquid Edition');
     assert.equal(qsStack.builtFor, 'quicksilver'); assert.ok(qsStack.custom, "Quicksilver's own custom stack");
     assert.equal(qsStack.members.drafters[0], 'local:starter-brain', 'the built-in Qwen3 4B answers everyday messages');
     assert.equal(qsStack.members.vision, 'local:starter', 'the built-in Qwen3-VL 2B reads photos');
@@ -689,7 +690,16 @@ async function collect(gen) {
     assert.ok(pic.steps.some((x) => x.role === 'vision') && pic.text.length > 0, 'the photo is read by the member that can see');
     complete.deleteStack('pair');
     models.remove('dolphin-test');
+    // The Liquid Edition's core follows the online picks: a newer uncensored Brain takes over once you have it.
+    const remoteP = require('../src/main/catalog-remote');
+    remoteP.apply({ successors: {}, featured: {}, ladders: {}, liquid: { brain: 'qwen3-8b-uncensored' } });
+    models.add({ id: 'newbrain', name: 'Qwen3 8B (uncensored)', kind: 'text', catalogId: 'qwen3-8b-uncensored', files: { model: (() => { const f = path.join(fs.mkdtempSync(path.join(os.tmpdir(), 'qs-nb-')), 'nb.gguf'); fs.copyFileSync(TINY, f); return f; })() }, size: 5e9 });
     await complete.ensureQuicksilverStack();
+    assert.equal(complete.stacks().find((x) => x.id === 'quicksilver').members.drafters[0], 'local:newbrain', 'the newer Brain named online takes over');
+    models.remove('newbrain');
+    remoteP.apply({ successors: {}, featured: {}, ladders: {}, liquid: {} });
+    await complete.ensureQuicksilverStack();
+    assert.equal(complete.stacks().find((x) => x.id === 'quicksilver').members.drafters[0], 'local:starter-brain');
     // Kept safe: never deleted, never repaired from the internet, stays removed.
     await assert.rejects(models.repair('starter', () => {}), /came with Quicksilver/);
     models.remove('starter');

@@ -220,14 +220,14 @@ async function setUpQuicksilver(firstLook) {
   else if (!targetValid(p.defaultTarget) && targetValid('local:starter')) p.defaultTarget = 'local:starter';
   if (p.defaultTarget !== before) save();
   if (firstLook && r.added.length) {
-    toast(r.stack ? '👋 Meet Quicksilver: two AI models working as one, right on your PC. It sees photos, thinks harder when a question needs it, and nothing leaves this computer. Try an idea below.'
+    toast(r.stack ? '👋 Meet Quicksilver Liquid Edition: two AI models working as one, right on your PC. It sees photos, thinks harder when a question needs it, and nothing leaves this computer. Try an idea below.'
       : '👋 Quicksilver is ready to chat, privately on your PC, and it can see photos. Try an idea below.', 10000);
   }
   if (firstLook && r.missing.length && !S.config?.offline) {
     for (const m of r.missing) if (!S.downloads[m.catalogId]) download(m.repo ? { repo: m.repo, quant: m.quant, catalogId: m.catalogId, name: m.name } : { catalogId: m.catalogId }, m.name).catch(() => {});
     toast(`Finishing Quicksilver in the background (${r.missing.map((m) => m.name).join(', ')}). You can chat right away.`, 8000);
   }
-  if (r.stack && !before?.startsWith('stack:quicksilver') && p.defaultTarget === r.stack && !firstLook) toast('💧 Quicksilver is fully ready: your models now work together as one.', 8000);
+  if (r.stack && !before?.startsWith('stack:quicksilver') && p.defaultTarget === r.stack && !firstLook) toast('💧 Quicksilver Liquid Edition is fully ready: your models now work together as one.', 8000);
   if (['home', 'chat'].includes(S.route.view) && (r.added.length || p.defaultTarget !== before)) render();
   return r;
 }

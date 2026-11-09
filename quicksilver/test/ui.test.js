@@ -749,7 +749,7 @@ function redPng(size = 64) {
   await shot(win, '05c-model-details');
   await win.click('#modal [data-close]');
   // The built-in model and what it can do; featured picks; better models swap in when installed.
-  await win.waitForSelector('#builtin-model:has-text("Built in: Quicksilver")');
+  await win.waitForSelector('#builtin-model:has-text("Built in: Quicksilver Liquid Edition")');
   assert.match(await win.locator('#builtin-model').innerText(), /Reasons step by step[\s\S]*Double-checks[\s\S]*Gets maths right[\s\S]*Sees photos/);
   assert.ok(await win.locator('.model-card .badge:has-text("Featured")').count() >= 3, 'featured picks are marked');
   const up = await win.evaluate(async () => {

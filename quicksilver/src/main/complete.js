@@ -845,8 +845,11 @@ async function ensureQuicksilverStack() {
   if (store.config().quicksilverRemoved || (have && have.autoManaged === false)) return have ? 'stack:quicksilver' : null;
   const all = models.list().filter((m) => m.kind === 'text');
   const pool = all.map(catalog.profileInstalled);
-  const brain = all.find((m) => m.id === 'starter-brain') || all.find((m) => m.catalogId === 'qwen3-4b');
-  const eyes = all.find((m) => m.id === 'starter') || all.find((m) => /^qwen3-vl-/.test(m.catalogId || ''));
+  // The Liquid Edition's core follows the online picks: when a newer, better uncensored Brain or
+  // Eyes is named there and you have it, it takes over; until then, the built-in ones.
+  const core = require('./catalog-remote').picks().liquid || {};
+  const brain = all.find((m) => core.brain && m.catalogId === core.brain && m.source !== 'bundled') || all.find((m) => m.id === 'starter-brain') || all.find((m) => m.catalogId === 'qwen3-4b');
+  const eyes = all.find((m) => core.eyes && m.catalogId === core.eyes && m.source !== 'bundled') || all.find((m) => m.id === 'starter') || all.find((m) => /^qwen3-vl-/.test(m.catalogId || ''));
   // Quicksilver is uncensored, so only uncensored models are on its team: the ones that come with
   // it, and uncensored ones you add.
   const UNC = /abliterat|uncensor|unfiltered|dolphin|hermes|lexi|rocinante/i;
@@ -880,9 +883,9 @@ async function ensureQuicksilverStack() {
   }
   if (!members.vision) delete members.vision;
   if (!members.judge) delete members.judge;
-  const def = { id: 'quicksilver', name: 'Quicksilver', emoji: '💧', builtIn: true, autoManaged: true, custom: true, builtFor: 'quicksilver',
-    description: "Quicksilver's own uncensored crew: the built-in Qwen3 4B (the Brain) answers everyday messages fast and reasons step by step, Qwen3-VL 2B (Eyes & Muse) reads photos and sketches fresh angles for creative work, and a stronger fast uncensored model on this PC (the Closer) leads on hard questions.", members };
-  if (!have || JSON.stringify(have.members) !== JSON.stringify(members) || have.builtFor !== 'quicksilver') saveStack(def);
+  const def = { id: 'quicksilver', name: 'Quicksilver Liquid Edition', emoji: '💧', builtIn: true, autoManaged: true, custom: true, builtFor: 'quicksilver',
+    description: "Quicksilver Liquid Edition, Quicksilver's own uncensored crew: the built-in Qwen3 4B (the Brain) answers everyday messages fast and reasons step by step, Qwen3-VL 2B (Eyes & Muse) reads photos and sketches fresh angles for creative work, and a stronger fast uncensored model on this PC (the Closer) leads on hard questions.", members };
+  if (!have || JSON.stringify(have.members) !== JSON.stringify(members) || have.builtFor !== 'quicksilver' || have.name !== def.name) saveStack(def);
   return 'stack:quicksilver';
 }
 

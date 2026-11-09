@@ -1262,3 +1262,5 @@ code.sel { user-select: all; background: var(--soft); padding: 1px 6px; border-r
 
 .sem-card { margin-bottom: 14px; border-color: var(--accent-line); }
 .sem-card.on { background: var(--accent-tint); }
+
+.pair-card { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin: 8px 0; padding: 10px 12px; border-radius: 12px; border: 1px dashed var(--accent-line); background: var(--accent-tint); }
