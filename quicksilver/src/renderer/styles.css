@@ -1440,3 +1440,4 @@ code.sel { user-select: all; background: var(--soft); padding: 1px 6px; border-r
 .ar-r > span:nth-child(2) { display: flex; flex-direction: column; gap: 2px; }
 .ar-n { font-weight: 800; color: var(--muted); }
 @media (max-width: 900px) { .ar-h { display: none; } .ar-r { grid-template-columns: 28px 1fr; } .ar-r > span:nth-child(n+3) { grid-column: 2; } }
+.start-note { margin: -4px 0 12px; max-width: 900px; line-height: 1.5; }

@@ -71,7 +71,11 @@ function redPng(size = 64) {
   await win.waitForSelector('.welcome-card', { state: 'detached' });
   await win.evaluate(() => { S.data.prefs.simple = false; S.data.prefs.autoRoute = false; applyPrefs(); save(); render(); });
   await win.waitForSelector('text=and added it. Ready to use', { timeout: 30000 });
-  console.log('✓ home (model from another app added automatically)');
+  // Start something: expert assistants for one task each (the everyday Quicksilver isn't listed).
+  assert.match(await win.locator('.start-note').innerText(), /assistant programmed to be an expert at one task/);
+  assert.equal(await win.locator('[data-start="as-general"]').count(), 0);
+  assert.ok(await win.locator('[data-start]').count() >= 10);
+  console.log('✓ home (model from another app added automatically; expert assistants explained)');
   await shot(win, '01-home');
 
   // Stack Advisor.
