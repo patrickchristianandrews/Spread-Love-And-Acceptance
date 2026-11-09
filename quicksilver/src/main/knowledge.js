@@ -393,10 +393,25 @@ async function indexPending(onProgress) {
 function semanticStatus() {
   load(); loadVec();
   const e = require('./embed');
-  return { on: Boolean(e.installed()), model: e.EMBED.name, sizeGB: e.EMBED.sizeGB, indexed: db.chunks.filter((c) => vec.v[vkey(c)]).length, total: db.chunks.length, indexing: Boolean(indexing) };
+  return { rerank: Boolean(require('./rerank').installed()), rerankModel: require('./rerank').RERANK.name, rerankGB: require('./rerank').RERANK.sizeGB, on: Boolean(e.installed()), model: e.EMBED.name, sizeGB: e.EMBED.sizeGB, indexed: db.chunks.filter((c) => vec.v[vkey(c)]).length, total: db.chunks.length, indexing: Boolean(indexing) };
 }
 // Keyword and meaning rankings merged (reciprocal rank fusion), at most 2 passages per document.
+// Puts the passages that best answer the question first (when the reranker is installed).
+async function sharpen(query, list, k) {
+  const r = require('./rerank');
+  if (!r.installed() || list.length < 2) return list.slice(0, k);
+  try {
+    const scores = await r.rerank(query, list.map((x) => x.text));
+    if (!scores) return list.slice(0, k);
+    return list.map((x, i) => ({ ...x, rerank: scores[i] })).sort((a2, b2) => b2.rerank - a2.rerank).slice(0, k);
+  } catch { return list.slice(0, k); }
+}
 async function hybrid(query, chunkFilter, k) {
+  const pool2 = Math.max(k * 2, 12);
+  const out0 = await hybridCandidates(query, chunkFilter, require('./rerank').installed() ? pool2 : k);
+  return sharpen(query, out0, k);
+}
+async function hybridCandidates(query, chunkFilter, k) {
   const words = bm25(query, chunkFilter, 40);
   const e = require('./embed');
   if (!e.installed()) return words.slice(0, k);

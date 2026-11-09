@@ -57,6 +57,7 @@ views.stacks = {
     if (stacksTab === 'stacks') bindAdvisor(); // the Setup Advisor is only on the Stacks tab
     bindRecipes();
     $$('[data-edit-stack]').forEach((b) => b.addEventListener('click', () => editStack(S.stacks.find((s) => s.id === b.dataset.editStack))));
+    $$('[data-fz-rate]').forEach((b) => b.addEventListener('click', () => fusionRateModal(b.dataset.fzRate)));
     $$('[data-del-stack]').forEach((b) => b.addEventListener('click', async () => {
       if (!(await confirmBox(`Delete this ${S.stacks.find((s) => s.id === b.dataset.delStack) && isFusion(S.stacks.find((s) => s.id === b.dataset.delStack)) ? 'fusion' : 'stack'}? The models stay installed.`))) return;
       await call('stacks:delete', b.dataset.delStack); await refreshModels(); render();
@@ -386,7 +387,7 @@ function stackCard(s) {
     <div class="stack-v" style="gap:6px;margin:12px 0">${rows.map(([role, t]) => `<div class="row">${ROLE[role]}<b class="small">${esc(targetLabel(t))}</b>${targetValid(t) ? '' : '<span class="badge b-pink">not installed yet</span>'}</div>`).join('')}</div>
     ${isFusion(s) ? fusionRatingsHTML(s.members, { compact: true }) : ''}
     ${stackScoresHTML(rows.map(([, t]) => t))}
-    <div class="row"><button class="btn small primary" data-chat-stack="${s.id}">Chat</button><button class="btn small" data-edit-stack="${s.id}">Edit</button>${isFusion(s) && !s.community ? `<button class="btn small" data-publish="${s.id}">📤 Publish</button>` : ''}<button class="btn small danger" data-del-stack="${s.id}">Delete</button></div>
+    <div class="row"><button class="btn small primary" data-chat-stack="${s.id}">Chat</button><button class="btn small" data-edit-stack="${s.id}">Edit</button>${isFusion(s) ? `<button class="btn small" data-fz-rate="${s.id}">📊 Rating &amp; tips</button>` : ''}${isFusion(s) && !s.community ? `<button class="btn small" data-publish="${s.id}">📤 Publish</button>` : ''}<button class="btn small danger" data-del-stack="${s.id}">Delete</button></div>
   </div>`;
 }
 
@@ -470,7 +471,7 @@ function infuseModal(onCreated) {
     const sees = (t) => S.targets.find((x) => x.target === t)?.vision;
     const vision = drafters.some(sees) ? undefined : S.targets.find((t) => t.vision && !t.stack)?.target;
     const mem = { drafters, judge, vision, mode: b.querySelector('input[name="im"]:checked').value };
-    el.innerHTML = fusionRatingsHTML(mem) + teamPreviewHTML(mem, { title: 'How your custom AI will work on this PC' });
+    el.innerHTML = fusionRatingsHTML(mem) + fusionAdviceHTML(mem) + teamPreviewHTML(mem, { title: 'How your custom AI will work on this PC' });
   };
   b.querySelector('.stack-v').addEventListener('change', preview); // this window's own fields (the modal frame is shared)
   preview();

@@ -1370,3 +1370,26 @@ code.sel { user-select: all; background: var(--soft); padding: 1px 6px; border-r
 .feat-ab > div { padding: 6px 9px; border-radius: 8px; background: var(--hover); opacity: .7; }
 .feat-ab > div.now { opacity: 1; outline: 1.5px solid color-mix(in srgb, var(--accent) 50%, transparent); }
 @media (max-width: 640px) { .feat-ab { grid-template-columns: 1fr; } }
+
+.pc-list { list-style: none; margin: 4px 0 0; padding: 0; display: grid; gap: 2px; font-size: .78rem; }
+.pc-list li { line-height: 1.35; }
+
+.ten-stars { position: relative; display: inline-block; font-size: .8rem; letter-spacing: 1px; line-height: 1; white-space: nowrap; vertical-align: middle; }
+.ten-stars .ts-bg { color: var(--line-soft); }
+.ten-stars .ts-fg { position: absolute; left: 0; top: 0; overflow: hidden; color: #f2b01e; }
+.ts-n { font-size: .8rem; margin-left: 2px; }
+.cc-list { margin-top: 12px; }
+.cc-list summary { cursor: pointer; padding: 6px 0; }
+.cc-plist { display: grid; gap: 4px; margin-top: 6px; }
+.cc-p { display: flex; gap: 10px; align-items: center; padding: 6px 9px; border-radius: 8px; background: var(--hover); flex-wrap: wrap; }
+.cc-p .grow { display: flex; flex-direction: column; gap: 2px; min-width: 180px; }
+.cc-p.now { outline: 1.5px solid color-mix(in srgb, var(--accent) 55%, transparent); }
+.cc-p.local { background: color-mix(in srgb, #2fbf71 12%, var(--hover)); }
+
+.fz-overall { display: flex; gap: 10px; align-items: center; padding: 10px 12px; border-radius: 12px; background: color-mix(in srgb, #f2b01e 12%, var(--hover)); margin: 8px 0; flex-wrap: wrap; }
+.fz-overall .grow { display: flex; flex-direction: column; gap: 2px; }
+.fz-overall .ten-stars { font-size: 1rem; }
+.fz-advice { display: grid; gap: 6px; margin: 8px 0 12px; }
+.fz-tip { display: flex; gap: 10px; align-items: center; padding: 8px 10px; border-radius: 10px; background: var(--hover); flex-wrap: wrap; }
+.fz-tip .grow { display: flex; flex-direction: column; gap: 2px; min-width: 200px; }
+.cc-r .small.muted { display: block; font-weight: 400; margin-top: 2px; }

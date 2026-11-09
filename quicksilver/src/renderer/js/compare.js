@@ -242,11 +242,109 @@ function fusionRatings(members) {
     },
   };
 }
+// One overall score for a custom AI on this PC (0.5–5, shown out of 10): its power, efficiency and
+// accuracy together, held down when it won't run here.
+function fusionOverall(r) {
+  if (!r) return null;
+  let o = (r.power + r.eff + r.acc) / 3;
+  if (r.runs.cls === 'bad') o = Math.min(o, 1);
+  else if (r.runs.cls === 'warn') o -= 0.25;
+  return Math.max(0.5, Math.min(5, Math.round(o * 4) / 4));
+}
+const fzVerdict = (o) => (o >= 4.25 ? 'Excellent on this PC' : o >= 3.5 ? 'Very good on this PC' : o >= 2.75 ? 'Good, with room to improve' : o >= 2 ? 'Works, but could be much better' : 'Needs changes to work well here');
+// Recommended changes for a custom AI on this PC, each with its new rating when it can be applied.
+function fusionAdvice(members) {
+  const t = teamStats(members);
+  if (!t) return [];
+  const r = fusionRatings(members);
+  const now = fusionOverall(r);
+  const instOf = (x) => S.installed.find((m) => `local:${m.id}` === x);
+  const est = (x) => S.est?.text?.[instOf(x)?.catalogId];
+  const name = (x) => instOf(x)?.name || targetLabel(x);
+  const runsWell = (x) => !x.startsWith('local:') || ['great', 'good', 'ok'].includes(est(x)?.rating);
+  const pool = S.targets.filter((x) => !x.stack && x.target && !t.all.includes(x.target) && S.speed?.targets?.[x.target]?.kind === 'model').map((x) => x.target);
+  const strength = (x) => { const i = t.info(x) || S.speed?.targets?.[x]; const sc = i?.scores || {}; return Math.max(sc.general ?? 0, sc.reasoning ?? 0); };
+  const best = (filter) => pool.filter(runsWell).filter(filter || (() => true)).sort((a, b) => strength(b) - strength(a))[0];
+  const swap = (m, from, to) => ({ ...m, drafters: (m.drafters || []).map((d) => (d === from ? to : d)), judge: m.judge === from ? to : m.judge, vision: m.vision === from ? to : m.vision });
+  const out = [];
+  const add = (icon, text, why, next) => {
+    const after = next ? fusionOverall(fusionRatings(next)) : null;
+    if (next && after != null && after < now) return; // only suggest changes that don't make it worse
+    out.push({ icon, text, why, next, after });
+  };
+  // 1. Members that won't run, or run slowly, here.
+  for (const x of t.all.filter((y) => y.startsWith('local:') && !runsWell(y))) {
+    const alt = best((y) => y.startsWith('local:'));
+    const wont = est(x)?.rating === 'wont';
+    if (alt) add(wont ? '🔁' : '🐢', `Swap ${name(x)} for ${name(alt)}`, wont ? `${name(x)} needs more memory than this PC has; ${name(alt)} runs well here.` : `${name(x)} is slow on this PC; ${name(alt)} answers much sooner.`, swap(members, x, alt));
+    else add(wont ? '🔁' : '🐢', `Replace ${name(x)} with a smaller model`, `${wont ? 'It needs more memory than this PC has' : 'It\'s slow on this PC'}. Models → Discover shows the ones marked Fast or Smooth for this PC.`, null);
+  }
+  // 2. Too slow overall: drop the slowest helper, or use a lighter way of working.
+  const hard = t.time(WORDS.hard, true);
+  if (hard > 150 && (members.drafters || []).length > 2) {
+    const slowest = [...members.drafters].filter((d) => d !== t.lead).sort((a, b) => t.w(a) - t.w(b))[0];
+    const fewer = slowest && { ...members, drafters: members.drafters.filter((d) => d !== slowest) };
+    const saved = fewer ? hard - (teamStats(fewer)?.time(WORDS.hard, true) ?? hard) : 0;
+    if (fewer && saved > 5) add('✂️', `Remove ${name(slowest)}`, `Hard answers take about ${etaLabel(hard)} here; without it they'd come about ${etaLabel(saved)} sooner. Three AIs are usually enough.`, fewer);
+  }
+  if (hard > 120 && members.mode === 'debate') add('⚡', 'Work as Red team instead of Debate', 'Debate runs every AI twice; Red team checks for mistakes in one pass, nearly as accurate at about half the time.', { ...members, mode: 'redteam' });
+  // 3. Accuracy: cross-checking and a mix of makers.
+  const crossCheck = ['debate', 'vote', 'redteam', 'consensus', 'panel'].includes(members.mode);
+  if (!crossCheck && t.all.length >= 2 && hard < 150) add('🎯', 'Work as Red team (one AI checks the other)', 'Your AIs currently blend their answers; having one hunt for mistakes catches more errors on facts, maths and code.', { ...members, mode: 'redteam' });
+  const makerOf = (x) => (x.startsWith('api:') ? x.split(':')[1] : catModel(instOf(x)?.catalogId)?.maker || x);
+  const makers = new Set(t.all.map(makerOf));
+  if (makers.size < 2 && (members.drafters || []).length < 4) {
+    const other = best((y) => !makers.has(makerOf(y)));
+    if (other) add('🤝', `Add ${name(other)} (a different maker)`, 'AIs from different makers make different mistakes, so they catch more of each other\'s.', { ...members, drafters: [...(members.drafters || []), other] });
+  }
+  // 4. A stronger lead.
+  const stronger = best((y) => strength(y) > strength(t.lead) + 1);
+  if (stronger && runsWell(stronger)) add('👑', `Let ${name(stronger)} lead`, `It scores higher than ${name(t.lead)} on hard questions, and the lead writes the final answer.`, { ...members, judge: stronger });
+  // 5. Photos.
+  if (!t.all.some((x) => t.info(x)?.vision)) {
+    const eyes = pool.filter(runsWell).find((y) => S.speed?.targets?.[y]?.vision);
+    if (eyes) add('👁️', `Add ${name(eyes)} to read photos`, 'Right now this AI can\'t look at photos or screenshots.', { ...members, vision: eyes });
+  }
+  // 6. Bigger upgrades worth downloading for this PC.
+  const vram = S.est?.hardware?.vramGB || 0;
+  const have = new Set(S.installed.map((m) => m.catalogId));
+  if (vram >= 8 && !have.has('qwen3.5-9b-uncensored') && t.stars('reasoning') < 4.5) add('⬇️', 'Download Qwen3.5 9B (uncensored) and add it', 'This PC\'s graphics card can run it; it scores 81% on graduate-level science (vs 77% for the built-in Brain) and sees photos. Find it in Models → Discover.', null);
+  if (!S.providers?.length && r.power < 4) add('☁️', 'Add a free cloud AI as the lead', 'A free cloud AI (Gemini, Groq or Cerebras free tiers) as the lead makes hard answers much stronger; your PC\'s models still draft. Connect one in Settings → Cloud AI.', null);
+  if (!out.length) out.push({ icon: '✅', text: 'Nothing to change', why: 'This is a strong mix for this PC: every AI runs well here and they check each other.', next: null, after: null });
+  return out.slice(0, 6);
+}
+function fusionAdviceHTML(members, { apply = false } = {}) {
+  const r = fusionRatings(members);
+  const o = fusionOverall(r);
+  if (o == null) return '';
+  return `<div class="fz-overall"><span class="grow"><b>Overall on this PC</b><span class="small muted">${esc(fzVerdict(o))}</span></span>${typeof tenStarsHTML === 'function' ? tenStarsHTML(tenOf(o)) : `<b>${tenText(o)}</b>`}</div>
+    <div class="fz-advice"><b class="small">💡 Recommended changes</b>${fusionAdvice(members).map((a, i) => `<div class="fz-tip"><span>${a.icon}</span><span class="grow"><b>${esc(a.text)}</b><span class="small muted">${esc(a.why)}</span></span>${a.after != null && a.after > o ? `<span class="badge b-mint" title="Overall rating after this change">→ ${tenText(a.after)}</span>` : ''}${apply && a.next ? `<button class="btn small" data-fz-apply="${i}">Apply</button>` : ''}</div>`).join('')}</div>`;
+}
+// The full rating of a saved custom AI on this PC, with its recommended changes (each can be applied).
+function fusionRateModal(id) {
+  const s = S.stacks.find((x) => x.id === id);
+  if (!s) return;
+  const b = openModal(`<h2>${esc(s.emoji || '⚗️')} ${esc(s.name)}: rating on this PC</h2>
+    <p class="small muted">How well this custom AI runs on ${S.est?.hardware ? `this PC (${hwText(S.est.hardware)})` : 'this PC'}, and what would make it better.</p>
+    ${fusionRatingsHTML(s.members)}${fusionAdviceHTML(s.members, { apply: true })}${teamPreviewHTML(s.members, { title: 'How it works on this PC' })}
+    <div class="modal-actions"><button class="btn" data-close>Close</button></div>`, { wide: true });
+  const tips = fusionAdvice(s.members);
+  b.querySelectorAll('[data-fz-apply]').forEach((btn) => btn.addEventListener('click', async () => {
+    const tip = tips[Number(btn.dataset.fzApply)];
+    if (!tip?.next) return;
+    btn.disabled = true;
+    await qs.call('stacks:save', { ...s, members: tip.next });
+    await refreshModels();
+    toast(`${tip.text}: done. ${tip.after != null ? `Now ${tenText(tip.after)} on this PC.` : ''}`);
+    render();
+    fusionRateModal(id);
+  }));
+}
 function fusionRatingsHTML(members, { compact = false } = {}) {
   const r = fusionRatings(members);
   if (!r) return '';
   const st = (v) => tenText(v);
-  if (compact) return `<div class="fz-compact small"><span title="${esc(r.why.power)}">⚡ Power <b>${st(r.power)}</b></span><span title="${esc(r.why.eff)}">🍃 Efficiency <b>${st(r.eff)}</b></span><span title="${esc(r.why.acc)}">🎯 Accuracy <b>${st(r.acc)}</b></span><span class="fz-run ${r.runs.cls}" title="${esc(r.runs.text)}">${r.runs.icon} ${r.runs.cls === 'ok' ? 'Runs well here' : r.runs.cls === 'warn' ? 'Runs slowly here' : 'Won\'t run here'}</span></div>`;
+  if (compact) return `<div class="fz-compact small"><span title="Overall on this PC"><b>⭐ ${tenText(fusionOverall(r))}</b></span><span title="${esc(r.why.power)}">⚡ Power <b>${st(r.power)}</b></span><span title="${esc(r.why.eff)}">🍃 Efficiency <b>${st(r.eff)}</b></span><span title="${esc(r.why.acc)}">🎯 Accuracy <b>${st(r.acc)}</b></span><span class="fz-run ${r.runs.cls}" title="${esc(r.runs.text)}">${r.runs.icon} ${r.runs.cls === 'ok' ? 'Runs well here' : r.runs.cls === 'warn' ? 'Runs slowly here' : 'Won\'t run here'}</span></div>`;
   return `<div class="fz-ratings">
     <div class="fz-r"><span>⚡ Power</span><b>${st(r.power)}</b><small>${esc(r.why.power)}</small></div>
     <div class="fz-r"><span>🍃 Efficiency</span><b>${st(r.eff)}</b><small>${esc(r.why.eff)}</small></div>

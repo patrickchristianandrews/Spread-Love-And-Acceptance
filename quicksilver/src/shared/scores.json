@@ -287,6 +287,13 @@
 "knowledge":null,
 "coding":null,
 "src":"aa"
+},
+"qwen3.5-9b-uncensored":{
+"math":null,
+"science":81,
+"knowledge":null,
+"coding":null,
+"src":"aa"
 }
 },
 "cloud":{

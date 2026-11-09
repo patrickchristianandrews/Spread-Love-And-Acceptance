@@ -190,11 +190,18 @@ function redPng(size = 64) {
   const fz = await win.locator('#inf-preview .fz-ratings').innerText();
   assert.match(fz, /Power[\s\S]*\/10[\s\S]*Efficiency[\s\S]*\/10[\s\S]*Accuracy[\s\S]*\/10/);
   assert.match(fz, /Runs well on this PC|Runs, but|Won't run/);
+  assert.match(await win.locator('#inf-preview').innerText(), /Overall on this PC[\s\S]*\/10[\s\S]*Recommended changes/);
   await shot(win, '13-infuse');
   await win.click('#inf-go');
   await win.waitForFunction(() => document.querySelector('#pick-model option:checked')?.textContent.includes('Analyst Supreme'));
   // Publish the custom AI: shows exactly what's shared (never keys), then opens a GitHub issue.
   await win.evaluate(() => { stacksTab = 'fusion'; go({ view: 'stacks' }); });
+  // Its rating on this PC, with recommended changes that can be applied in one click.
+  await win.click('.card:has-text("Analyst Supreme") [data-fz-rate]');
+  await win.waitForSelector('#modal h2:has-text("rating on this PC")');
+  assert.match(await win.locator('#modal').innerText(), /Power[\s\S]*Overall on this PC[\s\S]*Recommended changes/);
+  await shot(win, '13b-fusion-rating');
+  await win.click('#modal [data-close]');
   await win.click('.card:has-text("Analyst Supreme") [data-publish]');
   await win.waitForSelector('#modal h2:has-text("Publish your custom AI")');
   assert.match(await win.locator('#modal').innerText(), /Exactly what's shared[\s\S]*Never shared: your API keys/);
@@ -731,6 +738,15 @@ function redPng(size = 64) {
   await win.click('[data-cc-kind="video"]');
   await win.selectOption('#cc-vsvc', 'kling');
   await win.waitForFunction(() => /Kling 3\.0 alone/.test(document.querySelector('#cc-out').innerText));
+  // The price list: every service for this kind, rated on a 10-star scale, best first; Compare picks one.
+  await win.click('#cc-list summary');
+  await win.waitForSelector('#cc-list .cc-p .ten-stars');
+  assert.ok(await win.locator('#cc-list .cc-p').count() >= 5);
+  assert.match(await win.locator('#cc-list').innerText(), /10\/10/);
+  await win.locator('#cc-list [data-cc-pick]').first().click();
+  await win.waitForSelector('#cc-out .ten-stars');
+  await win.locator('#cloud-calc').scrollIntoViewIfNeeded();
+  await shot(win, '17d3-price-list');
   await win.click('[data-cc-kind="chat"]');
   assert.ok(await win.locator('.og-sec h3:has-text("Developer (dev) plans")').count() === 1);
   await win.locator('#cloud-calc').scrollIntoViewIfNeeded();
@@ -1020,13 +1036,23 @@ function redPng(size = 64) {
   await win.click('[data-set-tab="features"]');
   await win.waitForSelector('.feat [data-feature="thinking"]');
   assert.ok(await win.locator('.feat').count() >= 12, 'every feature has a switch');
-  assert.match(await win.locator('.feat:has([data-feature="autoWeb"])').innerText(), /With it on:[\s\S]*With it off:/);
+  assert.match(await win.locator('.feat:has([data-feature="autoWeb"])').innerText(), /With it on:[\s\S]*✅[\s\S]*⚠️[\s\S]*With it off:/);
+  // Turning one off asks first, listing what you gain and what you give up; "Keep it on" changes nothing.
   await win.click('[data-feature="thinking"]');
+  await win.waitForSelector('#modal-body:has-text("What you give up")');
+  assert.match(await win.locator('#modal-body').innerText(), /What you gain[\s\S]*much sooner[\s\S]*What you give up[\s\S]*More mistakes/);
+  await shot(win, '09b-features-confirm');
+  await win.click('[data-feat-no]');
+  assert.equal(await win.evaluate(() => S.data.prefs.thinking !== false), true, 'cancel keeps it on');
+  assert.equal(await win.locator('[data-feature="thinking"]').isChecked(), true);
+  await win.click('[data-feature="thinking"]');
+  await win.click('[data-feat-yes]');
   await win.waitForSelector('.toast:has-text("Thinking for hard questions off")');
   assert.equal(await win.evaluate(() => S.data.prefs.thinking), false);
   await shot(win, '09b-features');
   await win.click('[data-feature="thinking"]');
-  assert.equal(await win.evaluate(() => S.data.prefs.thinking), true);
+  await win.click('[data-feat-yes]');
+  await win.waitForFunction(() => S.data.prefs.thinking === true);
   // Settings: API server on.
   await win.click('[data-nav="settings"]');
   await win.click('[data-set-tab="advanced"]');

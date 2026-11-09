@@ -1015,7 +1015,7 @@ async function ensureQuicksilverStack() {
   if (!members.thinker) delete members.thinker;
   if (!members.muse || members.muse === members.drafters?.[0]) delete members.muse;
   const def = { id: 'quicksilver', name: 'Quicksilver Liquid Edition', emoji: '💧', builtIn: true, autoManaged: true, custom: true, builtFor: 'quicksilver', ...(bench ? { bench } : {}),
-    description: "Quicksilver Liquid Edition, Quicksilver's own uncensored crew: the built-in Qwen3 4B (the Brain) answers everyday messages fast and reasons step by step, Qwen3-VL 2B (Eyes & Muse) reads photos and sketches fresh angles for creative work, and a stronger fast uncensored model on this PC (the Closer) leads on hard questions.", members };
+    description: "Quicksilver Liquid Edition, Quicksilver's own uncensored crew: the built-in Qwen3.5 4B (the Brain) answers, sees photos and thinks hard questions through, Qwen3.5 2B (the Muse) sketches fresh angles for creative work, and a stronger uncensored model you add (the Closer, such as Qwen3.5 9B on a PC with a graphics card) leads on hard questions. Optional add-ons make it sharper: Smarter search and the reranker for your files and memories.", members };
   if (!have || JSON.stringify(have.members) !== JSON.stringify(members) || have.builtFor !== 'quicksilver' || have.name !== def.name || (have.bench || null) !== (def.bench || null)) saveStack(def);
   return 'stack:quicksilver';
 }

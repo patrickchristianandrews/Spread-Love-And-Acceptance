@@ -18,22 +18,71 @@ const FEATURES = [
   ['autoInstallModels', false, '⬇️', 'Install better models automatically', 'Downloads newer, better models and stacks in the background when they suit this PC.', 'Always the best models, without lifting a finger.', 'Nothing big downloads without you; you\'re shown each upgrade to choose.', 'Speed'],
   ['tips', true, '💡', 'Tips', 'Now and then, a short tip for getting more out of Quicksilver.', 'You discover features as you go.', 'No tips.', 'Personal'],
 ];
+// Pros and cons of each state: [pros with it on, cons with it on, pros with it off, cons with it off].
+// When the "off" sides aren't written, they're the "on" sides turned around.
+const FEATURE_PC = {
+  thinking: [['More accurate on maths, logic, planning and "why / how" questions', 'You can read how it worked the answer out'], ['Hard answers take longer (20–90 s more on a PC without a graphics card)', 'Uses more of the PC while it thinks'], ['Hard answers come back much sooner', 'Lighter on battery and fans'], ['More mistakes on maths, logic and multi-step questions']],
+  muse: [['Fresher, more surprising stories, lyrics, names and ideas'], ['Creative answers start a few seconds later']],
+  autoRoute: [['The best of your models answers each message', 'Photos go to a model that can see them'], ['The model can change from one message to the next']],
+  autoFix: [['Wrong sums and broken code are caught and fixed'], ['Answers with sums or code take a little longer']],
+  factCheck: [['The most reliable answers, every claim checked', 'Best for health, money, legal and work questions'], ['Answers take about twice as long', 'Uses more of the PC (or your cloud AI, if connected)']],
+  autoWeb: [['Up-to-date answers about news, prices and today\'s facts', 'Sources you can click'], ['Questions about current things are sent to a search engine']],
+  cloudHard: [['A much bigger model on the hardest questions'], ['Hard questions leave your PC', 'May cost money or use up a free plan\'s daily limit', 'Needs internet']],
+  autoTools: [['Just ask: it looks things up in your connected apps'], ['The AI can read connected apps whenever you mention them']],
+  memory: [['Answers fit you without repeating yourself', 'Remembers your preferences, projects and people'], ['What you share is kept on this PC until you clear it']],
+  memoryLearn: [['Memory fills itself in as you chat'], ['It may keep something you\'d rather it didn\'t (you can delete any memory)', 'A little background work after chats']],
+  humanWriting: [['Answers read like a knowledgeable friend wrote them', 'No chatbot phrases or needless bullet lists'], ['Fewer headings and lists for skimming']],
+  preanswer: [['Some follow-ups appear instantly'], ['More graphics card and power use while you read']],
+  autoInstallModels: [['Always the best models for this PC, without lifting a finger'], ['Big downloads (several GB) can start in the background', 'Uses disk space']],
+  tips: [['You discover useful features as you go'], ['An occasional extra message on screen']],
+};
+const lowerFirst = (t) => t.charAt(0).toLowerCase() + t.slice(1);
+function featurePC(key) {
+  const f = FEATURES.find((x) => x[0] === key);
+  const [onPro = [f[5]], onCon = [], offPro, offCon] = FEATURE_PC[key] || [];
+  return {
+    onPro, onCon,
+    offPro: offPro || (onCon.length ? onCon.map((c) => `No more: ${lowerFirst(c)}`) : [f[6]]),
+    offCon: offCon || onPro.map((c) => `You lose: ${lowerFirst(c)}`),
+  };
+}
+const pcListHTML = (pros, cons) => `<ul class="pc-list">${pros.map((x) => `<li class="pc-pro">✅ ${esc(x)}</li>`).join('')}${cons.map((x) => `<li class="pc-con">⚠️ ${esc(x)}</li>`).join('')}</ul>`;
+// Asks before changing a feature, showing exactly what you gain and what you give up.
+function featureConfirm(key, turnOn) {
+  const f = FEATURES.find((x) => x[0] === key);
+  const pc = featurePC(key);
+  const [pros, cons] = turnOn ? [pc.onPro, pc.onCon] : [pc.offPro, pc.offCon];
+  return new Promise((resolve) => {
+    const b = openModal(`<h2>${f[2]} Turn ${esc(f[3])} ${turnOn ? 'on' : 'off'}?</h2>
+      <p class="small muted">${esc(turnOn ? f[5] : f[6])}</p>
+      <h4 style="margin:10px 0 4px">What you gain</h4>${pcListHTML(pros, [])}
+      <h4 style="margin:10px 0 4px">What you give up</h4>${cons.length ? pcListHTML([], cons) : '<p class="small muted">Nothing worth mentioning.</p>'}
+      <div class="modal-actions"><button class="btn" data-feat-no>Keep it ${turnOn ? 'off' : 'on'}</button><button class="btn primary" data-feat-yes>Turn it ${turnOn ? 'on' : 'off'}</button></div>`);
+    b.querySelector('[data-feat-no]').onclick = () => { closeModal(); resolve(false); };
+    b.querySelector('[data-feat-yes]').onclick = () => { closeModal(); resolve(true); };
+  });
+}
 const featureOn = (key) => { const f = FEATURES.find((x) => x[0] === key); const v = S.data.prefs[key]; return f && f[1] ? v !== false : v === true; };
 
 function featuresHTML() {
   const groups = [...new Set(FEATURES.map((f) => f[7]))];
-  return `<p class="help" style="margin-top:0">Turn any feature on or off. Each one says what you get with it on, and what changes if you turn it off.</p>
+  return `<p class="help" style="margin-top:0">Turn any feature on or off. Each one lists its pros (✅) and cons (⚠️) with it on and with it off, and asks before changing, showing exactly what you gain and what you give up.</p>
     ${groups.map((g) => `<section class="card og-sec"><h3>${esc(g)}</h3>${FEATURES.filter((f) => f[7] === g).map(([key, , icon, name, what, on, off]) => {
       const isOn = featureOn(key);
+      const pc = featurePC(key);
       return `<div class="feat ${isOn ? 'on' : 'off'}"><label class="feat-top"><input type="checkbox" data-feature="${key}" ${isOn ? 'checked' : ''} ${key === 'cloudHard' && !S.providers?.length ? 'disabled title="Connect a cloud AI first"' : ''}><span class="grow"><b>${icon} ${esc(name)}</b> <span class="feat-state">${isOn ? 'On' : 'Off'}</span><span class="small muted feat-what">${esc(what)}</span></span></label>
-        <div class="feat-ab"><div class="${isOn ? 'now' : ''}"><span class="small"><b>With it on:</b> ${esc(on)}</span></div><div class="${isOn ? '' : 'now'}"><span class="small"><b>With it off:</b> ${esc(off)}</span></div></div></div>`;
+        <div class="feat-ab"><div class="${isOn ? 'now' : ''}"><span class="small"><b>With it on:</b> ${esc(on)}</span>${pcListHTML(pc.onPro, pc.onCon)}</div><div class="${isOn ? '' : 'now'}"><span class="small"><b>With it off:</b> ${esc(off)}</span>${pcListHTML(pc.offPro, pc.offCon)}</div></div></div>`;
     }).join('')}</section>`).join('')}`;
 }
 function bindFeatures() {
-  $$('[data-feature]').forEach((b) => b.addEventListener('change', (e) => {
+  $$('[data-feature]').forEach((b) => b.addEventListener('change', async (e) => {
     const key = b.dataset.feature;
     const f = FEATURES.find((x) => x[0] === key);
-    S.data.prefs[key] = e.target.checked;
+    const want = e.target.checked;
+    e.target.checked = !want;
+    if (!(await featureConfirm(key, want))) return;
+    e.target.checked = want;
+    S.data.prefs[key] = want;
     save(); render();
     toast(`${f[3]} ${e.target.checked ? 'on' : 'off'}: ${e.target.checked ? f[5] : f[6]}`, 7000);
   }));

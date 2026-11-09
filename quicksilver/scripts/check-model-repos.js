@@ -12,7 +12,7 @@ const catalog = require('../src/shared/catalog');
 
 (async () => {
   let bad = 0;
-  for (const m of [...catalog.TEXT_MODELS.filter((x) => x.verify), require('../src/main/embed').EMBED]) {
+  for (const m of [...catalog.TEXT_MODELS.filter((x) => x.verify), require('../src/main/embed').EMBED, require('../src/main/rerank').RERANK]) {
     let found = null;
     for (const repo of [m.repo, ...(m.alt || [])]) {
       try {

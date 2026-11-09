@@ -438,6 +438,12 @@ handle('kb:semanticOn', async () => {
   return models.start(await models.planCatalog(e.EMBED.id), (ch, d) => { emit(ch, d); if (ch === 'models:done') knowledge.indexPending((p) => emit('library:progress', p)).catch(() => {}); });
 });
 handle('kb:reindex', () => knowledge.indexPending((p) => emit('library:progress', p)));
+// Sharper search: the reranker download.
+handle('kb:rerankOn', async () => {
+  const r = require('./rerank');
+  if (r.installed()) return { installed: true };
+  return models.start(await models.planCatalog(r.RERANK.id), (ch, d) => emit(ch, d));
+});
 handle('kb:create', (c) => knowledge.createCollection(c));
 handle('kb:update', (id, patch) => knowledge.updateCollection(id, patch));
 handle('kb:delete', (id) => knowledge.deleteCollection(id));

@@ -1250,7 +1250,7 @@ async function collect(gen) {
   {
     const ids = ['qwen3-8b-uncensored', 'qwen3-14b-uncensored', 'qwen3-30b-a3b-uncensored'];
     for (const id of ids) { const m = catalog.TEXT_MODELS.find((x) => x.id === id); assert.ok(m && m.category === 'open' && m.verify && m.alt?.length, `${id} is in the catalog with backup copies`); }
-    assert.deepEqual(catalog.FEATURED.open.slice(0, 3), ['qwen3-30b-a3b-uncensored', 'qwen3-14b-uncensored', 'qwen3-8b-uncensored']);
+    assert.deepEqual(catalog.FEATURED.open.slice(0, 4), ['qwen3.5-9b-uncensored', 'qwen3-30b-a3b-uncensored', 'qwen3-14b-uncensored', 'qwen3-8b-uncensored']);
     assert.equal(catalog.draftFor('qwen3-14b-uncensored', [{ id: 'starter', catalogId: 'qwen3-vl-2b' }])?.id, 'starter', 'the built-in 2B drafts ahead for it');
     const real = global.fetch;
     const m8 = catalog.TEXT_MODELS.find((x) => x.id === 'qwen3-8b-uncensored');
@@ -1306,6 +1306,29 @@ async function collect(gen) {
     models.remove(embed.EMBED.id);
     knowledge.deleteCollection(kc.id);
     console.log('✓ smarter search: Nomic Embed finds passages by meaning, merged with keyword search');
+  }
+
+  // Sharper search: the reranker reads the question with each passage and puts the best one first.
+  {
+    const rerank = require('../src/main/rerank');
+    const kc = knowledge.createCollection({ name: 'Tyres' });
+    knowledge.addTexts(kc.id, [
+      { name: 'a.txt', path: '/tmp/a.txt', kind: 'document', text: 'Winter. Winter evenings are long and winter is cold.' },
+      { name: 'b.txt', path: '/tmp/b.txt', kind: 'document', text: 'Fit winter tyres to the car before the first frost; check the tread depth too.' },
+      { name: 'c.txt', path: '/tmp/c.txt', kind: 'document', text: 'Summer tyres grip best on warm, dry roads.' },
+    ]);
+    assert.equal(knowledge.semanticStatus().rerank, false);
+    models.add({ id: rerank.RERANK.id, name: rerank.RERANK.name, kind: 'rerank', catalogId: rerank.RERANK.id, files: { model: (() => { const f = path.join(fs.mkdtempSync(path.join(os.tmpdir(), 'qs-rr-')), 'rr.gguf'); fs.copyFileSync(TINY, f); return f; })() }, size: 4.4e8 });
+    assert.equal(knowledge.semanticStatus().rerank, true);
+    const hits = await knowledge.search('when to fit winter tyres to the car', { collectionIds: [kc.id] });
+    assert.match(hits[0]?.text || '', /Fit winter tyres to the car/, 'the passage that answers it comes first');
+    assert.ok(hits[0].rerank != null && hits.every((h, i) => i === 0 || h.rerank <= hits[i - 1].rerank), 'ordered by the reranker');
+    models.remove(rerank.RERANK.id);
+    knowledge.deleteCollection(kc.id);
+    // A stronger uncensored Closer is in the catalogue and joins the Liquid Edition's open models.
+    const c9 = catalog.TEXT_MODELS.find((m) => m.id === 'qwen3.5-9b-uncensored');
+    assert.ok(c9 && c9.category === 'open' && c9.vision && /abliterated/i.test(c9.repo));
+    console.log('✓ sharper search: the reranker puts the passage that answers the question first; Qwen3.5 9B Closer listed');
   }
 
   // Stack efficiency: the team's inner steps skip the reasoning pass; a lone lead doesn't review itself.

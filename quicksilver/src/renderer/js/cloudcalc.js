@@ -65,6 +65,9 @@ const CALC_MODES = {
   fusion: ['As the lead of a custom AI', 'Every message goes to the cloud AI, together with drafts from your PC\'s models, so it starts from more angles.'],
   check: ['As the double-checker', 'Your PC answers everything; the cloud AI only checks answers when Double-check is on (say a third of them).'],
 };
+const TEN = '★★★★★★★★★★';
+const tenStarsHTML = (r) => (r == null ? '<span class="muted">not rated</span>' : `<span class="ten-stars" role="img" aria-label="${r} out of 10 stars" title="${r} out of 10"><span class="ts-bg">${TEN}</span><span class="ts-fg" style="width:${Math.max(0, Math.min(10, r)) * 10}%">${TEN}</span></span> <b class="ts-n">${r}/10</b>`);
+const tenStarsText = (r) => (r == null ? '' : `${'★'.repeat(Math.round(r))}${'☆'.repeat(10 - Math.round(r))} ${r}/10`);
 const money = (v, free) => (free ? 'Free' : v == null ? '?' : v < 0.01 ? 'under $0.01' : `$${v < 10 ? v.toFixed(2) : Math.round(v).toLocaleString()}`);
 const ccBar = (v, max, cls) => `<span class="cc-bar"><i class="${cls}" style="width:${max ? Math.max(2, Math.round((v / max) * 100)) : 0}%"></i></span>`;
 function ccTable(heads, rows, note) {
@@ -94,7 +97,7 @@ function chatOutHTML() {
       ['☁️ Messages sent to the cloud a month', [n.alone.calls, n.withQs.calls], (v) => v.toLocaleString(), true],
       ['💵 Estimated cost a month', [n.alone.cost, n.withQs.cost], (v) => money(v, calcState.free), true],
       ['🔒 Your messages that leave your PC', [n.alone.leaves, n.withQs.leaves], (v) => `${v}%`, true],
-      ['🎯 Hard questions', [`${svc[0].split(' (')[0]}: ${svc[4]}/10`, calcState.mode === 'check' ? 'Your PC, checked by the cloud AI' : `${svc[0].split(' (')[0]} with your PC's drafts and working: ${Math.min(10, svc[4] + 0.5)}/10`]],
+      ['🎯 Hard questions (out of 10)', [`${tenStarsHTML(svc[4])}<span class="small muted">${esc(svc[0].split(' (')[0])}</span>`, calcState.mode === 'check' ? 'Your PC, checked by the cloud AI' : `${tenStarsHTML(Math.min(10, svc[4] + 0.5))}<span class="small muted">${esc(svc[0].split(' (')[0])} with your PC's drafts and working</span>`]],
       ['⚡ Everyday answers', ['From the cloud', calcState.mode === 'fusion' ? 'From the cloud, with your PC\'s drafts' : `From your PC${local ? ` (${local.label.toLowerCase()} here)` : ''}, private, no limits`]],
       ['📴 Works without internet', ['No', calcState.mode === 'fusion' ? 'No (the cloud AI leads)' : 'Yes, for everyday messages']],
     ], calcState.mode !== 'fusion' && saved > 0 ? `Through Quicksilver you send <b>${saved}% fewer</b> messages to the cloud${calcState.free ? `, so a free plan's daily limit lasts about <b>${(1 / Math.max(0.05, n.share)).toFixed(1)}×</b> longer` : `, saving about <b>${money(n.alone.cost - n.withQs.cost)}</b> a month`}, and ${100 - n.withQs.leaves}% of your messages never leave your PC.` : calcState.mode === 'fusion' ? 'As a lead, the cloud AI sees every message but gets your PC\'s drafts too: more accurate answers, at a little more cost than using it alone.' : '')}`;
@@ -116,7 +119,7 @@ function imageOutHTML() {
   const secs = loc?.est?.sec;
   return `${ccTable([`${label.split(' (')[0]} alone`, 'Quicksilver on your PC', 'Both: try on your PC, finish in the cloud'], [
       ['💵 Cost a month', [price == null ? null : n * price, 0, price == null ? null : keepers * price], (v) => money(v), true],
-      ['🖼️ Quality (out of 10)', [`${rating}/10${note ? ` · ${note}` : ''}`, loc ? `${loc.rating}/10 · ${loc.name}${loc.installed ? '' : ' (download)'}` : 'Needs a picture model (Create)', `${rating}/10 for the ones you keep`]],
+      ['🖼️ Quality (out of 10)', [`${tenStarsHTML(rating)}${note ? `<span class="small muted">${esc(note)}</span>` : ''}`, loc ? `${tenStarsHTML(loc.rating)}<span class="small muted">${esc(loc.name)}${loc.installed ? '' : ' (download)'}</span>` : 'Needs a picture model (Create)', `${tenStarsHTML(rating)}<span class="small muted">for the ones you keep</span>`]],
       ['⏱️ Time per picture', ['Seconds (on their servers)', loc?.est?.fit === 'no' ? "Won't fit this PC" : secs ? `about ${fmtSec(secs)} on this PC` : 'Depends on this PC', `${secs ? `about ${fmtSec(secs)} to try` : 'Quick tries'}, then seconds`]],
       ['🔒 Your prompts and pictures', ['Sent to the service', 'Stay on your PC', `Only the ${keepers} keepers are sent`]],
       ['📴 Works without internet', ['No', 'Yes', 'The tries do']],
@@ -132,14 +135,30 @@ function videoOutHTML() {
   const fits = loc && loc.est?.fit !== 'no';
   return `${ccTable([`${label.split(' (')[0]} alone`, 'Quicksilver on your PC', 'Both: preview on your PC, finish in the cloud'], [
       ['💵 Cost a month', [price == null ? null : sec * price, 0, price == null ? null : keep * price], (v) => money(v), true],
-      ['🎬 Quality (out of 10)', [`${rating}/10, sharp, with sound on most`, fits ? `${loc.rating}/10 · ${loc.name}, short clips${loc.installed ? '' : ' (download)'}` : 'Needs a graphics card with about 8 GB or more', `${rating}/10 for the clips you keep`]],
+      ['🎬 Quality (out of 10)', [`${tenStarsHTML(rating)}<span class="small muted">sharp, with sound on most</span>`, fits ? `${tenStarsHTML(loc.rating)}<span class="small muted">${esc(loc.name)}, short clips${loc.installed ? '' : ' (download)'}</span>` : 'Needs a graphics card with about 8 GB or more', `${tenStarsHTML(rating)}<span class="small muted">for the clips you keep</span>`]],
       ['⏱️ Time per clip', ['A minute or two', fits && loc.est?.sec ? `about ${fmtSec(loc.est.sec)} per short clip here` : fits ? 'Several minutes per short clip' : "Won't run on this PC", 'Quick previews, then a minute or two']],
       ['🔒 Your prompts and photos', ['Sent to the service', 'Stay on your PC', `Only the ${keep} s you keep are made in the cloud`]],
     ], `${sec} seconds of video a month: ${fits ? `preview ideas on your PC, then make only the best ${calcState.vkeep}% in ${label.split(' (')[0]}` : `this PC can't make video itself, so Quicksilver's AI writes the shot list and prompts, and ${label.split(' (')[0]} makes the clips`}. ${price != null && fits ? `That's about <b>${money(sec * price - keep * price)}</b> a month less than making everything in the cloud.` : price != null ? `About <b>${money(sec * price)}</b> a month in the cloud.` : 'Enter the price to see the cost.'} Cloud video apps are used on their own sites for now; bring the clips into Create → Video to trim and edit.`)}`;
 }
+const svcRating = (table, k) => (table === CHAT_SERVICES ? table[k][4] : table[k][2]);
+function svcPrice(table, k) {
+  const v = table[k];
+  if (table === CHAT_SERVICES) return v[3] ? 'Free (daily limits)' : v[1] == null ? 'Your price' : `$${v[1]} in · $${v[2]} out per million tokens`;
+  if (v[1] == null) return 'Your price';
+  return table === IMAGE_SERVICES ? `$${v[1]} a picture` : `$${v[1]} a second ($${(v[1] * 8).toFixed(2)} for an 8 s clip)`;
+}
+function priceListHTML() {
+  const [table, cur, local, what] = calcState.kind === 'image' ? [IMAGE_SERVICES, calcState.imgService, LOCAL_IMG, 'picture'] : calcState.kind === 'video' ? [VIDEO_SERVICES, calcState.vidService, LOCAL_VID, 'video'] : [CHAT_SERVICES, calcState.service, null, 'chat'];
+  const rows = Object.keys(table).filter((k) => k !== 'other').sort((a, b) => svcRating(table, b) - svcRating(table, a));
+  const loc = local && bestLocal(calcState.kind, local);
+  return `<details class="cc-list" ${calcState.listOpen ? 'open' : ''}><summary><b>⭐ Price list: every ${what} service rated out of 10</b> <span class="small muted">(best first)</span></summary>
+    <div class="cc-plist">${rows.map((k) => `<div class="cc-p ${k === cur ? 'now' : ''}"><span class="grow"><b>${esc(table[k][0])}</b><span class="small muted">${esc(svcPrice(table, k))}${table === IMAGE_SERVICES && table[k][3] ? ` · ${esc(table[k][3])}` : ''}</span></span>${tenStarsHTML(svcRating(table, k))}${k === cur ? '<span class="badge b-mint">Picked</span>' : `<button class="btn small ghost" data-cc-pick="${k}">Compare</button>`}</div>`).join('')}
+    ${what === 'chat' ? `<div class="cc-p local"><span class="grow"><b>💧 Quicksilver Liquid Edition (on your PC)</b><span class="small muted">Free, private, works offline · uncensored</span></span>${tenStarsHTML(6.5)}<span class="badge b-sky">Built in</span></div>` : loc ? `<div class="cc-p local"><span class="grow"><b>💻 ${esc(loc.name)} (on your PC)</b><span class="small muted">Free, private, works offline${loc.installed ? '' : ' · download in Create'}</span></span>${tenStarsHTML(loc.rating)}<span class="badge b-sky">${loc.installed ? 'Installed' : 'Local'}</span></div>` : ''}</div>
+    <p class="small muted" style="margin:6px 0 0">Ratings out of 10 are Quicksilver's, for the quality of what each service makes (${what === 'chat' ? 'accuracy on hard questions, from independent tests' : what === 'picture' ? 'detail, following the prompt, text in images' : 'sharpness, motion, sound'}). Prices are list prices and change often.</p></details>`;
+}
 function calcOutHTML() { return calcState.kind === 'image' ? imageOutHTML() : calcState.kind === 'video' ? videoOutHTML() : chatOutHTML(); }
 function calcInputsHTML() {
-  const sel = (id, table, cur) => `<select id="${id}">${Object.entries(table).map(([k, v]) => `<option value="${k}" ${cur === k ? 'selected' : ''}>${esc(v[0])}</option>`).join('')}</select>`;
+  const sel = (id, table, cur) => `<select id="${id}">${Object.entries(table).map(([k, v]) => `<option value="${k}" ${cur === k ? 'selected' : ''}>${esc(v[0])}${k === 'other' ? '' : ` · ${tenStarsText(svcRating(table, k))}`}</option>`).join('')}</select>`;
   if (calcState.kind === 'image') return `<label>Cloud picture service${sel('cc-isvc', IMAGE_SERVICES, calcState.imgService)}</label>
       <label>Price per picture <span class="row" style="gap:6px"><span class="small">$</span><input type="number" id="cc-iprice" min="0" step="0.001" value="${calcState.imgPrice ?? IMAGE_SERVICES[calcState.imgService][1] ?? ''}"></span></label>
       <label>Pictures a month <b id="cc-imgn-v">${calcState.imgPerMonth}</b><input type="range" id="cc-imgn" min="10" max="2000" step="10" value="${calcState.imgPerMonth}"></label>
@@ -161,6 +180,7 @@ function cloudCalcHTML() {
     <div class="tabs cc-kinds" role="tablist">${[['chat', '💬 Chat & answers'], ['image', '📸 Pictures'], ['video', '🎬 Video']].map(([k, l]) => `<button class="tab ${calcState.kind === k ? 'active' : ''}" data-cc-kind="${k}">${l}</button>`).join('')}</div>
     <div class="cc-in" id="cc-in">${calcInputsHTML()}</div>
     <div id="cc-out">${calcOutHTML()}</div>
+    <div id="cc-list">${priceListHTML()}</div>
     <p class="small muted" style="margin:8px 0 0">Prices are what the services list (November 2026) and change often: edit them from the service's price page. Ratings out of 10 are Quicksilver's.</p>
   </section>`;
 }
@@ -173,7 +193,16 @@ function bindCloudCalc() {
     if ($('#cc-hard')) $('#cc-hard').disabled = calcState.mode !== 'hard';
     if ($('#cc-pin')) { $('#cc-pin').disabled = calcState.free; $('#cc-pout').disabled = calcState.free; }
   };
-  const inputs = () => { $('#cc-in').innerHTML = calcInputsHTML(); bindInputs(); out(); };
+  const list = () => {
+    $('#cc-list').innerHTML = priceListHTML();
+    $('#cc-list details')?.addEventListener('toggle', (e) => { calcState.listOpen = e.target.open; });
+    $$('[data-cc-pick]').forEach((b) => b.addEventListener('click', () => {
+      const k = b.dataset.ccPick;
+      if (calcState.kind === 'image') { calcState.imgService = k; calcState.imgPrice = null; } else if (calcState.kind === 'video') { calcState.vidService = k; calcState.vidPrice = null; } else { calcState.service = k; const sv = CHAT_SERVICES[k]; if (sv[1] != null) { calcState.priceIn = sv[1]; calcState.priceOut = sv[2]; } calcState.free = sv[3]; }
+      inputs();
+    }));
+  };
+  const inputs = () => { $('#cc-in').innerHTML = calcInputsHTML(); bindInputs(); out(); list(); };
   const num = (e) => Math.max(0, Number(e.target.value) || 0);
   const on = (id, ev, fn) => $(`#${id}`)?.addEventListener(ev, fn);
   function bindInputs() {
@@ -195,6 +224,7 @@ function bindCloudCalc() {
   }
   $$('[data-cc-kind]').forEach((b) => b.addEventListener('click', () => { calcState.kind = b.dataset.ccKind; $$('[data-cc-kind]').forEach((x) => x.classList.toggle('active', x === b)); inputs(); }));
   bindInputs();
+  list();
 }
 
 // What happens when you add a cloud AI, in plain steps.

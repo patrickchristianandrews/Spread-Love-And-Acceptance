@@ -342,6 +342,12 @@ function addonsHTML() {
     ['🔎', 'Smarter search', 'Nomic Embed v1.5, 0.15 GB', sem?.on ? 'On' : 'Off',
       'A tiny embedding model that searches by meaning, not just words: "time off" finds "annual leave". It powers both Your knowledge and Memory.',
       'Finds the right passage and memory far more often · tiny download', sem?.on ? null : ['data-addon-semantic', 'Turn on']],
+    ['🎯', 'Sharper search', 'BGE Reranker v2 M3, 0.44 GB', sem?.rerank ? 'On' : 'Off',
+      'A small reranker reads your question together with each passage search found and puts the ones that really answer it first, so the model reads the right part of your files. Works with or without Smarter search.',
+      'Accuracy ↑ on questions about your files · well under a second per question', sem?.rerank ? null : ['data-addon-rerank', 'Turn on']],
+    ['💪', 'A stronger Closer', 'Qwen3.5 9B uncensored, 6.3 GB', S.installed.some((m) => m.catalogId === 'qwen3.5-9b-uncensored') ? 'Installed · leads hard questions' : (S.est?.hardware?.vramGB || 0) >= 8 ? 'Recommended for this PC' : 'Best with a graphics card (8 GB or more)',
+      'Adds a bigger uncensored model to the Liquid Edition. It joins by itself as the Closer and leads on hard questions (81% on graduate-level science, vs 77% for the built-in Brain); it also sees photos. Nothing is removed: the Brain and Muse keep their jobs.',
+      'Accuracy ↑ on hard questions · needs a graphics card to stay quick', S.installed.some((m) => m.catalogId === 'qwen3.5-9b-uncensored') ? null : ['data-addon-closer', 'Download']],
     ['🌐', 'Web search', 'free, no account', S.config?.offline ? 'Off (offline)' : 'Ready', 'For anything current (news, prices, today\'s facts) the stack searches the web first and answers with sources. Used automatically when a question needs it.', 'Up-to-date answers · a few seconds', null],
     ['✓', 'Double-check', 'a second opinion', S.data.prefs.factCheck ? 'On for every answer' : 'Off (on per chat)', 'A second model checks each claim in an answer and fixes clear mistakes. Worth it for health, money, legal and work answers.', 'Accuracy ↑ · roughly doubles the time', null],
     ['🎙', 'Voice', 'Whisper, runs here', voiceOn ? 'Ready' : 'Downloads when first used', 'Speak to the stack and hear it answer; your voice never leaves this PC.', 'Hands-free · no change to answers', null],
@@ -367,6 +373,14 @@ document.addEventListener('click', async (e) => {
   if (e.target.closest('[data-addon-fusion]')) { stacksTab = 'fusion'; go({ view: 'stacks' }); return; }
   const g = e.target.closest('[data-addon-go]');
   if (g) { go({ view: g.dataset.addonGo }); return; }
+  if (e.target.closest('[data-addon-rerank]')) {
+    try { const r = await call('kb:rerankOn'); if (r?.id) { S.downloads[r.id] = { ...r, name: 'BGE Reranker v2 M3' }; paintDownloads(); } S.kbSemantic = null; toast('Turning on sharper search: a small download (about 0.44 GB), then the best passages from your files come first.', 7000); } catch {}
+    return;
+  }
+  if (e.target.closest('[data-addon-closer]')) {
+    try { await download({ catalogId: 'qwen3.5-9b-uncensored' }, 'Qwen3.5 9B (uncensored)'); toast('Downloading Qwen3.5 9B (uncensored). When it\'s done it joins the Liquid Edition as its Closer.', 8000); } catch (err) { toast(err.message, 8000); }
+    return;
+  }
   if (e.target.closest('[data-addon-semantic]')) {
     try { const r = await call('kb:semanticOn'); if (r?.id) { S.downloads[r.id] = { ...r, name: 'Nomic Embed v1.5' }; paintDownloads(); } toast('Turning on smarter search: a small download, then your files and memories are found by meaning.'); } catch {}
   }

@@ -15,6 +15,12 @@ const server = http.createServer((req, res) => {
   req.on('end', () => {
     const j = JSON.parse(body || '{}');
     // Embeddings (the search model): words in the same meaning group land in the same place.
+    if (req.url.startsWith('/v1/rerank')) {
+      const qw = new Set(String(j.query || '').toLowerCase().match(/[a-z]+/g) || []);
+      const results = (j.documents || []).map((d, index) => ({ index, relevance_score: (String(d).toLowerCase().match(/[a-z]+/g) || []).filter((w) => qw.has(w)).length }));
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      return res.end(JSON.stringify({ results }));
+    }
     if (req.url.startsWith('/v1/embeddings')) {
       const GROUPS = [['car', 'automobile', 'vehicle'], ['wheels', 'tyres', 'tires'], ['money', 'cash', 'budget'], ['dog', 'puppy', 'hound']];
       const vecOf = (t) => {

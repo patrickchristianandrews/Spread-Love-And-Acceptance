@@ -191,11 +191,11 @@ function active() { return [...jobs.values()].map((j) => j.public); }
 
 // Builds a download plan for a catalog model (text, image or video).
 async function planCatalog(catalogId) {
-  if (catalogId === require('./embed').EMBED.id) {
-    const e = require('./embed').EMBED;
+  for (const [e, kind] of [[require('./embed').EMBED, 'embed'], [require('./rerank').RERANK, 'rerank']]) {
+    if (catalogId !== e.id) continue;
     let last;
     for (const repo of [e.repo, ...e.alt]) {
-      try { return { ...(await planGguf(repo, { id: e.id, name: e.name, quant: e.quant, catalogId: e.id, vision: false })), kind: 'embed' }; } catch (err) { last = err; }
+      try { return { ...(await planGguf(repo, { id: e.id, name: e.name, quant: e.quant, catalogId: e.id, vision: false })), kind }; } catch (err) { last = err; }
     }
     throw last;
   }

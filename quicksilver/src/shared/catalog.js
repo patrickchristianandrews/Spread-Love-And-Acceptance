@@ -89,6 +89,8 @@ const TEXT_MODELS = [
   // Vision (see photos, scans, charts and video frames)
   { id: 'qwen3.5-4b', name: 'Qwen3.5 4B', maker: 'Alibaba', params: '4B', category: 'small', repo: 'unsloth/Qwen3.5-4B-GGUF', quant: 'Q4_K_M', sizeGB: 2.74, mmprojGB: 0.67, vision: true, reasoning: true, ctx: 262144,
     blurb: 'The Liquid Edition\'s Brain (2026): sees photos and switches its own thinking on for hard questions. Far ahead of older 4B models, on par with many 8B ones.', jobs: { general: 8, office: 8, research: 8, coding: 7, vision: 7, fast: 7 }, judge: 7 },
+  { id: 'qwen3.5-9b-uncensored', name: 'Qwen3.5 9B (uncensored)', maker: 'Alibaba · uncensored by huihui-ai', params: '9B', category: 'open', repo: 'mradermacher/Huihui-Qwen3.5-9B-abliterated-GGUF', alt: ['mradermacher/Qwen3.5-9B-abliterated-GGUF'], verify: true, quant: 'Q4_K_M', sizeGB: 5.63, mmprojGB: 0.62, vision: true, reasoning: true, ctx: 262144,
+    blurb: 'The best uncensored model for a PC with a graphics card (8 GB or more): sees photos, thinks hard questions through, and joins the Liquid Edition as its Closer by itself.', jobs: { general: 9, office: 9, research: 9, coding: 8, vision: 8, fast: 5 }, judge: 8 },
   { id: 'qwen3.5-2b', name: 'Qwen3.5 2B', maker: 'Alibaba', params: '2B', category: 'small', repo: 'unsloth/Qwen3.5-2B-GGUF', quant: 'Q4_K_M', sizeGB: 1.3, mmprojGB: 0.67, vision: true, ctx: 262144,
     blurb: 'Comes with Quicksilver: small and quick on any PC, sees photos, and sketches fresh angles as the Liquid Edition\'s Muse.', jobs: { general: 6, office: 5, research: 5, coding: 5, vision: 6, fast: 9 }, judge: 4 },
   { id: 'qwen3-vl-2b', name: 'Qwen3-VL 2B', maker: 'Alibaba', params: '2B', category: 'vision', repo: 'Qwen/Qwen3-VL-2B-Instruct-GGUF', quant: 'Q4_K_M', sizeGB: 1.1, mmprojGB: 0.45, vision: true, ctx: 262144,
@@ -702,7 +704,7 @@ const FEATURED = {
   coding: ['qwen3-coder-30b', 'qwen2.5-coder-14b', 'qwen2.5-coder-7b'],
   reasoning: ['qwen3-30b-a3b-thinking', 'phi-4-reasoning-plus', 'deepseek-r1-qwen3-8b'],
   vision: ['gemma-3-27b', 'qwen3-vl-8b', 'gemma-3-12b', 'qwen3-vl-4b'],
-  open: ['qwen3-30b-a3b-uncensored', 'qwen3-14b-uncensored', 'qwen3-8b-uncensored', 'dolphin-3-mistral-24b', 'hermes-4-14b', 'rocinante-12b'],
+  open: ['qwen3.5-9b-uncensored', 'qwen3-30b-a3b-uncensored', 'qwen3-14b-uncensored', 'qwen3-8b-uncensored', 'dolphin-3-mistral-24b', 'hermes-4-14b', 'rocinante-12b'],
 };
 
 // ---------- retired models ----------
