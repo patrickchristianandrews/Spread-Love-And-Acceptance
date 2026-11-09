@@ -672,6 +672,11 @@ async function collect(gen) {
       assert.ok(!complete.smoothHelper(dol, { ...hwNow, vramGB: 0, gpus: [], ramGB: 8, freeRamGB: 6 }), 'too slow on an 8 GB laptop without a graphics card');
       assert.ok(!qs2.bench, 'nothing on the bench when it runs smoothly');
     }
+    // Completely uncensored: filtered models never answer, check or sit on its Council.
+    assert.ok(complete.isUncensored('local:dolphin-test') && complete.isUncensored('local:starter-brain') && complete.isUncensored('stack:quicksilver'));
+    assert.ok(!complete.isUncensored('local:qwen3-8b') && !complete.isUncensored('local:phi-4'), 'filtered models are not uncensored');
+    const cm = complete.councilMembers('stack:quicksilver', {});
+    assert.ok([cm.structurer, cm.critic, cm.pragmatist, cm.lead].every((t) => complete.isUncensored(t)), 'the Liquid Edition\'s Council is uncensored only');
     // Your own edits are kept: no automatic rebuild.
     complete.saveStack({ ...qsStack, autoManaged: false, members: { ...qsStack.members, drafters: ['local:qwen3-8b', 'local:starter-brain'] } });
     await complete.ensureQuicksilverStack();

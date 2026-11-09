@@ -753,8 +753,31 @@ const COUNCIL_ROLES = [
 ];
 const COUNCIL_LEAD = 'You chair a council of three AIs who each looked at the user\'s latest message: a Structurer, a Critic and a Pragmatist. Their notes are below. Write the single best final answer for the user: keep what is correct and useful from each, fix anything the Critic showed to be wrong, and make it practical. Where they genuinely disagree, say so briefly and give your judgement. Do not mention the council or the notes. Your reply MUST start with one line exactly like "AGREEMENT: 85%" (how much the three agreed on the substance, 0-100), then the answer on the next line.';
 
+// The Liquid Edition is completely uncensored: only uncensored models ever answer, check or sit on
+// its Council. Uncensored = comes with Quicksilver, listed as uncensored in the catalog, or an
+// uncensored model by name; in the cloud, an uncensored service (Venice) or model.
+const UNCENSORED = /abliterat|uncensor|unfiltered|dolphin|hermes|lexi|rocinante/i;
+const UNCENSORED_CLOUD = ['venice'];
+function isUncensored(target) {
+  if (!target) return false;
+  if (target === 'stack:quicksilver') return true;
+  const p = parse(target);
+  if (p.kind === 'local') {
+    const m = models.get(p.id);
+    if (!m) return false;
+    const c = catalog.TEXT_MODELS.find((x) => x.id === m.catalogId);
+    return m.source === 'bundled' || c?.category === 'open' || UNCENSORED.test(`${m.name} ${m.files?.model || ''}`);
+  }
+  if (p.kind === 'api') {
+    const [, pid, ...rest] = target.split(':');
+    return UNCENSORED_CLOUD.includes(providers.get(pid)?.preset) || UNCENSORED.test(rest.join(':'));
+  }
+  return false;
+}
+
 function councilMembers(target, req) {
-  const textTargets = targets().filter((t) => t.target.startsWith('local:') && exists(t.target) && !t.mediaOnly);
+  const liquid = target === 'stack:quicksilver';
+  const textTargets = targets().filter((t) => t.target.startsWith('local:') && exists(t.target) && !t.mediaOnly && (!liquid || isUncensored(t.target)));
   const score = (t, job = 'general') => { const m = models.get(parse(t).id); return m ? catalog.scoreFor(catalog.profileInstalled(m), job) : 0; };
   const fits = (t) => { const m = models.get(parse(t).id); return m && m.kind === 'text'; };
   const local = textTargets.map((t) => t.target).filter(fits);
@@ -765,7 +788,7 @@ function councilMembers(target, req) {
   const thinkers = local.filter((t) => { const m = models.get(parse(t).id); const c = catalog.TEXT_MODELS.find((x) => x.id === m?.catalogId); return c?.reasoning; });
   const critic = [...thinkers, ...byGeneral].find((t) => t !== structurer) || structurer;
   let pragmatist = [...byGeneral].reverse().find((t) => t !== structurer && t !== critic) || byGeneral.find((t) => t !== structurer) || structurer;
-  const cloud = store.config().offline ? null : targets().find((t) => t.target.startsWith('api:') && exists(t.target))?.target;
+  const cloud = store.config().offline ? null : targets().find((t) => t.target.startsWith('api:') && exists(t.target) && (!liquid || isUncensored(t.target)))?.target;
   if (req.councilCloud && cloud) pragmatist = cloud;
   return { structurer, critic, pragmatist, lead: structurer && score(critic) > score(structurer) + 1 ? critic : structurer };
 }
@@ -866,8 +889,7 @@ async function ensureQuicksilverStack() {
   const eyes = all.find((m) => core.eyes && m.catalogId === core.eyes && m.source !== 'bundled') || all.find((m) => m.id === 'starter') || all.find((m) => /^qwen3-vl-/.test(m.catalogId || ''));
   // Quicksilver is uncensored, so only uncensored models are on its team: the ones that come with
   // it, and uncensored ones you add.
-  const UNC = /abliterat|uncensor|unfiltered|dolphin|hermes|lexi|rocinante/i;
-  const isOpen = (p) => { const m = all.find((x) => x.id === p.id); return m?.source === 'bundled' || p.category === 'open' || UNC.test(`${p.name} ${m?.files?.model || ''}`); };
+  const isOpen = (p) => isUncensored(`local:${p.id}`);
   const hw = await hardware.detect();
   const calib = store.config().calib?.text || 1;
   const local = (id) => (id ? `local:${id}` : undefined);
@@ -1006,4 +1028,4 @@ async function warm(target, { contextSize, gpu } = {}) {
   return true;
 }
 
-module.exports = { smoothHelper, warm, prefill, run, targets, stacks, saveStack, deleteStack, kbModels, saveKbModel, deleteKbModel, label, exists, canSee, parse, autoLevel, ensureQuicksilverStack, explainStack };
+module.exports = { smoothHelper, isUncensored, councilMembers, warm, prefill, run, targets, stacks, saveStack, deleteStack, kbModels, saveKbModel, deleteKbModel, label, exists, canSee, parse, autoLevel, ensureQuicksilverStack, explainStack };

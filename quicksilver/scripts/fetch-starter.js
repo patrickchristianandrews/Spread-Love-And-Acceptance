@@ -70,7 +70,9 @@ async function get(repo, f, dest) {
     await get(pick.repo, pick.model, path.join(dir, m.file));
     if (pick.mmproj) await get(pick.repo, pick.mmproj, path.join(dir, 'mmproj.gguf'));
     const open = m.uncensored || /abliterat|uncensor/i.test(pick.repo);
-    console.log(open ? `  ✓ uncensored copy: ${pick.repo}` : `  ⚠ no uncensored copy found for ${m.name}; using the original`);
+    // The Liquid Edition is completely uncensored: no filtered stand-in, ever.
+    if (!open) throw new Error(`No uncensored copy of ${m.name} could be downloaded (tried ${m.repos.filter((r) => /abliterat|uncensor/i.test(r)).join(', ')}).`);
+    console.log(`  ✓ uncensored copy: ${pick.repo}`);
     entries.push({ id: m.id, catalogId: m.catalogId, name: open ? `${m.name} (uncensored)` : m.name, ...(open ? { uncensored: true } : {}), repo: pick.repo, quant: pick.quant, files: { model: m.file, ...(pick.mmproj ? { mmproj: 'mmproj.gguf' } : {}) }, ...(m.pack ? { pack: true } : {}), ...(m.optional ? { optional: true } : {}) });
     let text = m.licenceText;
     if (!text) try {

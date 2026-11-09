@@ -165,6 +165,25 @@ async function refreshEstimates() { S.est = await qs.call('catalog:estimates'); 
 const assistantById = (id) => S.data.assistants.find((a) => a.id === id) || S.data.assistants[0];
 const chatById = (id) => S.data.chats.find((c) => c.id === id);
 const targetValid = (t) => Boolean(t) && S.targets.some((x) => x.target === t);
+// The Liquid Edition is completely uncensored: only uncensored models answer, check or stand in
+// for it (the same rule as complete.js isUncensored).
+const UNCENSORED_RX = /abliterat|uncensor|unfiltered|dolphin|hermes|lexi|rocinante/i;
+function liquidOk(t) {
+  if (!t) return false;
+  if (t === 'stack:quicksilver') return true;
+  if (t.startsWith('local:')) {
+    const m = S.installed.find((x) => `local:${x.id}` === t);
+    if (!m) return false;
+    const c = S.catalog?.text?.find((x) => x.id === m.catalogId);
+    return m.source === 'bundled' || c?.category === 'open' || UNCENSORED_RX.test(`${m.name} ${m.files?.model || ''}`);
+  }
+  if (t.startsWith('api:')) {
+    const [, pid, ...rest] = t.split(':');
+    return S.providers?.find((p) => p.id === pid)?.preset === 'venice' || UNCENSORED_RX.test(rest.join(':'));
+  }
+  return false;
+}
+const isLiquid = (t) => t === 'stack:quicksilver';
 const targetLabel = (t) => S.targets.find((x) => x.target === t)?.label || 'No model chosen';
 
 // Model choice order: the chat's own, the assistant's, the default, then anything installed.

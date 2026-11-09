@@ -4,7 +4,6 @@
 const SCORE_KEYS = [
   ['math', '🧮', 'Maths', 'Hard maths: AIME 2025 competition problems'],
   ['science', '🔬', 'Science', 'Expert science: GPQA Diamond, PhD-level questions'],
-  ['knowledge', '📚', 'Knowledge', 'Broad knowledge: MMLU-Pro, 14 subjects'],
   ['coding', '💻', 'Coding', 'Coding: LiveCodeBench programming problems'],
 ];
 // The tested scores for a catalog model (or an installed one, by its catalogId). Uncensored versions

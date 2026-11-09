@@ -54,7 +54,7 @@ function autoPick(chat, a, text, hasImage) {
   const base = resolveTarget(chat, a);
   // Your own cloud AI for the hardest questions, if you switched that on (it uses your credits).
   if (S.data.prefs.cloudHard && !S.config?.offline && !hasImage && looksHard(text || '')) {
-    const cloud = S.targets.find((t) => t.target.startsWith('api:') && targetValid(t.target));
+    const cloud = S.targets.find((t) => t.target.startsWith('api:') && targetValid(t.target) && (!isLiquid(base) || liquidOk(t.target)));
     if (cloud) return { target: cloud.target, why: 'Picked automatically: your cloud AI, for a hard question.' };
   }
   const T = S.speed?.targets;
@@ -64,7 +64,7 @@ function autoPick(chat, a, text, hasImage) {
   const words = hard ? Math.max(wordsForJob(job), WORDS.hard) : wordsForJob(job);
   const budget = hard ? 60 : 20; // seconds: quick answers come first
   const local = !base.startsWith('api:');
-  const cands = S.targets.map((t) => t.target).filter((t) => T[t] && !t.startsWith('kb:') && (!t.startsWith('api:') || !local) && (!hasImage || T[t].vision));
+  const cands = S.targets.map((t) => t.target).filter((t) => T[t] && !t.startsWith('kb:') && (!t.startsWith('api:') || !local) && (!hasImage || T[t].vision) && (!isLiquid(base) || liquidOk(t)));
   if (!cands.length) return { target: base };
   const score = (t) => (T[t].scores?.[job] ?? T[t].scores?.general ?? 0) + learnBonus(job, t);
   const secs = (t) => etaFor(t, words, { hard }) ?? 999;

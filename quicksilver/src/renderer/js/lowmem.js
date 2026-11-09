@@ -16,7 +16,7 @@ function nextBestTarget(target, freeGB = Infinity) {
   const failed = loadsOf(target);
   const biggest = Math.max(0, ...failed.map(sizeGBOf));
   const skip = new Set(failed.map((m) => m.id));
-  const list = S.installed.filter((m) => m.kind === 'text' && !skip.has(m.id) && sizeGBOf(m) > 0 && sizeGBOf(m) < (biggest || Infinity) * 0.8 && sizeGBOf(m) * 1.15 < freeGB)
+  const list = S.installed.filter((m) => m.kind === 'text' && !skip.has(m.id) && (!isLiquid(target) || liquidOk(`local:${m.id}`)) && sizeGBOf(m) > 0 && sizeGBOf(m) < (biggest || Infinity) * 0.8 && sizeGBOf(m) * 1.15 < freeGB)
     .sort((a, b) => scoreOf(b) - scoreOf(a) || sizeGBOf(b) - sizeGBOf(a));
   const m = list[0] || (Number.isFinite(freeGB) ? null : S.installed.find((x) => x.source === 'bundled' && !skip.has(x.id)));
   return m ? `local:${m.id}` : null;

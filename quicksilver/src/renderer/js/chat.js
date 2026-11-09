@@ -949,10 +949,11 @@ function membersOf(target) {
 let loadedFiles = new Set();
 function pickChecker(answerTarget) {
   const used = new Set(membersOf(answerTarget));
+  const ok = (t) => !isLiquid(answerTarget) || liquidOk(t); // the Liquid Edition is checked by uncensored models only
   const own = stackOf(answerTarget)?.members.cloudCheck;
-  if (own && targetValid(own) && !used.has(own)) return own;
+  if (own && targetValid(own) && !used.has(own) && ok(own)) return own;
   const pref = S.data.prefs.factChecker;
-  if (pref && targetValid(pref) && !used.has(pref)) return pref;
+  if (pref && targetValid(pref) && !used.has(pref) && ok(pref)) return pref;
   const info = (target) => {
     if (target.startsWith('api:')) return { q: 9, sec: S.config?.offline ? Infinity : 6 };
     const inst = S.installed.find((m) => `local:${m.id}` === target);
@@ -963,7 +964,7 @@ function pickChecker(answerTarget) {
     return { q, sec: (loaded ? 0 : 4 + (inst.size || 4e9) / 1e9 * 1.5) + 300 / wps, loaded };
   };
   const self = [...used].map((t) => ({ t, ...info(t) })).filter((x) => x.q != null && x.sec != null).sort((a, b) => b.loaded - a.loaded || a.sec - b.sec)[0];
-  const others = S.targets.filter((t) => !t.stack && !used.has(t.target)).map((t) => ({ t: t.target, ...info(t.target) })).filter((x) => x.q != null && x.q >= 5);
+  const others = S.targets.filter((t) => !t.stack && !used.has(t.target) && ok(t.target)).map((t) => ({ t: t.target, ...info(t.target) })).filter((x) => x.q != null && x.q >= 5);
   // Another model if it's about as quick as checking with what's loaded; else the loaded one.
   const best = others.sort((a, b) => a.sec - b.sec || b.q - a.q)[0];
   if (best && (!self || best.sec <= self.sec * 1.5 + 3)) return best.t;

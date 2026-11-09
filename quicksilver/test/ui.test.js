@@ -790,6 +790,25 @@ function redPng(size = 64) {
   assert.match(await win.evaluate(() => dolphinOfferHTML({ members: { drafters: ['local:starter-brain'], vision: 'local:starter' } })), /Add Dolphin/, 'a crew of one is offered Dolphin as a second opinion');
   assert.equal(await win.evaluate(() => dolphinOfferHTML({ members: { drafters: ['local:a', 'local:b'] } })), '', 'not offered once the crew has a second model');
   assert.match(await win.evaluate(() => qsRolesHTML({ members: { drafters: ['local:starter-brain'], vision: 'local:starter' }, bench: 'local:starter-dolphin' })), /On the Council/, 'a slow PC shows Dolphin on the Council');
+  // Tested scores and create ratings on models, stacks and cloud AIs.
+  const sc = await win.evaluate(() => {
+    const m = S.catalog.text.find((x) => x.id === 'qwen3-4b');
+    const img = S.catalog.media.find((x) => x.kind === 'image' && x.category !== 'edit');
+    const vid = S.catalog.media.find((x) => x.kind === 'video');
+    return { model: modelProfileHTML(m, 'text'), img: createRowHTML(modelCreate(img), { all: true }), vid: createRowHTML(modelCreate(vid), { all: true }),
+      stack: stackScoresHTML(['local:qwen3-4b', 'local:qwen3-vl-2b', 'local:flux-schnell']), unc: scoresFor('qwen3-8b-uncensored'), none: modelProfileHTML(S.catalog.text.find((x) => x.id === 'rocinante-12b'), 'text'),
+      cloud: scoreChipsHTML(cloudScoresFor('groq')) };
+  });
+  assert.match(sc.model, /Maths <b>52%<\/b>/); assert.match(sc.model, /Music <b>★ 1<\/b>|Music <b>★ 2<\/b>/);
+  assert.match(sc.img, /Photos <b>★/); assert.match(sc.img, /Video <b>–/); assert.match(sc.vid, /Video <b>★/);
+  assert.match(sc.stack, /Best member/); assert.match(sc.stack, /Science <b>\d+%/);
+  assert.equal(sc.unc.basedOn, 'qwen3-8b', 'uncensored versions are scored by the model they come from');
+  assert.match(sc.none, /No published test scores/); assert.match(sc.cloud, /Maths <b>93%/);
+  // The Liquid Edition is completely uncensored: its cloud partner is Venice, and filtered models never stand in.
+  const unc = await win.evaluate(() => ({ partner: cloudPartnerHTML(), filtered: S.installed.filter((m) => m.kind === 'text' && !liquidOk(`local:${m.id}`)).length, bundledOk: S.installed.filter((m) => m.source === 'bundled').every((m) => liquidOk(`local:${m.id}`)), liquid: liquidOk('stack:quicksilver') }));
+  assert.match(unc.partner, /Venice/); assert.doesNotMatch(unc.partner, /data-pair="cerebras"/);
+  assert.ok(unc.bundledOk && unc.liquid);
+  console.log('✓ tested scores (maths, science, coding) and create ratings (photos, edits, video, music) on models, stacks and cloud AIs');
   assert.match(await win.locator('#builtin-model').innerText(), /Reasons step by step[\s\S]*Double-checks[\s\S]*Gets maths right[\s\S]*Sees photos/);
   assert.ok(await win.locator('.model-card .badge:has-text("Featured")').count() >= 3, 'featured picks are marked');
   const up = await win.evaluate(async () => {

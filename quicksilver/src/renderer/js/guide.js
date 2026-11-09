@@ -38,7 +38,8 @@ const OPTIONS_GUIDE = [
   ['☁️', 'Cloud AI & Fusion', [
     ['Every cloud AI', 'Over 30 services that work with Quicksilver (OpenAI, Claude, Gemini, Grok, Mistral, DeepSeek, Groq, OpenRouter, Perplexity, Venice and many more), each marked Free, Free to start or Paid, with the best model to link.', 'Explore → Models → Connect an API', "Click a service, paste its API key (the card links to where you get one) and press Save & load models: its model list is fetched, with the recommended model first. Keys are stored encrypted on this PC and only sent to that service. Free plans have limits; each card links to current prices."],
     ['Several connections', 'Connect as many as you like, even two accounts with the same service; each appears separately in every model menu.', 'Explore → Models → Connect an API'],
-    ['☁️ Best free partner', 'For the Liquid Edition: Cerebras (Qwen3 235B, the big sibling of the built-in model, fast with a large free daily allowance), with Groq and Mistral as free backups.', 'Explore → Models (Liquid Edition card)', 'Connect Cerebras, then Groq and Mistral (all free, no card). Switch on "use my cloud AI for hard questions" in Settings → General: everyday messages stay on this PC, hard ones go to Qwen3 235B, and if one free service hits its limit the next takes over. Free plans may use your prompts to improve their models, and their limits can change; for anything private, keep it on this PC.'],
+    ['🔓 Completely uncensored', 'Every model that answers, double-checks, sits on the Council or stands in for the Liquid Edition is uncensored.', 'Automatic', 'Its Brain and Eyes are uncensored versions, and the installer never falls back to a filtered one. Models it adds by itself (a Closer, a second opinion), the model that double-checks its answers, the Council, the next best model when memory is low and automatic model choice all use uncensored models only. In the cloud, only uncensored services (Venice) are ever used for it; filtered ones like Cerebras or Groq still work in your other chats. The parental lock in Settings is the one exception: when a parent turns it on, it adds family-safe rules on purpose.'],
+    ['☁️ Uncensored cloud partner', 'For the Liquid Edition: Venice AI, which runs uncensored models.', 'Explore → Models (Liquid Edition card)', 'Connect Venice (a small free allowance, then Pro or credits) and switch on "use my cloud AI for hard questions" in Settings → General: everyday messages stay on this PC, hard ones can go to Venice\'s uncensored model. Venice says it doesn\'t store prompts. For anything private, keep it on this PC.'],
     ['♻️ Free rotation', 'When a free cloud AI hits its limit, the next free one you\'ve connected answers instead, so you keep going for free. Pick "♻️ Free cloud AIs (rotating)" to rotate through them from the start.', 'Automatic; or the model menu in a chat', "If a free cloud AI answers with a rate-limit or quota error, Quicksilver immediately sends the same question to the next free one you've connected (you'll see \"Free limit reached; switching to…\"). On services that are only free to start, it prefers their free models (like OpenRouter's \":free\" ones). If every free one is used up, it says so and you can use the models on this PC."],
     ['⚗️ Fusion', 'Combine 2 to 4 AIs, local and cloud together, into one that answers as a team: they answer separately and a lead fuses the best of each.', 'Explore → Models → Connect an API, or Explore → Stacks', "Pick 2 to 4 AIs and how they work together (blend, vote, debate…). They each answer, then a lead combines the best parts and fixes mistakes. Different makers make different mistakes, so they catch each other's. The fusion is saved like a model: pick it in any chat, assistant or the local API."],
   ]],
@@ -112,7 +113,7 @@ const STACKS_GUIDE = [
 // [name, tag, best model, what it's best for, notes]
 const API_GUIDE = {
   free: [
-    ['Cerebras', 'Best free partner', 'Qwen3 235B (or gpt-oss-120b)', 'Pairs with the Liquid Edition: the big sibling of its Brain, extremely fast, with a large free daily allowance.', 'No card needed.'],
+    ['Cerebras', 'Best free cloud AI', 'Qwen3 235B (or gpt-oss-120b)', 'The big sibling of the built-in Brain, extremely fast, with a large free daily allowance. Filtered, so it\'s used in your other chats, not for the uncensored Liquid Edition.', 'No card needed.'],
     ['Groq', 'Fastest backup', 'gpt-oss-120b or Llama 3.3 70B', 'Very fast answers; a great second free AI so free rotation can switch when one hits its limit.', 'No card needed.'],
     ['Google Gemini (AI Studio)', 'Smart, sees images', 'The newest Gemini Flash', 'Strong all-rounder that reads photos and very long documents.', 'Free-plan prompts may be used by Google to improve its models; more filtered than the uncensored local models.'],
     ['Mistral (Experiment plan)', 'Generous', 'Mistral Large', 'Good writing and multilingual work, with high free limits.', 'Needs a verified phone number; free-plan prompts may be used for training.'],
@@ -140,7 +141,7 @@ const TIPS_GUIDE = [
   ['Tell it about you once', 'Say "remember that I…" (your job, your tools, how you like answers) and every new chat uses it.'],
   ['Use Projects for ongoing work', 'Put the instructions and files for a piece of work in a project; every chat in it knows the background.'],
   ['Rate answers', '👍 and 👎 teach Automatic which model suits you for each kind of question.'],
-  ['Pair a free cloud AI', 'Connect Cerebras plus Groq or Mistral (free) and turn on "use my cloud AI for hard questions": everyday stays private on your PC, hard ones get a big model, and free rotation keeps it free.'],
+  ['Pair a cloud AI', 'For the uncensored Liquid Edition, connect Venice. For your other chats, Cerebras plus Groq or Mistral (free) with "use my cloud AI for hard questions" gives hard ones a big model, and free rotation keeps it free.'],
   ['Add Dolphin or a stronger uncensored model', 'The Liquid Edition adds it to its crew by itself: Dolphin as a second opinion, an uncensored Qwen3 14B or 30B-A3B as the Closer on hard questions.'],
   ['Mix makers in a Fusion', 'Qwen + Llama + Claude catch more mistakes than three models from the same family.'],
   ['Free memory when you need it', 'Stop a model from the chat\'s status light before gaming or video editing; it reloads when needed.'],
@@ -151,14 +152,16 @@ const TIPS_GUIDE = [
 ];
 
 const SCORES_GUIDE = [
-  ['What the percentages are', 'Each model\'s score on four well-known tests: the share of questions it got right. They\'re the same tests for every model, so you can compare them at a glance. Independent results are used where they exist, otherwise the maker\'s own.'],
+  ['What the percentages are', 'Each model\'s score on three well-known tests: the share of questions it got right. They\'re the same tests for every model, so you can compare them at a glance. The scores come from Artificial Analysis, which tests every model the same way; makers\' own figures are often a little higher. A few models only have the maker\'s figures (hover the label to see which).'],
   ['🧮 Maths', 'AIME 2025: competition maths problems that take many steps. Very hard: a score above 50% is excellent for a model that runs on a PC.'],
   ['🔬 Science', 'GPQA Diamond: PhD-level biology, physics and chemistry questions. Experts score about 65% in their own field.'],
-  ['📚 Knowledge', 'MMLU-Pro: broad knowledge across 14 subjects, from law to engineering.'],
   ['💻 Coding', 'LiveCodeBench: fresh programming problems the model can\'t have seen in training.'],
   ['Colours', 'Green 80% and up, blue 55–79%, amber 30–54%, grey below 30%. These are hard tests: everyday questions go much better than the scores suggest.'],
   ['Stacks', 'A stack shows its strongest member\'s score on each test (hover a score to see which model). Working as a team usually adds a little on hard questions; Majority vote adds the most on maths.'],
   ['Uncensored versions', 'Scored by the model they\'re made from. Taking the refusals out usually costs a point or two.'],
+  ['Thinking models', 'Models that think before answering (marked 🧠 thinks) score much higher on maths, but answer more slowly.'],
+  ['No score shown', 'Some models, mostly community versions and older ones, have never been tested this way, so no number is shown rather than a guess.'],
+  ['Cloud AIs', 'Each card shows the scores of the model it recommends. The newest 2026 cloud models are only tested independently on science so far.'],
   ['Creates: ★ out of 5', 'Photos, photo edits, video and music, rated by Quicksilver for picture quality, how well they follow your description, and detail. Music on this PC is played by the built-in synth (instrumental beats and melodies, no vocals), so it rates ★ 2 whichever model writes it; for full songs with vocals, a cloud service like Suno is ★ 4.5.'],
   ['Online updates', 'New scores arrive with Quicksilver\'s online picks, so the numbers stay current as models are re-tested.'],
 ];
@@ -199,7 +202,7 @@ function apisGuideHTML() {
     <section class="card og-sec"><h3>$ Paid</h3><div class="api-grid">${API_GUIDE.paid.map(row).join('')}</div></section>
     <section class="card og-sec"><h3>Which to choose</h3><dl>
       <div class="og-row"><dt>Most private</dt><dd>Your PC (offline or with Proton VPN). Nothing leaves it.</dd></div>
-      <div class="og-row"><dt>Best free setup</dt><dd>Cerebras + Groq + Mistral, with free rotation and "cloud for hard questions" on.</dd></div>
+      <div class="og-row"><dt>Best free setup</dt><dd>Cerebras + Groq + Mistral, with free rotation and "cloud for hard questions" on (used in your other chats; the uncensored Liquid Edition only uses Venice).</dd></div>
       <div class="og-row"><dt>Best writing and code</dt><dd>Claude (paid), as the lead in a Fusion or for hard questions.</dd></div>
       <div class="og-row"><dt>Web research with sources</dt><dd>Perplexity (paid), or Quicksilver's own web search (free).</dd></div>
       <div class="og-row"><dt>Uncensored in the cloud</dt><dd>Venice or Featherless; for full privacy, the uncensored models on your PC.</dd></div>

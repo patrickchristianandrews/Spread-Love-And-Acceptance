@@ -262,12 +262,14 @@ function dolphinOfferHTML(qst) {
       <div class="small muted">Dolphin 3.0 8B is uncensored and about as strong as the Brain, but from a different family, so on hard questions it adds a second view and they catch each other's mistakes. Everyday messages stay with the fast Brain. ${d.sizeGB} GB download.${slow ? ' On this PC it runs slowly, so hard answers will take noticeably longer.' : ''}</div></div>
     ${S.downloads[DOLPHIN] ? downloadBox(DOLPHIN) : `<button class="btn small ${slow ? '' : 'primary'}" data-get="${DOLPHIN}">Add Dolphin</button>`}</div>`;
 }
+// The Liquid Edition is completely uncensored, so its cloud partner must be too: Venice. Filtered
+// cloud AIs (Cerebras, Groq, Mistral…) still work in your other chats, never for the Liquid Edition.
 function cloudPartnerHTML() {
-  const free = (S.providers || []).filter((p) => ['cerebras', 'groq', 'mistral', 'google', 'openrouter', 'sambanova', 'github'].includes(p.preset) && (p.hasKey || p.noKey));
-  if (free.length >= 2) return `<p class="small muted" style="margin:6px 0">☁️ Paired with ${free.map((p) => esc(p.name)).join(' + ')}: hard questions can use the cloud (if switched on in Settings), and free rotation takes over when one hits its limit.</p>`;
-  return `<div class="pair-card"><div class="grow"><b>☁️ Best free cloud partner: Cerebras · Qwen3 235B</b>
-      <div class="small muted">The big sibling of the built-in Qwen3, very fast, with a large free daily allowance and no card. Add <b>Groq</b> and <b>Mistral</b> (also free) as backups and free rotation keeps you going when one hits its limit. Then switch on "use my cloud AI for hard questions" in Settings → General.</div></div>
-    <div class="row" style="gap:6px;flex-wrap:wrap">${['cerebras', 'groq', 'mistral'].filter((k) => !free.some((p) => p.preset === k)).map((k, i) => `<button class="btn small ${i ? '' : 'primary'}" data-pair="${k}">Connect ${({ cerebras: 'Cerebras', groq: 'Groq', mistral: 'Mistral' })[k]}</button>`).join('')}</div></div>`;
+  const unc = (S.providers || []).filter((p) => p.preset === 'venice' && (p.hasKey || p.noKey));
+  if (unc.length) return `<p class="small muted" style="margin:6px 0">☁️ Paired with ${unc.map((p) => esc(p.name)).join(' + ')}: with "use my cloud AI for hard questions" on, hard ones can go to its uncensored model. Filtered cloud AIs are never used for the Liquid Edition.</p>`;
+  return `<div class="pair-card"><div class="grow"><b>☁️ Uncensored cloud partner: Venice AI</b>
+      <div class="small muted">The Liquid Edition is completely uncensored, so it only hands hard questions to an uncensored cloud AI. Venice runs uncensored models and says it doesn't store your prompts; it has a small free allowance, then Pro or credits. Filtered cloud AIs like Cerebras or Groq still work in your other chats, never for the Liquid Edition.</div></div>
+    <div class="row" style="gap:6px;flex-wrap:wrap"><button class="btn small primary" data-pair="venice">Connect Venice</button></div></div>`;
 }
 document.addEventListener('click', async (e) => {
   const b = e.target.closest('[data-pair]');
