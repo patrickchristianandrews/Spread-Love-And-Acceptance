@@ -494,7 +494,8 @@ async function* stack(stackDef, req) {
   if (req.level === 'max') req = { ...req, forceTeam: true }; // Max: always the whole team, always combined
   if (members.mode === 'auto' && level !== 'quick') {
     level = level === 'max' ? 'thorough' : autoLevel(req);
-    if (level === 'thorough') yield { type: 'status', text: 'A harder one: thinking it through with two models…' };
+    const team = new Set([...(members.drafters || []), members.judge].filter((t) => t && exists(t)));
+    if (level === 'thorough') yield { type: 'status', text: team.size > 1 ? `A harder one: thinking it through with ${team.size} models…` : 'A harder one: thinking it through step by step…' };
   }
   let drafters = (members.drafters || []).filter(exists);
   let judge = members.judge && exists(members.judge) ? members.judge : null;
@@ -572,20 +573,25 @@ async function* stack(stackDef, req) {
     }
   }
   const msgsFor = (target) => (canSee(target) || !req.describedMessages ? messages : req.describedMessages);
+  // A team's inner steps (drafts, critiques, combining) skip the separate reasoning pass: the
+  // drafts are the working. Only an answer written straight to you reasons step by step.
+  const inner = { ...req, stepByStep: false };
 
   // Power moves: little-known ways of working together that beat a bigger model.
   if (POWER_MOVES.includes(members.mode) && level !== 'quick') {
     const lead = judge || drafters[0];
     const helpers = [...new Set([...(members.drafters || []).filter(exists), judge].filter((x) => x && x !== lead))];
-    yield* powerMove(members.mode, lead, helpers, req, msgsFor, step, live);
+    yield* powerMove(members.mode, lead, helpers, inner, msgsFor, step, live);
     return;
   }
 
-  // 2. One drafter and no lead: just stream it.
-  if (!judge && drafters.length === 1) {
+  // 2. One model answers (no lead, or the lead is the only drafter): just stream it. Drafting and
+  //    then reviewing its own draft would cost a second pass for nothing.
+  if ((!judge && drafters.length === 1) || (judge && drafters.length === 1 && drafters[0] === judge && members.mode !== 'debate')) {
     yield* single(drafters[0], { ...req, messages: msgsFor(drafters[0]) });
     return;
   }
+  if (judge && !drafters.length) { yield* single(judge, { ...req, messages: msgsFor(judge) }); return; }
 
   // 3. Drafts. Local models take turns (they share this PC's memory); cloud models run at the
   //    same time, so a mixed stack costs little extra time.
@@ -612,8 +618,8 @@ async function* stack(stackDef, req) {
     const started = Date.now();
     try {
       s.text = points
-        ? await collect(d, { ...req, points: true, messages: withPointsAsk(msgsFor(d)), maxTokens: 320, temperature: Math.min(req.temperature ?? 0.6, 0.5) }, live(s))
-        : await collect(d, { ...req, messages: msgsFor(d), maxTokens: Math.min(req.maxTokens || 2048, 1800) }, live(s));
+        ? await collect(d, { ...inner, points: true, messages: withPointsAsk(msgsFor(d)), maxTokens: 320, temperature: Math.min(req.temperature ?? 0.6, 0.5) }, live(s))
+        : await collect(d, { ...inner, messages: msgsFor(d), maxTokens: Math.min(req.maxTokens || 2048, 1800) }, live(s));
     } catch (err) {
       if (req.signal?.aborted) throw err;
       s.error = String(err.message || err);
@@ -646,7 +652,7 @@ async function* stack(stackDef, req) {
       const base = msgsFor(d);
       const started = Date.now();
       try {
-        r.text = await collect(d, { ...req, messages: [...base, { role: 'assistant', content: own }, { role: 'user', content: `${CRITIQUE}\n\n${others}` }] }, live(r));
+        r.text = await collect(d, { ...inner, messages: [...base, { role: 'assistant', content: own }, { role: 'user', content: `${CRITIQUE}\n\n${others}` }] }, live(r));
       } catch (err) { if (req.signal?.aborted) throw err; r.error = String(err.message || err); }
       r.done = true; r.ms = Date.now() - started;
       req.onStep?.(r);
@@ -695,7 +701,7 @@ async function* stack(stackDef, req) {
   yield step(s);
   yield { type: 'status', text: `${s.label} with ${label(lead)}…` };
   const started = Date.now();
-  for await (const ev of single(lead, { ...req, messages: leadMessages, temperature: Math.min(req.temperature ?? 0.5, 0.5) })) {
+  for await (const ev of single(lead, { ...inner, messages: leadMessages, temperature: Math.min(req.temperature ?? 0.5, 0.5) })) {
     yield ev;
   }
   s.done = true; s.ms = Date.now() - started;
@@ -779,7 +785,7 @@ async function* council(target, req) {
     const msgs = req.messages;
     const messages = [...msgs.slice(0, -1), { role: 'system', content: role.prompt }, msgs[msgs.length - 1]];
     try {
-      s.text = await collect(who, { ...req, messages, level: role.key === 'critic' ? req.level : 'quick', maxTokens: 450, temperature: role.key === 'pragmatist' ? 0.6 : 0.4 }, (t) => { s.text = t; req.onStep?.(s); });
+      s.text = await collect(who, { ...req, stepByStep: false, messages, level: role.key === 'critic' ? req.level : 'quick', maxTokens: 450, temperature: role.key === 'pragmatist' ? 0.6 : 0.4 }, (t) => { s.text = t; req.onStep?.(s); });
     } catch (err) { s.error = String(err?.message || err); }
     s.done = true; s.ms = Date.now() - t0;
     yield { type: 'step', step: s };
@@ -793,7 +799,7 @@ async function* council(target, req) {
   const messages = [...msgs.slice(0, -1), { role: 'system', content: `${COUNCIL_LEAD}\n\n${notes.join('\n')}` }, msgs[msgs.length - 1]];
   // The first line carries the agreement score; it's shown as a badge, not in the answer.
   let head = ''; let headDone = false;
-  for await (const ev of single(m.lead, { ...req, messages, level: 'quick' })) {
+  for await (const ev of single(m.lead, { ...req, stepByStep: false, messages, level: 'quick' })) {
     if (ev.type !== 'text' || headDone) { yield ev; continue; }
     head += ev.text;
     const nl = head.indexOf('\n');

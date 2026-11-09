@@ -1108,6 +1108,25 @@ async function collect(gen) {
     console.log('✓ smarter search: Nomic Embed finds passages by meaning, merged with keyword search');
   }
 
+  // Stack efficiency: the team's inner steps skip the reasoning pass; a lone lead doesn't review itself.
+  {
+    const tb = path.join(fs.mkdtempSync(path.join(os.tmpdir(), 'qs-tb-')), 'tb.gguf'); fs.copyFileSync(TINY, tb);
+    models.add({ id: 'tb2', name: 'Built-in test', kind: 'text', catalogId: 'qwen3-4b', files: { model: tb }, size: 2.5e9, source: 'bundled' });
+    const tb3f = path.join(path.dirname(tb), 'tb3.gguf'); fs.copyFileSync(TINY, tb3f);
+    models.add({ id: 'tb3', name: 'Lead test', kind: 'text', catalogId: 'qwen3-8b', files: { model: tb3f }, size: 5e9 });
+    complete.saveStack({ id: 'eff', name: 'Eff', members: { drafters: ['local:tb2', 'local:tb3'], judge: 'local:tb3', mode: 'blend' } });
+    const r = await collect(complete.run('stack:eff', { messages: [{ role: 'user', content: 'Calculate 17 × 23 and explain why' }], maxTokens: 120, contextSize: 4096, level: 'max' }));
+    const drafts = [...new Map(r.steps.map((x) => [x.index, x])).values()].filter((x) => x.role === 'draft');
+    assert.ok(drafts.length >= 2 && drafts.every((d) => !/Step 1: read the question|\[steps\]/.test(d.text || '')), 'drafts skip the reasoning pass');
+    assert.doesNotMatch(r.text, /\[steps\]/, 'combining skips it too');
+    complete.saveStack({ id: 'solo', name: 'Solo', members: { drafters: ['local:tb3'], judge: 'local:tb3', mode: 'blend' } });
+    const solo = await collect(complete.run('stack:solo', { messages: [{ role: 'user', content: 'Compare cats and dogs as pets' }], maxTokens: 80, contextSize: 4096, level: 'thorough' }));
+    assert.equal(solo.steps.length, 0, 'a lead that is its own only drafter answers once (no self-review)');
+    assert.match(solo.text, /Answer from/);
+    complete.deleteStack('eff'); complete.deleteStack('solo'); models.remove('tb2'); models.remove('tb3');
+    console.log('✓ stacks: inner steps skip the reasoning pass, no self-review, honest status');
+  }
+
   console.log('\nBACKEND TESTS PASSED');
   process.exit(0);
 })().catch((e) => { console.error('FAIL', e); llama.stopAll(); process.exit(1); });
