@@ -1331,6 +1331,44 @@ async function collect(gen) {
     console.log('✓ sharper search: the reranker puts the passage that answers the question first; Qwen3.5 9B Closer listed');
   }
 
+  // Cloud photo, video and music through fal.ai: submit, wait on the queue, save the file to the gallery.
+  {
+    const cm = require('../src/main/cloudmedia');
+    const fp = providers.upsert({ preset: 'fal' }, 'fal-test-key');
+    assert.equal((await providers.refreshModels(fp.id)).id, fp.id, 'no chat models to list for a media-only service');
+    const real = global.fetch;
+    const calls = [];
+    let polls = 0;
+    global.fetch = async (url, o = {}) => {
+      calls.push([String(url), o.method || 'GET', o.headers?.Authorization, o.body]);
+      const json = (j, status = 200) => new Response(JSON.stringify(j), { status, headers: { 'content-type': 'application/json' } });
+      if (/queue\.fal\.run\/fal-ai\/veo3\.1$/.test(url)) return json({ request_id: 'r1', status_url: 'https://queue.fal.run/fal-ai/veo3.1/requests/r1/status', response_url: 'https://queue.fal.run/fal-ai/veo3.1/requests/r1' });
+      if (/\/r1\/status$/.test(url)) return json({ status: ++polls < 2 ? 'IN_PROGRESS' : 'COMPLETED' });
+      if (/\/requests\/r1$/.test(url)) return json({ video: { url: 'https://cdn.fal.media/out/clip.mp4' } });
+      if (/clip\.mp4$/.test(url)) return new Response(Buffer.from('fake-mp4'), { status: 200, headers: { 'content-type': 'video/mp4' } });
+      if (/queue\.fal\.run\/fal-ai\/elevenlabs\/music$/.test(url)) return json({ audio: { url: 'https://cdn.fal.media/out/song.mp3' } });
+      if (/song\.mp3$/.test(url)) return new Response(Buffer.from('fake-mp3'), { status: 200, headers: { 'content-type': 'audio/mpeg' } });
+      return json({ detail: 'not found' }, 404);
+    };
+    const statuses = [];
+    const clip = await cm.generate(providers.get(fp.id), providers.secretOf(fp.id), 'video', 'fal-ai/veo3.1', { prompt: 'A fox in snow', pollMs: 1 }, (t) => statuses.push(t));
+    assert.equal(clip.kind, 'video'); assert.ok(fs.existsSync(clip.file) && /\.mp4$/.test(clip.file));
+    assert.equal(calls[0][2], 'Key fal-test-key', 'fal key sent as "Key …"');
+    assert.deepEqual(JSON.parse(calls[0][3]), { prompt: 'A fox in snow' });
+    assert.ok(statuses.some((x) => /Creating in the cloud/.test(x)));
+    const song = await cm.generate(providers.get(fp.id), providers.secretOf(fp.id), 'music', 'fal-ai/elevenlabs/music', { prompt: 'Upbeat pop', seconds: 30, lyrics: 'la la' });
+    assert.equal(song.kind, 'audio');
+    const el = JSON.parse(calls.find((c) => /elevenlabs/.test(c[0]))[3]);
+    assert.equal(el.music_length_ms, 60000, 'a full song is at least a minute');
+    assert.match(el.prompt, /^Upbeat pop\nA complete song with an intro, verses, chorus, a bridge and an ending\.\nLyrics:\nla la$/);
+    assert.deepEqual(cm.inputFor('music', 'fal-ai/minimax-music/v2.6', { prompt: 'p', lyrics: 'l' }), { prompt: 'p', lyrics: 'l' });
+    assert.equal(JSON.stringify(cm.inputFor('edit', 'google/nano-banana-2.1/edit', { prompt: 'x', imageDataUrl: 'data:image/png;base64,AA' })), '{"prompt":"x","image_urls":["data:image/png;base64,AA"]}');
+    global.fetch = real;
+    for (const k of ['image', 'edit', 'video', 'animate', 'music']) assert.ok(cm.FAL_MODELS[k].length && cm.FAL_MODELS[k].every((m) => m[2] >= 1 && m[2] <= 10), k);
+    providers.remove(fp.id);
+    console.log('✓ cloud photo, video and music (fal.ai): queue, status, file saved to the gallery; rated models for each kind');
+  }
+
   // Stack efficiency: the team's inner steps skip the reasoning pass; a lone lead doesn't review itself.
   {
     const tb = path.join(fs.mkdtempSync(path.join(os.tmpdir(), 'qs-tb-')), 'tb.gguf'); fs.copyFileSync(TINY, tb);

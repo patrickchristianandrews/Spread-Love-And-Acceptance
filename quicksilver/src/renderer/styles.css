@@ -1415,3 +1415,11 @@ code.sel { user-select: all; background: var(--soft); padding: 1px 6px; border-r
 .bz-jr > span:not(:first-child) { text-align: center; font-size: .9rem; }
 .bz-up { color: #2fbf71; }
 @media (max-width: 640px) { .bz-jh, .bz-jr { grid-template-columns: 1fr repeat(3, 52px); } }
+
+.bz-rec { padding: 4px 8px; border-radius: 8px; background: color-mix(in srgb, #f2b01e 10%, transparent); }
+.cs-models { display: grid; gap: 6px; }
+.cs-model { display: flex; gap: 10px; align-items: center; padding: 8px 10px; border-radius: 10px; background: var(--hover); cursor: pointer; flex-wrap: wrap; }
+.cs-model .grow { display: flex; flex-direction: column; gap: 2px; min-width: 200px; }
+.cs-model.now { outline: 1.5px solid color-mix(in srgb, var(--accent) 55%, transparent); }
+.cs-model.local { cursor: default; background: color-mix(in srgb, #2fbf71 12%, var(--hover)); }
+.bz-web { color: var(--text); opacity: .85; }

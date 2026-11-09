@@ -14,11 +14,11 @@ async function refreshGallery() { gallery = await qs.call('media:gallery'); }
 
 views.studio = {
   html() {
-    const tabs = { create: '🎨 Create image', edit: '🪄 Edit photo', video: '🎬 Create video', vedit: '✂️ Edit video', music: '🎵 Music', voice: '🎙️ Voice', tools: '🧰 Quick fixes', gallery: `🖼️ Gallery (${gallery.length})` };
+    const tabs = { create: '🎨 Create image', edit: '🪄 Edit photo', video: '🎬 Create video', vedit: '✂️ Edit video', music: '🎵 Music', voice: '🎙️ Voice', cloud: '☁️ Cloud (top quality)', tools: '🧰 Quick fixes', gallery: `🖼️ Gallery (${gallery.length})` };
     return `<div class="page">
       <div class="page-head"><h1>Create</h1><label class="btn">⬆ Upload photo, video or sound<input type="file" id="upload" accept="image/*,video/*,audio/*" multiple hidden></label></div>
       <div class="tabs">${Object.entries(tabs).map(([k, l]) => `<button class="tab ${studioTab === k ? 'active' : ''}" data-stab="${k}">${l}</button>`).join('')}</div>
-      ${({ create: createHTML, edit: editHTML, video: videoHTML, vedit: veditHTML, music: musicHTML, voice: voiceHTML, tools: fixesHTML, gallery: galleryHTML })[studioTab]()}
+      ${({ create: createHTML, edit: editHTML, video: videoHTML, vedit: veditHTML, music: musicHTML, voice: voiceHTML, cloud: cloudStudioHTML, tools: fixesHTML, gallery: galleryHTML })[studioTab]()}
     </div>`;
   },
   bind() {
@@ -34,7 +34,7 @@ views.studio = {
       render();
     });
     $$('[data-get]').forEach((b) => b.addEventListener('click', async () => { const m = S.catalog.media.find((x) => x.id === b.dataset.get); await download({ catalogId: m.id }, m.name); render(); }));
-    ({ create: bindCreate, edit: bindEdit, video: bindVideo, vedit: bindVedit, music: bindMusic, voice: bindVoice, tools: bindFixes, gallery: bindGallery })[studioTab]?.();
+    ({ create: bindCreate, edit: bindEdit, video: bindVideo, vedit: bindVedit, music: bindMusic, voice: bindVoice, cloud: bindCloudStudio, tools: bindFixes, gallery: bindGallery })[studioTab]?.();
     $$('[data-improve]').forEach((b) => b.addEventListener('click', () => improvePrompt(b)));
   },
 };

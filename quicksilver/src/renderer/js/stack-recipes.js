@@ -287,7 +287,7 @@ function recipeCard(r) {
     ${stackScoresHTML(rows.filter(({ p, s }) => p.kind === 'model' && s.cls !== 'bad').map(({ p }) => p.id))}
     <div class="rx-parts">${rows.map(({ p, s }) => `<div class="rx-part ${s.cls}" title="${esc(s.title || '')}"><span class="rx-ic">${s.icon}</span><span class="rx-body"><span class="rx-top"><b>${esc(p.role)}</b><span class="rx-note">${esc(s.note)}</span></span><span class="rx-sub">${esc(s.sub)}</span></span></div>`).join('')}</div>
     ${missing ? `<p class="small muted" style="margin:6px 0 0">${missing === 1 ? 'One part isn\'t' : `${missing} parts aren't`} available in Quicksilver yet; the rest works now. Hover a part for details.</p>` : ''}
-    <div class="row" style="margin-top:10px">${made ? '<span class="badge b-mint">✓ Set up</span><button class="btn small" data-rx-chat="' + r.id + '">Chat</button>' : `<button class="btn small primary" data-rx="${r.id}" ${blocked ? 'title="One of its models is too big for this PC; the rest will still be set up"' : ''}>${gb ? 'Download & set up' : 'Set up'}</button>`}</div>
+    <div class="row" style="margin-top:10px">${made ? '<span class="badge b-mint">✓ Set up</span><button class="btn small" data-rx-chat="' + r.id + '">Chat</button>' : `<button class="btn small primary" data-rx="${r.id}" ${blocked ? 'title="One of its models is too big for this PC; the rest will still be set up"' : ''}>${gb ? 'Download & set up' : 'Set up'}</button>`}${boostBtn(`rx:${r.id}`, `data-boost-ids="${esc(JSON.stringify(rows.filter(({ p }) => p.kind === 'model').map(({ p }) => p.id)))}" data-boost-name="${esc(r.name)}"`)}</div>
   </div>`;
 }
 

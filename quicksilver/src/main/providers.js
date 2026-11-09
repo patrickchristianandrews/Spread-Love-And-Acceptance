@@ -30,6 +30,9 @@ const PRESETS = {
     free: 'paid', freeNote: 'Pay as you go, at very low prices. No free plan.', priceUrl: 'https://api-docs.deepseek.com/quick_start/pricing' },
   xai: { best: 'grok-4', bestWhy: 'xAI\'s strongest model.', name: 'xAI (Grok)', baseUrl: 'https://api.x.ai/v1', keyUrl: 'https://console.x.ai', vision: true,
     free: 'paid', freeNote: 'Pay as you go. New accounts sometimes get promotional credits.', priceUrl: 'https://docs.x.ai/docs/models' },
+  fal: { name: 'fal.ai (photo, video & music)', media: true, baseUrl: 'https://queue.fal.run', keyUrl: 'https://fal.ai/dashboard/keys', models: [],
+    bestWhy: 'One key for the best cloud photo, video and music models: Nano Banana 2.1, Veo 3.1, Kling 3, ElevenLabs Music, MiniMax Music and Lyria. Used in Create → Cloud.',
+    free: 'paid', freeNote: 'Pay per picture, second of video or song (for example about $0.04 a picture, $0.40 a second of Veo 3.1 video). New accounts sometimes get a small credit.', priceUrl: 'https://fal.ai/pricing' },
   ollama: { name: 'Ollama (on this PC)', baseUrl: 'http://localhost:11434/v1', noKey: true, vision: true, free: 'local', freeNote: 'Free: runs on this PC with no key.' },
   lmstudio: { name: 'LM Studio (on this PC)', baseUrl: 'http://localhost:1234/v1', noKey: true, vision: true, free: 'local', freeNote: 'Free: runs on this PC with no key.' },
   // ---------- more cloud AIs (all OpenAI-compatible) ----------
@@ -122,6 +125,7 @@ function anthropicClient(p) {
 async function refreshModels(id) {
   const p = get(id);
   if (!p) throw new Error('Unknown API.');
+  if (PRESETS[p.preset]?.media) return p; // photo, video and music only: no chat models to list
   let models;
   if (p.preset === 'anthropic') {
     const { client } = anthropicClient(p);
@@ -255,4 +259,5 @@ async function image(providerId, model, { prompt, size = '1024x1024', image: inp
   throw new Error('The API returned no image.');
 }
 
-module.exports = { PRESETS, publicList, get, upsert, remove, refreshModels, chat, image };
+const secretOf = (id) => store.getSecret(keyName(id));
+module.exports = { PRESETS, publicList, get, upsert, remove, refreshModels, chat, image, secretOf };

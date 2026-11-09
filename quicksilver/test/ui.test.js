@@ -165,6 +165,12 @@ function redPng(size = 64) {
   const jobs = await win.locator('#modal .bz-jobs').innerText();
   for (const j of ['Reasoning & maths', 'Complex tasks', 'Research & current facts', 'Coding', 'Photo creation', 'Photo editing', 'Video creation', 'Music']) assert.ok(jobs.includes(j), j);
   assert.match(jobs, /On its own[\s\S]*\+ Web[\s\S]*\+ Cloud AI[\s\S]*\/10/);
+  // A recommended cloud service for each job, chosen for this PC and the output wanted.
+  assert.ok(await win.locator('#modal .bz-rec').count() >= 8);
+  // The web column is filled in for every job: a score where web search helps, "Same" where it can't.
+  assert.match(jobs, /With web: reads current library docs[\s\S]*Same/);
+  assert.equal(await win.locator('#modal .bz-web').count(), 10);
+  assert.match(jobs, /Recommended for this PC:[\s\S]*Video creation[\s\S]*Veo 3\.1[\s\S]*Music \(full songs\)[\s\S]*MiniMax Music/);
   await win.evaluate(() => { document.querySelector('#modal-body').scrollTop = 0; });
   await shot(win, '06b-web-cloud-boost');
   await win.click('#modal [data-close]');
@@ -216,6 +222,18 @@ function redPng(size = 64) {
   assert.match(await win.locator('#modal').innerText(), /Power[\s\S]*Overall on this PC[\s\S]*Recommended changes/);
   await shot(win, '13b-fusion-rating');
   await win.click('#modal [data-close]');
+  // Every stack, fusion and model has "⚡ Web & cloud": each job rated out of 10, and the service to add.
+  await win.click('.card:has-text("Analyst Supreme") [data-boost]');
+  await win.waitForSelector('#modal .bz-jobs');
+  assert.match(await win.locator('#modal').innerText(), /Analyst Supreme: what the web[\s\S]*custom AI \(fusion\)[\s\S]*Reasoning & maths[\s\S]*Recommended for this PC/);
+  await win.click('#modal [data-close]');
+  await win.evaluate(() => { modelsTab = 'text'; go({ view: 'models' }); });
+  await win.locator('.model-card [data-boost]').first().click();
+  await win.waitForSelector('#modal .bz-jobs');
+  assert.match(await win.locator('#modal').innerText(), /For this model, on this PC[\s\S]*Photo creation[\s\S]*Music \(full songs\)/);
+  await shot(win, '13c-model-web-cloud');
+  await win.click('#modal [data-close]');
+  await win.evaluate(() => { stacksTab = 'fusion'; go({ view: 'stacks' }); });
   await win.click('.card:has-text("Analyst Supreme") [data-publish]');
   await win.waitForSelector('#modal h2:has-text("Publish your custom AI")');
   assert.match(await win.locator('#modal').innerText(), /Exactly what's shared[\s\S]*Never shared: your API keys/);
@@ -766,6 +784,10 @@ function redPng(size = 64) {
   await win.waitForSelector('#cc-out .ten-stars');
   await win.locator('#cloud-calc').scrollIntoViewIfNeeded();
   await shot(win, '17d3-price-list');
+  // Music in the calculator and its rated price list.
+  await win.click('[data-cc-kind="music"]');
+  await win.waitForFunction(() => /MiniMax Music 2\.6 alone/.test(document.querySelector('#cc-out').innerText));
+  assert.match(await win.locator('#cc-list').innerText(), /ElevenLabs Music[\s\S]*Built-in synth/);
   await win.click('[data-cc-kind="chat"]');
   assert.ok(await win.locator('.og-sec h3:has-text("Developer (dev) plans")').count() === 1);
   await win.locator('#cloud-calc').scrollIntoViewIfNeeded();
@@ -1036,6 +1058,25 @@ function redPng(size = 64) {
   await win.waitForSelector('.studio audio', { timeout: 150000 });
   await win.waitForSelector('#mu-chords');
   await shot(win, '11b-music');
+  // Cloud: the best hosted photo, video and music models, rated out of 10 next to this PC's own.
+  await win.click('[data-stab="cloud"]');
+  await win.waitForSelector('.cs-model .ten-stars');
+  assert.ok(await win.locator('#cs-connect').count(), 'asks to connect fal.ai first');
+  for (const k of ['video', 'music', 'edit', 'animate', 'image']) {
+    await win.click(`[data-cs-kind="${k}"]`);
+    await win.waitForSelector('.cs-model input[name="cs-model"]');
+  }
+  await win.click('[data-cs-kind="video"]');
+  assert.match(await win.locator('.cs-models').innerText(), /Veo 3\.1[\s\S]*10\/10[\s\S]*Kling 3 Pro[\s\S]*On this PC/);
+  const falId = await win.evaluate(async () => { const p = await qs.call('providers:save', { preset: 'fal' }, 'fal-test'); await refreshProviders(); render(); return p.id; });
+  await win.waitForSelector('#cs-go:not([disabled])');
+  await win.click('[data-cs-kind="music"]');
+  await win.waitForSelector('#cs-lyrics');
+  const songs = await win.locator('#main').innerText();
+  assert.match(songs, /ElevenLabs Music[\s\S]*MiniMax Music 2\.6[\s\S]*Mureka v9/);
+  assert.match(songs, /full composition/);
+  await shot(win, '11c-cloud-studio');
+  await win.evaluate(async (id) => { await qs.call('providers:remove', id); await refreshProviders(); }, falId);
   // Voice: read aloud (a test tone stands in for Windows' voices on Linux).
   await win.click('[data-stab="voice"]');
   await win.fill('#vo-text', 'ALEX: Welcome to the show.\nSAM: Glad to be here.');
@@ -1226,9 +1267,16 @@ function redPng(size = 64) {
   await win.click('#improve-btn');
   await win.waitForFunction(() => /^Answer from/.test(document.querySelector('#input').value), null, { timeout: 60000 });
   await win.fill('#input', '');
-  // Command palette.
-  await win.keyboard.press('Control+Shift+P');
-  await win.waitForSelector('#pal-q');
+  // Command palette (the shortcut can land while a background repaint takes focus: press it again, then open it directly).
+  const openPal = async () => {
+    for (let i = 0; i < 3; i++) {
+      await win.keyboard.press('Control+Shift+P');
+      if (await win.waitForSelector('#pal-q', { timeout: 5000 }).catch(() => null)) return;
+    }
+    await win.evaluate(() => openPalette());
+    await win.waitForSelector('#pal-q');
+  };
+  await openPal();
   await win.fill('#pal-q', 'blind test');
   // The palette groups results, shows an icon for each, and highlights what you typed.
   await win.waitForSelector('.pal .pal-group:has-text("Best match")');
@@ -1238,8 +1286,7 @@ function redPng(size = 64) {
   await win.keyboard.press('Enter');
   // A background job (a title, suggestions) can repaint the chat just as the palette jumps; try once more.
   if (!(await win.waitForSelector('.arena', { timeout: 8000 }).catch(() => null))) {
-    await win.keyboard.press('Control+Shift+P');
-    await win.waitForSelector('#pal-q');
+    await openPal();
     await win.fill('#pal-q', 'blind test');
     await win.keyboard.press('Enter');
     await win.waitForSelector('.arena');

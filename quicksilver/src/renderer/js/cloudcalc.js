@@ -30,7 +30,7 @@ function devPlansHTML() {
 // ---------- the calculator: a cloud AI alone vs through Quicksilver ----------
 // Chat, pictures and video. Prices are what the services list (November 2026, from their price
 // pages and public comparisons); they change often, so every number can be edited.
-const calcState = { kind: 'chat', perDay: 40, hard: 35, mode: 'hard', priceIn: 1, priceOut: 5, free: false, service: 'gpt-terra', imgPerMonth: 100, imgService: 'nano', keep: 25, vidSecPerMonth: 120, vidService: 'veo', vkeep: 30 };
+const calcState = { songsPerMonth: 10, musicService: 'minimax', mkeep: 50, kind: 'chat', perDay: 40, hard: 35, mode: 'hard', priceIn: 1, priceOut: 5, free: false, service: 'gpt-terra', imgPerMonth: 100, imgService: 'nano', keep: 25, vidSecPerMonth: 120, vidService: 'veo', vkeep: 30 };
 // [label, $ in / $ out per million tokens, free plan?, rating out of 10 for hard questions]
 const CHAT_SERVICES = {
   'gpt-astra': ['OpenAI GPT-6 Astra (flagship)', 10, 50, false, 10],
@@ -56,6 +56,13 @@ const VIDEO_SERVICES = {
   kling: ['Kling 3.0 (720p, with audio)', 0.126, 9], seedance: ['Seedance 2.5 (720p)', 0.23, 9],
   runway: ['Runway Gen-4.5', 0.12, 8], runwayturbo: ['Runway Gen-4 Turbo', 0.05, 7],
   other: ['Another service (enter its price)', null, 8],
+};
+// Full compositions (whole songs, not clips). [label, $ per song (about 2½ minutes), rating /10, note]
+const MUSIC_SERVICES = {
+  elevenlabs: ['ElevenLabs Music (fal.ai)', 2, 9, 'full songs, sung or instrumental, about $0.80 a minute'],
+  minimax: ['MiniMax Music 2.6 (fal.ai)', 0.15, 8, 'full songs up to about 3 minutes, sung from your lyrics'],
+  mureka: ['Mureka v9 (fal.ai)', null, 8, 'full songs from long lyrics; enter the price from fal'],
+  other: ['Another service (enter its price)', null, 8, ''],
 };
 // Quicksilver's own picture and video models, rated on the same scale as the cloud ones.
 const LOCAL_IMG = { 'flux-schnell': 7, sdxl: 6, 'sdxl-turbo': 5, sd15: 3, 'flux-kontext': 7, 'qwen-image-edit': 7 };
@@ -145,24 +152,43 @@ function svcPrice(table, k) {
   const v = table[k];
   if (table === CHAT_SERVICES) return v[3] ? 'Free (daily limits)' : v[1] == null ? 'Your price' : `$${v[1]} in · $${v[2]} out per million tokens`;
   if (v[1] == null) return 'Your price';
+  if (table === MUSIC_SERVICES) return `about $${v[1]} a song`;
   return table === IMAGE_SERVICES ? `$${v[1]} a picture` : `$${v[1]} a second ($${(v[1] * 8).toFixed(2)} for an 8 s clip)`;
 }
 function priceListHTML() {
-  const [table, cur, local, what] = calcState.kind === 'image' ? [IMAGE_SERVICES, calcState.imgService, LOCAL_IMG, 'picture'] : calcState.kind === 'video' ? [VIDEO_SERVICES, calcState.vidService, LOCAL_VID, 'video'] : [CHAT_SERVICES, calcState.service, null, 'chat'];
+  const [table, cur, local, what] = calcState.kind === 'image' ? [IMAGE_SERVICES, calcState.imgService, LOCAL_IMG, 'picture'] : calcState.kind === 'video' ? [VIDEO_SERVICES, calcState.vidService, LOCAL_VID, 'video'] : calcState.kind === 'music' ? [MUSIC_SERVICES, calcState.musicService, null, 'music'] : [CHAT_SERVICES, calcState.service, null, 'chat'];
   const rows = Object.keys(table).filter((k) => k !== 'other').sort((a, b) => svcRating(table, b) - svcRating(table, a));
   const loc = local && bestLocal(calcState.kind, local);
   return `<details class="cc-list" ${calcState.listOpen ? 'open' : ''}><summary><b>⭐ Price list: every ${what} service rated out of 10</b> <span class="small muted">(best first)</span></summary>
-    <div class="cc-plist">${rows.map((k) => `<div class="cc-p ${k === cur ? 'now' : ''}"><span class="grow"><b>${esc(table[k][0])}</b><span class="small muted">${esc(svcPrice(table, k))}${table === IMAGE_SERVICES && table[k][3] ? ` · ${esc(table[k][3])}` : ''}</span></span>${tenStarsHTML(svcRating(table, k))}${k === cur ? '<span class="badge b-mint">Picked</span>' : `<button class="btn small ghost" data-cc-pick="${k}">Compare</button>`}</div>`).join('')}
-    ${what === 'chat' ? `<div class="cc-p local"><span class="grow"><b>💧 Quicksilver Liquid Edition (on your PC)</b><span class="small muted">Free, private, works offline · uncensored</span></span>${tenStarsHTML(6.5)}<span class="badge b-sky">Built in</span></div>` : loc ? `<div class="cc-p local"><span class="grow"><b>💻 ${esc(loc.name)} (on your PC)</b><span class="small muted">Free, private, works offline${loc.installed ? '' : ' · download in Create'}</span></span>${tenStarsHTML(loc.rating)}<span class="badge b-sky">${loc.installed ? 'Installed' : 'Local'}</span></div>` : ''}</div>
-    <p class="small muted" style="margin:6px 0 0">Ratings out of 10 are Quicksilver's, for the quality of what each service makes (${what === 'chat' ? 'accuracy on hard questions, from independent tests' : what === 'picture' ? 'detail, following the prompt, text in images' : 'sharpness, motion, sound'}). Prices are list prices and change often.</p></details>`;
+    <div class="cc-plist">${rows.map((k) => `<div class="cc-p ${k === cur ? 'now' : ''}"><span class="grow"><b>${esc(table[k][0])}</b><span class="small muted">${esc(svcPrice(table, k))}${(table === IMAGE_SERVICES || table === MUSIC_SERVICES) && table[k][3] ? ` · ${esc(table[k][3])}` : ''}</span></span>${tenStarsHTML(svcRating(table, k))}${k === cur ? '<span class="badge b-mint">Picked</span>' : `<button class="btn small ghost" data-cc-pick="${k}">Compare</button>`}</div>`).join('')}
+    ${what === 'music' ? `<div class="cc-p local"><span class="grow"><b>💻 Built-in synth (on your PC)</b><span class="small muted">Free, private, works offline · instrumentals only</span></span>${tenStarsHTML(SYNTH_MUSIC * 2)}<span class="badge b-sky">Built in</span></div>` : what === 'chat' ? `<div class="cc-p local"><span class="grow"><b>💧 Quicksilver Liquid Edition (on your PC)</b><span class="small muted">Free, private, works offline · uncensored</span></span>${tenStarsHTML(6.5)}<span class="badge b-sky">Built in</span></div>` : loc ? `<div class="cc-p local"><span class="grow"><b>💻 ${esc(loc.name)} (on your PC)</b><span class="small muted">Free, private, works offline${loc.installed ? '' : ' · download in Create'}</span></span>${tenStarsHTML(loc.rating)}<span class="badge b-sky">${loc.installed ? 'Installed' : 'Local'}</span></div>` : ''}</div>
+    <p class="small muted" style="margin:6px 0 0">Ratings out of 10 are Quicksilver's, for the quality of what each service makes (${what === 'chat' ? 'accuracy on hard questions, from independent tests' : what === 'picture' ? 'detail, following the prompt, text in images' : what === 'music' ? 'sound quality, vocals, following the style' : 'sharpness, motion, sound'}). Prices are list prices and change often.</p></details>`;
 }
-function calcOutHTML() { return calcState.kind === 'image' ? imageOutHTML() : calcState.kind === 'video' ? videoOutHTML() : chatOutHTML(); }
+// ----- music -----
+function musicOutHTML() {
+  const [label, price0, rating, note] = MUSIC_SERVICES[calcState.musicService];
+  const price = calcState.musicPrice ?? price0;
+  const n = calcState.songsPerMonth;
+  const keep = Math.round(n * calcState.mkeep / 100);
+  const name = label.split(' (')[0];
+  return `${ccTable([`${name} alone`, 'Quicksilver on your PC', 'Both: sketch on your PC, finish in the cloud'], [
+      ['💵 Cost a month', [price == null ? null : n * price, 0, price == null ? null : keep * price], (v) => money(v), true],
+      ['🎵 Quality (out of 10)', [`${tenStarsHTML(rating)}${note ? `<span class="small muted">${esc(note)}</span>` : ''}`, `${tenStarsHTML(SYNTH_MUSIC * 2)}<span class="small muted">built-in synth, instrumentals only</span>`, `${tenStarsHTML(rating)}<span class="small muted">for the songs you finish</span>`]],
+      ['🎤 Vocals', ['Yes', 'No (instrumental)', 'Yes, on the finished songs']],
+      ['✍️ Lyrics and style prompt', ['You write them', 'Quicksilver\'s AI writes them', 'Quicksilver\'s AI writes them']],
+    ], `${n} songs a month: sketch the idea and melody on your PC for free, let Quicksilver write the lyrics and the style prompt, and make the best ${calcState.mkeep}% in ${name}. ${price != null ? `That's about <b>${money(n * price - keep * price)}</b> a month less than making them all in the cloud.` : 'Enter the price to see the saving.'} Connect fal.ai once and make them in Create → Cloud.`)}`;
+}
+function calcOutHTML() { return calcState.kind === 'image' ? imageOutHTML() : calcState.kind === 'video' ? videoOutHTML() : calcState.kind === 'music' ? musicOutHTML() : chatOutHTML(); }
 function calcInputsHTML() {
   const sel = (id, table, cur) => `<select id="${id}">${Object.entries(table).map(([k, v]) => `<option value="${k}" ${cur === k ? 'selected' : ''}>${esc(v[0])}${k === 'other' ? '' : ` · ${tenStarsText(svcRating(table, k))}`}</option>`).join('')}</select>`;
   if (calcState.kind === 'image') return `<label>Cloud picture service${sel('cc-isvc', IMAGE_SERVICES, calcState.imgService)}</label>
       <label>Price per picture <span class="row" style="gap:6px"><span class="small">$</span><input type="number" id="cc-iprice" min="0" step="0.001" value="${calcState.imgPrice ?? IMAGE_SERVICES[calcState.imgService][1] ?? ''}"></span></label>
       <label>Pictures a month <b id="cc-imgn-v">${calcState.imgPerMonth}</b><input type="range" id="cc-imgn" min="10" max="2000" step="10" value="${calcState.imgPerMonth}"></label>
       <label>Share good enough to keep <b id="cc-keep-v">${calcState.keep}%</b><input type="range" id="cc-keep" min="5" max="100" step="5" value="${calcState.keep}"></label>`;
+  if (calcState.kind === 'music') return `<label>Cloud music service${sel('cc-msvc', MUSIC_SERVICES, calcState.musicService)}</label>
+      <label>Price per song <span class="row" style="gap:6px"><span class="small">$</span><input type="number" id="cc-mprice" min="0" step="0.01" value="${calcState.musicPrice ?? MUSIC_SERVICES[calcState.musicService][1] ?? ''}"></span></label>
+      <label>Songs a month <b id="cc-songs-v">${calcState.songsPerMonth}</b><input type="range" id="cc-songs" min="1" max="200" step="1" value="${calcState.songsPerMonth}"></label>
+      <label>Share worth finishing <b id="cc-mkeep-v">${calcState.mkeep}%</b><input type="range" id="cc-mkeep" min="5" max="100" step="5" value="${calcState.mkeep}"></label>`;
   if (calcState.kind === 'video') return `<label>Cloud video service${sel('cc-vsvc', VIDEO_SERVICES, calcState.vidService)}</label>
       <label>Price per second <span class="row" style="gap:6px"><span class="small">$</span><input type="number" id="cc-vprice" min="0" step="0.01" value="${calcState.vidPrice ?? VIDEO_SERVICES[calcState.vidService][1] ?? ''}"></span></label>
       <label>Seconds of video a month <b id="cc-vsec-v">${calcState.vidSecPerMonth}</b><input type="range" id="cc-vsec" min="10" max="1800" step="10" value="${calcState.vidSecPerMonth}"></label>
@@ -177,7 +203,7 @@ function calcInputsHTML() {
 function cloudCalcHTML() {
   return `<section class="card og-sec" id="cloud-calc"><h3>🧮 Calculator: a cloud AI alone, or through Quicksilver</h3>
     <p class="small" style="margin:0 0 10px">Pick what you'd use it for and which service. Quicksilver doesn't send everything to a cloud AI: your PC does what it can, and the cloud is used where it helps most.</p>
-    <div class="tabs cc-kinds" role="tablist">${[['chat', '💬 Chat & answers'], ['image', '📸 Pictures'], ['video', '🎬 Video']].map(([k, l]) => `<button class="tab ${calcState.kind === k ? 'active' : ''}" data-cc-kind="${k}">${l}</button>`).join('')}</div>
+    <div class="tabs cc-kinds" role="tablist">${[['chat', '💬 Chat & answers'], ['image', '📸 Pictures'], ['video', '🎬 Video'], ['music', '🎵 Music']].map(([k, l]) => `<button class="tab ${calcState.kind === k ? 'active' : ''}" data-cc-kind="${k}">${l}</button>`).join('')}</div>
     <div class="cc-in" id="cc-in">${calcInputsHTML()}</div>
     <div id="cc-out">${calcOutHTML()}</div>
     <div id="cc-list">${priceListHTML()}</div>
@@ -189,7 +215,7 @@ function bindCloudCalc() {
   if (!box) return;
   const out = () => {
     $('#cc-out').innerHTML = calcOutHTML();
-    for (const [id, v] of [['cc-perday-v', calcState.perDay], ['cc-hard-v', `${calcState.hard}%`], ['cc-imgn-v', calcState.imgPerMonth], ['cc-keep-v', `${calcState.keep}%`], ['cc-vsec-v', calcState.vidSecPerMonth], ['cc-vkeep-v', `${calcState.vkeep}%`]]) { const el = $(`#${id}`); if (el) el.textContent = v; }
+    for (const [id, v] of [['cc-perday-v', calcState.perDay], ['cc-hard-v', `${calcState.hard}%`], ['cc-imgn-v', calcState.imgPerMonth], ['cc-keep-v', `${calcState.keep}%`], ['cc-vsec-v', calcState.vidSecPerMonth], ['cc-vkeep-v', `${calcState.vkeep}%`], ['cc-songs-v', calcState.songsPerMonth], ['cc-mkeep-v', `${calcState.mkeep}%`]]) { const el = $(`#${id}`); if (el) el.textContent = v; }
     if ($('#cc-hard')) $('#cc-hard').disabled = calcState.mode !== 'hard';
     if ($('#cc-pin')) { $('#cc-pin').disabled = calcState.free; $('#cc-pout').disabled = calcState.free; }
   };
@@ -198,7 +224,7 @@ function bindCloudCalc() {
     $('#cc-list details')?.addEventListener('toggle', (e) => { calcState.listOpen = e.target.open; });
     $$('[data-cc-pick]').forEach((b) => b.addEventListener('click', () => {
       const k = b.dataset.ccPick;
-      if (calcState.kind === 'image') { calcState.imgService = k; calcState.imgPrice = null; } else if (calcState.kind === 'video') { calcState.vidService = k; calcState.vidPrice = null; } else { calcState.service = k; const sv = CHAT_SERVICES[k]; if (sv[1] != null) { calcState.priceIn = sv[1]; calcState.priceOut = sv[2]; } calcState.free = sv[3]; }
+      if (calcState.kind === 'music') { calcState.musicService = k; calcState.musicPrice = null; } else if (calcState.kind === 'image') { calcState.imgService = k; calcState.imgPrice = null; } else if (calcState.kind === 'video') { calcState.vidService = k; calcState.vidPrice = null; } else { calcState.service = k; const sv = CHAT_SERVICES[k]; if (sv[1] != null) { calcState.priceIn = sv[1]; calcState.priceOut = sv[2]; } calcState.free = sv[3]; }
       inputs();
     }));
   };
@@ -221,6 +247,10 @@ function bindCloudCalc() {
     on('cc-vprice', 'input', (e) => { calcState.vidPrice = num(e); out(); });
     on('cc-vsec', 'input', (e) => { calcState.vidSecPerMonth = num(e); out(); });
     on('cc-vkeep', 'input', (e) => { calcState.vkeep = num(e); out(); });
+    on('cc-msvc', 'change', (e) => { calcState.musicService = e.target.value; calcState.musicPrice = null; inputs(); });
+    on('cc-mprice', 'input', (e) => { calcState.musicPrice = num(e); out(); });
+    on('cc-songs', 'input', (e) => { calcState.songsPerMonth = num(e); out(); });
+    on('cc-mkeep', 'input', (e) => { calcState.mkeep = num(e); out(); });
   }
   $$('[data-cc-kind]').forEach((b) => b.addEventListener('click', () => { calcState.kind = b.dataset.ccKind; $$('[data-cc-kind]').forEach((x) => x.classList.toggle('active', x === b)); inputs(); }));
   bindInputs();
