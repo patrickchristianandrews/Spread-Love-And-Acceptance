@@ -54,7 +54,8 @@ function redPng(size = 64) {
     await idle();
     const a = await lastAnswer();
     const steps = await win.evaluate(() => [...document.querySelectorAll('.steps .step b')].map((b) => b.textContent));
-    return { a, steps };
+    const reasoning = await win.evaluate(() => { const m = chatById(S.route.id)?.messages.at(-1); return m?.alts?.[m.altIndex]?.reasoning || ''; });
+    return { a, steps, reasoning };
   };
 
   // 1. First launch: the bundled models are registered and Quicksilver is ready.
@@ -100,6 +101,8 @@ function redPng(size = 64) {
   const final = ((r.a.match(/\d[\d,]*/g) || []).pop() || '').replace(/,+$/, '');
   console.log(`  steps: ${r.steps.join(' → ') || '(none)'}; final number: ${final}`);
   assert.equal(final, '391', 'the hard question is answered correctly');
+  console.log(`  step-by-step reasoning: ${r.reasoning ? r.reasoning.replace(/\s+/g, ' ').slice(0, 300) : '(none)'}`);
+  assert.ok(r.reasoning.trim().length > 20, 'the built-in model shows its step-by-step reasoning');
   // The bundled 2B helper is much weaker than the 4B lead, so on Auto the lead answers alone
   // (quicker, same accuracy); a team with a close second model would show its steps here.
   assert.ok(r.steps.length === 0 || r.steps.length >= 2, `unexpected steps: ${r.steps.join(' → ')}`);

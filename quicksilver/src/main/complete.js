@@ -134,12 +134,23 @@ function localSpec(m, messages = []) {
 // Step-by-step reasoning for the Quicksilver model on questions that need care. Its fast model
 // has no built-in "thinking" mode, so it's asked to work it out first inside <think> tags; that
 // part shows under "Thought it through" and the answer follows. Easy questions skip it.
-const STEPS = 'This question needs care. First reason step by step inside <think> and </think>: say what is being asked, work through it in short numbered steps, recompute every number yourself and check the result against the question. Keep the reasoning concise. Then, after </think>, write the final answer for the user: clear and complete, without repeating all the steps.';
-function wantsSteps(m, req, level) {
-  if (level === 'quick' || req.points || req.tools?.length || req.toolList || hasImages(req.messages)) return false;
+const STEPS = 'This question needs care. First reason inside <think> and </think> in at most 6 short numbered steps (about 80 words in all): what is asked, the working, and a check of the result; recompute every number yourself. Then, after </think>, give the final answer for the user, clear and complete, without repeating the steps.';
+// Real questions get the steps (anything with a number, a 'why / how / explain' kind of question,
+// or any question of some length); greetings, thanks and one-line chat don't, so they stay instant.
+// Instant effort (you chose speed) skips them.
+function stepWorthy(req) {
+  const t = lastUserText(req.messages).trim();
+  if (t.length < 12 || /^(hi|hey|hello|thanks|thank you|ok|okay|cool|great|nice|yes|no|bye)\b[\s!.,]*$/i.test(t)) return false;
+  // Only where thinking first actually helps (maths, 'why / how / compare / plan' questions, long
+  // problems), so everyday questions stay as quick as before.
+  return HARD.test(t) || /\d\s*[-+*/^×÷%]\s*\d|\d+\s*(%|percent)/.test(t) || t.length > 300;
+}
+function wantsSteps(m, req) {
+  if (req.level === 'quick' || req.points || req.stepByStep === false || req.tools?.length || req.toolList || hasImages(req.messages)) return false;
   if (!(req.stepByStep || m.source === 'bundled')) return false;
   const c = catalog.TEXT_MODELS.find((x) => x.id === m.catalogId);
-  return !c?.reasoning; // models that think on their own already do this
+  if (c?.reasoning) return false; // models that think on their own already do this
+  return stepWorthy(req);
 }
 async function* withSteps(gen) {
   let text = ''; let reasoning = '';
@@ -160,11 +171,11 @@ async function* single(target, req) {
     // Thinking takes time: models that can switch it off skip it for easy questions (Deep think
     // always thinks). Hard questions still get the full think.
     const level = req.level === 'max' || req.points ? req.level : (req.level === 'quick' || autoLevel(req) === 'quick' ? 'quick' : req.level);
-    if (wantsSteps(m, req, level)) {
+    if (wantsSteps(m, req)) {
       const msgs = req.messages;
       const messages = [...msgs.slice(0, -1), { role: 'system', content: STEPS }, msgs[msgs.length - 1]];
       yield { type: 'status', text: 'Thinking it through step by step…' };
-      yield* withSteps(llama.chat(localSpec(m, messages), { ...req, messages, level, maxTokens: (req.maxTokens || 2048) + 1024 }));
+      yield* withSteps(llama.chat(localSpec(m, messages), { ...req, messages, level: 'thorough', maxTokens: (req.maxTokens || 2048) + 400 }));
       return;
     }
     yield* llama.chat(localSpec(m, req.messages), { ...req, level: req.points ? 'quick' : level });

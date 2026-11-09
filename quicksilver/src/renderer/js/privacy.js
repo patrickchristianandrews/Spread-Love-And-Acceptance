@@ -113,7 +113,7 @@ function sessionPrivacy(target) {
   }
   return cloud
     ? { kind: 'warn', icon: '☁️', label: `Cloud AI: ${cloud}`, tip: `Messages in this chat are sent to ${cloud} over your normal connection. For a protected session, use Private online (Proton VPN) or Fully private in Settings.` }
-    : { kind: 'ok', icon: '🔒', label: 'Private chat', tip: 'Answers come from this PC. Web searches use your normal connection; turn on Private online (Proton VPN) to protect them too.' };
+    : { kind: 'ok', icon: '🏠', label: 'Runs on this PC', tip: 'Answers come from the AI on this PC. Web searches use your normal connection; turn on Private online (Proton VPN) to protect them, or go offline for a fully private session.' };
 }
 function sessionBadgeHTML(target) {
   const p = sessionPrivacy(target);

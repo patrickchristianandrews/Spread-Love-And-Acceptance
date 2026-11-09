@@ -589,7 +589,7 @@ function redPng(size = 64) {
   await win.waitForSelector('#vpn-box [data-pv-mode="online"].on');
   assert.match(await win.locator('#net-toggle').innerText(), /Online/);
   await win.click('.nav-new');
-  await win.waitForSelector('#sess-badge:has-text("Private chat")');
+  await win.waitForSelector('#sess-badge:has-text("Runs on this PC")');
   assert.equal(await win.getAttribute('#input', 'spellcheck'), 'true', 'spell check in the message box');
   await win.waitForSelector('#improve-btn:has-text("Fix my prompt")');
   // Short or long answers.
@@ -602,7 +602,7 @@ function redPng(size = 64) {
   // Writes like a person: chatbot openers, sign-offs and em dashes are tidied; code is left alone.
   const hum = await win.evaluate(() => [humanize('Certainly! Paris is the capital — and the largest city.\n\n```js\nconst a = 1; // x — y\n```\n\nI hope this helps! Let me know if you have any other questions.'), systemPrompt(assistantById('as-general'), false, chatById(S.route.id))]);
   assert.equal(hum[0], 'Paris is the capital, and the largest city.\n\n```js\nconst a = 1; // x — y\n```');
-  assert.match(hum[1], /like a real person/); assert.match(hum[1], /Don't use em dashes/);
+  assert.match(hum[1], /knowledgeable friend talking/); assert.match(hum[1], /No em dashes/);
   console.log('✓ human writing: conversational style asked for, chatbot leftovers tidied, code untouched');
 
   // Share an answer or the whole chat.
