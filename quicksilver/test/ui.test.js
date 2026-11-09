@@ -786,6 +786,18 @@ function redPng(size = 64) {
   await win.waitForSelector('#cc-out .ten-stars');
   await win.locator('#cloud-calc').scrollIntoViewIfNeeded();
   await shot(win, '17d3-price-list');
+  // API rankings: best use, free credits and cost, sortable and filtered by use.
+  await win.waitForSelector('#api-rank .ar-r');
+  assert.match(await win.locator('#api-rank .ar-r').first().innerText(), /Google Gemini/);
+  await win.click('[data-rank-sort="free"]');
+  assert.match(await win.locator('#api-rank .ar-r').first().innerText(), /Pollinations/);
+  await win.click('[data-rank-use="music"]');
+  assert.match(await win.locator('#api-rank').innerText(), /fal\.ai[\s\S]*Suno|Suno[\s\S]*fal\.ai/);
+  assert.equal(await win.locator('#api-rank .ar-r:has-text("Groq")').count(), 0);
+  await win.click('[data-rank-use="all"]');
+  await win.click('[data-rank-sort="value"]');
+  await win.locator('#api-rank').scrollIntoViewIfNeeded();
+  await shot(win, '17d0-api-rankings');
   // Free vs paid: every job, what's possible at no cost and what paying adds, rated out of 10.
   await win.waitForSelector('#free-paid .fp-r');
   assert.ok(await win.locator('#free-paid .fp-r').count() >= 10);
