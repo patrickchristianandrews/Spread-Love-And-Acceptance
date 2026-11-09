@@ -91,3 +91,47 @@ function stackRatings(targets) {
 function stackScoreIds(targets) {
   return targets.map((t) => { const id = String(t).replace(/^local:/, ''); return S.installed.find((m) => m.id === id)?.catalogId || id; });
 }
+
+// ---------- what an upgrade gains you ----------
+// Plain-words gains from one model to another, biggest first: tested scores where both have them,
+// new abilities (reasoning, photos, longer documents, better pictures or video), stronger skills,
+// and speed on this PC.
+const KTXT = (n) => `${Math.round(n / 1024)}K`;
+function gainsOf(fromId, toId) {
+  const a = catModel(fromId);
+  const b = catModel(toId);
+  if (!b) return [];
+  const out = [];
+  if (b.kind === 'image' || b.kind === 'video') {
+    const qa = a?.quality ?? 0;
+    const qb = b.quality ?? 0;
+    if (b.kind === 'video' && qb > qa) out.push([40, '🎬', `Better video${a ? ` (★ ${stars5(qa)} → ★ ${stars5(qb)})` : ''}`]);
+    if (b.kind === 'image' && b.category !== 'edit' && qb > qa) out.push([40, '📸', `Improved picture generation${a ? ` (★ ${stars5(qa)} → ★ ${stars5(qb)})` : ''}`]);
+    if (b.category === 'edit' && a?.category !== 'edit') out.push([30, '🪄', 'Edits photos from a description']);
+    if (b.animate && !a?.animate) out.push([30, '📷', 'Brings photos to life']);
+  } else {
+    const sa = scoresFor(fromId);
+    const sb = scoresFor(toId);
+    for (const [k, i, l] of [['science', '🧠', 'Expanded reasoning'], ['math', '🧮', 'Sharper maths'], ['coding', '💻', 'Stronger coding']]) {
+      if (sb?.[k] == null || sa?.[k] == null) continue;
+      const d = sb[k] - sa[k];
+      if (d >= 3) out.push([d + 10, i, `${l}: ${sa[k]}% → ${sb[k]}%`]);
+    }
+    if (b.reasoning && !a?.reasoning && !out.some((x) => x[2].startsWith('Expanded reasoning'))) out.push([30, '🧠', 'Expanded reasoning: thinks problems through before answering']);
+    if (b.vision && !a?.vision) out.push([28, '👁', 'Now reads photos and screenshots']);
+    const ja = a?.jobs || {};
+    const jb = b.jobs || {};
+    const JL = { general: ['✨', 'Smarter everyday answers'], research: ['🔎', 'Deeper research'], office: ['📄', 'Better with documents and spreadsheets'], coding: ['💻', 'Stronger coding'], vision: ['👁', 'Sharper photo reading'] };
+    for (const [k, [i, l]] of Object.entries(JL)) {
+      const d = (jb[k] ?? 0) - (ja[k] ?? 0);
+      if (d < 1 || out.some((x) => x[2].startsWith(l.split(' ')[0]) && x[1] === i) || (k === 'vision' && (!b.vision || !a?.vision))) continue;
+      out.push([d * 8, i, l]);
+    }
+    if (b.ctx && a?.ctx && b.ctx >= a.ctx * 2) out.push([9, '📜', `Reads much longer documents (${KTXT(a.ctx)} → ${KTXT(b.ctx)})`]);
+  }
+  const ea = S.est?.text?.[fromId] || S.est?.media?.[fromId];
+  const eb = S.est?.text?.[toId] || S.est?.media?.[toId];
+  if (ea?.tps && eb?.tps && eb.tps > ea.tps * 1.3) out.push([12, '⚡', 'Faster on this PC']);
+  return out.sort((x, y) => y[0] - x[0]).slice(0, 4).map(([, icon, text]) => ({ icon, text }));
+}
+const gainsHTML = (gains) => (gains.length ? `<div class="gain-row">${gains.map((g) => `<span class="gain">${g.icon} ${esc(g.text)}</span>`).join('')}</div>` : '');

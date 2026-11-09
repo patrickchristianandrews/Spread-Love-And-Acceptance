@@ -38,7 +38,7 @@ function stackUpdates() {
     if (!r) continue;
     const add = rxResolve(r).parts.filter((p) => p.kind === 'model' && !p.helper && p.up && S.catalog.text.some((m) => m.id === p.id) && !haveModel(p.id)
       && ['great', 'good'].includes(S.est.text[p.id]?.rating));
-    if (add.length) out.push({ recipe: r.id, name: st.name, emoji: st.emoji || r.icon, models: add.map((p) => ({ id: p.id, name: catModel(p.id)?.name || p.id, from: catModel(p.from)?.name || p.from })) });
+    if (add.length) out.push({ recipe: r.id, name: st.name, emoji: st.emoji || r.icon, models: add.map((p) => ({ id: p.id, name: catModel(p.id)?.name || p.id, from: catModel(p.from)?.name || p.from, fromId: p.from })) });
   }
   const boost = quicksilverBoost();
   if (boost) out.push(boost);
@@ -65,7 +65,7 @@ function quicksilverBoost() {
     if (!c || haveModel(id) || !['great', 'good'].includes(S.est.text[id]?.rating)) continue;
     const now = S.installed.find((m) => m.source === 'bundled' && (role === 'brain' ? m.id === 'starter-brain' : m.id === 'starter'));
     if (now?.catalogId === id) continue;
-    return { quicksilver: true, core: role, name: 'Quicksilver Liquid Edition: new ' + label, emoji: '💧', models: [{ id, name: c.name, from: now?.name || 'the built-in one' }], why: `a newer, better uncensored ${label} for the Liquid Edition, ${c.sizeGB} GB, runs well on this PC` };
+    return { quicksilver: true, core: role, name: 'Quicksilver Liquid Edition: new ' + label, emoji: '💧', models: [{ id, name: c.name, from: now?.name || 'the built-in one', fromId: now?.catalogId }], why: `a newer, better uncensored ${label} for the Liquid Edition, ${c.sizeGB} GB, runs well on this PC` };
   }
   const score = (id) => S.catalog.text.find((x) => x.id === id)?.jobs?.general || 0;
   const leadInst = S.installed.find((m) => `local:${m.id}` === st.members?.judge);
@@ -76,7 +76,7 @@ function quicksilverBoost() {
     .sort((a, b) => score(b) - score(a))[0];
   if (!pick) return null;
   const c = catModel(pick);
-  return { quicksilver: true, name: 'Quicksilver Liquid Edition (built in)', emoji: '💧', models: [{ id: pick, name: c.name, from: leadInst?.name || 'its lead' }], why: `stronger (${best} → ${score(pick)} out of 10) and still fast on this PC, ${c.sizeGB} GB` };
+  return { quicksilver: true, name: 'Quicksilver Liquid Edition (built in)', emoji: '💧', models: [{ id: pick, name: c.name, from: leadInst?.name || 'its lead', fromId: leadInst?.catalogId }], why: `stronger (${best} → ${score(pick)} out of 10) and still fast on this PC, ${c.sizeGB} GB` };
 }
 const shownUpgrades = () => (S.modelUpgrades || []).filter((u) => !putOff(u));
 const shownStackUpdates = () => stackUpdates().filter((u) => !putOff(u));
@@ -184,9 +184,9 @@ function modelUpdatesHTML() {
   if (!ups.length && !stacks.length) {
     return `<div class="notice ok up-none" id="model-updates"><b>✓ Your models are the best picks for this PC.</b> <span class="small">Quicksilver checks online every day for newer, better models and stacks (${esc(when)}).</span> <button class="btn small ghost" id="up-check">Check now</button>${laterNote}</div>`;
   }
-  const row = (u) => `<div class="up-row"><div class="grow"><b>${esc(u.oldName)}</b> → <b>${esc(u.newName)}</b><div class="small muted">${esc(u.why)} · ${esc(u.speed)} on this PC</div></div>
-    ${S.downloads[u.newCatalogId] ? '<span class="badge b-sky">Installing…</span>' : `<button class="btn small primary" data-up-get="${esc(u.newCatalogId)}">Upgrade</button><button class="btn small ghost" data-up-later="${esc(upKey(u))}" title="Suggest it again in ${LATER_DAYS} days">Maybe later</button>`}</div>`;
-  const srow = (s) => `<div class="up-row"><div class="grow">${esc(s.emoji || '🧩')} <b>${esc(s.name)}</b><div class="small muted">${s.fresh ? `🆕 New stack. ${esc(s.why)}${s.models.length ? ` Downloads: ${s.models.map((m) => esc(m.name)).join(', ')}.` : ' Uses models you already have.'}` : s.quicksilver ? `${s.core ? 'Switch to' : 'Add'} <b>${esc(s.models[0].name)}</b>${s.core ? ` (replaces ${esc(s.models[0].from)})` : ' to the team'}: ${esc(s.why)}` : `Stronger now: ${s.models.map((m) => `${esc(m.from)} → <b>${esc(m.name)}</b>`).join(', ')}`}</div></div>
+  const row = (u) => { const gains = gainsOf(u.oldCatalogId, u.newCatalogId); return `<div class="up-row"><div class="grow"><b>${esc(gains[0]?.text || `A stronger ${u.oldName}`)}</b>${gainsHTML(gains.slice(1))}<div class="small muted">${esc(u.oldName)} → <b>${esc(u.newName)}</b> · ${esc(u.why)} · ${esc(u.speed)} on this PC</div></div>
+    ${S.downloads[u.newCatalogId] ? '<span class="badge b-sky">Installing…</span>' : `<button class="btn small primary" data-up-get="${esc(u.newCatalogId)}">Upgrade</button><button class="btn small ghost" data-up-later="${esc(upKey(u))}" title="Suggest it again in ${LATER_DAYS} days">Maybe later</button>`}</div>`; };
+  const srow = (s) => `<div class="up-row"><div class="grow">${esc(s.emoji || '🧩')} <b>${esc(s.name)}</b>${s.fresh ? '' : gainsHTML([...new Map(s.models.flatMap((m) => gainsOf(m.fromId, m.id)).map((g) => [g.text, g])).values()].slice(0, 4))}<div class="small muted">${s.fresh ? `🆕 New stack. ${esc(s.why)}${s.models.length ? ` Downloads: ${s.models.map((m) => esc(m.name)).join(', ')}.` : ' Uses models you already have.'}` : s.quicksilver ? `${s.core ? 'Switch to' : 'Add'} <b>${esc(s.models[0].name)}</b>${s.core ? ` (replaces ${esc(s.models[0].from)})` : ' to the team'}: ${esc(s.why)}` : `${s.models.map((m) => `${esc(m.from)} → <b>${esc(m.name)}</b>`).join(', ')}`}</div></div>
     ${s.models.some((m) => S.downloads[m.id]) ? '<span class="badge b-sky">Installing…</span>' : `<button class="btn small primary" data-up-stack="${esc(upKey(s))}">${s.fresh ? 'Set up' : s.quicksilver ? 'Add it' : 'Update stack'}</button><button class="btn small ghost" data-up-later="${esc(upKey(s))}" title="Suggest it again in ${LATER_DAYS} days">Maybe later</button>`}</div>`;
   return `<div class="card up-card" id="model-updates"><div class="row"><h3 class="grow" style="margin:0">✨ Better models available</h3><span class="small muted">${esc(when)}</span></div>
     <p class="small muted" style="margin:4px 0 10px">${autoUpdates() ? 'These install by themselves in the background' : 'Press Upgrade to download one (or switch on automatic installs in Settings → General)'}; when one is ready, your stacks, chats and assistants switch to it and you can remove the old one.</p>

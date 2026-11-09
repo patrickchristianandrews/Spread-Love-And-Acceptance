@@ -1289,3 +1289,6 @@ code.sel { user-select: all; background: var(--soft); padding: 1px 6px; border-r
 .sc-info { font-size: .8rem; text-decoration: none; opacity: .7; margin-left: 2px; }
 .sc-note { margin: 3px 0 0 82px; line-height: 1.35; }
 .sc-stack { margin: 4px 0 10px; }
+
+.gain-row { display: flex; flex-wrap: wrap; gap: 5px; margin: 5px 0 3px; }
+.gain { font-size: .78rem; font-weight: 700; padding: 3px 9px; border-radius: 999px; background: color-mix(in srgb, var(--accent) 16%, transparent); color: var(--text); }

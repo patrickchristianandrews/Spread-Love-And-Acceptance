@@ -808,6 +808,11 @@ function redPng(size = 64) {
   const unc = await win.evaluate(() => ({ partner: cloudPartnerHTML(), filtered: S.installed.filter((m) => m.kind === 'text' && !liquidOk(`local:${m.id}`)).length, bundledOk: S.installed.filter((m) => m.source === 'bundled').every((m) => liquidOk(`local:${m.id}`)), liquid: liquidOk('stack:quicksilver') }));
   assert.match(unc.partner, /Venice/); assert.doesNotMatch(unc.partner, /data-pair="cerebras"/);
   assert.ok(unc.bundledOk && unc.liquid);
+  // Upgrades say what you gain, in plain words.
+  const gains = await win.evaluate(() => ({ think: gainsOf('qwen3-4b', 'qwen3-4b-thinking').map((g) => g.text), img: gainsOf('sdxl', 'flux-schnell').map((g) => g.text), html: modelUpdatesHTML() }));
+  assert.ok(gains.think.includes('Sharper maths: 52% → 83%') && gains.think.some((t) => /Expanded reasoning/.test(t)), gains.think.join(' | '));
+  assert.match(gains.img[0], /Improved picture generation/);
+  assert.match(gains.html, /class="gain"/, 'the upgrade card lists the gains');
   console.log('✓ tested scores (maths, science, coding) and create ratings (photos, edits, video, music) on models, stacks and cloud AIs');
   assert.match(await win.locator('#builtin-model').innerText(), /Reasons step by step[\s\S]*Double-checks[\s\S]*Gets maths right[\s\S]*Sees photos/);
   assert.ok(await win.locator('.model-card .badge:has-text("Featured")').count() >= 3, 'featured picks are marked');
