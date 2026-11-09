@@ -23,7 +23,17 @@ const APP_Q = [
   [/\basana\b/i, 'asana'], [/\bairtable\b/i, 'airtable'], [/\bdiscord\b/i, 'discord'], [/\btelegram\b/i, 'telegram'],
   [/\bobsidian\b|\bmy notes folder\b/i, 'notes'], [/\bhome assistant\b|\b(turn|switch) (on|off) the (lights?|heating|fan)\b|\bthermostat\b/i, 'homeassistant'],
   [/\bzapier\b|\bn8n\b|\bifttt\b|\bmake\.com\b/i, 'webhook'],
+  [/\bgmail\b|\bmy (e-?mails?|inbox)\b/i, ['gmail', 'microsoft']], [/\bgoogle calendar\b/i, 'gcalendar'], [/\b(google )?drive\b|\bgoogle (docs?|sheets?)\b/i, 'gdrive'],
+  [/\bgoogle tasks\b/i, 'gtasks'], [/\bmy contacts\b|\bgoogle contacts\b/i, 'gcontacts'], [/\byoutube\b/i, 'youtube'], [/\bgoogle forms?\b|\bform responses\b/i, 'gforms'],
+  [/\b(google )?analytics\b|\bga4\b|\bmy (site|website) (traffic|visitors)\b/i, 'ganalytics'], [/\btag manager\b|\bgtm\b/i, 'gtagmanager'], [/\bsearch console\b|\bmy (google )?rankings?\b/i, 'gsearchconsole'],
+  [/\badsense\b/i, 'gadsense'], [/\bpage ?speed\b|\bcore web vitals\b|\bhow fast (is|does) (my|the) (site|page)\b/i, 'pagespeed'],
+  [/\boutlook\b|\bonedrive\b|\bmicrosoft to ?do\b|\bmicrosoft 365\b/i, 'microsoft'], [/\bdropbox\b/i, 'dropbox'],
+  [/\bspotify\b|\b(new )?(music|songs?|artists?|bands?) (like|similar|recommend|suggest)|\brecommend (me )?(some )?(music|songs|artists)\b|\bmy playlists?\b/i, 'spotify'],
+  [/\bhubspot\b/i, 'hubspot'], [/\bpipedrive\b/i, 'pipedrive'], [/\bzendesk\b|\bsupport tickets?\b/i, 'zendesk'], [/\bstripe\b/i, 'stripe'], [/\bshopify\b|\bmy (store|shop) orders\b/i, 'shopify'],
+  [/\bmailchimp\b/i, 'mailchimp'], [/\bclickup\b/i, 'clickup'], [/\bmonday(\.com)? board\b|\bmonday\.com\b/i, 'monday'], [/\bcalendly\b/i, 'calendly'], [/\bfigma\b/i, 'figma'], [/\bwordpress\b|\bmy blog\b/i, 'wordpress'],
 ];
+// The connector a mention points to: the first that's connected, else the first.
+const appFor = (ids) => { const list = [].concat(ids); return hintConnectors?.find((x) => list.includes(x.id) && x.enabled) || hintConnectors?.find((x) => x.id === list[0]); };
 
 let hintConnectors = null; // connector list, read once per session (and after visiting Connectors)
 async function loadHintConnectors() { try { hintConnectors = await qs.call('int:list'); } catch { hintConnectors = []; } }
@@ -62,10 +72,11 @@ function composerHints(chat, a, text, attachments = []) {
     else if (S.config?.web?.provider !== 'none') add({ id: 'web', icon: '🌐', label: 'Turn on web search', why: 'This is about something current, so an up-to-date search will make the answer right.', act: { web: true } });
   }
   // An app it mentions.
-  for (const [re, id] of APP_Q) {
+  for (const [re, ids] of APP_Q) {
     if (!re.test(t)) continue;
-    const c = hintConnectors?.find((x) => x.id === id);
+    const c = appFor(ids);
     if (!c) continue;
+    const id = c.id;
     const ready = c.enabled && (c.noToken || c.hasToken);
     if (!ready) add({ id: `app-${id}`, icon: c.icon || '🔌', label: `Connect ${c.name}`, why: `So it can read and act on your ${c.name} directly.`, act: { connect: id } });
     else if (!(chat.tools ?? a.tools) && (S.data.prefs.autoTools === false || chat.tools === false)) add({ id: `app-${id}`, icon: c.icon || '🔌', label: `Let it use ${c.name}`, why: `${c.name} is connected; turn on connected apps for this chat.`, act: { tools: true } });
@@ -128,7 +139,7 @@ function applyHint(chat, h) {
 // Connected apps are used for a message that mentions them, without switching anything on.
 function autoTools(chat, a, text) {
   if (chat.tools === false || S.data.prefs.autoTools === false || !text || !hintConnectors) return false;
-  return APP_Q.some(([re, id]) => re.test(text) && hintConnectors.some((c) => c.id === id && c.enabled && (c.noToken || c.hasToken)));
+  return APP_Q.some(([re, ids]) => re.test(text) && hintConnectors.some((c) => [].concat(ids).includes(c.id) && c.enabled && (c.noToken || c.hasToken)));
 }
 
 function bindHints(chat, a) {

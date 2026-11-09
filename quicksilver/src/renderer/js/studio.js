@@ -515,7 +515,7 @@ document.addEventListener('click', (e) => {
       <button class="btn" data-g="fix">🧰 Quick fixes</button>
       ${g.kind === 'image' && animators.length ? '<button class="btn" data-g="animate">🎬 Animate</button>' : ''}
       ${g.kind === 'audio' ? '' : '<button class="btn" data-g="chat">💬 Ask AI about it</button>'}
-      <button class="btn" data-g="export">⬇ Save as…</button><button class="btn" data-g="reveal">📁 Show in folder</button>
+      <button class="btn" data-g="export">⬇ Save as…</button><button class="btn" data-g="cloud">☁️ Send to cloud</button><button class="btn" data-g="reveal">📁 Show in folder</button>
       <button class="btn danger" data-g="delete">🗑 Delete</button>
     </div>`, { wide: true });
   box.addEventListener('click', async (ev) => {
@@ -532,6 +532,7 @@ document.addEventListener('click', (e) => {
     }
     if (act === 'export' && await call('media:export', g.id)) toast('Saved.');
     if (act === 'reveal') call('media:reveal', g.id);
+    if (act === 'cloud') cloudSendModal({ mediaId: g.id });
     if (act === 'delete' && await confirmBox('Delete this from the gallery?')) { await call('media:remove', g.id); await refreshGallery(); render(); }
   });
 });

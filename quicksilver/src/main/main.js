@@ -580,6 +580,27 @@ handle('export:file', async (format, { markdown, html, title }) => {
   return true;
 });
 handle('shell:open', (url) => { if (/^https?:\/\//.test(url)) shell.openExternal(url); });
+// Send what Quicksilver made to your cloud storage (Google Drive, OneDrive, Dropbox).
+handle('cloud:targets', () => integrations.cloudTargets());
+handle('cloud:sendAnswer', async (dest, format, { markdown, html, title }) => {
+  const ext = { docx: 'docx', pptx: 'pptx', pdf: 'pdf', md: 'md' }[format] || 'md';
+  const safe = String(title || 'Quicksilver').replace(/[^\w .-]/g, '').trim().slice(0, 80) || 'Quicksilver';
+  const dir = fs.mkdtempSync(path.join(require('node:os').tmpdir(), 'qs-cloud-'));
+  const file = path.join(dir, `${safe}.${ext}`);
+  try {
+    const exporters = require('./exporters');
+    if (ext === 'docx') await exporters.toDocx(markdown, file, { title });
+    else if (ext === 'pptx') await exporters.toPptx(markdown, file, { title });
+    else if (ext === 'pdf') await exporters.toPdf(html, file, { title });
+    else fs.writeFileSync(file, markdown);
+    return await integrations.cloudUpload(dest, file);
+  } finally { fs.rmSync(dir, { recursive: true, force: true }); }
+});
+handle('cloud:sendMedia', async (dest, id) => {
+  const g = media.gallery().find((x) => x.id === id);
+  if (!g) throw new Error('That item is gone.');
+  return integrations.cloudUpload(dest, g.file);
+});
 // Share by email: opens your email app with the subject and text filled in (nothing is sent by Quicksilver).
 handle('share:email', ({ subject, body }) => shell.openExternal(`mailto:?subject=${encodeURIComponent(String(subject || '').slice(0, 200))}&body=${encodeURIComponent(String(body || '').slice(0, 2400))}`));
 

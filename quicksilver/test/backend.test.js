@@ -407,6 +407,69 @@ async function collect(gen) {
     console.log('✓ Google: one browser sign-in turns on Gmail, Calendar, Drive, Docs, Sheets, Tasks, Contacts, YouTube and Forms; sending asks first');
   }
 
+  // Popular connectors: browser sign-in (Microsoft, Spotify, Dropbox), the Spotify music finder,
+  // tokens (Stripe…), and sending files Quicksilver made to cloud storage.
+  {
+    const popMod = require('../src/main/integrations-popular');
+    popMod.openBrowser = (url) => { const u = new URL(url); setTimeout(() => realFetch(`${u.searchParams.get('redirect_uri')}?code=c1&state=${u.searchParams.get('state')}`).catch(() => {}), 20); };
+    const calls = [];
+    global.fetch = async (url, opts = {}) => {
+      const u = String(url);
+      if (/127\.0\.0\.1|localhost/.test(u)) return realFetch(url, opts);
+      calls.push(`${opts.method || 'GET'} ${u.split('?')[0]}`);
+      const json = (o, status = 200) => new Response(JSON.stringify(o), { status, headers: { 'Content-Type': 'application/json' } });
+      if (/oauth2\/v2\.0\/token|api\/token|oauth2\/token/.test(u)) return json({ access_token: 'tok', refresh_token: 'ref', expires_in: 3600 });
+      // Microsoft Graph
+      if (u.includes('graph.microsoft.com/v1.0/me?')) return json({ mail: 'me@outlook.com' });
+      if (u.includes('/me/messages?')) return json({ value: [{ id: 'o1', subject: 'Invoice', from: { emailAddress: { name: 'Bob' } }, receivedDateTime: '2026-11-08T10:00:00Z', bodyPreview: 'Please find' }] });
+      if (u.includes('/me/drive/root:/Quicksilver/')) return json({ name: 'Plan.md', webUrl: 'https://onedrive.live.com/x' });
+      // Spotify
+      if (u.endsWith('api.spotify.com/v1/me')) return json({ id: 'u1', display_name: 'Sam' });
+      if (u.includes('/me/top/artists')) return json({ items: [{ name: 'Radiohead', genres: ['art rock'] }, { name: 'Portishead', genres: ['trip hop'] }] });
+      if (u.includes('/me/top/tracks')) return json({ items: [{ name: 'Reckoner', artists: [{ name: 'Radiohead' }] }] });
+      if (u.includes('/me/tracks')) return json({ items: [{ track: { name: 'Glory Box', artists: [{ name: 'Portishead' }] } }], next: null });
+      if (u.includes('/me/player/recently-played')) return json({ items: [] });
+      if (u.includes('/me/playlists')) return json({ items: [{ name: 'Late night' }] });
+      if (u.includes('/search')) {
+        const q = new URL(u).searchParams.get('q');
+        if (/Massive Attack/.test(q) && /track:/.test(q)) return json({ tracks: { items: [{ name: 'Teardrop', artists: [{ name: 'Massive Attack' }], uri: 'spotify:track:t1', external_urls: { spotify: 'https://open.spotify.com/track/t1' } }] } });
+        if (/Made Up Band/.test(q)) return json({ tracks: { items: [] }, artists: { items: [] } });
+        return json({ artists: { items: [] }, tracks: { items: [] } });
+      }
+      // Stripe
+      if (u.includes('api.stripe.com/v1/balance')) return json({ available: [{ amount: 12345, currency: 'usd' }], pending: [{ amount: 500, currency: 'usd' }] });
+      // Dropbox
+      if (u.includes('users/get_current_account')) return json({ email: 'me@dropbox.com' });
+      if (u.includes('content.dropboxapi.com/2/files/upload')) return json({ name: 'Plan.md', path_display: '/Quicksilver/Plan.md' });
+      if (u.includes('create_shared_link_with_settings')) return json({ url: 'https://www.dropbox.com/s/abc/Plan.md' });
+      return json({});
+    };
+    const L = integrations.list();
+    for (const id of ['microsoft', 'dropbox', 'spotify', 'hubspot', 'pipedrive', 'zendesk', 'stripe', 'shopify', 'mailchimp', 'clickup', 'monday', 'calendly', 'figma', 'wordpress', 'pagespeed']) assert.ok(L.some((c) => c.id === id), `${id} connector`);
+    assert.equal(await integrations.save('microsoft', { client: 'app-id' }, ''), 'me@outlook.com', 'Microsoft signs in through the browser');
+    assert.match(await integrations.tools().find((t) => t.name === 'outlook_search').run({ query: 'invoice' }), /\[o1\].*Bob.*Invoice/);
+    assert.equal(await integrations.save('spotify', { client: 'sp-id' }, ''), 'Sam');
+    const sp = integrations.tools().filter((t) => t.sourceId === 'spotify');
+    assert.match(await sp.find((t) => t.name === 'spotify_taste_profile').run({}), /Radiohead \(art rock\)[\s\S]*Portishead \(1 songs\)/);
+    const checked = await sp.find((t) => t.name === 'spotify_check_suggestions').run({ suggestions: [{ artist: 'Massive Attack', track: 'Teardrop', why: 'trip hop like Portishead' }, { artist: 'Made Up Band', track: 'Nope' }, { artist: 'Portishead' }] });
+    assert.match(checked, /Teardrop by Massive Attack · trip hop like Portishead · https:\/\/open\.spotify\.com\/track\/t1/);
+    assert.match(checked, /Nope by Made Up Band \(not found on Spotify\)/); assert.match(checked, /Portishead \(already one of yours\)/);
+    assert.ok(sp.find((t) => t.name === 'spotify_make_playlist').write, 'making a playlist asks first');
+    assert.match(await integrations.save('stripe', {}, 'rk_test'), /connected \(USD\)/);
+    assert.match(await integrations.tools().find((t) => t.name === 'stripe_balance').run({}), /Available: 123\.45 USD/);
+    // Files Quicksilver made go to cloud storage.
+    assert.equal(await integrations.save('dropbox', { client: 'dbx-key' }, ''), 'me@dropbox.com');
+    assert.deepEqual(integrations.cloudTargets().map((t) => t.id), ['onedrive', 'dropbox']);
+    const f = path.join(fs.mkdtempSync(path.join(os.tmpdir(), 'qs-cloud-')), 'Plan.md');
+    fs.writeFileSync(f, '# Plan');
+    assert.deepEqual(await integrations.cloudUpload('onedrive', f), { name: 'Plan.md', link: 'https://onedrive.live.com/x', where: 'OneDrive › Quicksilver' });
+    assert.match((await integrations.cloudUpload('dropbox', f)).link, /dropbox\.com\/s\/abc/);
+    for (const id of ['microsoft', 'spotify', 'stripe', 'dropbox']) integrations.disable(id);
+    assert.equal(integrations.cloudTargets().length, 0);
+    global.fetch = realFetch;
+    console.log('✓ popular connectors: Microsoft 365, Dropbox and Spotify sign in through the browser; Spotify music finder checks every suggestion; files go to OneDrive or Dropbox');
+  }
+
   // Models downloaded with Quicksilver 1.0 (older format) show up and work in this version.
   {
     const old = path.join(HOME, 'v1-qwen2.5-7b.gguf');

@@ -41,7 +41,7 @@ function list() {
   const c = cfg();
   return Object.entries(CONNECTORS).map(([id, def]) => ({
     id, ...def, enabled: Boolean(c[id]?.enabled), values: Object.fromEntries(def.fields.filter((f) => !f.secret).map((f) => [f.key, c[id]?.[f.key] || (def.google && f.key === 'client' ? google.clientOf(id).id || '' : '')])),
-    hasToken: def.google ? google.hasClient(id) : store.hasSecret(`int:${id}`), account: c[id]?.account || '', noToken: Boolean(def.noToken), group: def.group || 'Other',
+    hasToken: def.google ? google.hasClient(id) : def.oauth ? Boolean(c[id]?.client) : store.hasSecret(`int:${id}`), signInNeeded: Boolean(def.oauth), account: c[id]?.account || '', noToken: Boolean(def.noToken), group: def.group || 'Other',
   }));
 }
 
@@ -60,6 +60,7 @@ async function save(id, values, token) {
 
 function disable(id) {
   if (google.isGoogle(id)) google.forget(id);
+  popular.forget(id);
   const c = cfg();
   delete c[id];
   store.saveConfig({ integrations: c });
@@ -239,9 +240,13 @@ Object.assign(TOOLS, more.TOOLS);
 const google = require('./integrations-google')({ http, clip, cfg });
 Object.assign(CONNECTORS, google.CONNECTORS);
 Object.assign(TOOLS, google.TOOLS);
+const popular = require('./integrations-popular')({ http, clip, secret, cfg });
+Object.assign(CONNECTORS, popular.CONNECTORS);
+Object.assign(TOOLS, popular.TOOLS);
 
 async function test(id) {
   if (google.isGoogle(id)) return google.test(id);
+  if (popular.CONNECTORS[id]) return popular.test(id);
   // A personal token knows its user; a GitHub App or Actions token doesn't, but can list its repos.
   if (id === 'github') {
     try { return (await gh('/user')).login; } catch (err) {
@@ -260,7 +265,26 @@ async function test(id) {
 // Tools from every enabled connector.
 function tools() {
   const c = cfg();
-  return Object.entries(TOOLS).filter(([id]) => c[id]?.enabled && (CONNECTORS[id].noToken || (google.isGoogle(id) ? google.ready(id) : store.hasSecret(`int:${id}`)))).flatMap(([id, list]) => list.map((t) => ({ ...t, source: CONNECTORS[id].name, sourceId: id })));
+  return Object.entries(TOOLS).filter(([id]) => c[id]?.enabled && (CONNECTORS[id].noToken || (google.isGoogle(id) ? google.ready(id) : popular.isOAuth(id) ? popular.ready(id) : store.hasSecret(`int:${id}`)))).flatMap(([id, list]) => list.map((t) => ({ ...t, source: CONNECTORS[id].name, sourceId: id })));
 }
 
-module.exports = { CONNECTORS, list, save, disable, test, tools, githubRepoFiles, clip };
+// ---------- send files Quicksilver made to your cloud storage ----------
+const MIME = { '.docx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', '.pptx': 'application/vnd.openxmlformats-officedocument.presentationml.presentation', '.xlsx': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', '.pdf': 'application/pdf', '.md': 'text/markdown', '.txt': 'text/plain', '.png': 'image/png', '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.webp': 'image/webp', '.mp4': 'video/mp4', '.webm': 'video/webm', '.mp3': 'audio/mpeg', '.wav': 'audio/wav' };
+function cloudTargets() {
+  const c = cfg();
+  return [
+    ['gdrive', 'Google Drive', '📁', c.gdrive?.enabled && google.ready('gdrive')],
+    ['onedrive', 'OneDrive', '🟦', c.microsoft?.enabled && popular.ready('microsoft')],
+    ['dropbox', 'Dropbox', '📦', c.dropbox?.enabled && popular.ready('dropbox')],
+  ].filter((x) => x[3]).map(([id, name, icon]) => ({ id, name, icon }));
+}
+async function cloudUpload(dest, file) {
+  const fs = require('node:fs');
+  const path = require('node:path');
+  const buf = fs.readFileSync(file);
+  const name = path.basename(file);
+  const mime = MIME[path.extname(file).toLowerCase()] || 'application/octet-stream';
+  return dest === 'gdrive' ? google.upload(name, buf, mime) : popular.upload(dest, name, buf);
+}
+
+module.exports = { CONNECTORS, list, save, disable, test, tools, githubRepoFiles, clip, cloudTargets, cloudUpload };

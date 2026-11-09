@@ -91,20 +91,21 @@ views.integrations = {
   },
 };
 
-const INT_GROUPS = ['Everyday', 'Google', 'Notes & knowledge', 'Tasks & projects', 'Messaging & automation', 'Developer', 'Home', 'Other'];
+const INT_GROUPS = ['Everyday', 'Google', 'Microsoft', 'Files & storage', 'Sales & support', 'Commerce & payments', 'Marketing', 'Design', 'Websites', 'Music & media', 'Notes & knowledge', 'Tasks & projects', 'Messaging & automation', 'Developer', 'Home', 'Other'];
 
 function editConnector(c) {
   const b = openModal(`<h2>${c.icon} ${c.enabled ? 'Settings' : 'Connect'}: ${esc(c.name)}</h2>
     ${c.note ? `<p class="help">${esc(c.note)}</p>` : ''}
     <div class="stack-v">${c.fields.map((f) => `<div class="field"><label for="f-${f.key}">${esc(f.label)}</label>${f.help ? `<span class="help">${esc(f.help)}${f.url ? ` <a href="${esc(f.url)}">Open</a>` : ''}</span>` : ''}
       <input id="f-${f.key}" ${f.secret ? 'type="password" autocomplete="off"' : ''} placeholder="${esc(f.secret && c.hasToken ? 'Saved. Paste a new one to replace it' : f.placeholder || '')}" value="${f.secret ? '' : esc(c.values[f.key] || '')}"></div>`).join('')}</div>
-    <div class="modal-actions"><button class="btn" data-close>Cancel</button><button class="btn primary" id="int-save">${c.google && !c.enabled ? 'Sign in with Google' : c.enabled ? 'Save' : 'Connect'}</button></div>`);
+    <div class="modal-actions"><button class="btn" data-close>Cancel</button><button class="btn primary" id="int-save">${c.google && !c.enabled ? 'Sign in with Google' : c.oauth && !c.enabled ? 'Sign in' : c.enabled ? 'Save' : 'Connect'}</button></div>`);
   b.querySelector('#int-save').addEventListener('click', async () => {
     const values = {};
     let token = '';
     for (const f of c.fields) { const v = b.querySelector(`#f-${f.key}`).value.trim(); if (f.secret) token = v; else values[f.key] = v; }
-    if (!token && !c.hasToken && !c.noToken) { toast(c.google ? 'Paste the client ID and secret first.' : 'Paste the token first.'); return; }
-    const btn = b.querySelector('#int-save'); btn.disabled = true; btn.textContent = c.google ? 'Finish signing in in your browser…' : 'Checking…';
+    if (c.oauth && !values.client) { toast('Paste the client ID first.'); return; }
+    if (!c.oauth && !token && !c.hasToken && !c.noToken) { toast(c.google ? 'Paste the client ID and secret first.' : 'Paste the token first.'); return; }
+    const btn = b.querySelector('#int-save'); btn.disabled = true; btn.textContent = c.google || c.oauth ? 'Finish signing in in your browser…' : 'Checking…';
     try {
       const account = await qs.call('int:save', c.id, values, token);
       closeModal(); toast(`Connected to ${c.name} as ${account}.`);

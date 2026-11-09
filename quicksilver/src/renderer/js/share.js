@@ -59,3 +59,37 @@ function shareChat(chat) {
   if (!chat?.messages?.length) { toast('This chat is empty.'); return; }
   shareModal({ title: chat.title, markdown: chatMarkdown(chat), what: 'this chat' });
 }
+
+// ---------- send to your cloud storage ----------
+// Answers (as Word, PDF, PowerPoint or Markdown) and anything made in Create (pictures, videos,
+// music) can go straight to Google Drive, OneDrive or Dropbox, into a "Quicksilver" folder.
+async function cloudSendModal(what) {
+  let targets = [];
+  try { targets = await qs.call('cloud:targets'); } catch {}
+  if (!targets.length) {
+    const b = openModal(`<h2>☁️ Send to your cloud</h2>
+      <p>Connect Google Drive, OneDrive or Dropbox first, then anything Quicksilver makes can go straight there, into a "Quicksilver" folder.</p>
+      <div class="modal-actions"><button class="btn" data-close>Not now</button><button class="btn primary" id="cloud-connect">Open Connectors</button></div>`);
+    b.querySelector('#cloud-connect').addEventListener('click', () => { closeModal(); go({ view: 'integrations' }); });
+    return;
+  }
+  const fmts = what.answer ? [['docx', '📄 Word'], ['pdf', '📕 PDF'], ['pptx', '🖥️ PowerPoint'], ['md', '⬇ Markdown']] : [];
+  const b = openModal(`<h2>☁️ Send to your cloud</h2>
+    ${fmts.length ? `<div class="label">As</div><div class="row" style="gap:6px;flex-wrap:wrap;margin-bottom:12px">${fmts.map(([k, l], i) => `<label class="pill"><input type="radio" name="cl-f" value="${k}" ${i ? '' : 'checked'}> ${l}</label>`).join('')}</div>` : ''}
+    <div class="label">To</div><div class="stack-v" style="gap:6px">${targets.map((t, i) => `<label class="row"><input type="radio" name="cl-d" value="${t.id}" ${i ? '' : 'checked'}> ${t.icon} <b>${esc(t.name)}</b> <span class="small muted">› Quicksilver folder</span></label>`).join('')}</div>
+    <div id="cl-result" class="small" style="margin-top:10px"></div>
+    <div class="modal-actions"><button class="btn" data-close>Close</button><button class="btn primary" id="cl-send">Send</button></div>`);
+  const btn = b.querySelector('#cl-send');
+  btn.addEventListener('click', async () => {
+    const dest = b.querySelector('[name="cl-d"]:checked')?.value;
+    btn.disabled = true; btn.textContent = 'Sending…';
+    try {
+      const r = what.answer
+        ? await qs.call('cloud:sendAnswer', dest, b.querySelector('[name="cl-f"]:checked')?.value || 'docx', what.answer)
+        : await qs.call('cloud:sendMedia', dest, what.mediaId);
+      b.querySelector('#cl-result').innerHTML = `✓ Saved to ${esc(r.where)} as <b>${esc(r.name)}</b>. ${r.link ? `<a href="#" id="cl-open">Open it</a>` : ''}`;
+      b.querySelector('#cl-open')?.addEventListener('click', (e) => { e.preventDefault(); qs.call('shell:open', r.link); });
+      btn.textContent = 'Send again'; btn.disabled = false;
+    } catch (err) { btn.disabled = false; btn.textContent = 'Try again'; b.querySelector('#cl-result').textContent = `Couldn't send it: ${err.message}`; }
+  });
+}

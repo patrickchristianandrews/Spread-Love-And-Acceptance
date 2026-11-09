@@ -506,6 +506,17 @@ function redPng(size = 64) {
   // Integrations: add a real MCP server, then a chat uses its tools with an approval prompt.
   await win.click('[data-nav="integrations"]');
   await win.waitForSelector('text=Connectors');
+  // Google (one sign-in for every service), Microsoft and the other popular apps, grouped.
+  for (const g of ['Google', 'Microsoft', 'Files & storage', 'Sales & support', 'Commerce & payments', 'Music & media']) assert.ok(await win.locator(`.int-group:has-text("${g}")`).count() === 1, `${g} group`);
+  await win.click('[data-int-edit="google"]');
+  await win.waitForSelector('#int-save:has-text("Sign in with Google")');
+  await shot(win, '11b-google-signin');
+  await win.click('.modal [data-close]');
+  assert.ok(await win.evaluate(() => skillById('music-finder')?.tools?.apps), 'the Spotify music finder skill');
+  // Send to cloud: with nothing connected it points to Connectors.
+  await win.evaluate(() => cloudSendModal({ mediaId: 'x' }));
+  await win.waitForSelector('#cloud-connect');
+  await win.click('.modal [data-close]');
   await win.click('[data-mcp-preset="custom"]');
   await win.fill('#m-name', 'Test MCP');
   await win.selectOption('#m-transport', 'stdio');

@@ -399,10 +399,24 @@ module.exports = ({ http, clip, cfg }) => {
       } },
   ];
 
+  // Saves a file Quicksilver made to Google Drive, in a "Quicksilver" folder. Returns its link.
+  async function upload(name, buf, mime = 'application/octet-stream') {
+    const auth = { Authorization: `Bearer ${await token('gdrive')}` };
+    const q = "name = 'Quicksilver' and mimeType = 'application/vnd.google-apps.folder' and trashed = false";
+    let folder = (await g('gdrive', `${DR}?${new URLSearchParams({ q, fields: 'files(id)', pageSize: '1' })}`)).files?.[0]?.id;
+    if (!folder) folder = (await g('gdrive', `${DR}?fields=id`, { method: 'POST', body: { name: 'Quicksilver', mimeType: 'application/vnd.google-apps.folder' } })).id;
+    const start = await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=resumable&fields=id,name,webViewLink', { method: 'POST', headers: { ...auth, 'Content-Type': 'application/json; charset=UTF-8', 'X-Upload-Content-Type': mime }, body: JSON.stringify({ name, parents: [folder] }) });
+    if (!start.ok) throw new Error(`Google Drive said ${start.status}`);
+    const res = await fetch(start.headers.get('location'), { method: 'PUT', headers: { ...auth, 'Content-Type': mime }, body: buf });
+    const f = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(f.error?.message || `Google Drive said ${res.status}`);
+    return { name: f.name, link: f.webViewLink, where: 'Google Drive › Quicksilver' };
+  }
+
   const TOOLS = { ganalytics: GA_TOOLS, gtagmanager: GTM_TOOLS, gsearchconsole: GSC_TOOLS, gadsense: ADSENSE_TOOLS, gmail: GMAIL_TOOLS, gcalendar: CAL_TOOLS, gdrive: DRIVE_TOOLS, gtasks: TASK_TOOLS, gcontacts: CONTACT_TOOLS, youtube: YT_TOOLS, gforms: FORM_TOOLS };
   // A connector counts as ready when it has signed in (on its own or through "every service").
   const ready = (id) => Boolean(store.getSecret(refreshKey(id)) || store.getSecret(refreshKey('google')));
   const hasClient = (id) => Boolean(clientOf(id).id && clientOf(id).secret);
-  return { CONNECTORS, TOOLS, SCOPES, isGoogle, test, forget, ready, hasClient, clientOf };
+  return { CONNECTORS, TOOLS, SCOPES, isGoogle, test, forget, ready, hasClient, clientOf, upload };
 };
 module.exports.openBrowser = (url) => require('electron').shell.openExternal(url);

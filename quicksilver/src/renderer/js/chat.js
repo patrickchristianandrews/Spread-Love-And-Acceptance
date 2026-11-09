@@ -748,7 +748,7 @@ async function generate(chat, rerollMsg, withTarget, opts = {}) {
     contextSize: ctx,
     // Writing a picture prompt or a beat pattern is quick work: one model, no debate.
     level: skill && HIDE_BLOCK.has(skill.output) ? 'quick' : effortOf(chat, a) === 'council' ? 'thorough' : effortOf(chat, a),
-    tools: toolsOn(chat, a) || autoTools(chat, a, lastUser?.text),
+    tools: toolsOn(chat, a) || autoTools(chat, a, lastUser?.text) || Boolean(skill?.tools?.apps),
     gpu: p.gpu,
     effort: p.effort,
     council: effortOf(chat, a) === 'council' && !(skill && HIDE_BLOCK.has(skill.output)),
@@ -1234,10 +1234,15 @@ function saveAsMenu(chat, m, anchor) {
   menu.className = 'menu';
   menu.style.top = `${Math.min(r.bottom + 4, window.innerHeight - 230)}px`;
   menu.style.left = `${Math.max(8, r.left)}px`;
-  menu.innerHTML = '<button data-f="docx">📄 Word document</button><button data-f="pptx">🖥️ PowerPoint</button><button data-f="pdf">📕 PDF</button><button data-f="xlsx">📊 Excel (first table)</button><button data-f="md">⬇ Markdown</button>';
+  menu.innerHTML = '<button data-f="docx">📄 Word document</button><button data-f="pptx">🖥️ PowerPoint</button><button data-f="pdf">📕 PDF</button><button data-f="xlsx">📊 Excel (first table)</button><button data-f="md">⬇ Markdown</button><button data-f="cloud">☁️ Send to Google Drive, OneDrive or Dropbox…</button>';
   document.body.appendChild(menu);
   menu.querySelector('button').focus();
-  menu.addEventListener('click', (e) => { const f = e.target.closest('[data-f]')?.dataset.f; closeMenus(); if (f) exportAnswer(chat, m, f); });
+  menu.addEventListener('click', (e) => {
+    const f = e.target.closest('[data-f]')?.dataset.f;
+    closeMenus();
+    if (f === 'cloud') cloudSendModal({ answer: { markdown: msgText(m), html: document.querySelector(`[data-msg="${m.id}"] .bubble`)?.innerHTML || '', title: answerTitle(chat, m) } });
+    else if (f) exportAnswer(chat, m, f);
+  });
 }
 
 // ---------- tools in chat ----------
