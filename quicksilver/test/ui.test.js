@@ -764,9 +764,9 @@ function redPng(size = 64) {
     const dot = document.querySelector('[data-nav="models"] .nav-dot:not([hidden])')?.textContent;
     const dotWant = String(1 + shownStackUpdates().length);
     document.querySelector('[data-up-later="phi-4>qwen3-8b"]').click();
-    const laterCard = document.querySelector('#model-updates')?.textContent || '';
+    const laterCard = (document.querySelector('[data-up-later="phi-4>qwen3-8b"]') ? 'STILL ' : '') + (document.querySelector('#model-updates')?.textContent || '');
     S.data.prefs.upgradeLater['phi-4>qwen3-8b'] = Date.now() - 1; render();
-    const backCard = document.querySelector('#model-updates')?.textContent || '';
+    const backCard = (document.querySelector('[data-up-later="phi-4>qwen3-8b"]') ? 'BACK ' : '') + (document.querySelector('#model-updates')?.textContent || '');
     S.data.prefs.pendingUpgrades = { 'qwen3-8b': 'phi-4' };
     const swapped = await applyPendingUpgrades(S.installed.find((m) => m.id === 'qwen3-8b'));
     const st = (await qs.call('stacks:list')).find((x) => x.id === 't-up');
@@ -781,8 +781,8 @@ function redPng(size = 64) {
   });
   assert.match(up.card, /Better models available[\s\S]*Phi-4 14B[\s\S]*Qwen3 8B/);
   assert.equal(up.dot, up.dotWant, 'the Models menu item shows the updates');
-  assert.ok(!/Phi-4 14B/.test(up.laterCard) && /put off for later/.test(up.laterCard), 'Maybe later hides it for now');
-  assert.match(up.backCard, /Phi-4 14B[\s\S]*Maybe later/, 'and it is suggested again later');
+  assert.ok(!/^STILL /.test(up.laterCard) && /put off for later/.test(up.laterCard), 'Maybe later hides it for now');
+  assert.match(up.backCard, /^BACK /, 'and it is suggested again later');
   assert.equal(up.swapped, true);
   assert.deepEqual(up.members.drafters, ['local:qwen3-8b', 'local:gemma-3-4b']);
   assert.equal(up.members.judge, 'local:qwen3-8b');
