@@ -346,6 +346,27 @@ async function collect(gen) {
   global.fetch = realFetch;
   console.log('✓ GitHub connector: connect, list issues, create issue (approved)');
 
+  // User-submitted stacks: strict checks, portable parts, bad entries skipped.
+  {
+    const sc = require('../src/shared/community');
+    const known = { models: new Set(['qwen3-8b', 'phi-4']), presets: new Set(['anthropic']) };
+    const ok = sc.cleanStack({ name: 'Duo <b>', description: 'Two models that debate hard questions well.', mode: 'debate', parts: [{ kind: 'local', model: 'qwen3-8b' }, { kind: 'cloud', preset: 'anthropic', model: 'claude-opus-5-5' }], lead: 1 }, known);
+    assert.equal(ok.name, 'Duo b', 'no markup in names');
+    assert.deepEqual(ok.parts, [{ kind: 'local', model: 'qwen3-8b' }, { kind: 'cloud', preset: 'anthropic', model: 'claude-opus-5-5' }]);
+    assert.throws(() => sc.cleanStack({ name: 'Solo', description: 'Only one model in this one, which is not a stack.', parts: [{ kind: 'local', model: 'qwen3-8b' }] }, known), /2 to 4/);
+    assert.throws(() => sc.cleanStack({ name: 'Bad', description: 'Uses a model nobody can download from anywhere.', parts: [{ kind: 'local', model: 'evil' }, { kind: 'local', model: 'phi-4' }] }, known), /Unknown model/);
+    const list = sc.cleanList({ version: 1, stacks: [ok, { name: 'x' }] }, known);
+    assert.equal(list.stacks.length, 1, 'bad entries are skipped');
+    assert.deepEqual(sc.fromIssue('Hi\n```json\n{"a":1}\n```'), { a: 1 });
+    const community = require('../src/main/community');
+    const rf = global.fetch;
+    global.fetch = async () => new Response(JSON.stringify({ version: 1, stacks: [{ ...ok, parts: [{ kind: 'local', model: 'qwen3-8b' }, { kind: 'local', model: 'phi-4' }] }] }), { status: 200 });
+    const got = await community.refresh(true);
+    global.fetch = rf;
+    assert.equal(got.stacks.length, 1); assert.ok(got.fetchedAt > 0);
+    console.log('✓ user-submitted stacks: checked strictly, read once a day, bad entries skipped');
+  }
+
   // Google: one browser sign-in (OAuth with PKCE, loopback) turns on every Google connector.
   {
     const gCalls = [];

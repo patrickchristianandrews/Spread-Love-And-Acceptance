@@ -23,9 +23,11 @@ views.stacks = {
     const head = `<div class="page-head"><h1>Stacks &amp; Fusion</h1><a href="#" class="small og-link" data-guide="stacks" style="align-self:center">ⓘ What's the difference?</a></div>
       <div class="tabs sf-tabs" role="tablist">
         <button class="tab ${stacksTab === 'stacks' ? 'active' : ''}" data-sf-tab="stacks" role="tab" aria-selected="${stacksTab === 'stacks'}">🧩 Stacks <span class="sf-sub">ready-made by Quicksilver</span></button>
-        <button class="tab ${stacksTab === 'fusion' ? 'active' : ''}" data-sf-tab="fusion" role="tab" aria-selected="${stacksTab === 'fusion'}">⚗️ Fusion <span class="sf-sub">your own mix of AIs</span></button>
+        <button class="tab ${stacksTab === 'fusion' ? 'active' : ''}" data-sf-tab="fusion" role="tab" aria-selected="${stacksTab === 'fusion'}">⚗️ Fusion <span class="sf-sub">build your own custom AI</span></button>
+        <button class="tab ${stacksTab === 'community' ? 'active' : ''}" data-sf-tab="community" role="tab" aria-selected="${stacksTab === 'community'}">🌍 User-submitted <span class="sf-sub">custom AIs others shared</span></button>
       </div>`;
     if (stacksTab === 'fusion') return `<div class="page">${head}${fusionPageHTML()}</div>`;
+    if (stacksTab === 'community') return `<div class="page">${head}${communityTabHTML()}</div>`;
     return `<div class="page">
       ${head}
       <p class="lede"><b>A stack is a ready-made combination of AI models, picked and set up by Quicksilver for a job and fitted to this PC.</b> They answer separately, then a lead combines the best of each and fixes mistakes. Pick what you want to do and Quicksilver shows the best stack for this PC. Want to choose the AIs yourself, cloud ones included? That's <a href="#" data-sf-tab="fusion">⚗️ Fusion</a>.</p>
@@ -47,6 +49,7 @@ views.stacks = {
     loadFound();
     $$('[data-sf-tab]').forEach((b) => b.addEventListener('click', (e) => { e.preventDefault(); stacksTab = b.dataset.sfTab; render(); }));
     $$('#fusion-new-main').forEach((b) => b.addEventListener('click', () => infuseModal(() => render())));
+    if (stacksTab === 'community') bindCommunity();
     if (!advJob) { runAdvisor('general'); return; }
     $$('[data-job]').forEach((b) => b.addEventListener('click', () => runAdvisor(b.dataset.job)));
     $$('#main [data-goto]').forEach((b) => b.addEventListener('click', () => go({ view: b.dataset.goto })));
@@ -345,13 +348,13 @@ function kitsHTML() {
 function fusionPageHTML() {
   const mine = S.stacks.filter(isFusion);
   return `<div class="card fusion-hero"><div class="row" style="align-items:flex-start;gap:14px"><span class="emoji-badge" style="font-size:1.6rem">⚗️</span><div class="grow">
-      <h2 style="margin:0 0 4px">Fusion: your own mix of AIs</h2>
-      <p style="margin:0 0 10px">You pick 2 to 4 AIs, on this PC and in the cloud together, and how they should work together. They become one AI you can pick anywhere, like any model.</p>
-      <div class="sf-steps"><div><b>1</b><span>Pick the AIs<br><span class="small muted">mix makers: Qwen + Llama + Claude catch each other's mistakes</span></span></div><div><b>2</b><span>Pick how they work together<br><span class="small muted">blend, debate, vote, red team…</span></span></div><div><b>3</b><span>Name it and chat<br><span class="small muted">it shows under ⚗️ Fusions in every model menu</span></span></div></div>
-      <div class="small muted" style="margin-top:8px">How it differs from a stack: Quicksilver picks a stack's models for you; in a fusion you pick them, cloud AIs included.</div></div>
-      <button class="btn primary" id="fusion-new-main">⚗️ New fusion</button></div></div>
-    <div class="section"><h2>Your fusions</h2></div>
-    ${mine.length ? `<div class="cards">${mine.map(stackCard).join('')}</div>` : '<p class="muted">No fusions yet. Press ⚗️ New fusion, or start with a one-click fusion below.</p>'}
+      <h2 style="margin:0 0 4px">Fusion: build your own custom AI</h2>
+      <p style="margin:0 0 10px">Mix 2 to 4 AIs, on this PC and in the cloud, into one custom AI with its own name. Save it, use it anywhere like any model, and share it with everyone if you like.</p>
+      <div class="sf-steps"><div><b>1</b><span>Pick the AIs<br><span class="small muted">mix makers: Qwen + Llama + Claude catch each other's mistakes</span></span></div><div><b>2</b><span>Pick how they work together<br><span class="small muted">blend, debate, vote, red team…</span></span></div><div><b>3</b><span>Name it and save it<br><span class="small muted">it's yours, under ⚗️ Fusions in every model menu</span></span></div><div><b>4</b><span>Share it (optional)<br><span class="small muted">📤 Publish it to User-submitted stacks</span></span></div></div>
+      <div class="small muted" style="margin-top:8px">How it differs from a stack: Quicksilver picks a stack's models for you; in your custom AI you pick them, cloud AIs included.</div></div>
+      <button class="btn primary" id="fusion-new-main">⚗️ Build a custom AI</button></div></div>
+    <div class="section"><h2>Your custom AIs</h2><span class="small muted">Rename with Edit; share with 📤 Publish.</span></div>
+    ${mine.length ? `<div class="cards">${mine.map(stackCard).join('')}</div>` : '<p class="muted">No custom AIs yet. Press ⚗️ Build a custom AI, or start with a one-click fusion below.</p>'}
     ${powerMovesHTML()}
     <div class="section"><h2>Ways they can work together</h2><span class="small muted">You choose one when you make a fusion.</span></div>
     <div class="cards sf-modes">${Object.values(INFUSE_MODES).map((m) => `<div class="card"><div class="row"><span style="font-size:1.3rem">${m.icon}</span><b class="grow">${esc(m.name)}</b><span class="badge b-lav">${esc(m.cost)}</span></div><p class="small" style="margin:6px 0 0">${esc(m.blurb)}</p></div>`).join('')}</div>`;
@@ -382,7 +385,7 @@ function stackCard(s) {
     <div class="row"><span class="emoji-badge">${esc(s.emoji || '🧩')}</span><h3 class="grow">${esc(s.name)}</h3>${mode ? `<span class="badge b-lav">${mode.icon} ${esc(mode.name)}</span>` : ''}</div>
     <div class="stack-v" style="gap:6px;margin:12px 0">${rows.map(([role, t]) => `<div class="row">${ROLE[role]}<b class="small">${esc(targetLabel(t))}</b>${targetValid(t) ? '' : '<span class="badge b-pink">not installed yet</span>'}</div>`).join('')}</div>
     ${stackScoresHTML(rows.map(([, t]) => t))}
-    <div class="row"><button class="btn small primary" data-chat-stack="${s.id}">Chat</button><button class="btn small" data-edit-stack="${s.id}">Edit</button><button class="btn small danger" data-del-stack="${s.id}">Delete</button></div>
+    <div class="row"><button class="btn small primary" data-chat-stack="${s.id}">Chat</button><button class="btn small" data-edit-stack="${s.id}">Edit</button>${isFusion(s) && !s.community ? `<button class="btn small" data-publish="${s.id}">📤 Publish</button>` : ''}<button class="btn small danger" data-del-stack="${s.id}">Delete</button></div>
   </div>`;
 }
 
@@ -438,7 +441,7 @@ function strengthOf(t) {
 function infuseModal(onCreated) {
   const options = S.targets.filter((t) => !t.stack);
   if (options.length < 2) { toast('A fusion needs at least two AIs: install a model or connect a cloud AI (Models).', 6000); return; }
-  const b = openModal(`<h2>⚗️ New fusion</h2>
+  const b = openModal(`<h2>⚗️ Build a custom AI</h2>
     <p class="help">Choose 2 to 4 AIs. Mixing different makers (for example Qwen + Llama + Claude) gives the biggest boost: they make different mistakes, so they catch each other's.</p>
     <div class="stack-v">
       <div class="label">1. Pick the AIs to fuse (2 to 4)</div>
@@ -447,11 +450,11 @@ function infuseModal(onCreated) {
       <div class="infuse-modes">${Object.entries(INFUSE_MODES).map(([k, m], i) => `<label class="infuse-mode"><input type="radio" name="im" value="${k}" ${i === 0 ? 'checked' : ''}><div style="font-size:1.4rem">${m.icon}</div><b>${m.name}</b><div class="small muted" style="font-weight:600;margin:4px 0">${esc(m.blurb)}</div><span class="badge b-lav">${esc(m.cost)}</span></label>`).join('')}</div>
       <div class="grid2">
         <div class="field"><label for="inf-lead">3. Lead (writes the final answer)</label><select id="inf-lead"><option value="">Automatic: the strongest one you picked</option>${options.map((t) => `<option value="${esc(t.target)}">${esc(t.label)}</option>`).join('')}</select></div>
-        <div class="field"><label for="inf-name">4. Name your fusion</label><input id="inf-name" placeholder="e.g. Analyst Supreme"></div>
+        <div class="field"><label for="inf-name">4. Name your custom AI</label><input id="inf-name" placeholder="e.g. Analyst Supreme"></div>
       </div>
     </div>
     <div id="inf-preview"></div>
-    <div class="modal-actions"><span class="small muted grow" id="inf-count">Pick 2 to 4 AIs.</span><button class="btn" data-close>Cancel</button><button class="btn primary" id="inf-go">${icon('sparkle', 16)} Combine</button></div>`, { wide: true });
+    <div class="modal-actions"><span class="small muted grow" id="inf-count">Pick 2 to 4 AIs.</span><button class="btn" data-close>Cancel</button><button class="btn primary" id="inf-go">${icon('sparkle', 16)} Save custom AI</button></div>`, { wide: true });
   const picked = () => [...b.querySelectorAll('.infuse-opt input:checked')].map((x) => x.value);
   b.querySelector('.infuse-pick').addEventListener('change', () => {
     const n = picked().length;

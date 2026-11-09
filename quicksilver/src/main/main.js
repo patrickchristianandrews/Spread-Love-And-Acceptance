@@ -157,6 +157,9 @@ handle('guide:speeds', async (tiers) => {
 // Better models for what's installed (from the built-in and online model picks).
 handle('models:upgrades', async () => require('./catalog-remote').upgradesFor(models.list(), await hardware.detect(), store.config().calib?.text || 1));
 handle('catalog:refresh', () => require('./catalog-remote').refresh(true));
+// User-submitted stacks (custom AIs people published), read from the repository once a day.
+handle('community:list', () => require('./community').list());
+handle('community:refresh', () => require('./community').refresh(true));
 handle('guide:refresh', () => require('./guide').refresh(true));
 
 // Speeds on this PC, so every screen can say how long something will take:

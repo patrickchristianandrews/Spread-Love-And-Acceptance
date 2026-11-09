@@ -144,7 +144,7 @@ function redPng(size = 64) {
   assert.equal(await win.locator('.rx-card').count(), 0, 'no ready-made stacks on the Fusion tab');
   await shot(win, '02b-fusion-tab');
   await win.click('#fusion-new-main');
-  await win.waitForSelector('#modal h2:has-text("New fusion")');
+  await win.waitForSelector('#modal h2:has-text("Build a custom AI")');
   for (const m of ['vote', 'redteam', 'plan', 'panel']) await win.waitForSelector(`#modal input[name="im"][value="${m}"]`, { state: 'attached' });
   await win.click('#modal [data-close]');
   await win.click('.sf-tabs [data-sf-tab="stacks"]');
@@ -180,7 +180,7 @@ function redPng(size = 64) {
 
   // Infuse: fuse two models into one with Debate, from the model picker.
   await win.selectOption('#pick-model', '__infuse');
-  await win.waitForSelector('#modal h2:has-text("New fusion")');
+  await win.waitForSelector('#modal h2:has-text("Build a custom AI")');
   await win.check('.infuse-opt input[value="local:qwen3-8b"]');
   await win.check('.infuse-opt input[value="local:phi-4"]');
   await win.click('.infuse-mode:has-text("Debate")');
@@ -188,6 +188,25 @@ function redPng(size = 64) {
   await shot(win, '13-infuse');
   await win.click('#inf-go');
   await win.waitForFunction(() => document.querySelector('#pick-model option:checked')?.textContent.includes('Analyst Supreme'));
+  // Publish the custom AI: shows exactly what's shared (never keys), then opens a GitHub issue.
+  await win.evaluate(() => { stacksTab = 'fusion'; go({ view: 'stacks' }); });
+  await win.click('.card:has-text("Analyst Supreme") [data-publish]');
+  await win.waitForSelector('#modal h2:has-text("Publish your custom AI")');
+  assert.match(await win.locator('#modal').innerText(), /Exactly what's shared[\s\S]*Never shared: your API keys/);
+  await win.click('#modal [data-close]');
+  // User-submitted stacks: add one; its models are already here, so it's ready to chat with.
+  await win.evaluate(() => { communityData = { fetchedAt: Date.now(), stacks: [{ id: 'test-duo', name: 'Test Duo', emoji: '🧪', description: 'Two local models debating hard questions.', author: 'octo', mode: 'debate', parts: [{ kind: 'local', model: 'qwen3-8b' }, { kind: 'local', model: 'phi-4' }], lead: 1, added: '2026-11-09' }, { id: 'needs-cloud', name: 'Needs Cloud', emoji: '☁️', description: 'Fuses a local model with a cloud AI you have not connected.', mode: 'blend', parts: [{ kind: 'local', model: 'qwen3-8b' }, { kind: 'cloud', preset: 'xai', model: 'grok-4' }], lead: 0 }] }; stacksTab = 'community'; render(); });
+  await win.waitForSelector('.us-card:has-text("Test Duo") [data-us-add]');
+  assert.ok(await win.locator('.us-card:has-text("Needs Cloud") [data-us-connect="xai"]').count() === 1, 'a missing cloud AI asks to connect it first');
+  await shot(win, '02c-user-submitted');
+  await win.click('.us-card:has-text("Test Duo") [data-us-add]');
+  await win.waitForSelector('.us-card:has-text("Test Duo") [data-us-chat]');
+  const added = await win.evaluate(async () => (await qs.call('stacks:list')).find((x) => x.id === 'us-test-duo'));
+  assert.equal(added.members.mode, 'debate'); assert.ok(added.infused && added.community === 'test-duo');
+  await win.evaluate(() => { stacksTab = 'stacks'; });
+  console.log('✓ custom AIs: save with a name, publish (what\'s shared shown, never keys), user-submitted stacks added in a click');
+  await win.click('[data-nav="newchat"]');
+  await win.selectOption('#pick-model', { label: '⚗️ Analyst Supreme' }).catch(async () => { const t = await win.evaluate(() => S.targets.find((x) => /Analyst Supreme/.test(x.label))?.target); await win.selectOption('#pick-model', t); });
   await win.fill('#input', 'Settle this with a debate');
   await win.keyboard.press('Enter');
   await idle();
