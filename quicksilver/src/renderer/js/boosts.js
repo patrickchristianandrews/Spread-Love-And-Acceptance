@@ -4,7 +4,8 @@
 'use strict';
 
 // Cloud AIs that answer questions (fal.ai is for photos, video and music only).
-const connectedClouds = () => (S.providers || []).filter((p) => (p.hasKey || p.noKey) && p.preset !== 'fal');
+const MEDIA_PRESETS = ['fal', 'replicate', 'stability'];
+const connectedClouds = () => (S.providers || []).filter((p) => (p.hasKey || p.noKey) && !MEDIA_PRESETS.includes(p.preset));
 // The best tested science score among the given targets (local ones by their catalogue id).
 function boostBase(targets) {
   let best = null;
@@ -142,7 +143,7 @@ function boostsHTML(targets, { liquid = false, compact = false, fusion = false }
       <span class="small muted">Cost: needs internet; hard questions leave your PC; free plans have daily limits. ${cloud.connected ? (cloudOn || fusion ? '' : 'Turn it on in Settings → Features → Cloud AI for hard questions.') : 'Connect one in Models → Connect an API (free plans available).'}</span></span></div>`);
   }
   rows.push(`<div class="bz-row"><span class="bz-ic">🔌</span><span class="grow"><b>Connected apps</b><span class="small">With Gmail, Calendar, Drive, Spotify and others connected, answers come from your real data instead of general advice ("what's on my calendar Friday?"). It asks before sending or changing anything.</span></span></div>`);
-  return `<div class="bz"><div class="bz-title">⚡ How the web and a cloud AI improve ${fusion ? 'this custom AI' : 'it'}</div>${boostJobsHTML(targets, { liquid })}${rows.join('')}</div>`;
+  return `<div class="bz"><div class="bz-title">⚡ How the web and a cloud AI improve ${fusion ? 'this custom AI' : 'it'} <button class="btn small ghost" data-free-paid>💸 Free vs paid</button></div>${boostJobsHTML(targets, { liquid })}${rows.join('')}</div>`;
 }
 // The full explanation for a model or stack you picked.
 // target: a stack ("stack:…"), a model on this PC ("local:…"), a catalogue model id, or a list of
@@ -155,6 +156,11 @@ function boostModal(target, { ids, name } = {}) {
   const liquid = s?.builtFor === 'quicksilver' || (!s && !ids && (catModel(String(target).replace(/^local:/, ''))?.category === 'open' || catModel(S.installed.find((m) => `local:${m.id}` === target)?.catalogId)?.category === 'open'));
   openModal(`<h2>⚡ ${esc(title)}: what the web and a cloud AI add</h2><p class="small muted" style="margin-top:-4px">For this ${kind}, on this PC: each job's quality out of 10 on its own, with web search, and with a cloud AI or service, plus the service to add for it.</p>${boostsHTML(targets, { liquid, fusion: Boolean(s && isFusion(s)) })}<div class="modal-actions"><button class="btn" data-close>Close</button></div>`, { wide: true });
 }
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('[data-free-paid]')) return;
+  e.preventDefault();
+  openModal(`${freePaidHTML()}<div class="modal-actions"><button class="btn" data-close>Close</button></div>`, { wide: true });
+});
 // A "⚡ Web & cloud" button on any stack, model or fusion card.
 const boostBtn = (target, extra = '') => `<button class="btn small ghost" data-boost="${esc(target)}" ${extra} title="How web search and a cloud AI improve each job, rated out of 10, and which service to add">⚡ Web &amp; cloud</button>`;
 document.addEventListener('click', (e) => {

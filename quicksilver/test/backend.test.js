@@ -1363,10 +1363,38 @@ async function collect(gen) {
     assert.match(el.prompt, /^Upbeat pop\nA complete song with an intro, verses, chorus, a bridge and an ending\.\nLyrics:\nla la$/);
     assert.deepEqual(cm.inputFor('music', 'fal-ai/minimax-music/v2.6', { prompt: 'p', lyrics: 'l' }), { prompt: 'p', lyrics: 'l' });
     assert.equal(JSON.stringify(cm.inputFor('edit', 'google/nano-banana-2.1/edit', { prompt: 'x', imageDataUrl: 'data:image/png;base64,AA' })), '{"prompt":"x","image_urls":["data:image/png;base64,AA"]}');
+    // Free pictures with no key (Pollinations), Stability AI and Replicate.
+    const png = () => new Response(Buffer.from('fake-png'), { status: 200, headers: { 'content-type': 'image/png' } });
+    const seen = [];
+    global.fetch = async (url, o = {}) => {
+      const u = String(url);
+      seen.push([u, o.headers]);
+      const json = (j, status = 200) => new Response(JSON.stringify(j), { status, headers: { 'content-type': 'application/json' } });
+      if (u.startsWith('https://image.pollinations.ai/prompt/')) return png();
+      if (u === 'https://api.stability.ai/v2beta/stable-image/generate/core') return png();
+      if (u === 'https://api.replicate.com/v1/models/black-forest-labs/flux-schnell/predictions') return json({ id: 'p1', status: 'starting', urls: { get: 'https://api.replicate.com/v1/predictions/p1' } }, 201);
+      if (u === 'https://api.replicate.com/v1/predictions/p1') return json({ id: 'p1', status: 'succeeded', output: ['https://replicate.delivery/x/out.webp'] });
+      if (u.endsWith('out.webp')) return new Response(Buffer.from('w'), { status: 200, headers: { 'content-type': 'image/webp' } });
+      if (u.startsWith('https://api.mymemory.translated.net/get')) return json({ responseStatus: 200, responseData: { translatedText: 'Hola mundo' } });
+      return json({ detail: 'nope' }, 404);
+    };
+    const free = await cm.generate({ preset: 'pollinations', name: 'Pollinations' }, '', 'image', 'flux', { prompt: 'a red fox' });
+    assert.equal(free.kind, 'image'); assert.match(seen[0][0], /prompt\/a%20red%20fox\?width=1024&height=1024&nologo=true&model=flux/);
+    const sp = providers.upsert({ preset: 'stability' }, 'sk-stab');
+    assert.equal((await cm.generate(providers.get(sp.id), providers.secretOf(sp.id), 'image', 'core', { prompt: 'x' })).kind, 'image');
+    assert.equal(seen.at(-1)[1].Authorization, 'Bearer sk-stab');
+    const rp = providers.upsert({ preset: 'replicate' }, 'r8_test');
+    const rimg = await cm.generate(providers.get(rp.id), providers.secretOf(rp.id), 'image', 'black-forest-labs/flux-schnell', { prompt: 'x', pollMs: 1 });
+    assert.ok(/\.webp$/.test(rimg.file));
+    for (const k of Object.keys(cm.SERVICES)) for (const list of Object.values(cm.SERVICES[k].models)) assert.ok(list.every((m) => m[2] >= 1 && m[2] <= 10), k);
+    assert.ok(cm.SERVICES.pollinations.free && cm.SERVICES.pollinations.noKey);
+    // Translation: free with no key (MyMemory).
+    assert.match(await integrations.tools().find((t) => t.name === 'translate_text')?.run({ text: 'Hello world', to: 'es' }) ?? (await (async () => { await integrations.save('translate', {}, ''); return integrations.tools().find((t) => t.name === 'translate_text').run({ text: 'Hello world', to: 'es' }); })()), /Hola mundo[\s\S]*MyMemory/);
     global.fetch = real;
     for (const k of ['image', 'edit', 'video', 'animate', 'music']) assert.ok(cm.FAL_MODELS[k].length && cm.FAL_MODELS[k].every((m) => m[2] >= 1 && m[2] <= 10), k);
-    providers.remove(fp.id);
-    console.log('✓ cloud photo, video and music (fal.ai): queue, status, file saved to the gallery; rated models for each kind');
+    providers.remove(fp.id); providers.remove(sp.id); providers.remove(rp.id);
+    for (const id of ['aimlapi', 'litellm', 'replicate', 'stability']) assert.ok(providers.PRESETS[id], id);
+    console.log('✓ cloud photo, video and music (fal.ai, Replicate, Stability, free Pollinations): queue, status, file saved to the gallery; free translation');
   }
 
   // Stack efficiency: the team's inner steps skip the reasoning pass; a lone lead doesn't review itself.

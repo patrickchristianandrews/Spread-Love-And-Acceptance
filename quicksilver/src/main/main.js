@@ -501,14 +501,14 @@ handle('media:apiImage', async (providerId, model, req) => {
   return { ...item, url: `qsmedia://g/${item.id}` };
 });
 // Cloud photo, video and music (fal.ai): progress as media events, the file lands in the gallery.
-handle('media:cloudModels', () => require('./cloudmedia').FAL_MODELS);
+handle('media:cloudModels', () => require('./cloudmedia').SERVICES);
 handle('media:cloud', async (jobId, providerId, kind, model, req) => {
-  const p = providers.get(providerId);
+  const p = providerId === 'pollinations' ? { id: 'pollinations', preset: 'pollinations', name: 'Pollinations' } : providers.get(providerId);
   if (!p) throw new Error('That connection was removed.');
   const g = media.gallery();
   const src = req.imageId && g.find((x) => x.id === req.imageId);
   const imageDataUrl = src ? `data:image/${/\.png$/i.test(src.file) ? 'png' : 'jpeg'};base64,${fs.readFileSync(src.file).toString('base64')}` : undefined;
-  require('./cloudmedia').generate(p, providers.secretOf(p.id), kind, model, { ...req, imageDataUrl }, (text) => emit('media:event', { jobId, type: 'status', text }))
+  require('./cloudmedia').generate(p, p.preset === 'pollinations' ? '' : providers.secretOf(p.id), kind, model, { ...req, imageDataUrl }, (text) => emit('media:event', { jobId, type: 'status', text }))
     .then((item) => emit('media:event', { jobId, type: 'done', item: { ...item, url: `qsmedia://g/${item.id}` } }))
     .catch((err) => emit('media:event', { jobId, type: 'error', message: err.message }));
   return true;

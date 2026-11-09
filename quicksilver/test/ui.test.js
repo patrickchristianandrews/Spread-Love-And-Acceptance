@@ -784,6 +784,12 @@ function redPng(size = 64) {
   await win.waitForSelector('#cc-out .ten-stars');
   await win.locator('#cloud-calc').scrollIntoViewIfNeeded();
   await shot(win, '17d3-price-list');
+  // Free vs paid: every job, what's possible at no cost and what paying adds, rated out of 10.
+  await win.waitForSelector('#free-paid .fp-r');
+  assert.ok(await win.locator('#free-paid .fp-r').count() >= 10);
+  assert.match(await win.locator('#free-paid').innerText(), /Free[\s\S]*Paid[\s\S]*Music \(full songs\)[\s\S]*Paying adds/);
+  await win.locator("#free-paid").scrollIntoViewIfNeeded();
+  await shot(win, "17d1-free-vs-paid");
   // Music in the calculator and its rated price list.
   await win.click('[data-cc-kind="music"]');
   await win.waitForFunction(() => /MiniMax Music 2\.6 alone/.test(document.querySelector('#cc-out').innerText));
@@ -1061,7 +1067,9 @@ function redPng(size = 64) {
   // Cloud: the best hosted photo, video and music models, rated out of 10 next to this PC's own.
   await win.click('[data-stab="cloud"]');
   await win.waitForSelector('.cs-model .ten-stars');
-  assert.ok(await win.locator('#cs-connect').count(), 'asks to connect fal.ai first');
+  assert.ok(await win.locator('[data-cs-connect="fal"]').count(), 'asks to connect fal.ai for its models');
+  assert.match(await win.locator('.cs-models').innerText(), /FLUX via Pollinations[\s\S]*Free/);
+  assert.equal(await win.locator('#cs-go').isDisabled(), false, 'free pictures work with no key');
   for (const k of ['video', 'music', 'edit', 'animate', 'image']) {
     await win.click(`[data-cs-kind="${k}"]`);
     await win.waitForSelector('.cs-model input[name="cs-model"]');
@@ -1069,8 +1077,8 @@ function redPng(size = 64) {
   await win.click('[data-cs-kind="video"]');
   assert.match(await win.locator('.cs-models').innerText(), /Veo 3\.1[\s\S]*10\/10[\s\S]*Kling 3 Pro[\s\S]*On this PC/);
   const falId = await win.evaluate(async () => { const p = await qs.call('providers:save', { preset: 'fal' }, 'fal-test'); await refreshProviders(); render(); return p.id; });
-  await win.waitForSelector('#cs-go:not([disabled])');
   await win.click('[data-cs-kind="music"]');
+  await win.waitForSelector('#cs-go:not([disabled])');
   await win.waitForSelector('#cs-lyrics');
   const songs = await win.locator('#main').innerText();
   assert.match(songs, /ElevenLabs Music[\s\S]*MiniMax Music 2\.6[\s\S]*Mureka v9/);

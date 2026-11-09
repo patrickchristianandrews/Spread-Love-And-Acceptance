@@ -1423,3 +1423,12 @@ code.sel { user-select: all; background: var(--soft); padding: 1px 6px; border-r
 .cs-model.now { outline: 1.5px solid color-mix(in srgb, var(--accent) 55%, transparent); }
 .cs-model.local { cursor: default; background: color-mix(in srgb, #2fbf71 12%, var(--hover)); }
 .bz-web { color: var(--text); opacity: .85; }
+.cs-model.off { opacity: .6; }
+
+.fp-table { display: grid; gap: 4px; }
+.fp-h, .fp-r { display: grid; grid-template-columns: 1.1fr 1.2fr 1.2fr; gap: 12px; padding: 8px 10px; border-radius: 10px; align-items: start; }
+.fp-h { font-size: .78rem; font-weight: 800; color: var(--muted); }
+.fp-r:nth-child(even) { background: var(--hover); }
+.fp-r > span { display: flex; flex-direction: column; gap: 4px; font-size: .86rem; }
+@media (max-width: 760px) { .fp-h { display: none; } .fp-r { grid-template-columns: 1fr; } }
+.bz-title { display: flex; align-items: center; gap: 10px; justify-content: space-between; flex-wrap: wrap; }

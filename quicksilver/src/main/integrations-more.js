@@ -15,6 +15,8 @@ module.exports = ({ http, clip, secret, cfg }) => {
       fields: [{ key: 'key', label: 'API key (optional)', placeholder: 'Leave empty to start', help: 'Works without one for a few checks a day. For more, create a free API key in Google Cloud (enable PageSpeed Insights API).', url: 'https://console.cloud.google.com/apis/credentials' }] },
     weather: { name: 'Weather', icon: '⛅', group: 'Everyday', blurb: 'Current weather and a 7-day forecast anywhere. Free, no account (Open-Meteo).', noToken: true,
       fields: [{ key: 'units', label: 'Units', placeholder: 'celsius or fahrenheit', help: 'Type "fahrenheit" for °F and mph; anything else uses °C and km/h.' }, { key: 'home', label: 'Your town (optional)', placeholder: 'e.g. Leeds', help: 'Used when you ask about the weather without saying where.' }] },
+    translate: { name: 'Translation (MyMemory, DeepL, LibreTranslate)', icon: '🌍', group: 'Everyday', blurb: 'Accurate translation between 100+ languages. Free with no account (MyMemory, about 5,000 words a day); add a free DeepL key for 500,000 characters a month at higher quality.', noToken: true,
+      fields: [{ key: 'token', label: 'DeepL API key (optional)', secret: true, help: 'Free DeepL API plan: 500,000 characters a month. Keys from the free plan end in ":fx".', url: 'https://www.deepl.com/pro-api' }, { key: 'libre', label: 'LibreTranslate address (optional)', placeholder: 'https://libretranslate.com', help: 'Your own LibreTranslate server, used when there is no DeepL key.' }] },
     wikipedia: { name: 'Wikipedia', icon: '📖', group: 'Everyday', blurb: 'Search and read Wikipedia articles. Free, no account.', noToken: true,
       fields: [{ key: 'lang', label: 'Language code', placeholder: 'en', help: 'en, es, fr, de… The Wikipedia edition to search.' }] },
     calendar: { name: 'Calendar (iCal link)', icon: '📅', group: 'Everyday', blurb: 'Your upcoming events from Google, Outlook or Apple Calendar. Read-only.',
@@ -44,6 +46,27 @@ module.exports = ({ http, clip, secret, cfg }) => {
     webhook: { name: 'Zapier, Make, n8n or IFTTT', icon: '⚡', group: 'Messaging & automation', blurb: 'Start any automation (thousands of apps) by calling its webhook.',
       fields: [{ key: 'token', label: 'Webhook URL', secret: true, help: 'Zapier: "Webhooks by Zapier" → Catch Hook. Make: Webhooks → Custom webhook. n8n: Webhook node. The AI sends a JSON message to it.' }] },
   };
+
+  // ---------- Translation ----------
+  const TRANSLATE_TOOLS = [
+    { name: 'translate_text', description: 'Translate text into another language with a dedicated translation service (DeepL when a key is set, else LibreTranslate or MyMemory). Use for exact, faithful translations.', parameters: { type: 'object', properties: { text: { type: 'string' }, to: { type: 'string', description: 'Target language code, e.g. es, fr, de, ja, pt-BR' }, from: { type: 'string', description: 'Source language code, or leave empty to detect it' } }, required: ['text', 'to'] },
+      run: async ({ text, to, from = '' }) => {
+        const key = secret('translate');
+        if (key) {
+          const host = /:fx$/.test(key) ? 'https://api-free.deepl.com' : 'https://api.deepl.com';
+          const r = await http(`${host}/v2/translate`, { method: 'POST', headers: { Authorization: `DeepL-Auth-Key ${key}` }, body: { text: [String(text)], target_lang: String(to).toUpperCase(), ...(from ? { source_lang: String(from).toUpperCase().split('-')[0] } : {}) } });
+          return `${r.translations?.[0]?.text || ''}\n(DeepL${r.translations?.[0]?.detected_source_language ? `, from ${r.translations[0].detected_source_language}` : ''})`;
+        }
+        if (C('translate').libre) {
+          const r = await http(`${/^https?:\/\//.test(C('translate').libre) ? C('translate').libre.trim().replace(/\/+$/, '') : `https://${site(C('translate').libre)}`}/translate`, { method: 'POST', body: { q: String(text), source: from || 'auto', target: String(to).split('-')[0], format: 'text' } });
+          return `${r.translatedText}\n(LibreTranslate)`;
+        }
+        const pair = `${from || 'autodetect'}|${to}`;
+        const r = await http(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(String(text).slice(0, 500))}&langpair=${encodeURIComponent(pair)}`);
+        if (r.responseStatus && Number(r.responseStatus) !== 200) throw new Error(r.responseDetails || 'MyMemory could not translate that.');
+        return `${r.responseData?.translatedText || ''}\n(MyMemory${String(text).length > 500 ? ', first 500 characters' : ''})`;
+      } },
+  ];
 
   // ---------- PageSpeed Insights ----------
   const PAGESPEED_TOOLS = [
@@ -277,12 +300,13 @@ module.exports = ({ http, clip, secret, cfg }) => {
       run: async ({ message, data = {} }) => { const r = await http(secret('webhook'), { method: 'POST', body: { message, ...data, sentBy: 'Quicksilver', at: new Date().toISOString() }, raw: true }); if (!r.ok) throw new Error(`The webhook returned ${r.status}.`); return 'Sent to the automation.'; } },
   ];
 
-  const TOOLS = { pagespeed: PAGESPEED_TOOLS, weather: WEATHER_TOOLS, wikipedia: WIKI_TOOLS, calendar: CAL_TOOLS, rss: RSS_TOOLS, notes: NOTES_TOOLS, confluence: CONFLUENCE_TOOLS, todoist: TODOIST_TOOLS, trello: TRELLO_TOOLS, asana: ASANA_TOOLS, airtable: AIRTABLE_TOOLS, gitlab: GITLAB_TOOLS, homeassistant: HA_TOOLS, discord: DISCORD_TOOLS, telegram: TELEGRAM_TOOLS, webhook: WEBHOOK_TOOLS };
+  const TOOLS = { translate: TRANSLATE_TOOLS, pagespeed: PAGESPEED_TOOLS, weather: WEATHER_TOOLS, wikipedia: WIKI_TOOLS, calendar: CAL_TOOLS, rss: RSS_TOOLS, notes: NOTES_TOOLS, confluence: CONFLUENCE_TOOLS, todoist: TODOIST_TOOLS, trello: TRELLO_TOOLS, asana: ASANA_TOOLS, airtable: AIRTABLE_TOOLS, gitlab: GITLAB_TOOLS, homeassistant: HA_TOOLS, discord: DISCORD_TOOLS, telegram: TELEGRAM_TOOLS, webhook: WEBHOOK_TOOLS };
 
   // Checks the connection and returns a short "connected as" label.
   async function test(id) {
     if (id === 'pagespeed') return C('pagespeed').key ? 'with your API key' : 'ready';
     if (id === 'weather') return C('weather').home || 'ready';
+    if (id === 'translate') return secret('translate') ? 'DeepL' : C('translate').libre ? 'LibreTranslate' : 'MyMemory (free)';
     if (id === 'wikipedia') return `${C('wikipedia').lang || 'en'}.wikipedia.org`;
     if (id === 'calendar') { const r = await CAL_TOOLS[0].run({ days: 30 }); return /Nothing/.test(r) ? 'connected (no events in 30 days)' : `${r.split('\n').length} upcoming events`; }
     if (id === 'rss') { const n = String(C('rss').feeds || '').split(/[,\s]+/).filter((u) => /^https?:\/\//.test(u)).length; if (!n) throw new Error('Add at least one feed address.'); return `${n} feed${n > 1 ? 's' : ''}`; }

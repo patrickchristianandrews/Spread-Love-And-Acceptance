@@ -200,6 +200,31 @@ function calcInputsHTML() {
       <label class="cc-price">Price per million tokens <span class="row" style="gap:6px"><span class="small">in $</span><input type="number" id="cc-pin" min="0" step="0.05" value="${calcState.priceIn}" ${calcState.free ? 'disabled' : ''}><span class="small">out $</span><input type="number" id="cc-pout" min="0" step="0.05" value="${calcState.priceOut}" ${calcState.free ? 'disabled' : ''}></span></label>
       <label class="row" style="gap:6px;align-self:end"><input type="checkbox" id="cc-free" ${calcState.free ? 'checked' : ''}> It's a free or dev plan</label>`;
 }
+// ---------- what free APIs can do, and what paying adds ----------
+// [icon, job, free: [service, limit, rating /10, where], paid: [service, price, rating /10, where], what paying adds]
+// where: 'app' = works inside Quicksilver once connected, 'pc' = on this PC, 'site' = on the service's own site.
+const FREE_PAID = [
+  ['💬', 'Chat & everyday answers', ['Google Gemini, Groq or Cerebras free plans', 'daily limits (e.g. Groq about 1,000 requests a day, Cerebras 1M words a day)', 8.5, 'app'], ['OpenAI GPT-6 Astra or Anthropic Claude', 'about $1–$50 per million words', 10, 'app'], 'No daily limits, the top models, and your prompts aren\'t used for training on most paid plans.'],
+  ['🧠', 'Hard reasoning & maths', ['Google Gemini free plan (95% on graduate-level science)', 'daily limits; prompts may be used to improve Google\'s models', 9.5, 'app'], ['OpenAI GPT-6 Astra (96%)', 'about $10 in / $50 out per million words', 10, 'app'], 'A little more accuracy, much higher limits and more privacy.'],
+  ['💻', 'Coding', ['Groq gpt-oss-120b free plan (88% on a coding test)', 'about 1,000 requests a day', 8.5, 'app'], ['Anthropic Claude', 'pay as you go', 10, 'app'], 'Bigger programs written right first time, and long code reviews.'],
+  ['🔎', 'Research with sources', ['Built-in web search (DuckDuckGo, Mojeek, Wikipedia); Tavily 1,000 searches a month', 'unlimited built-in search', 8.5, 'app'], ['Perplexity Sonar Pro', 'pay as you go', 9, 'app'], 'Deeper searches that read more pages per question.'],
+  ['🌍', 'Translation', ['MyMemory (about 5,000 words a day, no account) or DeepL Free (500,000 characters a month)', 'free', 8.5, 'app'], ['DeepL Pro', 'from about $9 a month', 9.5, 'app'], 'Unlimited text and whole documents with formatting kept.'],
+  ['🖼️', 'Photo creation', ['Pollinations (free, no key), Replicate ($5 credits), Stability AI (25 credits a month), Together FLUX Schnell Free', 'free; rate limited', 6.5, 'app'], ['Google Nano Banana 2.1 or OpenAI GPT Image', 'about $0.04–$0.05 a picture', 10, 'app'], 'Sharper detail, readable text in pictures, and prompts followed exactly.'],
+  ['🪄', 'Photo editing', ['Your PC (Qwen Image Edit or FLUX Kontext with a graphics card)', 'free, private', 7, 'pc'], ['Nano Banana 2.1 Edit (fal.ai)', 'about $0.04 an edit', 9, 'app'], 'Faces and fine details kept when you change a photo by description.'],
+  ['🎬', 'Video creation', ['Kling free daily credits (on Kling\'s site), Replicate $5 credits, or Wan on your PC with a graphics card', 'a few short clips a day', 5, 'site'], ['Google Veo 3.1 or Kling 3 Pro (fal.ai)', 'about $0.40 a second for Veo 3.1', 10, 'app'], 'Sharp 1080p video with sound, longer clips, and it works inside Quicksilver.'],
+  ['🎵', 'Music (full songs)', ['Suno, about 5 songs a day (on Suno\'s site); the built-in synth for instrumentals', 'free', 7, 'site'], ['ElevenLabs Music or MiniMax Music 2.6 (fal.ai)', 'about $0.15 a song (MiniMax) to $0.80 a minute (ElevenLabs)', 9, 'app'], 'Whole songs with vocals made inside Quicksilver, any length, with your lyrics.'],
+  ['🎙️', 'Voice & transcription', ['Built-in Whisper and voices on your PC; ElevenLabs 10,000 characters a month', 'free, private', 7.5, 'pc'], ['ElevenLabs paid voices', 'from about $5 a month', 9.5, 'site'], 'Ultra-realistic voices and voice cloning.'],
+];
+const WHERE = { app: ['In Quicksilver', 'b-mint'], pc: ['On this PC', 'b-sky'], site: ['On their site', 'b-lav'] };
+function freePaidHTML() {
+  return `<section class="card og-sec" id="free-paid"><h3>💸 Free vs paid: what each gets you</h3>
+    <p class="small" style="margin:0 0 10px">What you can do at no cost, what paying adds, and the output quality of each out of 10. "In Quicksilver" means it works inside the app once you add the key (Models → Connect an API, Create → Cloud or Connectors).</p>
+    <div class="fp-table"><div class="fp-h"><span>Job</span><span>🆓 Free</span><span>💳 Paid</span></div>
+    ${FREE_PAID.map(([ic, job, f, p, adds]) => `<div class="fp-r"><span><b>${ic} ${esc(job)}</b><span class="small muted">Paying adds: ${esc(adds)}</span></span>
+      <span><b>${esc(f[0])}</b><span class="small muted">${esc(f[1])}</span><span class="row" style="gap:6px">${tenStarsHTML(f[2])}<span class="badge ${WHERE[f[3]][1]}">${WHERE[f[3]][0]}</span></span></span>
+      <span><b>${esc(p[0])}</b><span class="small muted">${esc(p[1])}</span><span class="row" style="gap:6px">${tenStarsHTML(p[2])}<span class="badge ${WHERE[p[3]][1]}">${WHERE[p[3]][0]}</span></span></span></div>`).join('')}</div>
+    <p class="small muted" style="margin:8px 0 0">Free plans change often and usually have daily limits; some free plans use your prompts to improve their models. Ratings out of 10 are Quicksilver's, from independent tests where they exist. Sources include the community list of free AI APIs (github.com/OuterSpacee/free-ai-apis).</p></section>`;
+}
 function cloudCalcHTML() {
   return `<section class="card og-sec" id="cloud-calc"><h3>🧮 Calculator: a cloud AI alone, or through Quicksilver</h3>
     <p class="small" style="margin:0 0 10px">Pick what you'd use it for and which service. Quicksilver doesn't send everything to a cloud AI: your PC does what it can, and the cloud is used where it helps most.</p>
