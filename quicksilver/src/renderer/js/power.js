@@ -234,26 +234,69 @@ function fuzzy(q, s) {
   for (const w of words) { const i = t.indexOf(w); if (i < 0) return 0; score += i === 0 || t[i - 1] === ' ' ? 3 : 1; }
   return score + (t.startsWith(words[0]) ? 2 : 0);
 }
+// What kind of thing each palette entry is: its group, icon and the label without the prefix.
+const PAL_KINDS = [
+  [/^Go to /, 'Go to', '🧭'], [/^Settings: /, 'Settings', '⚙️'], [/^This chat: |^Turn |^Effort: |^Voice typing/, 'This chat', '💬'],
+  [/^Use model: /, 'Models', '🧠'], [/^New chat with /, 'Assistants', '🤖'], [/^Project: /, 'Projects', '📁'],
+  [/^Chat: /, 'Recent chats', '🗨️'], [/^Skill: /, 'Skills', '⚡'],
+];
+const PAL_ORDER = ['Actions', 'Go to', 'This chat', 'Settings', 'Models', 'Assistants', 'Skills', 'Projects', 'Recent chats'];
+function palKind(label) {
+  for (const [re, group, icon] of PAL_KINDS) if (re.test(label)) {
+    let text = label.replace(re, '');
+    let ic = icon;
+    // Skills, assistants and projects carry their own emoji: show it as the icon.
+    const m = text.match(/^(\p{Extended_Pictographic}️?|\p{Emoji_Presentation})\s*/u);
+    if (m && ['Skills', 'Assistants', 'Projects', 'Models'].includes(group)) { ic = m[1]; text = text.slice(m[0].length); }
+    return { group, icon: ic, text: group === 'This chat' ? label.replace(/^This chat: /, '') : text };
+  }
+  return { group: 'Actions', icon: '✨', text: label };
+}
+// Highlights the words you typed.
+function palMark(text, q) {
+  let out = esc(text);
+  for (const w of q.toLowerCase().split(/\s+/).filter((x) => x.length > 1)) out = out.replace(new RegExp(`(${w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'ig'), '<mark>$1</mark>');
+  return out;
+}
 function openPalette() {
-  const items = paletteItems();
-  const b = openModal(`<div class="pal"><input id="pal-q" placeholder="Type a command, a chat, a model or a skill…" autocomplete="off" spellcheck="false"><div class="pal-list" id="pal-list"></div><div class="pal-foot small muted">↑↓ to choose · Enter to run · Esc to close</div></div>`);
+  const items = paletteItems().map((it) => ({ label: it[0], hint: it[1], run: it[2], ...palKind(it[0]) }));
+  const b = openModal(`<div class="pal"><div class="pal-in">${icon('search', 18)}<input id="pal-q" placeholder="Search commands, pages, chats, models and skills…" autocomplete="off" spellcheck="false"><kbd>Esc</kbd></div><div class="pal-list" id="pal-list" role="listbox"></div>
+    <div class="pal-foot small muted"><span><kbd>↑</kbd><kbd>↓</kbd> choose</span><span><kbd>↵</kbd> run</span><span><kbd>Esc</kbd> close</span><span class="grow"></span><span>Open any time with <kbd>Ctrl</kbd> <kbd>P</kbd></span></div></div>`);
   b.classList.add('pal-modal');
   const q = b.querySelector('#pal-q');
   const list = b.querySelector('#pal-list');
   let shown = []; let hot = 0;
   const paint = () => {
-    shown = items.map((it) => [fuzzy(q.value, it[0]), it]).filter((x) => x[0] > 0).sort((x, y) => y[0] - x[0]).slice(0, 60).map((x) => x[1]);
+    const text = q.value.trim();
+    let pick;
+    if (!text) {
+      // Before you type: a few of each kind, most useful first.
+      const per = { Actions: 4, 'Go to': 12, 'This chat': 6, 'Recent chats': 5 };
+      pick = PAL_ORDER.flatMap((g) => items.filter((x) => x.group === g).slice(0, per[g] || 0));
+    } else {
+      const scored = items.map((it) => [fuzzy(text, it.label), it]).filter((x) => x[0] > 0).sort((x, y) => y[0] - x[0]).slice(0, 60).map((x) => x[1]);
+      // Keep the best match on top, then group the rest in a steady order.
+      const first = scored[0];
+      pick = first ? [first, ...PAL_ORDER.flatMap((g) => scored.slice(1).filter((x) => x.group === g))] : [];
+    }
+    shown = pick;
     hot = Math.min(hot, Math.max(0, shown.length - 1));
-    list.innerHTML = shown.map((it, i) => `<button class="pal-item ${i === hot ? 'hot' : ''}" data-i="${i}"><span class="grow">${esc(it[0])}</span>${it[1] ? `<span class="small muted">${esc(it[1])}</span>` : ''}</button>`).join('') || '<div class="small muted" style="padding:14px">Nothing matches.</div>';
+    let last = '';
+    list.innerHTML = shown.length ? shown.map((it, i) => {
+      const head = text && i === 0 ? '<div class="pal-group">Best match</div>' : it.group !== last && !(text && i === 0) ? `<div class="pal-group">${esc(it.group)}</div>` : '';
+      if (!(text && i === 0)) last = it.group;
+      return `${head}<button class="pal-item ${i === hot ? 'hot' : ''}" data-i="${i}" role="option" aria-selected="${i === hot}"><span class="pal-ic">${it.icon}</span><span class="grow">${palMark(it.text, text)}</span>${it.hint ? `<span class="pal-hint">${esc(it.hint)}</span>` : ''}${i === hot ? '<kbd class="pal-enter">↵</kbd>' : ''}</button>`;
+    }).join('') : `<div class="pal-empty">Nothing matches "${esc(text)}". Try fewer words, or the name of a page, chat, model or skill.</div>`;
     list.querySelector('.hot')?.scrollIntoView({ block: 'nearest' });
   };
-  const run = (i) => { const it = shown[i]; if (!it) return; closeModal(); setTimeout(() => it[2](), 10); };
+  const run = (i) => { const it = shown[i]; if (!it) return; closeModal(); setTimeout(() => it.run(), 10); };
   q.addEventListener('input', () => { hot = 0; paint(); });
   q.addEventListener('keydown', (e) => {
     if (e.key === 'ArrowDown' || e.key === 'ArrowUp') { e.preventDefault(); hot = (hot + (e.key === 'ArrowDown' ? 1 : -1) + shown.length) % Math.max(1, shown.length); paint(); }
     if (e.key === 'Enter') { e.preventDefault(); run(hot); }
   });
   list.addEventListener('click', (e) => { const x = e.target.closest('[data-i]'); if (x) run(Number(x.dataset.i)); });
+  list.addEventListener('mousemove', (e) => { const x = e.target.closest('[data-i]'); if (x && Number(x.dataset.i) !== hot) { hot = Number(x.dataset.i); list.querySelectorAll('.pal-item').forEach((y) => { const on = Number(y.dataset.i) === hot; y.classList.toggle('hot', on); y.querySelector('.pal-enter')?.remove(); if (on) y.insertAdjacentHTML('beforeend', '<kbd class="pal-enter">↵</kbd>'); }); } });
   paint();
   q.focus();
 }

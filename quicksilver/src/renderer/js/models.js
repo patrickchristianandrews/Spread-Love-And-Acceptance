@@ -252,7 +252,7 @@ function apiHTML() {
       <div class="row small" style="margin-bottom:10px">${(p.models || []).slice(0, 8).map((m) => `<span class="badge b-lav">${esc(m)}</span>`).join('')}${(p.models || []).length > 8 ? `<span class="small muted">+${p.models.length - 8} more</span>` : ''}${(p.imageModels || []).map((m) => `<span class="badge b-peach">🎨 ${esc(m)}</span>`).join('')}</div>
       <div class="row"><button class="btn small" data-api-refresh="${p.id}">Refresh models</button><button class="btn small" data-api-edit="${p.id}">Edit</button><button class="btn small danger" data-api-del="${p.id}">Remove</button></div>
     </div>`).join('')}</div>` : ''}
-    <div class="section"><h2>Add a connection</h2><span class="small muted">Every cloud AI that works with Quicksilver, marked free or paid, with the best model to use. <a href="#" data-guide="apis">Which should I choose?</a></span></div>
+    <div class="section"><h2>Add a connection</h2><span class="small muted">Every cloud AI that works with Quicksilver, marked free or paid, with the best model to use. <a href="#" data-guide="apis">Which should I choose? What's a dev plan? Calculator: alone vs through Quicksilver</a></span></div>
     <div id="presets"></div>`;
 }
 
@@ -279,6 +279,7 @@ async function bindApi() {
     const list = Object.entries(presets).filter(([, p]) => test(p));
     return list.length ? `<h3 class="small muted" style="margin:14px 0 8px;text-transform:uppercase;letter-spacing:.05em">${title}</h3><div class="cards" style="grid-template-columns:repeat(auto-fill,minmax(250px,1fr))">${list.map(([k, p]) => `<button class="card" data-preset="${k}" style="text-align:left">
       <div class="row"><h3 class="grow">${esc(p.name)}</h3>${FREE_BADGE[p.free] || ''}</div>
+      ${devBadgeHTML(k) ? `<div style="margin-top:6px">${devBadgeHTML(k)}</div>` : ''}
       <div class="small muted" style="font-weight:600;margin-top:6px">${esc(p.freeNote || (k === 'custom' ? 'Any OpenAI-compatible endpoint' : 'Needs an API key'))}</div>
       ${p.best ? `<div class="small" style="margin-top:6px">⭐ <b>Best to link:</b> <code>${esc(p.best)}</code>${p.bestWhy ? ` <span class="muted">· ${esc(p.bestWhy)}</span>` : ''}</div>` : ''}
       ${scoreChipsHTML(cloudScoresFor(k), { label: 'Tested', note: cloudScoresFor(k)?.model ? `Scores of ${cloudScoresFor(k).model}.` : '' })}

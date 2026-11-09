@@ -707,6 +707,18 @@ function redPng(size = 64) {
   assert.ok(await win.locator('.api-row').count() >= 12);
   assert.ok(await win.locator('#guide-connect').count() === 1);
   assert.ok(await win.locator('.og-sec h3:has-text("When a cloud AI is worth it")').count() === 1 && await win.locator('.xp-where').count() >= 8);
+  // The calculator: a cloud AI alone vs through Quicksilver, and what a dev plan means.
+  await win.waitForSelector('#cloud-calc #cc-out .cc-sum');
+  const calcBefore = await win.locator('#cc-out').innerText();
+  await win.locator('#cc-hard').fill('20');
+  await win.waitForFunction(() => /80% fewer/.test(document.querySelector('#cc-out').innerText));
+  assert.notEqual(calcBefore, await win.locator('#cc-out').innerText(), 'the calculator updates as you move the sliders');
+  await win.selectOption('#cc-mode', 'fusion');
+  await win.waitForFunction(() => /As a lead/.test(document.querySelector('#cc-out').innerText));
+  await win.selectOption('#cc-mode', 'hard');
+  assert.ok(await win.locator('.og-sec h3:has-text("Developer (dev) plans")').count() === 1);
+  await win.locator('#cloud-calc').scrollIntoViewIfNeeded();
+  await shot(win, '17d2-cloud-calculator');
   await shot(win, '17d-guide-apis');
   await win.click('[data-guide-tab="tips"]');
   assert.ok(await win.locator('.tip-item').count() >= 12);
@@ -926,6 +938,7 @@ function redPng(size = 64) {
   // Every cloud AI, free or paid, with the best model to link; Fusion to combine them.
   assert.ok(await win.locator('#presets [data-preset]').count() >= 30, 'every OpenAI-compatible cloud AI is listed');
   await win.waitForSelector('#presets .card:has-text("Venice AI") :text("Best to link")');
+  await win.waitForSelector('#presets .card:has-text("Groq") .badge:has-text("Dev plan")');
   await win.waitForSelector('.fusion-card #fusion-open');
   await shot(win, '05b-api-free');
   await win.click('[data-nav="pc"]');
@@ -1139,6 +1152,10 @@ function redPng(size = 64) {
   await win.keyboard.press('Control+Shift+P');
   await win.waitForSelector('#pal-q');
   await win.fill('#pal-q', 'blind test');
+  // The palette groups results, shows an icon for each, and highlights what you typed.
+  await win.waitForSelector('.pal .pal-group:has-text("Best match")');
+  assert.match(await win.locator('.pal-item.hot').innerText(), /Compare models \(blind test\)/);
+  assert.ok(await win.locator('.pal-item.hot mark').count() >= 1 && await win.locator('.pal-item.hot .pal-ic').count() === 1);
   await shot(win, '19-command-palette');
   await win.keyboard.press('Enter');
   // A background job (a title, suggestions) can repaint the chat just as the palette jumps; try once more.

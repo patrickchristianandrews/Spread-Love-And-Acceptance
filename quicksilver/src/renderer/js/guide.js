@@ -201,7 +201,10 @@ function apisGuideHTML() {
   const row = ([name, tag, best, what, note]) => `<div class="api-row"><div class="row" style="gap:8px;flex-wrap:wrap"><b>${esc(name)}</b><span class="badge b-lav">${esc(tag)}</span></div>
     <div class="small">⭐ <b>Best model:</b> ${esc(best)}</div><div class="small">${esc(what)}</div><div class="small muted">${esc(note)}</div></div>`;
   return `<div class="og"><p class="help" style="margin-top:0">Quicksilver works without any cloud AI. These are the best ones to add, as of this version. Prices and free limits change often, so each service's card in Connect an API links to its current prices.</p>
+    ${addApiHTML()}
+    ${cloudCalcHTML()}
     ${expandedGuideHTML()}
+    ${devPlansHTML()}
     <section class="card og-sec"><h3>✓ Free</h3><div class="api-grid">${API_GUIDE.free.map(row).join('')}</div></section>
     <section class="card og-sec"><h3>$ Paid</h3><div class="api-grid">${API_GUIDE.paid.map(row).join('')}</div></section>
     <section class="card og-sec"><h3>Which to choose</h3><dl>
@@ -225,6 +228,7 @@ function bindGuidePage() {
   $$('[data-guide-tab]').forEach((b) => b.addEventListener('click', () => { guideTab = b.dataset.guideTab; render(); }));
   $$('#main [data-goto]').forEach((b) => b.addEventListener('click', () => go({ view: b.dataset.goto })));
   $('#guide-connect')?.addEventListener('click', () => { modelsTab = 'api'; go({ view: 'models' }); });
+  bindCloudCalc();
 }
 // Links from elsewhere: data-guide="stacks" / "apis" / "tips" opens that tab of the guide.
 document.addEventListener('click', (e) => {
