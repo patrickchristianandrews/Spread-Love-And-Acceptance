@@ -35,7 +35,14 @@ function load() {
   }
   return db;
 }
-const persist = () => store.writeJSON(FILE(), db);
+// After anything is added, new passages get their search vectors in the background.
+let indexTimer = null;
+const persist = () => {
+  store.writeJSON(FILE(), db);
+  clearTimeout(indexTimer);
+  indexTimer = setTimeout(() => { try { if (require('./embed').installed()) indexPending(module.exports.onProgress).catch(() => {}); } catch {} }, 800);
+  indexTimer.unref?.();
+};
 
 function collections() {
   load();
@@ -323,7 +330,7 @@ async function search(query, { k = 8, collectionIds, perSource = 3 } = {}) {
   const ids = collectionIds?.length ? new Set(collectionIds) : new Set(db.collections.map((c) => c.id));
   const cols = db.collections.filter((c) => ids.has(c.id));
   const docIds = new Set(db.docs.filter((d) => ids.has(d.c)).map((d) => d.id));
-  const local = bm25(query, (c) => docIds.has(c.d), k);
+  const local = await hybrid(query, (c) => docIds.has(c.d), k);
   // Offline: only your stored knowledge (live sources need the internet).
   const off = Boolean(store.config().offline);
   const live = new Set(off ? [] : cols.flatMap((c) => c.live || []));
@@ -347,6 +354,76 @@ async function search(query, { k = 8, collectionIds, perSource = 3 } = {}) {
   return out;
 }
 
+// ---------- smarter search (meaning vectors) ----------
+// Each passage gets a vector from the search model once; questions are matched by meaning and by
+// keywords, and the two rankings are merged. Without the search model, keywords alone are used.
+const VEC = () => store.file('knowledge-vec.json');
+let vec = null;
+const vkey = (c) => `${c.d}:${c.n}`;
+function loadVec() { if (!vec) vec = store.readJSON(VEC(), { v: {} }); return vec; }
+function saveVec() {
+  load(); loadVec();
+  const live = new Set(db.chunks.map(vkey));
+  for (const k of Object.keys(vec.v)) if (!live.has(k)) delete vec.v[k];
+  store.writeJSON(VEC(), vec);
+}
+let indexing = null;
+async function indexPending(onProgress) {
+  const embed = require('./embed');
+  if (!embed.installed()) return { indexed: 0 };
+  if (indexing) return indexing;
+  indexing = (async () => {
+    load(); loadVec();
+    const todo = db.chunks.filter((c) => !vec.v[vkey(c)]);
+    let done = 0;
+    for (let i = 0; i < todo.length; i += 16) {
+      const batch = todo.slice(i, i + 16);
+      const vs = await embed.embed(batch.map((c) => c.t), 'document');
+      if (!vs) break;
+      batch.forEach((c, j) => { if (vs[j]) vec.v[vkey(c)] = vs[j]; });
+      done += batch.length;
+      onProgress?.({ kind: 'index', done, total: todo.length });
+      if (done % 320 === 0) saveVec();
+    }
+    saveVec();
+    return { indexed: done };
+  })().finally(() => { indexing = null; });
+  return indexing;
+}
+function semanticStatus() {
+  load(); loadVec();
+  const e = require('./embed');
+  return { on: Boolean(e.installed()), model: e.EMBED.name, sizeGB: e.EMBED.sizeGB, indexed: db.chunks.filter((c) => vec.v[vkey(c)]).length, total: db.chunks.length, indexing: Boolean(indexing) };
+}
+// Keyword and meaning rankings merged (reciprocal rank fusion), at most 2 passages per document.
+async function hybrid(query, chunkFilter, k) {
+  const words = bm25(query, chunkFilter, 40);
+  const e = require('./embed');
+  if (!e.installed()) return words.slice(0, k);
+  loadVec();
+  const pool = db.chunks.filter(chunkFilter).filter((c) => vec.v[vkey(c)]);
+  if (!pool.length) return words.slice(0, k);
+  let qv;
+  try { [qv] = await e.embed([query], 'query'); } catch { return words.slice(0, k); }
+  if (!qv) return words.slice(0, k);
+  const byMeaning = pool.map((c) => ({ c, s: e.cosine(qv, vec.v[vkey(c)]) })).sort((a, b) => b.s - a.s).slice(0, 40);
+  const score = new Map();
+  const add = (c, rank) => score.set(c, (score.get(c) || 0) + 1 / (60 + rank));
+  const chunkOf = (r) => db.chunks.find((c) => c.t === r.text && db.docs.find((d) => d.id === c.d)?.name === r.title);
+  words.forEach((r, i) => { const c = chunkOf(r); if (c) add(c, i); });
+  byMeaning.forEach((x, i) => add(x.c, i));
+  const per = new Map();
+  const out = [];
+  for (const [c, s] of [...score.entries()].sort((a, b) => b[1] - a[1])) {
+    if ((per.get(c.d) || 0) >= 2) continue;
+    per.set(c.d, (per.get(c.d) || 0) + 1);
+    const doc = db.docs.find((d) => d.id === c.d);
+    out.push({ title: doc?.name || 'Document', path: doc?.path, url: /^https?:/.test(doc?.path || '') ? doc.path : undefined, text: c.t, score: s, collection: doc?.c, semantic: true });
+    if (out.length >= k) break;
+  }
+  return out;
+}
+
 function addTexts(collectionId, items) {
   load();
   for (const it of items) addText(collectionId, it);
@@ -354,4 +431,4 @@ function addTexts(collectionId, items) {
   return { added: items.length, errors: [] };
 }
 
-module.exports = { peek, addTexts, collections, createCollection, updateCollection, deleteCollection, docs, addPaths, addWebsite, removeDoc, search, LIVE, FETCHERS };
+module.exports = { indexPending, semanticStatus, peek, addTexts, collections, createCollection, updateCollection, deleteCollection, docs, addPaths, addWebsite, removeDoc, search, LIVE, FETCHERS };

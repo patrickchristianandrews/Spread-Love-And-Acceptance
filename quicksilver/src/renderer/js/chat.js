@@ -15,7 +15,7 @@ function newChat(assistantId, projectId) {
   go({ view: 'chat', id: chat.id });
 }
 
-const EFFORTS = { quick: '⚡ Instant', balanced: '⚖️ Balanced', thorough: '✨ Auto', max: '🧠 Deep think', council: '⚔️ Council' };
+const EFFORTS = { quick: '⚡ Instant', balanced: '⚖️ Balanced', thorough: '✨ Auto', council: '⚔️ Council' };
 const effortOf = (chat, a) => chat.effort || a.effort || S.data.prefs.effortLevel || 'thorough';
 
 const msgText = (m) => (m.role === 'assistant' ? m.alts[m.altIndex]?.text || '' : m.text || '');
@@ -59,7 +59,7 @@ views.chat = {
           <div class="skill-pop" id="skill-pop" hidden></div>
           <textarea id="input" rows="1" spellcheck="true" placeholder="${esc(chat.pendingSkill ? skillById(chat.pendingSkill)?.hint || 'Add details…' : `Message ${a.name}…  Type / for skills`)}" aria-label="Message"></textarea>
           <div class="composer-bar">
-            <button class="icon-btn opts-btn" id="opts-btn" title="Options: web search, knowledge, double-check, effort, skills" aria-label="Options">${icon('plus')}</button>
+            <button class="icon-btn opts-btn" id="opts-btn" title="More options: connected apps (tools), cloud AI, web search, knowledge, double-check, effort" aria-label="Options">${icon('plus')}</button>
             <button class="icon-btn" id="skill-btn" title="Use a skill (or type /)" aria-label="Skills">${icon('zap')}</button>
             <button class="chip-tog improve-btn" id="improve-btn" title="Fix my prompt: rewrites what you typed so it's clear and complete (spelling too), for a better answer. You can edit it before sending." aria-label="Fix my prompt">${icon('sparkle', 16)}<span>Fix my prompt</span></button>
             <button class="icon-btn mic-btn ${voiceRec?.chatId === chat.id ? 'rec' : ''}" id="mic-btn" title="Voice typing: click and speak (Ctrl+Space)" aria-label="Voice typing">${icon('mic')}</button>
@@ -67,11 +67,9 @@ views.chat = {
             <span class="bar-sep"></span>
             ${chip('tog-lib', 'book', 'Library', lib, 'Search your knowledge bases and cite them')}
             ${S.config?.offline ? `<span class="chip-tog" title="Offline: switch to Online in the sidebar to search the web" style="opacity:.5">${icon('globe', 16)}<span>Web (offline)</span></span>` : chip('tog-web', 'globe', 'Web', web, 'Search the web and cite sources')}
-            ${chip('tog-tools', 'plug', 'Tools', tools, 'Let the AI use your integrations (GitHub, Slack, MCP servers…)')}
             ${chip('tog-fact', 'shield', 'Double-check', fact, 'After each answer, a second model checks it claim by claim')}
-            <button class="chip-tog" id="add-api-chip" title="Connect a cloud AI (ChatGPT, Claude, Gemini…) to use alongside your local models">${icon('plus', 16)}<span>Cloud AI${S.providers?.length ? ` (${S.providers.length})` : ''}</span></button>
             <label class="pill-select small" title="Answer length: Best length fits the question; Quick answer gets straight to the point; Detailed answer gives the full picture, with explanation and examples">${icon('doc', 16)}<select id="pick-length" aria-label="Answer length">${Object.entries(LENGTHS).map(([k, l]) => `<option value="${k}" ${k === lengthOf(chat) ? 'selected' : ''}>${l.label}</option>`).join('')}</select>${icon('chevron', 14)}</label>
-            <label class="pill-select small" title="Instant: one model, fastest. Balanced: one model, then a check. Auto: the team works on hard questions only. Deep think: the whole team on every question, always double-checked. Council: three AIs (Structurer, Critic, Pragmatist), then one verdict. See Settings → Options guide.">${icon('gauge', 16)}<select id="pick-effort" aria-label="Effort">${Object.entries(EFFORTS).map(([k, e]) => `<option value="${k}" ${k === effortOf(chat, a) ? 'selected' : ''}>${e.replace(/^\S+\s/, '')}</option>`).join('')}</select>${icon('chevron', 14)}</label>
+            <label class="pill-select small" title="Instant: one model, fastest. Balanced: one model, then a check. Auto: the team works on hard questions only. Council: three AIs (Structurer, Critic, Pragmatist), then one verdict. See Settings → Options guide.">${icon('gauge', 16)}<select id="pick-effort" aria-label="Effort">${Object.entries(EFFORTS).map(([k, e]) => `<option value="${k}" ${k === effortOf(chat, a) ? 'selected' : ''}>${e.replace(/^\S+\s/, '')}</option>`).join('')}</select>${icon('chevron', 14)}</label>
             <span class="grow"></span>
             <button class="send-btn ${pending?.chatId === chat.id ? 'stop' : ''}" id="send" title="${pending?.chatId === chat.id ? 'Stop' : 'Send (Enter)'}" aria-label="${pending?.chatId === chat.id ? 'Stop' : 'Send'}">${icon(pending?.chatId === chat.id ? 'stop' : 'send', 20)}</button>
           </div>
@@ -230,7 +228,7 @@ function messageHTML(chat, a, m, i) {
   const body = alt.error ? esc(alt.error) + lowMemHTML(m, alt)
     : !alt.text && streaming ? `<span class="status-line">${esc(alt.status || 'Thinking…')}</span>`
     : HIDE_BLOCK.has(isMakerSkill(alt)?.output) ? (stripMediaBlock(alt.text) ? markdown(stripMediaBlock(alt.text)) : streaming ? `<span class="status-line">Writing the ${MEDIA_WORD[skillById(alt.skillId).output]} prompt…</span>` : '')
-    : markdown(alt.text || '');
+    : markdown(streaming && humanOn() ? humanize(alt.text || '') : alt.text || '');
   const tools = [];
   if (m.alts.length > 1) tools.push(`<span class="alt-switch" title="${m.alts.length} answers to this question${alt.target ? `; this one is by ${esc(targetLabel(alt.target))}` : ''}"><button class="tool icon" data-act="prev" data-id="${m.id}" aria-label="Previous answer">‹</button><span>${m.altIndex + 1} / ${m.alts.length}</span><button class="tool icon" data-act="next" data-id="${m.id}" aria-label="Next answer">›</button></span>`);
   if (!streaming && !pending) {
@@ -372,7 +370,6 @@ function bindChat() {
   });
   $('#pick-effort').addEventListener('change', (e) => { chat.effort = e.target.value; save(); render(); if (e.target.value === 'council') toast('⚔️ Council: a Structurer, a Critic and a Pragmatist each look at your question, then one answer is written from all three. Slower, for when it matters.', 7000); });
   $('#pick-length').addEventListener('change', (e) => { chat.length = e.target.value; S.data.prefs.answerLength = e.target.value; save(); toast(LENGTHS[e.target.value].toast); });
-  $('#tog-tools').addEventListener('click', () => { chat.tools = !toolsOn(chat, a); save(); render(); if (chat.tools && !S.hasIntegrations) toast('Connect GitHub, Slack, Notion, Jira, Linear or an MCP server under Connectors first.', 6000); });
   $('#tog-fact').addEventListener('click', () => { chat.factCheck = !factOn(chat, a); save(); render(); });
   $('#net-pill').addEventListener('click', toggleNet);
   $('#chat-more').addEventListener('click', (e) => { e.stopPropagation(); chatMenu(e.currentTarget, chat); });
@@ -759,6 +756,28 @@ async function generate(chat, rerollMsg, withTarget, opts = {}) {
   });
 }
 
+// Updates an element to match a freshly drawn one with as little change as possible: text that's
+// already on screen stays put, so nothing flickers or jumps while an answer streams in.
+function morphNode(o, n) {
+  if (!o || !n || o.isEqualNode(n)) return;
+  if (o.tagName !== n.tagName || o.nodeType !== n.nodeType) { o.replaceWith(n.cloneNode(true)); return; }
+  if (o.tagName === 'DETAILS') { const open = o.open; [...n.attributes].forEach((a) => o.getAttribute(a.name) !== a.value && a.name !== 'open' && o.setAttribute(a.name, a.value)); n.open = open; }
+  else {
+    [...o.attributes].forEach((a) => { if (!n.hasAttribute(a.name)) o.removeAttribute(a.name); });
+    [...n.attributes].forEach((a) => { if (o.getAttribute(a.name) !== a.value) o.setAttribute(a.name, a.value); });
+  }
+  const oc = [...o.childNodes];
+  const nc = [...n.childNodes];
+  nc.forEach((c, i) => {
+    const d = oc[i];
+    if (!d) o.appendChild(c.cloneNode(true));
+    else if (c.nodeType === 3 && d.nodeType === 3) { if (d.nodeValue !== c.nodeValue) d.nodeValue = c.nodeValue; }
+    else if (c.nodeType === 1 && d.nodeType === 1) morphNode(d, c);
+    else d.replaceWith(c.cloneNode(true));
+  });
+  for (let i = oc.length - 1; i >= nc.length; i--) oc[i].remove();
+}
+
 function paintStreaming(chat, msg) {
   if (S.route.view !== 'chat' || S.route.id !== chat.id || paintQueued) return;
   paintQueued = true;
@@ -769,22 +788,29 @@ function paintStreaming(chat, msg) {
     if (!el) return;
     const a = assistantById(chat.assistantId);
     const openSteps = el.querySelector('details.steps')?.open;
+    const openThink = el.querySelector('details.think')?.open;
     const tmp = document.createElement('div');
     tmp.innerHTML = messageHTML(chat, a, msg, chat.messages.indexOf(msg));
     const fresh = tmp.firstElementChild;
     if (openSteps === false && fresh.querySelector('details.steps')) fresh.querySelector('details.steps').open = false;
+    if (openThink && fresh.querySelector('details.think')) fresh.querySelector('details.think').open = true;
     fresh.classList.remove('msg-in');
     // Update in place: keep every part that hasn't changed (pictures, open panels, the text
     // already shown), and swap only what did. Falls back to a full swap if the shape changed.
     const oldMain = el.querySelector('.msg-main');
     const newMain = fresh.querySelector('.msg-main');
     if (oldMain && newMain && oldMain.children.length === newMain.children.length && el.className.replace(' msg-in', '') === fresh.className) {
-      [...newMain.children].forEach((n, k) => {
+      [...newMain.children].forEach((n, k) => morphNode(oldMain.children[k], n));
+    } else if (oldMain && newMain && el.className.replace(' msg-in', '') === fresh.className) {
+      // A part appeared or went (the steps row, the answer's tools): add or remove just that part.
+      const kids = [...newMain.children];
+      kids.forEach((n, k) => {
         const o = oldMain.children[k];
-        if (o.outerHTML === n.outerHTML) return;
-        if (o.tagName === n.tagName && o.className === n.className && n.classList.contains('bubble')) o.innerHTML = n.innerHTML;
-        else o.replaceWith(n.cloneNode(true));
+        if (!o) oldMain.appendChild(n.cloneNode(true));
+        else if (o.className === n.className && o.tagName === n.tagName) morphNode(o, n);
+        else oldMain.insertBefore(n.cloneNode(true), o);
       });
+      while (oldMain.children.length > kids.length) oldMain.lastElementChild.remove();
     } else el.replaceWith(fresh);
     scrollDown(false);
   });

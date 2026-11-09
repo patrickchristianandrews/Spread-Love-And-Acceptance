@@ -61,7 +61,7 @@ function redPng(size = 64) {
   // The fake 8 GB graphics card turns on background work (reading ahead, answering the next
   // question in advance); on a slow test machine that competes with the steps being tested, so
   // it's off here and switched on only in the tests that check it.
-  await win.evaluate(() => { S.data.prefs.preanswer = false; S.data.prefs.readAhead = false; S.data.prefs.autoUpgrade = false; S.data.prefs.exploreOpen = true; save(); paintExplore(); });
+  await win.evaluate(() => { S.data.prefs.preanswer = false; S.data.prefs.readAhead = false; S.data.prefs.exploreOpen = true; save(); paintExplore(); });
   // Most checks below use the full view (every option on screen); the simple view, which is the
   // default, is checked near the end.
   assert.equal(await win.evaluate(() => S.data.prefs.simple), true, 'simple view is the default');
@@ -132,13 +132,13 @@ function redPng(size = 64) {
   await win.waitForFunction(() => S.data.assistants.some((a) => a.id === 'as-rx-song-doctor'), null, { timeout: 30000 });
   assert.equal(await win.evaluate(async () => (await qs.call('stacks:list')).find((x) => x.id === 'rx-song-doctor')?.members.mode), 'debate');
   assert.equal(await win.evaluate(() => S.data.assistants.find((a) => a.id === 'as-rx-song-doctor').skill), 'song-critique');
-  // Power moves: one click builds the team from your own models and opens a chat with it.
+  // Power moves are Fusion styles now: Majority vote, Red team, Plan then solve, Expert panel.
   await win.click('[data-nav="stacks"]');
-  await win.click('[data-pm="redteam"]');
-  await win.waitForFunction(() => chatById(S.route.id)?.target === 'stack:pm-redteam', null, { timeout: 30000 });
-  await win.click('[data-nav="stacks"]');
-  await win.waitForSelector('[data-pm-chat="redteam"]');
-  console.log('✓ power moves: built from your own models in one click');
+  assert.equal(await win.locator('[data-pm]').count(), 0, 'no separate Power moves section');
+  await win.click('#infuse');
+  for (const m of ['vote', 'redteam', 'plan', 'panel']) await win.waitForSelector(`#modal input[name="im"][value="${m}"]`, { state: 'attached' });
+  await win.click('#modal [data-close]');
+  console.log('✓ fusion: includes the power-move styles (vote, red team, plan, panel)');
   assert.ok(await win.evaluate(() => STACK_RECIPES.some((r) => r.id === 'gif-maker' && r.skill === 'make-gif') && skillById('make-gif')?.media?.gif));
   console.log(`✓ stacks for specific work: ${await win.evaluate(() => STACK_RECIPES.length)} teams incl. 3 song stacks and a GIF maker, tuned to this PC, set up as a stack and an assistant`);
 
@@ -149,7 +149,7 @@ function redPng(size = 64) {
   await win.setInputFiles('#file-in', { name: 'sales.csv', mimeType: 'text/csv', buffer: Buffer.from('Region,Revenue\nNorth,1200\nSouth,800\n') });
   await win.waitForSelector('.attach:has-text("sales.csv")');
   if ((await win.getAttribute('#tog-fact', 'aria-pressed')) !== 'true') await win.click('#tog-fact');
-  await win.selectOption('#pick-effort', 'max'); // Max: the whole team, always combined
+  await win.evaluate(() => { chatById(S.route.id).effort = 'max'; save(); }); // the whole team, always combined (older setting, still honoured)
   await win.fill('#input', 'Which region sold more?');
   await win.keyboard.press('Enter');
   await idle();
@@ -338,15 +338,13 @@ function redPng(size = 64) {
   console.log('✓ exam coaches: CPA/CIA outlines, interactive practice questions, results tracked and used');
   // Connect a cloud AI from the message box: inline chip (full view) and the ＋ options (simple).
   await win.evaluate((id) => { S.data.prefs.simple = false; applySimple?.(); go({ view: 'chat', id }); }, backTo2);
-  await win.waitForSelector('#add-api-chip');
-  await win.click('#add-api-chip');
-  await win.waitForFunction(() => S.route.view === 'models' && modelsTab === 'api', null, { timeout: 10000 });
-  await win.evaluate((id) => { S.data.prefs.simple = true; applySimple?.(); go({ view: 'chat', id }); }, backTo2);
   await win.click('#opts-btn');
-  await win.waitForSelector('.opts-menu [data-o="add-api"]');
-  await win.keyboard.press('Escape');
+  await win.click('.opts-menu [data-o="add-api"]');
+  await win.waitForFunction(() => S.route.view === 'models' && modelsTab === 'api', null, { timeout: 10000 });
+  await win.evaluate((id) => { go({ view: 'chat', id }); }, backTo2);
+  assert.equal(await win.locator('#add-api-chip').count(), 0, 'the message bar stays tidy: Cloud AI is in the ＋ menu');
   await win.evaluate(() => { S.data.prefs.simple = false; applySimple?.(); });
-  console.log('✓ connect a cloud AI from the message box (chip in full view, ＋ menu in simple)');
+  console.log('✓ connect a cloud AI from the message box (＋ menu)');
   // With no model installed, chatting offers to add one or a team (keeps the typed message).
   await win.evaluate((id) => go({ view: 'chat', id }), backTo2);
   await win.evaluate(() => needModel(chatById(S.route.id)));
@@ -390,7 +388,7 @@ function redPng(size = 64) {
   // Dropdowns are drawn by Quicksilver (readable in both themes): click, see the choices, pick one.
   await win.click('#pick-effort');
   await win.waitForSelector('.sel-pop .sel-item.sel:has-text("Instant")');
-  assert.equal(await win.locator('.sel-pop .sel-item').count(), 5, 'Instant, Balanced, Auto, Deep think, Council');
+  assert.equal(await win.locator('.sel-pop .sel-item').count(), 4, 'Instant, Balanced, Auto, Council');
   const look = await win.evaluate(() => { const p = getComputedStyle(document.querySelector('.sel-pop')); const i = getComputedStyle(document.querySelector('.sel-pop .sel-item')); return { bg: p.backgroundColor, fg: i.color }; });
   assert.notEqual(look.bg, look.fg, 'text and background differ');
   await shot(win, '09b-dropdown');
@@ -517,7 +515,9 @@ function redPng(size = 64) {
   await shot(win, '11-integrations');
   await win.click('[data-nav="newchat"]');
   await win.selectOption('#pick-model', 'local:qwen3-8b');
-  await win.click('#tog-tools');
+  await win.click('#opts-btn');
+  await win.click('.opts-menu [data-o="tog-tools"]');
+  await win.waitForFunction(() => chatById(S.route.id)?.tools === true);
   await win.fill('#input', 'Please use save_note');
   await win.keyboard.press('Enter');
   await win.waitForSelector('text=Allow this action?', { timeout: 30000 });
@@ -604,6 +604,17 @@ function redPng(size = 64) {
   assert.equal(hum[0], 'Paris is the capital, and the largest city.\n\n```js\nconst a = 1; // x — y\n```');
   assert.match(hum[1], /knowledgeable friend talking/); assert.match(hum[1], /No em dashes/);
   console.log('✓ human writing: conversational style asked for, chatbot leftovers tidied, code untouched');
+  // No bounce: redrawing the chat you're on plays no entrance animation and keeps your place.
+  const still = await win.evaluate(() => { const box = document.getElementById('messages'); render(); return { enter: Boolean(document.querySelector('#main > .enter')), same: render.key === `chat:${S.route.id}` }; });
+  assert.equal(still.enter, false, 'no entrance animation when the same chat redraws'); assert.ok(still.same);
+  // Streaming morphs in place: the paragraph on screen is the same element after more text arrives.
+  const kept = await win.evaluate(() => {
+    const host = document.createElement('div'); host.innerHTML = '<div class="bubble"><p>Hello there</p></div>';
+    const fresh = document.createElement('div'); fresh.innerHTML = '<div class="bubble"><p>Hello there, friend</p><p>More</p></div>';
+    const p0 = host.querySelector('p'); morphNode(host.firstElementChild, fresh.firstElementChild);
+    return host.querySelector('p') === p0 && host.textContent === 'Hello there, friendMore';
+  });
+  assert.ok(kept, 'text already on screen stays put while more streams in');
 
   // Share an answer or the whole chat.
   await win.evaluate(() => {

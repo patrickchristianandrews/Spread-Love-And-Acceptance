@@ -1008,8 +1008,7 @@ code.sel { user-select: all; background: var(--soft); padding: 1px 6px; border-r
 .simple:not(.nav-open) .nav [data-adv]:not(.active) { display: none; }
 .simple:not(.nav-open) .nav .nav-label[data-adv] { display: none; }
 .simple #net-pill { display: none; }
-.opts-btn { display: none; }
-.simple .opts-btn { display: grid; }
+.opts-btn { display: grid; } /* ＋: more options (connected apps, cloud AI, effort…) in both views */
 /* Chat options (Web, Library, Tools, Double-check, Cloud AI, effort) stay visible in every view. */
 .composer-bar { flex-wrap: wrap; row-gap: 6px; }
 .simple .composer-hint { opacity: .85; }
@@ -1260,3 +1259,6 @@ code.sel { user-select: all; background: var(--soft); padding: 1px 6px; border-r
 .og-how { margin-top: 4px; }
 .og-how summary { cursor: pointer; font-size: .78rem; font-weight: 700; color: var(--text); }
 .og-how p { margin: 6px 0 2px; color: var(--muted); line-height: 1.55; }
+
+.sem-card { margin-bottom: 14px; border-color: var(--accent-line); }
+.sem-card.on { background: var(--accent-tint); }

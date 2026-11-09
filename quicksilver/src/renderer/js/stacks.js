@@ -32,7 +32,6 @@ views.stacks = {
       <div id="adv-out">${advResult ? advisorHTML(advResult) : '<div class="empty">Checking your PC and your models…</div>'}</div>
       <div class="section"><h2>Your teams</h2></div>
       ${yourStacksHTML()}
-      ${powerMovesHTML()}
       ${recipesHTML()}
     </div>`;
   },

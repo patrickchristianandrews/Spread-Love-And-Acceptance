@@ -25,7 +25,8 @@ function maybeLater(key) {
   save();
 }
 const isFeatured = (id) => Object.values(S.catalog?.picks?.featured || {}).some((l) => l.includes(id));
-const autoUpdates = () => S.data.prefs.autoUpgrade !== false;
+// Off unless you switch it on: model downloads can be several GB, so by default you're told and choose.
+const autoUpdates = () => S.data.prefs.autoInstallModels === true;
 
 // Recipe stacks you set up whose best plan for this PC now includes models you don't have.
 function stackUpdates() {
@@ -171,7 +172,7 @@ function modelUpdatesHTML() {
   const srow = (s) => `<div class="up-row"><div class="grow">${esc(s.emoji || '🧩')} <b>${esc(s.name)}</b><div class="small muted">${s.quicksilver ? `Add <b>${esc(s.models[0].name)}</b> to the team: ${esc(s.why)}` : `Stronger now: ${s.models.map((m) => `${esc(m.from)} → <b>${esc(m.name)}</b>`).join(', ')}`}</div></div>
     ${s.models.some((m) => S.downloads[m.id]) ? '<span class="badge b-sky">Installing…</span>' : `<button class="btn small primary" data-up-stack="${esc(upKey(s))}">${s.quicksilver ? 'Add it' : 'Update stack'}</button><button class="btn small ghost" data-up-later="${esc(upKey(s))}" title="Suggest it again in ${LATER_DAYS} days">Maybe later</button>`}</div>`;
   return `<div class="card up-card" id="model-updates"><div class="row"><h3 class="grow" style="margin:0">✨ Better models available</h3><span class="small muted">${esc(when)}</span></div>
-    <p class="small muted" style="margin:4px 0 10px">${autoUpdates() ? 'These install by themselves in the background' : 'Automatic installs are off in Settings'}; when one is ready, your stacks, chats and assistants switch to it and you can remove the old one.</p>
+    <p class="small muted" style="margin:4px 0 10px">${autoUpdates() ? 'These install by themselves in the background' : 'Press Upgrade to download one (or switch on automatic installs in Settings → General)'}; when one is ready, your stacks, chats and assistants switch to it and you can remove the old one.</p>
     ${ups.map(row).join('')}${stacks.map(srow).join('')}${laterNote ? `<div class="up-row">${laterNote}</div>` : ''}</div>`;
 }
 function bindModelUpdates() {

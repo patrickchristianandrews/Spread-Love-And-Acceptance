@@ -3,7 +3,7 @@
 
 const DEFAULT_PREFS = {
   userName: '', about: '', textSize: 'normal', defaultTarget: '', temperature: 0.6, contextSize: 16384, maxTokens: 2048,
-  gpu: 'auto', effort: 'medium', effortLevel: 'thorough', simple: true, autoRoute: true, autoUpgrade: true, autoWeb: true, autoFix: true, cloudHard: false, theme: 'dark', factCheck: false, factChecker: '', lastAssistant: 'as-general', sourcesPerAnswer: 8,
+  gpu: 'auto', effort: 'medium', effortLevel: 'thorough', simple: true, autoRoute: true, autoWeb: true, autoFix: true, cloudHard: false, theme: 'dark', factCheck: false, factChecker: '', lastAssistant: 'as-general', sourcesPerAnswer: 8,
 };
 
 // More ready-made assistants for everyday uses. Each borrows the settings of the team type that
@@ -149,6 +149,7 @@ async function init() {
   if (saved?.version === 3) S.data = saved;
   else S.data = { version: 3, prefs: { ...DEFAULT_PREFS, userName: saved?.settings?.userName && saved.settings.userName !== 'You' ? saved.settings.userName : '' }, assistants: [], chats: [] };
   S.data.prefs = { ...DEFAULT_PREFS, ...S.data.prefs };
+  if (S.data.prefs.effortLevel === 'max') S.data.prefs.effortLevel = 'council'; // Deep think became Council
   if (S.data.prefs.maxTokens === 4096 && !S.data.prefs.maxTokensSet) S.data.prefs.maxTokens = 2048; // 2.16: old default
   // Keep built-in assistants up to date, but never overwrite your edits or your own assistants.
   for (const d of defaultAssistants()) if (!S.data.assistants.some((a) => a.id === d.id)) S.data.assistants.push(d);

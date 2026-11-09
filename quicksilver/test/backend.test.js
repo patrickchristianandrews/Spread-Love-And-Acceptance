@@ -1074,6 +1074,26 @@ async function collect(gen) {
     console.log('✓ free rotation: a free cloud AI at its limit hands over to the next; a rotating choice in the menu');
   }
 
+  // Smarter search: with the search model, passages are found by meaning, not only shared words.
+  {
+    const embed = require('../src/main/embed');
+    const kc = knowledge.createCollection({ name: 'Garage' });
+    knowledge.addTexts(kc.id, [{ name: 'service.txt', path: '/tmp/service.txt', kind: 'document', text: 'The automobile needs new tyres before winter.' }, { name: 'pets.txt', path: '/tmp/pets.txt', kind: 'document', text: 'Our puppy loves long walks in the park.' }]);
+    const kw = await knowledge.search('car wheels', { collectionIds: [kc.id] });
+    assert.equal(kw.length, 0, 'keywords alone miss it (no shared words)');
+    assert.equal(knowledge.semanticStatus().on, false);
+    models.add({ id: embed.EMBED.id, name: embed.EMBED.name, kind: 'embed', catalogId: embed.EMBED.id, files: { model: (() => { const f = path.join(fs.mkdtempSync(path.join(os.tmpdir(), 'qs-emb-')), 'nomic.gguf'); fs.copyFileSync(TINY, f); return f; })() }, size: 1.5e8 });
+    await knowledge.indexPending();
+    const st = knowledge.semanticStatus();
+    assert.ok(st.on && st.indexed >= 2 && st.indexed === st.total, 'every passage indexed');
+    const hits = await knowledge.search('car wheels', { collectionIds: [kc.id] });
+    assert.match(hits[0]?.text || '', /automobile needs new tyres/, 'found by meaning');
+    assert.ok(hits[0].semantic);
+    models.remove(embed.EMBED.id);
+    knowledge.deleteCollection(kc.id);
+    console.log('✓ smarter search: Nomic Embed finds passages by meaning, merged with keyword search');
+  }
+
   console.log('\nBACKEND TESTS PASSED');
   process.exit(0);
 })().catch((e) => { console.error('FAIL', e); llama.stopAll(); process.exit(1); });

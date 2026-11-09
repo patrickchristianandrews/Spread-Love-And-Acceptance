@@ -409,6 +409,14 @@ handle('kb:github', async (collectionId, repo, maxFiles) => {
 // ---------- documents, library, web ----------
 handle('docs:extract', (name, bytes) => docs.extract(name, Buffer.from(bytes)));
 handle('kb:list', () => ({ collections: knowledge.collections(), live: knowledge.LIVE }));
+knowledge.onProgress = (p) => emit('library:progress', p);
+handle('kb:semantic', () => knowledge.semanticStatus());
+handle('kb:semanticOn', async () => {
+  const e = require('./embed');
+  if (e.installed()) { knowledge.indexPending((p) => emit('library:progress', p)).catch(() => {}); return { started: false, installed: true }; }
+  return models.start(await models.planCatalog(e.EMBED.id), (ch, d) => { emit(ch, d); if (ch === 'models:done') knowledge.indexPending((p) => emit('library:progress', p)).catch(() => {}); });
+});
+handle('kb:reindex', () => knowledge.indexPending((p) => emit('library:progress', p)));
 handle('kb:create', (c) => knowledge.createCollection(c));
 handle('kb:update', (id, patch) => knowledge.updateCollection(id, patch));
 handle('kb:delete', (id) => knowledge.deleteCollection(id));

@@ -21,6 +21,7 @@ views.library = {
     return `<div class="page">
       <div class="page-head"><h1>📚 Your knowledge</h1><button class="btn primary" id="kb-new">＋ New knowledge base</button></div>
       <p class="lede"><b>Give your AI your own data.</b> Each knowledge base is a separate, isolated collection: files, whole folders, websites, and live research databases like <b>PubMed</b>. Link one to an assistant (with "only answer from this knowledge" if you want) and every answer cites its sources as <span class="cite">1</span>. Your files stay on this PC.</p>
+      ${semanticCardHTML()}
       ${kbModelsHTML()}
       <div class="section"><h2>Knowledge bases</h2></div>
       <div class="tabs">${kb.collections.map((x) => `<button class="tab ${x.id === kbSel ? 'active' : ''}" data-kb="${x.id}">${esc(x.emoji)} ${esc(x.name)} <span class="small muted">(${x.docs})</span></button>`).join('')}</div>
@@ -195,7 +196,7 @@ function kbEdit(c) {
     closeModal(); await refreshKb(); render();
   });
 }
-qs.onLibrary((p) => { if (kbBusy) { kbBusy = p; if (S.route.view === 'library') render(); } });
+qs.onLibrary((p) => { if (kbBusy && p?.kind !== 'index') { kbBusy = p; if (S.route.view === 'library') render(); } });
 
 // ---------- "Connect your knowledge", front and centre ----------
 // On Home (and in new chats): your own files, folders and websites, answered from with sources.
@@ -243,3 +244,34 @@ document.addEventListener('click', async (e) => {
   go({ view: 'library' });
   setTimeout(() => document.getElementById({ files: 'kb-files', folder: 'kb-folder', web: 'kb-web' }[kind])?.click(), 250);
 });
+
+// ---------- smarter search (Nomic Embed) ----------
+S.kbSemantic = null;
+function semanticCardHTML() {
+  if (!S.kbSemantic) { qs.call('kb:semantic').then((r) => { S.kbSemantic = r; if (S.route.view === 'library') render(); }).catch(() => {}); return ''; }
+  const s = S.kbSemantic;
+  const dl = Object.values(S.downloads || {}).find((d) => d.id === 'nomic-embed-v1.5');
+  if (!s.on) {
+    return `<div class="card sem-card"><div class="row"><span class="emoji-badge">🧠</span><div class="grow"><h3 style="margin:0">Smarter search <span class="badge b-mint">Recommended</span></h3>
+      <div class="small muted">Finds the right passages by what they mean, not only by matching words: ask "car wheels" and it finds "the automobile needs new tyres". Uses Nomic Embed v1.5 (${s.sizeGB} GB), runs on this PC, works offline.</div></div>
+      ${dl ? downloadBox(dl.id) : '<button class="btn primary" id="sem-on">Turn on</button>'}</div></div>`;
+  }
+  const pct = s.total ? Math.round((s.indexed / s.total) * 100) : 100;
+  return `<div class="card sem-card on"><div class="row"><span class="emoji-badge">🧠</span><div class="grow"><h3 style="margin:0">Smarter search is on</h3>
+    <div class="small muted">${s.total ? (s.indexed >= s.total ? `All ${s.total} passages can be found by meaning as well as by words.` : `Preparing your passages for search by meaning: ${s.indexed} of ${s.total} (${pct}%). Keyword search works meanwhile.`) : 'New files you add are prepared for search by meaning automatically.'}</div></div>
+    ${s.total && s.indexed < s.total && !s.indexing ? '<button class="btn small" id="sem-reindex">Finish now</button>' : ''}</div></div>`;
+}
+document.addEventListener('click', async (e) => {
+  if (e.target.closest('#sem-on')) {
+    try { const r = await call('kb:semanticOn'); if (r?.id) { S.downloads[r.id] = { ...r, name: 'Nomic Embed v1.5' }; paintDownloads(); } toast('Turning on smarter search: a small download (about 0.15 GB), then your passages are prepared in the background.', 7000); } catch (err) { toast(err.message, 8000); }
+    render();
+  }
+  if (e.target.closest('#sem-reindex')) { call('kb:reindex').catch(() => {}); toast('Preparing the rest of your passages in the background.'); }
+});
+qs.onLibrary?.((p) => {
+  if (p?.kind !== 'index') return;
+  if (S.kbSemantic) { S.kbSemantic.indexed = Math.max(S.kbSemantic.indexed, (S.kbSemantic.total || p.total) - p.total + p.done); S.kbSemantic.indexing = p.done < p.total; }
+  if (p.done >= p.total) qs.call('kb:semantic').then((r) => { S.kbSemantic = r; if (S.route.view === 'library') render(); }).catch(() => {});
+  else if (S.route.view === 'library' && !(p.done % 64)) render();
+});
+qs.onModelDone?.(({ model }) => { if (model?.kind === 'embed') { S.kbSemantic = null; toast('🧠 Smarter search is on. Your passages are being prepared in the background.', 7000); } });

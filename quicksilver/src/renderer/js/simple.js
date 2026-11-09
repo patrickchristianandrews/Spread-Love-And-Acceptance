@@ -102,7 +102,7 @@ function composerOptions(chat, anchor) {
     <button data-o="add-api">${icon('plus', 16)} ${S.providers?.length ? 'Cloud AIs (ChatGPT, Claude…)' : 'Connect a cloud AI (ChatGPT, Claude…)'}<span class="grow"></span>${S.providers?.length ? `<span class="small muted">${S.providers.length}</span>` : ''}</button>
     <div class="menu-sep"></div>
     <div class="menu-h">How hard it should think</div>
-    <div class="opt-effort">${Object.entries(EFFORTS).map(([k, l]) => `<button data-eff="${k}" class="${k === eff ? 'on' : ''}" title="${{ quick: 'One model, fastest', balanced: 'One model, then a check', thorough: 'The team on hard questions only (recommended)', max: 'The whole team, always double-checked', council: 'Three AIs (Structurer, Critic, Pragmatist), then one verdict' }[k]}">${esc(l.replace(/^\S+\s/, ''))}</button>`).join('')}</div>
+    <div class="opt-effort">${Object.entries(EFFORTS).map(([k, l]) => `<button data-eff="${k}" class="${k === eff ? 'on' : ''}" title="${{ quick: 'One model, fastest', balanced: 'One model, then a check', thorough: 'The team on hard questions only (recommended)', council: 'Three AIs (Structurer, Critic, Pragmatist), then one verdict' }[k]}">${esc(l.replace(/^\S+\s/, ''))}</button>`).join('')}</div>
     <div class="menu-sep"></div>
     <button data-o="skill-btn">${icon('zap', 16)} Use a skill…</button>
     <button data-o="improve-btn">${icon('sparkle', 16)} Improve my message</button>
@@ -118,6 +118,7 @@ function composerOptions(chat, anchor) {
     closeMenus();
     if (o === 'settings') chatSettings(chat);
     else if (o === 'add-api') { modelsTab = 'api'; go({ view: 'models' }); }
+    else if (o === 'tog-tools') { chat.tools = !toolsOn(chat, assistantById(chat.assistantId)); save(); render(); if (chat.tools && !S.hasIntegrations) toast('Connect GitHub, Slack, Notion, Jira, Linear or an MCP server under Connectors first.', 6000); }
     else $(`#${o}`)?.click();
   });
 }

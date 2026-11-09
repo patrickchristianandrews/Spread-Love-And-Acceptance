@@ -265,10 +265,18 @@ function render() {
   $$('.nav-item[data-nav]').forEach((b) => b.classList.toggle('active', b.dataset.nav === (S.route.view === 'project' ? 'projects' : S.route.view)));
   const v = views[S.route.view] || views.chat;
   const main = $('#main');
+  // Redrawing the page you're already on (an answer finishing, checks or follow-ups arriving)
+  // must not move anything: no entrance animation, and the chat stays where you were reading.
+  const key = `${S.route.view}:${S.route.id || ''}`;
+  const same = render.key === key;
+  render.key = key;
+  const box = same ? document.getElementById('messages') : null;
+  const keep = box ? { top: box.scrollTop, bottom: box.scrollHeight - box.scrollTop - box.clientHeight < 120 } : null;
   main.innerHTML = v.html();
   if (typeof paintIcons === 'function') paintIcons(main);
-  main.firstElementChild?.classList.add('enter');
+  if (!same) main.firstElementChild?.classList.add('enter');
   v.bind?.();
+  if (keep) { const nb = document.getElementById('messages'); if (nb) nb.scrollTop = keep.bottom ? nb.scrollHeight : keep.top; }
 }
 
 function renderChatList() {

@@ -14,6 +14,23 @@ const server = http.createServer((req, res) => {
   req.on('data', (c) => (body += c));
   req.on('end', () => {
     const j = JSON.parse(body || '{}');
+    // Embeddings (the search model): words in the same meaning group land in the same place.
+    if (req.url.startsWith('/v1/embeddings')) {
+      const GROUPS = [['car', 'automobile', 'vehicle'], ['wheels', 'tyres', 'tires'], ['money', 'cash', 'budget'], ['dog', 'puppy', 'hound']];
+      const vecOf = (t) => {
+        const v = new Array(64).fill(0);
+        for (const w of String(t).toLowerCase().replace(/^search_(query|document):\s*/, '').match(/[a-z]+/g) || []) {
+          const g = GROUPS.findIndex((x) => x.includes(w));
+          const key = g >= 0 ? `group${g}` : w;
+          let h = 0; for (const ch of key) h = (h * 31 + ch.charCodeAt(0)) % 64;
+          v[h] += 1;
+        }
+        return v;
+      };
+      const input = Array.isArray(j.input) ? j.input : [j.input];
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      return res.end(JSON.stringify({ data: input.map((t, index) => ({ index, embedding: vecOf(t) })) }));
+    }
     const msgs = j.messages || [];
     const imgs = msgs.flatMap((m) => (Array.isArray(m.content) ? m.content.filter((p) => p.type === 'image_url') : []));
     if (imgs.length && !vision) { res.writeHead(400, { 'Content-Type': 'application/json' }); return res.end(JSON.stringify({ error: { message: 'image input is not supported by this model' } })); }
