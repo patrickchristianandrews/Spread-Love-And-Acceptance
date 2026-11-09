@@ -1,7 +1,10 @@
 # Builds the Quicksilver Windows installer (Quicksilver-Setup-x.y.z.exe).
 #  1. tests:   the back-end and end-to-end tests (Linux, with stand-in engines)
 #  2. windows: downloads the official llama.cpp and stable-diffusion.cpp builds, proves the real
-#              text engine loads a model and answers, then builds and uploads the installer.
+#              text engine loads a model and answers, then builds, uploads and install-tests the
+#              installer (the build is done when this job is).
+#  3. testers: five tester sessions on the installed app with the real models (informational, in
+#              its own job so it never holds up the installer).
 # Runs on every push that changes quicksilver/, and on demand from the Actions tab.
 # Pushing a tag like quicksilver-v2.0.0 also publishes the installer as a GitHub release.
 name: Quicksilver Windows installer
@@ -15,8 +18,13 @@ on:
       testers:
         description: 'Which tester group runs: a (Maya, Dev, Rosa, Jay, Priya), b (Alex, Grace, Marcus, Lena, Omar) or all'
         type: choice
-        options: [a, b, all]
+        options: [a, b, all, none]
         default: a
+
+# A newer run on the same branch or tag replaces one still running, so only the latest is built.
+concurrency:
+  group: quicksilver-${{ github.ref }}
+  cancel-in-progress: true
 
 permissions:
   contents: write
@@ -26,11 +34,14 @@ permissions:
 jobs:
   tests:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     defaults:
       run:
         working-directory: quicksilver
     steps:
       - uses: actions/checkout@v4
+        with:
+          sparse-checkout: quicksilver
       - uses: actions/setup-node@v4
         with:
           node-version: 22
@@ -52,12 +63,15 @@ jobs:
   windows:
     needs: tests
     runs-on: windows-latest
+    timeout-minutes: 90
     defaults:
       run:
         working-directory: quicksilver
         shell: bash
     steps:
       - uses: actions/checkout@v4
+        with:
+          sparse-checkout: quicksilver
       - uses: actions/setup-node@v4
         with:
           node-version: 22
@@ -181,6 +195,8 @@ jobs:
             quicksilver/dist/Quicksilver models/
             quicksilver/dist/READ ME FIRST.txt
           if-no-files-found: error
+          # The installer and models are already compressed; zipping them again only costs time.
+          compression-level: 0
 
       # Install it and use it the way a new user would: real installer, real engine, the models that
       # come with Quicksilver, real questions. A failure here fails the build.
@@ -197,27 +213,6 @@ jobs:
           Write-Host '✓ installed, and the installer copied the Quicksilver model in'
           node test/installed.test.js C:\QS\Quicksilver.exe full install-shots
           if ($LASTEXITCODE -ne 0) { throw 'the installed app test failed' }
-
-      # Five tester sessions on the installed app (before the second install replaces it) with the real models: every answer, its speed
-      # and a screenshot are recorded for review. Informational: never blocks the build.
-      - name: Tester sessions (five people, real models)
-        continue-on-error: true
-        timeout-minutes: 150
-        shell: pwsh
-        env:
-          # The web developer connects GitHub with this run's own short-lived token (it can read
-          # this repository; creating issues isn't allowed, and the tester declines the request).
-          QS_TESTER_GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          QS_TESTER_GH_REPO: ${{ github.repository }}
-          QS_TESTER_GROUP: ${{ inputs.testers || 'a' }}
-        run: node test/testers.js C:\QS\Quicksilver.exe tester-sessions
-
-      - uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: Quicksilver-tester-sessions
-          path: quicksilver/tester-sessions/
-          if-no-files-found: ignore
 
       - name: Install from the setup file alone, then uninstall
         shell: pwsh
@@ -257,3 +252,56 @@ jobs:
           files: |
             quicksilver/dist/*.exe
             quicksilver/dist/*.exe.sha256
+
+  # Five tester sessions on the installed app with the real models: every answer, its speed and a
+  # screenshot are recorded for review. Informational: in its own job, after the installer is built
+  # and tested, so it never holds up the build. Skipped with testers: none.
+  testers:
+    needs: windows
+    if: ${{ github.event_name != 'workflow_dispatch' || inputs.testers != 'none' }}
+    runs-on: windows-latest
+    timeout-minutes: 120
+    continue-on-error: true
+    defaults:
+      run:
+        working-directory: quicksilver
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: quicksilver
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: quicksilver/package-lock.json
+      - name: Install
+        run: npm ci
+        env:
+          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: '1'
+      - uses: actions/download-artifact@v4
+        with:
+          name: Quicksilver-Windows-installer
+          path: quicksilver/dist
+      - name: Install Quicksilver with the models folder
+        shell: pwsh
+        run: |
+          $setup = Get-ChildItem dist\Quicksilver-Setup-*.exe | Select-Object -First 1
+          Start-Process -Wait -FilePath $setup.FullName -ArgumentList '/S','/D=C:\QS'
+          if (!(Test-Path 'C:\QS\Quicksilver.exe')) { throw 'Quicksilver.exe was not installed' }
+      - name: Tester sessions (five people, real models)
+        timeout-minutes: 110
+        shell: pwsh
+        env:
+          # The web developer connects GitHub with this run's own short-lived token (it can read
+          # this repository; creating issues isn't allowed, and the tester declines the request).
+          QS_TESTER_GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          QS_TESTER_GH_REPO: ${{ github.repository }}
+          QS_TESTER_GROUP: ${{ inputs.testers || 'a' }}
+        run: node test/testers.js C:\QS\Quicksilver.exe tester-sessions
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: Quicksilver-tester-sessions
+          path: quicksilver/tester-sessions/
+          if-no-files-found: ignore
