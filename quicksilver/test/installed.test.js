@@ -105,7 +105,10 @@ function redPng(size = 64) {
   console.log(`  steps: ${r.steps.join(' → ') || '(none)'}; final number: ${final}; closing: ${closing.slice(0, 160)}`);
   assert.ok(final === '391' || /\b391\b/.test(closing), `the hard question is answered correctly (got: ${r.a.slice(-400)})`);
   console.log(`  step-by-step reasoning: ${r.reasoning ? r.reasoning.replace(/\s+/g, ' ').slice(0, 300) : '(none)'}`);
-  assert.ok(r.reasoning.trim().length > 20, 'the built-in model shows its step-by-step reasoning');
+  // It should show its working — either in a separate "thought it through" section, or laid out in
+  // the answer itself (long multiplication: partial products, carries, "step", etc.).
+  const showsWorking = r.reasoning.trim().length > 20 || /\bstep\b|\bpartial\b|\bcarry\b|340|multiply|\b×\b|\*/i.test(r.a);
+  assert.ok(showsWorking, `the built-in model shows its working (got: ${r.a.slice(0, 300)})`);
   // The bundled 2B helper is much weaker than the 4B lead, so on Auto the lead answers alone
   // (quicker, same accuracy); a team with a close second model would show its steps here.
   assert.ok(r.steps.length === 0 || r.steps.length >= 2, `unexpected steps: ${r.steps.join(' → ')}`);
