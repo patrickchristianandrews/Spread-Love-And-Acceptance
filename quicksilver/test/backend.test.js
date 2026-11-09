@@ -989,6 +989,8 @@ async function collect(gen) {
     assert.equal(bad.models.length, 1, 'broken model entries are dropped');
     assert.equal(bad.models[0].quant, 'Q4_K_M'); assert.equal(bad.models[0].evil, undefined); assert.equal(bad.models[0].remote, true);
     assert.deepEqual(Object.keys(bad.successors), ['qwen3-8b']);
+    const rec = remote.clean({ version: 1, recipes: [{ id: 'study-buddy', name: 'Study buddy', icon: '📚', mode: 'redteam', parts: [{ model: 'qwen3-8b', role: 'Tutor', ladder: 'general' }, { model: 'bad id!' }], why: 'Explains, then a second model checks it.', added: '2026-11-01', evil: 1 }, { id: 'x', parts: [] }] }).recipes;
+    assert.equal(rec.length, 1, 'broken stacks are dropped'); assert.equal(rec[0].parts.length, 1); assert.equal(rec[0].mode, 'redteam'); assert.equal(rec[0].evil, undefined);
     const real = global.fetch;
     let calls = 0;
     global.fetch = async () => { calls++; return new Response(JSON.stringify({ ...data, updated: '2026-12', models: [{ id: 'test-new-9b', name: 'New 9B', maker: 'Test', category: 'general', repo: 'test/New-9B-GGUF', quant: 'Q4_K_M', sizeGB: 5.5, jobs: { general: 9, office: 9, research: 9, coding: 8 } }], successors: { ...data.successors, 'qwen3-8b': 'test-new-9b' }, ladders: { general: ['test-new-9b', 'qwen3-8b'] } }), { status: 200 }); };

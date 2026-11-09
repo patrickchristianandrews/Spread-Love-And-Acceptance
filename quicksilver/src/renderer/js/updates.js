@@ -16,7 +16,7 @@ const upgradePrefs = () => {
   delete p.upgradeSkipped;  // older builds hid suggestions for good
   return p;
 };
-const upKey = (u) => (u.quicksilver ? `qs:${u.models[0].id}` : u.recipe ? `stack:${u.recipe}:${u.models.map((m) => m.id).join(',')}` : `${u.oldCatalogId}>${u.newCatalogId}`);
+const upKey = (u) => (u.fresh ? `new:${u.recipe}` : u.quicksilver ? `qs:${u.models[0].id}` : u.recipe ? `stack:${u.recipe}:${u.models.map((m) => m.id).join(',')}` : `${u.oldCatalogId}>${u.newCatalogId}`);
 const putOff = (u) => (upgradePrefs().upgradeLater[upKey(u)] || 0) > Date.now();
 function maybeLater(key) {
   const p = upgradePrefs();
@@ -42,6 +42,13 @@ function stackUpdates() {
   }
   const boost = quicksilverBoost();
   if (boost) out.push(boost);
+  // New stacks published online that run well here and aren't set up yet.
+  for (const r of STACK_RECIPES.filter((x) => x.isNew && x.parts.length)) {
+    if ((S.stacks || []).some((s) => s.id === `rx-${r.id}`)) continue;
+    const ms = rxResolve(r).parts.filter((p) => p.kind === 'model' && !p.helper);
+    if (!ms.length || !ms.every((p) => ['great', 'good', 'ok'].includes(S.est.text[p.id]?.rating))) continue;
+    out.push({ recipe: r.id, fresh: true, name: r.name, emoji: r.icon, why: rxWhy(r), models: ms.filter((p) => !haveModel(p.id)).map((p) => ({ id: p.id, name: catModel(p.id)?.name || p.id, from: '' })) });
+  }
   return out;
 }
 // The built-in Quicksilver model is a team of your best models: its lead answers every message, so
@@ -127,7 +134,7 @@ async function checkForUpdates({ auto = true } = {}) {
     if (!['great', 'good'].includes(u.rating) || S.downloads[u.newCatalogId] || u.sizeGB > budget) continue;
     budget -= u.sizeGB; startUpgrade(u, true); fresh.push(u.newName);
   }
-  for (const s of stacks) {
+  for (const s of stacks.filter((x) => !x.fresh)) {
     const size = s.models.reduce((t, m) => t + (catModel(m.id)?.sizeGB || 0), 0);
     if (size > budget || s.models.some((m) => S.downloads[m.id])) continue;
     budget -= size; await startStackUpdate(s).catch(() => {}); fresh.push(`${s.name} (stronger models)`);
@@ -179,8 +186,8 @@ function modelUpdatesHTML() {
   }
   const row = (u) => `<div class="up-row"><div class="grow"><b>${esc(u.oldName)}</b> → <b>${esc(u.newName)}</b><div class="small muted">${esc(u.why)} · ${esc(u.speed)} on this PC</div></div>
     ${S.downloads[u.newCatalogId] ? '<span class="badge b-sky">Installing…</span>' : `<button class="btn small primary" data-up-get="${esc(u.newCatalogId)}">Upgrade</button><button class="btn small ghost" data-up-later="${esc(upKey(u))}" title="Suggest it again in ${LATER_DAYS} days">Maybe later</button>`}</div>`;
-  const srow = (s) => `<div class="up-row"><div class="grow">${esc(s.emoji || '🧩')} <b>${esc(s.name)}</b><div class="small muted">${s.quicksilver ? `${s.core ? 'Switch to' : 'Add'} <b>${esc(s.models[0].name)}</b>${s.core ? ` (replaces ${esc(s.models[0].from)})` : ' to the team'}: ${esc(s.why)}` : `Stronger now: ${s.models.map((m) => `${esc(m.from)} → <b>${esc(m.name)}</b>`).join(', ')}`}</div></div>
-    ${s.models.some((m) => S.downloads[m.id]) ? '<span class="badge b-sky">Installing…</span>' : `<button class="btn small primary" data-up-stack="${esc(upKey(s))}">${s.quicksilver ? 'Add it' : 'Update stack'}</button><button class="btn small ghost" data-up-later="${esc(upKey(s))}" title="Suggest it again in ${LATER_DAYS} days">Maybe later</button>`}</div>`;
+  const srow = (s) => `<div class="up-row"><div class="grow">${esc(s.emoji || '🧩')} <b>${esc(s.name)}</b><div class="small muted">${s.fresh ? `🆕 New stack. ${esc(s.why)}${s.models.length ? ` Downloads: ${s.models.map((m) => esc(m.name)).join(', ')}.` : ' Uses models you already have.'}` : s.quicksilver ? `${s.core ? 'Switch to' : 'Add'} <b>${esc(s.models[0].name)}</b>${s.core ? ` (replaces ${esc(s.models[0].from)})` : ' to the team'}: ${esc(s.why)}` : `Stronger now: ${s.models.map((m) => `${esc(m.from)} → <b>${esc(m.name)}</b>`).join(', ')}`}</div></div>
+    ${s.models.some((m) => S.downloads[m.id]) ? '<span class="badge b-sky">Installing…</span>' : `<button class="btn small primary" data-up-stack="${esc(upKey(s))}">${s.fresh ? 'Set up' : s.quicksilver ? 'Add it' : 'Update stack'}</button><button class="btn small ghost" data-up-later="${esc(upKey(s))}" title="Suggest it again in ${LATER_DAYS} days">Maybe later</button>`}</div>`;
   return `<div class="card up-card" id="model-updates"><div class="row"><h3 class="grow" style="margin:0">✨ Better models available</h3><span class="small muted">${esc(when)}</span></div>
     <p class="small muted" style="margin:4px 0 10px">${autoUpdates() ? 'These install by themselves in the background' : 'Press Upgrade to download one (or switch on automatic installs in Settings → General)'}; when one is ready, your stacks, chats and assistants switch to it and you can remove the old one.</p>
     ${ups.map(row).join('')}${stacks.map(srow).join('')}${laterNote ? `<div class="up-row">${laterNote}</div>` : ''}</div>`;
@@ -280,6 +287,7 @@ function bindBuiltinModel() {
 
 async function reloadCatalog() {
   try { S.catalog = await qs.call('catalog:get'); } catch { return; }
+  mergeRemoteRecipes();
   for (const r of typeof STACK_RECIPES !== 'undefined' ? STACK_RECIPES : []) r._resolved = null;
   S.est = null; await refreshEstimates().catch(() => {});
 }

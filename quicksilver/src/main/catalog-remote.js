@@ -44,10 +44,21 @@ function clean(j) {
   // The Liquid Edition's core: which uncensored models are its Brain and Eyes right now.
   const liquid = {};
   if (j.liquid && typeof j.liquid === 'object') for (const k of ['brain', 'eyes']) if (typeof j.liquid[k] === 'string' && ID.test(j.liquid[k])) liquid[k] = j.liquid[k];
-  return { version: 1, updated: str(j.updated, 20), models, successors, featured, ladders, liquid };
+  // New ready-made stacks, published online: plain data (which models, roles, how they work
+  // together, instructions and why it's good). They appear in Stacks marked new.
+  const MODES = ['blend', 'debate', 'consensus', 'auto', 'vote', 'redteam', 'plan', 'panel'];
+  const recipes = (Array.isArray(j.recipes) ? j.recipes : []).slice(0, 30).map((r) => {
+    if (!r || !ID.test(r.id || '') || !Array.isArray(r.parts)) return null;
+    const parts = r.parts.slice(0, 5).filter((p) => p && ID.test(p.model || '')).map((p) => ({ model: p.model, role: str(p.role, 60) || 'Helper', ...(typeof p.ladder === 'string' && /^[a-z]{2,20}$/.test(p.ladder) ? { ladder: p.ladder } : {}) }));
+    if (!parts.length || !str(r.name, 90)) return null;
+    return { id: r.id, name: str(r.name, 90), icon: str(r.icon, 4) || '🧩', group: /^[a-z]{2,20}$/.test(r.group || '') ? r.group : 'new', mode: MODES.includes(r.mode) ? r.mode : 'blend',
+      parts, ...(ID.test(r.lead || '') ? { lead: r.lead } : {}), instructions: str(r.instructions, 1500), why: str(r.why, 300), added: str(r.added, 20),
+      ...(num(r.temperature, 0, 1.5) != null ? { temperature: r.temperature } : {}), ...(r.uncensored ? { uncensored: true } : {}) };
+  }).filter(Boolean);
+  return { version: 1, updated: str(j.updated, 20), models, successors, featured, ladders, liquid, recipes };
 }
 
-let applied = { successors: {}, featured: {}, ladders: {}, liquid: {}, updated: '', fetchedAt: 0 };
+let applied = { successors: {}, featured: {}, ladders: {}, liquid: {}, recipes: [], updated: '', fetchedAt: 0 };
 // Adds new models to the catalog (never replaces a built-in one) and keeps the picks for get().
 function apply(data) {
   if (!data) return;
@@ -56,7 +67,7 @@ function apply(data) {
     if (i < 0) catalog.TEXT_MODELS.push(m);
     else if (catalog.TEXT_MODELS[i].remote) catalog.TEXT_MODELS[i] = m; // a newer copy of a model added online
   }
-  applied = { successors: data.successors || {}, featured: data.featured || {}, ladders: data.ladders || {}, liquid: data.liquid || {}, updated: data.updated || '', fetchedAt: data.fetchedAt || 0 };
+  applied = { successors: data.successors || {}, featured: data.featured || {}, ladders: data.ladders || {}, liquid: data.liquid || {}, recipes: data.recipes || [], updated: data.updated || '', fetchedAt: data.fetchedAt || 0 };
 }
 
 // What the app uses: built-in picks, with the online ones on top.
@@ -66,6 +77,7 @@ function picks() {
     featured: { ...catalog.FEATURED, ...applied.featured },
     ladders: applied.ladders,
     liquid: { brain: 'qwen3-4b', eyes: 'qwen3-vl-2b', ...applied.liquid },
+    recipes: applied.recipes,
     updated: applied.updated, fetchedAt: applied.fetchedAt,
   };
 }

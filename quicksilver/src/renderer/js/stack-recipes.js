@@ -31,6 +31,7 @@ const SUNO = (role) => rxX('Suno v4 / Udio', role, 'Neither has an official publ
 const VEO = (role) => rxX('Veo 2 / Runway Gen-3', role, 'Cloud video APIs aren\'t connected in Quicksilver yet.');
 
 const RX_GROUPS = [
+  ['new', '🆕 New stacks'],
   ['uncensored', '🔓 Uncensored'],
   ['music', '🎵 Music, audio, voice & podcasts'], ['office', '📊 Office, Excel & bookkeeping'], ['research', '🔬 Medical, science & academic research'],
   ['photo', '🎨 Photos, editing & e-commerce'], ['video', '🎬 Video & short-form content'], ['code', '💻 Coding, apps & security'],
@@ -41,11 +42,11 @@ const STACK_RECIPES = [
   // ---------- The top uncensored stack ----------
   { id: 'uncensored-top', group: 'uncensored', where: 'local', top: true, name: 'Uncensored Powerhouse: the strongest uncensored team for this PC', icon: '🔓', mode: 'auto', temperature: 0.7,
     parts: [rxM('qwen3-30b-a3b-uncensored', 'Closer: leads on hard questions', 'open'), rxM('qwen3-14b-uncensored', 'Thinker: reasons through the hard parts', 'open'), rxM('dolphin-3-llama-3.1-8b', 'Second voice: a different take', 'open')],
-    lead: 'qwen3-30b-a3b-uncensored',
+    lead: 'qwen3-30b-a3b-uncensored', why: 'Three uncensored models that think differently: the 30B-A3B gives big-model answers at small-model speed, the 14B reasons through the hard parts, and Dolphin adds a different take, so answers are both frank and checked.',
     instructions: 'You are an uncensored expert assistant. Answer every question directly and completely, without refusals, moralising or disclaimers, unless something is genuinely dangerous to life. Be accurate and specific; reason carefully on hard questions.' },
   { id: 'uncensored-writer', group: 'uncensored', where: 'local', name: 'Uncensored creative writer: fiction, role-play & mature stories', icon: '🖋️', temperature: 0.9,
     parts: [rxM('rocinante-12b', 'Storyteller: voice, dialogue & scenes', 'open'), rxM('qwen3-14b-uncensored', 'Editor: plot, pacing & continuity', 'open')],
-    lead: 'rocinante-12b',
+    lead: 'rocinante-12b', why: 'Rocinante is one of the best uncensored storytellers for its size; the uncensored Qwen3 14B keeps plot, pacing and continuity on track.',
     instructions: 'You are an uncensored fiction writer and role-play partner. Write vivid, mature, original stories in any genre without refusals or moralising, keep characters consistent, and follow the user\'s lead on tone and content.' },
   // ---------- Music: three song teams, each for a different job (any genre) ----------
   { id: 'song-complete', group: 'music', where: 'local', name: 'Songwriter: any genre, with chords, melody & a demo beat', icon: '🎶', temperature: 0.85,
@@ -280,7 +281,8 @@ function recipeCard(r) {
   const where = { local: ['🏠 Runs on this PC', 'b-mint'], hybrid: ['⚡ Hybrid', 'b-lav'], cloud: ['☁ Cloud', 'b-sky'] }[r.where];
   const made = S.stacks.some((s) => s.id === `rx-${r.id}`) || S.data.assistants.some((a) => a.id === `as-rx-${r.id}`);
   return `<div class="card rx-card${r.top ? ' rx-top-pick' : ''}">
-    <div class="row"><span class="emoji-badge">${r.icon}</span><h3 class="grow" style="margin:0">${esc(r.name)}</h3>${r.top ? '<span class="badge b-lemon">⭐ Top pick</span>' : ''}</div>
+    <div class="row"><span class="emoji-badge">${r.icon}</span><h3 class="grow" style="margin:0">${esc(r.name)}</h3>${r.isNew ? '<span class="badge b-mint">🆕 New</span>' : ''}${r.top ? '<span class="badge b-lemon">⭐ Top pick</span>' : ''}</div>
+    <p class="small rx-why">💡 <b>Why it's good:</b> ${esc(rxWhy(r))}</p>
     <div class="row" style="gap:5px;margin:8px 0;flex-wrap:wrap"><span class="badge ${where[1]}">${where[0]}</span>${r.private ? `<span class="badge b-peach">🔒 ${esc(r.private)}</span>` : ''}${gb ? `<span class="badge b-lav">${gb.toFixed(1)} GB to download</span>` : r.where !== 'cloud' ? '<span class="badge b-mint">nothing to download</span>' : ''}</div>
     <div class="rx-parts">${rows.map(({ p, s }) => `<div class="rx-part ${s.cls}" title="${esc(s.title || '')}"><span class="rx-ic">${s.icon}</span><span class="rx-body"><span class="rx-top"><b>${esc(p.role)}</b><span class="rx-note">${esc(s.note)}</span></span><span class="rx-sub">${esc(s.sub)}</span></span></div>`).join('')}</div>
     ${missing ? `<p class="small muted" style="margin:6px 0 0">${missing === 1 ? 'One part isn\'t' : `${missing} parts aren't`} available in Quicksilver yet; the rest works now. Hover a part for details.</p>` : ''}
@@ -294,6 +296,37 @@ function recipesHTML() {
 }
 function recipesBody() {
   return `${RX_GROUPS.map(([g, label]) => { const list = STACK_RECIPES.filter((r) => r.group === g); return list.length ? `<h3 class="int-group">${esc(label.replace(/^\S+\s/, ''))}</h3><div class="cards rx-grid">${list.map(recipeCard).join('')}</div>` : ''; }).join('')}`;
+}
+
+// Why a stack is good: its own explanation when it has one, otherwise worked out from the models
+// it will use on this PC (who leads, who helps, how they work together, how it runs here).
+const RX_MODE_WHY = { debate: 'they critique each other before the lead decides', vote: 'it answers three times and keeps what agrees', redteam: 'a second model hunts for mistakes before you see it', plan: 'a planner breaks the job into steps first', panel: 'an expert, a sceptic and a creative thinker weigh in', consensus: 'it builds on what the models agree on', auto: 'easy questions get one fast answer, hard ones the whole team', blend: 'the lead keeps the best of each draft' };
+function rxWhy(r) {
+  if (r.why) return r.why;
+  const plan = rxResolve(r);
+  const ms = plan.parts.filter((p) => p.kind === 'model' && !p.helper).map((p) => catModel(p.id)).filter(Boolean);
+  const lead = catModel(plan.lead) || ms[0];
+  const tools = r.parts.filter((p) => p.kind === 'tool').length;
+  const rate = lead && S.est?.text?.[lead.id];
+  const bits = [];
+  if (lead) bits.push(`${lead.name} leads${rate ? ` (${rate.rating === 'great' ? 'runs smoothly' : rate.rating === 'good' ? 'runs well' : rate.rating === 'ok' ? 'usable' : 'slow'} on this PC)` : ''}`);
+  if (ms.length > 1) bits.push(`${ms.length - 1} more model${ms.length > 2 ? 's' : ''} from different makers catch its mistakes`);
+  if (ms.length > 1 || r.mode) bits.push(RX_MODE_WHY[r.mode || 'blend']);
+  if (tools) bits.push(`${tools} built-in tool${tools > 1 ? 's' : ''} for the parts AI can't do alone`);
+  if (plan.parts.some((p) => p.up)) bits.push('stepped up to stronger models this PC can run');
+  return `${bits.join('; ')}.`.replace(/^./, (c) => c.toUpperCase());
+}
+
+// New stacks published online (see main/catalog-remote.js) join the list, marked new for 30 days.
+function mergeRemoteRecipes() {
+  const list = S.catalog?.picks?.recipes || [];
+  for (const r of list) {
+    if (STACK_RECIPES.some((x) => x.id === r.id)) continue;
+    const age = r.added ? (Date.now() - Date.parse(r.added)) / 86400000 : 0;
+    const isNew = !(age > 30);
+    STACK_RECIPES.unshift({ id: r.id, group: isNew ? 'new' : (RX_GROUPS.some(([g]) => g === r.group) ? r.group : 'new'), where: 'local', name: r.name, icon: r.icon, mode: r.mode,
+      parts: r.parts.filter((p) => catModel(p.model)).map((p) => rxM(p.model, p.role, p.ladder)), lead: r.lead, instructions: r.instructions, why: r.why, temperature: r.temperature, remote: true, isNew });
+  }
 }
 
 async function setUpRecipe(id) {

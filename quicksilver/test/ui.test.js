@@ -119,6 +119,7 @@ function redPng(size = 64) {
   // Stacks for specific work: 27 ready-made teams; set one up and chat with it.
   await win.waitForSelector('.rx-card:has-text("Isolated medical journal")');
   assert.equal(await win.locator('.rx-card').count(), 34, '32 specialist stacks plus the two uncensored ones');
+  assert.equal(await win.locator('.rx-card .rx-why').count(), 34, 'each says why it is good');
   await win.click('.rx-card:has-text("Invoices, receipt reading") [data-rx]');
   await win.waitForFunction(() => S.data.assistants.some((a) => a.id === 'as-rx-bookkeeping'), null, { timeout: 30000 });
   // Song creation: 13 teams, each tuned to this PC (no model that won't run here; a speed helper
@@ -660,9 +661,27 @@ function redPng(size = 64) {
   await win.waitForSelector('#kn-hero [data-kn="files"]');
   assert.match(await win.locator('#kn-hero h2').innerText(), /knowledge/i);
   assert.match(await win.locator('.sidebar [data-nav="library"]').innerText(), /Your knowledge/);
-  assert.ok(await win.evaluate(() => { const r = STACK_RECIPES[0]; return r.id === 'uncensored-top' && r.top && RX_GROUPS[0][0] === 'uncensored'; }), 'the top uncensored stack comes first');
+  assert.ok(await win.evaluate(() => { const r = STACK_RECIPES[0]; return r.id === 'uncensored-top' && r.top && RX_GROUPS[0][0] === 'new' && RX_GROUPS[1][0] === 'uncensored'; }), 'the top uncensored stack comes first');
   await win.click('.nav-new');
   console.log('✓ your knowledge: front and centre on Home and in the menu; top uncensored stack first in the ready-made stacks');
+  // New stacks published online appear marked new, say why they're good, and are suggested.
+  const fresh = await win.evaluate(async () => {
+    S.catalog.picks.recipes = [{ id: 'web-test-new', name: 'Fact-checked explainer', icon: '🧪', group: 'new', mode: 'redteam', parts: [{ model: 'qwen3-8b', role: 'Explainer' }, { model: 'gemma-3-4b', role: 'Checker' }], why: 'Explains clearly, then a second model hunts for mistakes.', added: new Date().toISOString().slice(0, 10) }];
+    mergeRemoteRecipes();
+    go({ view: 'stacks' });
+    await new Promise((r) => setTimeout(r, 300));
+    const card = [...document.querySelectorAll('.rx-card')].find((c) => /Fact-checked explainer/.test(c.textContent));
+    const whys = document.querySelectorAll('.rx-card .rx-why').length;
+    const cards = document.querySelectorAll('.rx-card').length;
+    const sugg = stackUpdates().find((u) => u.fresh && u.recipe === 'web-test-new');
+    return { badge: /🆕 New/.test(card?.textContent || ''), why: /hunts for mistakes/.test(card?.querySelector('.rx-why')?.textContent || ''), whys, cards, sugg: Boolean(sugg) };
+  });
+  assert.ok(fresh.badge && fresh.why, 'a new online stack shows as new, with why it is good');
+  assert.equal(fresh.whys, fresh.cards, 'every stack says why it is good');
+  assert.ok(fresh.sugg, 'and it is suggested when it runs well on this PC');
+  await win.evaluate(() => { STACK_RECIPES.splice(STACK_RECIPES.findIndex((r) => r.id === 'web-test-new'), 1); S.catalog.picks.recipes = []; });
+  await win.click('.nav-new');
+  console.log('✓ new stacks from online picks: marked new, why each stack is good, suggested when they suit this PC');
   assert.doesNotMatch(await win.evaluate(() => turnContext(chatById(S.route.id), [], false, 'hi', null, '', '')), /Answer length/);
   await shot(win, '16-session-badge');
   console.log('✓ privacy modes: fully private, private online (Proton VPN free or your account), online; chats say Private / Protected session');

@@ -1264,3 +1264,6 @@ code.sel { user-select: all; background: var(--soft); padding: 1px 6px; border-r
 .sem-card.on { background: var(--accent-tint); }
 
 .pair-card { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin: 8px 0; padding: 10px 12px; border-radius: 12px; border: 1px dashed var(--accent-line); background: var(--accent-tint); }
+
+.rx-why { margin: 6px 0 8px; line-height: 1.45; color: var(--text); }
+.rx-why b { color: var(--accent); }

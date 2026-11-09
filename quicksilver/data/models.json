@@ -1,7 +1,7 @@
 {
   "version": 1,
   "updated": "2026-11",
-  "note": "Model picks that update Quicksilver when online: add new models (same fields as the built-in catalog), mark featured picks, map an older model to the newer one that replaces it, and set the ladders stack recipes choose from (strongest first). \"liquid\" names the Liquid Edition's core models (uncensored): set brain/eyes to a newer catalog or added model and every Quicksilver updates its built-in model to it.",
+  "note": "Model picks that update Quicksilver when online: add new models (same fields as the built-in catalog), mark featured picks, map an older model to the newer one that replaces it, and set the ladders stack recipes choose from (strongest first). \"liquid\" names the Liquid Edition's core models (uncensored): set brain/eyes to a newer catalog or added model and every Quicksilver updates its built-in model to it. \"recipes\" adds new ready-made stacks: {id, name, icon, group, mode (blend/debate/consensus/auto/vote/redteam/plan/panel), parts: [{model, role, ladder}], lead, instructions, why, added (YYYY-MM-DD), uncensored}.",
   "models": [],
   "successors": {
     "qwen2.5-3b": "qwen3-4b",
@@ -53,5 +53,6 @@
   "liquid": {
     "brain": "qwen3-4b",
     "eyes": "qwen3-vl-2b"
-  }
+  },
+  "recipes": []
 }

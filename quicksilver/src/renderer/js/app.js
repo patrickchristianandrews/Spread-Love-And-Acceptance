@@ -144,6 +144,7 @@ function welcomeCardHTML() {
 
 async function init() {
   S.catalog = await qs.call('catalog:get');
+  mergeRemoteRecipes();
   S.config = await qs.call('config:get');
   const saved = await qs.call('data:load');
   if (saved?.version === 3) S.data = saved;
