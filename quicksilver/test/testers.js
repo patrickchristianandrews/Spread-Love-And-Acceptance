@@ -336,6 +336,7 @@ async function session(p) {
         }
       } else if (step.action === 'powermove') {
         await win.click('[data-nav="stacks"]');
+        await win.click('.sf-tabs [data-sf-tab="fusion"]');
         await win.waitForSelector(`[data-pm="${step.kind}"]`, { timeout: 60000 });
         await win.click(`[data-pm="${step.kind}"]`);
         await win.waitForFunction((k) => chatById(S.route.id)?.target === `stack:pm-${k}`, step.kind, { timeout: 60000 });

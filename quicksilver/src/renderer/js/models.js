@@ -258,15 +258,12 @@ function apiHTML() {
 
 // Fusion: combine any AIs (on this PC and in the cloud) into one that answers as a team.
 function fusionHTML() {
-  const fused = (S.stacks || []).filter((s) => s.infused);
-  return `<div class="card fusion-card"><div class="row"><span class="emoji-badge">⚗️</span><div class="grow"><h3 style="margin:0">Fusion: combine AIs into one</h3>
-      <div class="small muted">Pick 2 to 4 AIs, local and cloud together (say Quicksilver + Claude + Gemini). They answer separately and a lead fuses the best of each, so they catch each other's mistakes. Use the fusion like any model.</div></div>
-      <button class="btn primary" id="fusion-new">⚗️ New fusion</button></div>
-    ${fused.length ? `<div class="row" style="margin-top:10px;flex-wrap:wrap;gap:6px">${fused.map((s) => `<button class="btn small" data-fusion-chat="${esc(s.id)}" title="Chat with it">${esc(s.emoji || '⚗️')} ${esc(s.name)}</button>`).join('')}</div>` : ''}
-  </div>`;
+  return `<div class="card fusion-card"><div class="row"><span class="emoji-badge">⚗️</span><div class="grow"><b>Mix cloud AIs with your own models in a Fusion</b>
+      <div class="small muted">Connected cloud AIs can be fused with the models on this PC into one AI. Fusions live on their own tab under Stacks &amp; Fusion.</div></div>
+      <button class="btn" id="fusion-open">Open ⚗️ Fusion</button></div></div>`;
 }
 document.addEventListener('click', (e) => {
-  if (e.target.closest('#fusion-new')) { infuseModal(() => render()); return; }
+  if (e.target.closest('#fusion-open')) { stacksTab = 'fusion'; go({ view: 'stacks' }); return; }
   const f = e.target.closest('[data-fusion-chat]');
   if (f) { newChat(); const c = chatById(S.route.id); if (c) { c.target = `stack:${f.dataset.fusionChat}`; save(); render(); } }
 });

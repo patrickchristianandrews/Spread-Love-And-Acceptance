@@ -292,8 +292,8 @@ function recipeCard(r) {
 }
 
 function recipesHTML() {
-  if (simpleOn()) return `<details class="rx-fold"><summary><span><b>Ready-made teams for specific work</b> <span class="small muted">${STACK_RECIPES.length} teams: music, office, research, photos, video, code, writing, finance, tutoring, games</span></span></summary>${recipesBody()}</details>`;
-  return `<div class="section"><h2>Teams for specific work</h2><span class="small muted">${STACK_RECIPES.length} ready-made teams. ✓ ready · ⬇ downloads · ☁ needs a cloud connection · – not in Quicksilver yet</span></div>${recipesBody()}`;
+  if (simpleOn()) return `<details class="rx-fold"><summary><span><b>Ready-made stacks for specific work</b> <span class="small muted">${STACK_RECIPES.length} stacks: music, office, research, photos, video, code, writing, finance, tutoring, games</span></span></summary>${recipesBody()}</details>`;
+  return `<div class="section"><h2>Ready-made stacks for specific work</h2><span class="small muted">${STACK_RECIPES.length} ready-made stacks. ✓ ready · ⬇ downloads · ☁ needs a cloud connection · – not in Quicksilver yet</span></div>${recipesBody()}`;
 }
 function recipesBody() {
   return `${RX_GROUPS.map(([g, label]) => { const list = STACK_RECIPES.filter((r) => r.group === g); return list.length ? `<h3 class="int-group">${esc(label.replace(/^\S+\s/, ''))}</h3><div class="cards rx-grid">${list.map(recipeCard).join('')}</div>` : ''; }).join('')}`;
@@ -371,7 +371,7 @@ const POWER_CARDS = [
   ['panel', 'Expert panel', '🎓', 'A practical expert, a sceptic and a creative thinker each weigh in; the lead turns it into one balanced answer.', 'Decisions, plans, big choices'],
 ];
 function powerMovesHTML() {
-  return `<div class="section"><h2>Power moves</h2><span class="small muted">Little-known ways of making AIs work together. Each one makes your own models answer better than they can alone.</span></div>
+  return `<div class="section"><h2>One-click fusions</h2><span class="small muted">Ready to go: each one fuses the best models already on this PC in a proven way. Nothing to download.</span></div>
     <div class="cards pm-grid">${POWER_CARDS.map(([k, n, ic, what, best]) => {
       const made = S.stacks.some((s) => s.id === `pm-${k}`);
       return `<div class="card pm-card"><div class="row"><span class="emoji-badge">${ic}</span><h3 class="grow" style="margin:0">${esc(n)}</h3></div>
@@ -389,7 +389,7 @@ async function createPowerMove(kind) {
   const fastest = [...local].filter((t) => t !== lead).sort((a, b) => (T[b].wps ?? 0) - (T[a].wps ?? 0))[0];
   const helper = kind === 'vote' ? lead : (kind === 'plan' ? fastest : rank[1]) || lead;
   const card = POWER_CARDS.find((x) => x[0] === kind);
-  await call('stacks:save', { id: `pm-${kind}`, name: card[1], emoji: card[2], builtFor: 'power', members: { drafters: [...new Set([helper, ...(kind === 'panel' ? rank.slice(1, 3) : [])])].filter(Boolean), judge: lead, mode: kind } });
+  await call('stacks:save', { id: `pm-${kind}`, name: card[1], emoji: card[2], builtFor: 'power', infused: true, members: { drafters: [...new Set([helper, ...(kind === 'panel' ? rank.slice(1, 3) : [])])].filter(Boolean), judge: lead, mode: kind } });
   await refreshModels();
   newChat();
   const c = chatById(S.route.id);

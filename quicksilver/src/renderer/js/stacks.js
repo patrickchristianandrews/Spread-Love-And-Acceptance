@@ -20,34 +20,42 @@ views.stacks = {
     const jobs = Object.entries(S.catalog.jobs);
     const goal = ([k, j]) => `<button class="goal ${advJob === k ? 'on' : ''}" data-job="${k}" aria-pressed="${advJob === k}">
       <span class="goal-ic">${j.icon}</span><span><b>${esc(j.label)}</b><span class="small muted">${esc(j.pitch)}</span></span></button>`;
+    const head = `<div class="page-head"><h1>Stacks &amp; Fusion</h1><a href="#" class="small og-link" data-guide="stacks" style="align-self:center">ⓘ What's the difference?</a></div>
+      <div class="tabs sf-tabs" role="tablist">
+        <button class="tab ${stacksTab === 'stacks' ? 'active' : ''}" data-sf-tab="stacks" role="tab" aria-selected="${stacksTab === 'stacks'}">🧩 Stacks <span class="sf-sub">ready-made by Quicksilver</span></button>
+        <button class="tab ${stacksTab === 'fusion' ? 'active' : ''}" data-sf-tab="fusion" role="tab" aria-selected="${stacksTab === 'fusion'}">⚗️ Fusion <span class="sf-sub">your own mix of AIs</span></button>
+      </div>`;
+    if (stacksTab === 'fusion') return `<div class="page">${head}${fusionPageHTML()}</div>`;
     return `<div class="page">
-      <div class="page-head"><h1>Stacks</h1><a href="#" class="small og-link" data-guide="stacks" style="align-self:center">ⓘ How stacks work</a><button class="btn" data-goto="compare">Compare teams</button><button class="btn" id="infuse">⚗️ Fusion: combine any AIs, including cloud</button></div>
-      <p class="lede">A team makes several AI models work as one: they answer separately, then a lead combines the best of each and fixes mistakes. <b>Pick what you want to do</b>, and Quicksilver shows the best team for this PC, how strong and fast each option is, and which cloud AI (optional) would make it even better.</p>
+      ${head}
+      <p class="lede"><b>A stack is a ready-made combination of AI models, picked and set up by Quicksilver for a job and fitted to this PC.</b> They answer separately, then a lead combines the best of each and fixes mistakes. Pick what you want to do and Quicksilver shows the best stack for this PC. Want to choose the AIs yourself, cloud ones included? That's <a href="#" data-sf-tab="fusion">⚗️ Fusion</a>.</p>
       ${foundBanner()}
       ${shownUpgrades().length || shownStackUpdates().length ? modelUpdatesHTML() : ''}
-      <div class="section"><h2>1. Choose a team</h2>${hwLine()}</div>
+      <div class="section"><h2>1. What do you want to do?</h2>${hwLine()}<button class="btn small" data-goto="compare" style="margin-left:auto">Compare stacks</button></div>
       <div class="goal-group"><div class="label">Think &amp; work</div><div class="goal-grid">${jobs.filter(([, j]) => j.kind === 'text').map(goal).join('')}</div></div>
       <div class="goal-group"><div class="label">Create</div><div class="goal-grid">${jobs.filter(([, j]) => j.kind === 'media').map(goal).join('')}</div></div>
       <div class="section"><h2>2. Set it up</h2></div>
       <div id="adv-out">${advResult ? advisorHTML(advResult) : '<div class="empty">Checking your PC and your models…</div>'}</div>
-      <div class="section"><h2>Your teams</h2></div>
+      <div class="section"><h2>Your stacks</h2><span class="small muted">Stacks you've set up. Your fusions are on the <a href="#" data-sf-tab="fusion">⚗️ Fusion</a> tab.</span></div>
       ${yourStacksHTML()}
       ${recipesHTML()}
+      ${kitsHTML()}
     </div>`;
   },
   bind() {
     if (!S.est) refreshEstimates().then(() => S.route.view === 'stacks' && render());
     loadFound();
+    $$('[data-sf-tab]').forEach((b) => b.addEventListener('click', (e) => { e.preventDefault(); stacksTab = b.dataset.sfTab; render(); }));
+    $$('#fusion-new-main').forEach((b) => b.addEventListener('click', () => infuseModal(() => render())));
     if (!advJob) { runAdvisor('general'); return; }
     $$('[data-job]').forEach((b) => b.addEventListener('click', () => runAdvisor(b.dataset.job)));
-    $('#infuse').addEventListener('click', () => infuseModal());
-    $$('.page-head [data-goto]').forEach((b) => b.addEventListener('click', () => go({ view: b.dataset.goto })));
+    $$('#main [data-goto]').forEach((b) => b.addEventListener('click', () => go({ view: b.dataset.goto })));
     $('#found-review')?.addEventListener('click', foundModal);
-    bindAdvisor();
+    if (stacksTab === 'stacks') bindAdvisor(); // the Setup Advisor is only on the Stacks tab
     bindRecipes();
     $$('[data-edit-stack]').forEach((b) => b.addEventListener('click', () => editStack(S.stacks.find((s) => s.id === b.dataset.editStack))));
     $$('[data-del-stack]').forEach((b) => b.addEventListener('click', async () => {
-      if (!(await confirmBox('Delete this team? The models stay installed.'))) return;
+      if (!(await confirmBox(`Delete this ${S.stacks.find((s) => s.id === b.dataset.delStack) && isFusion(S.stacks.find((s) => s.id === b.dataset.delStack)) ? 'fusion' : 'stack'}? The models stay installed.`))) return;
       await call('stacks:delete', b.dataset.delStack); await refreshModels(); render();
     }));
     $$('[data-chat-stack]').forEach((b) => b.addEventListener('click', () => {
@@ -316,10 +324,37 @@ async function createBest(r) {
   }, missing.length);
 }
 
+// Stacks are ready-made (Quicksilver picks the models); a fusion is a mix you chose yourself
+// (including the one-click fusions). They're kept apart everywhere so they never get confused.
+const isFusion = (s) => Boolean(s?.infused || s?.builtFor === 'power');
+let stacksTab = 'stacks';
 function yourStacksHTML() {
+  const list = S.stacks.filter((s) => !isFusion(s));
+  if (!list.length) return '<p class="muted">No stacks yet. Pick what you want to do above, or set up a ready-made one below.</p>';
+  return `<div class="cards">${list.map(stackCard).join('')}</div>`;
+}
+// Create kits are the picture and video models Create uses: not a stack, so they get their own section.
+function kitsHTML() {
   const kits = Object.entries(S.data.mediaKits || {}).filter(([k]) => S.catalog.jobs[k]);
-  if (!S.stacks.length && !kits.length) return '<p class="muted">No teams yet. Choose one above.</p>';
-  return `<div class="cards">${S.stacks.map(stackCard).join('')}${kits.map(([k, kit]) => kitCard(k, kit)).join('')}</div>`;
+  if (!kits.length) return '';
+  return `<div class="section"><h2>🎨 Create kits</h2><span class="small muted">The picture and video models Create uses. Not stacks: they make media, they don't answer chats.</span></div>
+    <div class="cards">${kits.map(([k, kit]) => kitCard(k, kit)).join('')}</div>`;
+}
+
+// ---------- the Fusion tab ----------
+function fusionPageHTML() {
+  const mine = S.stacks.filter(isFusion);
+  return `<div class="card fusion-hero"><div class="row" style="align-items:flex-start;gap:14px"><span class="emoji-badge" style="font-size:1.6rem">⚗️</span><div class="grow">
+      <h2 style="margin:0 0 4px">Fusion: your own mix of AIs</h2>
+      <p style="margin:0 0 10px">You pick 2 to 4 AIs, on this PC and in the cloud together, and how they should work together. They become one AI you can pick anywhere, like any model.</p>
+      <div class="sf-steps"><div><b>1</b><span>Pick the AIs<br><span class="small muted">mix makers: Qwen + Llama + Claude catch each other's mistakes</span></span></div><div><b>2</b><span>Pick how they work together<br><span class="small muted">blend, debate, vote, red team…</span></span></div><div><b>3</b><span>Name it and chat<br><span class="small muted">it shows under ⚗️ Fusions in every model menu</span></span></div></div>
+      <div class="small muted" style="margin-top:8px">How it differs from a stack: Quicksilver picks a stack's models for you; in a fusion you pick them, cloud AIs included.</div></div>
+      <button class="btn primary" id="fusion-new-main">⚗️ New fusion</button></div></div>
+    <div class="section"><h2>Your fusions</h2></div>
+    ${mine.length ? `<div class="cards">${mine.map(stackCard).join('')}</div>` : '<p class="muted">No fusions yet. Press ⚗️ New fusion, or start with a one-click fusion below.</p>'}
+    ${powerMovesHTML()}
+    <div class="section"><h2>Ways they can work together</h2><span class="small muted">You choose one when you make a fusion.</span></div>
+    <div class="cards sf-modes">${Object.values(INFUSE_MODES).map((m) => `<div class="card"><div class="row"><span style="font-size:1.3rem">${m.icon}</span><b class="grow">${esc(m.name)}</b><span class="badge b-lav">${esc(m.cost)}</span></div><p class="small" style="margin:6px 0 0">${esc(m.blurb)}</p></div>`).join('')}</div>`;
 }
 
 function kitCard(k, kit) {
@@ -402,17 +437,17 @@ function strengthOf(t) {
 
 function infuseModal(onCreated) {
   const options = S.targets.filter((t) => !t.stack);
-  if (options.length < 2) { toast('Install or connect at least two models to infuse them. Open Models, or the Setup Advisor.', 6000); return; }
-  const b = openModal(`<h2>✨ Combine AIs</h2>
+  if (options.length < 2) { toast('A fusion needs at least two AIs: install a model or connect a cloud AI (Models).', 6000); return; }
+  const b = openModal(`<h2>⚗️ New fusion</h2>
     <p class="help">Choose 2 to 4 AIs. Mixing different makers (for example Qwen + Llama + Claude) gives the biggest boost: they make different mistakes, so they catch each other's.</p>
     <div class="stack-v">
-      <div class="label">1. Pick the AIs to infuse</div>
+      <div class="label">1. Pick the AIs to fuse (2 to 4)</div>
       <div class="infuse-pick">${options.map((t) => `<label class="infuse-opt"><input type="checkbox" value="${esc(t.target)}"> <span class="grow">${esc(t.label)}${t.vision ? ' 👁' : ''}<div class="small muted">${esc(t.group)}</div></span></label>`).join('')}</div>
       <div class="label">2. How should they work together?</div>
       <div class="infuse-modes">${Object.entries(INFUSE_MODES).map(([k, m], i) => `<label class="infuse-mode"><input type="radio" name="im" value="${k}" ${i === 0 ? 'checked' : ''}><div style="font-size:1.4rem">${m.icon}</div><b>${m.name}</b><div class="small muted" style="font-weight:600;margin:4px 0">${esc(m.blurb)}</div><span class="badge b-lav">${esc(m.cost)}</span></label>`).join('')}</div>
       <div class="grid2">
         <div class="field"><label for="inf-lead">3. Lead (writes the final answer)</label><select id="inf-lead"><option value="">Automatic: the strongest one you picked</option>${options.map((t) => `<option value="${esc(t.target)}">${esc(t.label)}</option>`).join('')}</select></div>
-        <div class="field"><label for="inf-name">4. Name your infused AI</label><input id="inf-name" placeholder="e.g. Analyst Supreme"></div>
+        <div class="field"><label for="inf-name">4. Name your fusion</label><input id="inf-name" placeholder="e.g. Analyst Supreme"></div>
       </div>
     </div>
     <div id="inf-preview"></div>
@@ -426,11 +461,11 @@ function infuseModal(onCreated) {
   const preview = () => {
     const drafters = picked();
     const el = b.querySelector('#inf-preview');
-    if (drafters.length < 2) { el.innerHTML = '<div class="preview muted">Pick 2 to 4 AIs to see how fast and how good the infused AI will be on your PC.</div>'; return; }
+    if (drafters.length < 2) { el.innerHTML = '<div class="preview muted">Pick 2 to 4 AIs to see how fast and how good your fusion will be on this PC.</div>'; return; }
     const judge = b.querySelector('#inf-lead').value || [...drafters].sort((x, y) => strengthOf(y) - strengthOf(x))[0];
     const sees = (t) => S.targets.find((x) => x.target === t)?.vision;
     const vision = drafters.some(sees) ? undefined : S.targets.find((t) => t.vision && !t.stack)?.target;
-    el.innerHTML = teamPreviewHTML({ drafters, judge, vision, mode: b.querySelector('input[name="im"]:checked').value }, { title: 'How your infused AI will work on this PC' });
+    el.innerHTML = teamPreviewHTML({ drafters, judge, vision, mode: b.querySelector('input[name="im"]:checked').value }, { title: 'How your fusion will work on this PC' });
   };
   b.querySelector('.stack-v').addEventListener('change', preview); // this window's own fields (the modal frame is shared)
   preview();
@@ -443,7 +478,7 @@ function infuseModal(onCreated) {
     const vision = drafters.some(canSee) ? undefined : S.targets.find((t) => t.vision && !t.stack)?.target;
     const short = (t) => (S.targets.find((x) => x.target === t)?.label || '').split(/[ (]/)[0];
     const name = b.querySelector('#inf-name').value.trim() || `${drafters.map(short).join(' + ')} ${INFUSE_MODES[mode].name}`;
-    const stack = { id: `inf-${uid()}`, name, emoji: '✨', infused: true, members: { drafters, judge, vision, mode } };
+    const stack = { id: `inf-${uid()}`, name, emoji: '⚗️', infused: true, members: { drafters, judge, vision, mode } };
     await call('stacks:save', stack);
     await refreshModels();
     closeModal();

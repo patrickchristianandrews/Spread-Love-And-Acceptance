@@ -134,12 +134,21 @@ function redPng(size = 64) {
   assert.equal(await win.evaluate(async () => (await qs.call('stacks:list')).find((x) => x.id === 'rx-song-doctor')?.members.mode), 'debate');
   assert.equal(await win.evaluate(() => S.data.assistants.find((a) => a.id === 'as-rx-song-doctor').skill), 'song-critique');
   // Power moves are Fusion styles now: Majority vote, Red team, Plan then solve, Expert panel.
+  // Stacks & Fusion: two separate tabs. Stacks are ready-made; a fusion is your own mix.
   await win.click('[data-nav="stacks"]');
-  assert.equal(await win.locator('[data-pm]').count(), 0, 'no separate Power moves section');
-  await win.click('#infuse');
+  await win.waitForSelector('.sf-tabs [data-sf-tab="stacks"].active');
+  assert.equal(await win.locator('[data-pm], #fusion-new-main').count(), 0, 'nothing about fusions on the Stacks tab');
+  await win.click('.sf-tabs [data-sf-tab="fusion"]');
+  await win.waitForSelector('.fusion-hero #fusion-new-main');
+  assert.equal(await win.locator('[data-pm]').count(), 4, 'one-click fusions');
+  assert.equal(await win.locator('.rx-card').count(), 0, 'no ready-made stacks on the Fusion tab');
+  await shot(win, '02b-fusion-tab');
+  await win.click('#fusion-new-main');
+  await win.waitForSelector('#modal h2:has-text("New fusion")');
   for (const m of ['vote', 'redteam', 'plan', 'panel']) await win.waitForSelector(`#modal input[name="im"][value="${m}"]`, { state: 'attached' });
   await win.click('#modal [data-close]');
-  console.log('✓ fusion: includes the power-move styles (vote, red team, plan, panel)');
+  await win.click('.sf-tabs [data-sf-tab="stacks"]');
+  console.log('✓ Stacks & Fusion: separate tabs; Fusion has its builder, your fusions, one-click fusions and the ways to combine');
   assert.ok(await win.evaluate(() => STACK_RECIPES.some((r) => r.id === 'gif-maker' && r.skill === 'make-gif') && skillById('make-gif')?.media?.gif));
   console.log(`✓ stacks for specific work: ${await win.evaluate(() => STACK_RECIPES.length)} teams incl. 3 song stacks and a GIF maker, tuned to this PC, set up as a stack and an assistant`);
 
@@ -171,7 +180,7 @@ function redPng(size = 64) {
 
   // Infuse: fuse two models into one with Debate, from the model picker.
   await win.selectOption('#pick-model', '__infuse');
-  await win.waitForSelector('text=Combine AIs');
+  await win.waitForSelector('#modal h2:has-text("New fusion")');
   await win.check('.infuse-opt input[value="local:qwen3-8b"]');
   await win.check('.infuse-opt input[value="local:phi-4"]');
   await win.click('.infuse-mode:has-text("Debate")');
@@ -879,7 +888,7 @@ function redPng(size = 64) {
   // Every cloud AI, free or paid, with the best model to link; Fusion to combine them.
   assert.ok(await win.locator('#presets [data-preset]').count() >= 30, 'every OpenAI-compatible cloud AI is listed');
   await win.waitForSelector('#presets .card:has-text("Venice AI") :text("Best to link")');
-  await win.waitForSelector('.fusion-card #fusion-new');
+  await win.waitForSelector('.fusion-card #fusion-open');
   await shot(win, '05b-api-free');
   await win.click('[data-nav="pc"]');
   await win.waitForSelector('text=Speed test');

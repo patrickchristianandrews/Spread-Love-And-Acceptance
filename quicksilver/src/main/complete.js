@@ -979,8 +979,13 @@ async function explainStack(id) {
 // Everything you can chat with, for menus and the API server.
 function targets() {
   const out = [];
+  // Built in first, then ready-made stacks, then your fusions, then single models.
+  const st = stacks();
+  const fusion = (s) => s.infused || s.builtFor === 'power';
+  for (const s of st.filter((x) => x.id === 'quicksilver')) out.push({ target: `stack:${s.id}`, label: `${s.emoji || '💧'} ${s.name}`, name: s.name, group: '💧 Built in', stack: true });
+  for (const s of st.filter((x) => x.id !== 'quicksilver' && !fusion(x))) out.push({ target: `stack:${s.id}`, label: `${s.emoji || '🧩'} ${s.name}`, name: s.name, group: '🧩 Stacks', stack: true });
+  for (const s of st.filter(fusion)) out.push({ target: `stack:${s.id}`, label: `${s.emoji || '⚗️'} ${s.name}`, name: s.name, group: '⚗️ Fusions', stack: true, fusion: true });
   for (const m of models.list().filter((x) => x.kind === 'text')) out.push({ target: `local:${m.id}`, label: m.name, name: m.name, group: 'On this PC', vision: Boolean(m.files.mmproj) });
-  for (const s of stacks()) out.push({ target: `stack:${s.id}`, label: `${s.emoji || '⚡'} ${s.name}`, name: s.name, group: 'Infused AIs & stacks', stack: true });
   for (const k of kbModels()) if (exists(k.base)) out.push({ target: `kbm:${k.id}`, label: `${k.emoji || '📚'} ${k.name}`, name: k.name, group: 'Knowledge models', vision: canSee(k.base), knowledge: true });
   const off = Boolean(store.config().offline);
   for (const p of providers.publicList()) {
