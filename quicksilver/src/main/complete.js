@@ -97,6 +97,7 @@ function parse(target) {
 
 function label(target) {
   const t = parse(target);
+  if (t.kind === 'free') return '♻️ Free cloud AIs (rotating)';
   if (t.kind === 'local') return models.get(t.id)?.name || 'Missing model';
   if (t.kind === 'api') return `${t.model} (${providers.get(t.providerId)?.name || 'API'})`;
   if (t.kind === 'stack') return stacks().find((s) => s.id === t.id)?.name || 'Missing stack';
@@ -112,8 +113,68 @@ function canSee(target) {
   return false;
 }
 
+// ---------- free rotation ----------
+// Free cloud plans have limits. When a free one runs out (rate limit or daily quota), the next free
+// cloud AI you've connected answers instead, so you keep going for free. "♻️ Free cloud AIs" in the
+// model menu rotates through them from the start.
+const LIMIT = /\b429\b|rate.?limit|quota|limit (reached|exceeded)|too many requests|exceeded your|resource.?exhausted|credits? (are )?(exhausted|depleted)|insufficient (balance|credit)/i;
+const isLimit = (err) => err?.status === 429 || LIMIT.test(String(err?.message || err));
+let freeTurn = 0;
+function freeTargets(exclude) {
+  if (store.config().offline) return [];
+  const out = [];
+  for (const p of providers.publicList()) {
+    const pre = providers.PRESETS[p.preset];
+    if (!pre || !['free', 'some'].includes(pre.free) || !(p.hasKey || p.noKey) || !(p.models || []).length) continue;
+    // On "free to start" services, prefer models marked free (like OpenRouter's ":free" ones).
+    const freeModels = (p.models || []).filter((m) => /:free$|-free\b|flash/i.test(m));
+    const model = pre.free === 'some' ? (freeModels[0] || (p.models.includes(pre.best) ? pre.best : p.models[0])) : (p.models.includes(pre.best) ? pre.best : p.models[0]);
+    const tg = `api:${p.id}:${model}`;
+    if (tg !== exclude && !String(exclude || '').startsWith(`api:${p.id}:`)) out.push(tg);
+  }
+  return out;
+}
+async function* rotateFrom(list, req, firstErr) {
+  let lastErr = firstErr;
+  for (const tg of list) {
+    const t = parse(tg);
+    yield { type: 'status', text: `♻️ Free limit reached; switching to ${label(tg)}…` };
+    let produced = false;
+    try {
+      for await (const ev of providers.chat(t.providerId, t.model, req)) { if (ev.type === 'text') produced = true; yield ev; }
+      return true;
+    } catch (err) {
+      if (produced || !isLimit(err)) throw err;
+      lastErr = err;
+    }
+  }
+  if (lastErr) throw new Error(`Every free cloud AI you've connected has hit its limit for now (${String(lastErr.message || lastErr).slice(0, 120)}). Try again later, connect another free one under Models → Connect an API, or use the models on this PC.`);
+  return false;
+}
+async function* withFreeRotation(target, req) {
+  const t = parse(target);
+  let produced = false;
+  try {
+    for await (const ev of providers.chat(t.providerId, t.model, req)) { if (ev.type === 'text') produced = true; yield ev; }
+  } catch (err) {
+    const p = providers.get(t.providerId);
+    const free = ['free', 'some'].includes(providers.PRESETS[p?.preset]?.free);
+    if (produced || !free || req.noRotate || !isLimit(err)) throw err;
+    const list = freeTargets(target);
+    if (!list.length) throw err;
+    yield* rotateFrom(list, req, err);
+  }
+}
+async function* freeRotation(req) {
+  const list = freeTargets();
+  if (!list.length) throw new Error('Connect a free cloud AI first (Models → Connect an API → Free).');
+  const start = freeTurn++ % list.length;
+  yield* rotateFrom([...list.slice(start), ...list.slice(0, start)], req, null);
+}
+
 function exists(target) {
   const t = parse(target);
+  if (t.kind === 'free') return freeTargets().length > 0;
   if (t.kind === 'local') return Boolean(models.get(t.id));
   if (t.kind === 'api') return Boolean(providers.get(t.providerId));
   if (t.kind === 'stack') return stacks().some((s) => s.id === t.id);
@@ -180,7 +241,9 @@ async function* single(target, req) {
     }
     yield* llama.chat(localSpec(m, req.messages), { ...req, level: req.points ? 'quick' : level });
   } else if (t.kind === 'api') {
-    yield* providers.chat(t.providerId, t.model, req);
+    yield* withFreeRotation(target, req);
+  } else if (t.kind === 'free') {
+    yield* freeRotation(req);
   } else if (t.kind === 'kbm') {
     const km = kbModels().find((m) => m.id === t.id);
     if (!km) throw new Error('That knowledge model was deleted. Pick another one.');
@@ -878,6 +941,7 @@ function targets() {
     if (off && !require('./offline').isLocal(p.baseUrl || 'https://cloud')) continue; // cloud AIs can't answer offline
     for (const m of p.models || []) out.push({ target: `api:${p.id}:${m}`, label: m, name: m, group: p.name, vision: p.vision });
   }
+  if (freeTargets().length >= 2) out.push({ target: 'free:rotate', label: '♻️ Free cloud AIs (rotating)', name: 'Free cloud AIs (rotating)', group: 'Cloud', vision: false });
   return out;
 }
 

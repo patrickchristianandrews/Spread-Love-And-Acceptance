@@ -6,32 +6,80 @@ const oai = require('./oai');
 // free: 'local' (runs on this PC), 'free' (a free plan with a key), 'some' (some free models or
 // credits), 'paid' (pay as you go). Free plans change, so the app also links to the pricing page.
 const PRESETS = {
-  google: { name: 'Google Gemini', baseUrl: 'https://generativelanguage.googleapis.com/v1beta/openai', keyUrl: 'https://aistudio.google.com/apikey', vision: true,
+  google: { best: 'gemini-2.5-flash', bestWhy: 'Fast, strong and on the free plan; Gemini Pro models are stronger but have tighter free limits.', name: 'Google Gemini', baseUrl: 'https://generativelanguage.googleapis.com/v1beta/openai', keyUrl: 'https://aistudio.google.com/apikey', vision: true,
     free: 'free', freeNote: 'Free plan: get a key in Google AI Studio with a Google account, no card. Daily limits apply, and Google may use free-plan prompts to improve its products.', priceUrl: 'https://ai.google.dev/pricing' },
-  groq: { name: 'Groq (very fast)', baseUrl: 'https://api.groq.com/openai/v1', keyUrl: 'https://console.groq.com/keys',
+  groq: { best: 'openai/gpt-oss-120b', bestWhy: 'The strongest open model there, at hundreds of words a second.', name: 'Groq (very fast)', baseUrl: 'https://api.groq.com/openai/v1', keyUrl: 'https://console.groq.com/keys',
     free: 'free', freeNote: 'Free plan: sign up and create a key, no card. Requests per minute and per day are limited.', priceUrl: 'https://groq.com/pricing' },
-  openrouter: { name: 'OpenRouter (hundreds of models)', baseUrl: 'https://openrouter.ai/api/v1', keyUrl: 'https://openrouter.ai/keys', vision: true,
+  openrouter: { best: 'openrouter/auto', bestWhy: 'Picks the best model for each question automatically; any model ending in :free costs nothing.', name: 'OpenRouter (hundreds of models)', baseUrl: 'https://openrouter.ai/api/v1', keyUrl: 'https://openrouter.ai/keys', vision: true,
     free: 'some', freeNote: 'Free models: any model whose name ends in ":free" costs nothing, with a daily limit. Other models are pay as you go.', priceUrl: 'https://openrouter.ai/models?max_price=0' },
-  github: { name: 'GitHub Models', baseUrl: 'https://models.github.ai/inference', keyUrl: 'https://github.com/settings/personal-access-tokens', vision: true, models: ['openai/gpt-4.1-mini', 'meta/Llama-3.3-70B-Instruct', 'deepseek/DeepSeek-R1', 'mistral-ai/Mistral-Large-2411'],
+  github: { best: 'openai/gpt-4.1', bestWhy: 'The strongest general model on the free GitHub plan.', name: 'GitHub Models', baseUrl: 'https://models.github.ai/inference', keyUrl: 'https://github.com/settings/personal-access-tokens', vision: true, models: ['openai/gpt-4.1-mini', 'meta/Llama-3.3-70B-Instruct', 'deepseek/DeepSeek-R1', 'mistral-ai/Mistral-Large-2411'],
     free: 'free', freeNote: 'Free with a GitHub account: use a personal access token with the "models" permission. Good for trying models; daily limits are low.', priceUrl: 'https://docs.github.com/en/github-models/use-github-models/prototyping-with-ai-models#rate-limits' },
-  cerebras: { name: 'Cerebras (very fast)', baseUrl: 'https://api.cerebras.ai/v1', keyUrl: 'https://cloud.cerebras.ai',
+  cerebras: { best: 'gpt-oss-120b', bestWhy: 'Strong reasoning at extreme speed on the free plan.', name: 'Cerebras (very fast)', baseUrl: 'https://api.cerebras.ai/v1', keyUrl: 'https://cloud.cerebras.ai',
     free: 'free', freeNote: 'Free plan: sign up and create a key, no card. Daily token limits apply.', priceUrl: 'https://www.cerebras.ai/pricing' },
-  mistral: { name: 'Mistral AI', baseUrl: 'https://api.mistral.ai/v1', keyUrl: 'https://console.mistral.ai/api-keys', vision: true,
+  mistral: { best: 'mistral-large-latest', bestWhy: 'Mistral\'s strongest model, on the free Experiment plan.', name: 'Mistral AI', baseUrl: 'https://api.mistral.ai/v1', keyUrl: 'https://console.mistral.ai/api-keys', vision: true,
     free: 'free', freeNote: 'Free "Experiment" plan: verify a phone number, no card. Rate limits apply, and free-plan prompts may be used for training.', priceUrl: 'https://mistral.ai/pricing' },
-  huggingface: { name: 'Hugging Face', baseUrl: 'https://router.huggingface.co/v1', keyUrl: 'https://huggingface.co/settings/tokens', vision: true,
+  huggingface: { best: 'openai/gpt-oss-120b', bestWhy: 'A strong open model; hundreds of others are available.', name: 'Hugging Face', baseUrl: 'https://router.huggingface.co/v1', keyUrl: 'https://huggingface.co/settings/tokens', vision: true,
     free: 'some', freeNote: 'Free monthly credits come with a Hugging Face account (a small amount; PRO gives more). Then pay as you go.', priceUrl: 'https://huggingface.co/docs/inference-providers/pricing' },
-  together: { name: 'Together AI', baseUrl: 'https://api.together.xyz/v1', keyUrl: 'https://api.together.ai/settings/api-keys', imageModels: ['black-forest-labs/FLUX.1-schnell-Free'],
+  together: { best: 'meta-llama/Llama-3.3-70B-Instruct-Turbo', bestWhy: 'A strong, fast, low-cost all-rounder.', name: 'Together AI', baseUrl: 'https://api.together.xyz/v1', keyUrl: 'https://api.together.ai/settings/api-keys', imageModels: ['black-forest-labs/FLUX.1-schnell-Free'],
     free: 'some', freeNote: 'A few free models (like FLUX.1 Schnell Free for images); others are pay as you go. A small credit purchase may be needed to activate the account.', priceUrl: 'https://www.together.ai/pricing' },
-  anthropic: { name: 'Anthropic (Claude)', baseUrl: 'https://api.anthropic.com', keyUrl: 'https://console.anthropic.com/settings/keys', models: ['claude-opus-5-5', 'claude-sonnet-5-5', 'claude-haiku-5-5', 'claude-fable-5-1'], vision: true,
+  anthropic: { best: 'claude-opus-5-5', bestWhy: 'Claude\'s most capable model; Sonnet is the best value, Haiku the fastest.', name: 'Anthropic (Claude)', baseUrl: 'https://api.anthropic.com', keyUrl: 'https://console.anthropic.com/settings/keys', models: ['claude-opus-5-5', 'claude-sonnet-5-5', 'claude-haiku-5-5', 'claude-fable-5-1'], vision: true,
     free: 'paid', freeNote: 'Pay as you go: buy credits first. No ongoing free plan.', priceUrl: 'https://www.anthropic.com/pricing#api' },
-  openai: { name: 'OpenAI', baseUrl: 'https://api.openai.com/v1', keyUrl: 'https://platform.openai.com/api-keys', imageModels: ['gpt-image-1'], vision: true,
+  openai: { best: 'gpt-5', bestWhy: 'OpenAI\'s flagship; gpt-5-mini is much cheaper for everyday use.', name: 'OpenAI', baseUrl: 'https://api.openai.com/v1', keyUrl: 'https://platform.openai.com/api-keys', imageModels: ['gpt-image-1'], vision: true,
     free: 'paid', freeNote: 'Pay as you go: add credit first. A ChatGPT subscription does not include the API.', priceUrl: 'https://openai.com/api/pricing' },
-  deepseek: { name: 'DeepSeek', baseUrl: 'https://api.deepseek.com/v1', keyUrl: 'https://platform.deepseek.com/api_keys',
+  deepseek: { best: 'deepseek-reasoner', bestWhy: 'Strong reasoning at a very low price; deepseek-chat is quicker.', name: 'DeepSeek', baseUrl: 'https://api.deepseek.com/v1', keyUrl: 'https://platform.deepseek.com/api_keys',
     free: 'paid', freeNote: 'Pay as you go, at very low prices. No free plan.', priceUrl: 'https://api-docs.deepseek.com/quick_start/pricing' },
-  xai: { name: 'xAI (Grok)', baseUrl: 'https://api.x.ai/v1', keyUrl: 'https://console.x.ai', vision: true,
+  xai: { best: 'grok-4', bestWhy: 'xAI\'s strongest model.', name: 'xAI (Grok)', baseUrl: 'https://api.x.ai/v1', keyUrl: 'https://console.x.ai', vision: true,
     free: 'paid', freeNote: 'Pay as you go. New accounts sometimes get promotional credits.', priceUrl: 'https://docs.x.ai/docs/models' },
   ollama: { name: 'Ollama (on this PC)', baseUrl: 'http://localhost:11434/v1', noKey: true, vision: true, free: 'local', freeNote: 'Free: runs on this PC with no key.' },
   lmstudio: { name: 'LM Studio (on this PC)', baseUrl: 'http://localhost:1234/v1', noKey: true, vision: true, free: 'local', freeNote: 'Free: runs on this PC with no key.' },
+  // ---------- more cloud AIs (all OpenAI-compatible) ----------
+  perplexity: { name: 'Perplexity (answers with web sources)', baseUrl: 'https://api.perplexity.ai', keyUrl: 'https://www.perplexity.ai/settings/api', best: 'sonar-pro', bestWhy: 'Searches the web and cites sources in every answer.', models: ['sonar-pro', 'sonar', 'sonar-reasoning-pro'],
+    free: 'paid', freeNote: 'Pay as you go: add credit first. Perplexity Pro subscribers get a small monthly API credit.', priceUrl: 'https://docs.perplexity.ai/guides/pricing' },
+  fireworks: { name: 'Fireworks AI', baseUrl: 'https://api.fireworks.ai/inference/v1', keyUrl: 'https://fireworks.ai/account/api-keys', best: 'accounts/fireworks/models/llama-v3p3-70b-instruct', bestWhy: 'Fast hosting of the best open models.', vision: true,
+    free: 'some', freeNote: 'A small free credit when you sign up, then pay as you go.', priceUrl: 'https://fireworks.ai/pricing' },
+  deepinfra: { name: 'DeepInfra', baseUrl: 'https://api.deepinfra.com/v1/openai', keyUrl: 'https://deepinfra.com/dash/api_keys', best: 'meta-llama/Llama-3.3-70B-Instruct', bestWhy: 'Very low prices for big open models.',
+    free: 'paid', freeNote: 'Pay as you go, at some of the lowest prices for open models.', priceUrl: 'https://deepinfra.com/pricing' },
+  sambanova: { name: 'SambaNova (very fast)', baseUrl: 'https://api.sambanova.ai/v1', keyUrl: 'https://cloud.sambanova.ai/apis', best: 'Meta-Llama-3.3-70B-Instruct', bestWhy: 'Large open models at very high speed.',
+    free: 'free', freeNote: 'Free plan with rate limits, no card needed.', priceUrl: 'https://cloud.sambanova.ai/plans/pricing' },
+  nvidia: { name: 'NVIDIA NIM (build.nvidia.com)', baseUrl: 'https://integrate.api.nvidia.com/v1', keyUrl: 'https://build.nvidia.com', best: 'meta/llama-3.3-70b-instruct', bestWhy: 'A wide catalogue of open models run by NVIDIA.',
+    free: 'some', freeNote: 'Free credits for developers with an NVIDIA account, then limits apply.', priceUrl: 'https://build.nvidia.com/explore/discover' },
+  cloudflare: { name: 'Cloudflare Workers AI', baseUrl: 'https://api.cloudflare.com/client/v4/accounts/YOUR_ACCOUNT_ID/ai/v1', keyUrl: 'https://dash.cloudflare.com/profile/api-tokens', best: '@cf/meta/llama-3.3-70b-instruct-fp8-fast', bestWhy: 'A strong open model on Cloudflare\'s network.',
+    free: 'free', freeNote: 'A free daily allowance with a Cloudflare account. Replace YOUR_ACCOUNT_ID in the address with your account ID.', priceUrl: 'https://developers.cloudflare.com/workers-ai/platform/pricing/' },
+  cohere: { name: 'Cohere (Command)', baseUrl: 'https://api.cohere.ai/compatibility/v1', keyUrl: 'https://dashboard.cohere.com/api-keys', best: 'command-a-03-2025', bestWhy: 'Cohere\'s strongest model, good with documents and business writing.',
+    free: 'free', freeNote: 'Free trial key with rate limits (not for commercial use). Paid keys for production.', priceUrl: 'https://cohere.com/pricing' },
+  ai21: { name: 'AI21 (Jamba)', baseUrl: 'https://api.ai21.com/studio/v1', keyUrl: 'https://studio.ai21.com/account/api-key', best: 'jamba-large', bestWhy: 'Very long documents (256K context).',
+    free: 'some', freeNote: 'Free trial credit for new accounts, then pay as you go.', priceUrl: 'https://www.ai21.com/pricing' },
+  qwen: { name: 'Alibaba Qwen (Model Studio)', baseUrl: 'https://dashscope-intl.aliyuncs.com/compatible-mode/v1', keyUrl: 'https://modelstudio.console.alibabacloud.com/', best: 'qwen-max', bestWhy: 'Alibaba\'s strongest Qwen model in the cloud.', vision: true,
+    free: 'some', freeNote: 'A free token allowance for new users, then pay as you go.', priceUrl: 'https://www.alibabacloud.com/help/en/model-studio/models' },
+  moonshot: { name: 'Moonshot (Kimi)', baseUrl: 'https://api.moonshot.ai/v1', keyUrl: 'https://platform.moonshot.ai/console/api-keys', best: 'kimi-latest', bestWhy: 'Kimi: strong at coding and long documents.',
+    free: 'paid', freeNote: 'Pay as you go. New accounts sometimes get a small credit.', priceUrl: 'https://platform.moonshot.ai/docs/pricing' },
+  zai: { name: 'Z.ai (GLM)', baseUrl: 'https://api.z.ai/api/paas/v4', keyUrl: 'https://z.ai/manage-apikey/apikey-list', best: 'glm-4.6', bestWhy: 'GLM\'s flagship; glm-4.5-flash is free.',
+    free: 'some', freeNote: 'GLM Flash models are free; the flagship models are pay as you go.', priceUrl: 'https://docs.z.ai/guides/overview/pricing' },
+  minimax: { name: 'MiniMax', baseUrl: 'https://api.minimax.io/v1', keyUrl: 'https://www.minimax.io/platform', best: 'MiniMax-M2', bestWhy: 'Strong at coding and agent tasks for its price.',
+    free: 'paid', freeNote: 'Pay as you go.', priceUrl: 'https://www.minimax.io/platform/document/Price' },
+  venice: { name: 'Venice AI (private, uncensored)', baseUrl: 'https://api.venice.ai/api/v1', keyUrl: 'https://venice.ai/settings/api', best: 'venice-uncensored', bestWhy: 'Uncensored and private: Venice says it doesn\'t store your prompts.',
+    free: 'some', freeNote: 'A limited free allowance; Venice Pro or credits for more.', priceUrl: 'https://docs.venice.ai/overview/pricing' },
+  nebius: { name: 'Nebius AI Studio', baseUrl: 'https://api.studio.nebius.com/v1', keyUrl: 'https://studio.nebius.com/settings/api-keys', best: 'meta-llama/Llama-3.3-70B-Instruct', bestWhy: 'Low-cost open models hosted in Europe.',
+    free: 'some', freeNote: 'Trial credit for new accounts, then pay as you go.', priceUrl: 'https://studio.nebius.com/' },
+  novita: { name: 'Novita AI', baseUrl: 'https://api.novita.ai/v3/openai', keyUrl: 'https://novita.ai/settings/key-management', best: 'meta-llama/llama-3.3-70b-instruct', bestWhy: 'Low-cost open models, including uncensored ones.',
+    free: 'some', freeNote: 'Trial credit for new accounts, then pay as you go.', priceUrl: 'https://novita.ai/pricing' },
+  hyperbolic: { name: 'Hyperbolic', baseUrl: 'https://api.hyperbolic.xyz/v1', keyUrl: 'https://app.hyperbolic.xyz/settings', best: 'meta-llama/Llama-3.3-70B-Instruct', bestWhy: 'Low-cost open models, including base models.',
+    free: 'some', freeNote: 'Trial credit for new accounts, then pay as you go.', priceUrl: 'https://hyperbolic.xyz/pricing' },
+  featherless: { name: 'Featherless (thousands of open models)', baseUrl: 'https://api.featherless.ai/v1', keyUrl: 'https://featherless.ai/account/api-keys', best: 'meta-llama/Llama-3.3-70B-Instruct', bestWhy: 'A flat monthly price for thousands of open and uncensored fine-tunes.',
+    free: 'paid', freeNote: 'Monthly subscription, unlimited use of its models.', priceUrl: 'https://featherless.ai/#pricing' },
+  chutes: { name: 'Chutes', baseUrl: 'https://llm.chutes.ai/v1', keyUrl: 'https://chutes.ai/app/api', best: 'deepseek-ai/DeepSeek-V3-0324', bestWhy: 'Big open models on a decentralised network.',
+    free: 'some', freeNote: 'Some free models with daily limits; others are paid.', priceUrl: 'https://chutes.ai/' },
+  inception: { name: 'Inception (Mercury, very fast)', baseUrl: 'https://api.inceptionlabs.ai/v1', keyUrl: 'https://platform.inceptionlabs.ai/', best: 'mercury', bestWhy: 'A diffusion model that writes extremely fast.',
+    free: 'some', freeNote: 'Free credit for new accounts, then pay as you go.', priceUrl: 'https://platform.inceptionlabs.ai/' },
+  upstage: { name: 'Upstage (Solar)', baseUrl: 'https://api.upstage.ai/v1', keyUrl: 'https://console.upstage.ai/api-keys', best: 'solar-pro2', bestWhy: 'Compact and good at documents.',
+    free: 'some', freeNote: 'Free credit for new accounts, then pay as you go.', priceUrl: 'https://www.upstage.ai/pricing' },
+  poe: { name: 'Poe (many bots, one key)', baseUrl: 'https://api.poe.com/v1', keyUrl: 'https://poe.com/api_key', best: 'Claude-Sonnet-4', bestWhy: 'Use your Poe points with models from many companies.',
+    free: 'some', freeNote: 'Uses your Poe points: free daily points, more with a subscription.', priceUrl: 'https://poe.com/api_key' },
+  jan: { name: 'Jan (on this PC)', baseUrl: 'http://localhost:1337/v1', noKey: true, free: 'local', freeNote: 'Free: runs on this PC with no key. Start Jan\'s local API server first.' },
+  llamacpp: { name: 'llama.cpp server (on this PC)', baseUrl: 'http://localhost:8080/v1', noKey: true, vision: true, free: 'local', freeNote: 'Free: a llama-server you run yourself.' },
+  vllm: { name: 'vLLM / LocalAI / TGI (your server)', baseUrl: 'http://localhost:8000/v1', noKey: true, free: 'local', freeNote: 'Free: any OpenAI-compatible server on this PC or your network.' },
+  koboldcpp: { name: 'KoboldCpp (on this PC)', baseUrl: 'http://localhost:5001/v1', noKey: true, free: 'local', freeNote: 'Free: runs on this PC with no key.' },
+  gpt4all: { name: 'GPT4All (on this PC)', baseUrl: 'http://localhost:4891/v1', noKey: true, free: 'local', freeNote: 'Free: turn on GPT4All\'s local API server first.' },
   custom: { name: 'Custom OpenAI-compatible API', baseUrl: '', vision: true, freeNote: 'Depends on the service.' },
 };
 
@@ -88,6 +136,8 @@ async function refreshModels(id) {
     models = await oai.listModels({ baseUrl: p.baseUrl, apiKey: store.getSecret(keyName(p.id)) });
   }
   if (p.preset === 'openai') models = models.filter((m) => /^(gpt|o\d|chatgpt)/.test(m) && !/(audio|realtime|transcribe|tts|embedding|search)/.test(m));
+  const best = PRESETS[p.preset]?.best;
+  if (best && models.includes(best)) models = [best, ...models.filter((x) => x !== best)];
   const imageModels = p.preset === 'openai' ? models.filter((m) => /image|dall-e/.test(m)) : p.imageModels;
   return upsert({ ...p, models: models.filter((m) => !/image|dall-e/.test(m)), imageModels });
 }
@@ -157,7 +207,7 @@ async function* chat(providerId, model, { messages, temperature, maxTokens, sign
     } catch (err) {
       if (err instanceof Anthropic.APIUserAbortError) return;
       if (err instanceof Anthropic.AuthenticationError) throw new Error('Your Anthropic key was not accepted. Check it under Models → Connect an API.');
-      if (err instanceof Anthropic.RateLimitError) throw new Error('Anthropic is rate limiting this key. Wait a moment and try again.');
+      if (err instanceof Anthropic.RateLimitError) { const e = new Error('Anthropic is rate limiting this key. Wait a moment and try again.'); e.status = 429; throw e; }
       if (err instanceof Anthropic.APIConnectionError) throw new Error('Could not reach Anthropic. Check your internet connection.');
       throw err;
     }
@@ -172,7 +222,7 @@ async function* chat(providerId, model, { messages, temperature, maxTokens, sign
   } catch (err) {
     if (signal?.aborted) return;
     if (/fetch failed|ECONNREFUSED/i.test(String(err.message))) throw new Error(`Could not reach ${p.name}. ${PRESETS[p.preset]?.noKey ? 'Is it running?' : 'Check your internet connection.'}`);
-    throw new Error(`${p.name}: ${err.message}`);
+    const e2 = new Error(`${p.name}: ${err.message}`); e2.status = err.status; throw e2;
   }
 }
 

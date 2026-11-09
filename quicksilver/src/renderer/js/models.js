@@ -235,23 +235,39 @@ async function chooseQuant(repo) {
 // ---------- API connections ----------
 
 const FREE_BADGE = {
-  free: '<span class="badge b-mint" title="Has a free plan">✓ Free plan</span>',
-  some: '<span class="badge b-lemon" title="Some models or credits are free">✓ Free models</span>',
-  local: '<span class="badge b-mint">Free · on this PC</span>',
-  paid: '<span class="badge b-peach">Paid</span>',
+  free: '<span class="badge b-mint" title="Has a free plan">✓ Free</span>',
+  some: '<span class="badge b-lemon" title="Free credits or some free models, then paid">◐ Free to start, then paid</span>',
+  local: '<span class="badge b-mint">✓ Free · on this PC</span>',
+  paid: '<span class="badge b-peach">$ Paid</span>',
 };
 
 function apiHTML() {
   return `<p class="muted">Optional. Connect cloud AI services to use their models next to your local ones, as the lead of a team, as your double-checker, or for image generation. Keys are encrypted on this PC and only sent to that service.</p>
-    ${S.providers.length ? `<div class="section"><h2>Connected</h2></div><div class="cards">${S.providers.map((p) => `<div class="card">
+    ${fusionHTML()}
+    ${S.providers.length ? `<div class="section"><h2>Connected (${S.providers.length})</h2><span class="small muted">Connect as many as you like, even two accounts with the same service: each appears separately in every model menu.</span></div><div class="cards">${S.providers.map((p) => `<div class="card">
       <div class="row"><h3 class="grow">${esc(p.name)}</h3>${p.hasKey || p.noKey ? '<span class="badge b-mint">✓ connected</span>' : '<span class="badge b-pink">needs key</span>'}</div>
       <div class="meta" style="margin:4px 0 8px">${esc(p.baseUrl)}</div>
       <div class="row small" style="margin-bottom:10px">${(p.models || []).slice(0, 8).map((m) => `<span class="badge b-lav">${esc(m)}</span>`).join('')}${(p.models || []).length > 8 ? `<span class="small muted">+${p.models.length - 8} more</span>` : ''}${(p.imageModels || []).map((m) => `<span class="badge b-peach">🎨 ${esc(m)}</span>`).join('')}</div>
       <div class="row"><button class="btn small" data-api-refresh="${p.id}">Refresh models</button><button class="btn small" data-api-edit="${p.id}">Edit</button><button class="btn small danger" data-api-del="${p.id}">Remove</button></div>
     </div>`).join('')}</div>` : ''}
-    <div class="section"><h2>Add a connection</h2></div>
+    <div class="section"><h2>Add a connection</h2><span class="small muted">Every cloud AI that works with Quicksilver, marked free or paid, with the best model to use.</span></div>
     <div id="presets"></div>`;
 }
+
+// Fusion: combine any AIs (on this PC and in the cloud) into one that answers as a team.
+function fusionHTML() {
+  const fused = (S.stacks || []).filter((s) => s.infused);
+  return `<div class="card fusion-card"><div class="row"><span class="emoji-badge">⚗️</span><div class="grow"><h3 style="margin:0">Fusion: combine AIs into one</h3>
+      <div class="small muted">Pick 2 to 4 AIs, local and cloud together (say Quicksilver + Claude + Gemini). They answer separately and a lead fuses the best of each, so they catch each other's mistakes. Use the fusion like any model.</div></div>
+      <button class="btn primary" id="fusion-new">⚗️ New fusion</button></div>
+    ${fused.length ? `<div class="row" style="margin-top:10px;flex-wrap:wrap;gap:6px">${fused.map((s) => `<button class="btn small" data-fusion-chat="${esc(s.id)}" title="Chat with it">${esc(s.emoji || '⚗️')} ${esc(s.name)}</button>`).join('')}</div>` : ''}
+  </div>`;
+}
+document.addEventListener('click', (e) => {
+  if (e.target.closest('#fusion-new')) { infuseModal(() => render()); return; }
+  const f = e.target.closest('[data-fusion-chat]');
+  if (f) { newChat(); const c = chatById(S.route.id); if (c) { c.target = `stack:${f.dataset.fusionChat}`; save(); render(); } }
+});
 
 async function bindApi() {
   if (modelsTab !== 'api') return;
@@ -259,12 +275,14 @@ async function bindApi() {
   const box = $('#presets');
   if (!box) return;
   // Free options first, so people can try cloud models without paying.
-  const groups = [['Free to start', (p) => ['free', 'some'].includes(p.free)], ['Free, on this PC', (p) => p.free === 'local'], ['Paid', (p) => p.free === 'paid'], ['Other', (p) => !p.free]];
+  const groups = [['Free', (p) => p.free === 'free'], ['Free to start, then paid', (p) => p.free === 'some'], ['Paid', (p) => p.free === 'paid'], ['Other', (p) => !p.free]];
   box.innerHTML = `<p class="small muted" style="margin:-4px 0 12px">Free plans have daily limits and can change; each card links to the current prices.</p>` + groups.map(([title, test]) => {
     const list = Object.entries(presets).filter(([, p]) => test(p));
     return list.length ? `<h3 class="small muted" style="margin:14px 0 8px;text-transform:uppercase;letter-spacing:.05em">${title}</h3><div class="cards" style="grid-template-columns:repeat(auto-fill,minmax(250px,1fr))">${list.map(([k, p]) => `<button class="card" data-preset="${k}" style="text-align:left">
       <div class="row"><h3 class="grow">${esc(p.name)}</h3>${FREE_BADGE[p.free] || ''}</div>
-      <div class="small muted" style="font-weight:600;margin-top:6px">${esc(p.freeNote || (k === 'custom' ? 'Any OpenAI-compatible endpoint' : 'Needs an API key'))}</div></button>`).join('')}</div>` : '';
+      <div class="small muted" style="font-weight:600;margin-top:6px">${esc(p.freeNote || (k === 'custom' ? 'Any OpenAI-compatible endpoint' : 'Needs an API key'))}</div>
+      ${p.best ? `<div class="small" style="margin-top:6px">⭐ <b>Best to link:</b> <code>${esc(p.best)}</code>${p.bestWhy ? ` <span class="muted">· ${esc(p.bestWhy)}</span>` : ''}</div>` : ''}
+      ${S.providers.some((x) => x.preset === k) ? '<div class="small" style="margin-top:4px"><span class="badge b-mint">✓ connected</span> · click to connect another account</div>' : ''}</button>`).join('')}</div>` : '';
   }).join('');
   $$('[data-preset]').forEach((b) => b.addEventListener('click', () => editProvider({ preset: b.dataset.preset }, presets)));
   $$('[data-api-edit]').forEach((b) => b.addEventListener('click', () => editProvider(S.providers.find((p) => p.id === b.dataset.apiEdit), presets)));

@@ -914,7 +914,20 @@ async function collect(gen) {
     assert.equal(g[0].source, 'chatgpt'); assert.equal(g[0].created, 1700000000000);
     const cl = importer.parse('conversations.json', Buffer.from(JSON.stringify([{ uuid: 'u1', name: '', created_at: '2025-01-02T03:04:05Z', updated_at: '2025-01-02T03:05:05Z', chat_messages: [{ sender: 'human', text: 'Hi Claude', created_at: '2025-01-02T03:04:05Z' }, { sender: 'assistant', text: '', content: [{ type: 'text', text: 'Hello!' }] }] }])));
     assert.equal(cl[0].title, 'Hi Claude'); assert.equal(cl[0].messages[1].text, 'Hello!'); assert.equal(cl[0].source, 'claude');
-    assert.throws(() => importer.parse('x.json', Buffer.from('[]')), /No conversations/);
+    assert.throws(() => importer.parse('x.json', Buffer.from('[]')), /No chats Quicksilver can read/);
+    // Other AIs: Gemini (Takeout), Grok, DeepSeek, LM Studio, Jan / SillyTavern (.jsonl), a text transcript.
+    const gem = importer.parse('MyActivity.json', Buffer.from(JSON.stringify([{ header: 'Gemini Apps', title: 'Prompted What is 2+2?', time: '2026-05-01T10:00:00Z', safeHtmlItem: [{ html: '<p>It is <b>4</b>.</p>' }] }])));
+    assert.equal(gem[0].source, 'gemini'); assert.deepEqual(gem[0].messages.map((m) => m.text), ['What is 2+2?', 'It is 4.']);
+    const grok = importer.parse('grok.json', Buffer.from(JSON.stringify({ conversations: [{ conversation: { title: 'Grok chat' }, responses: [{ response: { message: 'Hi Grok', sender: 'human' } }, { response: { message: 'Hello!', sender: 'ASSISTANT' } }] }] })));
+    assert.equal(grok[0].source, 'grok'); assert.equal(grok[0].messages[1].role, 'assistant');
+    const ds = importer.parse('conversations.json', Buffer.from(JSON.stringify([{ id: 'd1', title: 'DS', mapping: { a: { id: 'a', parent: null, children: ['b'], message: { fragments: [{ type: 'REQUEST', content: 'Q?' }] } }, b: { id: 'b', parent: 'a', children: [], message: { fragments: [{ type: 'THINK', content: 'hmm' }, { type: 'RESPONSE', content: 'A.' }] } } }, current_node: 'b' }])));
+    assert.equal(ds[0].source, 'deepseek'); assert.deepEqual(ds[0].messages.map((m) => `${m.role}:${m.text}`), ['user:Q?', 'assistant:A.']);
+    const lms = importer.parse('chat.json', Buffer.from(JSON.stringify({ name: 'LMS', messages: [{ versions: [{ type: 'singleStep', role: 'user', content: [{ type: 'text', text: 'Hey' }] }], currentlySelected: 0 }, { versions: [{ type: 'singleStep', role: 'assistant', content: [{ type: 'text', text: 'Yo' }] }], currentlySelected: 0 }] })));
+    assert.equal(lms[0].source, 'lmstudio'); assert.equal(lms[0].messages.length, 2);
+    const st = importer.parse('Bob - chats.jsonl', Buffer.from('{"user_name":"me","character_name":"Bob"}\n{"name":"me","is_user":true,"mes":"Hello Bob"}\n{"name":"Bob","is_user":false,"mes":"Hi there"}\n'));
+    assert.equal(st[0].source, 'sillytavern'); assert.deepEqual(st[0].messages.map((m) => m.role), ['user', 'assistant']);
+    const txt = importer.parse('perplexity-thread.md', Buffer.from('**User:** What is rain?\n\n**Perplexity:** Water falling from clouds.\nIt can be heavy.'));
+    assert.equal(txt[0].source, 'text'); assert.match(txt[0].messages[1].text, /falling from clouds\.\nIt can be heavy/);
     console.log('✓ import: ChatGPT (zip, edited branches, tool steps) and Claude exports');
   }
 
@@ -1034,6 +1047,31 @@ async function collect(gen) {
     assert.equal(plan.repo, m8.alt[0], 'a backup copy is used when the first is missing');
     assert.equal(plan.catalogId, 'qwen3-8b-uncensored'); assert.equal(plan.quant, 'Q4_K_M');
     console.log('✓ uncensored Qwen3 8B / 14B / 30B-A3B: featured, sped up by the built-in 2B, backup copies used if needed');
+  }
+
+  // Free rotation: when a free cloud AI hits its limit, the next free one answers.
+  {
+    const providers = require('../src/main/providers');
+    const a = providers.upsert({ preset: 'groq', models: ['openai/gpt-oss-120b'] }, 'k1');
+    const b = providers.upsert({ preset: 'cerebras', models: ['gpt-oss-120b'] }, 'k2');
+    const real = global.fetch;
+    const hits = [];
+    global.fetch = async (url) => {
+      hits.push(String(url));
+      if (String(url).includes('groq')) return new Response(JSON.stringify({ error: { message: 'Rate limit reached for requests' } }), { status: 429 });
+      return new Response('data: ' + JSON.stringify({ choices: [{ delta: { content: 'Answer from Cerebras.' } }] }) + '\n\ndata: [DONE]\n\n', { status: 200, headers: { 'content-type': 'text/event-stream' } });
+    };
+    const r = await collect(complete.run(`api:${a.id}:openai/gpt-oss-120b`, { messages: [{ role: 'user', content: 'Hi' }], maxTokens: 50 }));
+    assert.match(r.text, /Answer from Cerebras/, 'the next free cloud AI answers');
+    assert.ok(r.status.some((x) => /Free limit reached; switching/.test(x)));
+    assert.ok(complete.targets().some((t) => t.target === 'free:rotate'), 'a rotating free choice appears with two free AIs');
+    const r2 = await collect(complete.run('free:rotate', { messages: [{ role: 'user', content: 'Hi' }], maxTokens: 50 }));
+    assert.match(r2.text, /Answer from Cerebras/);
+    global.fetch = async () => new Response(JSON.stringify({ error: { message: 'quota exceeded' } }), { status: 429 });
+    await assert.rejects(collect(complete.run(`api:${a.id}:openai/gpt-oss-120b`, { messages: [{ role: 'user', content: 'Hi' }], maxTokens: 50 })), /Every free cloud AI you've connected has hit its limit/);
+    global.fetch = real;
+    providers.remove(a.id); providers.remove(b.id);
+    console.log('✓ free rotation: a free cloud AI at its limit hands over to the next; a rotating choice in the menu');
   }
 
   console.log('\nBACKEND TESTS PASSED');

@@ -63,7 +63,7 @@ async function* streamChat({ baseUrl, apiKey, body, signal, headers = {} }) {
     headers: { 'Content-Type': 'application/json', ...(apiKey ? { Authorization: `Bearer ${apiKey}` } : {}), ...headers },
     body: JSON.stringify({ ...body, stream: true }),
   });
-  if (!res.ok) throw new Error(await errorText(res));
+  if (!res.ok) { const e = new Error(await errorText(res)); e.status = res.status; throw e; }
   const split = thinkSplitter();
   const started = Date.now();
   let tokens = 0;
@@ -100,7 +100,7 @@ async function listModels({ baseUrl, apiKey, headers = {} }) {
     headers: { ...(apiKey ? { Authorization: `Bearer ${apiKey}` } : {}), ...headers },
     signal: AbortSignal.timeout(15000),
   });
-  if (!res.ok) throw new Error(await errorText(res));
+  if (!res.ok) { const e = new Error(await errorText(res)); e.status = res.status; throw e; }
   const j = await res.json();
   return (j.data || j.models || []).map((m) => m.id || m.name).filter(Boolean).sort();
 }

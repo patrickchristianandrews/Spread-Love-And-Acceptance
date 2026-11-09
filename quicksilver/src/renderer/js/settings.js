@@ -23,6 +23,7 @@ const P = () => S.data.prefs;
 
 function generalHTML() {
   return `<div class="stack-v">
+    ${updateBoxHTML()}
     <div class="field"><label>View</label><div class="row">${[[true, 'Simple'], [false, 'Full']].map(([v, l]) => `<button class="btn small ${simpleOn() === v ? 'on' : ''}" data-simple="${v}">${l}</button>`).join('')}</div><span class="help">Simple shows what most people need; everything else is under More in the sidebar and the ＋ in the message box. Full shows every option.</span></div>
     <label class="row"><input type="checkbox" id="g-auto" ${S.data.prefs.autoRoute !== false ? 'checked' : ''}> <span><b>Pick the best model for each question automatically</b> <span class="help">quick answers first; the team works on hard questions when it can still answer in about a minute</span></span></label>
     <label class="row"><input type="checkbox" id="g-autoweb" ${S.data.prefs.autoWeb !== false ? 'checked' : ''}> <span><b>Check the web for questions about current things</b> <span class="help">news, prices, weather, the latest guidance; switch web search off in a chat to skip it there</span></span></label>
@@ -41,7 +42,6 @@ function generalHTML() {
     <div class="card set-card" style="margin-top:16px"><h3>🗑 Chats</h3>
       <p class="help" style="margin-top:0">Delete a single chat with the bin icon next to it in the sidebar, or from the ⋯ menu. This removes every chat at once; pinned chats are kept.</p>
       <button class="btn danger" id="del-all-chats">Delete all chats</button></div>
-    ${updateBoxHTML()}
     ${importHTML()}
   </div>`;
 }

@@ -149,19 +149,20 @@ document.addEventListener('click', (e) => {
 
 // ---------- import from ChatGPT and Claude ----------
 function importHTML() {
-  return `<div class="field"><label>Bring your chats from ChatGPT or Claude</label>
-    <div class="card"><p class="small" style="margin:0 0 8px">Export your data (ChatGPT: Settings → Data controls → Export data. Claude: Settings → Privacy → Export data). You'll get an email with a .zip; choose it here. Your chats are copied into Quicksilver, grouped in a project, and you can carry on any of them with your own models.</p>
-    <label class="btn small">${icon('download', 15)} Choose the export (.zip or conversations.json)<input type="file" id="imp-file" accept=".zip,.json" hidden></label> <span class="small muted" id="imp-status"></span></div></div>`;
+  return `<div class="field"><label>Bring your chats from other AIs</label>
+    <div class="card"><p class="small" style="margin:0 0 8px">Works with <b>ChatGPT</b> and <b>Claude</b> (Settings → export data: choose the .zip you get by email), <b>Gemini</b> (Google Takeout → My Activity → Gemini Apps, as JSON), <b>Grok</b> and <b>DeepSeek</b> (data export), <b>Open WebUI</b>, <b>LM Studio</b> and <b>Jan</b> chats, <b>SillyTavern</b> (.jsonl), and any chat saved as text or Markdown with "User:" / "Assistant:" turns (from Perplexity, Copilot, Le Chat…). Your chats stay on this PC.</p>
+    <label class="btn small">${icon('download', 15)} Choose an export or chat file<input type="file" id="imp-file" accept=".zip,.json,.jsonl,.md,.txt" multiple hidden></label> <span class="small muted" id="imp-status"></span></div></div>`;
 }
 function bindImport() {
   $('#imp-file')?.addEventListener('change', async (e) => {
-    const f = e.target.files[0];
+    const files = [...e.target.files];
     e.target.value = '';
-    if (!f) return;
+    if (!files.length) return;
     const st = $('#imp-status');
     st.textContent = 'Reading…';
     try {
-      const convs = await qs.call('import:chats', f.name, new Uint8Array(await f.arrayBuffer()));
+      const convs = [];
+      for (const f of files) convs.push(...await qs.call('import:chats', f.name, new Uint8Array(await f.arrayBuffer())));
       const n = importChats(convs);
       st.textContent = '';
       toast(n.added ? `Imported ${n.added} chat${n.added === 1 ? '' : 's'} from ${n.from}${n.skipped ? ` (${n.skipped} were already here)` : ''}. They're in the project "${n.project}".` : `All ${n.skipped} chats were already imported.`, 8000);
@@ -170,10 +171,11 @@ function bindImport() {
   });
 }
 function importChats(convs) {
-  const from = convs[0]?.source === 'claude' ? 'Claude' : 'ChatGPT';
+  const SOURCES = { chatgpt: ['ChatGPT', '🟢'], claude: ['Claude', '🟠'], gemini: ['Gemini', '🔷'], grok: ['Grok', '⚫'], deepseek: ['DeepSeek', '🐋'], openwebui: ['Open WebUI', '🌐'], lmstudio: ['LM Studio', '🧪'], jan: ['Jan', '👋'], sillytavern: ['SillyTavern', '🍺'], text: ['saved chats', '📝'], other: ['another AI', '💬'] };
+  const [from, emoji] = SOURCES[convs[0]?.source] || SOURCES.other;
   const name = `Imported from ${from}`;
   let p = projList().find((x) => x.importedFrom === convs[0]?.source);
-  if (!p) { p = { id: uid(), name, emoji: from === 'Claude' ? '🟠' : '🟢', instructions: '', files: [], created: now(), updated: now(), importedFrom: convs[0]?.source }; projList().push(p); }
+  if (!p) { p = { id: uid(), name, emoji, instructions: '', files: [], created: now(), updated: now(), importedFrom: convs[0]?.source }; projList().push(p); }
   const have = new Set(S.data.chats.map((c) => c.importId).filter(Boolean));
   let added = 0; let skipped = 0;
   for (const c of convs) {

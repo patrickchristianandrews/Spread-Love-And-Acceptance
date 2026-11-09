@@ -82,12 +82,12 @@ function updateBoxInner() {
     : u.available ? `<span class="badge b-lemon">New</span> Version ${esc(u.available.version)} is available. <button class="btn small primary" id="upd-get">Download</button>`
     : u.error ? `<span class="small" style="color:var(--danger)">${esc(u.error)}</span>`
     : u.checkedAt ? `You have the latest version. <span class="small muted">Checked ${ago(u.checkedAt)}.</span>` : '';
-  return `<div class="row"><b>Quicksilver ${esc(u.current || '')}</b><span class="grow"></span><button class="btn small" id="upd-check" ${u.checking ? 'disabled' : ''}>Check now</button></div>
+  return `<div class="row"><b>Quicksilver ${esc(u.current || '')}</b><span class="grow"></span><button class="btn small primary" id="upd-check" ${u.checking ? 'disabled' : ''}>Check for updates</button></div>
     <div class="small" style="margin-top:6px">${status}</div>
     ${u.available?.notes && !u.downloaded ? `<details class="small" style="margin-top:6px"><summary>What's new</summary><div class="md">${markdown(u.available.notes)}</div></details>` : ''}
     <label class="row" style="margin-top:10px"><input type="checkbox" id="upd-auto" ${p.autoUpdate !== false ? 'checked' : ''}> <span><b>Keep Quicksilver up to date</b> <span class="help">checks once a day and downloads new versions in the background; you choose when to restart</span></span></label>`;
 }
-function updateBoxHTML() { return `<div class="field"><label>Updates</label><div class="card" id="upd-box">${updateBoxInner()}</div></div>`; }
+function updateBoxHTML() { return `<div class="field"><label>⬆️ Quicksilver updates</label><div class="card upd-card" id="upd-box">${updateBoxInner()}</div></div>`; }
 function bindUpdateBox() {
   if (!upd) qs.call('update:state').then((s) => { upd = s; const el = $('#upd-box'); if (el) { el.innerHTML = updateBoxInner(); bindUpdateBox(); } });
   $('#upd-check')?.addEventListener('click', async () => { if (S.config?.offline) { toast('Go online (in the sidebar) to check for updates.'); return; } upd = await call('update:check'); if (upd.available && !upd.downloaded && S.data.prefs.autoUpdate !== false) qs.call('update:download').catch(() => {}); });

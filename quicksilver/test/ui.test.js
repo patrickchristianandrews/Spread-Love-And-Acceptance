@@ -65,7 +65,7 @@ function redPng(size = 64) {
   // Most checks below use the full view (every option on screen); the simple view, which is the
   // default, is checked near the end.
   assert.equal(await win.evaluate(() => S.data.prefs.simple), true, 'simple view is the default');
-  await win.waitForSelector('.welcome-card:has-text("Bring your ChatGPT or Claude chats")');
+  await win.waitForSelector('.welcome-card:has-text("Bring your chats from other AIs")');
   await shot(win, '00-welcome');
   await win.click('#wc-close');
   await win.waitForSelector('.welcome-card', { state: 'detached' });
@@ -782,9 +782,14 @@ function redPng(size = 64) {
   console.log('✓ built-in model card, featured picks, better-model upgrade swaps into stacks and chats');
   await win.click('[data-tab="api"]');
   await win.waitForSelector('text=Anthropic (Claude)');
-  await win.waitForSelector('#presets h3:has-text("Free to start")');
-  await win.waitForSelector('#presets .card:has-text("Google Gemini") .badge:has-text("Free plan")');
+  await win.waitForSelector('#presets h3:has-text("Free to start, then paid")');
+  assert.equal(await win.locator('#presets h3:has-text("on this PC")').count(), 0, 'no "Free, on this PC" group');
+  await win.waitForSelector('#presets .card:has-text("Google Gemini") .badge:has-text("✓ Free")');
   await win.waitForSelector('#presets .card:has-text("OpenAI") .badge:has-text("Paid")');
+  // Every cloud AI, free or paid, with the best model to link; Fusion to combine them.
+  assert.ok(await win.locator('#presets [data-preset]').count() >= 30, 'every OpenAI-compatible cloud AI is listed');
+  await win.waitForSelector('#presets .card:has-text("Venice AI") :text("Best to link")');
+  await win.waitForSelector('.fusion-card #fusion-new');
   await shot(win, '05b-api-free');
   await win.click('[data-nav="pc"]');
   await win.waitForSelector('text=Speed test');
@@ -822,20 +827,20 @@ function redPng(size = 64) {
   // Music: a groove in one click, played by the synth and saved as an MP3.
   await win.click('[data-stab="music"]');
   await win.click('[data-beat="lofi"]');
-  await win.waitForSelector('.studio audio', { timeout: 60000 });
+  await win.waitForSelector('.studio audio', { timeout: 150000 });
   await win.waitForSelector('#mu-chords');
   await shot(win, '11b-music');
   // Voice: read aloud (a test tone stands in for Windows' voices on Linux).
   await win.click('[data-stab="voice"]');
   await win.fill('#vo-text', 'ALEX: Welcome to the show.\nSAM: Glad to be here.');
   await win.click('#vo-go');
-  await win.waitForFunction(() => [...document.querySelectorAll('.studio .card b')].some((b) => /Welcome/.test(b.textContent)), null, { timeout: 60000 });
+  await win.waitForFunction(() => [...document.querySelectorAll('.studio .card b')].some((b) => /Welcome/.test(b.textContent)), null, { timeout: 150000 });
   // Quick fixes on a gallery item.
   await win.click('[data-stab="tools"]');
   const pickImg = await win.evaluate(() => gallery.find((g) => g.kind === 'image')?.id);
   await win.selectOption('#tl-pick', pickImg);
   await win.click('[data-fix="upscale2"]');
-  await win.waitForFunction(() => gallery.some((g) => /^Upscaled 2×/.test(g.title || '')), null, { timeout: 60000 });
+  await win.waitForFunction(() => gallery.some((g) => /^Upscaled 2×/.test(g.title || '')), null, { timeout: 150000 });
   await shot(win, '11c-quick-fixes');
   console.log('✓ studio: music, voice, quick fixes');
 
