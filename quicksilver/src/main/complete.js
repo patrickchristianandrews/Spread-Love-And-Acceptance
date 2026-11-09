@@ -204,7 +204,7 @@ const STEPS_ANSWER = (steps) => `Your working for the user's latest message (the
 // or any question of some length); greetings, thanks and one-line chat don't, so they stay instant.
 // Instant effort (you chose speed) skips them.
 function stepWorthy(req) {
-  const t = lastUserText(req.messages).trim();
+  const t = lastUserText(req.messages).replace(/<context>[\s\S]*?<\/context>/g, '').replace(/\[Image \d+:[\s\S]*?\]/g, '').replace(/<file name=[\s\S]*?<\/file>/g, '').trim();
   if (t.length < 12 || /^(hi|hey|hello|thanks|thank you|ok|okay|cool|great|nice|yes|no|bye)\b[\s!.,]*$/i.test(t)) return false;
   // Only where thinking first actually helps (maths, 'why / how / compare / plan' questions, long
   // problems), so everyday questions stay as quick as before.
@@ -482,7 +482,7 @@ async function* quicksilverMuse(stackDef, req, step, live) {
 
 async function* stack(stackDef, req) {
   const { members } = stackDef;
-  if (stackDef.id === 'quicksilver') req = { ...req, stepByStep: true };
+  if (stackDef.id === 'quicksilver' && req.stepByStep !== false) req = { ...req, stepByStep: true };
   if (stackDef.id === 'quicksilver' && req.level !== 'quick' && !req.toolList && !hasImages(req.messages) && CREATIVE.test(lastUserText(req.messages))) {
     const steps0 = [];
     const step0 = (s) => { s.index = steps0.length; steps0.push(s); return { type: 'step', step: s }; };
@@ -548,7 +548,7 @@ async function* stack(stackDef, req) {
     const parts = desc.split(/^###\s*Image\s*\d+\s*$/im).map((x) => x.trim()).filter(Boolean);
     const descriptions = parts.length >= imgs.length ? parts : imgs.map(() => desc);
     // Members that can see keep the real images; the rest get the descriptions.
-    req = { ...req, describedMessages: textOnly(messages, descriptions) };
+    req = { ...req, describedMessages: textOnly(messages, descriptions), stepByStep: false };
   }
   // Tools: the lead gathers information (and takes approved actions) first; every member then
   // works from what it found.

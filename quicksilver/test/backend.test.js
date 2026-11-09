@@ -84,6 +84,10 @@ async function collect(gen) {
     assert.doesNotMatch(easy.text + easy.reasoning, /Step 1|\[steps\]/, 'easy messages skip the steps');
     const other = await collect(complete.run('local:qwen3-8b', { messages: [{ role: 'user', content: 'Calculate 17 × 23 and explain why' }], maxTokens: 200, contextSize: 4096, level: 'thorough' }));
     assert.doesNotMatch(other.text, /\[steps\]/, 'models that think on their own are left alone');
+    const fix = await collect(complete.run('local:test-bundled', { messages: [{ role: 'user', content: 'Calculate 17 × 23 and explain why' }], maxTokens: 200, contextSize: 4096, level: 'thorough', stepByStep: false }));
+    assert.doesNotMatch(fix.text, /\[steps\]/, 'a correction pass skips the reasoning step');
+    const long = await collect(complete.run('local:test-bundled', { messages: [{ role: 'user', content: `[Image 1: ${'a red square on a white background. '.repeat(20)}]\nWhat colour is it?` }], maxTokens: 200, contextSize: 4096, level: 'thorough' }));
+    assert.doesNotMatch(long.text, /\[steps\]/, 'a photo description does not make a simple question look hard');
     models.remove('test-bundled');
     console.log('✓ built-in model reasons step by step on hard questions');
   }

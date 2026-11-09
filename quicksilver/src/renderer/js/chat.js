@@ -752,6 +752,7 @@ async function generate(chat, rerollMsg, withTarget, opts = {}) {
     gpu: p.gpu,
     effort: p.effort,
     council: effortOf(chat, a) === 'council' && !(skill && HIDE_BLOCK.has(skill.output)),
+    noSteps: Boolean(opts.fix),
     councilCloud: Boolean(p.cloudHard),
   });
 }
