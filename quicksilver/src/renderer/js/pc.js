@@ -76,6 +76,20 @@ function pcTierOf(h) {
   if (tiers.every((t) => Number.isFinite(t.minVram))) return [...tiers].sort((a, b) => b.minVram - a.minVram).find((t) => v >= t.minVram)?.n || tiers[0].n;
   return v >= 20 ? 4 : v >= 12 ? 3 : v >= 6 ? 2 : 1;
 }
+// Under each kind of computer: how fast Quicksilver would answer on it, next to this PC.
+S.tierSpeeds = null;
+function tierSpeedHTML(t, isMine) {
+  if (!S.tierSpeeds) {
+    if (!S.tierSpeedsLoading) { S.tierSpeedsLoading = true; qs.call('guide:speeds', pcTiers().map(({ n, minVram, ram }) => ({ n, minVram, ram }))).then((r) => { S.tierSpeeds = r; if (S.route.view === 'pc') render(); }).catch(() => {}).finally(() => { S.tierSpeedsLoading = false; }); }
+    return '';
+  }
+  const s = S.tierSpeeds.tiers?.[t.n];
+  if (!s?.wps) return '';
+  const x = s.times;
+  const vs = isMine ? 'about what this PC does now' : x >= 1.25 ? `<b>${x >= 10 ? Math.round(x) : x.toFixed(1)}× faster</b> than this PC` : x && x < 0.8 ? 'slower than this PC' : 'about the same as this PC';
+  return `<div class="tier-speed"><div class="small"><b>⚡ Quicksilver here:</b> ~${s.wps} words a second, a typical answer in ~${fmtSec(s.answerSec)} (${vs})</div>
+    ${s.best ? `<div class="small muted">Also runs ${esc(s.best.name)} smoothly (~${s.best.wps} words/s)</div>` : ''}</div>`;
+}
 function newPcGuideHTML(h) {
   const mine = h ? pcTierOf(h) : 0;
   const g = pcGuide();
@@ -85,6 +99,7 @@ function newPcGuideHTML(h) {
       <div class="row"><span class="tier-n">${t.n}</span><h3 class="grow">${esc(t.name)}</h3>${t.n === mine ? '<span class="badge b-mint">This PC</span>' : ''}</div>
       <p class="small tier-good">${esc(t.good)}</p>
       <dl class="tier-spec"><dt>Graphics card</dt><dd>${esc(t.gpu)}</dd><dt>RAM</dt><dd>${esc(t.ram)}</dd><dt>Storage</dt><dd>${esc(t.disk)}</dd><dt>Processor</dt><dd>${esc(t.cpu)}</dd></dl>
+      ${tierSpeedHTML(t, t.n === mine)}
       ${t.ex?.length ? `<div class="tier-ex"><span class="small muted"><b>Examples</b></span><ul>${t.ex.map((x) => `<li>${esc(x)}</li>`).join('')}</ul></div>` : ''}
     </div>`).join('')}</div>
     <details class="card tier-tips"><summary><b>Buying tips</b></summary><ul>

@@ -112,6 +112,29 @@ handle('upgrades:advise', async () => {
 });
 // The buying guide: refreshed from the Quicksilver repository once a day when online.
 handle('guide:get', () => require('./guide').get());
+// How fast Quicksilver would be on each kind of computer in the buying guide, next to this PC.
+handle('guide:speeds', async (tiers) => {
+  const hw = await hardware.detect();
+  const calib = store.config().calib?.text || 1;
+  const brain = catalog.TEXT_MODELS.find((m) => m.id === 'qwen3-4b');
+  const est = (m, h, c = 1) => catalog.estimateText(m, h, c);
+  const here = est(brain, hw, calib);
+  const big = ['qwen3-30b-a3b-uncensored', 'qwen3-14b-uncensored', 'qwen3-8b-uncensored'].map((id) => catalog.TEXT_MODELS.find((m) => m.id === id)).filter(Boolean);
+  const out = {};
+  for (const t of tiers || []) {
+    const vram = Number.isFinite(t.minVram) ? t.minVram : ({ 1: 0, 2: 8, 3: 16, 4: 24 })[t.n] ?? 0;
+    const ram = Math.max(16, Number(String(t.ram || '').match(/\d+/)?.[0]) || 16);
+    const h = { ramGB: ram, freeRamGB: ram * 0.7, vramGB: vram, vramFreeGB: vram ? vram - 0.5 : 0, cpuCores: vram >= 16 ? 12 : 8, gpuName: vram ? `${vram} GB graphics card` : '', backend: vram ? 'cuda' : 'cpu' };
+    const q = est(brain, h);
+    const best = big.find((m) => ['great', 'good'].includes(est(m, h).rating));
+    out[t.n] = {
+      wps: Math.round(q.wordsPerSec || 0), answerSec: q.wordsPerSec ? Math.round(300 / q.wordsPerSec) : null,
+      times: here.wordsPerSec && q.wordsPerSec ? q.wordsPerSec / here.wordsPerSec : null,
+      best: best ? { name: best.name, wps: Math.round(est(best, h).wordsPerSec || 0) } : null,
+    };
+  }
+  return { here: { wps: Math.round(here.wordsPerSec || 0), answerSec: here.wordsPerSec ? Math.round(300 / here.wordsPerSec) : null, measured: Boolean(store.config().calib?.text) }, tiers: out };
+});
 // Better models for what's installed (from the built-in and online model picks).
 handle('models:upgrades', async () => require('./catalog-remote').upgradesFor(models.list(), await hardware.detect(), store.config().calib?.text || 1));
 handle('catalog:refresh', () => require('./catalog-remote').refresh(true));

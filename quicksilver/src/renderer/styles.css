@@ -1238,3 +1238,4 @@ code.sel { user-select: all; background: var(--soft); padding: 1px 6px; border-r
 .kn-acts { gap: 8px; flex-wrap: wrap; }
 .nav-item.nav-knowledge { color: var(--text); }
 .nav-item.nav-knowledge [data-icon] { color: var(--accent); }
+.tier-speed { padding: 8px 10px; border-radius: 10px; background: var(--accent-tint); border: 1px solid var(--accent-line); display: flex; flex-direction: column; gap: 2px; }

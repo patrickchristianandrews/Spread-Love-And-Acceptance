@@ -792,6 +792,10 @@ function redPng(size = 64) {
   await win.waitForSelector('#new-pc');
   assert.equal(await win.locator('.tier-grid .tier').count(), 4, 'four buying tiers');
   assert.equal(await win.locator('.tier.mine').count(), 1, 'this PC is marked');
+  await win.waitForFunction(() => document.querySelectorAll('.tier-speed').length === 4, null, { timeout: 15000 });
+  assert.match(await win.locator('.tier-speed').last().innerText(), /words a second[\s\S]*faster than this PC/);
+  await win.locator('#new-pc').scrollIntoViewIfNeeded();
+  await shot(win, '06b-new-pc-speeds');
   console.log('✓ models + your PC (incl. buying a new computer guide)');
 
   // Studio: create an image, edit it, make a video.
