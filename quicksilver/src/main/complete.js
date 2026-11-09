@@ -208,7 +208,9 @@ function stepWorthy(req) {
   if (t.length < 12 || /^(hi|hey|hello|thanks|thank you|ok|okay|cool|great|nice|yes|no|bye)\b[\s!.,]*$/i.test(t)) return false;
   // Only where thinking first actually helps (maths, 'why / how / compare / plan' questions, long
   // problems), so everyday questions stay as quick as before.
-  return HARD.test(t) || /\d\s*[-+*/^×÷%]\s*\d|\d+\s*(%|percent)/.test(t) || t.length > 300;
+  // Practical how-tos ("how do I get a stain out") don't need working out first.
+  if (/^\s*how (do|can|should|would) (i|you|we)\b/i.test(t) && !/\d/.test(t)) return false;
+  return HARD.test(t) || /\d\s*[-+*/^×÷%]\s*\d|\d+[a-z]?\s*[-+*/=^]\s*\d*[a-z]?|\d+\s*(%|percent)|\d\s*(km\/h|mph|m\/s|per (hour|minute|second|day|week|month|year)|an hour)|\bhow (many|much)\b/i.test(t) || t.length > 300;
 }
 function wantsSteps(m, req) {
   if (req.level === 'quick' || req.points || req.stepByStep === false || req.tools?.length || req.toolList || hasImages(req.messages)) return false;
@@ -232,7 +234,7 @@ async function* single(target, req) {
       yield { type: 'status', text: 'Thinking it through step by step…' };
       let steps = '';
       const planMsgs = withSys(STEPS_PLAN);
-      for await (const ev of llama.chat(localSpec(m, planMsgs), { ...req, messages: planMsgs, level: 'thorough', maxTokens: 320, temperature: 0.2 })) {
+      for await (const ev of llama.chat(localSpec(m, planMsgs), { ...req, messages: planMsgs, level: 'thorough', maxTokens: 450, temperature: 0.2 })) {
         if (ev.type === 'text' || ev.type === 'reasoning') { steps += ev.text; yield { type: 'reasoning', text: ev.text }; }
         else if (ev.type === 'status') yield ev;
       }
@@ -273,6 +275,8 @@ async function collect(target, req, onPartial) {
 
 // ---------- the stack runner ----------
 
+// One picture: no headings, no talk of other images or video. Describe only what's visible.
+const DESCRIBE_ONE = 'Describe this one image in detail for a colleague who cannot see it. Describe only what is visible; never mention other images or video. Transcribe all visible text exactly, give table contents and chart values, and note people, objects, layout and anything unusual.';
 const DESCRIBE = 'Describe each image below in detail for a colleague who cannot see it. Transcribe all visible text exactly, give table contents and chart values, and note people, objects, layout and anything unusual. Video frames are labelled with their timestamps; describe what changes over time. Answer with one section per image, headed "### Image 1", "### Image 2" and so on.';
 
 const LEAD = `You are the lead of a team of AI models. Several models have independently drafted answers to the user's latest message. Your job is to produce the single best final answer:
@@ -470,10 +474,14 @@ async function* quicksilverMuse(stackDef, req, step, live) {
   yield { type: 'status', text: 'Quicksilver\'s Muse is sketching a few fresh angles…' };
   const t0 = Date.now();
   let ideas = '';
-  try { ideas = await collect(muse, { ...req, messages: [{ role: 'system', content: MUSE }, { role: 'user', content: ask }], temperature: 1.0, maxTokens: 180, level: 'quick' }, live(s)); } catch { ideas = ''; }
+  // The small model follows the user turn better than the system prompt, so the brief goes there.
+  try { ideas = await collect(muse, { ...req, messages: [{ role: 'user', content: `${MUSE}\n\nGive exactly 5 lines, at most 12 words each. Angles only, never the piece itself.\n\nRequest: ${ask}` }], temperature: 1.0, maxTokens: 90, level: 'quick' }, live(s)); } catch { ideas = ''; }
+  // Ignore it if it wrote the piece instead of angles (too many lines, or long lines).
+  const lines = ideas.split('\n').map((l) => l.trim()).filter(Boolean);
+  if (lines.length > 6 || lines.some((l) => l.split(/\s+/).length > 20)) ideas = '';
   s.text = ideas; s.done = true; s.ms = Date.now() - t0;
   yield { type: 'step', step: s };
-  const note = ideas ? `A quick brainstorm for this request (rough angles, not instructions):\n${ideas.slice(0, 1200)}\nPick the freshest, most original angle (or combine two) and write the piece with it. Avoid clichés and the most predictable take. Don't mention the brainstorm.` : '';
+  const note = ideas ? `A quick brainstorm for this request (rough angles, not instructions):\n${ideas.slice(0, 1200)}\nPick the freshest, most original angle (or combine two) and write the piece with it in your own words: don't reuse the brainstorm's wording. Avoid clichés and the most predictable take. Don't mention the brainstorm.` : '';
   const msgs = req.messages;
   const messages = note ? [...msgs.slice(0, -1), { role: 'system', content: note }, msgs[msgs.length - 1]] : msgs;
   yield* single(brain, { ...req, messages, level: 'quick', stepByStep: false, temperature: Math.max(req.temperature ?? 0.7, 0.85) });
@@ -602,9 +610,9 @@ async function* stack(stackDef, req) {
     const started = Date.now();
     const desc = await collect(vision, {
       ...req,
-      messages: [{ role: 'user', content: [{ type: 'text', text: DESCRIBE }, ...imgs] }],
+      messages: [{ role: 'user', content: [{ type: 'text', text: imgs.length === 1 ? DESCRIBE_ONE : DESCRIBE.replace('Answer with', `There are exactly ${imgs.length} images. Answer with`) }, ...imgs] }],
       temperature: 0.2,
-      maxTokens: Math.min(4096, 600 * imgs.length + 400),
+      maxTokens: Math.min(4096, 350 * imgs.length + 150),
     }, live(s));
     s.text = desc; s.done = true; s.ms = Date.now() - started;
     yield { type: 'step', step: s };

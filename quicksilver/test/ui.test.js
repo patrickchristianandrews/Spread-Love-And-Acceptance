@@ -185,6 +185,11 @@ function redPng(size = 64) {
   await win.check('.infuse-opt input[value="local:phi-4"]');
   await win.click('.infuse-mode:has-text("Debate")');
   await win.fill('#inf-name', 'Analyst Supreme');
+  // The builder rates the custom AI: power, efficiency, accuracy, and whether it runs on this PC.
+  await win.waitForSelector('#inf-preview .fz-ratings .fz-run');
+  const fz = await win.locator('#inf-preview .fz-ratings').innerText();
+  assert.match(fz, /Power[\s\S]*★[\s\S]*Efficiency[\s\S]*★[\s\S]*Accuracy[\s\S]*★/);
+  assert.match(fz, /Runs well on this PC|Runs, but|Won't run/);
   await shot(win, '13-infuse');
   await win.click('#inf-go');
   await win.waitForFunction(() => document.querySelector('#pick-model option:checked')?.textContent.includes('Analyst Supreme'));
@@ -1136,7 +1141,14 @@ function redPng(size = 64) {
   await win.fill('#pal-q', 'blind test');
   await shot(win, '19-command-palette');
   await win.keyboard.press('Enter');
-  await win.waitForSelector('.arena');
+  // A background job (a title, suggestions) can repaint the chat just as the palette jumps; try once more.
+  if (!(await win.waitForSelector('.arena', { timeout: 8000 }).catch(() => null))) {
+    await win.keyboard.press('Control+Shift+P');
+    await win.waitForSelector('#pal-q');
+    await win.fill('#pal-q', 'blind test');
+    await win.keyboard.press('Enter');
+    await win.waitForSelector('.arena');
+  }
   // Import from ChatGPT.
   await win.click('[data-nav="settings"]');
   await win.click('[data-set-tab="general"]');

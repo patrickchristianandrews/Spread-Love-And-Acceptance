@@ -188,3 +188,69 @@ views.compare = {
     });
   },
 };
+
+// ---------- ratings for a custom AI (fusion) ----------
+// Power, efficiency and accuracy out of 5, and a plain verdict on whether it runs on this PC.
+const half = (n) => Math.max(0.5, Math.min(5, Math.round(n * 2) / 2));
+function fusionRatings(members) {
+  const t = teamStats(members);
+  if (!t) return null;
+  const hw = S.est?.hardware || {};
+  const inst = (x) => S.installed.find((m) => `local:${m.id}` === x);
+  const locals = t.all.filter((x) => x.startsWith('local:'));
+  const clouds = t.all.filter((x) => x.startsWith('api:'));
+  const est = (x) => S.est?.text?.[inst(x)?.catalogId];
+  const name = (x) => inst(x)?.name || targetLabel(x);
+  // Runs on this PC?
+  const wont = locals.filter((x) => est(x)?.rating === 'wont');
+  const slow = locals.filter((x) => est(x)?.rating === 'slow');
+  const memGB = locals.reduce((s, x) => s + (inst(x)?.size || 0) / 1e9, 0);
+  const roomGB = (hw.vramGB || 0) + (hw.ramGB || 0) * 0.7;
+  let runs;
+  if (wont.length) runs = { cls: 'bad', icon: '✕', text: `Won't run on this PC: ${wont.map(name).join(', ')} needs more memory than it has. Swap it for a smaller model.` };
+  else if (slow.length) runs = { cls: 'warn', icon: '⚠', text: `Runs, but slowly: ${slow.map(name).join(', ')} is slow on this PC.` };
+  else if (roomGB && memGB > roomGB) runs = { cls: 'warn', icon: '⚠', text: `Runs, but its models (${memGB.toFixed(1)} GB) don't all fit in memory at once, so they take turns and hard answers wait longer.` };
+  else runs = { cls: 'ok', icon: '✓', text: 'Runs well on this PC.' };
+  if (clouds.length) runs.text += ' Its cloud AI needs the internet.';
+  // Power: how capable it is on hard work (its strongest member, plus teamwork).
+  const power = half(Math.max(t.stars('general'), t.stars('reasoning')));
+  // Efficiency: how quickly it answers here, and whether its models fit in memory together.
+  const hard = t.time(WORDS.hard, true);
+  let eff = hard < 30 ? 5 : hard < 60 ? 4.5 : hard < 90 ? 4 : hard < 150 ? 3.5 : hard < 240 ? 3 : hard < 400 ? 2 : 1;
+  if (roomGB && memGB > roomGB) eff -= 1;
+  if (wont.length) eff = 0.5;
+  // Accuracy: the best tested scores in the team, plus cross-checking and a mix of makers.
+  const cid = locals.map((x) => inst(x)?.catalogId).filter(Boolean);
+  const sc = bestScores(cid) || {};
+  for (const x of clouds) {
+    const preset = S.providers.find((p) => p.id === x.split(':')[1])?.preset;
+    const c = cloudScoresFor(preset);
+    for (const k of ['math', 'science', 'coding']) if (c?.[k] != null && !(sc[k] >= c[k])) sc[k] = c[k];
+  }
+  const tested = ['math', 'science', 'coding'].map((k) => sc[k]).filter((v) => v != null);
+  const makers = new Set(t.all.map((x) => (x.startsWith('api:') ? x.split(':')[1] : catModel(inst(x)?.catalogId)?.maker || x)));
+  const crossCheck = ['debate', 'vote', 'redteam', 'consensus', 'panel'].includes(members.mode);
+  let acc = tested.length ? tested.reduce((a, b) => a + b, 0) / tested.length / 20 : t.stars('general') - 0.5;
+  if (t.all.length >= 2) acc += crossCheck ? 0.75 : 0.25;
+  if (makers.size >= 2) acc += 0.25;
+  return {
+    power, eff: half(eff), acc: half(acc), runs,
+    why: {
+      power: `${t.all.length} AI${t.all.length > 1 ? 's' : ''}, led by ${name(t.lead)}`,
+      eff: `about ${etaLabel(hard)} for a hard answer here`,
+      acc: `${tested.length ? `best tested: ${['math', 'science', 'coding'].filter((k) => sc[k] != null).map((k) => `${{ math: 'maths', science: 'science', coding: 'coding' }[k]} ${sc[k]}%`).join(', ')}` : 'no published test scores'}${crossCheck ? `; ${(INFUSE_MODES[members.mode] || {}).name || members.mode} cross-checks` : ''}${makers.size >= 2 ? '; different makers catch each other\'s mistakes' : ''}`,
+    },
+  };
+}
+function fusionRatingsHTML(members, { compact = false } = {}) {
+  const r = fusionRatings(members);
+  if (!r) return '';
+  const st = (v) => `★ ${Number.isInteger(v) ? v : v.toFixed(1)}`;
+  if (compact) return `<div class="fz-compact small"><span title="${esc(r.why.power)}">⚡ Power <b>${st(r.power)}</b></span><span title="${esc(r.why.eff)}">🍃 Efficiency <b>${st(r.eff)}</b></span><span title="${esc(r.why.acc)}">🎯 Accuracy <b>${st(r.acc)}</b></span><span class="fz-run ${r.runs.cls}" title="${esc(r.runs.text)}">${r.runs.icon} ${r.runs.cls === 'ok' ? 'Runs well here' : r.runs.cls === 'warn' ? 'Runs slowly here' : 'Won\'t run here'}</span></div>`;
+  return `<div class="fz-ratings">
+    <div class="fz-r"><span>⚡ Power</span><b>${st(r.power)}</b><small>${esc(r.why.power)}</small></div>
+    <div class="fz-r"><span>🍃 Efficiency</span><b>${st(r.eff)}</b><small>${esc(r.why.eff)}</small></div>
+    <div class="fz-r"><span>🎯 Accuracy</span><b>${st(r.acc)}</b><small>${esc(r.why.acc)}</small></div>
+    <div class="fz-run ${r.runs.cls}">${r.runs.icon} ${esc(r.runs.text)}</div>
+  </div>`;
+}

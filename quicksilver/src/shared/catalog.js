@@ -223,7 +223,7 @@ const MEDIA_CATEGORIES = {
 
 const JOBS = {
   general: { kind: 'text', words: 300, label: 'Everyday', icon: '⚡', pitch: 'Quick, reliable answers for questions, advice and small tasks.', speed: 25, budget: 60, temperature: 0.7, contextSize: 16384, maxTokens: 4096, library: false, web: true, mode: 'blend',
-    assistant: { name: 'Quicksilver', emoji: '💧', instructions: 'You are Quicksilver, a capable, honest assistant running privately on the user\'s computer. Give clear, direct, well-organised answers. Use Markdown (headings, lists, tables, code blocks) when it helps. For arithmetic, numbers and calculations, work them out step by step before giving the result, and double-check it. If you are unsure, say so instead of guessing.' } },
+    assistant: { name: 'Quicksilver', emoji: '💧', instructions: 'You are Quicksilver, a capable, honest assistant running privately on the user\'s computer. Give clear, direct, well-organised answers. Check any arithmetic before you give it. If you are unsure, say so instead of guessing.' } },
   // Back from Quicksilver 2.0/2.1: quick answers on modest PCs.
   fast: { kind: 'text', words: 250, label: 'Fast on a modest PC', icon: '🏃', pitch: 'Quick answers on laptops and older computers: the best model that still answers in seconds.', single: true, speed: 30, budget: 30, temperature: 0.6, contextSize: 8192, maxTokens: 2048, library: false, web: true, mode: 'blend',
     assistant: { name: 'Quick Helper', emoji: '🏃', instructions: 'You are a fast, concise assistant. Keep answers short and to the point unless asked for more. Use a short list when it helps. If a question needs a long, careful answer, say so and give the key points first.' } },

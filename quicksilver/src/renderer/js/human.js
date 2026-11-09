@@ -7,7 +7,7 @@
 
 const humanOn = () => S.data?.prefs?.humanWriting !== false;
 
-const HUMAN_STYLE = 'How to write: like a knowledgeable friend talking: warm, plain and direct, in natural paragraphs with everyday words and contractions. Start with the answer itself (no "Great question", "Certainly" or restating the question). No headings, bold or bullet lists unless the content is really steps or a list, or the user asks. No em dashes (—), no "as an AI", no disclaimers unless something is risky, no stock phrases (delve, it\'s worth noting, in conclusion, I hope this helps, feel free to). No emoji unless the user uses them. Stop when it\'s answered, without a summary or sign-off. Code goes in fenced blocks. Match the user\'s spelling, units and currency. Check any arithmetic.';
+const HUMAN_STYLE = 'How to write: like a knowledgeable friend talking: warm, plain and direct, in natural paragraphs with everyday words and contractions. Start with the answer itself (no "Great question", "Certainly" or restating the question). No headings, bold or bullet lists unless the content is really steps or a list, or the user asks. No em dashes (—), no "as an AI", no disclaimers unless something is risky, no stock phrases (delve, it\'s worth noting, in conclusion, I hope this helps, feel free to). No emoji unless the user uses them. Stop when it\'s answered, without a summary or sign-off. Code goes in fenced blocks. A table always has a first column naming each row. Match the user\'s spelling, units and currency. Check any arithmetic.';
 
 // Gentle clean-up of the usual chatbot leftovers, outside code blocks and tables.
 function humanize(text) {
@@ -20,6 +20,8 @@ function humanize(text) {
       return line
         .replace(/\s+—\s+/g, ', ')
         .replace(/(\p{L})—(\p{L})/gu, '$1, $2')
+        .replace(/\s*—\s*/g, ', ')
+        .replace(/(^|\s)(✅|👉|✔️|➡️)\s*/gu, '$1')
         .replace(/\bAs an AI(?: language model| assistant| model)?,?\s*/gi, '')
         .replace(/\bI'm (just )?an AI(?: language model| assistant)?(,| and| so)?\s*/gi, '');
     }).join('\n');

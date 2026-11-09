@@ -384,6 +384,7 @@ function stackCard(s) {
   return `<div class="card">
     <div class="row"><span class="emoji-badge">${esc(s.emoji || '🧩')}</span><h3 class="grow">${esc(s.name)}</h3>${mode ? `<span class="badge b-lav">${mode.icon} ${esc(mode.name)}</span>` : ''}</div>
     <div class="stack-v" style="gap:6px;margin:12px 0">${rows.map(([role, t]) => `<div class="row">${ROLE[role]}<b class="small">${esc(targetLabel(t))}</b>${targetValid(t) ? '' : '<span class="badge b-pink">not installed yet</span>'}</div>`).join('')}</div>
+    ${isFusion(s) ? fusionRatingsHTML(s.members, { compact: true }) : ''}
     ${stackScoresHTML(rows.map(([, t]) => t))}
     <div class="row"><button class="btn small primary" data-chat-stack="${s.id}">Chat</button><button class="btn small" data-edit-stack="${s.id}">Edit</button>${isFusion(s) && !s.community ? `<button class="btn small" data-publish="${s.id}">📤 Publish</button>` : ''}<button class="btn small danger" data-del-stack="${s.id}">Delete</button></div>
   </div>`;
@@ -468,7 +469,8 @@ function infuseModal(onCreated) {
     const judge = b.querySelector('#inf-lead').value || [...drafters].sort((x, y) => strengthOf(y) - strengthOf(x))[0];
     const sees = (t) => S.targets.find((x) => x.target === t)?.vision;
     const vision = drafters.some(sees) ? undefined : S.targets.find((t) => t.vision && !t.stack)?.target;
-    el.innerHTML = teamPreviewHTML({ drafters, judge, vision, mode: b.querySelector('input[name="im"]:checked').value }, { title: 'How your fusion will work on this PC' });
+    const mem = { drafters, judge, vision, mode: b.querySelector('input[name="im"]:checked').value };
+    el.innerHTML = fusionRatingsHTML(mem) + teamPreviewHTML(mem, { title: 'How your custom AI will work on this PC' });
   };
   b.querySelector('.stack-v').addEventListener('change', preview); // this window's own fields (the modal frame is shared)
   preview();

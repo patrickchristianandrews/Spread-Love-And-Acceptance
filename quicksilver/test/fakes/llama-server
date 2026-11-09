@@ -71,6 +71,7 @@ const server = http.createServer((req, res) => {
     else if (/most likely (want to )?ask (the assistant )?next/.test(sys)) reply = JSON.stringify([`Show an example of ${(lastText.match(/Their question: ([^\n]{0,24})/) || [])[1] || 'it'}`, 'Which option suits a beginner?', 'What should I do first?']);
     else if (/You keep a short memory about a user/.test(sys)) reply = /\bmy\b/i.test(lastText) ? JSON.stringify([`The user mentioned: ${lastText.slice(0, 50)}`]) : '[]';
     else if (/You are a careful editor/.test(sys)) reply = `Edited by ${model}: ${(lastText.split('<<<\n')[1] || '').split('\n>>>')[0].toUpperCase().slice(0, 200)}`;
+    else if (/Describe this one image/.test(lastText)) reply = `A chart showing sales rising, described by ${model}.`;
     else if (/Describe each image/.test(lastText)) reply = imgs.map((_, i) => `### Image ${i + 1}\nA chart showing sales rising, described by ${model}.`).join('\n\n');
     else if (/<draft number/.test(lastText)) reply = `FINAL from ${model} combining ${(lastText.match(/<draft number/g) || []).length} drafts.`;
     else reply = `Answer from ${model}: you said "${lastText.slice(0, 40)}"${msgs.some((m) => typeof m.content === 'string' && m.content.includes('[Image 1:')) ? ' (saw image description)' : ''}${imgs.length ? ' (saw real image)' : ''}.${tags}`;
