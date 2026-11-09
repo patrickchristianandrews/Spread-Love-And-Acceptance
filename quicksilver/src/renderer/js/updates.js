@@ -236,6 +236,7 @@ function builtinModelHTML() {
       ${open ? '<span class="badge b-peach" title="Answers plainly, without refusing. The parental lock keeps it family-safe.">Uncensored</span>' : ''}${est ? `<span class="badge rate-${est.rating}">${esc(est.label)}</span>` : ''}</div>
     <p style="margin:10px 0 6px"><b>Fast answers you can trust.</b> Chosen as the quickest model that's still accurate: it answers almost instantly on most PCs and double-checks facts and figures, so you can rely on it for everyday work.${open ? ' It\'s uncensored: it answers plainly instead of refusing (the parental lock in Settings keeps it family-safe).' : ''}</p>
     ${qsRolesHTML(qst)}
+    ${dolphinOfferHTML(qst)}
     ${cloudPartnerHTML()}
     <div class="builtin-can">${can.map(([i, t, d]) => `<div><span>${i}</span><b>${esc(t)}</b><span class="small muted">${esc(d)}</span></div>`).join('')}</div>
     <div class="row" style="margin-top:10px">${have ? '<button class="btn small primary" id="builtin-chat">Start a chat</button>' : (S.downloads[brain.id] ? downloadBox(brain.id) : `<button class="btn small primary" data-get="${brain.id}">Download it (${brain.sizeGB} GB)</button>`)}<span class="grow"></span><span class="small muted">Want more power? Better models below run alongside it.</span></div>
@@ -244,6 +245,22 @@ function builtinModelHTML() {
 // The best free cloud partner for the Liquid Edition: Cerebras runs Qwen3 235B (the big sibling of
 // the built-in Qwen3) very fast with a generous free daily allowance; Groq and Mistral as backups
 // make free rotation work. Shown until a free cloud AI is connected.
+// Dolphin in the crew: an uncensored model from a different family (Llama-based) that's about as
+// strong as the Brain, so it adds a genuinely different view on hard questions. Everyday messages
+// stay with the fast Brain. Offered when the crew has no second model yet.
+const DOLPHIN = 'dolphin-3-llama-3.1-8b';
+function dolphinOfferHTML(qst) {
+  const m = qst?.members || {};
+  const crew = [...(m.drafters || []), m.judge].filter(Boolean);
+  const d = catModel(DOLPHIN);
+  if (!qst || !d || crew.length > 1 || haveModel(DOLPHIN)) return '';
+  const est = S.est?.text?.[DOLPHIN];
+  if (est?.rating === 'wont') return '';
+  const slow = est && !['great', 'good'].includes(est.rating);
+  return `<div class="pair-card"><div class="grow"><b>🐬 Add Dolphin to the crew</b>
+      <div class="small muted">Dolphin 3.0 8B is uncensored and about as strong as the Brain, but from a different family, so on hard questions it adds a second view and they catch each other's mistakes. Everyday messages stay with the fast Brain. ${d.sizeGB} GB download.${slow ? ' On this PC it runs slowly, so hard answers will take noticeably longer.' : ''}</div></div>
+    ${S.downloads[DOLPHIN] ? downloadBox(DOLPHIN) : `<button class="btn small ${slow ? '' : 'primary'}" data-get="${DOLPHIN}">Add Dolphin</button>`}</div>`;
+}
 function cloudPartnerHTML() {
   const free = (S.providers || []).filter((p) => ['cerebras', 'groq', 'mistral', 'google', 'openrouter', 'sambanova', 'github'].includes(p.preset) && (p.hasKey || p.noKey));
   if (free.length >= 2) return `<p class="small muted" style="margin:6px 0">☁️ Paired with ${free.map((p) => esc(p.name)).join(' + ')}: hard questions can use the cloud (if switched on in Settings), and free rotation takes over when one hits its limit.</p>`;
