@@ -1203,6 +1203,20 @@ function redPng(size = 64) {
   await win.click('[data-feature="thinking"]');
   await win.click('[data-feat-yes]');
   await win.waitForFunction(() => S.data.prefs.thinking === true);
+  // Settings → What's inside: the bundled uncensored models, engines, the full feature list and this
+  // release's notes, all in one place.
+  await win.click('[data-set-tab="about"]');
+  await win.waitForSelector('.about-page');
+  const about = await win.locator('.about-page').innerText();
+  assert.match(about, /Qwen3\.5 4B[\s\S]*Uncensored/i, 'the Brain is listed as uncensored');
+  assert.match(about, /Qwen3\.5 2B/, 'the fast helper is listed');
+  assert.match(about, /llama\.cpp[\s\S]*stable-diffusion\.cpp[\s\S]*whisper\.cpp/, 'the engines are listed');
+  assert.match(about, /Memory \(Mem0-style\)/, 'memory is listed');
+  assert.match(about, /Pollinations/, 'free no-key pictures are listed');
+  assert.match(about, /What's new in this version/, 'this release\'s feature notes are included');
+  await win.waitForFunction(() => /version \d+\.\d+/.test($('.about-page h2')?.innerText || ''), null, { timeout: 8000 });
+  console.log('✓ Settings → What\'s inside: models, engines, features and release notes');
+  await shot(win, '09c-about');
   // Settings: API server on.
   await win.click('[data-nav="settings"]');
   await win.click('[data-set-tab="advanced"]');

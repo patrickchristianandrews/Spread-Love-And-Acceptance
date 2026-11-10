@@ -1491,3 +1491,12 @@ code.sel { user-select: all; background: var(--soft); padding: 1px 6px; border-r
 .filtered-note { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin: 0 0 8px; padding: 7px 10px; border-radius: 10px; font-size: .82rem; background: color-mix(in srgb, #e5484d 12%, transparent); border: 1px solid color-mix(in srgb, #e5484d 35%, transparent); }
 .filtered-note .btn { margin-left: auto; }
 .composer-bar .pill-select .muted { white-space: nowrap; }
+
+/* Settings → What's inside */
+.about-page .ab-row { display: flex; gap: 10px; align-items: flex-start; padding: 7px 0; border-top: 1px solid color-mix(in srgb, var(--fg, #222) 8%, transparent); }
+.about-page .ab-row:first-of-type { border-top: 0; }
+.about-page .ab-ico { flex: 0 0 1.4em; font-size: 1.05rem; line-height: 1.5; text-align: center; }
+.about-page .ab-eng { margin: 6px 0 0; padding-left: 20px; }
+.about-page .ab-eng li { margin: 3px 0; font-size: .85rem; }
+.about-page .ab-groups { display: grid; gap: 16px; }
+.about-page .ab-group h3 { margin: 0 0 2px; font-size: .95rem; }
