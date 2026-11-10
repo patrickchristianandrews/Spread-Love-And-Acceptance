@@ -15,7 +15,10 @@ function newChat(assistantId, projectId) {
   go({ view: 'chat', id: chat.id });
 }
 
-const EFFORTS = { quick: '⚡ Instant', balanced: '⚖️ Balanced', thorough: '✨ Auto', council: '⚔️ Council' };
+// How much effort goes into each answer. "Smart" is the default: your PC answers everyday messages
+// fast and brings in the whole team only on hard ones. "Deep" has three AIs debate, for big decisions.
+const EFFORTS = { quick: '⚡ Fast', balanced: '⚖️ Balanced', thorough: '✨ Smart', council: '⚔️ Deep (3 AIs)' };
+const EFFORT_WHY = { quick: 'One model, fastest — for quick questions and drafts', balanced: 'One model, then a quick self-check', thorough: 'Recommended: fast on everyday messages, the whole team only on hard ones', council: 'Three AIs (a Structurer, a Critic and a Pragmatist) work it out, then one combined answer — slower, for big or important questions' };
 const effortOf = (chat, a) => chat.effort || a.effort || S.data.prefs.effortLevel || 'thorough';
 
 const msgText = (m) => (m.role === 'assistant' ? m.alts[m.altIndex]?.text || '' : m.text || '');
@@ -59,21 +62,21 @@ views.chat = {
           <div class="skill-pop" id="skill-pop" hidden></div>
           <textarea id="input" rows="1" spellcheck="true" placeholder="${esc(chat.pendingSkill ? skillById(chat.pendingSkill)?.hint || 'Add details…' : `Message ${a.name}…  Type / for skills`)}" aria-label="Message"></textarea>
           <div class="composer-bar">
-            <button class="icon-btn opts-btn" id="opts-btn" title="More options: connected apps (tools), cloud AI, web search, knowledge, double-check, effort" aria-label="Options">${icon('plus')}</button>
-            <button class="icon-btn" id="skill-btn" title="Use a skill (or type /)" aria-label="Skills">${icon('zap')}</button>
+            <button class="icon-btn opts-btn" id="opts-btn" title="Add a file, use a skill, search the web, connect apps, and more" aria-label="Add and options">${icon('plus')}</button>
+            <input type="file" id="file-in" multiple hidden accept="image/*,video/*,.pdf,.docx,.xlsx,.xlsm,.csv,.tsv,.pptx,.txt,.md,.json,.html,.htm,.xml,.js,.ts,.py,.java,.c,.cpp,.cs,.go,.rs,.rb,.php,.sql">
             <button class="chip-tog improve-btn" id="improve-btn" title="Fix my prompt: rewrites what you typed so it's clear and complete (spelling too), for a better answer. You can edit it before sending." aria-label="Fix my prompt">${icon('sparkle', 16)}<span>Fix my prompt</span></button>
             <button class="icon-btn mic-btn ${voiceRec?.chatId === chat.id ? 'rec' : ''}" id="mic-btn" title="Voice typing: click and speak (Ctrl+Space)" aria-label="Voice typing">${icon('mic')}</button>
-            <label class="icon-btn" title="Attach photos, videos or documents" aria-label="Attach">${icon('clip')}<input type="file" id="file-in" multiple hidden accept="image/*,video/*,.pdf,.docx,.xlsx,.xlsm,.csv,.tsv,.pptx,.txt,.md,.json,.html,.htm,.xml,.js,.ts,.py,.java,.c,.cpp,.cs,.go,.rs,.rb,.php,.sql"></label>
             <span class="bar-sep"></span>
             ${chip('tog-lib', 'book', 'Library', lib, 'Search your knowledge bases and cite them')}
             ${S.config?.offline ? `<span class="chip-tog" title="Offline: switch to Online in the sidebar to search the web" style="opacity:.5">${icon('globe', 16)}<span>Web (offline)</span></span>` : chip('tog-web', 'globe', 'Web', web, 'Search the web and cite sources')}
             ${chip('tog-fact', 'shield', 'Double-check', fact, 'After each answer, a second model checks it claim by claim')}
             <label class="pill-select small" title="Answer length: Best length fits the question; Quick answer gets straight to the point; Detailed answer gives the full picture, with explanation and examples">${icon('doc', 16)}<select id="pick-length" aria-label="Answer length">${Object.entries(LENGTHS).map(([k, l]) => `<option value="${k}" ${k === lengthOf(chat) ? 'selected' : ''}>${l.label}</option>`).join('')}</select>${icon('chevron', 14)}</label>
-            <label class="pill-select small" title="Instant: one model, fastest. Balanced: one model, then a check. Auto: the team works on hard questions only. Council: three AIs (Structurer, Critic, Pragmatist), then one verdict. See Settings → Options guide.">${icon('gauge', 16)}<select id="pick-effort" aria-label="Effort">${Object.entries(EFFORTS).map(([k, e]) => `<option value="${k}" ${k === effortOf(chat, a) ? 'selected' : ''}>${e.replace(/^\S+\s/, '')}</option>`).join('')}</select>${icon('chevron', 14)}</label>
+            <label class="pill-select small" title="How much effort goes into each answer. Fast: one model, quickest. Balanced: one model, then a self-check. Smart (recommended): fast on everyday messages, the whole team only on hard ones. Deep: three AIs work it out together — slower, for big questions. See ⓘ What do these do?">${icon('gauge', 16)}<span class="small muted" style="margin:0 2px">Effort:</span><select id="pick-effort" aria-label="Effort">${Object.entries(EFFORTS).map(([k, e]) => `<option value="${k}" ${k === effortOf(chat, a) ? 'selected' : ''}>${e.replace(/^\S+\s/, '')}</option>`).join('')}</select>${icon('chevron', 14)}</label>
             <span class="grow"></span>
             <button class="send-btn ${pending?.chatId === chat.id ? 'stop' : ''}" id="send" title="${pending?.chatId === chat.id ? 'Stop' : 'Send (Enter)'}" aria-label="${pending?.chatId === chat.id ? 'Stop' : 'Send'}">${icon(pending?.chatId === chat.id ? 'stop' : 'send', 20)}</button>
           </div>
         </div>
+        ${filteredModelNote(chat, a, target)}
         <div class="composer-hint">${simpleOn() && chat.messages.length ? `${/ctx-meter (warm|hot)/.test(contextMeterHTML(chat, a)) ? contextMeterHTML(chat, a) : ''}${chatHasSettings(chat) ? `${/ctx-meter (warm|hot)/.test(contextMeterHTML(chat, a)) ? ' · ' : ''}<a href="#" data-chat-settings>custom settings</a>` : ''}` : `${autoOn(chat, a) ? 'Automatic: the best model for each question, quick answers first' : `Runs on ${esc(targetLabel(target))}${simpleOn() ? '' : chatEtaHint(target, a)}`}${chatHasSettings(chat) ? ' · <a href="#" data-chat-settings>custom settings</a>' : ''}${chat.messages.length ? ` · ${contextMeterHTML(chat, a)}` : ' · Drop or paste photos, video, PDF, Word, Excel or PowerPoint'}`}<a href="#" class="og-link" data-open-guide title="What every option does">ⓘ What do these do?</a></div>
       </div>
       </div>${docPanelHTML(chat) || factPanelHTML(chat)}</div>
@@ -83,6 +86,17 @@ views.chat = {
 };
 
 // "⏱ ~6 s per answer (hard questions ~20 s)", for the model or team this chat runs on.
+// A warning when a chat is set to a filtered (censored) model while an uncensored one is available,
+// so an unexpected refusal is never a mystery. One click switches to the uncensored Liquid Edition.
+function filteredModelNote(chat, a, target) {
+  if (!target || target.startsWith('api:') || liquidOk(target)) return '';
+  // Only when an uncensored path exists: the built-in Liquid Edition, or an uncensored model.
+  const liquid = S.targets.find((t) => t.target === 'stack:quicksilver' && targetValid('stack:quicksilver'));
+  const uncModel = S.targets.find((t) => t.target.startsWith('local:') && liquidOk(t.target));
+  const to = liquid || uncModel;
+  if (!to) return '';
+  return `<div class="filtered-note"><span>⚠️ <b>${esc(targetLabel(target))}</b> is a filtered model and may refuse some requests. For uncensored answers, use ${liquid ? 'the Quicksilver Liquid Edition' : esc(to.label)}.</span><button class="btn small" data-use-uncensored="${esc(to.target)}">Switch to uncensored</button></div>`;
+}
 function chatEtaHint(target, a) {
   const words = wordsForJob(a.job);
   const easy = etaFor(target, words);
@@ -347,7 +361,7 @@ function bindChat() {
     if (e.key === 'Enter' && !e.shiftKey && !e.isComposing) { e.preventDefault(); sendOrStop(); }
   });
   pop.addEventListener('click', (e) => { const b = e.target.closest('[data-pick-skill]'); if (b) pickSkill(b.dataset.pickSkill); });
-  $('#skill-btn').addEventListener('click', () => { if (pop.hidden) { openPop(''); input.focus(); } else closePop(); });
+  $('#skill-btn')?.addEventListener('click', () => { if (pop.hidden) { openPop(''); input.focus(); } else closePop(); });
   $('#skill-row').addEventListener('click', (e) => {
     if (e.target.closest('[data-skill-clear]')) { chat.pendingSkill = null; save(); $('#skill-row').innerHTML = skillChipHTML(chat); input.placeholder = `Message ${a.name}… (type / for skills)`; }
     const use = e.target.closest('[data-skill-use]');
@@ -373,7 +387,7 @@ function bindChat() {
     if (next && S.config?.web?.provider === 'none') toast('Turn on a web search service in Settings → Web search first.');
     chat.web = next; save(); render();
   });
-  $('#pick-effort').addEventListener('change', (e) => { chat.effort = e.target.value; save(); render(); if (e.target.value === 'council') toast('⚔️ Council: a Structurer, a Critic and a Pragmatist each look at your question, then one answer is written from all three. Slower, for when it matters.', 7000); });
+  $('#pick-effort').addEventListener('change', (e) => { chat.effort = e.target.value; save(); render(); if (EFFORT_WHY[e.target.value]) toast(`${EFFORTS[e.target.value]}: ${EFFORT_WHY[e.target.value]}`, 7000); });
   $('#pick-length').addEventListener('change', (e) => { chat.length = e.target.value; S.data.prefs.answerLength = e.target.value; save(); toast(LENGTHS[e.target.value].toast); });
   $('#tog-fact').addEventListener('click', () => { chat.factCheck = !factOn(chat, a); save(); render(); });
   $('#net-pill').addEventListener('click', toggleNet);
@@ -405,6 +419,7 @@ function bindChat() {
   $('#opts-btn').addEventListener('click', (e) => composerOptions(chat, e.currentTarget));
   $('#add-api-chip')?.addEventListener('click', () => { modelsTab = 'api'; go({ view: 'models' }); });
   $('[data-chat-settings]')?.addEventListener('click', (e) => { e.preventDefault(); chatSettings(chat); });
+  $('[data-use-uncensored]')?.addEventListener('click', (e) => { chat.target = e.currentTarget.dataset.useUncensored; chat.auto = false; save(); render(); toast('Switched to the uncensored model.'); });
   scrollDown(true);
   if (!pending && !docOpen(chat)) input.focus();
   warmUp(chat, a);

@@ -54,7 +54,7 @@ function autoPick(chat, a, text, hasImage) {
   const base = resolveTarget(chat, a);
   // Your own cloud AI for the hardest questions, if you switched that on (it uses your credits).
   if (S.data.prefs.cloudHard && !S.config?.offline && !hasImage && looksHard(text || '')) {
-    const cloud = S.targets.find((t) => t.target.startsWith('api:') && targetValid(t.target) && (!isLiquid(base) || liquidOk(t.target)));
+    const cloud = S.targets.find((t) => t.target.startsWith('api:') && targetValid(t.target) && (!liquidOk(base) || liquidOk(t.target)));
     if (cloud) return { target: cloud.target, why: 'Picked automatically: your cloud AI, for a hard question.' };
   }
   const T = S.speed?.targets;
@@ -64,7 +64,10 @@ function autoPick(chat, a, text, hasImage) {
   const words = hard ? Math.max(wordsForJob(job), WORDS.hard) : wordsForJob(job);
   const budget = hard ? 60 : 20; // seconds: quick answers come first
   const local = !base.startsWith('api:');
-  const cands = S.targets.map((t) => t.target).filter((t) => T[t] && !t.startsWith('kb:') && (!t.startsWith('api:') || !local) && (!hasImage || T[t].vision) && (!isLiquid(base) || liquidOk(t)));
+  // When you're on an uncensored model or the Liquid Edition, Automatic only ever picks another
+  // uncensored one — it never quietly switches you to a filtered model that would refuse.
+  const baseUnc = liquidOk(base);
+  const cands = S.targets.map((t) => t.target).filter((t) => T[t] && !t.startsWith('kb:') && (!t.startsWith('api:') || !local) && (!hasImage || T[t].vision) && (!baseUnc || liquidOk(t)));
   if (!cands.length) return { target: base };
   const score = (t) => (T[t].scores?.[job] ?? T[t].scores?.general ?? 0) + learnBonus(job, t);
   const secs = (t) => etaFor(t, words, { hard }) ?? 999;
@@ -95,6 +98,9 @@ function composerOptions(chat, anchor) {
   const menu = document.createElement('div');
   menu.className = 'menu opts-menu';
   menu.innerHTML = `
+    <button data-o="file-in">${icon('clip', 16)} Attach a file (photo, PDF, Word…)</button>
+    <button data-o="skill-pop">${icon('zap', 16)} Use a skill…</button>
+    <div class="menu-sep"></div>
     <button data-o="tog-web" ${S.config?.offline ? 'disabled title="Go online to search the web"' : ''}>${icon('globe', 16)} Search the web<span class="grow"></span>${on('tog-web') ? icon('check', 15) : ''}</button>
     <button data-o="tog-lib">${icon('book', 16)} Use my library<span class="grow"></span>${on('tog-lib') ? icon('check', 15) : ''}</button>
     <button data-o="tog-fact">${icon('shield', 16)} Double-check answers<span class="grow"></span>${on('tog-fact') ? icon('check', 15) : ''}</button>
@@ -104,7 +110,6 @@ function composerOptions(chat, anchor) {
     <div class="menu-h">How hard it should think</div>
     <div class="opt-effort">${Object.entries(EFFORTS).map(([k, l]) => `<button data-eff="${k}" class="${k === eff ? 'on' : ''}" title="${{ quick: 'One model, fastest', balanced: 'One model, then a check', thorough: 'The team on hard questions only (recommended)', council: 'Three AIs (Structurer, Critic, Pragmatist), then one verdict' }[k]}">${esc(l.replace(/^\S+\s/, ''))}</button>`).join('')}</div>
     <div class="menu-sep"></div>
-    <button data-o="skill-btn">${icon('zap', 16)} Use a skill…</button>
     <button data-o="improve-btn">${icon('sparkle', 16)} Improve my message</button>
     <button data-o="settings">${icon('settings', 16)} Settings for this chat…</button>`;
   document.body.appendChild(menu);
@@ -117,6 +122,8 @@ function composerOptions(chat, anchor) {
     if (!o) return;
     closeMenus();
     if (o === 'settings') chatSettings(chat);
+    else if (o === 'file-in') $('#file-in')?.click();
+    else if (o === 'skill-pop') { const p = $('#skill-pop'); if (p) { p.innerHTML = skillPickerHTML(''); p.hidden = false; $('#input')?.focus(); } }
     else if (o === 'add-api') { modelsTab = 'api'; go({ view: 'models' }); }
     else if (o === 'tog-tools') { chat.tools = !toolsOn(chat, assistantById(chat.assistantId)); save(); render(); if (chat.tools && !S.hasIntegrations) toast('Connect GitHub, Slack, Notion, Jira, Linear or an MCP server under Connectors first.', 6000); }
     else $(`#${o}`)?.click();

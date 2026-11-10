@@ -1488,3 +1488,6 @@ code.sel { user-select: all; background: var(--soft); padding: 1px 6px; border-r
 .privacy-bar .pb-x { background: transparent; border: 0; color: var(--muted); cursor: pointer; font-size: .9rem; padding: 2px 6px; }
 .main > .chat { height: auto; flex: 1 1 auto; min-height: 0; }
 .net-toggle.exposed .net-lbl, #net-pill.exposed .net-lbl { color: #c98a00; }
+.filtered-note { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin: 0 0 8px; padding: 7px 10px; border-radius: 10px; font-size: .82rem; background: color-mix(in srgb, #e5484d 12%, transparent); border: 1px solid color-mix(in srgb, #e5484d 35%, transparent); }
+.filtered-note .btn { margin-left: auto; }
+.composer-bar .pill-select .muted { white-space: nowrap; }
