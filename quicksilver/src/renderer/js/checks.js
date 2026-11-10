@@ -218,11 +218,13 @@ function prefillChat(chat, a, text) {
 // After an answer, the top follow-up suggestion is answered in the background (local models only,
 // and only when it needs no web or Library search). Click it and the answer is already there.
 // Anything you send stops this work at once.
-function preanswer(chat, msg, alt) {
+function preanswer(chat, msg, alt, tries = 0) {
   const p = S.data.prefs;
   const a = assistantById(chat.assistantId);
   const q = alt.followups?.[0];
-  if (p.preanswer === false || !hasGpu() || !q || pending || alt.pre || alt.check?.running || chat.messages.at(-1) !== msg || FRESH_Q.test(q) || effortOf(chat, a) === 'max') return;
+  if (p.preanswer === false || !hasGpu() || !q || alt.pre || chat.messages.at(-1) !== msg || FRESH_Q.test(q) || effortOf(chat, a) === 'max') return;
+  // Still finishing the answer or checking it: try again shortly rather than skip it for good.
+  if (pending || alt.check?.running) { if (tries < 20) setTimeout(() => preanswer(chat, msg, alt, tries + 1), 1000); return; }
   let target = resolveTarget(chat, a);
   if (autoOn(chat, a)) target = autoPick(chat, a, q, false).target || target;
   if (!target || target.startsWith('api:') || webWanted(chat, a, q) || (chat.library ?? a.library) || toolsOn(chat, a)) return;
