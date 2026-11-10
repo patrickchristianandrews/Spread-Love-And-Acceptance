@@ -52,14 +52,15 @@ function learnSignal(job, target, kind, w = 1) {
 
 function autoPick(chat, a, text, hasImage) {
   const base = resolveTarget(chat, a);
+  const job = jobOfQuestion(text || '', a);
   // Your own cloud AI for the hardest questions, if you switched that on (it uses your credits).
+  // When several cloud AIs are connected, use the one that's best for this kind of question.
   if (S.data.prefs.cloudHard && !S.config?.offline && !hasImage && looksHard(text || '')) {
-    const cloud = S.targets.find((t) => t.target.startsWith('api:') && targetValid(t.target) && (!liquidOk(base) || liquidOk(t.target)));
-    if (cloud) return { target: cloud.target, why: 'Picked automatically: your cloud AI, for a hard question.' };
+    const cloud = bestApiTarget(job, (t) => !liquidOk(base) || liquidOk(t));
+    if (cloud) return { target: cloud, why: `Picked automatically: ${apiServiceName(cloud)}, your best connected cloud AI ${AUTO_WHY[job] || 'for this question'}, for a hard question.` };
   }
   const T = S.speed?.targets;
   if (!T || !base) return { target: base };
-  const job = jobOfQuestion(text || '', a);
   const hard = looksHard(text);
   const words = hard ? Math.max(wordsForJob(job), WORDS.hard) : wordsForJob(job);
   const budget = hard ? 60 : 20; // seconds: quick answers come first
@@ -69,7 +70,9 @@ function autoPick(chat, a, text, hasImage) {
   const baseUnc = liquidOk(base);
   const cands = S.targets.map((t) => t.target).filter((t) => T[t] && !t.startsWith('kb:') && (!t.startsWith('api:') || !local) && (!hasImage || T[t].vision) && (!baseUnc || liquidOk(t)));
   if (!cands.length) return { target: base };
-  const score = (t) => (T[t].scores?.[job] ?? T[t].scores?.general ?? 0) + learnBonus(job, t);
+  // A connected cloud AI is scored for this exact task from the rankings (so the best one wins when
+  // several are connected); a local model or team uses its measured quality for the job.
+  const score = (t) => (t.startsWith('api:') ? apiScore(t, job) : (T[t].scores?.[job] ?? T[t].scores?.general ?? 0)) + learnBonus(job, t);
   const secs = (t) => etaFor(t, words, { hard }) ?? 999;
   // A photo the usual choice can already see stays with it.
   if (hasImage && T[base]?.vision) return { target: base };
