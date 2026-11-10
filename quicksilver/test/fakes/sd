@@ -1,0 +1,15 @@
+#!/usr/bin/env node
+// Stand-in for stable-diffusion.cpp's CLI, for tests. Prints progress and writes a real image/video.
+const { execFileSync } = require('child_process');
+const args = process.argv.slice(2);
+const arg = (f) => { const i = args.indexOf(f); return i >= 0 ? args[i + 1] : null; };
+if (args.includes('--help')) { console.log('usage: sd [options]\n -M, --mode [img_gen|vid_gen]\n --llm\n --fps\n --flow-shift\n --offload-to-cpu\n --vae-tiling\n --diffusion-fa\n --video-frames'); process.exit(0); }
+const out = arg('-o');
+const steps = Number(arg('--steps') || 4);
+console.log('loading model...');
+for (let i = 1; i <= steps; i++) console.log(`  |=====>   | ${i}/${steps} - 0.10s/it`);
+const W = arg('-W') || 64, H = arg('-H') || 64;
+const color = arg('-i') || arg('-r') ? 'blue' : 'pink';
+if (arg('-M') === 'vid_gen') execFileSync('ffmpeg', ['-y', '-loglevel', 'error', '-f', 'lavfi', '-i', `testsrc=size=${Math.min(W, 320)}x${Math.min(H, 240)}:rate=8:duration=1`, out]);
+else execFileSync('ffmpeg', ['-y', '-loglevel', 'error', '-f', 'lavfi', '-i', `color=c=${color}:s=${W}x${H}`, '-frames:v', '1', out]);
+console.log('decoding... done');

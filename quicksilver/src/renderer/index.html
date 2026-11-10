@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: qsmedia:; media-src 'self' data: blob: qsmedia:; connect-src 'self' qsmedia:">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Quicksilver</title>
+  <link rel="stylesheet" href="vendor/katex/katex.min.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app" id="app">
+    <aside class="sidebar" aria-label="Navigation">
+      <div class="brand">
+        <svg class="brand-mark" viewBox="0 0 512 512" width="38" height="38" aria-hidden="true">
+          <defs>
+            <linearGradient id="qsbg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1a2440"/><stop offset="1" stop-color="#070b14"/></linearGradient>
+            <linearGradient id="qschrome" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset=".35" stop-color="#cfd8e6"/><stop offset=".55" stop-color="#7d8ca6"/><stop offset=".72" stop-color="#d9e2ee"/><stop offset="1" stop-color="#4fdbe8"/></linearGradient>
+            <radialGradient id="qsglow" cx=".5" cy=".62" r=".5"><stop offset="0" stop-color="#5ee7f0" stop-opacity=".35"/><stop offset="1" stop-color="#5ee7f0" stop-opacity="0"/></radialGradient>
+          </defs>
+          <rect x="16" y="16" width="480" height="480" rx="112" fill="url(#qsbg)"/>
+          <circle cx="256" cy="300" r="190" fill="url(#qsglow)"/>
+          <path d="M256 70C256 70 108 236 108 330a148 148 0 0 0 296 0C404 236 256 70 256 70z" fill="url(#qschrome)"/>
+          <path d="M182 336a74 74 0 0 0 74 74" stroke="#ffffff" stroke-opacity=".85" stroke-width="22" fill="none" stroke-linecap="round"/>
+          <ellipse cx="300" cy="230" rx="22" ry="40" fill="#ffffff" fill-opacity=".55" transform="rotate(28 300 230)"/>
+        </svg>
+        <div class="brand-text"><div class="brand-name">Quicksilver</div><div class="brand-tag">Forms to fit your work.</div></div>
+        <button class="icon-btn collapse-btn" id="collapse" title="Collapse the sidebar" aria-label="Collapse the sidebar"><span data-icon="left"></span></button>
+      </div>
+      <button class="nav-new" data-nav="newchat" title="New chat (Ctrl+N)"><span data-icon="plus"></span><span class="lbl">New chat</span><kbd class="lbl">Ctrl N</kbd></button>
+      <div class="dl-mini" id="dl-mini" hidden></div>
+      <div class="side-scroll" id="side-scroll">
+      <nav class="nav">
+        <button class="nav-item" data-nav="home" title="Home"><span data-icon="home"></span><span class="lbl">Home</span></button>
+        <button class="nav-item" data-nav="projects" title="Projects"><span data-icon="folder"></span><span class="lbl">Projects</span></button>
+        <button class="nav-item" data-nav="studio" title="Create pictures, video and music"><span data-icon="image"></span><span class="lbl">Create</span></button>
+        <button class="nav-item nav-knowledge" data-nav="library" title="Your knowledge: connect your files, folders and websites, and Quicksilver answers from them with sources"><span data-icon="book"></span><span class="lbl">Your knowledge</span></button>
+        <button class="nav-item nav-explore-btn" id="nav-explore" aria-expanded="false" title="Explore: stacks, models, upgrades, assistants, skills, connectors"><span data-icon="sparkle"></span><span class="lbl">Explore</span><span class="lbl nav-caret">▸</span></button>
+        <div class="nav-explore" id="nav-explore-list" hidden>
+        <button class="nav-item" data-nav="stacks" title="Stacks (ready-made by Quicksilver) and Fusion (your own mix of AIs)"><span data-icon="layers"></span><span class="lbl">Stacks &amp; Fusion</span></button>
+        <button class="nav-item" data-nav="models" title="Models: free models rated for this PC, trending, Hugging Face, cloud AIs"><span data-icon="box"></span><span class="lbl">Models</span></button>
+        <button class="nav-item" data-nav="upgrades" title="Upgrades: what would make Quicksilver faster or smarter on this PC"><span data-icon="gauge"></span><span class="lbl">Upgrades</span></button>
+        <button class="nav-item" data-nav="assistants" title="Assistants for every kind of work"><span data-icon="users"></span><span class="lbl">Assistants</span></button>
+        <button class="nav-item" data-nav="skills" title="Skills: one-click abilities"><span data-icon="zap"></span><span class="lbl">Skills</span></button>
+        <button class="nav-item" data-nav="integrations" title="Connectors: your apps and services"><span data-icon="plug"></span><span class="lbl">Connectors</span></button>
+        <button class="nav-item" data-nav="arena" title="Compare models in a blind test"><span data-icon="scale"></span><span class="lbl">Compare models</span></button>
+        </div>
+      </nav>
+      <div class="chats-head lbl"><span class="nav-label" style="padding:0">Chats</span></div>
+      <div class="side-search-wrap lbl"><span data-icon="search"></span><input class="side-search" id="chat-search" type="search" placeholder="Search chats (Ctrl K)" aria-label="Search chats"></div>
+      <div class="chat-list lbl" id="chat-list"></div>
+      </div>
+      <button class="net-toggle" id="net-toggle" role="switch" aria-checked="true" title="Online: web search, cloud AIs and downloads are available"><span class="net-dot"></span><span class="lbl net-lbl">Online</span><span class="net-sw"><i></i></span></button>
+      <div class="side-foot">
+        <button class="nav-item" data-nav="pc" title="Your PC"><span data-icon="cpu"></span><span class="lbl">Your PC</span></button>
+        <button class="nav-item" data-nav="settings" title="Settings"><span data-icon="settings"></span><span class="lbl">Settings</span></button>
+        <button class="icon-btn" id="feedback-btn" title="Send feedback" aria-label="Send feedback"><span data-icon="chat"></span></button>
+        <button class="icon-btn" id="theme-btn" title="Switch theme" aria-label="Switch between light and dark mode"></button>
+      </div>
+    </aside>
+    <main class="main" id="main"></main>
+  </div>
+  <div class="modal-backdrop" id="modal" hidden><div class="modal" role="dialog" aria-modal="true" id="modal-body"></div></div>
+  <div class="toast" id="toast" role="status" hidden></div>
+  <script src="js/icons.js"></script>
+  <script src="js/core.js"></script>
+  <script src="js/select.js"></script>
+  <script src="js/md.js"></script>
+  <script src="js/skills-data.js"></script>
+  <script src="js/skills-more.js"></script>
+  <script src="js/skills.js"></script>
+  <script src="js/human.js"></script>
+  <script src="js/chat.js"></script>
+  <script src="js/share.js"></script>
+  <script src="js/runstate.js"></script>
+  <script src="js/tabs.js"></script>
+  <script src="js/magic.js"></script>
+  <script src="js/memory.js"></script>
+  <script src="js/projects.js"></script>
+  <script src="js/canvas.js"></script>
+  <script src="js/voice.js"></script>
+  <script src="js/arena.js"></script>
+  <script src="js/compare-task.js"></script>
+  <script src="js/connect.js"></script>
+  <script src="js/power.js"></script>
+  <script src="js/simple.js"></script>
+  <script src="js/hints.js"></script>
+  <script src="js/lock.js"></script>
+  <script src="js/lowmem.js"></script>
+  <script src="js/checks.js"></script>
+  <script src="js/exam.js"></script>
+  <script src="js/tips.js"></script>
+  <script src="js/feedback.js"></script>
+  <script src="vendor/katex/katex.min.js"></script>
+  <script src="js/assistants-more.js"></script>
+  <script src="js/assistants.js"></script>
+  <script src="js/ratings.js"></script>
+  <script src="js/community.js"></script>
+  <script src="js/cloudcalc.js"></script>
+  <script src="js/features.js"></script>
+  <script src="js/boosts.js"></script>
+  <script src="js/cloudstudio.js"></script>
+  <script src="js/apirank.js"></script>
+  <script src="js/suggest.js"></script>
+  <script src="js/stacks.js"></script>
+  <script src="js/stacks-more.js"></script>
+  <script src="js/stack-recipes.js"></script>
+  <script src="js/updates.js"></script>
+  <script src="js/models.js"></script>
+  <script src="js/models-detail.js"></script>
+  <script src="js/pc.js"></script>
+  <script src="js/studio.js"></script>
+  <script src="js/skill-media.js"></script>
+  <script src="js/studio-more.js"></script>
+  <script src="js/library.js"></script>
+  <script src="js/settings.js"></script>
+  <script src="js/guide.js"></script>
+  <script src="js/privacy.js"></script>
+  <script src="js/integrations.js"></script>
+  <script src="js/compare.js"></script>
+  <script src="js/sidebar.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

@@ -1,6 +1,12 @@
 # Builds the Quicksilver Windows installer (Quicksilver-Setup-x.y.z.exe).
+#  1. tests:   the back-end and end-to-end tests (Linux, with stand-in engines)
+#  2. windows: downloads the official llama.cpp and stable-diffusion.cpp builds, proves the real
+#              text engine loads a model and answers, then builds, uploads and install-tests the
+#              installer (the build is done when this job is).
+#  3. testers: five tester sessions on the installed app with the real models (informational, in
+#              its own job so it never holds up the installer).
 # Runs on every push that changes quicksilver/, and on demand from the Actions tab.
-# Pushing a tag like quicksilver-v1.0.0 also publishes the installer as a GitHub release.
+# Pushing a tag like quicksilver-v2.0.0 also publishes the installer as a GitHub release.
 name: Quicksilver Windows installer
 
 on:
@@ -8,19 +14,64 @@ on:
     paths: ['quicksilver/**', '.github/workflows/quicksilver-windows.yml']
     tags: ['quicksilver-v*']
   workflow_dispatch:
+    inputs:
+      testers:
+        description: 'Which tester group runs: a (Maya, Dev, Rosa, Jay, Priya), b (Alex, Grace, Marcus, Lena, Omar) or all'
+        type: choice
+        options: [a, b, all, none]
+        default: a
+
+# A newer run on the same branch or tag replaces one still running, so only the latest is built.
+concurrency:
+  group: quicksilver-${{ github.ref }}
+  cancel-in-progress: true
 
 permissions:
   contents: write
+  issues: read
+  pull-requests: read
 
 jobs:
-  windows:
-    runs-on: windows-latest
+  tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
     defaults:
       run:
         working-directory: quicksilver
     steps:
       - uses: actions/checkout@v4
+        with:
+          sparse-checkout: quicksilver
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: quicksilver/package-lock.json
+      # A stalled download is retried instead of hanging the build (it has happened twice).
+      - name: Install
+        timeout-minutes: 20
+        run: |
+          for i in 1 2 3; do timeout 240 sudo apt-get update -qq && timeout 240 sudo apt-get install -y -qq ffmpeg xvfb && break; echo "apt attempt $i stalled or failed; retrying"; sleep 5; done
+          for i in 1 2 3; do timeout 300 npm ci && exit 0; echo "npm ci attempt $i stalled or failed; retrying"; sleep 5; done; exit 1
+        env:
+          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: '1'
+      - name: Back-end tests
+        run: node test/backend.test.js
+      - name: End-to-end tests
+        run: xvfb-run -a node test/ui.test.js
 
+  windows:
+    needs: tests
+    runs-on: windows-latest
+    timeout-minutes: 90
+    defaults:
+      run:
+        working-directory: quicksilver
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: quicksilver
       - uses: actions/setup-node@v4
         with:
           node-version: 22
@@ -29,26 +80,228 @@ jobs:
 
       - name: Install
         run: npm ci
+        env:
+          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: '1'
 
+      - name: Download the engines (llama.cpp, stable-diffusion.cpp, whisper.cpp)
+        run: node scripts/fetch-engines.js --platform win32
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Prove the real text engine loads a model and answers
+        run: |
+          SERVER=$(find engine/llama -name llama-server.exe | head -1)
+          echo "engine: $SERVER ($(cat engine/llama/VERSION.txt))"
+          "$SERVER" --list-devices || true
+          "$SERVER" -m test/fixtures/tiny.gguf --host 127.0.0.1 --port 8099 -c 512 -ngl 0 --jinja --cache-reuse 256 --device none > llama.log 2>&1 &
+          for i in $(seq 1 60); do curl -sf http://127.0.0.1:8099/health && break; sleep 1; done
+          RESPONSE=$(curl -sf http://127.0.0.1:8099/v1/chat/completions -H "Content-Type: application/json" -d '{"messages":[{"role":"user","content":"Hello"}],"max_tokens":8}')
+          echo "$RESPONSE"
+          echo "$RESPONSE" | grep -q '"choices"' || { cat llama.log; exit 1; }
+          taskkill //F //IM llama-server.exe || true
+
+      - name: Download the models that come with Quicksilver
+        run: node scripts/fetch-starter.js
+
+      - name: Check the uncensored Qwen3 models in the catalog can be downloaded
+        run: node scripts/check-model-repos.js
+
+      # Quicksilver stores the model's working memory (KV cache) at 8-bit to save memory, and uses
+      # a small same-family model to draft ahead (speculative decoding) when one is installed; it
+      # falls back if the engine refuses either. This shows which ones users get, with a real model.
+      - name: Check the 8-bit memory cache and speculative decoding on the real engine
+        continue-on-error: true
+        run: |
+          SERVER=$(find engine/llama -name llama-server.exe | head -1)
+          MODEL=pack/qwen3.5-4b.gguf
+          echo "model: $MODEL"
+          "$SERVER" -m "$MODEL" --host 127.0.0.1 --port 8098 -c 2048 -ngl 0 --jinja --device none --cache-type-k q8_0 --cache-type-v q8_0 > kv.log 2>&1 &
+          for i in $(seq 1 120); do curl -sf http://127.0.0.1:8098/health && break; sleep 1; done
+          if curl -sf http://127.0.0.1:8098/v1/chat/completions -H "Content-Type: application/json" -d '{"messages":[{"role":"user","content":"Hi"}],"max_tokens":8}' | grep -q '"choices"'; then echo "8-bit KV cache: works"; else echo "::warning::8-bit KV cache not accepted; Quicksilver will use a normal cache"; tail -20 kv.log; fi
+          taskkill //F //IM llama-server.exe || true
+          sleep 2
+          HELP=$("$SERVER" --help 2>&1 || true)
+          if echo "$HELP" | grep -q -- '--spec-draft-n-max'; then SPEC="--spec-draft-n-max 16"; else SPEC="--draft-max 16"; fi
+          echo "draft options: --model-draft --gpu-layers-draft $SPEC"
+          "$SERVER" -m "$MODEL" --model-draft "$MODEL" --gpu-layers-draft 0 $SPEC --host 127.0.0.1 --port 8097 -c 2048 -ngl 0 --jinja --device none > spec.log 2>&1 &
+          for i in $(seq 1 120); do curl -sf http://127.0.0.1:8097/health && break; sleep 1; done
+          if curl -sf http://127.0.0.1:8097/v1/chat/completions -H "Content-Type: application/json" -d '{"messages":[{"role":"user","content":"Hi"}],"max_tokens":8}' | grep -q '"choices"'; then echo "Speculative decoding: works"; else echo "::warning::speculative decoding not accepted; Quicksilver will run without a draft model"; tail -20 spec.log; fi
+          taskkill //F //IM llama-server.exe || true
+
+      - name: Prove each bundled model answers correctly (and sees images) on the processor
+        run: node scripts/prove-starter.js "$(find engine/llama -name llama-server.exe | head -1)"
+
+      - name: Check the image engine starts
+        run: |
+          SD=$(find engine/sd \( -name sd-cli.exe -o -name sd.exe \) | head -1)
+          echo "engine: $SD ($(cat engine/sd/VERSION.txt))"
+          "$SD" --help | head -5
+
+      - name: Prove voice typing works (real whisper.cpp, real speech from Windows)
+        continue-on-error: true
+        shell: pwsh
+        run: |
+          $w = Get-ChildItem -Recurse engine\whisper -Filter whisper-cli.exe -ErrorAction SilentlyContinue | Select-Object -First 1
+          if (!$w) { Write-Host '::warning::whisper.cpp was not bundled; voice typing will download it on first use'; exit 0 }
+          Add-Type -AssemblyName System.Speech
+          $s = New-Object System.Speech.Synthesis.SpeechSynthesizer
+          $s.SetOutputToWaveFile("$PWD\speech.wav"); $s.Speak('The quick brown fox jumps over the lazy dog.'); $s.Dispose()
+          curl.exe -sSL -o whisper.bin https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-base-q5_1.bin
+          $env:QS_WHISPER_BIN = $w.FullName; $env:QS_WHISPER_MODEL = "$PWD\whisper.bin"; $env:QUICKSILVER_HOME = "$PWD\voice-home"
+          node -e "require('./src/main/whisper').transcribe(require('fs').readFileSync('speech.wav'), { ext: 'wav' }).then((t) => { console.log('heard:', t); if (!/fox/i.test(t)) { console.log('::warning::voice typing heard the wrong words'); process.exit(1); } console.log('voice typing: works'); }).catch((e) => { console.log('::warning::voice typing failed: ' + e.message); process.exit(1); })"
+
+      # Signing removes Windows' "unknown publisher" warning. It turns on by itself once either
+      # set of repository secrets exists (Settings → Secrets and variables → Actions):
+      #   Azure Trusted Signing: AZURE_TENANT_ID, AZURE_CLIENT_ID, AZURE_CLIENT_SECRET,
+      #                          AZURE_SIGN_ENDPOINT, AZURE_SIGN_ACCOUNT, AZURE_SIGN_PROFILE, AZURE_SIGN_PUBLISHER
+      #   or a certificate file: WIN_CSC_LINK (base64 of the .pfx) and WIN_CSC_KEY_PASSWORD
       - name: Build installer
-        run: npx electron-builder --win --publish never
+        run: |
+          ARGS=(--win --publish never)
+          if [ -n "$AZURE_CLIENT_ID" ]; then
+            echo "Signing with Azure Trusted Signing"
+            ARGS+=("-c.win.azureSignOptions.publisherName=$AZURE_SIGN_PUBLISHER" "-c.win.azureSignOptions.endpoint=$AZURE_SIGN_ENDPOINT" "-c.win.azureSignOptions.codeSigningAccountName=$AZURE_SIGN_ACCOUNT" "-c.win.azureSignOptions.certificateProfileName=$AZURE_SIGN_PROFILE")
+          elif [ -n "$CSC_LINK" ]; then
+            echo "Signing with the code-signing certificate"
+          else
+            echo "::warning::Installer is not code-signed, so Windows will show an 'unknown publisher' warning. See the comments in this workflow to turn on signing."
+            unset CSC_LINK CSC_KEY_PASSWORD
+          fi
+          npx electron-builder "${ARGS[@]}"
+          # A Windows installer can't be larger than about 2 GB.
+          for f in dist/*.exe; do s=$(stat -c %s "$f"); echo "$f: $((s / 1048576)) MB"; [ "$s" -lt 2100000000 ] || { echo "::error::$f is too big for a Windows installer"; exit 1; }; done
+          # Quicksilver's full model ships next to the installer, which copies it in.
+          mkdir -p "dist/Quicksilver models"
+          cp pack/* "dist/Quicksilver models/"
+          VERSION=$(node -p "require('./package.json').version")
+          printf 'Installing Quicksilver\r\n\r\n1. Unzip everything into one folder.\r\n2. Run Quicksilver-Setup-%s.exe. Keep the "Quicksilver models" folder next to it:\r\n   the installer copies the full Quicksilver Liquid Edition from there,\r\n   so it works offline right away.\r\n\r\nIf you only have the setup file, that is fine too: Quicksilver starts with its small model\r\nand downloads the rest in the background the first time it runs.\r\n' "$VERSION" > "dist/READ ME FIRST.txt"
         env:
           CSC_IDENTITY_AUTO_DISCOVERY: 'false'
-
-      - name: Check the local engine loads on Windows
-        shell: bash
-        run: |
-          node -e "import('node-llama-cpp').then(async (m) => { const l = await m.getLlama({ gpu: 'auto', build: 'never' }); console.log('engine ok, gpu:', l.gpu); process.exit(0); })"
+          CSC_LINK: ${{ secrets.WIN_CSC_LINK }}
+          CSC_KEY_PASSWORD: ${{ secrets.WIN_CSC_KEY_PASSWORD }}
+          AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+          AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+          AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+          AZURE_SIGN_ENDPOINT: ${{ secrets.AZURE_SIGN_ENDPOINT }}
+          AZURE_SIGN_ACCOUNT: ${{ secrets.AZURE_SIGN_ACCOUNT }}
+          AZURE_SIGN_PROFILE: ${{ secrets.AZURE_SIGN_PROFILE }}
+          AZURE_SIGN_PUBLISHER: ${{ secrets.AZURE_SIGN_PUBLISHER }}
 
       - uses: actions/upload-artifact@v4
         with:
           name: Quicksilver-Windows-installer
-          path: quicksilver/dist/*.exe
+          path: |
+            quicksilver/dist/*.exe
+            quicksilver/dist/Quicksilver models/
+            quicksilver/dist/READ ME FIRST.txt
           if-no-files-found: error
+          # The installer and models are already compressed; zipping them again only costs time.
+          compression-level: 0
+
+      # Install it and use it the way a new user would: real installer, real engine, the models that
+      # come with Quicksilver, real questions. A failure here fails the build.
+      - name: Install with the models folder and use it like a new user
+        shell: pwsh
+        timeout-minutes: 30
+        run: |
+          $setup = Get-ChildItem dist\Quicksilver-Setup-*.exe | Select-Object -First 1
+          Start-Process -Wait -FilePath $setup.FullName -ArgumentList '/S','/D=C:\QS'
+          if (!(Test-Path 'C:\QS\Quicksilver.exe')) { throw 'Quicksilver.exe was not installed' }
+          if (!(Test-Path 'C:\QS\resources\engine\llama\llama-server.exe')) { throw 'the text engine is missing' }
+          foreach ($f in 'STARTER.json','model.gguf','mmproj.gguf','embed.gguf','qwen3.5-4b.gguf','qwen3.5-4b-mmproj.gguf') { if (!(Test-Path "C:\QS\resources\starter\$f")) { throw "missing resources\starter\$f" } }
+          Get-ChildItem C:\QS\resources\starter | ForEach-Object { '{0,-34} {1,8:N0} MB' -f $_.Name, ($_.Length / 1MB) }
+          Write-Host '✓ installed, and the installer copied the Quicksilver model in'
+          node test/installed.test.js C:\QS\Quicksilver.exe full install-shots
+          if ($LASTEXITCODE -ne 0) { throw 'the installed app test failed' }
+
+      - name: Install from the setup file alone, then uninstall
+        shell: pwsh
+        timeout-minutes: 40
+        run: |
+          New-Item -ItemType Directory -Force C:\lonely | Out-Null
+          $setup = Get-ChildItem dist\Quicksilver-Setup-*.exe | Select-Object -First 1
+          Copy-Item $setup.FullName C:\lonely\
+          Start-Process -Wait -FilePath (Join-Path C:\lonely $setup.Name) -ArgumentList '/S','/D=C:\QS2'
+          if (!(Test-Path 'C:\QS2\Quicksilver.exe')) { throw 'Quicksilver.exe was not installed' }
+          if (Test-Path 'C:\QS2\resources\starter\qwen3.5-4b.gguf') { throw 'without the folder, the main model should not be installed' }
+          node test/installed.test.js C:\QS2\Quicksilver.exe fallback install-shots
+          if ($LASTEXITCODE -ne 0) { throw 'the installed app test failed' }
+          $un = Get-ChildItem 'C:\QS2\Uninstall*.exe' | Select-Object -First 1
+          Start-Process -Wait -FilePath $un.FullName -ArgumentList '/S'
+          for ($i = 0; $i -lt 90 -and (Test-Path 'C:\QS2\Quicksilver.exe'); $i++) { Start-Sleep 1 }
+          if (Test-Path 'C:\QS2\Quicksilver.exe') { throw 'uninstalling left the app behind' }
+          Write-Host '✓ uninstalled cleanly'
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: Quicksilver-install-test-screenshots
+          path: quicksilver/install-shots/
+          if-no-files-found: ignore
+
+      # The installer's fingerprint, which the app's automatic updates check before installing.
+      - name: Fingerprint the installer
+        run: for f in dist/Quicksilver-Setup-*.exe; do (cd dist && sha256sum "$(basename "$f")" > "$(basename "$f").sha256" && cat "$(basename "$f").sha256"); done
 
       - name: Publish release
         if: startsWith(github.ref, 'refs/tags/quicksilver-v')
         uses: softprops/action-gh-release@v2
         with:
-          files: quicksilver/dist/*.exe
           name: Quicksilver ${{ github.ref_name }}
+          body_path: quicksilver/RELEASE_NOTES.md
+          files: |
+            quicksilver/dist/*.exe
+            quicksilver/dist/*.exe.sha256
+
+  # Five tester sessions on the installed app with the real models: every answer, its speed and a
+  # screenshot are recorded for review. Informational: in its own job, after the installer is built
+  # and tested, so it never holds up the build. Skipped with testers: none.
+  testers:
+    needs: windows
+    if: ${{ github.event_name != 'workflow_dispatch' || inputs.testers != 'none' }}
+    runs-on: windows-latest
+    timeout-minutes: 120
+    continue-on-error: true
+    defaults:
+      run:
+        working-directory: quicksilver
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: quicksilver
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: quicksilver/package-lock.json
+      - name: Install
+        run: npm ci
+        env:
+          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: '1'
+      - uses: actions/download-artifact@v4
+        with:
+          name: Quicksilver-Windows-installer
+          path: quicksilver/dist
+      - name: Install Quicksilver with the models folder
+        shell: pwsh
+        run: |
+          $setup = Get-ChildItem dist\Quicksilver-Setup-*.exe | Select-Object -First 1
+          Start-Process -Wait -FilePath $setup.FullName -ArgumentList '/S','/D=C:\QS'
+          if (!(Test-Path 'C:\QS\Quicksilver.exe')) { throw 'Quicksilver.exe was not installed' }
+      - name: Tester sessions (five people, real models)
+        timeout-minutes: 110
+        shell: pwsh
+        env:
+          # The web developer connects GitHub with this run's own short-lived token (it can read
+          # this repository; creating issues isn't allowed, and the tester declines the request).
+          QS_TESTER_GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          QS_TESTER_GH_REPO: ${{ github.repository }}
+          QS_TESTER_GROUP: ${{ inputs.testers || 'a' }}
+        run: node test/testers.js C:\QS\Quicksilver.exe tester-sessions
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: Quicksilver-tester-sessions
+          path: quicksilver/tester-sessions/
+          if-no-files-found: ignore

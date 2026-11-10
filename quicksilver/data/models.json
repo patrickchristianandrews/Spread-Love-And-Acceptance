@@ -1,0 +1,58 @@
+{
+  "version": 1,
+  "updated": "2026-11",
+  "note": "Model picks that update Quicksilver when online: add new models (same fields as the built-in catalog), mark featured picks, map an older model to the newer one that replaces it, and set the ladders stack recipes choose from (strongest first). \"liquid\" names the Liquid Edition's core models (uncensored): set brain/eyes to a newer catalog or added model and every Quicksilver updates its built-in model to it. \"recipes\" adds new ready-made stacks: {id, name, icon, group, mode (blend/debate/consensus/auto/vote/redteam/plan/panel), parts: [{model, role, ladder}], lead, instructions, why, added (YYYY-MM-DD), uncensored}.",
+  "models": [],
+  "successors": {
+    "qwen2.5-3b": "qwen3-4b",
+    "phi-3.5-mini": "qwen3-4b",
+    "qwen2.5-7b": "qwen3-8b",
+    "mistral-7b": "qwen3-8b",
+    "llama-3.1-8b": "qwen3-8b",
+    "qwen2.5-14b": "qwen3-14b",
+    "deepseek-r1-qwen-7b": "deepseek-r1-qwen3-8b",
+    "deepseek-r1-qwen-14b": "phi-4-reasoning-plus",
+    "deepseek-r1-qwen-32b": "qwen3-30b-a3b-thinking",
+    "qwq-32b": "qwen3-30b-a3b-thinking",
+    "qwen2.5-coder-32b": "qwen3-coder-30b",
+    "qwen2.5-vl-7b": "qwen3-vl-8b"
+  },
+  "featured": {
+    "general": [
+      "qwen3-30b-a3b",
+      "qwen3-14b",
+      "qwen3-8b",
+      "qwen3-4b"
+    ],
+    "coding": [
+      "qwen3-coder-30b",
+      "qwen2.5-coder-14b",
+      "qwen2.5-coder-7b"
+    ],
+    "reasoning": [
+      "qwen3-30b-a3b-thinking",
+      "phi-4-reasoning-plus",
+      "deepseek-r1-qwen3-8b"
+    ],
+    "vision": [
+      "gemma-3-27b",
+      "qwen3-vl-8b",
+      "gemma-3-12b",
+      "qwen3-vl-4b"
+    ],
+    "open": [
+      "qwen3-30b-a3b-uncensored",
+      "qwen3-14b-uncensored",
+      "qwen3-8b-uncensored",
+      "dolphin-3-mistral-24b",
+      "hermes-4-14b",
+      "rocinante-12b"
+    ]
+  },
+  "ladders": {},
+  "liquid": {
+    "brain": "qwen3-4b",
+    "eyes": "qwen3-vl-2b"
+  },
+  "recipes": []
+}
