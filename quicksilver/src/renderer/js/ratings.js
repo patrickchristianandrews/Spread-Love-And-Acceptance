@@ -1,10 +1,19 @@
 // Scores and ratings shown on models, stacks and cloud AIs.
 // Tested scores: percent right on four well-known tests (see shared/catalog.js), so people can
 // compare models in one glance. Create ratings: how good the photos, videos and music are, out of 5.
+// Each key is a well-known public test; a chip shows only when that score exists for the model, so
+// the feed can fill in as many or as few as it has. Percentages are the share of questions right
+// (for Elo, a 0–100 scaling of head-to-head human votes).
 const SCORE_KEYS = [
   ['math', '🧮', 'Maths', 'Hard maths: AIME 2025 competition problems'],
   ['science', '🔬', 'Science', 'Expert science: GPQA Diamond, PhD-level questions'],
-  ['coding', '💻', 'Coding', 'Coding: LiveCodeBench programming problems'],
+  ['knowledge', '📚', 'Knowledge', 'Broad knowledge: MMLU-Pro'],
+  ['coding', '💻', 'Coding', 'Coding problems: LiveCodeBench'],
+  ['codeAgent', '🛠️', 'Real coding', 'Fixing real software issues: SWE-bench Verified'],
+  ['ifeval', '📋', 'Follows instructions', 'Doing exactly what was asked: IFEval'],
+  ['tools', '🔌', 'Tool use', 'Using tools and connectors correctly: function-calling (BFCL)'],
+  ['writing', '✍️', 'Writing', 'Natural, creative writing: EQ-Bench Creative Writing'],
+  ['elo', '🏆', 'People prefer', 'Human preference from head-to-head votes, scaled to 0–100 (arena-style)'],
 ];
 // The tested scores for a catalog model (or an installed one, by its catalogId). Uncensored versions
 // use the scores of the model they're made from, and say so.

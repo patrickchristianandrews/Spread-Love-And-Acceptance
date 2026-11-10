@@ -1,5 +1,5 @@
 {
-"_about":"Percent right: math = AIME 2025, science = GPQA Diamond, knowledge = MMLU-Pro, coding = LiveCodeBench. src aa = Artificial Analysis (artificialanalysis.ai, independent, Nov 2026); maker = the model's own card. Hybrid Qwen3 models are scored in thinking mode; gpt-oss at high effort. 2026 cloud flagships are only tested on GPQA Diamond.",
+"_about":"Percent right on well-known public tests (each key optional; a model shows only the ones it has): math = AIME 2025, science = GPQA Diamond, knowledge = MMLU-Pro, coding = LiveCodeBench, codeAgent = SWE-bench Verified (fixing real software issues), ifeval = IFEval (instruction following), tools = BFCL (tool/function calling), writing = EQ-Bench Creative Writing, elo = head-to-head human-preference votes scaled to 0-100 (arena-style). src aa = independent testing (run the same way for every model, Nov 2026); maker = the model's own card. Routing prefers the task-specific test per job (codeAgent/coding for code, science/math for reasoning, writing for writing, ifeval/elo for general). Hybrid Qwen3 models scored in thinking mode; gpt-oss at high effort. These values can be corrected or extended by the online picks feed.",
 "local":{
 "qwen3-1.7b":{
 "math":39,

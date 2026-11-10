@@ -64,7 +64,7 @@ function clean(j) {
     for (const [id, v] of Object.entries(src).slice(0, 200)) {
       if (!/^[a-z0-9][\w.-]{0,80}$/i.test(id) || !v || typeof v !== 'object') continue;
       const e = {};
-      for (const k of ['math', 'science', 'knowledge', 'coding']) if (k in v) { const n = pct(v[k]); if (n !== undefined) e[k] = n == null ? null : Math.round(n); }
+      for (const k of ['math', 'science', 'knowledge', 'coding', 'codeAgent', 'ifeval', 'tools', 'writing', 'elo']) if (k in v) { const n = pct(v[k]); if (n !== undefined) e[k] = n == null ? null : Math.round(n); }
       if (Object.keys(e).length) scores[side][id] = { ...e, ...(str(v.model, 80) ? { model: str(v.model, 80) } : {}), src: v.src === 'maker' ? 'maker' : 'aa' };
     }
   }
