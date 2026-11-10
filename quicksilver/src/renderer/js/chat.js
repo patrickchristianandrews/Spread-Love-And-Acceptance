@@ -45,7 +45,7 @@ views.chat = {
         <div class="pickers">
           <label class="pill-select" title="Assistant"><span class="pill-emoji">${esc(a.emoji)}</span><select id="pick-assistant" aria-label="Assistant">${S.data.assistants.map((x) => `<option value="${x.id}" ${x.id === a.id ? 'selected' : ''}>${esc(x.name)}</option>`).join('')}</select>${icon('chevron', 16)}</label>
           <label class="pill-select" title="Model or team">${icon(target.startsWith('stack:') ? 'layers' : 'cpu', 16)}<select id="pick-model" aria-label="Model or team">${!a.target && S.data.prefs.autoRoute !== false && S.targets.length > 1 ? `<option value="__auto" ${autoOn(chat, a) ? 'selected' : ''}>✨ Automatic</option>` : ''}${S.targets.length ? targetOptions(autoOn(chat, a) ? '' : target) : '<option value="">No models yet</option>'}<option value="__infuse">⚗️ Build a custom AI…</option><option value="__get">＋ Get more models…</option></select>${icon('chevron', 16)}</label>
-          <button class="net-pill ${S.config?.offline ? 'off' : ''}" id="net-pill" role="switch" aria-checked="${!S.config?.offline}" title="${S.config?.offline ? 'Offline: nothing leaves this PC. Click to go online.' : 'Online: web search, cloud AIs and downloads are available. Click to go offline.'}"><span class="net-dot"></span><span>${S.config?.offline ? 'Offline' : 'Online'}</span><span class="net-sw"><i></i></span></button>
+          <button class="net-pill ${S.config?.offline ? 'off' : ''}" id="net-pill" role="switch" aria-checked="${!S.config?.offline}" title="${S.config?.offline ? 'Offline: nothing leaves this PC, so web search is off. Click to go online.' : 'Online: web search is on for questions that need it, and cloud AIs and downloads are available. Click to go offline.'}"><span class="net-dot"></span><span>${S.config?.offline ? 'Offline' : 'Online'}</span><span class="net-sw"><i></i></span></button>
         </div>
         <div class="chat-title" title="${esc(chat.title)}">${sessionBadgeHTML(target)}${projectChipHTML(chat)}${chat.private ? '<span class="priv-chip" title="Private chat: memory is not used or added">🔒 Private</span>' : ''}<span class="ct">${chat.messages.length && chat.title !== 'New chat' ? esc(chat.title) : ''}</span></div>
         <button class="run-state" id="run-state" hidden aria-label="How the model is running"></button>
@@ -68,7 +68,7 @@ views.chat = {
             <button class="icon-btn mic-btn ${voiceRec?.chatId === chat.id ? 'rec' : ''}" id="mic-btn" title="Voice typing: click and speak (Ctrl+Space)" aria-label="Voice typing">${icon('mic')}</button>
             <span class="bar-sep"></span>
             ${chip('tog-lib', 'book', 'Library', lib, 'Search your knowledge bases and cite them')}
-            ${S.config?.offline ? `<span class="chip-tog" title="Offline: switch to Online in the sidebar to search the web" style="opacity:.5">${icon('globe', 16)}<span>Web (offline)</span></span>` : chip('tog-web', 'globe', 'Web', web, 'Search the web and cite sources')}
+            ${webStateHTML()}
             ${chip('tog-fact', 'shield', 'Double-check', fact, 'After each answer, a second model checks it claim by claim')}
             <label class="pill-select small" title="Answer length: Best length fits the question; Quick answer gets straight to the point; Detailed answer gives the full picture, with explanation and examples">${icon('doc', 16)}<select id="pick-length" aria-label="Answer length">${Object.entries(LENGTHS).map(([k, l]) => `<option value="${k}" ${k === lengthOf(chat) ? 'selected' : ''}>${l.label}</option>`).join('')}</select>${icon('chevron', 14)}</label>
             <label class="pill-select small" title="How much effort goes into each answer. Fast: one model, quickest. Balanced: one model, then a self-check. Smart (recommended): fast on everyday messages, the whole team only on hard ones. Deep: three AIs work it out together — slower, for big questions. See ⓘ What do these do?">${icon('gauge', 16)}<span class="small muted" style="margin:0 2px">Effort:</span><select id="pick-effort" aria-label="Effort">${Object.entries(EFFORTS).map(([k, e]) => `<option value="${k}" ${k === effortOf(chat, a) ? 'selected' : ''}>${e.replace(/^\S+\s/, '')}</option>`).join('')}</select>${icon('chevron', 14)}</label>
@@ -382,11 +382,6 @@ function bindChat() {
     if (tip) toastAction(tip, 'How?', () => boostModal(chat.target), 9000);
   });
   $('#tog-lib').addEventListener('click', () => { chat.library = !(chat.library ?? a.library); save(); render(); });
-  $('#tog-web')?.addEventListener('click', () => {
-    const next = !(chat.web ?? a.web);
-    if (next && S.config?.web?.provider === 'none') toast('Turn on a web search service in Settings → Web search first.');
-    chat.web = next; save(); render();
-  });
   $('#pick-effort').addEventListener('change', (e) => { chat.effort = e.target.value; save(); render(); if (EFFORT_WHY[e.target.value]) toast(`${EFFORTS[e.target.value]}: ${EFFORT_WHY[e.target.value]}`, 7000); });
   $('#pick-length').addEventListener('change', (e) => { chat.length = e.target.value; S.data.prefs.answerLength = e.target.value; save(); toast(LENGTHS[e.target.value].toast); });
   $('#tog-fact').addEventListener('click', () => { chat.factCheck = !factOn(chat, a); save(); render(); });
@@ -547,10 +542,17 @@ function userContent(m, docBudget) {
 const FRESH_Q = /\b(latest|most recent|newest|up[- ]to[- ]date|right now|at the moment|this (week|month|year)|news|headlines?|breaking|stock (price|market)|share price|exchange rate|crypto|bitcoin|weather|forecast|who won|final score|release dates?|out yet|released yet|as of 20\d\d|in 20(2[6-9]|[3-9]\d))\b/i;
 // A calculation, a creative or build request, or a how-to is about the user's own work, not the news.
 const NOT_FRESH = /\d\s*[-+*/^×÷%]\s*\d|\b(write|draft|create|build|make|design|generate|code|refactor|debug|explain|summar|translate|rewrite|compose|story|poem|lyrics|essay|email|script|app|website|function)\b/i;
+// The composer's web status: read-only. Web search is controlled by the Online/Offline switch at the
+// top of the chat, so this just says what that switch is doing right now.
+function webStateHTML() {
+  const off = Boolean(S.config?.offline);
+  const title = off ? 'Web search is off because Quicksilver is offline. Use the Online/Offline switch at the top of the chat to go online.' : 'Web search follows the Online/Offline switch at the top of the chat: when you are online, questions about current things are searched on the web and cited.';
+  return `<span class="web-state ${off ? 'off' : 'on'}" title="${title}">${icon('globe', 15)}<span>${off ? 'Web search off (offline)' : 'Web search on · follows Online'}</span></span>`;
+}
 function webWanted(chat, a, query, force = {}) {
   if (!query || S.config?.web?.provider === 'none' || S.config?.offline) return '';
-  if (force.web || (chat.web ?? a.web)) return 'on';
-  return chat.web !== false && S.data.prefs.autoWeb !== false && FRESH_Q.test(query) && !NOT_FRESH.test(query) ? 'auto' : '';
+  if (force.web || a.web) return 'on';
+  return S.data.prefs.autoWeb !== false && FRESH_Q.test(query) && !NOT_FRESH.test(query) ? 'auto' : '';
 }
 
 async function gatherSources(chat, a, query, force = {}) {

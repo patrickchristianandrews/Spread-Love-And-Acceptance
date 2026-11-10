@@ -104,7 +104,6 @@ function composerOptions(chat, anchor) {
     <button data-o="file-in">${icon('clip', 16)} Attach a file (photo, PDF, Word…)</button>
     <button data-o="skill-pop">${icon('zap', 16)} Use a skill…</button>
     <div class="menu-sep"></div>
-    <button data-o="tog-web" ${S.config?.offline ? 'disabled title="Go online to search the web"' : ''}>${icon('globe', 16)} Search the web<span class="grow"></span>${on('tog-web') ? icon('check', 15) : ''}</button>
     <button data-o="tog-lib">${icon('book', 16)} Use my library<span class="grow"></span>${on('tog-lib') ? icon('check', 15) : ''}</button>
     <button data-o="tog-fact">${icon('shield', 16)} Double-check answers<span class="grow"></span>${on('tog-fact') ? icon('check', 15) : ''}</button>
     <button data-o="tog-tools">${icon('plug', 16)} Use my connected apps<span class="grow"></span>${on('tog-tools') ? icon('check', 15) : ''}</button>
