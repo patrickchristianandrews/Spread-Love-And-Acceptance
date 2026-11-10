@@ -653,6 +653,12 @@ async function diagnostics() {
   lines.push('## Recent errors', ...(recentErrors.length ? recentErrors : ['none']));
   return lines.join('\n');
 }
+handle('disk:info', () => {
+  try {
+    const s = fs.statfsSync(store.dir('models'));
+    return { freeBytes: s.bfree * s.bsize, totalBytes: s.blocks * s.bsize, modelsBytes: models.list().reduce((t, m) => t + (m.size || 0), 0) };
+  } catch { return null; }
+});
 handle('diag:text', () => diagnostics());
 handle('diag:save', async () => {
   const r = await dialog.showSaveDialog(win, { defaultPath: `Quicksilver-diagnostics-${new Date().toISOString().slice(0, 10)}.txt`, filters: [{ name: 'Text', extensions: ['txt'] }] });

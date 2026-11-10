@@ -7,10 +7,15 @@ const ADV_PARTS = [['phone', '📱 Use from your phone'], ['api', '🔌 API serv
 function advancedHTML() {
   const parts = { phone: phoneSetHTML, api: apiSrvHTML, engines: enginesHTML };
   return `<p class="help" style="margin-top:0">Settings most people never need: using Quicksilver from your phone, letting other apps use your models, and the engines that run them.</p>
-    ${ADV_PARTS.map(([k, title]) => `<section class="card adv-sec" id="adv-${k}"><h2 style="margin-top:0">${title}</h2>${parts[k]()}</section>`).join('')}`;
+    ${ADV_PARTS.map(([k, title]) => `<section class="card adv-sec" id="adv-${k}"><h2 style="margin-top:0">${title}</h2>${parts[k]()}</section>`).join('')}
+    <section class="card adv-sec" id="adv-diag"><h2 style="margin-top:0">🩺 Diagnostics</h2>
+      <p class="small muted" style="font-weight:600;margin-top:0">A text report of this PC's specs, your engines and models, settings and recent errors — for fixing problems or filing a bug. It never includes your chats, files or keys.</p>
+      <div class="row"><button class="btn" id="diag-copy">Copy diagnostics</button><button class="btn" id="diag-save">Save as a file…</button></div></section>`;
 }
 function bindAdvanced() {
   bindPhoneSet(); bindApiSrv(); bindEngines();
+  $('#diag-copy')?.addEventListener('click', async () => { try { await navigator.clipboard.writeText(await qs.call('diag:text')); toast('Diagnostics copied to the clipboard.'); } catch { toast('Could not copy; use "Save as a file" instead.', 6000); } });
+  $('#diag-save')?.addEventListener('click', async () => { try { if (await qs.call('diag:save')) toast('Diagnostics saved.'); } catch (err) { toast(err.message, 6000); } });
   if (advFocus) { const f = advFocus; advFocus = ''; setTimeout(() => $(`#adv-${f}`)?.scrollIntoView({ block: 'start' }), 30); }
 }
 let engineInfo = null;

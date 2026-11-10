@@ -156,7 +156,7 @@ const TIPS_GUIDE = [
 ];
 
 const SCORES_GUIDE = [
-  ['What the percentages are', 'Each model\'s score on three well-known tests: the share of questions it got right. They\'re the same tests for every model, so you can compare them at a glance. The scores come from Artificial Analysis, which tests every model the same way; makers\' own figures are often a little higher. A few models only have the maker\'s figures (hover the label to see which).'],
+  ['What the percentages are', 'Each model\'s score on three well-known tests: the share of questions it got right. They\'re the same tests for every model, so you can compare them at a glance. The scores come from independent testing that runs every model the same way; makers\' own figures are often a little higher. A few models only have the maker\'s figures (hover the label to see which).'],
   ['🧮 Maths', 'AIME 2025: competition maths problems that take many steps. Very hard: a score above 50% is excellent for a model that runs on a PC.'],
   ['🔬 Science', 'GPQA Diamond: PhD-level biology, physics and chemistry questions. Experts score about 65% in their own field.'],
   ['💻 Coding', 'LiveCodeBench: fresh programming problems the model can\'t have seen in training.'],
