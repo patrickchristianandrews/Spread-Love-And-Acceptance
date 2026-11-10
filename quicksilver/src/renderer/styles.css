@@ -1505,3 +1505,7 @@ code.sel { user-select: all; background: var(--soft); padding: 1px 6px; border-r
 .toast .toast-x { flex: none; margin-left: 4px; width: 24px; height: 24px; display: grid; place-items: center; border: 0; border-radius: 999px; background: color-mix(in srgb, var(--toast-ink, #fff) 14%, transparent); color: var(--toast-ink); font-size: .8rem; line-height: 1; cursor: pointer; opacity: .8; }
 .toast .toast-x:hover { opacity: 1; background: color-mix(in srgb, var(--toast-ink, #fff) 26%, transparent); }
 .toast > span { flex: 1 1 auto; }
+
+/* Composer web status: read-only, follows the Online/Offline switch at the top of the chat. */
+.web-state { display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px; border-radius: 999px; font-size: .8rem; font-weight: 650; white-space: nowrap; background: color-mix(in srgb, #2fa36b 14%, transparent); color: var(--fg, inherit); border: 1px solid color-mix(in srgb, #2fa36b 35%, transparent); cursor: default; }
+.web-state.off { background: color-mix(in srgb, #8a8f98 14%, transparent); border-color: color-mix(in srgb, #8a8f98 35%, transparent); }

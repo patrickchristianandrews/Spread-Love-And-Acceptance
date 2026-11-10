@@ -305,7 +305,7 @@ function redPng(size = 64) {
   await win.locator('[data-act="down"]').last().click();
   assert.match(await win.evaluate(() => JSON.stringify(S.data.learn)), /"up":0,"down":1/, 'switching the vote moves it, not doubles it');
   assert.ok(await win.evaluate(() => webWanted({}, {}, 'What is the latest NHS guidance on blood pressure?') !== '' || S.config?.web?.provider === 'none' || S.config?.offline), 'current questions search the web automatically');
-  assert.equal(await win.evaluate(() => webWanted({ web: false }, {}, 'latest news today')), '', 'not when web search is off for the chat');
+  assert.equal(await win.evaluate(() => { const was = S.config.offline; S.config.offline = true; const r = webWanted({}, {}, 'latest news today'); S.config.offline = was; return r; }), '', 'offline: web search never runs, whatever the chat says');
   if ((await win.getAttribute('#tog-fact', 'aria-pressed')) !== 'true') await win.click('#tog-fact');
   await win.fill('#input', 'WRONGFACT what colour is the sky?');
   await win.keyboard.press('Enter');
@@ -328,9 +328,11 @@ function redPng(size = 64) {
   await win.click('[data-nav="newchat"]');
   await win.evaluate(() => { S.data.prefs.autoWeb = false; });
   await win.fill('#input', "What's the latest news about the election?");
-  await win.waitForSelector('#hint-row .hint-go:has-text("Turn on web search")');
-  await win.click('#hint-row .hint-go:has-text("Turn on web search")');
-  await win.waitForFunction(() => chatById(S.route.id).web === true);
+  await win.evaluate(() => { S.data.prefs.autoWeb = false; });
+  await win.fill('#input', "What's the latest news about the election?");
+  await win.waitForSelector('#hint-row .hint-go:has-text("Turn on automatic web search")');
+  await win.click('#hint-row .hint-go:has-text("Turn on automatic web search")');
+  await win.waitForFunction(() => S.data.prefs.autoWeb === true);
   assert.equal(await win.inputValue('#input'), "What's the latest news about the election?", 'the message is kept');
   await win.evaluate(() => { S.data.prefs.autoWeb = true; });
   await win.fill('#input', 'Write a dark horror story with graphic violence');
@@ -978,7 +980,7 @@ function redPng(size = 64) {
   await win.click('#net-pill');
   await win.waitForSelector('#net-toggle.off');
   await win.waitForSelector('#net-pill.off');
-  await win.waitForSelector('text=Web (offline)');
+  await win.waitForSelector('.web-state.off');
   await shot(win, '14-offline');
   await win.click('#net-toggle');
   await win.waitForSelector('#net-toggle:not(.off)');
@@ -1490,7 +1492,7 @@ function redPng(size = 64) {
   await win.click('[data-nav="newchat"]');
   // Everything is findable: the menu shows Stacks, Models, Upgrades… and the chat options are in the bar.
   for (const v of ['stacks', 'models', 'upgrades', 'assistants', 'skills', 'integrations']) assert.ok(await win.isVisible(`.nav [data-nav="${v}"]`), `${v} is in the menu`);
-  assert.ok(await win.isVisible('#tog-web') && await win.isVisible('#tog-fact') && await win.isVisible('#pick-effort'), 'chat options are in the message bar');
+  assert.ok(await win.isVisible('.web-state') && await win.isVisible('#tog-fact') && await win.isVisible('#pick-effort'), 'chat options are in the message bar');
   // A tidy menu: no list of stacks; the Explore pages fold into one section.
   assert.equal(await win.locator('#side-stacks').count(), 0, 'stacks are not listed in the menu');
   await win.click('#nav-explore');

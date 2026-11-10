@@ -69,7 +69,7 @@ function composerHints(chat, a, text, attachments = []) {
   // Something current: the web makes it right.
   if (FRESH_Q.test(t) && !NOT_FRESH.test(t) && !webWanted(chat, a, t)) {
     if (S.config?.offline) add({ id: 'web', icon: '🌐', label: 'Go online to check the web', why: 'This is about something current, and you are offline.', act: { online: true } });
-    else if (S.config?.web?.provider !== 'none') add({ id: 'web', icon: '🌐', label: 'Turn on web search', why: 'This is about something current, so an up-to-date search will make the answer right.', act: { web: true } });
+    else if (S.config?.web?.provider !== 'none' && S.data.prefs.autoWeb === false) add({ id: 'web', icon: '🌐', label: 'Turn on automatic web search', why: 'You are online, but automatic web search is off. Turning it on lets current questions be searched and cited.', act: { autoWeb: true } });
   }
   // An app it mentions.
   for (const [re, ids] of APP_Q) {
@@ -125,7 +125,7 @@ function applyHint(chat, h) {
     if (uncensoredBlocked(x.use)) { askUnlock().then((ok) => { if (ok) { chat.target = x.use; save(); render(); toast(`This chat now uses ${targetLabel(x.use)}.`); } }); return; }
     chat.target = x.use; save(); render(); toast(`This chat now uses ${targetLabel(x.use)}.`); return;
   }
-  if (x.web) { chat.web = true; save(); render(); toast('Web search is on for this chat.'); return; }
+  if (x.autoWeb) { S.data.prefs.autoWeb = true; save(); render(); toast('Automatic web search is on while you are online.'); return; }
   if (x.online) { $('#net-pill')?.click(); return; }
   if (x.tools) { chat.tools = true; save(); render(); toast('Connected apps are on for this chat.'); return; }
   if (x.library) { chat.library = true; save(); render(); toast('Your Library is searched for this chat.'); return; }

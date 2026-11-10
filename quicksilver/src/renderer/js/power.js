@@ -213,7 +213,7 @@ function paletteItems() {
       [`This chat: ${chat.private ? 'use memory again' : 'make private (no memory)'}`, '', () => { chat.private = !chat.private; save(); render(); }],
       ['This chat: move to a project', '', () => moveToProject(chat)],
       ['This chat: continue in a fresh chat (with a summary)', '', () => freshFromSummary(chat)],
-      [`Turn web search ${(chat.web ?? a.web) ? 'off' : 'on'}`, '', () => { chat.web = !(chat.web ?? a.web); save(); render(); }],
+      [S.config?.offline ? 'Go online (web search follows)' : 'Go offline (no web search)', '', () => $('#net-pill')?.click()],
       [`Turn double-checking ${factOn(chat, a) ? 'off' : 'on'}`, '', () => { chat.factCheck = !factOn(chat, a); save(); render(); }],
       ['Voice typing', 'Ctrl Space', () => toggleVoice(chat)],
       ...S.targets.filter((t) => !t.target.startsWith('kb:')).map((t) => [`Use model: ${t.label}`, '', () => { chat.target = t.target; save(); render(); }]),
