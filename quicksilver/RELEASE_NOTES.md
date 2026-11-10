@@ -1,9 +1,26 @@
-### Downloads
+### Download
 
-- **Quicksilver-Setup-2.18.0.exe** — the installer (about 1.9 GB). Quicksilver Liquid Edition, uncensored, with the 2B model built in; the 4B Brain downloads by itself in the background the first time you run it.
-- **Quicksilver-Liquid-Edition-full-offline-2.18.0.zip** — the same installer plus the 4B Brain already inside, so it installs fully offline with nothing to download on first run. Unzip, then run the setup file next to the "Quicksilver models" folder.
+**Quicksilver-Setup-2.18.0.exe** — the installer (about 1.9 GB), below, with a matching `.sha256` to check it. This is the full Quicksilver Liquid Edition, uncensored, with the 2B model built in; the 4B Brain downloads by itself in the background the first time you run it. (A fully-offline package with the 4B already inside — about 5 GB — is built with every release but is too large for a GitHub release file, so it lives as a build artifact on the [Actions run](https://github.com/patrickchristianandrews/Spread-Love-And-Acceptance/actions/workflows/quicksilver-windows.yml); a GitHub sign-in is needed to download it.)
 
-Each download has a matching `.sha256` to check it after downloading.
+## What's inside
+
+**The AI in the box — uncensored, runs on your PC:**
+
+- **Qwen3.5 4B — the Brain** (uncensored/abliterated): reasons step by step on hard questions, reads photos.
+- **Qwen3.5 2B — the fast helper** (uncensored/abliterated): quick on any PC, sees photos, speeds the 4B up. Built into the installer.
+- **Nomic Embed v1.5 — Smarter search**: finds things in Memory and your Library by meaning.
+- **Engines:** llama.cpp (text + vision), stable-diffusion.cpp (pictures), whisper.cpp (voice typing).
+
+**Everything it can do:**
+
+- **Private by design** — answers offline; fully private / Proton-VPN private / online, shown on every chat; uncensored by default with an optional parental-lock PIN.
+- **Smarter answers** — Automatic model choice, ~78 AI Teams, a Fusion builder with a model/API suggester, Double-check that corrects its own maths and facts, and learning from your 👍/👎.
+- **Knows what you need** — Memory (Mem0-style, on by default, found by meaning), your Library (cited answers from your files and sites), and web search with no key.
+- **Create** — pictures, video and music on your PC or in the cloud; **free with Pollinations (no key, no account)**, paid services for top quality, Venice for uncensored pictures, plus a GIF maker and video editing.
+- **Gets things done** — Skills (find-a-product-from-a-photo, vibe-hacking, charts), Connectors (GitHub, Slack, Google…), CPA/CIA exam coaches, a document editor and projects.
+- **Everyday** — voice typing and read-aloud, use from your phone, Compare models, a Your-PC advisor with upgrade costs, and automatic updates that keep your big models.
+
+All of this is also listed in the app under **Settings → What's inside**.
 
 ## What's new in Quicksilver 2.18
 

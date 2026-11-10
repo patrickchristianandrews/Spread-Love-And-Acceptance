@@ -65,6 +65,7 @@ handle('apiserver:status', () => apiserver.status());
 
 // ---------- voice typing, phone access, updates ----------
 handle('voice:status', () => whisper.status());
+handle('app:version', () => app.getVersion());
 handle('voice:setup', () => whisper.setup((p) => emit('app:event', { kind: 'voice:progress', ...p })));
 handle('voice:transcribe', (bytes, opts) => whisper.transcribe(bytes, opts));
 handle('phone:info', () => phone.info());

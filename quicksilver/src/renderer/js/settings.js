@@ -20,15 +20,15 @@ views.settings = {
   html() {
     // Phone, API server and Engines are rarely needed, so they share one Advanced tab.
     if (ADV_PARTS.some(([k]) => k === setTab)) { advFocus = setTab; setTab = 'advanced'; }
-    const tabs = { general: 'General', features: 'Features', guide: 'Guide & tips', chat: 'Chat & accuracy', memory: 'Memory', voice: 'Voice', web: 'Web search', accounts: 'Accounts', advanced: 'Advanced' };
+    const tabs = { general: 'General', features: 'Features', guide: 'Guide & tips', chat: 'Chat & accuracy', memory: 'Memory', voice: 'Voice', web: 'Web search', accounts: 'Accounts', advanced: 'Advanced', about: "What's inside" };
     const adv = new Set(['web', 'accounts', 'advanced']);
     return `<div class="page"><div class="page-head"><h1>Settings</h1></div>
       <div class="tabs">${Object.entries(tabs).filter(([k]) => !simpleOn() || !adv.has(k) || setTab === k).map(([k, l]) => `<button class="tab ${setTab === k ? 'active' : ''}" data-set-tab="${k}">${l}</button>`).join('')}</div>
-      <div style="max-width:860px">${({ general: generalHTML, guide: guidePageHTML, chat: chatSetHTML, memory: memSetHTML, voice: voiceSetHTML, web: webHTML, accounts: accountsHTML, advanced: advancedHTML, features: featuresHTML })[setTab]()}</div></div>`;
+      <div style="max-width:860px">${({ general: generalHTML, guide: guidePageHTML, chat: chatSetHTML, memory: memSetHTML, voice: voiceSetHTML, web: webHTML, accounts: accountsHTML, advanced: advancedHTML, features: featuresHTML, about: aboutHTML })[setTab]()}</div></div>`;
   },
   bind() {
     $$('[data-set-tab]').forEach((b) => b.addEventListener('click', () => { setTab = b.dataset.setTab; render(); }));
-    ({ general: bindGeneral, guide: bindGuidePage, chat: bindChatSet, memory: bindMemSet, voice: bindVoiceSet, web: bindWeb, accounts: bindAccounts, advanced: bindAdvanced, features: bindFeatures })[setTab]();
+    ({ general: bindGeneral, guide: bindGuidePage, chat: bindChatSet, memory: bindMemSet, voice: bindVoiceSet, web: bindWeb, accounts: bindAccounts, advanced: bindAdvanced, features: bindFeatures, about: bindAbout })[setTab]();
   },
 };
 
