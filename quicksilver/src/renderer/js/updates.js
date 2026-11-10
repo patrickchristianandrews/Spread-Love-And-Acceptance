@@ -57,12 +57,15 @@ function stackUpdates() {
 function quicksilverBoost() {
   const st = (S.stacks || []).find((x) => x.id === 'quicksilver');
   if (!st || st.autoManaged === false || !S.est?.text) return null;
-  // A newer core for the Liquid Edition (named in the online picks): suggested first.
+  // A newer core for the Liquid Edition (named in the online picks): suggested first. The Liquid
+  // Edition is completely uncensored, so a replacement is only ever offered when it is itself
+  // uncensored — a filtered model (even one the feed names) is never suggested or called uncensored.
+  const openOk = (c) => c && (c.category === 'open' || c.open || /abliterat|uncensor|unfiltered|dolphin|hermes|lexi|rocinante/i.test(`${c.name || ''} ${c.repo || ''}`));
   const core = S.catalog.picks?.liquid || {};
   for (const [role, label] of [['brain', 'Brain'], ['eyes', 'Eyes & Muse']]) {
     const id = core[role];
     const c = id && catModel(id);
-    if (!c || haveModel(id) || !['great', 'good'].includes(S.est.text[id]?.rating)) continue;
+    if (!c || !openOk(c) || haveModel(id) || !['great', 'good'].includes(S.est.text[id]?.rating)) continue;
     const now = S.installed.find((m) => m.source === 'bundled' && (role === 'brain' ? m.id === 'starter-brain' : m.id === 'starter'));
     if (now?.catalogId === id) continue;
     return { quicksilver: true, core: role, name: 'Quicksilver Liquid Edition: new ' + label, emoji: '💧', models: [{ id, name: c.name, from: now?.name || 'the built-in one', fromId: now?.catalogId }], why: `a newer, better uncensored ${label} for the Liquid Edition, ${c.sizeGB} GB, runs well on this PC` };

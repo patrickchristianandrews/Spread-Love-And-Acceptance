@@ -33,24 +33,25 @@ function ago(t) {
   return new Date(t).toLocaleDateString();
 }
 
-function toast(msg, ms = 3600) {
+// A small message at the bottom. It always has an ✕ to dismiss it, and it pauses its countdown while
+// the pointer is over it, so nothing disappears before it's been read.
+function showToast(inner, ms, onAction) {
   const t = $('#toast');
-  t.textContent = msg;
+  t.innerHTML = `${inner}<button class="toast-x" aria-label="Dismiss" title="Dismiss">✕</button>`;
   t.hidden = false;
   t.classList.remove('toast-in'); void t.offsetWidth; t.classList.add('toast-in');
-  clearTimeout(toast._t);
-  toast._t = setTimeout(() => { t.hidden = true; }, ms);
+  const close = () => { t.classList.remove('toast-in'); t.hidden = true; clearTimeout(toast._t); };
+  let left = ms; let since = Date.now();
+  const arm = () => { clearTimeout(toast._t); since = Date.now(); toast._t = setTimeout(close, left); };
+  t.onmouseenter = () => { clearTimeout(toast._t); left -= Date.now() - since; };
+  t.onmouseleave = arm;
+  t.querySelector('.toast-x').onclick = close;
+  const act = t.querySelector('.toast-act');
+  if (act && onAction) act.onclick = () => { close(); onAction(); };
+  arm();
 }
-
-function toastAction(msg, label, fn, ms = 7000) {
-  const t = $('#toast');
-  t.innerHTML = `<span>${esc(msg)}</span> <button class="toast-act">${esc(label)}</button>`;
-  t.hidden = false;
-  t.classList.remove('toast-in'); void t.offsetWidth; t.classList.add('toast-in');
-  t.querySelector('.toast-act').onclick = () => { t.hidden = true; clearTimeout(toast._t); fn(); };
-  clearTimeout(toast._t);
-  toast._t = setTimeout(() => { t.hidden = true; }, ms);
-}
+function toast(msg, ms = 5000) { showToast(`<span>${esc(msg)}</span>`, ms); }
+function toastAction(msg, label, fn, ms = 9000) { showToast(`<span>${esc(msg)}</span> <button class="toast-act">${esc(label)}</button>`, ms, fn); }
 
 async function call(ch, ...args) {
   try { return await qs.call(ch, ...args); } catch (err) { toast(err.message, 6000); throw err; }
