@@ -102,7 +102,8 @@ function mediaModelOptions(kinds, filter = () => true) {
 
 function suggestHTML(category, title) {
   const list = S.catalog.media.filter((m) => m.category === category).map((m) => ({ m, e: S.est?.media[m.id] })).sort((a, b) => ({ great: 0, good: 1, ok: 2, slow: 3, wont: 4 }[a.e?.rating] ?? 5) - ({ great: 0, good: 1, ok: 2, slow: 3, wont: 4 }[b.e?.rating] ?? 5));
-  return `<div class="notice info" style="margin-bottom:14px"><b>${esc(title)}</b> Download one below; ratings show how fast each runs on your PC. You can also connect an image API (OpenAI, Together) under Models → Connect an API.</div>
+  const freeCloud = category === 'image' ? `<div class="notice" style="margin-bottom:14px;background:color-mix(in srgb,var(--accent,#5b8cff) 10%,transparent)"><b>🖼️ Make a picture free right now — no download, no key.</b> Pollinations creates pictures in the cloud with no account at all. To run pictures privately on this PC instead, download a model below (ratings show the speed on your PC). <div style="margin-top:8px"><button class="btn small primary" data-stab="cloud">Make a free cloud picture</button></div></div>` : '';
+  return `${freeCloud}<div class="notice info" style="margin-bottom:14px"><b>${esc(title)}</b> Download one below; ratings show how fast each runs on your PC. You can also connect an image API (OpenAI, Together) under Models → Connect an API.</div>
     <div class="cards">${list.map(({ m, e }) => `<div class="card"><div class="row"><h3 class="grow">${esc(m.name)}</h3><b class="small">${m.sizeGB.toFixed(1)} GB</b></div><p class="desc">${esc(m.blurb)}</p><div class="row" style="margin-bottom:10px">${rateBadge(e, 'media')}</div>${S.downloads[m.id] ? downloadBox(m.id) : S.installed.some((x) => x.catalogId === m.id) ? '<span class="badge b-mint">✓ Installed</span>' : `<button class="btn small primary" data-get="${m.id}">Download</button>`}</div>`).join('')}</div>`;
 }
 

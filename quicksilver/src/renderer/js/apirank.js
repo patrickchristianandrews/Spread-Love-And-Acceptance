@@ -72,13 +72,26 @@ function bindApiRank() {
 // them apart. Here we score each one for the kind of question using the rankings above, so when
 // several cloud AIs are connected Quicksilver uses the one that's actually best for the task.
 const JOB_TO_RANK = { coding: 'coding', reasoning: 'reasoning', writing: 'writing', research: 'research', office: 'chat', general: 'chat' };
+// Which measured test (from the catalog's refreshed cloud scores) genuinely reflects a kind of
+// question. Only coding and reasoning have a benchmark that maps cleanly; writing, research, office
+// and chat don't, so they keep the curated table rather than being skewed by a science score.
+const JOB_METRIC = { coding: 'coding', reasoning: 'science' };
 const apiPreset = (target) => (S.providers || []).find((p) => p.id === String(target).split(':')[1])?.preset || '';
 function apiScore(target, job) {
-  const row = API_RANK.find((r) => r[0] && r[0] === apiPreset(target));
-  if (!row) return 8; // a custom or unlisted service: treat as solidly capable
+  const preset = apiPreset(target);
+  const row = API_RANK.find((r) => r[0] && r[0] === preset);
   const want = JOB_TO_RANK[job] || 'chat';
-  const fits = row[2].includes(want) || (want === 'chat' && (row[2].includes('reasoning') || row[2].includes('coding')));
-  return row[6] - (fits ? 0 : 1.2); // its quality, nudged down a little when this isn't a listed strength
+  let q = 8; // a custom or unlisted service: treat as solidly capable
+  if (row) {
+    const fits = row[2].includes(want) || (want === 'chat' && (row[2].includes('reasoning') || row[2].includes('coding')));
+    q = row[6] - (fits ? 0 : 1.2); // its quality, nudged down a little when this isn't a listed strength
+  }
+  // Blend in the catalog's freshly-measured test scores when we have them, so the pick tracks how the
+  // service performs now rather than only the built-in table (which can go stale between releases).
+  const sc = JOB_METRIC[job] && (typeof cloudScoresFor === 'function') ? cloudScoresFor(preset) : null;
+  const metric = sc && sc[JOB_METRIC[job]];
+  if (metric != null) q = (q + metric / 10) / 2;
+  return q;
 }
 const apiValue = (target) => { const row = API_RANK.find((r) => r[0] && r[0] === apiPreset(target)); return row ? rankValue(row) : 0; };
 const apiServiceName = (target) => { const row = API_RANK.find((r) => r[0] && r[0] === apiPreset(target)); return row ? row[1] : (targetLabel(target) || 'your cloud AI'); };
