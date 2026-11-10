@@ -1,3 +1,10 @@
+### Downloads
+
+- **Quicksilver-Setup-2.18.0.exe** — the installer (about 1.9 GB). Quicksilver Liquid Edition, uncensored, with the 2B model built in; the 4B Brain downloads by itself in the background the first time you run it.
+- **Quicksilver-Liquid-Edition-full-offline-2.18.0.zip** — the same installer plus the 4B Brain already inside, so it installs fully offline with nothing to download on first run. Unzip, then run the setup file next to the "Quicksilver models" folder.
+
+Each download has a matching `.sha256` to check it after downloading.
+
 ## What's new in Quicksilver 2.18
 
 A big release focused on accuracy and speed, plus exam coaches, a GIF maker and a vibe-hacking team. In short: answers now check and correct their own maths, code and facts; the app does more for you automatically (web, your apps, your documents); and it's noticeably quicker through reading ahead, instant repeats and better use of your hardware.

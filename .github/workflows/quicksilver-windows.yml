@@ -243,6 +243,16 @@ jobs:
       - name: Fingerprint the installer
         run: for f in dist/Quicksilver-Setup-*.exe; do (cd dist && sha256sum "$(basename "$f")" > "$(basename "$f").sha256" && cat "$(basename "$f").sha256"); done
 
+      # One download that already holds the full Liquid Edition: the setup file plus the "Quicksilver
+      # models" folder (the 4B Brain) and the read-me, so it installs fully offline with nothing to
+      # fetch on first run. Stored, not recompressed (the models and installer are already packed).
+      - name: Package the full offline edition
+        if: startsWith(github.ref, 'refs/tags/quicksilver-v')
+        run: |
+          V=$(node -p "require('./package.json').version")
+          ZIP="Quicksilver-Liquid-Edition-full-offline-$V.zip"
+          (cd dist && 7z a -tzip -mx=0 "$ZIP" "Quicksilver-Setup-$V.exe" "Quicksilver models" "READ ME FIRST.txt" >/dev/null && sha256sum "$ZIP" > "$ZIP.sha256" && cat "$ZIP.sha256" && ls -l "$ZIP")
+
       - name: Publish release
         if: startsWith(github.ref, 'refs/tags/quicksilver-v')
         uses: softprops/action-gh-release@v2
@@ -252,6 +262,8 @@ jobs:
           files: |
             quicksilver/dist/*.exe
             quicksilver/dist/*.exe.sha256
+            quicksilver/dist/Quicksilver-Liquid-Edition-full-offline-*.zip
+            quicksilver/dist/Quicksilver-Liquid-Edition-full-offline-*.zip.sha256
 
   # Five tester sessions on the installed app with the real models: every answer, its speed and a
   # screenshot are recorded for review. Informational: in its own job, after the installer is built
