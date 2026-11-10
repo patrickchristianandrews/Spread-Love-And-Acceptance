@@ -964,8 +964,12 @@ async function ensureQuicksilverStack() {
   // The Liquid Edition's core follows the online picks: when a newer, better uncensored Brain or
   // Eyes is named there and you have it, it takes over; until then, the built-in ones.
   const core = require('./catalog-remote').picks().liquid || {};
-  const brain = all.find((m) => core.brain && m.catalogId === core.brain && m.source !== 'bundled') || all.find((m) => m.id === 'starter-brain') || all.find((m) => /^qwen3(\.5)?-4b$/.test(m.catalogId || ''));
-  const eyes = all.find((m) => core.eyes && m.catalogId === core.eyes && m.source !== 'bundled') || all.find((m) => m.id === 'starter') || all.find((m) => /^qwen3(\.5-2b|-vl-)/.test(m.catalogId || ''));
+  // Quicksilver is completely uncensored, so every model on its crew must be uncensored — including
+  // the fallbacks. A filtered model of a matching name (e.g. a plain "Qwen3 4B Instruct" found from
+  // another app) is NEVER adopted as the Brain, Eyes or Thinker.
+  const unc = (m) => m && isUncensored(`local:${m.id}`);
+  const brain = all.find((m) => core.brain && m.catalogId === core.brain && m.source !== 'bundled' && unc(m)) || all.find((m) => m.id === 'starter-brain') || all.find((m) => /^qwen3(\.5)?-4b$/.test(m.catalogId || '') && unc(m));
+  const eyes = all.find((m) => core.eyes && m.catalogId === core.eyes && m.source !== 'bundled' && unc(m)) || all.find((m) => m.id === 'starter') || all.find((m) => /^qwen3(\.5-2b|-vl-)/.test(m.catalogId || '') && unc(m));
   // A Brain that thinks for itself (Qwen3.5) is also the Thinker; one that sees is also the Eyes.
   const brainThinks = Boolean(brain && catalog.TEXT_MODELS.find((c) => c.id === brain.catalogId)?.reasoning);
   const brainSees = Boolean(brain?.files?.mmproj);

@@ -1500,3 +1500,8 @@ code.sel { user-select: all; background: var(--soft); padding: 1px 6px; border-r
 .about-page .ab-eng li { margin: 3px 0; font-size: .85rem; }
 .about-page .ab-groups { display: grid; gap: 16px; }
 .about-page .ab-group h3 { margin: 0 0 2px; font-size: .95rem; }
+
+/* Toast close button: always present, so a message can be dismissed before it fades on its own. */
+.toast .toast-x { flex: none; margin-left: 4px; width: 24px; height: 24px; display: grid; place-items: center; border: 0; border-radius: 999px; background: color-mix(in srgb, var(--toast-ink, #fff) 14%, transparent); color: var(--toast-ink); font-size: .8rem; line-height: 1; cursor: pointer; opacity: .8; }
+.toast .toast-x:hover { opacity: 1; background: color-mix(in srgb, var(--toast-ink, #fff) 26%, transparent); }
+.toast > span { flex: 1 1 auto; }
