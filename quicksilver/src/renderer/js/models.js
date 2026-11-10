@@ -24,6 +24,7 @@ views.models = {
   },
   bind() {
     if (!S.est) refreshEstimates().then(() => S.route.view === 'models' && render());
+    if (modelsTab === 'installed' && S.disk === undefined) { S.disk = null; qs.call('disk:info').then((d) => { S.disk = d; if (S.route.view === 'models' && modelsTab === 'installed') render(); }).catch(() => {}); }
     if (!S.modelUpgrades) loadModelUpgrades().then(() => S.route.view === 'models' && $('#modal').hidden && render());
     bindModelUpdates(); bindBuiltinModel();
     $$('[data-tab]').forEach((b) => b.addEventListener('click', () => { modelsTab = b.dataset.tab; render(); }));
@@ -46,7 +47,7 @@ views.models = {
     $$('[data-remove]').forEach((b) => b.addEventListener('click', async () => {
       const m = S.installed.find((x) => x.id === b.dataset.remove);
       if (!(await confirmBox(`Remove ${m.name}?${m.source === 'imported' ? ' The file stays where it is.' : ` This frees ${gb(m.size)}.`}`, { yes: 'Remove' }))) return;
-      await call('models:remove', m.id); await refreshModels(); render();
+      await call('models:remove', m.id); S.disk = undefined; await refreshModels(); render();
     }));
     $$('[data-repair]').forEach((b) => b.addEventListener('click', async () => {
       b.disabled = true; b.textContent = 'Checking…';
@@ -62,12 +63,24 @@ views.models = {
   },
 };
 
+// A plain summary of disk use: what the models take up, and how much room is left. Warns when the
+// drive is getting full so a download won't fail halfway.
+function diskSummaryHTML() {
+  const d = S.disk;
+  const modelsBytes = S.installed.reduce((t, m) => t + (m.size || 0), 0);
+  const low = d && d.freeBytes < 20 * 1024 ** 3;
+  const freeTxt = d ? `${gb(d.freeBytes)} free of ${gb(d.totalBytes)}` : 'checking free space…';
+  return `<div class="card set-card" style="margin-bottom:12px"><div class="row" style="align-items:baseline"><b>💾 Storage</b><span class="grow"></span><span class="small muted">Your models use <b>${gb(modelsBytes)}</b> · ${freeTxt}</span></div>
+    ${d && d.totalBytes ? `<div class="bar" style="margin-top:8px;height:8px"><i style="width:${Math.min(100, Math.round(((d.totalBytes - d.freeBytes) / d.totalBytes) * 100))}%"></i></div>` : ''}
+    ${low ? '<div class="small" style="color:var(--danger);margin-top:6px">⚠️ Low on space. Remove models you don\'t use (the Remove button next to each) before downloading large ones.</div>' : '<div class="small muted" style="margin-top:6px">Remove any model with its Remove button to free space. Damaged downloads show a Repair button.</div>'}</div>`;
+}
+
 function installedHTML() {
   if (!S.installed.length) return `<div class="notice info">Nothing installed yet. Start with the <a href="#" data-goto-stacks>Setup Advisor</a>, or browse <b>Text & vision</b>.</div>`;
   const kinds = { text: '💬 Text & vision', image: '🎨 Images', video: '🎬 Video' };
   const onlyStarter = S.installed.filter((m) => m.kind === 'text').every((m) => m.source === 'bundled');
   const note = onlyStarter ? '<div class="notice info" style="margin-bottom:12px"><b>💡 Only the starter models so far.</b> They are limited on their own; download stronger ones under <b>Text &amp; vision</b>, or let the <a href="#" data-goto-stacks>Setup Advisor</a> pick a team for your PC. Quicksilver adds new models to its team automatically.</div>' : '';
-  return note + Object.entries(kinds).map(([k, label]) => {
+  return note + diskSummaryHTML() + Object.entries(kinds).map(([k, label]) => {
     const list = S.installed.filter((m) => m.kind === k);
     if (!list.length) return '';
     return `<div class="section"><h2>${label}</h2></div><table class="list"><thead><tr><th>Model</th><th>Size</th><th>Abilities</th><th>On your PC</th><th></th></tr></thead><tbody>

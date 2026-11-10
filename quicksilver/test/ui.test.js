@@ -990,6 +990,12 @@ function redPng(size = 64) {
   await win.click('[data-tab="text"]');
   await win.waitForSelector('text=Qwen3 30B-A3B');
   await shot(win, '05-models');
+  // Storage summary on the installed tab: what models use and how much room is left.
+  await win.click('[data-tab="installed"]');
+  await win.waitForSelector('.set-card:has-text("Storage")');
+  assert.match(await win.locator('.set-card:has-text("Storage")').innerText(), /Your models use/, 'storage summary shows model usage');
+  await win.click('[data-tab="text"]');
+  await win.waitForSelector('text=Qwen3 30B-A3B');
   // Model details: click a model that won't fit to see why and what it would need.
   await win.click('[data-details="gpt-oss-120b"]');
   await win.waitForSelector('.md-need:has-text("What you can do")');
@@ -1257,6 +1263,9 @@ function redPng(size = 64) {
   await win.click('[data-nav="settings"]');
   await win.click('[data-set-tab="advanced"]');
   await win.waitForTimeout(800);
+  // Diagnostics live here now (not only in the feedback form).
+  await win.waitForSelector('#adv-diag #diag-copy');
+  assert.ok(await win.locator('#adv-diag #diag-save').count(), 'diagnostics can be saved from Settings');
   await win.check('#a-on', { timeout: 8000 }).catch(async (e) => { console.log('CHECKLOG', e.message.split('\n').slice(0, 25).join('\n')); throw e; });
   await win.fill('#a-port', '18440');
   await win.click('#a-save');
