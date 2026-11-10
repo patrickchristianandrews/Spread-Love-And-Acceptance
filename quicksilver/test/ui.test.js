@@ -1217,6 +1217,31 @@ function redPng(size = 64) {
   await win.waitForFunction(() => /version \d+\.\d+/.test($('.about-page h2')?.innerText || ''), null, { timeout: 8000 });
   console.log('✓ Settings → What\'s inside: models, engines, features and release notes');
   await shot(win, '09c-about');
+
+  // Several cloud AIs connected: Automatic picks the one that's best for each kind of question.
+  await win.evaluate(() => {
+    S.providers = [{ id: 'pds', preset: 'deepseek', hasKey: true }, { id: 'ppx', preset: 'perplexity', hasKey: true }];
+    S.targets = [...S.targets.filter((t) => !t.target.startsWith('api:')), { target: 'api:pds:deepseek', label: 'DeepSeek' }, { target: 'api:ppx:sonar', label: 'Perplexity' }];
+  });
+  assert.equal(await win.evaluate(() => bestApiTarget('coding')), 'api:pds:deepseek', 'coding → the coding-strong cloud AI');
+  assert.equal(await win.evaluate(() => bestApiTarget('research')), 'api:ppx:sonar', 'research → the research-strong cloud AI');
+  // Through Automatic, with "use my cloud for the hardest questions" on and a plain local base.
+  const cloudPicks = await win.evaluate(() => {
+    const base = S.targets.map((t) => t.target).find((t) => t.startsWith('local:') && !liquidOk(t)) || S.targets.map((t) => t.target).find((t) => t.startsWith('stack:') && !liquidOk(t));
+    if (!base) return null;
+    S.data.prefs.cloudHard = true; S.config = { ...(S.config || {}), offline: false };
+    const chat = { target: base };
+    return { base,
+      code: autoPick(chat, { job: 'general' }, 'Debug this function and explain the error step by step', false).target,
+      research: autoPick(chat, { job: 'research' }, 'Compare and analyse the long-term strategy and trade-offs in depth', false).target };
+  });
+  if (cloudPicks) {
+    assert.equal(cloudPicks.code, 'api:pds:deepseek', `coding routed to the best cloud AI (base ${cloudPicks.base})`);
+    assert.equal(cloudPicks.research, 'api:ppx:sonar', `research routed to the best cloud AI (base ${cloudPicks.base})`);
+  }
+  await win.evaluate(async () => { S.data.prefs.cloudHard = false; S.providers = await qs.call('providers:list'); S.targets = await qs.call('targets:list'); render(); });
+  console.log('✓ multiple cloud AIs: Automatic chooses the best one for each task' + (cloudPicks ? ` (via base ${cloudPicks.base})` : ' (helper checked)'));
+
   // Settings: API server on.
   await win.click('[data-nav="settings"]');
   await win.click('[data-set-tab="advanced"]');

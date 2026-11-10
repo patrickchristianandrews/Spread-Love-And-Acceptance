@@ -66,3 +66,24 @@ function bindApiRank() {
   $$('[data-rank-sort]').forEach((b) => b.addEventListener('click', () => { rankState.sort = b.dataset.rankSort; redraw(); }));
   $$('[data-rank-use]').forEach((b) => b.addEventListener('click', () => { rankState.use = b.dataset.rankUse; redraw(); }));
 }
+
+// ---------- pick the best connected cloud AI for a question ----------
+// All connected APIs look equally strong to the speed table (a flat score), so Automatic can't tell
+// them apart. Here we score each one for the kind of question using the rankings above, so when
+// several cloud AIs are connected Quicksilver uses the one that's actually best for the task.
+const JOB_TO_RANK = { coding: 'coding', reasoning: 'reasoning', writing: 'writing', research: 'research', office: 'chat', general: 'chat' };
+const apiPreset = (target) => (S.providers || []).find((p) => p.id === String(target).split(':')[1])?.preset || '';
+function apiScore(target, job) {
+  const row = API_RANK.find((r) => r[0] && r[0] === apiPreset(target));
+  if (!row) return 8; // a custom or unlisted service: treat as solidly capable
+  const want = JOB_TO_RANK[job] || 'chat';
+  const fits = row[2].includes(want) || (want === 'chat' && (row[2].includes('reasoning') || row[2].includes('coding')));
+  return row[6] - (fits ? 0 : 1.2); // its quality, nudged down a little when this isn't a listed strength
+}
+const apiValue = (target) => { const row = API_RANK.find((r) => r[0] && r[0] === apiPreset(target)); return row ? rankValue(row) : 0; };
+const apiServiceName = (target) => { const row = API_RANK.find((r) => r[0] && r[0] === apiPreset(target)); return row ? row[1] : (targetLabel(target) || 'your cloud AI'); };
+// The connected API that is best for this job: top quality for the task, then best value to break ties.
+function bestApiTarget(job, filter) {
+  const cands = (S.targets || []).map((t) => t.target).filter((t) => t.startsWith('api:') && targetValid(t) && (!filter || filter(t)));
+  return cands.sort((a, b) => apiScore(b, job) - apiScore(a, job) || apiValue(b) - apiValue(a))[0] || null;
+}
