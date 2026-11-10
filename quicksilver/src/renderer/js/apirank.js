@@ -73,9 +73,16 @@ function bindApiRank() {
 // several cloud AIs are connected Quicksilver uses the one that's actually best for the task.
 const JOB_TO_RANK = { coding: 'coding', reasoning: 'reasoning', writing: 'writing', research: 'research', office: 'chat', general: 'chat' };
 // Which measured test (from the catalog's refreshed cloud scores) genuinely reflects a kind of
-// question. Only coding and reasoning have a benchmark that maps cleanly; writing, research, office
-// and chat don't, so they keep the curated table rather than being skewed by a science score.
-const JOB_METRIC = { coding: 'coding', reasoning: 'science' };
+// question, best first — the first one a model actually has is used. Research has no clean public
+// benchmark, so it keeps the curated table rather than being skewed by an unrelated score.
+const JOB_METRICS = {
+  coding: ['codeAgent', 'coding'],
+  reasoning: ['science', 'math'],
+  writing: ['writing', 'elo'],
+  office: ['ifeval', 'elo'],
+  general: ['elo', 'ifeval'],
+};
+const freshMetric = (sc, job) => { for (const k of (JOB_METRICS[job] || [])) if (sc && sc[k] != null) return sc[k]; return null; };
 const apiPreset = (target) => (S.providers || []).find((p) => p.id === String(target).split(':')[1])?.preset || '';
 function apiScore(target, job) {
   const preset = apiPreset(target);
@@ -88,8 +95,8 @@ function apiScore(target, job) {
   }
   // Blend in the catalog's freshly-measured test scores when we have them, so the pick tracks how the
   // service performs now rather than only the built-in table (which can go stale between releases).
-  const sc = JOB_METRIC[job] && (typeof cloudScoresFor === 'function') ? cloudScoresFor(preset) : null;
-  const metric = sc && sc[JOB_METRIC[job]];
+  const sc = (JOB_METRICS[job] && typeof cloudScoresFor === 'function') ? cloudScoresFor(preset) : null;
+  const metric = freshMetric(sc, job);
   if (metric != null) q = (q + metric / 10) / 2;
   return q;
 }

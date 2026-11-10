@@ -1242,6 +1242,16 @@ function redPng(size = 64) {
     return bestApiTarget('research');
   }), 'api:pds:deepseek', 'thumbs steer the research pick to the preferred cloud AI');
   await win.evaluate(() => { if (S.data.learn) { delete S.data.learn.research; } });
+  // Richer ratings: every public test a model has shows as its own chip, and routing prefers the
+  // task-specific benchmark (real-world coding over puzzle coding) when the feed supplies it.
+  assert.ok(await win.evaluate(() => scoreChipsHTML({ codeAgent: 70, ifeval: 88, writing: 60, elo: 82 }).includes('Real coding')), 'new test columns render as chips');
+  const codePref = await win.evaluate(() => {
+    ((S.catalog.scores ||= {}).cloud ||= {}).deepseek = { ...(S.catalog.scores.cloud.deepseek || {}), coding: 20, codeAgent: 90 };
+    const v = apiScore('api:pds:deepseek', 'coding');
+    delete S.catalog.scores.cloud.deepseek;
+    return v;
+  });
+  assert.ok(codePref > 8.5, `coding uses the real-coding benchmark when present (got ${codePref})`);
   // Through Automatic, with "use my cloud for the hardest questions" on and a plain local base.
   const cloudPicks = await win.evaluate(() => {
     const base = S.targets.map((t) => t.target).find((t) => t.startsWith('local:') && !liquidOk(t)) || S.targets.map((t) => t.target).find((t) => t.startsWith('stack:') && !liquidOk(t));
