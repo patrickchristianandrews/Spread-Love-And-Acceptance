@@ -429,7 +429,7 @@ function redPng(size = 64) {
   }), 'signals, connected apps and the cloud option are used');
   // The most likely next question is answered while you read; clicking it shows it at once.
   await win.click('[data-nav="newchat"]');
-  await win.evaluate(() => { const c = chatById(S.route.id); c.library = false; c.web = false; c.tools = false; S.data.prefs.preanswer = true; save(); render(); });
+  await win.evaluate(() => { const c = chatById(S.route.id); c.library = false; c.web = false; c.tools = false; S.data.prefs.preanswer = true; S.testGpu = true; save(); render(); }); // pre-answering needs a graphics card; CI has none
   await win.fill('#input', 'Tell me about sourdough starters');
   await win.keyboard.press('Enter');
   await win.waitForSelector('.msg.assistant');
@@ -437,7 +437,7 @@ function redPng(size = 64) {
   await win.waitForFunction(() => chatById(S.route.id).messages.at(-1).alts.at(-1).pre?.done, null, { timeout: 60000 });
   await win.click('.followups .fu >> nth=0');
   await win.waitForSelector('.msg.assistant .badge:has-text("Ready before you asked")', { timeout: 10000 });
-  await win.evaluate(() => { S.data.prefs.preanswer = false; save(); });
+  await win.evaluate(() => { S.data.prefs.preanswer = false; S.testGpu = false; save(); });
   await idle();
   // Exam coaches: a CPA course in the chat with interactive practice questions and progress.
   await win.click('[data-nav="newchat"]');
