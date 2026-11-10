@@ -1225,6 +1225,13 @@ function redPng(size = 64) {
   });
   assert.equal(await win.evaluate(() => bestApiTarget('coding')), 'api:pds:deepseek', 'coding → the coding-strong cloud AI');
   assert.equal(await win.evaluate(() => bestApiTarget('research')), 'api:ppx:sonar', 'research → the research-strong cloud AI');
+  // Your 👍/👎 steer the cloud pick too: downvote the table's favourite for coding and upvote the
+  // other, and Automatic switches to the one you prefer.
+  assert.equal(await win.evaluate(() => {
+    for (let i = 0; i < 6; i++) { learnSignal('coding', 'api:ppx:sonar', 'up'); learnSignal('coding', 'api:pds:deepseek', 'down'); }
+    return bestApiTarget('coding');
+  }), 'api:ppx:sonar', 'thumbs steer the coding pick to the preferred cloud AI');
+  await win.evaluate(() => { if (S.data.learn) { delete S.data.learn.coding; } });
   // Through Automatic, with "use my cloud for the hardest questions" on and a plain local base.
   const cloudPicks = await win.evaluate(() => {
     const base = S.targets.map((t) => t.target).find((t) => t.startsWith('local:') && !liquidOk(t)) || S.targets.map((t) => t.target).find((t) => t.startsWith('stack:') && !liquidOk(t));

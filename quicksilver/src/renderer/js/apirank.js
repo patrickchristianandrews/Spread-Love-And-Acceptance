@@ -82,8 +82,11 @@ function apiScore(target, job) {
 }
 const apiValue = (target) => { const row = API_RANK.find((r) => r[0] && r[0] === apiPreset(target)); return row ? rankValue(row) : 0; };
 const apiServiceName = (target) => { const row = API_RANK.find((r) => r[0] && r[0] === apiPreset(target)); return row ? row[1] : (targetLabel(target) || 'your cloud AI'); };
-// The connected API that is best for this job: top quality for the task, then best value to break ties.
+// How good a connected API is for this job, as Automatic sees it: its quality for the task plus what
+// your 👍/👎 have taught about it, so the pick adapts to you and isn't just the static rankings.
+const apiPick = (t, job) => apiScore(t, job) + (typeof learnBonus === 'function' ? learnBonus(job, t) : 0);
+// The connected API that is best for this job: that combined score, then best value to break ties.
 function bestApiTarget(job, filter) {
   const cands = (S.targets || []).map((t) => t.target).filter((t) => t.startsWith('api:') && targetValid(t) && (!filter || filter(t)));
-  return cands.sort((a, b) => apiScore(b, job) - apiScore(a, job) || apiValue(b) - apiValue(a))[0] || null;
+  return cands.sort((a, b) => apiPick(b, job) - apiPick(a, job) || apiValue(b) - apiValue(a))[0] || null;
 }
