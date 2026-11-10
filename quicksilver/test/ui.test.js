@@ -461,6 +461,11 @@ function redPng(size = 64) {
   // Connect a cloud AI from the message box: inline chip (full view) and the ＋ options (simple).
   await win.evaluate((id) => { S.data.prefs.simple = false; applySimple?.(); go({ view: 'chat', id }); }, backTo2);
   await win.click('#opts-btn');
+  // The ＋ menu now holds attach-a-file and skills (the separate skill icon is gone); the bar keeps a hidden file input.
+  await win.waitForSelector('.opts-menu [data-o="file-in"]');
+  await win.waitForSelector('.opts-menu [data-o="skill-pop"]');
+  assert.equal(await win.locator('#skill-btn').count(), 0, 'no standalone skill icon');
+  assert.equal(await win.locator('#file-in').count(), 1, 'the file input is still there for attachments');
   await win.click('.opts-menu [data-o="add-api"]');
   await win.waitForFunction(() => S.route.view === 'models' && modelsTab === 'api', null, { timeout: 10000 });
   await win.evaluate((id) => { go({ view: 'chat', id }); }, backTo2);
@@ -509,12 +514,12 @@ function redPng(size = 64) {
   console.log('✓ status light: state of the model in use, with details');
   // Dropdowns are drawn by Quicksilver (readable in both themes): click, see the choices, pick one.
   await win.click('#pick-effort');
-  await win.waitForSelector('.sel-pop .sel-item.sel:has-text("Instant")');
-  assert.equal(await win.locator('.sel-pop .sel-item').count(), 4, 'Instant, Balanced, Auto, Council');
+  await win.waitForSelector('.sel-pop .sel-item.sel:has-text("Fast")');
+  assert.equal(await win.locator('.sel-pop .sel-item').count(), 4, 'Fast, Balanced, Smart, Deep');
   const look = await win.evaluate(() => { const p = getComputedStyle(document.querySelector('.sel-pop')); const i = getComputedStyle(document.querySelector('.sel-pop .sel-item')); return { bg: p.backgroundColor, fg: i.color }; });
   assert.notEqual(look.bg, look.fg, 'text and background differ');
   await shot(win, '09b-dropdown');
-  await win.click('.sel-pop .sel-item:has-text("Auto")');
+  await win.click('.sel-pop .sel-item:has-text("Smart")');
   await win.waitForFunction(() => !document.querySelector('.sel-pop') && document.querySelector('#pick-effort').value === 'thorough');
   // Keyboard: Enter opens, arrows move, Escape closes without changing anything.
   await win.focus('#pick-effort');
