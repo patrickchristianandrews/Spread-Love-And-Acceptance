@@ -1080,6 +1080,10 @@ function redPng(size = 64) {
   assert.ok(await win.locator('#presets [data-preset]').count() >= 30, 'every OpenAI-compatible cloud AI is listed');
   await win.waitForSelector('#presets .card:has-text("Venice AI") :text("Best to link")');
   await win.waitForSelector('#presets .card:has-text("Groq") .badge:has-text("Dev plan")');
+  // A direct "Get your API key →" link to each provider's own key page.
+  await win.waitForSelector('#presets .card:has-text("Google Gemini") a:has-text("Get your API key")');
+  assert.ok(await win.locator('#presets .card a:has-text("Get your API key")').count() >= 20, 'most providers link straight to their key page');
+  assert.ok(await win.locator('#presets .card:has-text("Pollinations")').count(), 'the free no-key Pollinations text option is listed');
   await win.waitForSelector('.fusion-card #fusion-open');
   await shot(win, '05b-api-free');
   await win.evaluate(() => { modelsTab = 'text'; render(); });
@@ -1225,13 +1229,13 @@ function redPng(size = 64) {
   });
   assert.equal(await win.evaluate(() => bestApiTarget('coding')), 'api:pds:deepseek', 'coding → the coding-strong cloud AI');
   assert.equal(await win.evaluate(() => bestApiTarget('research')), 'api:ppx:sonar', 'research → the research-strong cloud AI');
-  // Your 👍/👎 steer the cloud pick too: downvote the table's favourite for coding and upvote the
-  // other, and Automatic switches to the one you prefer.
+  // Your 👍/👎 steer the pick too: on research (where no benchmark overrides it) upvote the other
+  // cloud AI and downvote the usual one, and Automatic switches to the one you prefer.
   assert.equal(await win.evaluate(() => {
-    for (let i = 0; i < 6; i++) { learnSignal('coding', 'api:ppx:sonar', 'up'); learnSignal('coding', 'api:pds:deepseek', 'down'); }
-    return bestApiTarget('coding');
-  }), 'api:ppx:sonar', 'thumbs steer the coding pick to the preferred cloud AI');
-  await win.evaluate(() => { if (S.data.learn) { delete S.data.learn.coding; } });
+    for (let i = 0; i < 6; i++) { learnSignal('research', 'api:pds:deepseek', 'up'); learnSignal('research', 'api:ppx:sonar', 'down'); }
+    return bestApiTarget('research');
+  }), 'api:pds:deepseek', 'thumbs steer the research pick to the preferred cloud AI');
+  await win.evaluate(() => { if (S.data.learn) { delete S.data.learn.research; } });
   // Through Automatic, with "use my cloud for the hardest questions" on and a plain local base.
   const cloudPicks = await win.evaluate(() => {
     const base = S.targets.map((t) => t.target).find((t) => t.startsWith('local:') && !liquidOk(t)) || S.targets.map((t) => t.target).find((t) => t.startsWith('stack:') && !liquidOk(t));

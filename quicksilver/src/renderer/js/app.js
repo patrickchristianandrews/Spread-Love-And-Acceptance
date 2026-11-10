@@ -148,6 +148,7 @@ views.home = {
     $('#wc-chat')?.addEventListener('click', () => { S.data.prefs.welcomed = true; save(); newChat(); });
     $('#wc-import')?.addEventListener('click', () => { setTab = 'general'; go({ view: 'settings' }); setTimeout(() => $('#imp-file')?.click(), 250); });
     $('#wc-setup')?.addEventListener('click', () => go({ view: 'stacks' }));
+    $('#wc-cloud')?.addEventListener('click', () => { S.data.prefs.welcomed = true; save(); modelsTab = 'api'; go({ view: 'models' }); });
     bindNameAsk();
   },
 };
@@ -166,6 +167,7 @@ function welcomeCardHTML() {
       <button class="wc-step" id="wc-chat"><span class="wc-n">1</span><span><b>Ask anything</b><span class="small muted">It's ready now. Type, talk (mic) or drop in a photo or file.</span></span></button>
       <button class="wc-step" id="wc-import"><span class="wc-n">2</span><span><b>Bring your chats from other AIs</b><span class="small muted">Carry on any conversation here, privately.</span></span></button>
       <button class="wc-step" id="wc-setup"><span class="wc-n">3</span><span><b>Make it great at your work</b><span class="small muted">Get the best free models for what you do, fitted to this PC.</span></span></button>
+      <button class="wc-step" id="wc-cloud"><span class="wc-n">4</span><span><b>Add a free cloud AI (optional)</b><span class="small muted">Connect Gemini, Groq or free no-key options for extra muscle. With several connected, Quicksilver picks the best for each question.</span></span></button>
     </div>
   </div>`;
 }

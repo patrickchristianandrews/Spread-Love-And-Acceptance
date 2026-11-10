@@ -253,6 +253,7 @@ function apiHTML() {
       <div class="row small" style="margin-bottom:10px">${(p.models || []).slice(0, 8).map((m) => `<span class="badge b-lav">${esc(m)}</span>`).join('')}${(p.models || []).length > 8 ? `<span class="small muted">+${p.models.length - 8} more</span>` : ''}${(p.imageModels || []).map((m) => `<span class="badge b-peach">🎨 ${esc(m)}</span>`).join('')}</div>
       <div class="row"><button class="btn small" data-api-refresh="${p.id}">Refresh models</button><button class="btn small" data-api-edit="${p.id}">Edit</button><button class="btn small danger" data-api-del="${p.id}">Remove</button></div>
     </div>`).join('')}</div>` : ''}
+    ${S.providers.length > 1 ? '<div class="notice info" style="margin-bottom:12px">☁️ <b>Several cloud AIs connected.</b> On Automatic, Quicksilver picks the best one for each question — a strong coder for code, a research model for research, and so on — and your 👍/👎 refine the choice over time. Pick one by hand at the top of any chat to override it.</div>' : ''}
     <div class="section"><h2>Add a connection</h2><span class="small muted">Every cloud AI that works with Quicksilver, marked free or paid, with the best model to use. <a href="#" data-guide="apis">Which should I choose? What's a dev plan? Calculator: alone vs through Quicksilver</a></span></div>
     <div id="presets"></div>`;
 }
@@ -282,6 +283,7 @@ async function bindApi() {
       <div class="row"><h3 class="grow">${esc(p.name)}</h3>${FREE_BADGE[p.free] || ''}</div>
       ${devBadgeHTML(k) ? `<div style="margin-top:6px">${devBadgeHTML(k)}</div>` : ''}
       <div class="small muted" style="font-weight:600;margin-top:6px">${esc(p.freeNote || (k === 'custom' ? 'Any OpenAI-compatible endpoint' : 'Needs an API key'))}</div>
+      ${p.keyUrl ? `<div class="small" style="margin-top:6px">🔑 <a href="${esc(p.keyUrl)}" title="Opens ${esc(p.keyUrl)}">Get your API key →</a></div>` : ''}
       ${p.best ? `<div class="small" style="margin-top:6px">⭐ <b>Best to link:</b> <code>${esc(p.best)}</code>${p.bestWhy ? ` <span class="muted">· ${esc(p.bestWhy)}</span>` : ''}</div>` : ''}
       ${scoreChipsHTML(cloudScoresFor(k), { label: 'Tested', note: cloudScoresFor(k)?.model ? `Scores of ${cloudScoresFor(k).model}.` : '' })}
       ${(p.imageModels || []).length ? createRowHTML(createRatings(p.imageModels.map((x) => ({ cloudImage: x })))) : ''}
@@ -300,7 +302,7 @@ function editProvider(p, presets) {
       <div class="field"><label for="pv-name">Name</label><input id="pv-name" value="${esc(p.name || pre.name)}"></div>
       <div class="field"><label for="pv-url">Address (base URL)</label><input id="pv-url" value="${esc(p.baseUrl || pre.baseUrl)}" ${p.preset === 'custom' ? 'placeholder="https://…/v1"' : ''}></div>
       ${pre.freeNote ? `<div class="notice ${['free', 'some', 'local'].includes(pre.free) ? 'info' : ''}" style="margin:0">${FREE_BADGE[pre.free] || ''} ${esc(pre.freeNote)}${pre.priceUrl ? ` <a href="${esc(pre.priceUrl)}">Current prices and limits</a>` : ''}</div>` : ''}
-      ${pre.noKey ? '' : `<div class="field"><label for="pv-key">API key</label><span class="help">${p.hasKey ? 'A key is saved. Paste a new one to replace it.' : `Get one at <a href="${esc(pre.keyUrl || '#')}">${esc(pre.keyUrl || 'the provider\'s website')}</a>.`}</span><input id="pv-key" type="password" autocomplete="off" placeholder="Paste key"></div>`}
+      ${pre.noKey ? '' : `<div class="field"><label for="pv-key">API key</label><span class="help">${p.hasKey ? 'A key is saved. Paste a new one to replace it.' : (pre.keyUrl ? `🔑 <a href="${esc(pre.keyUrl)}" title="Opens ${esc(pre.keyUrl)}">Get your API key from ${esc(pre.name)} →</a> (opens in your browser), then paste it here.` : 'Paste your key from the provider\'s website.')}</span><input id="pv-key" type="password" autocomplete="off" placeholder="Paste key"></div>`}
       <div class="field"><label for="pv-models">Models</label><span class="help">One per line. Leave empty and press "Save & load models" to fetch the list.</span><textarea id="pv-models" rows="4">${esc((p.models || pre.models || []).join('\n'))}</textarea></div>
       <div class="field"><label for="pv-img">Image models (optional)</label><input id="pv-img" value="${esc((p.imageModels || pre.imageModels || []).join(', '))}" placeholder="e.g. gpt-image-1"></div>
       <label class="row"><input type="checkbox" id="pv-vision" ${(p.vision ?? pre.vision) ? 'checked' : ''}> <b>Its models can see images</b></label>
