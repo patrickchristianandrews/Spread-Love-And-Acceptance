@@ -197,7 +197,7 @@ function cachedAnswer(chat, q) {
 // On a PC with no graphics card there is one slow model and one processor, so background work
 // (reading ahead, answering the next question in advance) competes with the answer the user is
 // waiting for. Skip it there; it's a clear win only when there's a GPU to spare.
-const hasGpu = () => (S.est?.hardware?.vramGB || 0) >= 2;
+const hasGpu = () => S.testGpu === true || (S.est?.hardware?.vramGB || 0) >= 2; // testGpu: tests on machines with no graphics card
 
 // ---------- 6. reading ahead while you type ----------
 const prefilled = new Map(); // chat id -> what was last read ahead
