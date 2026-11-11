@@ -732,7 +732,8 @@ function redPng(size = 64) {
   await win.waitForSelector('#vpn-box .pv-link.cut:has-text("waiting for VPN")');
   await win.waitForSelector('#vpn-box .pv-plan:has-text("Proton VPN Free")');
   await win.waitForSelector('#vpn-box .pv-plan:has-text("Your Proton account")');
-  assert.match(await win.locator('#net-toggle').innerText(), /VPN off/);
+  assert.equal((await win.locator('#net-toggle').innerText()).trim(), 'Online', 'the switch just says Online or Offline');
+  assert.match(await win.locator('#net-toggle').getAttribute('title'), /waiting for a VPN/);
   await win.locator('#vpn-box').scrollIntoViewIfNeeded();
   await shot(win, '15-privacy-vpn');
   const vpnLabel = await win.evaluate(() => sessionPrivacy('local:qwen3-8b').label);
@@ -750,7 +751,7 @@ function redPng(size = 64) {
   // Online without a VPN: the top of the page says it's not private.
   await win.click('.nav-new');
   await win.waitForSelector('#privacy-bar:has-text("not private")');
-  assert.match(await win.locator('#net-toggle').innerText(), /not private/);
+  assert.equal((await win.locator('#net-toggle').innerText()).trim(), 'Online');
   await shot(win, '18b-not-private-bar');
   await win.click('#privacy-bar [data-pb="x"]');
   await win.waitForSelector('#privacy-bar', { state: 'detached' });

@@ -59,15 +59,12 @@ function paintNet() {
   for (const b of [$('#net-toggle'), $('#net-pill')].filter(Boolean)) {
     b.classList.toggle('off', off);
     b.setAttribute('aria-checked', String(!off));
-    const vpn = !off && S.config?.vpnOnly;
-    const tunnel = vpn && S.vpn?.connected;
-    // Online without a VPN = not private: what you search and send can be seen by the sites and
-    // services you use. Marked clearly so it's never a surprise.
-    const exposed = !off && !vpn;
-    b.classList.toggle('vpn', Boolean(vpn)); b.classList.toggle('vpn-wait', Boolean(vpn && !tunnel));
-    b.classList.toggle('exposed', exposed);
-    (b.querySelector('.net-lbl') || b.querySelector('span:nth-child(2)')).textContent = off ? 'Offline' : vpn ? (tunnel ? '🛡 Private (VPN)' : '🛡 VPN off: paused') : '🌐 Online · not private';
-    b.title = off ? 'Offline: nothing leaves this PC. Click to go online.' : vpn ? (tunnel ? 'Private online: everything goes through your VPN. Click to go offline. Privacy modes are in Settings → General.' : 'Private online is on, but no VPN is connected, so nothing leaves this PC. Connect Proton VPN, or change it in Settings → General.') : 'Online, not private: web search and any cloud AI you use can see what you send, and sites see your location. Everyday chats still run on this PC. Click to go offline, or turn on Private online (Proton VPN) in Settings → General.';
+    // Just Online or Offline, as it always was. (If Private online is on in Settings and no VPN
+    // is connected, the tooltip says why nothing is going out.)
+    const vpnWait = !off && S.config?.vpnOnly && !S.vpn?.connected;
+    for (const c of ['vpn', 'vpn-wait', 'exposed']) b.classList.remove(c);
+    (b.querySelector('.net-lbl') || b.querySelector('span:nth-child(2)')).textContent = off ? 'Offline' : 'Online';
+    b.title = off ? 'Offline: nothing leaves this PC. Click to go online.' : vpnWait ? 'Online, but Private online (Settings → General) is waiting for a VPN, so nothing leaves this PC until one connects. Click to go offline.' : 'Online: web search, cloud AIs and downloads are available. Click to go offline.';
   }
   document.documentElement.classList.toggle('is-offline', off);
   document.documentElement.classList.toggle('is-exposed', !off && !S.config?.vpnOnly);
