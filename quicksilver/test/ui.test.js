@@ -1052,12 +1052,18 @@ function redPng(size = 64) {
     await qs.call('stacks:save', { id: 't-up', name: 'Upgrade test', members: { drafters: ['local:phi-4', 'local:gemma-3-4b'], judge: 'local:phi-4' } });
     S.data.chats.push({ id: 'c-up', title: 'Upgrade test', target: 'local:phi-4', messages: [], assistantId: 'as-general', created: Date.now(), updated: Date.now() });
     S.modelUpgrades = [{ oldId: 'phi-4', oldName: 'Phi-4 14B', oldCatalogId: 'phi-4', newCatalogId: 'qwen3-8b', newName: 'Qwen3 8B', why: 'stronger for everyday use (6 → 8 out of 10)', rating: 'great', speed: 'Fast', sizeGB: 5 }];
+    // Only this upgrade: online stack suggestions (which differ from PC to PC) and earlier
+    // put-offs are set aside for the check.
+    const picksRecipes = S.catalog.picks?.recipes; if (S.catalog.picks) S.catalog.picks.recipes = [];
+    S.data.prefs.upgradeLater = {};
+    delete S.downloads['qwen3-8b'];
     paintUpdateBadge(); render();
     const card = document.querySelector('#model-updates')?.textContent || '';
     const dot = document.querySelector('[data-nav="models"] .nav-dot:not([hidden])')?.textContent;
     const dotWant = String(1 + shownStackUpdates().length);
     document.querySelector('[data-up-later="phi-4>qwen3-8b"]').click();
-    const laterCard = (document.querySelector('[data-up-later="phi-4>qwen3-8b"]') ? 'STILL ' : '') + (document.querySelector('#model-updates')?.textContent || '');
+    const laterBtns = document.querySelectorAll('[data-up-later="phi-4>qwen3-8b"]').length;
+    const laterCard = (document.querySelector('[data-up-later="phi-4>qwen3-8b"]') ? 'STILL ' : '') + (document.querySelector('#model-updates')?.textContent || '') + ` [buttons after: ${laterBtns}; view: ${S.route.view}; stack updates: ${stackUpdates().map((u) => upKey(u)).join(', ') || 'none'}]`;
     S.data.prefs.upgradeLater['phi-4>qwen3-8b'] = Date.now() - 1; render();
     const backCard = (document.querySelector('[data-up-later="phi-4>qwen3-8b"]') ? 'BACK ' : '') + (document.querySelector('#model-updates')?.textContent || '');
     S.data.prefs.pendingUpgrades = { 'qwen3-8b': 'phi-4' };
@@ -1075,15 +1081,16 @@ function redPng(size = 64) {
     const addons = liquidAddonsHTML();
     if (!['Rocinante', 'WAI-NSFW', 'Chroma1-HD', 'CyberRealistic', 'Mistral Small', 'gpt-oss'].every((n) => addons.includes(n))) throw new Error('the six suggested add-ons should be listed');
     if (S.catalog.liquidAddons.some((a) => S.catalog.liquid.includes(a.id))) throw new Error('add-ons must not be locked');
+    if (S.catalog.picks) S.catalog.picks.recipes = picksRecipes;
     S.data.chats = S.data.chats.filter((c) => c.id !== 'c-up');
     for (const l of Object.values(keep)) for (const [x, t] of l) x.target = t;
-    for (const st0 of stacksBefore) await qs.call('stacks:save', st0);
+    for (const st0 of stacksBefore) if (st0.id !== 'quicksilver') await qs.call('stacks:save', st0);
     S.data.prefs.defaultTarget = before; S.modelUpgrades = []; paintUpdateBadge(); save(); await refreshModels(); render();
     return out;
   });
   assert.match(up.card, /Better models available[\s\S]*Phi-4 14B[\s\S]*Qwen3 8B/);
   assert.equal(up.dot, up.dotWant, 'the Models menu item shows the updates');
-  assert.ok(!/^STILL /.test(up.laterCard) && /put off for later/.test(up.laterCard), 'Maybe later hides it for now');
+  assert.ok(!/^STILL /.test(up.laterCard) && /put off for later/.test(up.laterCard), `Maybe later hides it for now (card: ${up.laterCard.slice(0, 600)})`);
   assert.match(up.backCard, /^BACK /, 'and it is suggested again later');
   assert.equal(up.swapped, true);
   assert.deepEqual(up.members.drafters, ['local:qwen3-8b', 'local:gemma-3-4b']);
