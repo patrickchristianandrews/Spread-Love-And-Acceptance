@@ -16,7 +16,7 @@ const BEAT_PRESETS = {
   ambient: { label: 'Ambient', spec: { bpm: 70, bars: 8, style: 'ambient lofi', chords: ['Cmaj7', 'Am7', 'Fmaj7', 'Gsus4'], drums: { kick: 'x...............', hat: '' }, bass: 'x...............', melody: 'G5 . . . . . . . E5 . . . . . . .' } },
 };
 
-const jobsForTab = (label) => Object.entries(mediaJobs).filter(([, j]) => j.label === label && !j.done).map(([id]) => jobBox(id)).join('');
+const jobsForTab = (label) => pageJobs(label).map(([id]) => jobBox(id)).join(''); // running ones, and failed ones until dismissed
 const recentOf = (kind, n = 6) => gallery.filter((g) => g.kind === kind).slice(0, n);
 const soundList = (items) => (items.length ? `<div class="stack-v">${items.map((g) => `<div class="card" style="padding:10px 12px"><div class="row"><b class="grow small">${esc(g.title || 'Sound')}</b><button class="btn small ghost" data-gopen="${g.id}">More</button></div><audio src="${g.url}" controls preload="metadata" style="width:100%;margin-top:6px"></audio></div>`).join('')}</div>` : '');
 

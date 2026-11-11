@@ -61,6 +61,13 @@ const CASES = [
   ['I need a business plan for a bakery', [], 'business-plan'],
   ['build me a todo app in react', [], 'build-app'],
   ['Build a single-page website for a bakery', [], 'build-site'],
+  // a plain picture request is a picture, whatever other skill's words are in the description
+  ['make me a picture of my memory of the beach', [], 'make-image'],
+  ['make me a picture of a fox (fail-memory)', [], 'make-image'],
+  ['draw a workout scene in a gym', [], 'make-image'],
+  ['make a picture of a budget meeting', [], 'make-image'],
+  ['create a presentation with pictures of cats', [], 'presentation'],
+  ['I need a memo to staff about the holiday rota', [], 'report'],
   // messages about code are answered as code, never painted or filmed (found by the audit)
   ['can you make the image smaller in this html', [], null],
   ['I want the image to be centered, here is my css', [], null],

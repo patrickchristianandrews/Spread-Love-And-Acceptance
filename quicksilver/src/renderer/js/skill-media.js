@@ -174,7 +174,7 @@ async function makeMedia(chat, msg, alt, pick, { imageId, count = 1 }, repaint) 
       for (let i = 0; i < count; i++) {
         const jobId = uid();
         const item = await new Promise((resolve) => {
-          mediaJobs[jobId] = { status: 'Starting…', progress: 0, label: kind === 'image' || kind === 'edit' ? 'Creating' : 'Animating', resolve, sec: mediaEta(pick.value), start: Date.now() };
+          mediaJobs[jobId] = { status: 'Starting…', progress: 0, label: kind === 'image' || kind === 'edit' ? 'Creating' : 'Animating', resolve, sec: mediaEta(pick.value), start: Date.now(), inChat: true };
           md.jobs.push(jobId); repaint();
           qs.call('media:generate', jobId, { modelId: pick.inst.id, mode: kind === 'edit' ? 'edit' : kind === 'animate' ? 'animate' : 'generate', prompt: text, negative: md.avoid, width, height, imageId, seed: '' })
             .catch((err) => { mediaJobs[jobId].error = err.message; resolve(null); });

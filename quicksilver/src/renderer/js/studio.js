@@ -109,31 +109,67 @@ function suggestHTML(category, title) {
     <div class="cards">${list.map(({ m, e }) => `<div class="card"><div class="row"><h3 class="grow">${esc(m.name)}</h3><b class="small">${m.sizeGB.toFixed(1)} GB</b></div><p class="desc">${esc(m.blurb)}</p><div class="row" style="margin-bottom:10px">${rateBadge(e, 'media')}</div>${S.downloads[m.id] ? downloadBox(m.id) : S.installed.some((x) => x.catalogId === m.id) ? '<span class="badge b-mint">✓ Installed</span>' : `<button class="btn small primary" data-get="${m.id}">Download</button>`}</div>`).join('')}</div>`;
 }
 
+// A job's box: what it is doing, how far along, and, if it failed, why (it stays until you
+// dismiss it or try again: a failure must never just disappear).
 function jobBox(jobId) {
   const j = mediaJobs[jobId];
   if (!j) return '';
   const pct = Math.round((j.progress || 0) * 100);
-  return `<div class="progress-box" data-job="${jobId}"><div class="row"><span class="grow jt">${esc(j.error || j.status || 'Starting…')}</span>${j.sec && !j.done && !j.error ? '<span class="badge b-lav jeta">⏱</span>' : ''}${!j.done && !j.error ? `<button class="btn small" data-stop-job="${jobId}">Stop</button>` : ''}</div><div class="bar"><i style="width:${pct}%"></i></div></div>`;
+  if (j.error) {
+    return `<div class="progress-box failed" data-job="${jobId}" role="alert"><div class="row"><span class="grow jt">⚠️ ${esc(j.error)}</span></div>
+      <div class="row" style="gap:6px;margin-top:8px">${j.req ? `<button class="btn small primary" data-retry-job="${jobId}">Try again</button>` : ''}<button class="btn small ghost" data-dismiss-job="${jobId}">Dismiss</button></div></div>`;
+  }
+  return `<div class="progress-box" data-job="${jobId}"><div class="row"><span class="grow jt">${esc(j.status || 'Starting…')}</span><span class="small muted jp">${j.done ? '' : `${pct}%`}</span>${j.sec && !j.done ? '<span class="badge b-lav jeta">⏱</span>' : ''}${!j.done ? `<button class="btn small" data-stop-job="${jobId}">Stop</button>` : ''}</div>
+    <div class="bar"><i style="width:${pct}%"></i></div></div>`;
 }
 
 function paintJob(jobId) {
   const el = document.querySelector(`[data-job="${jobId}"]`);
   const j = mediaJobs[jobId];
-  if (!el || !j) return;
-  el.querySelector('.jt').textContent = j.error || j.status || '';
-  el.querySelector('i').style.width = `${Math.round((j.progress || 0) * 100)}%`;
+  if (!el || !j || j.error) return;
+  const pct = Math.round((j.progress || 0) * 100);
+  el.querySelector('.jt').textContent = j.status || '';
+  const jp = el.querySelector('.jp'); if (jp) jp.textContent = `${pct}%`;
+  const bar = el.querySelector('.bar i'); if (bar) bar.style.width = `${pct}%`;
 }
+// The jobs a Create page shows: the ones still going, and the ones that failed (until dismissed).
+// Jobs started from a chat are shown in that chat, not here.
+const pageJobs = (label) => Object.entries(mediaJobs).filter(([, j]) => j.label === label && !j.inChat && (!j.done || j.error));
 
 qs.onMedia(async (ev) => {
   const j = mediaJobs[ev.jobId];
   if (!j) return;
-  if (ev.type === 'progress') { j.progress = ev.value; j.status = `${j.label}… ${Math.round(ev.value * 100)}%`; }
+  // The bar only reaches 100% when the result exists: the engine's steps finishing is not the
+  // end (the picture or video still has to be decoded and saved), so until then it stops short.
+  if (ev.type === 'progress') j.progress = Math.max(0, Math.min(0.99, Number(ev.value) || 0));
   if (ev.type === 'status') j.status = ev.text;
-  if (ev.type === 'done') { j.done = true; j.item = ev.item; j.status = `Done in ${fmtSec(ev.item.seconds || 0)}.`; lastResults.unshift(ev.item.id); await refreshGallery(); if (S.route.view === 'studio') render(); j.resolve?.(ev.item); return; }
-  if (ev.type === 'error') { j.error = ev.message; j.done = true; if (S.route.view === 'studio') render(); j.resolve?.(null); return; }
+  if (ev.type === 'done') {
+    j.done = true; j.progress = 1; j.item = ev.item; j.status = `Done in ${fmtSec(ev.item.seconds || 0)}.`;
+    lastResults.unshift(ev.item.id);
+    try { await refreshGallery(); } catch { /* the result is still in the gallery; it shows on the next refresh */ }
+    if (S.route.view === 'studio') render();
+    else if (!j.inChat) toast(`✓ Your ${ev.item.kind === 'video' ? 'video' : 'picture'} is ready in Create.`, 6000);
+    j.resolve?.(ev.item);
+    return;
+  }
+  if (ev.type === 'error') {
+    j.error = ev.message || 'It did not finish.'; j.done = true;
+    if (/^Stopped\.?$/.test(j.error) && !j.inChat) delete mediaJobs[ev.jobId]; // you stopped it: nothing to report
+    if (S.route.view === 'studio') render();
+    else if (!j.inChat && mediaJobs[ev.jobId]) toast(`Create: ${j.error}`, 12000);
+    j.resolve?.(null);
+    return;
+  }
   paintJob(ev.jobId);
 });
-document.addEventListener('click', (e) => { const b = e.target.closest('[data-stop-job]'); if (b) qs.call('media:stop', b.dataset.stopJob); });
+document.addEventListener('click', (e) => {
+  const stop = e.target.closest('[data-stop-job]');
+  if (stop) { qs.call('media:stop', stop.dataset.stopJob); return; }
+  const gone = e.target.closest('[data-dismiss-job]');
+  if (gone) { delete mediaJobs[gone.dataset.dismissJob]; if (S.route.view === 'studio') render(); return; }
+  const again = e.target.closest('[data-retry-job]');
+  if (again) { const old = mediaJobs[again.dataset.retryJob]; delete mediaJobs[again.dataset.retryJob]; if (old?.req) startJob(old.req, old.label, old.sec); else if (S.route.view === 'studio') render(); }
+});
 
 // "⏱ About 20 s per picture on your PC · ★ 4.5" for the chosen model (× how many).
 function mediaEtaText(target, what, times = 1) {
@@ -150,11 +186,11 @@ setInterval(() => {
   }
 }, 1000);
 
-function startJob(req, label, sec = null) {
+function startJob(req, label, sec = null, extra = {}) {
   const jobId = uid();
   return new Promise((resolve) => {
-    mediaJobs[jobId] = { status: 'Starting…', progress: 0, label, resolve, sec, start: Date.now() };
-    qs.call('media:generate', jobId, req).catch((err) => { mediaJobs[jobId].error = err.message; resolve(null); });
+    mediaJobs[jobId] = { status: 'Starting…', progress: 0, label, resolve, sec, start: Date.now(), req, ...extra };
+    qs.call('media:generate', jobId, req).catch((err) => { const j = mediaJobs[jobId]; if (j) { j.error = err.message; j.done = true; } if (S.route.view === 'studio') render(); resolve(null); });
     if (S.route.view === 'studio') render();
   });
 }
@@ -181,7 +217,7 @@ function sizeFor(spec, preset) {
 function createHTML() {
   const opts = mediaModelOptions(['image'], (c) => c.edit !== 'instruct');
   if (!opts.length) return suggestHTML('image', 'Get an image model first.');
-  const jobs = Object.entries(mediaJobs).filter(([, j]) => j.label === 'Creating' && !j.done);
+  const jobs = pageJobs('Creating');
   return `<div class="studio">
     <div class="card stack-v">
       <div class="field"><label for="ci-model">Model</label><select id="ci-model">${opts.map((o) => `<option value="${esc(o.value)}" ${o.value === S.data.prefs.imageModel ? 'selected' : ''}>${esc(o.label)}</option>`).join('')}</select></div>
@@ -219,12 +255,16 @@ function bindCreate() {
       await refreshGallery(); render(); return;
     }
     const inst = S.installed.find((m) => `local:${m.id}` === model);
-    const spec = S.catalog.media.find((c) => c.id === inst.catalogId);
+    const spec = inst && S.catalog.media.find((c) => c.id === inst.catalogId);
+    if (!spec) { toast('That picture model is no longer installed. Pick another under Model.', 8000); await refreshModels().catch(() => {}); render(); return; }
     const [width, height] = sizeFor(spec, preset);
     const seed = $('#ci-seed').value;
-    for (let i = 0; i < count; i++) {
-      await startJob({ modelId: inst.id, mode: 'generate', prompt, negative: $('#ci-neg').value, width, height, steps: Number($('#ci-steps').value) || undefined, cfg: $('#ci-cfg').value === '' ? undefined : Number($('#ci-cfg').value), seed: seed === '' ? '' : Number(seed) + i }, 'Creating', mediaEta(model));
-    }
+    // Read the form once: the page is redrawn while the pictures are made.
+    const base = { modelId: inst.id, mode: 'generate', prompt, negative: $('#ci-neg').value, width, height, steps: Number($('#ci-steps').value) || undefined, cfg: $('#ci-cfg').value === '' ? undefined : Number($('#ci-cfg').value) };
+    const eta = mediaEta(model);
+    // All of them are queued at once (they are made one after another), so each shows its place.
+    const all = Array.from({ length: count }, (_, k) => startJob({ ...base, seed: seed === '' ? '' : Number(seed) + k }, 'Creating', eta));
+    await Promise.all(all);
   });
 }
 
@@ -282,7 +322,7 @@ function editHTML() {
   }
   const aiOpts = mediaModelOptions(['image'], (c) => Boolean(c.edit));
   const slider = (k, label, min, max, step = 1) => `<div class="field"><label for="adj-${k}">${label}: <span id="adj-${k}-v">${ed.adj[k]}</span></label><input type="range" id="adj-${k}" data-adj="${k}" min="${min}" max="${max}" step="${step}" value="${ed.adj[k]}"></div>`;
-  const jobs = Object.entries(mediaJobs).filter(([, j]) => j.label === 'Editing' && !j.done);
+  const jobs = pageJobs('Editing');
   return `<div class="studio">
     <div class="stack-v">
       <div class="card stack-v">
@@ -414,7 +454,7 @@ function videoHTML() {
   const opts = mediaModelOptions(['video']);
   if (!opts.length) return suggestHTML('video', 'Get a video model first.');
   const imgs = gallery.filter((g) => g.kind === 'image');
-  const jobs = Object.entries(mediaJobs).filter(([, j]) => j.label === 'Animating' && !j.done);
+  const jobs = pageJobs('Animating');
   return `<div class="studio">
     <div class="card stack-v">
       <div class="field"><label for="cv-model">Model</label><select id="cv-model">${opts.map((o) => `<option value="${esc(o.value)}" ${o.value === S.data.prefs.videoModel ? 'selected' : ''}>${esc(o.label)}</option>`).join('')}</select></div>
@@ -444,7 +484,8 @@ function bindVideo() {
     const prompt = $('#cv-prompt').value.trim();
     if (!prompt) { toast('Describe the video first.'); return; }
     const inst = S.installed.find((m) => `local:${m.id}` === $('#cv-model').value);
-    const spec = S.catalog.media.find((c) => c.id === inst.catalogId);
+    const spec = inst && S.catalog.media.find((c) => c.id === inst.catalogId);
+    if (!spec) { toast('That video model is no longer installed. Pick another under Model.', 8000); await refreshModels().catch(() => {}); render(); return; }
     const from = $('#cv-from').value;
     if (from && !spec.animate) { toast(`${spec.name} can't start from a photo. Use Wan 2.2, or clear "Start from a photo".`, 6000); return; }
     const d = spec.defaults;
@@ -460,7 +501,7 @@ function veditHTML() {
   const videos = gallery.filter((g) => g.kind === 'video');
   const g = gallery.find((x) => x.id === vid.id);
   if (!g) return `<div class="notice info" style="margin-bottom:14px">Pick a video to edit, or upload one with the button above.</div>${videos.length ? `<div class="gallery">${videos.map((x) => `<button class="gitem" data-pick-video="${x.id}"><video src="${x.url}" muted preload="metadata"></video><div class="cap">${esc(x.prompt || x.title || 'Video')}</div></button>`).join('')}</div>` : ''}`;
-  const jobs = Object.entries(mediaJobs).filter(([, j]) => j.label === 'Exporting' && !j.done);
+  const jobs = pageJobs('Exporting');
   return `<div class="studio">
     <div class="card stack-v">
       <div class="grid2">

@@ -137,6 +137,15 @@ async function whenFree(s, maxMs = 15 * 60 * 1000) {
   while (isBusy(s) && !s.exited && Date.now() < until) await new Promise((r) => setTimeout(r, 200));
 }
 function stopAll() { for (const k of [...servers.keys()]) stop(k); }
+// Graphics memory held by loaded chat models, and a way to hand it back: pictures and video need
+// the room. Every loaded model that is not answering right now is unloaded from the card (it
+// loads again when you next chat); one in the middle of an answer is left alone.
+const gpuHeld = () => [...servers.values()].reduce((t, s) => t + (s.exited ? 0 : s.vramGB || 0), 0);
+function releaseGpu() {
+  let n = 0;
+  for (const [k, s] of [...servers.entries()]) if ((s.vramGB || 0) > 0 && !isBusy(s)) { stop(k); n++; }
+  return n;
+}
 // Stops one model (every copy of it that's running), giving its memory back to the PC.
 function stopFile(file) { let n = 0; for (const [k, s] of [...servers.entries()]) if (s.file === file) { stop(k); n++; } return n; }
 
@@ -488,4 +497,4 @@ const isLoaded = (file) => [...servers.values()].some((s) => s.file === file && 
 
 // The last lines each running engine printed (for "Save diagnostics").
 const logTails = () => [...servers.values()].map((s) => ({ file: require('node:path').basename(s.file), lines: s.log.join('').split('\n').slice(-40).join('\n') }));
-module.exports = { gpuLayers, countedVram, roomyContext, idleMs, readGguf, ensure, prefill, chat, stop, stopAll, stopFile, status, isLoaded, contextFor, prefetch, logTails };
+module.exports = { gpuLayers, countedVram, gpuHeld, releaseGpu, roomyContext, idleMs, readGguf, ensure, prefill, chat, stop, stopAll, stopFile, status, isLoaded, contextFor, prefetch, logTails };

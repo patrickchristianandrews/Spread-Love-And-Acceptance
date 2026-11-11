@@ -88,6 +88,27 @@ const TINY = path.join(__dirname, 'fixtures', 'tiny.gguf');
   const BUILT_IN = ['text', 'app', 'docx', 'pptx', 'xlsx', 'chart', 'beat', 'tool', 'speech', 'narrate', 'podcast'];
   assert.deepEqual(cover.kinds.filter((k) => !BUILT_IN.includes(k)).sort(), ['animate', 'edit', 'image', 'video'], `a new kind of skill output needs a maker in the Liquid Edition: ${cover.kinds.join(', ')}`);
   assert.deepEqual([cover.image, cover.edit, cover.video, cover.animate], ['lustify', 'lustify', 'wan2.2-5b', 'wan2.2-5b'], 'the Liquid Edition makes all four with its own models');
+  // Create: a picture that fails does not vanish at the end. Its box stays, says why in plain
+  // words, and offers another try; one that works shows 100% only once the picture is there.
+  await win.evaluate(() => { studioTab = 'create'; go({ view: 'studio' }); });
+  await win.waitForSelector('#ci-prompt');
+  await win.fill('#ci-prompt', 'a fox [fail:crash]');
+  await win.click('#ci-go');
+  await win.waitForSelector('.progress-box.failed', { timeout: 60000 });
+  const failed = await win.evaluate(() => ({ text: document.querySelector('.progress-box.failed').innerText, retry: Boolean(document.querySelector('.progress-box.failed [data-retry-job]')), pictures: document.querySelectorAll('.gallery .gitem').length }));
+  assert.match(failed.text, /stopped before the picture was finished/); assert.ok(failed.retry, 'a failed job offers "Try again"');
+  await win.click('.progress-box.failed [data-dismiss-job]');
+  await win.waitForSelector('.progress-box.failed', { state: 'detached' });
+  await win.fill('#ci-prompt', 'a fox in the snow');
+  await win.click('#ci-go');
+  await win.waitForFunction((n) => document.querySelectorAll('.gallery .gitem').length > n && !document.querySelector('.progress-box'), failed.pictures, { timeout: 60000 });
+  // In a chat, a failed picture says why too.
+  await win.click('[data-nav="newchat"]');
+  await win.waitForSelector('#input');
+  await win.fill('#input', 'make me a picture of a fox [fail:memory]');
+  await win.keyboard.press('Enter');
+  await win.waitForFunction(() => /Not enough graphics memory/.test([...document.querySelectorAll('.msg.assistant')].pop()?.innerText || ''), null, { timeout: 90000 })
+    .catch(async () => { throw new Error(`the chat did not say why the picture failed: ${(await win.evaluate(() => [...document.querySelectorAll('.msg.assistant')].pop()?.innerText || '(none)')).slice(0, 400)}`); });
   // Where Venice is suggested for the Liquid Edition, it says what the pairing gives you: how
   // much less of Venice you use, how much faster hard answers are on this PC, and the quality.
   await win.evaluate(() => { go({ view: 'models' }); });
@@ -111,6 +132,6 @@ const TINY = path.join(__dirname, 'fixtures', 'tiny.gguf');
   assert.match(venice.rec, /less Venice use than Venice alone/); assert.match(venice.pics, /Lustify on your PC/);
   assert.deepEqual(errors, []);
   await app.close();
-  console.log('✓ Liquid Edition chat: just asking makes a picture with Lustify; follow-ups continue; ordinary messages get ordinary answers; every kind of skill has its maker in the Liquid Edition; Code chat opens a chat set up for programming; Venice suggestions say what the pairing saves, speeds up and how good it is');
+  console.log('✓ Liquid Edition chat: just asking makes a picture with Lustify; follow-ups continue; ordinary messages get ordinary answers; every kind of skill has its maker in the Liquid Edition; Code chat opens a chat set up for programming; Venice suggestions say what the pairing saves, speeds up and how good it is; a failed picture stays on screen and says why');
   process.exit(0);
 })().catch((e) => { console.error(`FAIL ${e.message}`); process.exit(1); });

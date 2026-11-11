@@ -39,7 +39,7 @@ const NOT_NOW = /\b(someday|some day|one day|eventually|in the future|thinking (
 // smaller", "I need the big picture", "a photo column" and "a video player" are not requests.
 const ASK_VERB = '\\b(make|create|generate|draw|paint|design|render|produce|show|give|send|want|need|like|get|gimme)\\b(?: me| us)?';
 const SOME = '(?:a|an|another|some|one|two|three|four|five|six|\\d+|a few|a couple of|several|more)';
-const NOT_MINE = "(?:(?!(?:the|this|that|these|those|my|your|his|her|their|our|its)\\b)[\\w'-]+ )";
+const NOT_MINE = "(?:(?!(?:the|this|that|these|those|my|your|his|her|their|our|its|with|and|about|for|of|in|on|to|from|or)\\b)[\\w'-]+ )";
 const THEN = '(?= (?:of|with|showing|featuring|depicting|that shows|where|for|in|like|from|about|please)\\b|\\s*[.,!?:;]|\\s*$)';
 const PIC = '(pictures?|images?|photos?|photographs?|pics?|drawings?|paintings?|illustrations?|portraits?|artworks?|selfies?)';
 const VID = '(videos?|clips?|animations?|gifs?)';
@@ -68,6 +68,11 @@ function askedFor(t, skill) {
     let m;
     try { m = new RegExp(p, 'i').exec(t); } catch { continue; }
     if (!m) continue;
+    // A whole word, not part of another one: "memo" is not asked for by "memory" (a plural or an
+    // -ing form still counts: "flashcards", "vibe coding").
+    const tail = t.slice(m.index + m[0].length);
+    if (/[a-z]$/i.test(m[0]) && /^[a-z]/i.test(tail) && !/^(s|es|e|ed|er|ing)\b|^'s\b/i.test(tail)) continue;
+    if (m.index > 0 && /[a-z0-9]/i.test(t[m.index - 1]) && /^[a-z0-9]/i.test(m[0])) continue;
     // "a video script", "an image editor", "a photo column": about the thing, not the thing.
     if (['image', 'video'].includes(skill.output) && NEXT_WORD_ELSE.test(t.slice(m.index + m[0].length))) continue;
     if (OWN_VERB.test(m[0]) && !/^(research|plan\b(?! (a|my|the|our)\b))/i.test(m[0])) return true;
@@ -93,6 +98,14 @@ function autoSkillFor(text, atts = [], chat = null) {
   if (coding) return out === 'app' && askedFor(t, cand) ? pick(cand) : null;
   // Photo edits and bringing a photo to life: with the photo attached.
   if ((out === 'edit' || out === 'animate') && has('image')) return pick(cand);
+  // A plain request for a picture or a video comes first: "make me a picture of my memory of
+  // the beach" is a picture, whatever other skill's words turn up in the description. A specific
+  // picture skill (logo, poster, GIF…) when it is what is asked for; otherwise the general one.
+  if (!has('image') && !ABOUT_WORDS.test(t)) {
+    const video = VIDEO_ASK.test(t) || VIDEO_FIRST.test(t);
+    const picture = PICTURE_ASK.test(t) || PICTURE_FIRST.test(t) || (DRAW_IT.test(t) && !SUMS.test(t));
+    if (video || picture) return pick((out === 'image' || out === 'video') && askedFor(t, cand) ? cand : skillById(video ? 'make-video' : 'make-image'));
+  }
   // Instant tools work on an attached file (upscale, remove vocals, 60 fps…).
   if (out === 'tool') return has('image') || has('video') || has('audio') ? pick(cand) : null;
   // Reading aloud, narration, podcasts, beats, documents, slides, spreadsheets, charts and
@@ -102,13 +115,9 @@ function autoSkillFor(text, atts = [], chat = null) {
   // asked for; otherwise the general one. Never for requests about a picture (describe it,
   // write a prompt, review a book with "picture" in its title).
   if (ABOUT_WORDS.test(t)) return null;
-  if ((out === 'image' || out === 'video') && (askedFor(t, cand) || (out === 'image' ? PICTURE_FIRST : VIDEO_FIRST).test(t))) return pick(cand);
-  if (cand && out && !['text', 'image', 'video'].includes(out)) return null;
-  if (has('image')) return null; // with a photo attached, "make…" is about that photo: left to you
-  if (VIDEO_ASK.test(t) || VIDEO_FIRST.test(t)) return pick(skillById('make-video'));
-  if (PICTURE_ASK.test(t) || PICTURE_FIRST.test(t)) return pick(skillById('make-image'));
-  if (DRAW_IT.test(t) && !SUMS.test(t)) return pick(skillById('make-image'));
-  return null;
+  // A specific picture or video skill asked for in its own words ("design a logo for my bakery").
+  if ((out === 'image' || out === 'video') && !has('image') && askedFor(t, cand)) return pick(cand);
+  return null; // (with a photo attached, "make…" is about that photo: left to you)
 }
 
 views.skills = {

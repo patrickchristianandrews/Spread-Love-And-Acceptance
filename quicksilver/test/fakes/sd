@@ -3,13 +3,34 @@
 const { execFileSync } = require('child_process');
 const args = process.argv.slice(2);
 const arg = (f) => { const i = args.indexOf(f); return i >= 0 ? args[i + 1] : null; };
-if (args.includes('--help')) { console.log('usage: sd [options]\n -M, --mode [img_gen|vid_gen]\n --llm\n --fps\n --flow-shift\n --offload-to-cpu\n --vae-tiling\n --diffusion-fa\n --video-frames'); process.exit(0); }
+if (args.includes('--help')) { console.log('usage: sd [options]\n -M, --mode [img_gen|vid_gen]\n --llm\n --fps\n --flow-shift\n --offload-to-cpu\n --vae-tiling\n --temporal-tiling\n --max-vram\n --diffusion-fa\n --video-frames\n' + ' '.repeat(220)); process.exit(0); }
+// For tests of what Quicksilver does when the engine misbehaves:
+//   QS_SD_LOG=<file>        every run appends "start <ms> <args>" and "end <ms>" (to see runs don't overlap)
+//   QS_SD_FAIL_ONCE=<file>  the first run fails like a card out of memory, after its steps; later runs work
+//   QS_SD_FAIL=memory|crash|nofile|blank  every run fails that way (blank: one flat colour)
+//   QS_SD_SLOW=<ms>         each step takes this long
+const fs = require('fs');
+const note = (t) => { if (process.env.QS_SD_LOG) fs.appendFileSync(process.env.QS_SD_LOG, `${t}\n`); };
+note(`start ${Date.now()} ${args.join(' ')}`);
 const out = arg('-o');
 const steps = Number(arg('--steps') || 4);
+const slow = Number(process.env.QS_SD_SLOW || 0);
+const nap = (ms) => { if (ms > 0) Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, ms); };
 console.log('loading model...');
-for (let i = 1; i <= steps; i++) console.log(`  |=====>   | ${i}/${steps} - 0.10s/it`);
+for (let i = 1; i <= steps; i++) { nap(slow); console.log(`  |=====>   | ${i}/${steps} - 0.10s/it`); }
+// ...or for one job, with a marker in its prompt: "[fail:memory]", "[fail:crash]", "[fail:blank]".
+let mode = process.env.QS_SD_FAIL || (String(arg('-p') || '').match(/\[fail:(\w+)\]/) || [])[1] || '';
+const once = process.env.QS_SD_FAIL_ONCE;
+if (once && !fs.existsSync(once)) { fs.writeFileSync(once, 'failed once'); mode = 'memory'; }
+if (mode === 'memory') { console.error('decoding 1 latents\nggml_vulkan: Device memory allocation of size 1073741824 failed.\nvk::Device::allocateMemory: ErrorOutOfDeviceMemory'); note(`end ${Date.now()} failed`); process.exit(1); }
+if (mode === 'crash') { console.error('[ERROR] something went badly wrong in the sampler'); note(`end ${Date.now()} failed`); process.exit(3); }
+if (mode === 'nofile') { console.log('decoding... done'); note(`end ${Date.now()} nofile`); process.exit(0); }
 const W = arg('-W') || 64, H = arg('-H') || 64;
 const color = arg('-i') || arg('-r') ? 'blue' : 'pink';
+console.log('decoding 1 latents');
 if (arg('-M') === 'vid_gen') execFileSync('ffmpeg', ['-y', '-loglevel', 'error', '-f', 'lavfi', '-i', `testsrc=size=${Math.min(W, 320)}x${Math.min(H, 240)}:rate=8:duration=1`, out]);
-else execFileSync('ffmpeg', ['-y', '-loglevel', 'error', '-f', 'lavfi', '-i', `color=c=${color}:s=${W}x${H}`, '-frames:v', '1', out]);
-console.log('decoding... done');
+else if (mode === 'blank') execFileSync('ffmpeg', ['-y', '-loglevel', 'error', '-f', 'lavfi', '-i', `color=c=black:s=${W}x${H}`, '-frames:v', '1', out]);
+// A real-looking picture (many colours), so it is never mistaken for a blank one.
+else execFileSync('ffmpeg', ['-y', '-loglevel', 'error', '-f', 'lavfi', '-i', `testsrc2=size=${W}x${H}:rate=1`, '-vf', `drawbox=x=0:y=0:w=24:h=24:color=${color}:t=fill`, '-frames:v', '1', out]);
+console.log('decode_first_stage completed');
+note(`end ${Date.now()} ok`);

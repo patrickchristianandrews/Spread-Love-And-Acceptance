@@ -132,6 +132,10 @@ kbd { font-size: .72rem; padding: 1px 6px; border-radius: 6px; border: 1px solid
 /* Code chat: the second way to start, quieter than New chat. */
 .nav-new.nav-code { background: transparent; color: var(--text); border: 1.5px solid var(--line-soft); box-shadow: none; padding: 8px 12px; }
 .nav-new.nav-code:hover { background: var(--soft); filter: none; }
+/* A Create job that failed: stays, says why, offers another try. */
+.progress-box.failed { border-color: var(--danger, #e5484d); }
+.progress-box.failed .jt { white-space: normal; }
+.progress-box .jp { min-width: 3.2em; text-align: right; font-variant-numeric: tabular-nums; }
 /* Venice with the Liquid Edition: use, speed and quality, one line each. */
 .venice-facts { display: flex; flex-direction: column; gap: 4px; margin: 8px 0 4px; padding: 8px 10px; border: 1px solid var(--line-soft); border-radius: 10px; background: var(--soft); }
 .venice-facts > span { display: block; line-height: 1.4; }

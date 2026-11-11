@@ -690,7 +690,9 @@ async function diagnostics() {
   lines.push('## Connectors on', integrations.list().filter((c) => c.enabled).map((c) => c.name).join(', ') || 'none', '');
   lines.push('## Running engines', ...llama.status().map((s) => `${path.basename(s.file)} · ${s.layers} layers on GPU · ctx ${s.ctx} · ${s.ready ? 'running' : 'stopped'}`), '');
   for (const t of llama.logTails()) lines.push(`## Engine log: ${t.file}`, t.lines, '');
-  lines.push('## Recent errors', ...(recentErrors.length ? recentErrors : ['none']));
+  lines.push('## Recent errors', ...(recentErrors.length ? recentErrors : ['none']), '');
+  // The last picture or video that failed: the engine's command line and what it said.
+  try { lines.push('## Create: last failure', fs.readFileSync(path.join(store.dir('logs'), 'create-last-failure.log'), 'utf8').slice(-6000)); } catch { lines.push('## Create: last failure', 'none'); }
   return lines.join('\n');
 }
 handle('disk:info', () => {

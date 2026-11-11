@@ -255,7 +255,8 @@ async function collect(gen) {
   const sdModel = models.add({ id: 'sdxl-turbo', name: 'SDXL Turbo', kind: 'image', catalogId: 'sdxl-turbo', files: { model: copy('sdxl.safetensors') }, size: 7e9 });
   let progress = 0;
   const g1 = await media.generate('job1', { modelId: sdModel.id, mode: 'generate', prompt: 'a pastel droplet', width: 64, height: 64 }, { onProgress: (v) => { progress = v; } });
-  assert.ok(fs.existsSync(g1.file)); assert.equal(progress, 1);
+  // The bar moves, and stops short of 100% by itself: 100% is shown when the picture exists.
+  assert.ok(fs.existsSync(g1.file)); assert.ok(progress > 0.8 && progress < 1, `progress ${progress}`);
   const g2 = await media.generate('job2', { modelId: sdModel.id, mode: 'edit', prompt: 'make it blue', image: g1.file, strength: 0.5, width: 64, height: 64 });
   assert.ok(fs.statSync(g2.file).size > 0);
   models.add({ id: 'wan2.1-1.3b', name: 'Wan', kind: 'video', catalogId: 'wan2.1-1.3b', files: { diffusion: copy('wan.safetensors'), vae: copy('wanvae.safetensors'), t5xxl: copy('umt5.gguf') }, size: 7e9 });
