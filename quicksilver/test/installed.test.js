@@ -1,6 +1,6 @@
 // Tests the INSTALLED app, the way a new user would use it: the real installer's output, the
 // real engine and the models that come with Quicksilver. Run on Windows after a silent install.
-//   node test/installed.test.js <path to Quicksilver.exe> <full|fallback> [screenshot folder]
+//   node test/installed.test.js <path to Quicksilver.exe> <full|fallback|web> [screenshot folder]
 //   full:     installed with the "Quicksilver models" folder next to the setup file
 //   fallback: installed from the setup file alone (the setup screen downloads the Liquid Edition first)
 const { _electron: electron } = require('playwright');
@@ -60,8 +60,25 @@ function redPng(size = 64) {
 
   // 1. First launch: the bundled models are registered and Quicksilver is ready.
   await win.waitForSelector('text=Forms to fit your work.', { timeout: 60000 });
+  let s;
+  if (mode === 'web') {
+    // The web installer has no models at all: the setup screen covers the app and downloads the
+    // whole Liquid Edition, the small 2B model and search included.
+    await win.waitForSelector('#liquid-gate', { timeout: 60000 }).catch(() => { throw new Error('the web installer should open on the Liquid Edition setup screen'); });
+    const want = ['qwen3.5-2b', 'qwen3.5-4b', 'qwen3.5-9b-uncensored', 'nomic-embed-v1.5', 'bge-reranker-v2-m3', 'lustify', 'wan2.2-5b'];
+    await win.waitForFunction((ids) => ids.every((id) => S.downloads[id] || S.installed.some((m) => m.catalogId === id)), want, { timeout: 120000 })
+      .catch(async () => { throw new Error(`every Liquid Edition model should start downloading (downloading: ${(await state()).downloads.map((d) => d.id).join(', ') || 'none'})`); });
+    await shot('01-web-setup');
+    s = await state();
+    assert.equal(s.installed.filter((m) => m.kind === 'text').length, 0, 'nothing installed with the web installer');
+    ok(`web installer: setup screen up, downloading ${s.downloads.map((d) => d.id).join(', ')}`);
+    assert.deepEqual(errors, [], 'no errors in the app');
+    await app.close().catch(() => {});
+    console.log(`\nINSTALLED APP WORKS (${mode})`);
+    process.exit(0);
+  }
   await win.waitForFunction(() => S.installed.some((m) => m.id === 'starter'), null, { timeout: 60000 });
-  let s = await state();
+  s = await state();
   assert.ok(s.installed.find((m) => m.id === 'starter' && m.source === 'bundled'), 'Qwen3.5 2B registered from the installer');
   if (mode === 'full') {
     assert.ok(s.installed.find((m) => m.id === 'starter-brain' && m.source === 'bundled'), 'Qwen3.5 4B copied in by the installer and registered');

@@ -12,6 +12,9 @@
 // (pictures) and Wan 2.2 5B and Turbo (video), so it makes both offline from the first run. Set
 // QS_NO_MEDIA_PACK=1 to leave them out (the app then downloads them on first run, before it opens).
 // A failed download fails the build: the Liquid Edition ships complete.
+// QS_WEB_INSTALLER=1 makes the web installer instead: no model files at all (not even the small
+// ones that normally go inside it). Only STARTER.json and the licences are written, every model
+// marked to download — Quicksilver's setup screen fetches the whole Liquid Edition on first launch.
 // Usage: node scripts/fetch-starter.js
 const path = require('node:path');
 const fs = require('node:fs');
@@ -25,6 +28,7 @@ const HF = 'https://huggingface.co';
 const ROOT = path.join(__dirname, '..');
 const QUANTS = ['Q4_K_M', 'Q4_K_S', 'IQ4_XS'];
 const PROJ_ORDER = [/q8_0/i, /(^|[-_.])f16/i, /bf16/i];
+const WEB = Boolean(process.env.QS_WEB_INSTALLER);
 
 const MODELS = [
   // Inside the installer: small, quick on any PC, sees photos. The Muse, and the instant fallback.
@@ -112,14 +116,16 @@ async function get(repo, f, dest) {
     const pick = await choose(m);
     console.log(`${m.name}: ${pick.quant} from ${pick.repo}`);
     const dir = path.join(ROOT, m.where);
-    await get(pick.repo, pick.model, path.join(dir, m.file));
-    if (pick.mmproj) await get(pick.repo, pick.mmproj, path.join(dir, m.proj || 'mmproj.gguf'));
+    if (!WEB) {
+      await get(pick.repo, pick.model, path.join(dir, m.file));
+      if (pick.mmproj) await get(pick.repo, pick.mmproj, path.join(dir, m.proj || 'mmproj.gguf'));
+    }
     const open = m.uncensored || /abliterat|uncensor/i.test(pick.repo);
     // The Liquid Edition's chat models are completely uncensored: no filtered stand-in, ever. The
     // search model (embeddings) writes no text, so it's exempt.
     if (!m.kind && !open) throw new Error(`No uncensored copy of ${m.name} could be downloaded (tried ${m.repos.filter((r) => /abliterat|uncensor/i.test(r)).join(', ')}).`);
     if (m.kind) console.log(`  ✓ ${m.kind === 'rerank' ? 'sharper' : 'smarter'}-search model`); else console.log(`  ✓ uncensored copy: ${pick.repo}`);
-    entries.push({ id: m.id, catalogId: m.catalogId, name: m.kind ? m.name : open ? `${m.name} (uncensored)` : m.name, ...(m.kind ? { kind: m.kind } : {}), ...(open && !m.kind ? { uncensored: true } : {}), repo: pick.repo, quant: pick.quant, files: { model: m.file, ...(pick.mmproj ? { mmproj: m.proj || 'mmproj.gguf' } : {}) }, ...(m.pack ? { pack: true } : {}), ...(m.optional ? { optional: true } : {}), ...(m.ifFits ? { ifFits: true } : {}) });
+    entries.push({ id: m.id, catalogId: m.catalogId, name: m.kind ? m.name : open ? `${m.name} (uncensored)` : m.name, ...(m.kind ? { kind: m.kind } : {}), ...(open && !m.kind ? { uncensored: true } : {}), repo: pick.repo, quant: pick.quant, files: { model: m.file, ...(pick.mmproj ? { mmproj: m.proj || 'mmproj.gguf' } : {}) }, ...(m.pack || WEB ? { pack: true } : {}), ...(m.optional ? { optional: true } : {}), ...(m.ifFits ? { ifFits: true } : {}) });
     let text = m.licenceText;
     if (!text) try {
       const tmp = path.join(os.tmpdir(), `licence-${m.id}.txt`);
@@ -133,7 +139,7 @@ async function get(repo, f, dest) {
     try {
       const plan = await models.planCatalog(m.catalogId);
       console.log(`${m.name}: ${plan.items.map((i) => `${i.repo}/${i.path}`).join(', ')}`);
-      for (const it of plan.items) await get(it.repo, it, path.join(ROOT, 'pack', m.names[it.role]));
+      if (!WEB) for (const it of plan.items) await get(it.repo, it, path.join(ROOT, 'pack', m.names[it.role]));
       // pack: copied in by the installer; without the folder the app downloads it before it opens.
       entries.push({ id: m.id, catalogId: m.catalogId, name: m.name, kind: m.kind, uncensored: true, files: Object.fromEntries(plan.items.map((i) => [i.role, m.names[i.role]])), pack: true, optional: true, media: true });
       licences.push(m.licence);
@@ -147,5 +153,5 @@ async function get(repo, f, dest) {
   fs.writeFileSync(path.join(ROOT, 'starter', 'MODEL-LICENCES.txt'), licences.join('\n\n'));
   fs.copyFileSync(path.join(ROOT, 'starter', 'MODEL-LICENCES.txt'), path.join(ROOT, 'pack', 'MODEL-LICENCES.txt'));
   const size = (d) => fs.readdirSync(path.join(ROOT, d)).reduce((t, n) => t + fs.statSync(path.join(ROOT, d, n)).size, 0);
-  console.log(`inside the installer: ${(size('starter') / 1e9).toFixed(2)} GB · next to it: ${(size('pack') / 1e9).toFixed(2)} GB`);
+  console.log(`inside the installer: ${(size('starter') / 1e9).toFixed(2)} GB · next to it: ${(size('pack') / 1e9).toFixed(2)} GB${WEB ? ' · web installer: every model downloads on first launch' : ''}`);
 })().catch((e) => { console.error(e); process.exit(1); });

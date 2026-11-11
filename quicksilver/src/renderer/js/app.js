@@ -320,7 +320,7 @@ function paintLiquidGate() {
     <p class="muted">Quicksilver opens as soon as its whole uncensored crew is on this PC: the Brain, the Closer, smarter search, Lustify for pictures and Wan 2.2 for video. ${tot ? `${gb(got)} of ${gb(tot)} so far.` : ''} You can close Quicksilver at any time: downloads pick up where they stopped.</p>
     <div class="stack-v" style="gap:14px;margin:16px 0">${rows}</div>
     ${S.config?.offline ? '<button class="btn primary" data-gate-online>Turn off offline mode and download</button>' : Object.keys(gateFailed).length ? '<button class="btn primary" data-gate-retry>Try again</button>' : ''}
-    <p class="small muted" style="margin-bottom:0">Tip: the "Quicksilver models" folder that comes with the installer has all of these already. Keep it next to the setup file and reinstall to skip the download.</p></div>`;
+    <p class="small muted" style="margin-bottom:0">This is part of setup: Quicksilver downloads its models once (about 37 GB, so it can take a while), then works offline. The full installer's "Quicksilver models" folder has them all already, if you'd rather skip the download.</p></div>`;
 }
 
 // After the first screen: add models found on this PC, pick a default if there is none, and load

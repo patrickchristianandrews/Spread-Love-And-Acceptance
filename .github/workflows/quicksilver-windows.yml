@@ -274,6 +274,85 @@ jobs:
             quicksilver/dist/*.exe
             quicksilver/dist/*.exe.sha256
 
+  # The web installer: no models inside or next to it (a small download). On first launch
+  # Quicksilver's setup screen downloads the whole Liquid Edition (about 37 GB) before it opens.
+  web:
+    needs: tests
+    runs-on: windows-latest
+    timeout-minutes: 90
+    defaults:
+      run:
+        working-directory: quicksilver
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: quicksilver
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: quicksilver/package-lock.json
+      - name: Install
+        run: npm ci
+        env:
+          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: '1'
+      - name: Download the engines (llama.cpp, stable-diffusion.cpp, whisper.cpp)
+        run: node scripts/fetch-engines.js --platform win32
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: List the Liquid Edition's models (no model files in this installer)
+        run: QS_WEB_INSTALLER=1 node scripts/fetch-starter.js
+      - name: Build the web installer
+        run: |
+          ARGS=(--win --publish never '-c.win.artifactName=Quicksilver-Web-Setup-${version}.${ext}')
+          if [ -n "$AZURE_CLIENT_ID" ]; then
+            ARGS+=("-c.win.azureSignOptions.publisherName=$AZURE_SIGN_PUBLISHER" "-c.win.azureSignOptions.endpoint=$AZURE_SIGN_ENDPOINT" "-c.win.azureSignOptions.codeSigningAccountName=$AZURE_SIGN_ACCOUNT" "-c.win.azureSignOptions.certificateProfileName=$AZURE_SIGN_PROFILE")
+          elif [ -z "$CSC_LINK" ]; then
+            unset CSC_LINK CSC_KEY_PASSWORD
+          fi
+          npx electron-builder "${ARGS[@]}"
+          for f in dist/*.exe; do s=$(stat -c %s "$f"); echo "$f: $((s / 1048576)) MB"; done
+          VERSION=$(node -p "require('./package.json').version")
+          printf 'Quicksilver web installer\r\n\r\nRun Quicksilver-Web-Setup-%s.exe. When Quicksilver first opens it downloads the\r\nLiquid Edition (chat, search, Lustify for pictures, Wan 2.2 for video: about 37 GB) and\r\nopens when the download is done. Keep 40 GB free on the drive you install to.\r\nIf the download stops, close and reopen Quicksilver: it picks up where it stopped.\r\n' "$VERSION" > "dist/READ ME FIRST.txt"
+        env:
+          CSC_IDENTITY_AUTO_DISCOVERY: 'false'
+          CSC_LINK: ${{ secrets.WIN_CSC_LINK }}
+          CSC_KEY_PASSWORD: ${{ secrets.WIN_CSC_KEY_PASSWORD }}
+          AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+          AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+          AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+          AZURE_SIGN_ENDPOINT: ${{ secrets.AZURE_SIGN_ENDPOINT }}
+          AZURE_SIGN_ACCOUNT: ${{ secrets.AZURE_SIGN_ACCOUNT }}
+          AZURE_SIGN_PROFILE: ${{ secrets.AZURE_SIGN_PROFILE }}
+          AZURE_SIGN_PUBLISHER: ${{ secrets.AZURE_SIGN_PUBLISHER }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Quicksilver-Windows-web-installer
+          path: |
+            quicksilver/dist/*.exe
+            quicksilver/dist/READ ME FIRST.txt
+          if-no-files-found: error
+      - name: Install it and check the setup screen downloads the Liquid Edition
+        shell: pwsh
+        timeout-minutes: 30
+        run: |
+          $setup = Get-ChildItem dist\Quicksilver-Web-Setup-*.exe | Select-Object -First 1
+          $p = Start-Process -FilePath $setup.FullName -ArgumentList '/S','/D=D:\QSW' -PassThru
+          if (!$p.WaitForExit(600000)) { $p.Kill(); throw 'the web installer did not finish within 10 minutes' }
+          if (!(Test-Path 'D:\QSW\Quicksilver.exe')) { throw 'Quicksilver.exe was not installed' }
+          $models = Get-ChildItem D:\QSW\resources\starter -Include *.gguf, *.safetensors -Recurse -ErrorAction SilentlyContinue
+          if ($models) { throw "the web installer should contain no models (found: $($models.Name -join ', '))" }
+          node test/installed.test.js D:\QSW\Quicksilver.exe web install-shots-web
+          if ($LASTEXITCODE -ne 0) { throw 'the installed app test failed' }
+          Get-Process Quicksilver, llama-server -ErrorAction SilentlyContinue | Stop-Process -Force -ErrorAction SilentlyContinue
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: Quicksilver-web-install-test-screenshots
+          path: quicksilver/install-shots-web/
+          if-no-files-found: ignore
+
   # Five tester sessions on the installed app with the real models: every answer, its speed and a
   # screenshot are recorded for review. Informational: in its own job, after the installer is built
   # and tested, so it never holds up the build. Skipped with testers: none.
