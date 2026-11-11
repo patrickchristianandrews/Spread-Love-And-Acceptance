@@ -393,7 +393,7 @@ function stackCard(s) {
     ${timesHTML(etaFor(`stack:${s.id}`))}
     ${boostsHTML(rows.map(([, t]) => t), { compact: true, liquid: s.builtFor === 'quicksilver' })}
     ${stackScoresHTML(rows.map(([, t]) => t))}
-    <div class="row"><button class="btn small primary" data-chat-stack="${s.id}">Chat</button><button class="btn small" data-edit-stack="${s.id}">Edit</button>${isFusion(s) ? `<button class="btn small" data-fz-rate="${s.id}">📊 Rating &amp; tips</button>` : ''}${boostBtn(`stack:${s.id}`)}<button class="btn small ghost" data-sug-open="stack:${s.id}" title="The best model to join and API to add for a task you pick">💡 What to add</button>${isFusion(s) && !s.community ? `<button class="btn small" data-publish="${s.id}">📤 Publish</button>` : ''}<button class="btn small danger" data-del-stack="${s.id}">Delete</button></div>
+    <div class="row"><button class="btn small primary" data-chat-stack="${s.id}">Chat</button>${s.builtFor === 'quicksilver' ? '' : `<button class="btn small" data-edit-stack="${s.id}">Edit</button>`}${isFusion(s) ? `<button class="btn small" data-fz-rate="${s.id}">📊 Rating &amp; tips</button>` : ''}${boostBtn(`stack:${s.id}`)}<button class="btn small ghost" data-sug-open="stack:${s.id}" title="The best model to join and API to add for a task you pick">💡 What to add</button>${isFusion(s) && !s.community ? `<button class="btn small" data-publish="${s.id}">📤 Publish</button>` : ''}${s.builtFor === 'quicksilver' ? '<span class="badge b-lav" title="The Liquid Edition can\'t be edited or deleted; choose another model or stack whenever you like">🔒 Locked</span>' : `<button class="btn small danger" data-del-stack="${s.id}">Delete</button>`}</div>
   </div>`;
 }
 

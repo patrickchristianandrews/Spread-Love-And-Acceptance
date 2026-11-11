@@ -848,4 +848,18 @@ const SCORES = require('./scores.json');
 // Uncensored versions are scored by the model they're made from (usually a point or two lower).
 const SCORE_BASE = { 'qwen3-8b-uncensored': 'qwen3-8b', 'qwen3-14b-uncensored': 'qwen3-14b', 'qwen3-30b-a3b-uncensored': 'qwen3-30b-a3b' };
 
-module.exports = { RETIRED, SCORES, SCORE_BASE, SUCCESSORS, FEATURED, TEXT_MODELS, TEXT_CATEGORIES, MEDIA_MODELS, MEDIA_CATEGORIES, JOBS, CLOUD_BOOST, cloudPlan, accuracyLevel, requirements, smallerAlternative, draftFor, DRAFT_FAMILIES, estimateText, estimateMedia, advise, compose, gpuBandwidth, profileInstalled, matchCatalog, scoreFor, familyOf, starsFor, capabilities, upgradeAdvice };
+// ---------- the Liquid Edition's members ----------
+// Every uncensored model is part of Quicksilver Liquid Edition: its built-in core (Muse, Brain,
+// Closer, search), every uncensored chat model, every uncensored picture model and Wan 2.2 for
+// video. The Liquid Edition is locked: its models can't be removed and the stack can't be edited
+// or deleted (you can still pick any other model or stack instead). Core first, then chat, then
+// pictures and video: the order they download in.
+const LIQUID_CORE = ['qwen3.5-2b', 'qwen3.5-4b', 'qwen3.5-9b-uncensored', 'nomic-embed-v1.5', 'bge-reranker-v2-m3', 'lustify', 'wan2.2-5b', 'wan2.2-5b-turbo'];
+const LIQUID_MEMBERS = [...new Set([
+  ...LIQUID_CORE,
+  ...TEXT_MODELS.filter((m) => m.category === 'open' && !RETIRED.has?.(m.id) && !m.retired).map((m) => m.id),
+  ...MEDIA_MODELS.filter((m) => m.uncensored).map((m) => m.id),
+])];
+const liquidMember = (catalogId) => Boolean(catalogId) && LIQUID_MEMBERS.includes(catalogId);
+
+module.exports = { LIQUID_CORE, LIQUID_MEMBERS, liquidMember, RETIRED, SCORES, SCORE_BASE, SUCCESSORS, FEATURED, TEXT_MODELS, TEXT_CATEGORIES, MEDIA_MODELS, MEDIA_CATEGORIES, JOBS, CLOUD_BOOST, cloudPlan, accuracyLevel, requirements, smallerAlternative, draftFor, DRAFT_FAMILIES, estimateText, estimateMedia, advise, compose, gpuBandwidth, profileInstalled, matchCatalog, scoreFor, familyOf, starsFor, capabilities, upgradeAdvice };

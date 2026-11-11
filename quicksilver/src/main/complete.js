@@ -958,7 +958,8 @@ function smoothHelper(p, hw, calib = 1) {
 
 async function ensureQuicksilverStack() {
   const have = stacks().find((s) => s.id === 'quicksilver');
-  if (store.config().quicksilverRemoved || (have && have.autoManaged === false)) return have ? 'stack:quicksilver' : null;
+  // Locked: the Liquid Edition is always Quicksilver's own crew (older versions let it be edited or deleted).
+  if (have && have.autoManaged === false) saveStack({ ...have, autoManaged: true });
   const all = models.list().filter((m) => m.kind === 'text');
   const pool = all.map(catalog.profileInstalled);
   // The Liquid Edition's core follows the online picks: when a newer, better uncensored Brain or
@@ -1020,7 +1021,7 @@ async function ensureQuicksilverStack() {
   if (!members.thinker) delete members.thinker;
   if (!members.muse || members.muse === members.drafters?.[0]) delete members.muse;
   const def = { id: 'quicksilver', name: 'Quicksilver Liquid Edition', emoji: '💧', builtIn: true, autoManaged: true, custom: true, builtFor: 'quicksilver', ...(bench ? { bench } : {}),
-    description: "Quicksilver Liquid Edition, Quicksilver's own uncensored crew: the built-in Qwen3.5 4B (the Brain) answers, sees photos and thinks hard questions through, Qwen3.5 2B (the Muse) sketches fresh angles for creative work, and a stronger uncensored model you add (the Closer, such as Qwen3.5 9B on a PC with a graphics card) leads on hard questions. Pictures are uncensored too: Lustify makes them (or the best uncensored picture model you add, with an anime model for anime requests), and Venice in the cloud when nothing is downloaded yet. Videos come from Wan 2.2 (open weights, no content filter), from a description or by animating a photo. Smarter search (finds your files and memories by meaning) is built in; the reranker is an optional add-on for even sharper results.", members };
+    description: "Quicksilver Liquid Edition, Quicksilver's own uncensored crew (locked: it can't be edited or deleted, and its models stay installed; choose any other model or stack whenever you like). Every uncensored model is part of it and joins by itself: the built-in Qwen3.5 4B (the Brain) answers, sees photos and thinks hard questions through, Qwen3.5 2B (the Muse) sketches fresh angles for creative work, and a stronger uncensored model you add (the Closer, such as Qwen3.5 9B on a PC with a graphics card) leads on hard questions. Pictures are uncensored too: Lustify makes them (or the best uncensored picture model you add, with an anime model for anime requests), and Venice in the cloud when nothing is downloaded yet. Videos come from Wan 2.2 (open weights, no content filter), from a description or by animating a photo. Smarter search (finds your files and memories by meaning) is built in; the reranker is an optional add-on for even sharper results.", members };
   if (!have || JSON.stringify(have.members) !== JSON.stringify(members) || have.builtFor !== 'quicksilver' || have.name !== def.name || (have.bench || null) !== (def.bench || null)) saveStack(def);
   return 'stack:quicksilver';
 }

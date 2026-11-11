@@ -188,6 +188,9 @@ function liquidOk(t) {
   return false;
 }
 const isLiquid = (t) => t === 'stack:quicksilver';
+// A model that's part of the Liquid Edition can't be removed (imported files from other apps can).
+const liquidLocked = (m) => Boolean(m) && m.source !== 'imported' && (m.source === 'bundled' || (S.catalog?.liquid || []).includes(m.catalogId));
+const LOCK_BADGE = '<span class="badge b-lav" title="Part of Quicksilver Liquid Edition: it stays installed. Choose any other model or stack whenever you like.">🔒 Liquid Edition</span>';
 const targetLabel = (t) => S.targets.find((x) => x.target === t)?.label || 'No model chosen';
 
 // Model choice order: the chat's own, the assistant's, the default, then anything installed.

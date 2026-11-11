@@ -25,5 +25,9 @@ for (const id of adv.best.ids) assert.ok(!catalog.MEDIA_MODELS.find((m) => m.id 
 // ...but one you downloaded counts as your picture maker.
 const mine = catalog.advise('create', hw, { installed: [{ id: 'my-lustify', name: 'Lustify', kind: 'image', catalogId: 'lustify' }] });
 assert.equal(mine.mine?.members.image, 'my-lustify', 'your own Lustify makes the pictures in your kit');
+// Every uncensored model is part of the Liquid Edition, with its core first.
+for (const m of [...catalog.TEXT_MODELS.filter((x) => x.category === 'open' && !x.retired), ...catalog.MEDIA_MODELS.filter((x) => x.uncensored)]) assert.ok(catalog.liquidMember(m.id), `${m.id} is in the Liquid Edition`);
+for (const id of ['qwen3.5-4b', 'qwen3.5-9b-uncensored', 'lustify', 'wan2.2-5b']) assert.ok(catalog.liquidMember(id), `${id} in the core`);
+assert.ok(!catalog.liquidMember('qwen3-8b') && !catalog.liquidMember('sdxl'), 'filtered models are outside it (and removable)');
 const unc = [...catalog.MEDIA_MODELS, ...catalog.TEXT_MODELS].filter((m) => m.uncensored || m.category === 'open');
 console.log(`✓ media catalog: ${catalog.MEDIA_MODELS.length} picture/video models, ${unc.length} uncensored (text + pictures), Lustify and Wan 2.2 for the Liquid Edition`);

@@ -79,7 +79,7 @@ handle('update:install', () => updater.install({ starterDir: app.isPackaged ? pa
 
 // ---------- hardware, catalog, estimates, advisor ----------
 handle('hw:detect', (fresh) => hardware.detect({ fresh }));
-handle('catalog:get', () => ({ picks: require('./catalog-remote').picks(), scores: catalog.SCORES, scoreBase: catalog.SCORE_BASE, text: catalog.TEXT_MODELS, textCategories: catalog.TEXT_CATEGORIES, media: catalog.MEDIA_MODELS, mediaCategories: catalog.MEDIA_CATEGORIES, jobs: catalog.JOBS }));
+handle('catalog:get', () => ({ liquid: catalog.LIQUID_MEMBERS, picks: require('./catalog-remote').picks(), scores: catalog.SCORES, scoreBase: catalog.SCORE_BASE, text: catalog.TEXT_MODELS, textCategories: catalog.TEXT_CATEGORIES, media: catalog.MEDIA_MODELS, mediaCategories: catalog.MEDIA_CATEGORIES, jobs: catalog.JOBS }));
 // Everything the model details view shows: how it runs here, why, and what it would need.
 handle('catalog:details', async (id) => {
   const hw = await hardware.detect();
@@ -280,7 +280,13 @@ handle('models:download', async (req) => {
 });
 handle('models:options', (repo) => models.ggufOptions(repo));
 handle('models:cancel', (id) => models.cancel(id));
-handle('models:remove', (id) => { llama.stopAll(); return models.remove(id); });
+handle('models:remove', (id) => {
+  const m = models.get(id);
+  // Models that are part of the Liquid Edition stay (an imported file from another app is yours to remove).
+  if (m && m.source !== 'imported' && (m.source === 'bundled' || catalog.liquidMember(m.catalogId))) throw new Error(`🔒 ${m.name} is part of Quicksilver Liquid Edition, so it can't be removed. Models outside the Liquid Edition can be.`);
+  llama.stopAll();
+  return models.remove(id);
+});
 // Stop a running model (or all of them) to free memory; it loads again the next time it's needed.
 handle('models:stop', (file) => (file ? llama.stopFile(file) : (llama.stopAll(), true)));
 handle('models:search', (q) => models.search(q));
@@ -353,8 +359,10 @@ handle('page:check', (html) => new Promise((resolve) => {
   w.loadFile(file).catch(() => { clearTimeout(timer); done(); });
 }));
 handle('stacks:list', () => complete.stacks());
-handle('stacks:save', (s) => complete.saveStack(s));
-handle('stacks:delete', (id) => complete.deleteStack(id));
+// The Liquid Edition is locked: it can't be edited or deleted (choose another model or stack instead).
+const LIQUID_LOCKED = '🔒 Quicksilver Liquid Edition is locked: it can\'t be changed or deleted. You can still choose any other model or stack.';
+handle('stacks:save', (s) => { if (s?.id === 'quicksilver' || s?.builtFor === 'quicksilver') throw new Error(LIQUID_LOCKED); return complete.saveStack(s); });
+handle('stacks:delete', (id) => { if (id === 'quicksilver') throw new Error(LIQUID_LOCKED); return complete.deleteStack(id); });
 handle('kbm:list', () => complete.kbModels());
 handle('kbm:save', (m) => complete.saveKbModel(m));
 handle('kbm:delete', (id) => complete.deleteKbModel(id));

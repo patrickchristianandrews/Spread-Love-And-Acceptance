@@ -853,10 +853,11 @@ async function collect(gen) {
     assert.ok(!complete.isUncensored('local:qwen3-8b') && !complete.isUncensored('local:phi-4'), 'filtered models are not uncensored');
     const cm = complete.councilMembers('stack:quicksilver', {});
     assert.ok([cm.structurer, cm.critic, cm.pragmatist, cm.lead].every((t) => complete.isUncensored(t)), 'the Liquid Edition\'s Council is uncensored only');
-    // Your own edits are kept: no automatic rebuild.
+    // Locked: an edited Liquid Edition (from an older version) is put back to Quicksilver's own uncensored crew.
     complete.saveStack({ ...qsStack, autoManaged: false, members: { ...qsStack.members, drafters: ['local:qwen3-8b', 'local:starter-brain'] } });
     await complete.ensureQuicksilverStack();
-    assert.deepEqual(complete.stacks().find((x) => x.id === 'quicksilver').members.drafters, ['local:qwen3-8b', 'local:starter-brain']);
+    const relocked = complete.stacks().find((x) => x.id === 'quicksilver');
+    assert.ok(relocked.autoManaged && !relocked.members.drafters.includes('local:qwen3-8b'), 'a filtered model never stays in the locked Liquid Edition');
     complete.saveStack({ ...qs2 });
     assert.deepEqual(models.registerStarter(sd).added, [], 'announced only once');
     // Smart routing: simple → one answer from the brain; hard → both draft, the brain combines.

@@ -90,7 +90,7 @@ function installedHTML() {
         return `<tr><td><b>${esc(m.name)}</b>${m.source === 'imported' ? ` <span class="badge b-lemon">${esc(m.from ? `from ${m.from}` : 'imported')}</span>` : m.source === 'bundled' ? ' <span class="badge b-mint">included</span>' : ''}</td><td>${gb(m.size)}</td>
           <td>${m.vision ? '<span class="badge b-sky">👁 sees images</span>' : ''}${S.catalog.text.find((c) => c.id === m.catalogId)?.reasoning ? ' <span class="badge b-lav">🧠 thinks</span>' : ''}</td>
           <td>${est ? rateBadge(est, k === 'text' ? 'text' : 'media') : '<span class="small muted">n/a</span>'}${(S.running || []).some((x) => x.ready && x.file === m.files?.model) ? ` <span class="badge b-mint" title="Loaded in memory">● Running</span> <button class="btn small ghost" data-stop-model="${esc(m.files.model)}" title="Stop it and free its memory; it loads again when needed">Stop</button>` : ''}</td>
-          <td class="row" style="justify-content:flex-end">${k === 'text' ? `${boostBtn(`local:${m.id}`)}${def ? '<span class="badge b-mint">default</span>' : `<button class="btn small" data-default="local:${m.id}">Make default</button>`}` : ''}${!['imported', 'bundled'].includes(m.source) ? `<button class="btn small" data-repair="${m.id}" title="Check the files and download again anything missing or damaged">Repair</button>` : ''}<button class="btn small danger" data-remove="${m.id}">Remove</button></td></tr>`;
+          <td class="row" style="justify-content:flex-end">${k === 'text' ? `${boostBtn(`local:${m.id}`)}${def ? '<span class="badge b-mint">default</span>' : `<button class="btn small" data-default="local:${m.id}">Make default</button>`}` : ''}${!['imported', 'bundled'].includes(m.source) ? `<button class="btn small" data-repair="${m.id}" title="Check the files and download again anything missing or damaged">Repair</button>` : ''}${liquidLocked(m) ? LOCK_BADGE : `<button class="btn small danger" data-remove="${m.id}">Remove</button>`}</td></tr>`;
       }).join('')}</tbody></table>`;
   }).join('');
 }
@@ -142,6 +142,7 @@ function modelCard(m, est, kind) {
   if (m.edit === 'instruct') tags.push('<span class="badge b-peach">🪄 edit by instruction</span>');
   if (m.animate) tags.push('<span class="badge b-peach">📷→🎬 animates photos</span>');
   if (m.uncensored) tags.push('<span class="badge b-lav" title="No content filter">🔓 uncensored</span>');
+  if ((S.catalog?.liquid || []).includes(m.id)) tags.push('<span class="badge b-mint" title="Part of Quicksilver Liquid Edition: downloaded with it and kept installed">💧 in the Liquid Edition</span>');
   if (m.id === (S.catalog?.picks?.liquid?.pictures || 'lustify')) tags.push('<span class="badge b-mint" title="The Liquid Edition makes its pictures with this model">💧 Liquid Edition pictures</span>');
   if (/^wan2\.2/.test(m.id)) tags.push(`<span class="badge b-mint" title="The Liquid Edition makes its videos with Wan 2.2">💧 Liquid Edition videos${m.id === (S.catalog?.picks?.liquid?.videos || 'wan2.2-5b') ? '' : ' (fast)'}</span>`);
   if (m.style === 'anime') tags.push('<span class="badge b-peach">🎌 anime</span>');

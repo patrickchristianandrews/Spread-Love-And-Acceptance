@@ -169,7 +169,7 @@ async function applyPendingUpgrades(model) {
   S.modelUpgrades = (S.modelUpgrades || []).filter((u) => u.newCatalogId !== model.catalogId);
   paintUpdateBadge();
   const old = S.installed.find((x) => x.id === oldId);
-  if (old) {
+  if (old && !liquidLocked(old)) {
     toastAction(`✨ Upgraded to ${model.name}: your stacks and chats use it now. Remove ${old.name} to free ${gb(old.size)}?`, 'Remove old', async () => {
       await qs.call('models:remove', old.id).catch(() => {}); await refreshModels(); render(); toast(`${old.name} removed.`);
     }, 12000);

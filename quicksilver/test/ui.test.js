@@ -1060,6 +1060,11 @@ function redPng(size = 64) {
     const chat = S.data.chats.find((c) => c.id === 'c-up');
     const out = { card, dot, dotWant, laterCard, backCard, swapped, members: st.members, chat: chat.target, toast: document.querySelector('#toast')?.textContent || document.body.innerText.match(/Upgraded to[^\n]*/)?.[0] || '' };
     await qs.call('stacks:delete', 't-up');
+    // The Liquid Edition is locked: it can't be deleted or edited; other stacks can.
+    const lockErr = await qs.call('stacks:delete', 'quicksilver').then(() => '', (e) => e.message);
+    if (!/locked/i.test(lockErr)) throw new Error('the Liquid Edition should refuse to be deleted');
+    const editErr = await qs.call('stacks:save', { id: 'quicksilver', name: 'Mine', members: { drafters: [] } }).then(() => '', (e) => e.message);
+    if (!/locked/i.test(editErr)) throw new Error('the Liquid Edition should refuse to be edited');
     S.data.chats = S.data.chats.filter((c) => c.id !== 'c-up');
     for (const l of Object.values(keep)) for (const [x, t] of l) x.target = t;
     for (const st0 of stacksBefore) await qs.call('stacks:save', st0);
