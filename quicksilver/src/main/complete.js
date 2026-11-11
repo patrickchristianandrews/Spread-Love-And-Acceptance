@@ -1015,13 +1015,20 @@ async function ensureQuicksilverStack() {
     const openPool = pool.filter((p) => p.id !== brain.id && p.id !== eyes?.id && p.id !== thinker?.id && (all.find((x) => x.id === p.id)?.source !== 'bundled' || p.id === 'starter-closer') && isOpen(p));
     const team = (openPool.length && catalog.compose(openPool, 'general', hw, calib, { vision: false, speed: 10, leadSpeed: 20, budget: 180 })) || { members: { drafters: [] } };
     const lead = team.members.judge || team.members.drafters[0];
-    const stronger = lead && score(lead) > score(brain.id) ? lead : null;
+    // The Closer leads only where it and the Brain both stay loaded (the same memory budget the
+    // engine uses). Otherwise every hard question would unload one to load the other, and the
+    // next message would swap them back: slow, every time. Then it waits on the bench instead.
+    const gbOf = (id) => (all.find((x) => x.id === id)?.size || 0) / 1024 ** 3;
+    const roomGB = Math.max(hw.vramGB || 0, 0) + (hw.ramGB || 0) * 0.7 - 2;
+    const together = (id) => gbOf(brain.id) + gbOf(id) + (eyes && eyes.id !== brain.id ? gbOf(eyes.id) : 0) <= roomGB;
+    const leadFits = Boolean(lead) && together(lead);
+    const stronger = lead && leadFits && score(lead) > score(brain.id) ? lead : null;
     // A second opinion on hard questions: the best other uncensored model that isn't the lead.
     // It joins only where it runs smoothly, so hard answers don't get much slower; on a slower PC
     // it waits on the bench (it still sits on the Council, and you can chat with it directly).
     const candidate = [...team.members.drafters, team.members.judge].find((id) => id && id !== stronger);
-    const second = candidate && smoothHelper(pool.find((p) => p.id === candidate), hw, calib) ? candidate : null;
-    bench = candidate && !second ? local(candidate) : undefined;
+    const second = candidate && together(candidate) && smoothHelper(pool.find((p) => p.id === candidate), hw, calib) ? candidate : null;
+    bench = lead && !leadFits ? local(lead) : candidate && !second ? local(candidate) : undefined;
     members = {
       drafters: [brain.id, ...(stronger ? [] : second ? [second] : [])].map(local),
       // With nobody to combine, the brain answers on its own (step by step on hard questions).

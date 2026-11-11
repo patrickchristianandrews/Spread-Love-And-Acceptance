@@ -11,7 +11,7 @@ BUILTIN_SKILLS.push(
   sk('make-image', 'Create a picture', '🖼️', 'media', 'image', 'Describe it; Quicksilver writes a great prompt and paints it.',
     'Describe the picture you want…',
     'Turn the request into the best possible picture. Choose a fitting style if none is given, and decide the shape from the subject (portrait for people, wide for landscapes).',
-    ['(make|create|generate|draw|paint) (me )?(a|an|some) (picture|image|photo|drawing|painting|illustration)', 'draw me'], { media: { shape: 'square' } }),
+    ['(make|create|generate|draw|paint|show|give|send) (me )?(a|an|some|another) (\\w+ ){0,3}(picture|image|photo|pic|drawing|painting|illustration)', 'draw me', '^(a |an )?(picture|image|photo|pic|drawing|painting) of '], { media: { shape: 'square' } }),
   sk('make-logo', 'Design a logo', '🔷', 'media', 'image', 'Clean logo ideas for a brand, app or project.',
     'Name, what it does, and any colours or feel…',
     'Design a simple, memorable logo: flat vector style, centred on a plain white background, bold shapes, at most three colours, no tiny details. If a name is given, include it in clean lettering below the symbol.',

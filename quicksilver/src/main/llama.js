@@ -246,10 +246,15 @@ function roomyContext(asked, limit, headroomGB) {
 
 // Starts (or reuses) a server for a model. model = { id, file, mmproj?, ctx? }
 async function ensure(model, { contextSize = 8192, limit, gpu = 'auto', onStatus } = {}) {
-  const key = `${model.file}|${gpu}`;
+  // One running copy per model, whoever asks (a chat, the warm-up when a chat opens, a stack
+  // step): once it's loaded it is reused, never loaded a second time. A model whose graphics
+  // card failed earlier stays on the processor for every caller.
+  if (cpuOnly.has(model.file)) gpu = 0;
+  const key = model.file;
   if (model.draft && noDraft.has(model.file)) model = { ...model, draft: null };
   const existing = servers.get(key);
-  if (existing && !existing.exited && existing.ctx >= Math.min(contextSize, existing.maxCtx || contextSize)) {
+  // (Reloaded only if the chat outgrew its memory, or you switched it to "Processor only".)
+  if (existing && !existing.exited && existing.ctx >= Math.min(contextSize, existing.maxCtx || contextSize) && !(gpu === 0 && existing.layers > 0)) {
     existing.lastUsed = Date.now();
     await existing.ready;
     return existing;

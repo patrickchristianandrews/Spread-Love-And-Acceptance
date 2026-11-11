@@ -1513,3 +1513,21 @@ code.sel { user-select: all; background: var(--soft); padding: 1px 6px; border-r
 /* Composer web status: read-only, follows the Online/Offline switch at the top of the chat. */
 .web-state { display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px; border-radius: 999px; font-size: .8rem; font-weight: 650; white-space: nowrap; background: color-mix(in srgb, #2fa36b 14%, transparent); color: var(--fg, inherit); border: 1px solid color-mix(in srgb, #2fa36b 35%, transparent); cursor: default; }
 .web-state.off { background: color-mix(in srgb, #8a8f98 14%, transparent); border-color: color-mix(in srgb, #8a8f98 35%, transparent); }
+
+/* The chat options sit on one line. When the window is narrow, the buttons keep their icons and
+   drop their words (hover shows what each does), and the two menus shorten, so nothing wraps. */
+.composer-card { container-type: inline-size; }
+.composer-bar { flex-wrap: nowrap; row-gap: 0; }
+.composer-bar > * { flex-shrink: 0; }
+.composer-bar > .grow { flex-shrink: 1; min-width: 0; }
+.composer-bar .pill-select { flex-shrink: 1; min-width: 0; }
+.composer-bar .pill-select select { min-width: 0; max-width: 150px; text-overflow: ellipsis; }
+@container (max-width: 800px) {
+  .composer-bar .chip-tog > span, .composer-bar .pill-label { display: none; }
+  .composer-bar .pill-select.labelled select, .composer-bar .pill-select.small.labelled select { padding-left: 32px !important; }
+  .composer-bar .pill-select select { max-width: 130px; }
+}
+@container (max-width: 520px) {
+  .composer-bar .pill-select select { max-width: 84px; }
+  .composer-bar .bar-sep { display: none; }
+}

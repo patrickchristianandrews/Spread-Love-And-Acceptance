@@ -58,7 +58,7 @@ jobs:
       - name: Back-end tests
         run: node test/backend.test.js && node test/media-catalog.test.js && node test/loading.test.js && node test/civitai.test.js && node test/pro.test.js
       - name: End-to-end tests
-        run: xvfb-run -a node test/ui.test.js
+        run: xvfb-run -a node test/ui.test.js && xvfb-run -a node test/liquid-picture.test.js
 
   windows:
     needs: tests

@@ -429,7 +429,11 @@ function bindChat() {
     }
     if (!resolveTarget(chat, a)) { needModel(chat); return; }
     // An assistant can apply a skill to every message (the Image Artist paints each request).
-    chat.messages.push({ id: uid(), t: now(), role: 'user', text, attachments: atts, skillId: chat.pendingSkill || (skillById(a.skill) ? a.skill : undefined) });
+    // Asking for a picture or a video makes one: no need to click the suggested skill first.
+    // (Editing or animating needs a photo attached, so those still wait for you to choose.)
+    const autoSkill = !chat.pendingSkill ? suggestSkill(text) : null;
+    const autoMedia = autoSkill && ['image', 'video'].includes(autoSkill.output) ? autoSkill.id : null;
+    chat.messages.push({ id: uid(), t: now(), role: 'user', text, attachments: atts, skillId: chat.pendingSkill || autoMedia || (skillById(a.skill) ? a.skill : undefined) });
     chat.pendingSkill = null; chat.suggested = null;
     drafts[chat.id] = [];
     if (chat.title === 'New chat') chat.title = (text || atts[0]?.name || 'New chat').replace(/\s+/g, ' ').slice(0, 60);
@@ -906,7 +910,8 @@ qs.onChat(({ requestId, ev }) => {
         if (ok && !maker) { maybeTip(chat, msg, alt); if (alt.tip) paintStreaming(chat, msg); }
         if (ok) try { speedNudge(chat, msg, alt); } catch {}
         if (fuOk) writeFollowups(chat, msg, alt);
-        if (ok && maker && MEDIA_OUTPUTS.has(maker.output)) runSkillMedia(chat, msg, alt, maker);
+        // Whatever goes wrong while making the picture or video is shown under the answer, never lost.
+        if (ok && maker && MEDIA_OUTPUTS.has(maker.output)) runSkillMedia(chat, msg, alt, maker).catch((err) => { alt.media = { ...(alt.media || { kind: maker.output, prompt: '', items: [], jobs: [] }), jobs: [], error: `Couldn't make the ${MEDIA_WORD[maker.output]}: ${err.message}` }; delete alt.media.status; save(); paintStreaming(chat, msg); });
         else if (ok && maker && AFTER_OUTPUTS.has(maker.output) && alt.text) runAfterText(chat, msg, alt, maker);
         else if (ok && alt.text && !maker && (alt.forceFact || factOn(chat, assistantById(chat.assistantId)))) factCheck(chat, msg, alt, sourcesFull);
         // The automatic second-model double-check only runs when you've turned on "notice uncertain
