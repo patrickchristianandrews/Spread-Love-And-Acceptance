@@ -297,7 +297,7 @@ const MEDIA_MODELS = [
     blurb: 'Short video clips from a description. Fits on graphics cards (GPUs) with 8 GB of their own memory.' },
   { id: 'wan2.2-5b', quality: 8, name: 'Wan 2.2 Text/Image-to-Video 5B', maker: 'Alibaba', kind: 'video', category: 'video', recipe: 'wan', sizeGB: 9.5, vramGB: 12, refSec: 420, defaults: { width: 1280, height: 704, steps: 20, cfg: 5, frames: 49, fps: 24 },
     files: { diffusion: { repo: 'QuantStack/Wan2.2-TI2V-5B-GGUF', match: 'Q4_K_M\\.gguf$' }, vae: { repo: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', match: 'wan2\\.2_vae\\.safetensors$' }, t5xxl: { repo: 'city96/umt5-xxl-encoder-gguf', match: 'Q4_K_M\\.gguf$' } },
-    blurb: 'Higher-quality 720p clips, from text or by animating a photo.', animate: true },
+    blurb: 'Higher-quality 720p clips, from text or by animating a photo. Open weights with no content filter: the Liquid Edition\'s video maker.', animate: true },
   { id: 'wan2.2-5b-turbo', quality: 7, name: 'Wan 2.2 5B Turbo (4-step video)', maker: 'Alibaba · Turbo by quanhaol', kind: 'video', category: 'video', recipe: 'wan', sizeGB: 9.5, vramGB: 6, refSec: 90, defaults: { width: 1280, height: 704, steps: 4, cfg: 1, frames: 49, fps: 24 },
     files: { diffusion: { repo: 'hum-ma/Wan2.2-TI2V-5B-Turbo-GGUF', match: 'Wan2_2-TI2V-5B-Turbo-Q4_K_M\\.gguf$' }, vae: { repo: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', match: 'wan2\\.2_vae\\.safetensors$' }, t5xxl: { repo: 'city96/umt5-xxl-encoder-gguf', match: 'Q4_K_M\\.gguf$' } },
     blurb: 'Wan 2.2 in 4 steps: about five times faster, from text or a photo, and usable on 6 GB cards. Open weights with no built-in content filter.', animate: true },

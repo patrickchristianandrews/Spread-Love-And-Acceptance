@@ -11,6 +11,7 @@ const MEDIA_NEED = {
   edit: ['edit', 'To edit photos by describing the change, get a photo-editing model (FLUX.1 Kontext or Qwen Image Edit), or any image model for lighter changes.'],
   animate: ['video', 'To bring photos to life, get Wan 2.2 5B (it animates photos).'],
   liquid: ['open', 'The Liquid Edition makes pictures with uncensored models only. Get Lustify (free, 7 GB, runs on 8 GB graphics cards), or connect Venice for uncensored pictures in the cloud.'],
+  'liquid-video': ['video', 'The Liquid Edition makes videos with Wan 2.2: open weights with no content filter, from a description or by animating a photo. It\'s free and runs on this PC.'],
 };
 
 // The extra instructions a media skill adds: the model replies with a short note and a JSON block.
@@ -35,9 +36,11 @@ function parseMediaSpec(text) {
 // What to show in the bubble: the note, without the JSON block (also while it streams in).
 const stripMediaBlock = (text) => String(text || '').replace(/```(?:image|video|edit|beat)[\s\S]*?(```|$)/g, '').trim();
 
-// The Liquid Edition is completely uncensored, pictures included: in its chats only uncensored
-// picture models are used, Lustify first (or the online pick), with an anime model for anime prompts.
+// The Liquid Edition is completely uncensored, pictures and video included: in its chats only uncensored
+// picture models are used, Lustify first (or the online pick), with an anime model for anime prompts,
+// and videos are made (and photos animated) with Wan 2.2.
 const LIQUID_PICTURES = 'lustify';
+const LIQUID_VIDEO = 'wan2.2-5b';
 const ANIME_RX = /\b(anime|manga|hentai|cartoon|toon|chibi|waifu|furry|illustrat\w*|cel[- ]shad\w*|drawn|drawing|comic)\b/i;
 function chatIsLiquid(chat) {
   if (!chat) return false;
@@ -56,8 +59,17 @@ function pickLiquidMedia(kind, prompt, specOf) {
     const api = mediaModelOptions(['image']).find((o) => o.value.startsWith('api:') && S.providers.find((p) => p.id === o.value.split(':')[1])?.preset === 'venice');
     return api ? { value: api.value, api: true, label: api.label } : null;
   }
-  return undefined; // video: open-weight Wan models have no content filter, so the usual pick
+  // Videos: Wan 2.2 (open weights, no content filter), the online pick first, then Turbo; Wan 2.1 if that's all there is.
+  const firstVid = S.catalog.picks?.liquid?.videos || LIQUID_VIDEO;
+  const vids = S.installed.filter((m) => m.kind === 'video' && (kind === 'video' || specOf(m).animate));
+  const vscore = (m) => (m.catalogId === firstVid ? 20 : 0) + (/^wan2\.2/.test(m.catalogId || '') ? 10 : 0) + (specOf(m).quality || 0);
+  const vid = vids.sort((a, b) => vscore(b) - vscore(a))[0];
+  return vid ? { value: `local:${vid.id}`, inst: vid, spec: specOf(vid) } : null;
 }
+// Which Wan 2.2 to download: the full 5B where it runs on the graphics card, else the 4-step Turbo (6 GB cards).
+const liquidVideoToGet = () => (S.est?.media?.[LIQUID_VIDEO]?.fit === 'gpu' ? LIQUID_VIDEO : 'wan2.2-5b-turbo');
+
+const liquidNeed = (liquid, kind) => (!liquid ? kind : kind === 'image' || kind === 'edit' ? 'liquid' : 'liquid-video');
 
 // The best installed model for the job (your Create choice first, then the highest quality).
 // opts.liquid: the chat is on the Liquid Edition; opts.prompt: what to draw (picks the style).
@@ -90,7 +102,7 @@ async function runSkillMedia(chat, msg, alt, skill) {
   const repaint = () => { save(); if (S.route.view === 'chat' && S.route.id === chat.id) paintStreaming(chat, msg); };
   const liquid = chatIsLiquid(chat);
   const pick = pickMediaModel(kind, { liquid, prompt });
-  if (!pick) { alt.media.need = liquid && (kind === 'image' || kind === 'edit') ? 'liquid' : kind; repaint(); return; }
+  if (!pick) { alt.media.need = liquidNeed(liquid, kind); repaint(); return; }
   alt.media.model = pick.api ? pick.label : pick.inst.name;
   let imageId;
   if (kind === 'edit' || kind === 'animate') {
@@ -160,8 +172,10 @@ function skillMediaHTML(m, alt, streaming) {
   const word = md.gif ? 'GIF' : MEDIA_WORD[md.kind];
   if (md.need) {
     const [cat, text] = MEDIA_NEED[md.need];
-    const getLustify = md.need === 'liquid' && !S.downloads[LIQUID_PICTURES] ? `<button class="btn primary small" data-act="m-lustify" data-id="${m.id}">⬇ Get Lustify</button>` : '';
-    return `<div class="notice info media-need"><b>One more thing:</b> ${esc(text)}<div class="row" style="margin-top:8px">${getLustify}<button class="btn ${getLustify ? '' : 'primary '}small" data-act="m-get" data-cat="${cat}" data-id="${m.id}">${md.need === 'liquid' ? 'All uncensored models' : 'Get a model'}</button><button class="btn small" data-act="m-copy" data-id="${m.id}">Copy the prompt</button></div></div>`;
+    const vidId = md.need === 'liquid-video' ? liquidVideoToGet() : null;
+    const getLustify = md.need === 'liquid' && !S.downloads[LIQUID_PICTURES] ? `<button class="btn primary small" data-act="m-lustify" data-id="${m.id}">⬇ Get Lustify</button>`
+      : vidId && !S.downloads[vidId] ? `<button class="btn primary small" data-act="m-wan" data-id="${m.id}">⬇ Get ${vidId === LIQUID_VIDEO ? 'Wan 2.2 5B' : 'Wan 2.2 Turbo'}</button>` : '';
+    return `<div class="notice info media-need"><b>One more thing:</b> ${esc(text)}<div class="row" style="margin-top:8px">${getLustify}<button class="btn ${getLustify ? '' : 'primary '}small" data-act="m-get" data-cat="${cat}" data-id="${m.id}">${md.need === 'liquid' ? 'All uncensored models' : md.need === 'liquid-video' ? 'All video models' : 'Get a model'}</button><button class="btn small" data-act="m-copy" data-id="${m.id}">Copy the prompt</button></div></div>`;
   }
   const items = md.items.map((it, k) => `<figure class="skill-media-item ${it.kind === 'audio' ? 'audio' : ''}">${it.kind === 'audio' ? `<audio src="${esc(it.url)}" controls preload="metadata"></audio>` : it.kind === 'video' ? `<video src="${esc(it.url)}" controls loop playsinline></video>` : `<img src="${esc(it.url)}" alt="${esc(md.prompt.slice(0, 120))}" data-act="m-open" data-k="${k}" data-id="${m.id}">`}
     <figcaption class="row"><button class="tool" data-act="m-save" data-k="${k}" data-id="${m.id}">${icon('download', 14)} Save</button>${it.kind === 'image' && !it.gif ? `<button class="tool" data-act="m-edit" data-k="${k}" data-id="${m.id}">🪄 Edit</button>` : it.kind === 'video' ? `<button class="tool" data-act="m-vedit" data-k="${k}" data-id="${m.id}">✂️ Trim & edit</button><button class="tool" data-act="m-gif" data-k="${k}" data-id="${m.id}" title="Save this clip as a looping GIF">🌀 GIF</button>` : ''}${it.gif && it.video ? `<button class="tool" data-act="m-vedit" data-k="${k}" data-id="${m.id}" title="Trim, crop or change the speed, then save as GIF again">✂️ Trim & edit</button>` : ''}</figcaption></figure>`).join('');
@@ -179,6 +193,7 @@ async function skillMediaAction(chat, m, act, el) {
   const md = alt.media;
   const it = md?.items[Number(el?.dataset.k)];
   if (act === 'm-get') { modelsTab = 'media'; if (el?.dataset.cat === 'open') catFilter = 'open'; go({ view: 'models' }); return; }
+  if (act === 'm-wan') { const id = liquidVideoToGet(); const name = id === LIQUID_VIDEO ? 'Wan 2.2 5B' : 'Wan 2.2 Turbo'; await download({ catalogId: id }, name); toast(`Downloading ${name}. Press "Make another video" when it's done.`, 6000); render(); return; }
   if (act === 'm-lustify') { await download({ catalogId: LIQUID_PICTURES }, 'Lustify (uncensored)'); toast('Downloading Lustify. Press "Make another picture" when it\'s done.', 6000); render(); return; }
   if (act === 'm-copy') { navigator.clipboard?.writeText(md.prompt); toast('Prompt copied.'); return; }
   if (act === 'm-save' && it) { if (await call('media:export', it.id)) toast('Saved.'); return; }
@@ -193,7 +208,7 @@ async function skillMediaAction(chat, m, act, el) {
   if (act === 'm-again') {
     const liquid = chatIsLiquid(chat);
     const pick = pickMediaModel(md.kind, { liquid, prompt: md.prompt });
-    if (!pick) { md.need = liquid && (md.kind === 'image' || md.kind === 'edit') ? 'liquid' : md.kind; save(); render(); return; }
+    if (!pick) { md.need = liquidNeed(liquid, md.kind); save(); render(); return; }
     delete md.error;
     const repaint = () => { save(); if (S.route.view === 'chat' && S.route.id === chat.id) paintStreaming(chat, m); };
     let imageId;

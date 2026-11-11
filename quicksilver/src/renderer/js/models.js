@@ -143,6 +143,7 @@ function modelCard(m, est, kind) {
   if (m.animate) tags.push('<span class="badge b-peach">📷→🎬 animates photos</span>');
   if (m.uncensored) tags.push('<span class="badge b-lav" title="No content filter">🔓 uncensored</span>');
   if (m.id === (S.catalog?.picks?.liquid?.pictures || 'lustify')) tags.push('<span class="badge b-mint" title="The Liquid Edition makes its pictures with this model">💧 Liquid Edition pictures</span>');
+  if (/^wan2\.2/.test(m.id)) tags.push(`<span class="badge b-mint" title="The Liquid Edition makes its videos with Wan 2.2">💧 Liquid Edition videos${m.id === (S.catalog?.picks?.liquid?.videos || 'wan2.2-5b') ? '' : ' (fast)'}</span>`);
   if (m.style === 'anime') tags.push('<span class="badge b-peach">🎌 anime</span>');
   if (m.promptPrefix) tags.push('<span class="badge b-sky" title="Quicksilver adds this model\'s quality tags (score_9…) to your prompts by itself">🏷 Pony tags added for you</span>');
   if (m.license) tags.push(`<span class="badge b-lemon" title="Licence">📄 ${esc(m.license)}</span>`);

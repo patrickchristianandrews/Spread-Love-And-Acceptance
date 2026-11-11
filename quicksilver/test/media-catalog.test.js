@@ -14,6 +14,8 @@ for (const m of catalog.MEDIA_MODELS) {
 const lustify = catalog.MEDIA_MODELS.find((m) => m.id === 'lustify');
 assert.ok(lustify && lustify.uncensored && lustify.recipe === 'sd' && lustify.files.model.alt.length, 'Lustify, with backup copies');
 assert.equal(remote.picks().liquid.pictures, 'lustify', 'the Liquid Edition makes pictures with Lustify');
+assert.equal(remote.picks().liquid.videos, 'wan2.2-5b', 'the Liquid Edition makes videos with Wan 2.2');
+for (const id of ['wan2.2-5b', 'wan2.2-5b-turbo']) assert.ok(catalog.MEDIA_MODELS.find((m) => m.id === id)?.animate, `${id} makes and animates videos`);
 assert.ok(catalog.MEDIA_MODELS.find((m) => m.id === 'pony-v6').promptPrefix.startsWith('score_9'), 'Pony tags');
 assert.equal(catalog.MEDIA_MODELS.find((m) => m.id === 'wai-nsfw-illustrious').style, 'anime');
 // Recommended "create" kits never pick an uncensored model by themselves...
@@ -24,4 +26,4 @@ for (const id of adv.best.ids) assert.ok(!catalog.MEDIA_MODELS.find((m) => m.id 
 const mine = catalog.advise('create', hw, { installed: [{ id: 'my-lustify', name: 'Lustify', kind: 'image', catalogId: 'lustify' }] });
 assert.equal(mine.mine?.members.image, 'my-lustify', 'your own Lustify makes the pictures in your kit');
 const unc = [...catalog.MEDIA_MODELS, ...catalog.TEXT_MODELS].filter((m) => m.uncensored || m.category === 'open');
-console.log(`✓ media catalog: ${catalog.MEDIA_MODELS.length} picture/video models, ${unc.length} uncensored (text + pictures), Lustify for the Liquid Edition`);
+console.log(`✓ media catalog: ${catalog.MEDIA_MODELS.length} picture/video models, ${unc.length} uncensored (text + pictures), Lustify and Wan 2.2 for the Liquid Edition`);

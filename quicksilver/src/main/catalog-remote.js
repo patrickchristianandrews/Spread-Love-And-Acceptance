@@ -41,9 +41,9 @@ function clean(j) {
   const featured = {}; const ladders = {};
   for (const [k, v] of Object.entries(j.featured && typeof j.featured === 'object' ? j.featured : {})) if (/^[a-z]{2,20}$/.test(k)) featured[k] = idList(v, 12);
   for (const [k, v] of Object.entries(j.ladders && typeof j.ladders === 'object' ? j.ladders : {})) if (/^[a-z]{2,20}$/.test(k)) ladders[k] = idList(v, 20);
-  // The Liquid Edition's core: which uncensored models are its Brain, Eyes and picture maker right now.
+  // The Liquid Edition's core: which uncensored models are its Brain, Eyes, picture maker and video maker right now.
   const liquid = {};
-  if (j.liquid && typeof j.liquid === 'object') for (const k of ['brain', 'eyes', 'pictures']) if (typeof j.liquid[k] === 'string' && ID.test(j.liquid[k])) liquid[k] = j.liquid[k];
+  if (j.liquid && typeof j.liquid === 'object') for (const k of ['brain', 'eyes', 'pictures', 'videos']) if (typeof j.liquid[k] === 'string' && ID.test(j.liquid[k])) liquid[k] = j.liquid[k];
   // New ready-made stacks, published online: plain data (which models, roles, how they work
   // together, instructions and why it's good). They appear in Stacks marked new.
   const MODES = ['blend', 'debate', 'consensus', 'auto', 'vote', 'redteam', 'plan', 'panel'];
@@ -89,7 +89,7 @@ function picks() {
     successors: { ...catalog.SUCCESSORS, ...applied.successors },
     featured: { ...catalog.FEATURED, ...applied.featured },
     ladders: applied.ladders,
-    liquid: { brain: 'qwen3.5-4b', eyes: 'qwen3.5-2b', pictures: 'lustify', ...applied.liquid },
+    liquid: { brain: 'qwen3.5-4b', eyes: 'qwen3.5-2b', pictures: 'lustify', videos: 'wan2.2-5b', ...applied.liquid },
     recipes: applied.recipes,
     scores: applied.scores,
     updated: applied.updated, fetchedAt: applied.fetchedAt,
