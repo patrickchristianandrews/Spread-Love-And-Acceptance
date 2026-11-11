@@ -1033,7 +1033,12 @@ function redPng(size = 64) {
   assert.match(sys.liquid, /fully uncensored/); assert.doesNotMatch(sys.liquid, /no disclaimers unless something is risky/);
   assert.doesNotMatch(sys.other, /fully uncensored/);
   // Upgrades say what you gain, in plain words.
-  const gains = await win.evaluate(() => ({ think: gainsOf('qwen3-4b', 'qwen3-4b-thinking').map((g) => g.text), img: gainsOf('sdxl', 'flux-schnell').map((g) => g.text), html: modelUpdatesHTML() }));
+  // (A fixed upgrade, so the card doesn't depend on the background check having finished.)
+  const gains = await win.evaluate(() => {
+    const had = S.modelUpgrades;
+    S.modelUpgrades = [{ oldId: 'q4', oldName: 'Qwen3 4B', oldCatalogId: 'qwen3-4b', newCatalogId: 'qwen3-4b-thinking', newName: 'Qwen3 4B Thinking', why: 'thinks hard questions through', rating: 'great', speed: 'Fast', sizeGB: 2.5 }];
+    try { return { think: gainsOf('qwen3-4b', 'qwen3-4b-thinking').map((g) => g.text), img: gainsOf('sdxl', 'flux-schnell').map((g) => g.text), html: modelUpdatesHTML() }; } finally { S.modelUpgrades = had; }
+  });
   assert.ok(gains.think.includes('Sharper maths: 52% → 83%') && gains.think.some((t) => /Expanded reasoning/.test(t)), gains.think.join(' | '));
   assert.match(gains.img[0], /Improved picture generation/);
   assert.match(gains.html, /class="gain"/, 'the upgrade card lists the gains');
