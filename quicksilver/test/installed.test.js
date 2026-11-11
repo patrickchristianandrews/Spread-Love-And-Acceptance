@@ -12,7 +12,7 @@ const assert = require('node:assert');
 
 const [exe, mode = 'full', shots] = process.argv.slice(2);
 const HOME = fs.mkdtempSync(path.join(os.tmpdir(), 'qs-installed-'));
-const LONG = 6 * 60 * 1000; // real models on a CI processor: allow plenty of time
+const LONG = 12 * 60 * 1000; // answers on a build machine's processor (no graphics card) can take several minutes
 
 // A plain red 64×64 PNG, built by hand.
 function redPng(size = 64) {
