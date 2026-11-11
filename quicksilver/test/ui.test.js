@@ -35,7 +35,7 @@ function redPng(size = 64) {
     { id: 'sdxl-turbo', name: 'SDXL Turbo', kind: 'image', catalogId: 'sdxl-turbo', files: { model: copy('sdxl.safetensors') }, size: 7e9 },
     { id: 'wan2.1-1.3b', name: 'Wan 2.1 1.3B', kind: 'video', catalogId: 'wan2.1-1.3b', files: { diffusion: copy('wan.st'), vae: copy('vae.st'), t5xxl: copy('t5.gguf') }, size: 7e9 },
   ]));
-  // A model "downloaded by LM Studio": added automatically at start-up.
+  // A model "downloaded by LM Studio": found, but only added when the user chooses.
   const SCAN = path.join(HOME, 'lmstudio');
   fs.mkdirSync(path.join(SCAN, 'bartowski', 'Llama-3.2-3B-Instruct-GGUF'), { recursive: true });
   const lms = path.join(SCAN, 'bartowski', 'Llama-3.2-3B-Instruct-GGUF', 'Llama-3.2-3B-Instruct-Q4_K_M.gguf');
@@ -70,12 +70,17 @@ function redPng(size = 64) {
   await win.click('#wc-close');
   await win.waitForSelector('.welcome-card', { state: 'detached' });
   await win.evaluate(() => { S.data.prefs.simple = false; S.data.prefs.autoRoute = false; applyPrefs(); save(); render(); });
+  // Models from other apps are never added by themselves: nothing imported until you choose to.
+  await win.waitForTimeout(1500);
+  assert.equal(await win.evaluate(() => S.installed.filter((m) => m.source === 'imported').length), 0, 'a model found from another app is not added by itself');
+  // Turned on in Settings (as a user would): found models are added.
+  await win.evaluate(async () => { S.data.prefs.addFoundModels = true; save(); await startupModels(); });
   await win.waitForSelector('text=and added it. Ready to use', { timeout: 30000 });
   // Start something: expert assistants for one task each (the everyday Quicksilver isn't listed).
   assert.match(await win.locator('.start-note').innerText(), /assistant programmed to be an expert at one task/);
   assert.equal(await win.locator('[data-start="as-general"]').count(), 0);
   assert.ok(await win.locator('[data-start]').count() >= 10);
-  console.log('✓ home (model from another app added automatically; expert assistants explained)');
+  console.log('✓ home (models from other apps added only when you choose; expert assistants explained)');
   await shot(win, '01-home');
 
   // Stack Advisor.

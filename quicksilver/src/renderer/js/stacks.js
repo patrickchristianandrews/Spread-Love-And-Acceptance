@@ -107,8 +107,8 @@ function foundBanner() {
 function foundModal() {
   const f = S.found || [];
   const b = openModal(`<h2>📦 Models already on this PC</h2>
-    <p class="help">These were downloaded by other apps or are in your Downloads folder. Quicksilver uses them where they are: nothing is copied, and removing them here never deletes the file.</p>
-    <div class="pick-list">${f.map((m, i) => `<label class="pick-row"><input type="checkbox" data-found="${i}" checked>
+    <p class="help">These were downloaded by other apps or are in your Downloads folder. Tick the ones you want to use in Quicksilver; none are added unless you choose them. Quicksilver uses them where they are: nothing is copied, and removing them here never deletes the file.</p>
+    <div class="pick-list">${f.map((m, i) => `<label class="pick-row"><input type="checkbox" data-found="${i}">
       <span class="grow"><b>${esc(m.name)}</b>${m.vision ? ' <span title="Can see photos">👁</span>' : ''}<div class="small muted">${esc(m.app)} · ${gb(m.size)} · <span title="${esc(m.path)}">${esc(m.path.length > 70 ? `…${m.path.slice(-68)}` : m.path)}</span></div></span></label>`).join('')}</div>
     <div class="modal-actions"><button class="btn" data-close>Cancel</button><button class="btn primary" id="found-add">Add selected</button></div>`, { wide: true });
   b.querySelector('#found-add').addEventListener('click', async () => {
