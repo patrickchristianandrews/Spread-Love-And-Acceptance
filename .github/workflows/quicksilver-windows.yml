@@ -63,7 +63,9 @@ jobs:
   windows:
     needs: tests
     runs-on: windows-latest
-    timeout-minutes: 90
+    # The models folder is ~37 GB (the Liquid Edition: chat, Lustify, Wan 2.2): downloading, copying
+    # it in during the install test and uploading it all take time.
+    timeout-minutes: 240
     defaults:
       run:
         working-directory: quicksilver
@@ -202,7 +204,7 @@ jobs:
       # come with Quicksilver, real questions. A failure here fails the build.
       - name: Install with the models folder and use it like a new user
         shell: pwsh
-        timeout-minutes: 30
+        timeout-minutes: 60
         run: |
           $setup = Get-ChildItem dist\Quicksilver-Setup-*.exe | Select-Object -First 1
           Start-Process -Wait -FilePath $setup.FullName -ArgumentList '/S','/D=C:\QS'
