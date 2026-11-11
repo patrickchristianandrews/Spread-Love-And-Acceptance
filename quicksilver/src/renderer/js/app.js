@@ -70,23 +70,34 @@ function paintNet() {
   document.documentElement.classList.toggle('is-exposed', !off && !S.config?.vpnOnly);
   paintPrivacyBar();
 }
-// A one-line banner at the top of the page whenever you're online without a VPN. It sits inside the
-// page (it never covers anything); ✕ hides it until Quicksilver restarts.
+// A one-line banner at the top of the page (inside the page: it never covers anything):
+//  - online without a VPN: says it isn't private; ✕ hides it until Quicksilver restarts.
+//  - "Private online" is on but no VPN is connected: nothing can reach the internet, so updates,
+//    downloads and web search all fail. This says why, and one click fixes it either way
+//    (connect the VPN, or go online without one). It can't be hidden: until it's resolved,
+//    everything that needs the internet is stopped.
 function paintPrivacyBar() {
   const main = document.getElementById('main');
   if (!main) return;
-  const show = !S.config?.offline && !S.config?.vpnOnly && !S.privacyBarHidden;
+  const off = Boolean(S.config?.offline);
+  const waiting = !off && Boolean(S.config?.vpnOnly) && S.vpn && !S.vpn.connected;
+  const kind = waiting ? 'vpn-wait' : !off && !S.config?.vpnOnly && !S.privacyBarHidden ? 'exposed' : '';
   let bar = document.getElementById('privacy-bar');
-  if (!show) { bar?.remove(); return; }
-  if (!bar || bar.parentNode !== main) {
+  if (!kind) { bar?.remove(); return; }
+  if (!bar || bar.parentNode !== main || bar.dataset.kind !== kind) {
     bar?.remove();
     bar = Object.assign(document.createElement('div'), { id: 'privacy-bar', className: 'privacy-bar' });
-    bar.innerHTML = `<span class="grow">🌐 <b>Online — not private.</b> <span class="small">Web searches and anything sent to a cloud AI can be seen by those services, and sites see your location. Chats with models on this PC stay private.</span></span><button class="btn small" data-pb="vpn">🛡 Make private (VPN)</button><button class="btn small ghost" data-pb="off">Go offline</button><button class="pb-x" data-pb="x" title="Hide until restart" aria-label="Hide">✕</button>`;
-    bar.addEventListener('click', (e) => {
+    bar.dataset.kind = kind;
+    bar.innerHTML = kind === 'vpn-wait'
+      ? `<span class="grow">🛡 <b>Private online is on, but no VPN is connected.</b> <span class="small">Until one is, nothing can reach the internet: updates, downloads, web search and cloud AIs are paused. Models on this PC keep working.</span></span>${S.vpn?.installed ? '<button class="btn small" data-pb="connect">Open Proton VPN</button>' : ''}<button class="btn small primary" data-pb="plain">Go online without a VPN</button><button class="btn small ghost" data-pb="off">Go offline</button>`
+      : `<span class="grow">🌐 <b>Online — not private.</b> <span class="small">Web searches and anything sent to a cloud AI can be seen by those services, and sites see your location. Chats with models on this PC stay private.</span></span><button class="btn small" data-pb="vpn">🛡 Make private (VPN)</button><button class="btn small ghost" data-pb="off">Go offline</button><button class="pb-x" data-pb="x" title="Hide until restart" aria-label="Hide">✕</button>`;
+    bar.addEventListener('click', async (e) => {
       const k = e.target.closest('[data-pb]')?.dataset.pb;
       if (k === 'off') toggleNet();
       else if (k === 'vpn') { setTab = 'general'; go({ view: 'settings' }); }
       else if (k === 'x') { S.privacyBarHidden = true; bar.remove(); }
+      else if (k === 'connect') { await call('vpn:open').catch(() => {}); toast('Opening Proton VPN. Press Connect there; Quicksilver notices within a few seconds.', 6000); }
+      else if (k === 'plain') { await setPrivacyMode('online'); await refreshModels().catch(() => {}); render(); }
     });
   }
   if (main.firstChild !== bar) main.prepend(bar);

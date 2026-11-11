@@ -746,6 +746,13 @@ function redPng(size = 64) {
   await win.click('#vpn-box [data-pv-mode="online"]');
   await win.waitForSelector('#vpn-box [data-pv-mode="online"].on');
   assert.match(await win.locator('#net-toggle').innerText(), /Online/);
+  // Private online with no VPN connected: nothing can go out (updates, downloads, web search), so
+  // the page says why and one click goes online without a VPN.
+  await win.evaluate(() => setPrivacyMode('vpn'));
+  await win.waitForSelector('#privacy-bar[data-kind="vpn-wait"]:has-text("no VPN is connected")');
+  assert.equal(await win.locator('#privacy-bar [data-pb="x"]').count(), 0, 'it stays until it is resolved');
+  await win.click('#privacy-bar [data-pb="plain"]');
+  await win.waitForFunction(() => S.config.vpnOnly === false && S.config.offline === false);
   // Online without a VPN: the top of the page says it's not private.
   await win.click('.nav-new');
   await win.waitForSelector('#privacy-bar:has-text("not private")');
