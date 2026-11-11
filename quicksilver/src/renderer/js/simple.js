@@ -111,7 +111,7 @@ function composerOptions(chat, anchor) {
     <div class="menu-sep"></div>
     <button data-o="tog-lib">${icon('book', 16)} Use my library<span class="grow"></span>${on('tog-lib') ? icon('check', 15) : ''}</button>
     <button data-o="tog-fact">${icon('shield', 16)} Double-check answers<span class="grow"></span>${on('tog-fact') ? icon('check', 15) : ''}</button>
-    <button data-o="tog-tools">${icon('plug', 16)} Use my connected apps<span class="grow"></span>${on('tog-tools') ? icon('check', 15) : ''}</button>
+    <button data-o="tog-tools">${icon('plug', 16)} Use my connected apps<span class="grow"></span>${toolsOn(chat, a) ? icon('check', 15) : ''}</button>
     <button data-o="add-api">${icon('plus', 16)} ${S.providers?.length ? 'Cloud AIs (ChatGPT, Claude…)' : 'Connect a cloud AI (ChatGPT, Claude…)'}<span class="grow"></span>${S.providers?.length ? `<span class="small muted">${S.providers.length}</span>` : ''}</button>
     <div class="menu-sep"></div>
     <div class="menu-h">How hard it should think</div>

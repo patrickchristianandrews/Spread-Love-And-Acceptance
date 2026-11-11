@@ -23,12 +23,14 @@ WHAT GETS INSTALLED
   huihui-ai, converted by mradermacher), Lustify (a community Stable Diffusion XL model,
   CreativeML Open RAIL++-M), Wan 2.2 5B and its Turbo version (Alibaba, Apache 2.0),
   Nomic Embed and the BGE reranker (search, Apache 2.0) and Whisper base (OpenAI, MIT).
-  The full licence texts are in MODEL-LICENCES.txt, in the models folder and in the
-  folder Quicksilver is installed in (resources\starter).
+  Each model's licence (its full text, or a link to it) is in MODEL-LICENCES.txt, in the
+  models folder and in the folder Quicksilver is installed in (resources\starter).
 - Your chats, settings and models are saved in your user folder (%APPDATA%\Quicksilver),
-  so updates and reinstalls keep them. Models can be removed at any time under Models
-  (the Liquid Edition's own models stay while Quicksilver is installed). When you
-  uninstall, Quicksilver asks whether to remove your chats and models too.
+  so updates and reinstalls keep them. If you install Quicksilver on another drive, its
+  big models are kept on that drive, in a "Quicksilver kept models" folder beside the
+  app's own. Models can be removed at any time under Models (the Liquid Edition's own
+  models stay while Quicksilver is installed). When you uninstall, Quicksilver asks
+  whether to remove your chats and models too.
 
 AI MODELS
 The Liquid Edition's chat, picture and video models are uncensored: they have no built-in

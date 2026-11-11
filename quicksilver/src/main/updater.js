@@ -95,12 +95,33 @@ async function install({ starterDir } = {}) {
   // Models must be closed before their files can be moved out of the app's folder.
   require('./llama').stopAll();
   await new Promise((r) => setTimeout(r, 1200));
-  try { require('./models').keepPackModels(starterDir); } catch {}
+  const models = require('./models');
+  try { await models.keepPackModels(starterDir); } catch {}
+  // Installing replaces the app's folder. Models that could not be moved out of it first (the
+  // app is on another drive and the drive with your data has no room, or no permission) would go
+  // with it and have to be downloaded again, so the update waits and says what to do.
+  let left = { bytes: 0 };
+  try { left = models.packLeft(starterDir); } catch {}
+  if (left.bytes > 500e6) {
+    const gbs = Math.ceil(left.bytes / 1024 ** 3);
+    throw new Error(`This update is ready, but about ${gbs} GB of Quicksilver's models are still inside the app's folder and could not be moved out of it (the drive with your data is short of room, or the folder can't be written to). Installing now would delete them. Free about ${gbs + 2} GB on the drive that holds your user folder and press Install again.`);
+  }
   spawn(d.file, ['--updated', '/S', '--force-run'], { detached: true, stdio: 'ignore', windowsHide: true }).unref();
   setTimeout(() => electron?.app?.quit(), 300);
   return true;
 }
 
-function init(emitter) { emit = emitter; }
+// An installer that has done its job is not kept: after an update (or if the same version is
+// already running) the downloaded setup file, about 2 GB, is removed.
+function tidyDownloads() {
+  try {
+    const dir = store.dir('updates');
+    for (const f of fs.readdirSync(dir)) {
+      const v = (f.match(/(\d+\.\d+\.\d+)/) || [])[1];
+      if (/\.part$/i.test(f) ? false : !v || cmp(v, current()) <= 0) fs.rmSync(path.join(dir, f), { force: true });
+    }
+  } catch { /* nothing to tidy */ }
+}
+function init(emitter) { emit = emitter; tidyDownloads(); }
 
-module.exports = { init, check, download, install, state: publicState, cmp };
+module.exports = { init, check, download, install, tidyDownloads, state: publicState, cmp };

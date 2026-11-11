@@ -192,7 +192,9 @@ function liquidOk(t) {
 const isLiquid = (t) => t === 'stack:quicksilver' || t === 'stack:quicksilver-pro';
 const isLiquidStack = (s) => Boolean(s) && (s.builtFor === 'quicksilver' || s.builtFor === 'quicksilver-pro');
 // A model that's part of the Liquid Edition can't be removed (imported files from other apps can).
-const liquidLocked = (m) => Boolean(m) && m.source !== 'imported' && (m.source === 'bundled' || (S.catalog?.liquid || []).includes(m.catalogId));
+// (A chat model must be the uncensored build: the plain catalog build of the same model is not
+// the Liquid Edition's, so that one can be removed. The same test as models.liquidOwn.)
+const liquidLocked = (m) => Boolean(m) && m.source !== 'imported' && (m.source === 'bundled' || ((S.catalog?.liquid || []).includes(m.catalogId) && ((m.kind || 'text') !== 'text' || liquidOk(`local:${m.id}`))));
 const LOCK_BADGE = '<span class="badge b-lav" title="Part of Quicksilver Liquid Edition: it stays installed. Choose any other model or stack whenever you like.">🔒 Liquid Edition</span>';
 const targetLabel = (t) => S.targets.find((x) => x.target === t)?.label || 'No model chosen';
 // Every model a target runs by itself: the model, or all the members of its stack or fusion.
@@ -440,7 +442,7 @@ function chartHTML(json) {
     data.forEach((v, i) => {
       const a2 = ang + (Math.max(0, v) / total) * Math.PI * 2;
       const large = a2 - ang > Math.PI ? 1 : 0;
-      body += `<path d="M${cx},${cy} L${cx + rr * Math.cos(ang)},${cy + rr * Math.sin(ang)} A${rr},${rr} 0 ${large} 1 ${cx + rr * Math.cos(a2)},${cy + rr * Math.sin(a2)} Z" fill="${CHART_COLORS[i % 8]}" stroke="#fff" stroke-width="2"><title>${esc(spec.labels[i])}: ${v}</title></path>`;
+      body += `<path d="M${cx},${cy} L${cx + rr * Math.cos(ang)},${cy + rr * Math.sin(ang)} A${rr},${rr} 0 ${large} 1 ${cx + rr * Math.cos(a2)},${cy + rr * Math.sin(a2)} Z" fill="${CHART_COLORS[i % 8]}" stroke="#fff" stroke-width="2"><title>${esc(spec.labels[i])}: ${esc(String(v))}</title></path>`;
       ang = a2;
     });
     if (type === 'doughnut') body += `<circle cx="${cx}" cy="${cy}" r="${rr * 0.55}" fill="#fff"/>`;
@@ -457,13 +459,13 @@ function chartHTML(json) {
     spec.labels.forEach((l, i) => { body += `<text x="${x0 + step * (i + 0.5)}" y="${y1 + 18}" font-size="11" text-anchor="middle" fill="#3d3858">${esc(String(l).slice(0, 14))}</text>`; });
     if (type === 'bar') {
       const bw = (step * 0.8) / spec.series.length;
-      spec.series.forEach((s, si) => s.data.forEach((v, i) => { const yy = y(Math.max(0, v)); const h = Math.abs(y(v) - y(0)); body += `<rect x="${x0 + step * i + step * 0.1 + bw * si}" y="${yy}" width="${bw - 2}" height="${Math.max(1, h)}" rx="3" fill="${CHART_COLORS[si % 8]}"><title>${esc(s.name)} · ${esc(spec.labels[i])}: ${v}</title></rect>`; }));
+      spec.series.forEach((s, si) => s.data.forEach((v, i) => { const yy = y(Math.max(0, v)); const h = Math.abs(y(v) - y(0)); body += `<rect x="${x0 + step * i + step * 0.1 + bw * si}" y="${yy}" width="${bw - 2}" height="${Math.max(1, h)}" rx="3" fill="${CHART_COLORS[si % 8]}"><title>${esc(s.name)} · ${esc(spec.labels[i])}: ${esc(String(v))}</title></rect>`; }));
     } else {
       spec.series.forEach((s, si) => {
         const pts = s.data.map((v, i) => `${x0 + step * (i + 0.5)},${y(Number(v))}`).join(' ');
         if (type === 'area') body += `<polygon points="${x0 + step * 0.5},${y(0)} ${pts} ${x0 + step * (n - 0.5)},${y(0)}" fill="${CHART_COLORS[si % 8]}" opacity=".25"/>`;
         body += `<polyline points="${pts}" fill="none" stroke="${CHART_COLORS[si % 8]}" stroke-width="3" stroke-linejoin="round"/>`;
-        s.data.forEach((v, i) => { body += `<circle cx="${x0 + step * (i + 0.5)}" cy="${y(Number(v))}" r="4" fill="${CHART_COLORS[si % 8]}"><title>${esc(s.name)} · ${esc(spec.labels[i])}: ${v}</title></circle>`; });
+        s.data.forEach((v, i) => { body += `<circle cx="${x0 + step * (i + 0.5)}" cy="${y(Number(v))}" r="4" fill="${CHART_COLORS[si % 8]}"><title>${esc(s.name)} · ${esc(spec.labels[i])}: ${esc(String(v))}</title></circle>`; });
       });
     }
     if (spec.series.length > 1) body += spec.series.map((s, si) => `<rect x="${x0 + si * 130}" y="${H - 22}" width="12" height="12" rx="3" fill="${CHART_COLORS[si % 8]}"/><text x="${x0 + si * 130 + 18}" y="${H - 12}" font-size="12" fill="#16122a">${esc(s.name)}</text>`).join('');

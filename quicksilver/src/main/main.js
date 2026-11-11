@@ -291,7 +291,8 @@ handle('models:cancel', (id) => models.cancel(id));
 handle('models:remove', (id) => {
   const m = models.get(id);
   // Models that are part of the Liquid Edition stay (an imported file from another app is yours to remove).
-  if (m && m.source !== 'imported' && (m.source === 'bundled' || catalog.liquidMember(m.catalogId))) throw new Error(`🔒 ${m.name} is part of Quicksilver Liquid Edition, so it can't be removed. Models outside the Liquid Edition can be.`);
+  // (The plain catalog build of the same model is not the Liquid Edition's: that one can go.)
+  if (m && m.source !== 'imported' && models.liquidOwn(m)) throw new Error(`🔒 ${m.name} is part of Quicksilver Liquid Edition, so it can't be removed. Models outside the Liquid Edition can be.`);
   llama.stopAll();
   return models.remove(id);
 });
@@ -321,9 +322,14 @@ handle('models:addFound', (items) => models.addFound(items, llama.readGguf));
 // The starter model inside the installer (resources/starter), or QS_STARTER_DIR for tests.
 handle('models:starter', async () => {
   // Once: take files that are not chat models, and second copies, off the list an older version built.
+  let tidied = [];
   if (store.config().importTidy !== 1) {
-    const mine = (id) => complete.stacks().some((s) => !['quicksilver', 'quicksilver-pro'].includes(s.id) && JSON.stringify(s.members || {}).includes(`"local:${id}"`));
-    try { await models.tidyImported(llama.readGguf, mine); store.saveConfig({ importTidy: 1 }); } catch { /* tried again next start */ }
+    // Anything of yours that uses the model keeps it: a stack or fusion, a knowledge model, a
+    // chat, an assistant, or your default model (the last three are in your saved app data).
+    const saved = JSON.stringify(store.readJSON(store.file('app-data.json'), null) || {});
+    const mine = (id) => complete.stacks().some((s) => !['quicksilver', 'quicksilver-pro'].includes(s.id) && JSON.stringify(s.members || {}).includes(`"local:${id}"`))
+      || complete.kbModels().some((k) => k.base === `local:${id}`) || saved.includes(`"local:${id}"`);
+    try { tidied = await models.tidyImported(llama.readGguf, mine); store.saveConfig({ importTidy: 1 }); } catch { /* tried again next start */ }
   }
   whisper.keepShipped().catch(() => {}); // voice typing's speech model: kept across updates
   const starterDir = process.env.QS_STARTER_DIR || (app.isPackaged ? path.join(process.resourcesPath, 'starter') : path.join(__dirname, '..', '..', 'starter'));
@@ -331,8 +337,8 @@ handle('models:starter', async () => {
   // The big models the installer copied in leave the app's folder for your data folder straight
   // away (an instant move on the same drive; see keepPackModels). Installing a newer version over
   // this one, by any route, replaces the app's folder: this way it never takes 30 GB of models with it.
-  if (app.isPackaged || process.env.QS_KEEP_PACK) { try { models.keepPackModels(starterDir, { renameOnly: true }); } catch { /* they stay where they are */ } }
-  return complete.ensureQuicksilverStack().then((stack) => ({ ...r, stack }));
+  if (app.isPackaged || process.env.QS_KEEP_PACK) { try { await models.keepPackModels(starterDir, { renameOnly: true }); } catch { /* they stay where they are */ } }
+  return complete.ensureQuicksilverStack().then((stack) => ({ ...r, stack, tidied }));
 });
 handle('quicksilver:rebuild', () => complete.ensureQuicksilverStack());
 handle('models:autoAdd', async () => { const found = await models.findChat(llama.readGguf); return found.length ? models.addFound(found, llama.readGguf) : []; });

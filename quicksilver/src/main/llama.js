@@ -16,7 +16,7 @@ const TYPE_BYTES = { 0: 4, 1: 2, 2: 18 / 32, 3: 20 / 32, 6: 22 / 32, 7: 24 / 32,
 
 // GGUF is also the file format of picture and video models (Wan, Flux, SDXL…), their text encoders
 // (T5, CLIP), search models (BERT) and speech models. None of those can hold a conversation.
-const NOT_CHAT_ARCH = /^(clip|t5|t5encoder|umt5|bert|nomic-bert|nomic-bert-moe|jina-bert-v2|jina-bert-v3|neo-bert|modern-bert|eurobert|whisper|wavtokenizer-dec|wan|flux|sd1|sd2|sdxl|sd3|aura|ltxv|hyvid|cosmos|lumina2|qwen_image|z_image|hidream|chroma|pig|vae)$/i;
+const NOT_CHAT_ARCH = /^(clip|t5|t5encoder|umt5|bert|nomic-bert|nomic-bert-moe|jina-bert-v2|jina-bert-v3|neo-bert|modern-bert|eurobert|whisper|wavtokenizer-dec|wan|flux|sd1|sd2|sdxl|sd3|aura|ltxv|hyvid|cosmos|lumina2|qwen_image|z_image|hidream|chroma|pig|vae|gemma-embedding)$/i;
 async function readGguf(file) {
   const fh = await fs.promises.open(file, 'r');
   const CHUNK = 1 << 20;
@@ -100,7 +100,8 @@ async function readGguf(file) {
       experts: Number(meta[`${arch}.expert_count`]) || 0,
       contextLength: meta[`${arch}.context_length`],
       isProjector: arch === 'clip' || Boolean(meta['clip.has_vision_encoder']),
-      chat: !NOT_CHAT_ARCH.test(String(arch || '')) && !meta['clip.has_vision_encoder'],
+      // (An embedding model built on a chat architecture says so with a pooling type.)
+      chat: !NOT_CHAT_ARCH.test(String(arch || '')) && !meta['clip.has_vision_encoder'] && meta[`${arch}.pooling_type`] == null,
       size,
       complete: size >= needBytes,
       needBytes,
@@ -164,16 +165,22 @@ function lastError(log) {
   return hit ? clean(hit) : lines.slice(-2).join(' ');
 }
 
+// Graphics memory held by Quicksilver's loaded models that must still be taken off the hardware
+// reading. The reading is up to a minute old: a model loaded before it was taken is already in
+// its "free" figure (taking it off again would push the next model onto the processor for no
+// reason); one loaded after it is not (leaving it out would overfill the card). Where the card
+// reports no live free figure, every loaded model counts.
+function countedVram(list, hw) {
+  return list.reduce((t, s) => t + (hw.vramFreeLive && s.startedAt && hw.readAt && s.startedAt <= hw.readAt ? 0 : (s.vramGB || 0)), 0);
+}
 // How many layers go on the graphics card: all if it fits, else a share, else none.
 function gpuLayers(model, info, hw, setting, otherVramGB = 0) {
   if (setting === 0 || setting === 'cpu') return 0;
   if (!hw.vramGB) return 0;
   const sizeGB = (info.size + (model.mmprojSize || 0)) / 1024 ** 3;
-  // Free graphics memory: what was free when the hardware was last read, or the card's size minus
-  // what Quicksilver's other loaded models hold, whichever is less. (The reading may already
-  // include those models, so taking them off it again would count them twice and push a second
-  // model onto the processor for no reason.)
-  const free = Math.min(hw.vramFreeGB || hw.vramGB, hw.vramGB - otherVramGB) * 0.9 - 0.8;
+  // otherVramGB: graphics memory held by Quicksilver's other loaded models that the free-memory
+  // reading does not already include (see countedVram).
+  const free = (hw.vramFreeGB || hw.vramGB) * 0.9 - 0.8 - otherVramGB;
   if (free <= 0.5) return 0;
   if (sizeGB <= free) return 999;
   const layers = info.layers || 32;
@@ -308,7 +315,7 @@ async function ensureNow(model, { contextSize = 8192, limit, gpu = 'auto', onSta
   const headroomGB = budget - used() - sizeGB;
   const want = roomyContext(contextSize, limit, headroomGB);
   const ctx = Math.min(want, info.contextLength || want);
-  const otherVram = [...servers.values()].reduce((t, s) => t + (s.vramGB || 0), 0);
+  const otherVram = countedVram([...servers.values()], hw);
   const ngl = gpuLayers(model, info, hw, gpu, otherVram);
   // The model's working memory (KV cache) is stored at 8-bit: about half the memory, with no
   // noticeable change in answers. Engines that can't do it get a normal cache instead.
@@ -347,7 +354,7 @@ async function ensureNow(model, { contextSize = 8192, limit, gpu = 'auto', onSta
     const proc = spawn(engine.bin, args, { windowsHide: true, stdio: ['ignore', 'pipe', 'pipe'] });
     const blocks = info.layers || 32;
     const vramGB = layers >= 999 ? sizeGB : layers ? (sizeGB * Math.min(layers, blocks)) / blocks : 0;
-    const s = { proc, port, file: model.file, draft: useDraft ? model.draft : null, sizeGB, vramGB, lastUsed: Date.now(), log: [], ctx, maxCtx: info.contextLength || ctx, layers, exited: false };
+    const s = { proc, port, file: model.file, draft: useDraft ? model.draft : null, sizeGB, vramGB, startedAt: Date.now(), lastUsed: Date.now(), log: [], ctx, maxCtx: info.contextLength || ctx, layers, exited: false };
     const keep = (d) => { s.log.push(d.toString()); if (s.log.length > 200) s.log.shift(); };
     proc.stdout.on('data', keep);
     proc.stderr.on('data', keep);
@@ -481,4 +488,4 @@ const isLoaded = (file) => [...servers.values()].some((s) => s.file === file && 
 
 // The last lines each running engine printed (for "Save diagnostics").
 const logTails = () => [...servers.values()].map((s) => ({ file: require('node:path').basename(s.file), lines: s.log.join('').split('\n').slice(-40).join('\n') }));
-module.exports = { gpuLayers, roomyContext, idleMs, readGguf, ensure, prefill, chat, stop, stopAll, stopFile, status, isLoaded, contextFor, prefetch, logTails };
+module.exports = { gpuLayers, countedVram, roomyContext, idleMs, readGguf, ensure, prefill, chat, stop, stopAll, stopFile, status, isLoaded, contextFor, prefetch, logTails };

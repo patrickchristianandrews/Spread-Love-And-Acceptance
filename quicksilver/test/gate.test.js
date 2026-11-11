@@ -62,7 +62,31 @@ const TINY = path.join(__dirname, 'fixtures', 'tiny.gguf');
   const again = await win2.evaluate(() => ({ text: document.getElementById('liquid-gate').innerText, brain: S.installed.some((m) => m.id === 'starter-brain') }));
   assert.ok(again.brain && !/Qwen3\.5 4B/.test(again.text), 'after a reinstall the Brain is kept: only what is really missing is asked for');
   await app2.close();
+
+  // "Private online" is on and no VPN is connected: every download is blocked. The setup screen
+  // says so and offers the ways out itself (the bar that normally does is behind it), and its
+  // buttons are not rebuilt while downloads report progress.
+  fs.writeFileSync(path.join(HOME, 'config.json'), JSON.stringify({ ...JSON.parse(fs.readFileSync(path.join(HOME, 'config.json'), 'utf8')), offline: false, vpnOnly: true }));
+  const app3 = await electron.launch({ executablePath: require('electron'), args: ['--no-sandbox', ROOT],
+    env: { ...process.env, QUICKSILVER_HOME: HOME, QS_STARTER_DIR: starter, QS_KEEP_PACK: '1', QS_LLAMA_SERVER: path.join(__dirname, 'fakes', 'llama-server'), QS_SD_BIN: path.join(__dirname, 'fakes', 'sd'), QS_SCAN_DIRS: path.join(HOME, 'none') } });
+  const win3 = await app3.firstWindow();
+  await win3.waitForSelector('#liquid-gate [data-gate-plain]', { timeout: 60000 });
+  const vpn = await win3.evaluate(() => {
+    const gate = document.getElementById('liquid-gate');
+    const before = gate.querySelector('[data-gate-plain]');
+    S.downloads['qwen3.5-9b-uncensored'] = { id: 'qwen3.5-9b-uncensored', downloaded: 5, total: 10 };
+    paintLiquidGate(); paintLiquidGate();
+    const row = [...gate.querySelectorAll('[data-gate-row]')].find((r) => r.dataset.gateRow === 'qwen3.5-9b-uncensored');
+    const out = { text: gate.innerText, same: before.isConnected && gate.querySelector('[data-gate-plain]') === before, vpnBtn: Boolean(gate.querySelector('[data-gate-vpn]')), bar: row?.querySelector('.bar i').style.width };
+    delete S.downloads['qwen3.5-9b-uncensored'];
+    return out;
+  });
+  assert.match(vpn.text, /Private online is on, but no VPN is connected/);
+  assert.ok(vpn.vpnBtn, 'offers to open the VPN');
+  assert.ok(vpn.same, 'a button stays the same button while progress is painted');
+  assert.equal(vpn.bar, '50%', 'progress still updates');
+  await app3.close();
   fs.rmSync(HOME, { recursive: true, force: true });
-  console.log('✓ setup screen: nothing behind it can be reached; the installer\'s big models move to the data folder and survive a reinstall');
+  console.log('✓ setup screen: nothing behind it can be reached; the installer\'s big models move to the data folder and survive a reinstall; with Private online and no VPN it says so and offers the way out');
   process.exit(0);
 })().catch((e) => { console.error('FAIL', e); process.exit(1); });

@@ -11,6 +11,8 @@ vm.createContext(ctx);
 const load = (f) => { try { vm.runInContext(fs.readFileSync(path.join(__dirname, '..', 'src', 'renderer', 'js', f), 'utf8').replace(/^(const|let) /gm, 'var '), ctx, { filename: f }); } catch (e) { if (!/is not defined/.test(e.message)) throw e; } };
 load('skills-data.js'); load('skills-more.js'); load('skills.js');
 const img = [{ type: 'image' }];
+ctx.isCodeChat = (a) => a?.id === 'as-code';
+ctx.assistantById = (id) => ({ id });
 const CASES = [
   // pictures
   ['make me a picture of a red fox in the snow', [], 'make-image'],
@@ -51,6 +53,36 @@ const CASES = [
   ['make a chart of these sales numbers: 3, 5, 9', [], 'chart'],
   ['make a lofi beat', [], 'make-beat'],
   ['read this aloud', [], 'read-aloud'],
+  ['make a 4k ultra detailed cinematic wide-angle picture of a cat', [], 'make-image'],
+  ['gimme a picture of a cat', [], 'make-image'],
+  ['make me a cat picture', [], 'make-image'],
+  ['show me some pictures of mountains at dawn', [], 'make-image'],
+  ['a video of a dog running on a beach', [], 'make-video'],
+  ['I need a business plan for a bakery', [], 'business-plan'],
+  ['build me a todo app in react', [], 'build-app'],
+  ['Build a single-page website for a bakery', [], 'build-site'],
+  // messages about code are answered as code, never painted or filmed (found by the audit)
+  ['can you make the image smaller in this html', [], null],
+  ['I want the image to be centered, here is my css', [], null],
+  ['draw a rectangle on a canvas in javascript', [], null],
+  ['write a python script to generate an image of the mandelbrot set', [], null],
+  ['Fix this error. Here is the message and the code:\n\nTypeError: cannot create image from null', [], null],
+  ['generate a migration that adds a photo column', [], null],
+  ['show me the code for a video player', [], null],
+  ['can you give me a clip-path example in css', [], null],
+  // the thing must be what is asked for, not just a word in the message
+  ['I need the big picture on climate change', [], null],
+  ['the picture of dorian gray is my favourite book, write a review', [], null],
+  ['draw two cards from a deck and tell me the probability they are both aces', [], null],
+  ['generate a video script about recycling', [], null],
+  ['I need the video to autoplay on my landing page', [], null],
+  ['I want to build an app someday', [], null],
+  ['I need to research dogs for school', [], null],
+  ['can you make sense of this invoice', [], null],
+  ['I want to know about seo', [], null],
+  ['I need meditation tips', [], null],
+  ['I want a picture frame for my wall', [], null],
+  ['give me an image description for accessibility', [], null],
   // ordinary chat stays ordinary
   ['how do I give a good presentation?', [], null],
   ['I did some research on dogs yesterday', [], null],
@@ -64,6 +96,10 @@ const CASES = [
 ];
 const wrong = CASES.map(([t, a, want]) => [t, ctx.autoSkillFor(t, a, null)?.id || null, want]).filter(([, got, want]) => got !== want);
 assert.deepEqual(wrong, [], `wrong: ${wrong.map(([t, got, want]) => `"${t}" → ${got} (wanted ${want})`).join('; ')}`);
+// In a Code chat nothing is painted or filmed by itself; an app or a web page still opens in a preview.
+assert.equal(ctx.autoSkillFor('make me a picture of a fox', [], { assistantId: 'as-code' }), null);
+assert.equal(ctx.autoSkillFor('write a report on solar power in Texas', [], { assistantId: 'as-code' }), null);
+assert.equal(ctx.autoSkillFor('Build a single-page website for a bakery', [], { assistantId: 'as-code' })?.id, 'build-site');
 // A skill you dismissed in a chat stays dismissed there; the switch in Settings turns it all off.
 assert.equal(ctx.autoSkillFor('make me a picture of a fox', [], { dismissed: ['make-image'] }), null);
 ctx.S.data.prefs.autoSkills = false;

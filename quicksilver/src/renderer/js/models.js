@@ -58,7 +58,7 @@ views.models = {
       const m = S.installed.find((x) => x.id === b.dataset.useModel);
       b.disabled = true;
       try {
-        await call('models:use', b.dataset.useModel, b.checked);
+        await qs.call('models:use', b.dataset.useModel, b.checked);
         await refreshModels();
         toast(b.checked ? `${m?.name || 'The model'} is in use: Quicksilver may now use it by itself.` : `${m?.name || 'The model'} is now only used when you choose it.`, 5000);
       } catch (err) { toast(err.message, 8000); }
@@ -99,25 +99,27 @@ function modelsInUseHTML() {
   const proText = new Set([lp.brain, lp.closer, lp.thinker, lp.muse].filter(Boolean));
   const inStacks = (t) => S.stacks.filter((s) => `stack:${s.id}` !== def && teamTargets(`stack:${s.id}`).includes(t)).map((s) => s.name);
   // The default's own models first, then ticked ones, then the rest, by name.
-  const rank = (m) => (team.has(`local:${m.id}`) && (liquidLocked(m) || !isLiquidStack(defStack)) ? 0 : m.inUse ? 1 : 2);
+  // The default's own models: locked on. In the Liquid Edition those are the models that come
+  // with it (Pro: its line-up); a helper that joined because you ticked it can be unticked.
+  const ownOf = (m) => team.has(`local:${m.id}`) && (!isLiquidStack(defStack) || liquidLocked(m) || (defStack.id === 'quicksilver-pro' && proText.has(m.catalogId)));
+  const single = Boolean(def) && !def.startsWith('stack:');
+  const rank = (m) => (ownOf(m) ? 0 : m.inUse ? 1 : 2);
   const rows = [...list].sort((a, b) => rank(a) - rank(b) || a.name.localeCompare(b.name)).map((m) => {
     const t = `local:${m.id}`;
-    // Locked on: the default's own models. In the Liquid Edition those are the models that come
-    // with it; a helper that joined because you ticked it (or a suggested add-on) can be unticked.
-    const own = team.has(t) && (!isLiquidStack(defStack) || liquidLocked(m) || (defStack.id === 'quicksilver-pro' && proText.has(m.catalogId)));
+    const own = ownOf(m);
     const helper = team.has(t) && !own;
     const on = own || m.inUse;
     const also = inStacks(t);
     const where = m.source === 'imported' ? (m.from ? `from ${m.from}` : 'imported') : liquidLocked(m) ? 'comes with Quicksilver' : 'downloaded here';
-    const role = own ? `🔒 Part of ${esc(defName)}` : helper && on ? `Ticked: helps ${esc(defName)}` : also.length ? `Also in ${esc(also.slice(0, 2).join(', '))}${also.length > 2 ? '…' : ''}` : on ? 'Ticked by you' : 'Only when you choose it';
+    const role = own ? `🔒 Part of ${esc(defName)}` : helper && on ? `Ticked: helps ${esc(defName)}` : also.length ? `Also in ${esc(also.slice(0, 2).join(', '))}${also.length > 2 ? '…' : ''}` : on ? 'Ticked by you' : single && liquidLocked(m) ? 'Built in: may step in' : 'Only when you choose it';
     return `<label class="pick-row ${on ? 'on' : ''}"><input type="checkbox" data-use-model="${esc(m.id)}" ${on ? 'checked' : ''} ${own ? 'disabled' : ''} aria-label="Use ${esc(m.name)}">
       <span class="grow"><b>${esc(m.name)}</b>${m.vision ? ' <span title="Can see photos and video">👁</span>' : ''}${liquidOk(t) ? ' <span class="badge b-lav">uncensored</span>' : ''}<div class="small muted">${gb(m.size)} · ${esc(where)}</div></span>
       <span class="small muted">${role}</span></label>`;
   }).join('');
-  const ticked = list.filter((m) => m.inUse && !(team.has(`local:${m.id}`) && (!isLiquidStack(defStack) || liquidLocked(m)))).length;
+  const ticked = list.filter((m) => m.inUse && !ownOf(m)).length;
   return `<div class="card set-card" id="models-in-use" style="margin-bottom:12px">
     <div class="row" style="align-items:baseline"><b>✅ Models in use</b><span class="grow"></span><span class="small muted">${team.size ? `${esc(defName)}${ticked ? ` + ${ticked} ticked` : ', nothing else'}` : `${ticked} ticked`}</span></div>
-    <p class="small muted" style="margin:6px 0 10px">A chat uses the model you chose for it, or the members of its stack or fusion, and nothing else on this PC. Tick a model to let Quicksilver also use it by itself: Automatic may pick it, it can double-check answers and sit on the Council, and an uncensored one helps the Liquid Edition. Unticked models are only used when you choose them (as a chat's model, or in a stack you build).</p>
+    <p class="small muted" style="margin:6px 0 10px">A chat uses the model you chose for it, or the members of its stack or fusion, and nothing else on this PC. Tick a model to let Quicksilver also use it by itself: Automatic may pick it, it can double-check answers and sit on the Council, and an uncensored one helps the Liquid Edition. Unticked models are only used when you choose them (as a chat's model, or in a stack you build).${single ? ' Your default is a single model, so with Automatic on Quicksilver\'s own built-in models and your stacks may still step in (to read a photo it can\'t see, or for a question another answers better); with a stack or fusion as the default, nothing else does.' : ''}</p>
     <div class="pick-list">${rows}</div>
   </div>`;
 }
@@ -126,7 +128,7 @@ function installedHTML() {
   if (!S.installed.length) return `<div class="notice info">Nothing installed yet. Start with the <a href="#" data-goto-stacks>Setup Advisor</a>, or browse <b>Text & vision</b>.</div>`;
   const kinds = { text: '💬 Text & vision', image: '🎨 Images', video: '🎬 Video', embed: '🔎 Smarter search', rerank: '🔎 Sharper search' };
   const onlyStarter = S.installed.some((m) => m.kind === 'text') && S.installed.filter((m) => m.kind === 'text').every((m) => m.source === 'bundled');
-  const note = onlyStarter ? '<div class="notice info" style="margin-bottom:12px"><b>💡 Only the starter models so far.</b> They are limited on their own; download stronger ones under <b>Text &amp; vision</b>, or let the <a href="#" data-goto-stacks>Setup Advisor</a> pick a team for your PC. Quicksilver adds new models to its team automatically.</div>' : '';
+  const note = onlyStarter ? '<div class="notice info" style="margin-bottom:12px"><b>💡 Only the starter models so far.</b> They are limited on their own; download stronger ones under <b>Text &amp; vision</b>, or let the <a href="#" data-goto-stacks>Setup Advisor</a> pick a team for your PC. To let Quicksilver use one by itself, tick it under <b>Models in use</b> below.</div>' : '';
   return note + diskSummaryHTML() + modelsInUseHTML() + Object.entries(kinds).map(([k, label]) => {
     const list = S.installed.filter((m) => m.kind === k);
     if (!list.length) return '';

@@ -263,7 +263,7 @@ function dolphinOfferHTML(qst) {
   const slow = est && !['great', 'good'].includes(est.rating);
   return `<div class="pair-card"><div class="grow"><b>🐬 Add Dolphin to the crew</b>
       <div class="small muted">Dolphin 3.0 8B is uncensored and about as strong as the Brain, but from a different family, so on hard questions it adds a second view and they catch each other's mistakes. Everyday messages stay with the fast Brain. ${d.sizeGB} GB download.${slow ? ' On this PC it runs slowly, so hard answers will take noticeably longer.' : ''}</div></div>
-    ${S.downloads[DOLPHIN] ? downloadBox(DOLPHIN) : `<button class="btn small ${slow ? '' : 'primary'}" data-get="${DOLPHIN}">Add Dolphin</button>`}</div>`;
+    ${S.downloads[DOLPHIN] ? downloadBox(DOLPHIN) : `<button class="btn small ${slow ? '' : 'primary'}" data-get="${DOLPHIN}" data-use-when-done="${DOLPHIN}">Add Dolphin</button>`}</div>`;
 }
 // The Liquid Edition is completely uncensored, so its cloud partner must be too: Venice. Filtered
 // cloud AIs (Cerebras, Groq, Mistral…) still work in your other chats, never for the Liquid Edition.
@@ -302,7 +302,7 @@ function qsRolesHTML(qst) {
   ].filter(Boolean);
   if (!roles.length) return '';
   return `<div class="qs-roles">${roles.map(([i, r, n, d]) => `<div class="qs-role"><span class="qs-role-ic">${i}</span><span><b>${esc(r)}</b> <span class="small">${esc(n)}</span><span class="small muted">${esc(d)}</span></span></div>`).join('')}</div>
-    <p class="small muted" style="margin:4px 0 6px">Liquid Edition's own uncensored crew. It rebuilds itself as you add models: a stronger, still-fast uncensored model joins as the Closer automatically.</p>`;
+    <p class="small muted" style="margin:4px 0 6px">Liquid Edition's own uncensored crew. It answers with its own models and nothing else on this PC. Suggested add-ons you download join it; any other uncensored model joins when you tick it under Models → Models in use.</p>`;
 }
 function bindBuiltinModel() {
   $('#builtin-chat')?.addEventListener('click', () => {

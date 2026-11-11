@@ -231,6 +231,8 @@ async function init() {
   qs.onModelProgress((d) => { S.downloads[d.id] = { ...S.downloads[d.id], ...d }; paintDownloads(); paintLiquidGate(); });
   qs.onModelDone(async ({ id, model }) => {
     delete S.downloads[id];
+    // A model you added "to the crew" is ticked as in use, so it really joins.
+    if (useWhenDone.has(model?.catalogId) || useWhenDone.has(id)) { useWhenDone.delete(model?.catalogId); useWhenDone.delete(id); await qs.call('models:use', model.id, true).catch(() => {}); }
     await refreshModels();
     // One more Liquid Edition model in: re-check what's still missing (opens Quicksilver when none is).
     if (document.getElementById('liquid-gate')) { await setUpQuicksilver(false).catch(() => {}); if (document.getElementById('liquid-gate')) return; }
@@ -282,6 +284,11 @@ async function setUpQuicksilver(firstLook) {
     toast(r.stack ? '👋 Meet Quicksilver Liquid Edition: two AI models working as one, right on your PC. It sees photos, thinks harder when a question needs it, and nothing leaves this computer. Try an idea below.'
       : '👋 Quicksilver is ready to chat, privately on your PC, and it can see photos. Try an idea below.', 10000);
   }
+  // The one-time tidy of the model list (see models.tidyImported) says what it did.
+  if (r.tidied?.length) {
+    await refreshModels();
+    toast(`🧹 Tidied your model list: ${r.tidied.length} ${r.tidied.length === 1 ? 'entry was' : 'entries were'} not a chat model or a second copy of one you have (${r.tidied.slice(0, 3).map((x) => x.name).join(', ')}${r.tidied.length > 3 ? '…' : ''}). No file was deleted.`, 12000);
+  }
   // Quicksilver doesn't open until the whole Liquid Edition is installed: anything not copied in
   // from the models folder downloads straight away behind the setup screen.
   liquidGate(r);
@@ -295,7 +302,11 @@ async function setUpQuicksilver(firstLook) {
 // alone, or a download that was interrupted). Downloads start at once and resume where they
 // stopped; when the last one is in, the screen goes away and Quicksilver opens.
 let gateItems = [];
+const useWhenDone = new Set();
+document.addEventListener('click', (e) => { const b = e.target.closest?.('[data-use-when-done]'); if (b) useWhenDone.add(b.dataset.useWhenDone); }, true);
 const gateFailed = {};
+const gateTries = {}; // how many times each model's download has failed (picks the next copy to try)
+let gateNote = ''; // something to tell you on the setup screen itself (toasts are behind it)
 // While the setup screen is up, the app behind it can't be reached at all: not by the Tab key,
 // not by a keyboard shortcut, not by a screen reader. Focus moves to the setup screen.
 function gateInert(on) {
@@ -303,7 +314,9 @@ function gateInert(on) {
   if (on) { const g = document.getElementById('liquid-gate'); if (g) { g.tabIndex = -1; g.focus({ preventScroll: true }); } }
 }
 function liquidGate(r) {
-  gateItems = (r?.missing || []).filter((m) => !S.installed.some((x) => x.catalogId === m.catalogId));
+  // What is missing is decided in one place (models.registerStarter): a plain catalog build of
+  // the Brain, or an unticked file from another app, does not count as having it.
+  gateItems = r?.missing || [];
   let el = document.getElementById('liquid-gate');
   if (!gateItems.length) {
     if (el) { el.remove(); gateInert(false); S.gateClosedAt = Date.now(); toastAction('💧 Quicksilver Liquid Edition is ready: chat, pictures and video, all on your PC.', 'Suggested add-ons', () => liquidAddonsModal(), 12000); render(); }
@@ -318,9 +331,17 @@ function liquidGate(r) {
     document.body.appendChild(el);
     gateInert(true);
     el.addEventListener('click', async (e) => {
-      if (e.target.closest('[data-gate-online]')) { S.config = await call('config:set', { offline: false }); paintNet(); startGateDownloads(true); }
-      else if (e.target.closest('[data-gate-retry]')) startGateDownloads(true);
+      // Messages elsewhere in the app are behind this screen, so anything that goes wrong is said here.
+      gateNote = '';
+      try {
+        if (e.target.closest('[data-gate-online]')) { S.config = await qs.call('config:set', { offline: false }); paintNet(); startGateDownloads(true); }
+        else if (e.target.closest('[data-gate-plain]')) { S.config = await qs.call('config:set', { offline: false, vpnOnly: false }); await refreshVpn().catch(() => {}); startGateDownloads(true); }
+        else if (e.target.closest('[data-gate-vpn]')) { await qs.call('vpn:open'); gateNote = 'Proton VPN is opening. Connect it there, then press "Try again".'; paintLiquidGate(); }
+        else if (e.target.closest('[data-gate-retry]')) { await refreshVpn().catch(() => {}); startGateDownloads(true); }
+      } catch (err) { gateNote = err.message || String(err); paintLiquidGate(); }
     });
+    // "Private online" with no VPN connected blocks every download: find out, so the screen can say so.
+    if (S.config?.vpnOnly && !S.vpn) refreshVpn().then(() => paintLiquidGate()).catch(() => {});
   }
   startGateDownloads(false);
 }
@@ -337,32 +358,62 @@ function startGateDownloads(retry) {
   fetchVoiceQuietly();
   for (const m of gateItems) {
     if (S.downloads[m.catalogId] || (gateFailed[m.catalogId] && !retry)) continue;
-    // After a failure, the catalog's own entry is used: it knows backup copies of each model.
-    const viaCatalog = Boolean(gateFailed[m.catalogId]) || !m.repo;
+    // A chat model always comes from an uncensored copy: the one the installer uses, then the
+    // other uncensored copies in turn after a failure. Never the catalog's own entry for it,
+    // which is the plain (filtered) build. Pictures, video and search models have no such copy
+    // list: they come from the catalog, which knows backup copies of each.
+    const repos = m.repo ? [m.repo, ...(m.alt || [])] : [];
+    if (gateFailed[m.catalogId]) gateTries[m.catalogId] = (gateTries[m.catalogId] || 0) + 1;
     delete gateFailed[m.catalogId];
-    download(viaCatalog ? { catalogId: m.catalogId } : { repo: m.repo, quant: m.quant, catalogId: m.catalogId, name: m.name }, m.name)
-      .catch((err) => { gateFailed[m.catalogId] = err.message; paintLiquidGate(); });
+    const req = repos.length ? { repo: repos[(gateTries[m.catalogId] || 0) % repos.length], quant: m.quant, catalogId: m.catalogId, name: m.name } : { catalogId: m.catalogId };
+    download(req, m.name).catch((err) => { gateFailed[m.catalogId] = err.message; paintLiquidGate(); });
   }
   paintLiquidGate();
 }
+// Private online is on and no VPN is connected: nothing can be downloaded until one is, or until
+// you choose to go online without it.
+const gateVpnWait = () => Boolean(S.config?.vpnOnly) && !S.config?.offline && S.vpn?.connected === false;
 function paintLiquidGate() {
   const el = document.getElementById('liquid-gate');
   if (!el) return;
-  const rows = gateItems.map((m) => {
+  const state = (m) => {
     const d = S.downloads[m.catalogId];
     const pct = d?.total ? Math.round((d.downloaded / d.total) * 100) : 0;
-    const what = gateFailed[m.catalogId] ? `⚠️ ${esc(gateFailed[m.catalogId])}` : d ? (d.total ? `${gb(d.downloaded)} of ${gb(d.total)} (${pct}%)` : 'Finding files…') : S.config?.offline ? 'Waiting: offline mode is on' : 'Starting…';
-    return `<div class="stack-v" style="gap:4px"><div class="row"><b class="grow">${esc(m.name)}</b><span class="small muted">${what}</span></div><div class="bar"><i style="width:${pct}%"></i></div></div>`;
-  }).join('');
+    const what = gateFailed[m.catalogId] ? `⚠️ ${gateFailed[m.catalogId]}` : d ? (d.total ? `${gb(d.downloaded)} of ${gb(d.total)} (${pct}%)` : 'Finding files…') : S.config?.offline ? 'Waiting: offline mode is on' : gateVpnWait() ? 'Waiting: no VPN connected' : 'Starting…';
+    return { pct, what };
+  };
   const all = gateItems.map((m) => S.downloads[m.catalogId]).filter(Boolean);
   const tot = all.reduce((a, d) => a + (d.total || 0), 0);
   const got = all.reduce((a, d) => a + (d.downloaded || 0), 0);
-  el.innerHTML = `<div class="card" style="max-width:560px;width:100%;padding:24px">
-    <h2 style="margin-top:0">💧 Installing Quicksilver Liquid Edition</h2>
-    <p class="muted">Quicksilver opens as soon as its whole uncensored crew is on this PC: the Brain, the Closer, smarter search, Lustify for pictures and Wan 2.2 for video. ${tot ? `${gb(got)} of ${gb(tot)} so far.` : ''} You can close Quicksilver at any time: downloads pick up where they stopped.</p>
-    <div class="stack-v" style="gap:14px;margin:16px 0">${rows}</div>
-    ${S.config?.offline ? '<button class="btn primary" data-gate-online>Turn off offline mode and download</button>' : Object.keys(gateFailed).length ? '<button class="btn primary" data-gate-retry>Try again</button>' : ''}
-    <p class="small muted" style="margin-bottom:0">This is part of setup: Quicksilver downloads its models once (about 37 GB, so it can take a while), then works offline. The full installer's "Quicksilver models" folder has them all already, if you'd rather skip the download.</p></div>`;
+  const soFar = tot ? `${gb(got)} of ${gb(tot)} so far.` : '';
+  const failed = Object.keys(gateFailed).length > 0;
+  const buttons = S.config?.offline ? '<button class="btn primary" data-gate-online>Turn off offline mode and download</button>'
+    : gateVpnWait() ? `<div class="notice info" style="text-align:left;margin-bottom:10px"><b>🛡 Private online is on, but no VPN is connected.</b> Until one is, nothing can be downloaded.</div>
+        <div class="row" style="gap:8px;flex-wrap:wrap"><button class="btn primary" data-gate-vpn>Open Proton VPN</button><button class="btn" data-gate-plain>Go online without a VPN</button><button class="btn ghost" data-gate-retry>Try again</button></div>`
+      : failed ? '<button class="btn primary" data-gate-retry>Try again</button>' : '';
+  // The screen is built once and only its numbers change while downloads run, so a button under
+  // your mouse or keyboard is still the same button when you press it. It is rebuilt only when
+  // the list of models, the buttons or the note change.
+  const key = JSON.stringify([gateItems.map((m) => m.catalogId), buttons, gateNote]);
+  if (el.dataset.key !== key) {
+    el.dataset.key = key;
+    el.innerHTML = `<div class="card" style="max-width:560px;width:100%;padding:24px">
+      <h2 style="margin-top:0">💧 Installing Quicksilver Liquid Edition</h2>
+      <p class="muted">Quicksilver opens as soon as its whole uncensored crew is on this PC: the Brain, the Closer, smarter search, Lustify for pictures and Wan 2.2 for video. <span data-gate-total></span> You can close Quicksilver at any time: downloads pick up where they stopped.</p>
+      <div class="stack-v" style="gap:14px;margin:16px 0">${gateItems.map((m) => `<div class="stack-v" style="gap:4px" data-gate-row="${esc(m.catalogId)}"><div class="row"><b class="grow">${esc(m.name)}</b><span class="small muted" data-gate-what></span></div><div class="bar"><i style="width:0%"></i></div></div>`).join('')}</div>
+      ${gateNote ? `<div class="notice" style="text-align:left;margin-bottom:10px" role="alert">${esc(gateNote)}</div>` : ''}
+      ${buttons}
+      <p class="small muted" style="margin-bottom:0">This is part of setup: Quicksilver downloads its models once (about 30 GB, so it can take a while), then works offline. The full installer's "Quicksilver models" folder has them all already, if you'd rather skip the download.</p></div>`;
+  }
+  el.querySelector('[data-gate-total]').textContent = soFar;
+  for (const m of gateItems) {
+    const row = [...el.querySelectorAll('[data-gate-row]')].find((r) => r.dataset.gateRow === m.catalogId);
+    if (!row) continue;
+    const st = state(m);
+    const what = row.querySelector('[data-gate-what]');
+    if (what.textContent !== st.what) what.textContent = st.what;
+    row.querySelector('.bar i').style.width = `${st.pct}%`;
+  }
 }
 
 // After the first screen: add models found on this PC, pick a default if there is none, and load

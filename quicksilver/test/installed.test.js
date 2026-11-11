@@ -94,6 +94,14 @@ function redPng(size = 64) {
     const kit = await win.evaluate(() => ({ pic: pickMediaModel('image', { liquid: true, prompt: 'a lighthouse' })?.inst?.catalogId, edit: pickMediaModel('edit', { liquid: true, prompt: 'make it night' })?.inst?.catalogId, vid: pickMediaModel('video', { liquid: true })?.inst?.catalogId, anim: pickMediaModel('animate', { liquid: true })?.inst?.catalogId }));
     assert.deepEqual([kit.pic, kit.edit, /^wan2\.2-5b/.test(kit.vid), /^wan2\.2-5b/.test(kit.anim)], ['lustify', 'lustify', true, true], `pictures and photo edits by Lustify, videos and animated photos by Wan 2.2 (got ${JSON.stringify(kit)})`);
     ok('everything skills need is installed: pictures, photo edits, video, animation, search and voice typing');
+    // The big models have left the app's folder (which an update or reinstall replaces) for a
+    // folder that is kept; the small one stays inside the app, where every installer puts it.
+    const where = await win.evaluate(() => Object.fromEntries(S.installed.filter((m) => m.source === 'bundled').map((m) => [m.id, m.files.model])));
+    const inApp = (f) => /resources[\\/]starter[\\/]/i.test(f || '');
+    console.log(`  kept: Brain at ${where['starter-brain']}; Lustify at ${where['starter-lustify']}`);
+    for (const id of ['starter-brain', 'starter-closer', 'starter-lustify', 'starter-wan']) assert.ok(where[id] && !inApp(where[id]) && fs.existsSync(where[id]), `${id} was moved out of the app's folder and is still there (${where[id]})`);
+    assert.ok(inApp(where.starter), 'the small model stays inside the app');
+    ok('the big models are kept outside the app\'s folder, so an update or reinstall does not remove them');
   } else {
     // Without the models folder Quicksilver doesn't open until the whole Liquid Edition is in: the
     // setup screen covers the app and every missing model starts downloading at once.

@@ -142,10 +142,12 @@ function boostJobsHTML(targets, opts = {}) {
 // The share of hard questions comes from your own chats once there are enough of them.
 let veniceFactsAt = 0;
 let veniceFactsMemo = null;
+let veniceFactsKey = '';
 function veniceLiquidFacts() {
   // Worked out once for a page (several rows show it), not once per row.
-  if (veniceFactsMemo && Date.now() - veniceFactsAt < 2000) return veniceFactsMemo;
-  veniceFactsAt = Date.now();
+  const key = `${(S.data?.chats || []).length}:${Boolean(S.est)}:${Boolean(S.speed)}:${(S.installed || []).length}:${(S.stacks || []).length}`;
+  if (veniceFactsMemo && veniceFactsKey === key && Date.now() - veniceFactsAt < 2000) return veniceFactsMemo;
+  veniceFactsAt = Date.now(); veniceFactsKey = key;
   return (veniceFactsMemo = veniceLiquidFactsNow());
 }
 function veniceLiquidFactsNow() {
@@ -159,16 +161,20 @@ function veniceLiquidFactsNow() {
   const easyHere = etaFor('stack:quicksilver', WORDS.chat) ?? (wps ? WORDS.chat / wps : null);
   const hardCloud = 1.5 + WORDS.hard / CLOUD_WPS;
   const sci = boostBase(team.length ? team : ['qwen3.5-4b']);
-  const pic = S.installed?.some((m) => m.catalogId === 'lustify') ? S.est?.media?.lustify : null;
-  return { share, measured, less: Math.round((1 - share) * 100), lasts: 1 / share, hardHere, easyHere, hardCloud,
+  const picsHere = Boolean(S.installed?.some((m) => m.catalogId === 'lustify'));
+  const pic = picsHere ? S.est?.media?.lustify : null;
+  // How much of what you would send to Venice still goes there: hard questions only, and they
+  // are the long ones, so it is worked out by words rather than by counting messages.
+  const sent = (share * WORDS.hard) / (share * WORDS.hard + (1 - share) * WORDS.chat);
+  return { share, measured, less: Math.round((1 - sent) * 100), lasts: 1 / sent, hardHere, easyHere, hardCloud,
     faster: hardHere ? hardHere / hardCloud : null, sci, own: sci != null ? r10(sci / 10) : null, venice: CHAT_SERVICES.venice[4],
-    picsHere: Boolean(pic), picSec: pic?.sec ?? null };
+    picsHere, picSec: pic?.sec ?? null };
 }
 const veniceTimes = (x) => (x >= 10 ? Math.round(x) : Math.round(x * 2) / 2);
 function veniceLiquidLines() {
   const f = veniceLiquidFacts();
-  const oneIn = Math.max(2, Math.round(1 / f.share));
-  const use = `<b>About ${f.less}% less Venice use</b> than using Venice for everything: only hard questions go to it (about 1 in ${oneIn}${f.measured ? ' of your messages so far' : ' messages'}), so its free allowance or credits last about <b>${f.lasts.toFixed(1)}×</b> longer.${f.picsHere ? ' Pictures and video use none of it: Lustify and Wan 2.2 make them on your PC.' : ' Once Lustify and Wan 2.2 are on your PC, pictures and video use none of it.'}`;
+  const howMany = f.share > 0.45 ? `about ${Math.round(f.share * 10)} in 10` : `about 1 in ${Math.round(1 / f.share)}`;
+  const use = `<b>About ${f.less}% less Venice use</b> than using Venice for everything: only hard questions go to it (${howMany}${f.measured ? ' of your messages so far' : ' messages'}, and they are the longer ones), so its free allowance or credits last about <b>${f.lasts.toFixed(1)}×</b> longer.${f.picsHere ? ' Pictures and video use none of it: Lustify and Wan 2.2 make them on your PC.' : ' Once Lustify and Wan 2.2 are on your PC, pictures and video use none of it.'}`;
   const everyday = ` Everyday answers stay on your PC${f.easyHere ? ` (about ${fmtSec(f.easyHere)})` : ''}, with no waiting on the internet.`;
   const speed = f.faster == null ? `<b>Hard answers in about ${fmtSec(f.hardCloud)}</b> from Venice, however fast or slow this PC is.${everyday}`
     : f.faster >= 1.3 ? `<b>Hard answers about ${veniceTimes(f.faster)}× faster</b> on this PC: about ${fmtSec(f.hardCloud)} from Venice instead of about ${fmtSec(f.hardHere)} here.${everyday}`
@@ -215,7 +221,7 @@ function boostsHTML(targets, { liquid = false, compact = false, fusion = false }
   } else {
     rows.push(`<div class="bz-row"><span class="bz-ic">☁️</span><span class="grow"><b>A connected cloud AI</b> <span class="badge ${cloudOn ? 'b-mint' : ''}">${cloud.connected ? (cloudOn ? 'On for hard questions' : 'Connected, not used for hard questions') : 'Not connected'}</span>
       <span class="small">${fusion ? `Add ${esc(cloud.name)} as the lead: your PC's models draft, the cloud AI writes the final answer.` : `Hard questions go to ${esc(cloud.name)}; everyday messages stay on your PC.`}${liquid ? ' The Liquid Edition only uses uncensored cloud AIs, so it stays uncensored.' : ''}</span>
-      ${lift ? `<span class="small bz-num">Graduate-level science: <b>${base}%</b> → <b>${lift}%</b> ${boostBar(base, lift)}</span>` : base != null && cloud.science != null ? `<span class="small bz-num">This already scores ${base}% on graduate-level science, as high as ${esc(cloud.name)} (${cloud.science}%): a cloud AI mainly adds speed on a slower PC.</span>` : '<span class="small bz-num">Usually a big step up on hard reasoning, maths and long writing.</span>'}
+      ${lift ? `<span class="small bz-num">Graduate-level science: <b>${base}%</b> → <b>${lift}%</b> ${boostBar(base, lift)}</span>` : base != null && cloud.science != null ? `<span class="small bz-num">This already scores ${base}% on graduate-level science, as high as ${esc(cloud.name)} (${cloud.science}%): a cloud AI mainly adds speed on a slower PC.</span>` : liquid ? '' : '<span class="small bz-num">Usually a big step up on hard reasoning, maths and long writing.</span>'}
       ${liquid ? veniceLiquidHTML() : ''}
       <span class="small muted">Cost: needs internet; hard questions leave your PC; free plans have daily limits. ${cloud.connected ? (cloudOn || fusion ? '' : 'Turn it on in Settings → Features → Cloud AI for hard questions.') : 'Connect one in Models → Connect an API (free plans available).'}</span></span></div>`);
   }

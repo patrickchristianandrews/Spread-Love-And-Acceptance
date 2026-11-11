@@ -7,10 +7,12 @@ let paintQueued = false;
 
 function newChat(assistantId, projectId) {
   const proj = projectId && projectById(projectId);
-  const a = assistantById(assistantId || proj?.assistantId || S.data.prefs.lastAssistant);
+  // (The Code chat has its own button: it is never what a plain "New chat" opens.)
+  const last = S.data.prefs.lastAssistant === 'as-code' ? 'as-general' : S.data.prefs.lastAssistant;
+  const a = assistantById(assistantId || proj?.assistantId || last);
   const chat = { id: uid(), assistantId: a.id, title: 'New chat', created: now(), updated: now(), target: proj?.target || '', library: null, web: null, messages: [], ...(proj ? { projectId: proj.id } : {}) };
   S.data.chats.push(chat);
-  S.data.prefs.lastAssistant = a.id;
+  if (a.id !== 'as-code') S.data.prefs.lastAssistant = a.id;
   save();
   go({ view: 'chat', id: chat.id });
 }
@@ -41,7 +43,10 @@ document.addEventListener('click', (e) => {
   if (!b) return;
   const box = $('#input');
   if (!box) return;
-  box.value = CODE_STARTERS[Number(b.dataset.codeStart)]?.[2] || '';
+  // What you already typed is kept: the opening words go in front of it.
+  const typed = box.value.trim();
+  const opener = CODE_STARTERS[Number(b.dataset.codeStart)]?.[2] || '';
+  box.value = typed && !typed.startsWith(opener.trim()) ? `${opener}${typed}` : opener || typed;
   box.dispatchEvent(new Event('input', { bubbles: true }));
   box.focus();
   box.setSelectionRange(box.value.length, box.value.length);
@@ -291,7 +296,7 @@ function messageHTML(chat, a, m, i) {
   return `<div class="msg assistant${msgIn(m)}" data-msg="${m.id}">
     <div class="av" aria-hidden="true">${esc(a.emoji)}</div>
     <div class="msg-main">
-    <div class="who-line"><b>${esc(a.name)}</b>${model ? `<span class="who-model"${alt.autoWhy ? ` title="${esc(alt.autoWhy)}"` : ''}>${alt.autoWhy ? '✨ ' : ''}${esc(model)}</span>` : ''}${alt.skillId && skillById(alt.skillId) ? `<span class="badge b-peach">⚡ ${esc(skillById(alt.skillId).name)}</span>` : ''}${alt.imported ? `<span class="badge">From ${esc(alt.imported)}</span>` : ''}${alt.fixed ? '<span class="badge b-mint" title="A check of the first answer found a mistake (a sum, a code error or a wrong fact); this one fixes it. The first answer is still there with ‹ ›.">✓ Corrected</span>' : ''}${alt.preAnswered ? '<span class="badge b-lemon" title="This was the most likely next question, so it was answered while you read the last answer.">⚡ Ready before you asked</span>' : ''}${alt.cached ? '<span class="badge b-lemon" title="You rated this answer before (or it passed the double-check), so it was shown instantly. Regenerate for a fresh one.">⚡ Instant</span>' : ''}${alt.unsure && alt.check?.running ? '<span class="badge" title="The model was unsure of a number in this answer, so a second model is checking it.">Checking a number…</span>' : ''}${alt.autoWeb && !alt.sources?.length ? '<span class="badge b-sky" title="This question is about something current, so the web was searched automatically. Turn it off in Settings → General.">🌐 Checked the web</span>' : ''}${alt.webEmpty ? '<span class="badge b-lemon" title="Web search was on but found nothing for this question, so this answer is from the model\'s own knowledge.">Web: nothing found</span>' : ''}${etaNow}${alt.stats?.tps && !streaming ? `<span class="who-speed" title="${esc(statsTitle(alt))}">${Math.round(alt.stats.tps * 0.75)} words/s</span>` : ''}${m.t ? `<span class="who-time">${esc(msgTime(m))}</span>` : ''}</div>
+    <div class="who-line"><b>${esc(a.name)}</b>${model ? `<span class="who-model"${alt.autoWhy ? ` title="${esc(alt.autoWhy)}"` : ''}>${alt.autoWhy ? '✨ ' : ''}${esc(model)}</span>` : ''}${alt.skillId && skillById(alt.skillId) ? `<span class="badge b-peach">⚡ ${esc(skillById(alt.skillId).name)}</span>${!streaming && !pending && chat.messages[i - 1]?.skillAuto ? `<button class="tool plain-btn" data-act="plain" data-id="${m.id}" title="Quicksilver used this skill by itself because of how the message was worded. Press to get an ordinary written answer instead.">↩ Answer normally</button>` : ''}` : ''}${alt.imported ? `<span class="badge">From ${esc(alt.imported)}</span>` : ''}${alt.fixed ? '<span class="badge b-mint" title="A check of the first answer found a mistake (a sum, a code error or a wrong fact); this one fixes it. The first answer is still there with ‹ ›.">✓ Corrected</span>' : ''}${alt.preAnswered ? '<span class="badge b-lemon" title="This was the most likely next question, so it was answered while you read the last answer.">⚡ Ready before you asked</span>' : ''}${alt.cached ? '<span class="badge b-lemon" title="You rated this answer before (or it passed the double-check), so it was shown instantly. Regenerate for a fresh one.">⚡ Instant</span>' : ''}${alt.unsure && alt.check?.running ? '<span class="badge" title="The model was unsure of a number in this answer, so a second model is checking it.">Checking a number…</span>' : ''}${alt.autoWeb && !alt.sources?.length ? '<span class="badge b-sky" title="This question is about something current, so the web was searched automatically. Turn it off in Settings → General.">🌐 Checked the web</span>' : ''}${alt.webEmpty ? '<span class="badge b-lemon" title="Web search was on but found nothing for this question, so this answer is from the model\'s own knowledge.">Web: nothing found</span>' : ''}${etaNow}${alt.stats?.tps && !streaming ? `<span class="who-speed" title="${esc(statsTitle(alt))}">${Math.round(alt.stats.tps * 0.75)} words/s</span>` : ''}${m.t ? `<span class="who-time">${esc(msgTime(m))}</span>` : ''}</div>
     ${metaRow(councilBadgeHTML(alt) + stepsHTML(alt, streaming) + toolsHTML(alt) + memoryChipHTML(alt) + (alt.reasoning ? `<details class="think chip-d"><summary>${streaming && !alt.text ? '<span class="pulse"></span>Thinking…' : '💭 Thought it through'}</summary><div>${esc(alt.reasoning)}</div></details>` : ''))}
     <div class="bubble md ${streaming ? 'streaming' : ''} ${alt.error ? 'error' : ''}">${body}</div>
     ${downloadHTML(m, alt, streaming)}
@@ -397,15 +402,17 @@ function bindChat() {
   $('#skill-btn')?.addEventListener('click', () => { if (pop.hidden) { openPop(''); input.focus(); } else closePop(); });
   $('#skill-row').addEventListener('click', (e) => {
     if (e.target.closest('[data-skill-clear]')) { chat.pendingSkill = null; save(); $('#skill-row').innerHTML = skillChipHTML(chat); input.placeholder = `Message ${a.name}… (type / for skills)`; }
+    // "No thanks": that skill is not suggested, or used by itself, again in this chat.
+    const no = e.target.closest('[data-skill-dismiss]');
+    if (no) { chat.dismissed = [...new Set([...(chat.dismissed || []).filter(Boolean), no.dataset.skillDismiss || chat.suggested].filter(Boolean))]; chat.suggested = null; save(); $('#skill-row').innerHTML = skillChipHTML(chat); return; }
     const use = e.target.closest('[data-skill-use]');
     if (use) pickSkill(use.dataset.skillUse);
-    if (e.target.closest('[data-skill-dismiss]')) { chat.dismissed = [...(chat.dismissed || []), chat.suggested]; chat.suggested = null; save(); $('#skill-row').innerHTML = skillChipHTML(chat); }
   });
   $('#send').addEventListener('click', sendOrStop);
   bindNameAsk();
   bindHints(chat, a);
   $$('[data-goto]').forEach((b) => b.addEventListener('click', () => go({ view: b.dataset.goto })));
-  $('#pick-assistant').addEventListener('change', (e) => { chat.assistantId = e.target.value; S.data.prefs.lastAssistant = e.target.value; save(); render(); });
+  $('#pick-assistant').addEventListener('change', (e) => { chat.assistantId = e.target.value; if (e.target.value !== 'as-code') S.data.prefs.lastAssistant = e.target.value; save(); render(); });
   $('#pick-model').addEventListener('change', (e) => {
     if (e.target.value === '__get') { go({ view: 'stacks' }); return; }
     if (e.target.value === '__infuse') { e.target.value = resolveTarget(chat, a); infuseModal((st) => { chat.target = `stack:${st.id}`; save(); render(); }); return; }
@@ -466,11 +473,14 @@ function bindChat() {
     // right skill by itself. Right after a picture or video, a short follow-up about it ("another
     // one", "same but at night") continues with the same skill.
     const prevAlt = (() => { const m = [...chat.messages].reverse().find((x) => x.role === 'assistant'); return m?.alts?.[m.altIndex]; })();
-    const prevSkill = prevAlt?.media?.items?.length && ['image', 'video'].includes(skillById(prevAlt.skillId)?.output) ? prevAlt.skillId : null;
-    const autoSkill = chat.pendingSkill ? null : autoSkillFor(text, atts, chat);
-    const followUp = !autoSkill && prevSkill && S.data.prefs.autoSkills !== false && text.length < 240 && !/\?\s*$/.test(text) && isMediaFollowUp(text) ? prevSkill : null;
-    // An assistant can apply a skill to every message (the Image Artist paints each request).
-    chat.messages.push({ id: uid(), t: now(), role: 'user', text, attachments: atts, skillId: chat.pendingSkill || autoSkill?.id || followUp || (skillById(a.skill) ? a.skill : undefined) });
+    const prevSkill = prevAlt?.media && ['image', 'video'].includes(skillById(prevAlt.skillId)?.output) ? prevAlt.skillId : null;
+    // An assistant can apply a skill to every message (the Image Artist paints each request):
+    // that one is never replaced by a guess. Neither is a skill you picked yourself.
+    const ownSkill = chat.pendingSkill || (skillById(a.skill) ? a.skill : null);
+    const autoSkill = ownSkill ? null : autoSkillFor(text, atts, chat);
+    const followUp = !ownSkill && !autoSkill && prevSkill && S.data.prefs.autoSkills !== false && !isCodeChat(a) && text.length < 240 && !/\?\s*$/.test(text) && isMediaFollowUp(text) ? prevSkill : null;
+    // skillAuto: Quicksilver chose the skill from your words (so it can be undone: "Answer normally").
+    chat.messages.push({ id: uid(), t: now(), role: 'user', text, attachments: atts, skillId: ownSkill || autoSkill?.id || followUp || undefined, ...(!ownSkill && (autoSkill || followUp) ? { skillAuto: true } : {}) });
     chat.pendingSkill = null; chat.suggested = null;
     drafts[chat.id] = [];
     if (chat.title === 'New chat') chat.title = (text || atts[0]?.name || 'New chat').replace(/\s+/g, ' ').slice(0, 60);
@@ -682,7 +692,8 @@ function chatHistory(chat, a, upTo, skill = null) {
   const p = S.data.prefs;
   // Building a site or app: a whole page is long, and later messages edit it, so allow a long
   // answer and enough memory to keep the current version in view.
-  const appWork = skill?.output === 'app' || chat.messages.slice(0, upTo).some((m) => m.role === 'assistant' && /```html\s*\n[\s\S]*?(<!doctype html|<html[\s>])/i.test(msgText(m)));
+  const lastAsk = [...chat.messages.slice(0, upTo)].reverse().find((m) => m.role === 'user')?.text || '';
+  const appWork = skill?.output === 'app' || (isCodeChat(a) && /\b(web ?site|web ?page|single-page|landing page|html page|web app|app|game|dashboard)\b/i.test(lastAsk) && /\b(build|make|create|write|code|design)\b/i.test(lastAsk)) || chat.messages.slice(0, upTo).some((m) => m.role === 'assistant' && /```html\s*\n[\s\S]*?(<!doctype html|<html[\s>])/i.test(msgText(m)));
   const ctx = Math.max(Number(a.contextSize || p.contextSize) || 16384, appWork ? 32768 : 0);
   const docBudget = Math.max(4000, Math.floor((ctx * 3 * 0.6) / Math.max(1, chat.messages.slice(0, upTo).reduce((n, m) => n + (m.attachments || []).filter((x) => x.type === 'doc').length, 0))));
   const strict = Boolean(a.strict && (chat.library ?? a.library));
@@ -815,7 +826,7 @@ async function generate(chat, rerollMsg, withTarget, opts = {}) {
   qs.sendChat({
     requestId, target, messages,
     temperature: Number(chat.temperature ?? a.temperature ?? p.temperature),
-    maxTokens: ((n) => (lengthOf(chat) === 'short' && !appWork ? Math.min(n, LENGTHS.short.tokens) : lengthOf(chat) === 'long' ? Math.max(n, LENGTHS.long.tokens) : target === 'stack:quicksilver' && !appWork && !skill ? Math.min(n, 1200) : n))(Math.max(appWork && chat.maxTokens == null ? 8192 : 0, Math.round(Number(chat.maxTokens || a.maxTokens || p.maxTokens) * (effortOf(chat, a) === 'max' && chat.maxTokens == null ? 1.5 : 1)))),
+    maxTokens: ((n) => (lengthOf(chat) === 'short' && !appWork ? Math.min(n, LENGTHS.short.tokens) : lengthOf(chat) === 'long' ? Math.max(n, LENGTHS.long.tokens) : target === 'stack:quicksilver' && !appWork && !skill && a.job !== 'coding' ? Math.min(n, 1200) : n))(Math.max(appWork && chat.maxTokens == null ? 8192 : 0, Math.round(Number(chat.maxTokens || a.maxTokens || p.maxTokens) * (effortOf(chat, a) === 'max' && chat.maxTokens == null ? 1.5 : 1)))),
     contextSize: ctx,
     // Writing a picture prompt or a beat pattern is quick work: one model, no debate.
     level: skill && HIDE_BLOCK.has(skill.output) ? 'quick' : effortOf(chat, a) === 'council' ? 'thorough' : effortOf(chat, a),
@@ -986,6 +997,11 @@ function messageAction(chat, act, id, el) {
   if (act.startsWith('app-')) { appAction(chat, m, act); return; }
   if (act === 'prev' || act === 'next') { if (pending) return; m.altIndex = (m.altIndex + (act === 'next' ? 1 : -1) + m.alts.length) % m.alts.length; save(); render(); }
   else if (act === 'regen') generate(chat, m);
+  else if (act === 'plain') {
+    // The skill was a guess from the wording: take it off the question and answer it as written.
+    const q = chat.messages[idx - 1];
+    if (q?.role === 'user') { delete q.skillId; delete q.skillAuto; q.noAuto = true; save(); generate(chat, m); }
+  }
   else if (act === 'continue') { chat.messages.push({ id: uid(), role: 'user', text: 'Continue.', attachments: [] }); generate(chat, null); }
   else if (act === 'copy') { navigator.clipboard?.writeText(msgText(m)); toast('Copied.'); }
   else if (act === 'share') shareAnswer(chat, m);
@@ -1005,8 +1021,9 @@ function messageAction(chat, act, id, el) {
   else if (act === 'edit') {
     const b = openModal(`<h2>Edit message</h2><textarea id="edit-text" rows="8">${esc(m.text)}</textarea>
       <div class="modal-actions"><button class="btn" data-close>Cancel</button><button class="btn" id="edit-save">Save</button><button class="btn primary" id="edit-resend">Save and ask again</button></div>`);
-    const apply = () => { m.text = b.querySelector('#edit-text').value; chat.messages = chat.messages.slice(0, idx + 1); closeModal(); save(); };
-    b.querySelector('#edit-save').onclick = () => { m.text = b.querySelector('#edit-text').value; closeModal(); save(); render(); };
+    const reguess = () => { if (m.skillAuto) { const again = autoSkillFor(m.text, m.attachments || [], chat); if (again) m.skillId = again.id; else { delete m.skillId; delete m.skillAuto; } } };
+    const apply = () => { m.text = b.querySelector('#edit-text').value; reguess(); chat.messages = chat.messages.slice(0, idx + 1); closeModal(); save(); };
+    b.querySelector('#edit-save').onclick = () => { m.text = b.querySelector('#edit-text').value; reguess(); closeModal(); save(); render(); };
     b.querySelector('#edit-resend').onclick = () => { apply(); generate(chat, null); };
   }
 }
@@ -1057,7 +1074,11 @@ function pickChecker(answerTarget) {
   };
   const self = [...used].map((t) => ({ t, ...info(t) })).filter((x) => x.q != null && x.sec != null).sort((a, b) => b.loaded - a.loaded || a.sec - b.sec)[0];
   // Another model on this PC checks only if it belongs to the chat's stack or is ticked as in use.
-  const others = S.targets.filter((t) => !t.stack && !used.has(t.target) && ok(t.target) && mayUse(t.target, answerTarget)).map((t) => ({ t: t.target, ...info(t.target) })).filter((x) => x.q != null && x.q >= 5);
+  // A cloud AI checks only when the answer itself came from the cloud, or you switched on "Cloud
+  // AI for hard questions" (your choice in Settings and a stack's own checker are handled above):
+  // a chat that runs on this PC is never sent out just because Double-check is on.
+  const cloudOk = String(answerTarget).startsWith('api:') || membersOf(answerTarget).some((t) => String(t).startsWith('api:')) || Boolean(S.data.prefs.cloudHard);
+  const others = S.targets.filter((t) => !t.stack && !used.has(t.target) && ok(t.target) && mayUse(t.target, answerTarget) && (cloudOk || !t.target.startsWith('api:'))).map((t) => ({ t: t.target, ...info(t.target) })).filter((x) => x.q != null && x.q >= 5);
   // Another model if it's about as quick as checking with what's loaded; else the loaded one.
   const best = others.sort((a, b) => a.sec - b.sec || b.q - a.q)[0];
   if (best && (!self || best.sec <= self.sec * 1.5 + 3)) return best.t;
@@ -1286,7 +1307,7 @@ function skillChipHTML(chat) {
   const own = skillById(assistantById(chat.assistantId)?.skill);
   if (own) return `<div class="row" style="margin-bottom:2px"><span class="badge b-peach" style="font-size:.85rem;padding:3px 9px" title="This assistant uses it on every message">⚡ ${esc(own.icon)} ${esc(own.name)}</span><span class="small muted">${esc(own.description)}</span></div>`;
   const sug = chat.suggested && !(chat.dismissed || []).includes(chat.suggested) && skillById(chat.suggested);
-  if (sug) return `<div class="row" style="margin-bottom:2px"><span class="small muted">Suggested skill:</span><button class="btn small" data-skill-use="${esc(sug.id)}">⚡ ${esc(sug.icon)} ${esc(sug.name)}</button><button class="tool" data-skill-dismiss data-skill-use="${esc(sug.id)}">No thanks</button></div>`;
+  if (sug) return `<div class="row" style="margin-bottom:2px"><span class="small muted">Suggested skill:</span><button class="btn small" data-skill-use="${esc(sug.id)}">⚡ ${esc(sug.icon)} ${esc(sug.name)}</button><button class="tool" data-skill-dismiss="${esc(sug.id)}">No thanks</button></div>`;
   return '';
 }
 

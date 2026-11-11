@@ -48,9 +48,11 @@ function mediaReplySkill(text) {
 // Is a short message right after a picture about that picture ("another one", "same but at
 // night", "make her smile")? Requests to write, explain or answer something are not.
 function isMediaFollowUp(text) {
-  const t = String(text || '');
-  if (/\b(write|explain|summar|tell|describe|what|why|how|who|when|joke|poem|story|essay|email|code|translate|list|calculate)\w*\b/i.test(t)) return false;
-  return /\b(another|again|one more|a few more|variation|redo|try again|same (but|one|thing|again)|this time|make (her|him|it|them|this|that)\b|(now|but) (make|with|without|in|at|as|from)\b|more like|closer|wider|zoom(ed)? (in|out))/i.test(t);
+  const t = String(text || '').trim();
+  if (/\b(write|explain|summar|tell|describe|what|why|how|who|when|joke|poem|story|essay|email|code|translate|list|calculate|question|thanks|thank you|nailed|love it|great|nice|perfect|awesome|spanish|french|german|english|italian|language)\w*\b/i.test(t)) return false;
+  // "another one", "again", "one more": the words that ask for a repeat, at the start or alone.
+  if (/^(and |ok(ay)?,? |now |please )?(another( one)?|again|one more|a few more|more( like (this|that))?|redo( it)?|try again|same again|do it again|(a |another )?variation)\b/i.test(t)) return true;
+  return /\b(same (but|one|thing)|this time|make (her|him|it|them|this|that)\b|(now|but) (make|with|without|at night|in (the|a) |as a )|more like|closer|wider|zoom(ed)? (in|out))/i.test(t);
 }
 // What to show in the bubble: the note, without the JSON block (also while it streams in).
 const stripMediaBlock = (text) => String(text || '').replace(/```(?:image|video|edit|beat)[\s\S]*?(```|$)/g, '').replace(/```(?:json)?\s*\n?\s*\{[^`]*"prompt"\s*:[^`]*(```|$)/g, '').trim();

@@ -58,14 +58,14 @@ jobs:
         env:
           PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: '1'
       - name: Back-end tests
-        run: node test/backend.test.js && node test/media-catalog.test.js && node test/loading.test.js && node test/skills-auto.test.js && node test/pro.test.js
+        run: node test/backend.test.js && node test/media-catalog.test.js && node test/loading.test.js && node test/skills-auto.test.js && node test/pro.test.js && node test/liquid-own.test.js
       - name: End-to-end tests
         run: xvfb-run -a node test/ui.test.js && xvfb-run -a node test/liquid-picture.test.js && xvfb-run -a node test/in-use.test.js && xvfb-run -a node test/gate.test.js
 
   windows:
     needs: tests
     runs-on: windows-latest
-    # The models folder is ~37 GB (the Liquid Edition: chat, Lustify, Wan 2.2): downloading, copying
+    # The models folder is about 30 GB (the Liquid Edition: chat, Lustify, Wan 2.2): downloading, copying
     # it in during the install test and uploading it all take time.
     timeout-minutes: 240
     defaults:
@@ -229,6 +229,7 @@ jobs:
             quicksilver/dist/Quicksilver models/
             quicksilver/dist/READ ME FIRST.txt
           if-no-files-found: error
+          retention-days: 90
           # The installer and models are already compressed; zipping them again only costs time.
           compression-level: 0
 
@@ -242,7 +243,7 @@ jobs:
           Get-ChildItem 'dist\Quicksilver models' | ForEach-Object { 'in the models folder: {0,-30} {1,8:N0} MB' -f $_.Name, ($_.Length / 1MB) }
           Get-PSDrive C, D -ErrorAction SilentlyContinue | ForEach-Object { 'free on {0}: {1:N0} GB before installing' -f $_.Name, ($_.Free / 1GB) }
           # Installed on D: — the runner's C: drive has under 30 GB free, less than the Liquid
-          # Edition's ~27 GB of models (Windows then copies none of them).
+          # Edition's about 30 GB of models (Windows then copies none of them).
           Start-Process -Wait -FilePath $setup.FullName -ArgumentList '/S','/D=D:\QS'
           Get-PSDrive C, D -ErrorAction SilentlyContinue | ForEach-Object { 'free on {0}: {1:N0} GB after installing' -f $_.Name, ($_.Free / 1GB) }
           if (!(Test-Path 'D:\QS\Quicksilver.exe')) { throw 'Quicksilver.exe was not installed' }
@@ -279,6 +280,48 @@ jobs:
           if (Test-Path 'C:\QS2\Quicksilver.exe') { throw 'uninstalling left the app behind' }
           Write-Host '✓ uninstalled cleanly'
 
+      # The in-app update, rehearsed: install the last released version, then run this installer
+      # over it exactly as the app's updater does (--updated /S). Checks the new version is in
+      # place and that the user's data folder was left alone. Informational for now: it depends
+      # on a download from the previous release.
+      - name: Rehearse updating from the last release
+        continue-on-error: true
+        shell: pwsh
+        timeout-minutes: 25
+        run: |
+          $ver = node -p "require('./package.json').version"
+          $rel = Invoke-RestMethod -Headers @{ Authorization = "Bearer $env:GH_TOKEN" } "https://api.github.com/repos/$env:GITHUB_REPOSITORY/releases?per_page=20"
+          $prev = $rel | Where-Object { $_.tag_name -like 'quicksilver-v*' -and -not $_.prerelease -and $_.tag_name -ne "quicksilver-v$ver" } | Select-Object -First 1
+          if (!$prev) { Write-Host '::warning::no earlier release to update from'; exit 0 }
+          $asset = $prev.assets | Where-Object { $_.name -match '^Quicksilver-Setup-[\d.]+\.exe$' } | Select-Object -First 1
+          if (!$asset) { Write-Host "::warning::$($prev.tag_name) has no installer attached"; exit 0 }
+          Write-Host "updating from $($prev.tag_name) ($($asset.name), $([math]::Round($asset.size / 1MB)) MB) to $ver"
+          Get-Process Quicksilver, llama-server, sd-cli, sd, whisper-cli -ErrorAction SilentlyContinue | Stop-Process -Force -ErrorAction SilentlyContinue
+          New-Item -ItemType Directory -Force C:\upd | Out-Null
+          curl.exe -sSL --retry 3 -o C:\upd\old-setup.exe $asset.browser_download_url
+          $p = Start-Process -FilePath C:\upd\old-setup.exe -ArgumentList '/S','/D=C:\QSU' -PassThru
+          if (!$p.WaitForExit(600000)) { $p.Kill(); throw 'the previous version did not install within 10 minutes' }
+          if (!(Test-Path 'C:\QSU\Quicksilver.exe')) { throw 'the previous version was not installed' }
+          $data = Join-Path $env:APPDATA 'Quicksilver'
+          New-Item -ItemType Directory -Force $data | Out-Null
+          Set-Content -Path (Join-Path $data 'update-rehearsal.txt') -Value 'kept'
+          $setup = Get-ChildItem dist\Quicksilver-Setup-*.exe | Select-Object -First 1
+          Copy-Item $setup.FullName C:\upd\new-setup.exe
+          $p = Start-Process -FilePath C:\upd\new-setup.exe -ArgumentList '--updated','/S' -PassThru
+          if (!$p.WaitForExit(600000)) { $p.Kill(); throw 'the update did not finish within 10 minutes' }
+          Start-Sleep 5
+          Get-Process Quicksilver, llama-server -ErrorAction SilentlyContinue | Stop-Process -Force -ErrorAction SilentlyContinue
+          if (!(Test-Path 'C:\QSU\Quicksilver.exe')) { throw 'after the update Quicksilver.exe is missing' }
+          $now = (Get-Item 'C:\QSU\Quicksilver.exe').VersionInfo.ProductVersion
+          if ($now -notlike "$ver*") { throw "after the update the installed version is $now, not $ver" }
+          if (!(Test-Path (Join-Path $data 'update-rehearsal.txt'))) { throw 'the update removed the data folder' }
+          Write-Host "✓ updated in place from $($prev.tag_name) to $now; the data folder was kept"
+          $un = Get-ChildItem 'C:\QSU\Uninstall*.exe' | Select-Object -First 1
+          if ($un) { $u = Start-Process -FilePath $un.FullName -ArgumentList '/S' -PassThru; $u.WaitForExit(300000) | Out-Null }
+          Remove-Item -Recurse -Force C:\upd -ErrorAction SilentlyContinue
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -294,18 +337,34 @@ jobs:
       # far larger than GitHub's 2 GB-per-file limit for release downloads, so it is not
       # attached here. It is uploaded as the Quicksilver-Windows-installer build artifact above, which
       # has no such limit (a GitHub sign-in is needed to download it).
+      - name: Write the release notes (with a link to this build run)
+        if: startsWith(github.ref, 'refs/tags/quicksilver-v')
+        run: |
+          { printf 'Build run for this release (the full offline package, **Quicksilver-Windows-installer**, is under Artifacts there for 90 days): https://github.com/%s/actions/runs/%s\n\n' "$GITHUB_REPOSITORY" "$GITHUB_RUN_ID"; cat RELEASE_NOTES.md; } > release-body.md
+
+      # The web installer, once its own job has installed and tested it (that job is much shorter
+      # than this one). If it failed, the release goes out without it rather than with an untested file.
+      - name: Fetch the tested web installer
+        if: startsWith(github.ref, 'refs/tags/quicksilver-v')
+        continue-on-error: true
+        uses: actions/download-artifact@v4
+        with:
+          name: Quicksilver-web-installer-tested
+          path: quicksilver/web-installer
+
       - name: Publish release
         if: startsWith(github.ref, 'refs/tags/quicksilver-v')
         uses: softprops/action-gh-release@v2
         with:
           name: Quicksilver ${{ github.ref_name }}
-          body_path: quicksilver/RELEASE_NOTES.md
+          body_path: quicksilver/release-body.md
           files: |
             quicksilver/dist/*.exe
             quicksilver/dist/*.exe.sha256
+            quicksilver/web-installer/*.exe
 
   # The web installer: no models inside or next to it (a small download). On first launch
-  # Quicksilver's setup screen downloads the whole Liquid Edition (about 37 GB) before it opens.
+  # Quicksilver's setup screen downloads the whole Liquid Edition (about 30 GB) before it opens.
   web:
     needs: tests
     runs-on: windows-latest
@@ -344,7 +403,7 @@ jobs:
           npx electron-builder "${ARGS[@]}"
           for f in dist/*.exe; do s=$(stat -c %s "$f"); echo "$f: $((s / 1048576)) MB"; done
           VERSION=$(node -p "require('./package.json').version")
-          printf 'Quicksilver web installer\r\n\r\nRun Quicksilver-Web-Setup-%s.exe. When Quicksilver first opens it downloads the\r\nLiquid Edition (chat, search, Lustify for pictures, Wan 2.2 for video: about 37 GB) and\r\nopens when the download is done. Keep 40 GB free on the drive you install to.\r\nIf the download stops, close and reopen Quicksilver: it picks up where it stopped.\r\n' "$VERSION" > "dist/READ ME FIRST.txt"
+          printf 'Quicksilver web installer\r\n\r\nRun Quicksilver-Web-Setup-%s.exe. When Quicksilver first opens it downloads the\r\nLiquid Edition (chat, search, Lustify for pictures, Wan 2.2 for video: about 30 GB) and\r\nopens when the download is done. Keep 40 GB free on the drive you install to.\r\nIf the download stops, close and reopen Quicksilver: it picks up where it stopped.\r\n' "$VERSION" > "dist/READ ME FIRST.txt"
         env:
           CSC_IDENTITY_AUTO_DISCOVERY: 'false'
           CSC_LINK: ${{ secrets.WIN_CSC_LINK }}
@@ -363,6 +422,7 @@ jobs:
             quicksilver/dist/*.exe
             quicksilver/dist/READ ME FIRST.txt
           if-no-files-found: error
+          retention-days: 90
       - name: Install it and check the setup screen downloads the Liquid Edition
         shell: pwsh
         timeout-minutes: 30
@@ -376,6 +436,15 @@ jobs:
           node test/installed.test.js D:\QSW\Quicksilver.exe web install-shots-web
           if ($LASTEXITCODE -ne 0) { throw 'the installed app test failed' }
           Get-Process Quicksilver, llama-server -ErrorAction SilentlyContinue | Stop-Process -Force -ErrorAction SilentlyContinue
+      # Handed to the release only after it installed and showed its setup screen: the main job
+      # picks this copy up when it publishes. (Its name does not match the pattern the in-app
+      # updater looks for, so updates never pick it by mistake.)
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Quicksilver-web-installer-tested
+          path: quicksilver/dist/Quicksilver-Web-Setup-*.exe
+          if-no-files-found: error
+          retention-days: 5
       - uses: actions/upload-artifact@v4
         if: always()
         with:

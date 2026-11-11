@@ -1212,7 +1212,7 @@ async function collect(gen) {
     fs.writeFileSync(path.join(sdir, 'big.gguf'), 'x'.repeat(1000));
     fs.writeFileSync(path.join(sdir, 'STARTER.json'), JSON.stringify({ models: [{ id: 'brain', catalogId: 'qwen3-4b', name: 'Brain', files: { model: 'big.gguf' }, pack: true }] }));
     models.add({ id: 'brain', name: 'Brain', kind: 'text', catalogId: 'qwen3-4b', files: { model: path.join(sdir, 'big.gguf') }, size: 1000, source: 'bundled' });
-    assert.equal(models.keepPackModels(sdir), 1);
+    assert.equal(await models.keepPackModels(sdir), 1);
     const kept = models.get('brain').files.model;
     assert.ok(!kept.startsWith(sdir) && fs.existsSync(kept) && !fs.existsSync(path.join(sdir, 'big.gguf')));
     assert.equal(models.registerStarter(sdir).missing.length, 0, 'not downloaded again after the update');

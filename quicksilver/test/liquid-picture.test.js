@@ -53,11 +53,11 @@ const TINY = path.join(__dirname, 'fixtures', 'tiny.gguf');
     const reply = 'I\'ll create a portrait of a lighthouse.\n```json\n{"prompt": "a lighthouse at dusk, warm light", "shape": "portrait", "count": 1}\n```';
     const html = skillMediaHTML({ id: 'x' }, { text: reply, mediaOffer: mediaReplySkill(reply) }, false);
     return { plain: mediaReplySkill(reply), labelled: mediaReplySkill('Sure.\n```image\n{"prompt": "a cat"}\n```'), video: mediaReplySkill('```video\n{"prompt": "waves"}\n```'), code: mediaReplySkill('```json\n{"name": "x"}\n```'), button: /data-act="m-make"/.test(html), shown: stripMediaBlock(reply),
-      follow: ['another one, this time at night', 'make her smile', 'same but in winter'].map(isMediaFollowUp), notFollow: ['Thanks! Now write a short poem about lanterns.', 'Lovely, but how do diffusion models work, explain briefly', 'Summarise the history of lanterns with dates'].map(isMediaFollowUp) };
+      follow: ['another one, this time at night', 'make her smile', 'same but in winter'].map(isMediaFollowUp), notFollow: ['Thanks! Now write a short poem about lanterns.', 'Lovely, but how do diffusion models work, explain briefly', 'Summarise the history of lanterns with dates', 'thanks, again you nailed it', 'another question: what is the capital of France', 'now in spanish'].map(isMediaFollowUp) };
   });
   assert.deepEqual([r.plain, r.labelled, r.video, r.code, r.button], ['make-image', 'make-image', 'make-video', null, true]);
   assert.equal(r.shown, "I'll create a portrait of a lighthouse.");
-  assert.deepEqual(r.follow, [true, true, true]); assert.deepEqual(r.notFollow, [false, false, false]);
+  assert.deepEqual(r.follow, [true, true, true]); assert.deepEqual(r.notFollow, [false, false, false, false, false, false]);
   // Code chat: its own button under New chat. An ordinary chat set up for programming, on the
   // same model (the Liquid Edition here); New chat stays the everyday AI.
   const before = await win.evaluate(() => S.data.prefs.lastAssistant);
@@ -106,8 +106,8 @@ const TINY = path.join(__dirname, 'fixtures', 'tiny.gguf');
   assert.match(venice.card, /About \d+% less Venice use/); assert.match(venice.card, /last about [\d.]+× longer/);
   assert.match(venice.card, /Hard answers (about [\d.]+× faster|in about)|No faster on this PC/); assert.match(venice.card, /Quality/);
   assert.match(venice.card, /Pictures and video use none of it/);
-  assert.equal(venice.first.less, 65, 'before there are enough chats: the usual share (about 1 in 3 hard)');
-  assert.ok(venice.own.measured && venice.own.less >= 70 && venice.own.less <= 80, `from your own chats: ${venice.own.less}% less`);
+  assert.equal(venice.first.less, 53, 'before there are enough chats: the usual share (about 1 in 3 hard, and those are the longer answers)');
+  assert.ok(venice.own.measured && venice.own.less >= 60 && venice.own.less <= 70, `from your own chats (1 in 4 hard): ${venice.own.less}% less`);
   assert.match(venice.rec, /less Venice use than Venice alone/); assert.match(venice.pics, /Lustify on your PC/);
   assert.deepEqual(errors, []);
   await app.close();

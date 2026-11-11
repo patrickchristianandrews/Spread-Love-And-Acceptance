@@ -115,7 +115,8 @@ function foundModal() {
     const items = [...b.querySelectorAll('[data-found]:checked')].map((x) => f[Number(x.dataset.found)]);
     if (!items.length) { closeModal(); return; }
     const btn = b.querySelector('#found-add'); btn.disabled = true; btn.textContent = 'Adding…';
-    const added = await call('models:addFound', items);
+    let added;
+    try { added = await qs.call('models:addFound', items); } catch (err) { btn.disabled = false; btn.textContent = 'Add selected'; toast(err.message, 8000); return; }
     closeModal();
     await refreshModels();
     S.found = f.filter((x) => !items.includes(x));

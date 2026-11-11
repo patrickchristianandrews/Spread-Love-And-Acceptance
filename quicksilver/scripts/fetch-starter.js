@@ -126,7 +126,7 @@ async function get(repo, f, dest) {
     // search model (embeddings) writes no text, so it's exempt.
     if (!m.kind && !open) throw new Error(`No uncensored copy of ${m.name} could be downloaded (tried ${m.repos.filter((r) => /abliterat|uncensor/i.test(r)).join(', ')}).`);
     if (m.kind) console.log(`  ✓ ${m.kind === 'rerank' ? 'sharper' : 'smarter'}-search model`); else console.log(`  ✓ uncensored copy: ${pick.repo}`);
-    entries.push({ id: m.id, catalogId: m.catalogId, name: m.kind ? m.name : open ? `${m.name} (uncensored)` : m.name, ...(m.kind ? { kind: m.kind } : {}), ...(open && !m.kind ? { uncensored: true } : {}), repo: pick.repo, quant: pick.quant, files: { model: m.file, ...(pick.mmproj ? { mmproj: m.proj || 'mmproj.gguf' } : {}) }, ...(m.pack || WEB ? { pack: true } : {}), ...(m.optional ? { optional: true } : {}), ...(m.ifFits ? { ifFits: true } : {}) });
+    entries.push({ id: m.id, catalogId: m.catalogId, name: m.kind ? m.name : open ? `${m.name} (uncensored)` : m.name, ...(m.kind ? { kind: m.kind } : {}), ...(open && !m.kind ? { uncensored: true } : {}), repo: pick.repo, quant: pick.quant, ...(m.repos.filter((r) => r !== pick.repo).length ? { alt: m.repos.filter((r) => r !== pick.repo) } : {}), files: { model: m.file, ...(pick.mmproj ? { mmproj: m.proj || 'mmproj.gguf' } : {}) }, ...(m.pack || WEB ? { pack: true } : {}), ...(m.optional ? { optional: true } : {}), ...(m.ifFits ? { ifFits: true } : {}) });
     let text = m.licenceText;
     if (!text) try {
       const tmp = path.join(os.tmpdir(), `licence-${m.id}.txt`);

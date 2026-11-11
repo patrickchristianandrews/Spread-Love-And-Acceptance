@@ -614,7 +614,7 @@ async function* stack(stackDef, req) {
     // left out the member that can see (e.g. the Quicksilver model's 2B, which reads photos).
     const vision = (members.vision && exists(members.vision) && members.vision) || everyone.find(canSee)
       || [...(members.drafters || []), members.judge].filter((t) => t && exists(t)).find(canSee);
-    if (!vision) throw new Error('This chat has images, but no model in the stack can see. Add a vision model to the stack.');
+    if (!vision) throw new Error('This chat has a photo, but no model in this stack can see, and a stack only uses its own models. Pick a model that sees for this chat (the Liquid Edition does), add one to the stack, or tick one under Models → Models in use.');
     const imgs = messages.flatMap((m) => (Array.isArray(m.content) ? m.content.filter((p) => p.type === 'image_url') : []));
     const s = { role: 'vision', label: 'Looking at the images', model: label(vision), text: '', done: false };
     yield step(s);
@@ -845,10 +845,7 @@ function isUncensored(target) {
   if (target === 'stack:quicksilver' || target === 'stack:quicksilver-pro') return true;
   const p = parse(target);
   if (p.kind === 'local') {
-    const m = models.get(p.id);
-    if (!m) return false;
-    const c = catalog.TEXT_MODELS.find((x) => x.id === m.catalogId);
-    return m.source === 'bundled' || c?.category === 'open' || UNCENSORED.test(`${m.name} ${require('node:path').basename(m.files?.model || '')} ${m.repo || ''}`);
+    return models.looksUncensored(models.get(p.id));
   }
   if (p.kind === 'api') {
     const [, pid, ...rest] = target.split(':');
@@ -868,9 +865,13 @@ function teamOf(target) {
 }
 // May this local model take part in a chat with that target? Only the target's own models, plus
 // the ones ticked under Models → "Models in use". Nothing else on this PC is pulled in.
+// With a single model or a cloud AI, Quicksilver's own built-in models may still take part (they
+// fill the Council's seats, say); with a stack or fusion, not even those.
 function mayUse(t, base) {
   const m = models.get(parse(t).id);
-  return Boolean(m) && (teamOf(base).includes(t) || models.inUse(m));
+  if (!m) return false;
+  if (teamOf(base).includes(t) || models.inUse(m)) return true;
+  return parse(base).kind !== 'stack' && models.liquidOwn(m);
 }
 
 function councilMembers(target, req) {
@@ -893,7 +894,7 @@ function councilMembers(target, req) {
 
 async function* council(target, req) {
   const m = councilMembers(target, req);
-  if (!m.structurer) throw new Error('The Council needs at least one model on this PC.');
+  if (!m.structurer) throw new Error('The Council needs at least one model on this PC that it may use. Tick one under Models → Models in use.');
   const steps = [];
   const step = (s) => { s.index = steps.length; steps.push(s); return { type: 'step', step: s }; };
   const notes = [];
@@ -985,7 +986,8 @@ const LIQUID_STACKS = new Set(['quicksilver', 'quicksilver-pro']);
 function ensureQuicksilverProStack() {
   const P = catalog.LIQUID_PRO;
   const all = models.list().filter((m) => m.kind === 'text');
-  const pick = (cid) => all.find((m) => m.catalogId === cid);
+  // A copy found in another app is never taken by itself (only once you tick it as in use).
+  const pick = (cid) => all.find((m) => m.catalogId === cid && (m.source !== 'imported' || models.inUse(m)));
   const brain = pick(P.brain); const closer = pick(P.closer); const thinker = pick(P.thinker); const muse = pick(P.muse);
   const have = stacks().find((s) => s.id === 'quicksilver-pro');
   if (!store.config().liquidProWanted) return null;
@@ -999,7 +1001,16 @@ function ensureQuicksilverProStack() {
   return 'stack:quicksilver-pro';
 }
 
-async function ensureQuicksilverStack() {
+// One rebuild at a time: a tick under Models, a finished download and Home can all ask at once,
+// and each reads the models, waits for the hardware, then saves. Run together, an older reading
+// could be saved last.
+let stackBuild = Promise.resolve();
+function ensureQuicksilverStack() {
+  const run = stackBuild.then(buildQuicksilverStack, buildQuicksilverStack);
+  stackBuild = run.catch(() => {});
+  return run;
+}
+async function buildQuicksilverStack() {
   const have = stacks().find((s) => s.id === 'quicksilver');
   // Locked: the Liquid Edition is always Quicksilver's own crew (older versions let it be edited or deleted).
   if (have && have.autoManaged === false) saveStack({ ...have, autoManaged: true });
@@ -1011,14 +1022,17 @@ async function ensureQuicksilverStack() {
   // Quicksilver is completely uncensored, so every model on its crew must be uncensored — including
   // the fallbacks. A filtered model of a matching name (e.g. a plain "Qwen3 4B Instruct" found from
   // another app) is NEVER adopted as the Brain, Eyes or Thinker.
-  const unc = (m) => m && isUncensored(`local:${m.id}`);
+  // Nor is a copy found in another app, however well it matches, unless you ticked it as in use.
+  const unc = (m) => m && isUncensored(`local:${m.id}`) && (m.source !== 'imported' || models.inUse(m));
   const brain = all.find((m) => core.brain && m.catalogId === core.brain && m.source !== 'bundled' && unc(m)) || all.find((m) => m.id === 'starter-brain') || all.find((m) => /^qwen3(\.5)?-4b$/.test(m.catalogId || '') && unc(m));
-  const eyes = all.find((m) => core.eyes && m.catalogId === core.eyes && m.source !== 'bundled' && unc(m)) || all.find((m) => m.id === 'starter') || all.find((m) => /^qwen3(\.5-2b|-vl-)/.test(m.catalogId || '') && unc(m));
+  // The Eyes must see: a copy with its vision add-on comes first.
+  const eyesOk = (m) => core.eyes && m.catalogId === core.eyes && m.source !== 'bundled' && unc(m);
+  const eyes = all.find((m) => eyesOk(m) && m.files?.mmproj) || all.find((m) => m.id === 'starter') || all.find(eyesOk) || all.find((m) => /^qwen3(\.5-2b|-vl-)/.test(m.catalogId || '') && unc(m));
   // A Brain that thinks for itself (Qwen3.5) is also the Thinker; one that sees is also the Eyes.
   const brainThinks = Boolean(brain && catalog.TEXT_MODELS.find((c) => c.id === brain.catalogId)?.reasoning);
   const brainSees = Boolean(brain?.files?.mmproj);
   // The Thinker: an uncensored thinking model for hard maths and logic (comes with Quicksilver).
-  const thinker = brainThinks ? brain : all.find((m) => m.id === 'starter-thinker') || all.find((m) => /^qwen3-4b-thinking/.test(m.catalogId || '') && isUncensored(`local:${m.id}`));
+  const thinker = brainThinks ? brain : all.find((m) => m.id === 'starter-thinker') || all.find((m) => /^qwen3-4b-thinking/.test(m.catalogId || '') && unc(m));
   // Quicksilver is uncensored, so only uncensored models are on its team: the ones that come with
   // it, and uncensored ones you add.
   const isOpen = (p) => isUncensored(`local:${p.id}`);

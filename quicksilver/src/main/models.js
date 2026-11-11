@@ -92,6 +92,26 @@ function add(entry) {
   return entry;
 }
 
+// Is this installed chat model an uncensored one? The models that came with Quicksilver are; so
+// are the catalog's "open" models; otherwise the name, file name or repository says so.
+// (Never the folder: a Windows user called Alexis has "lexi" in every path.)
+const UNCENSORED_NAME = /abliterat|uncensor|unfiltered|dolphin|hermes|lexi|rocinante/i;
+function looksUncensored(m) {
+  if (!m) return false;
+  const c = catalog.TEXT_MODELS.find((x) => x.id === m.catalogId);
+  return m.source === 'bundled' || c?.category === 'open' || UNCENSORED_NAME.test(`${m.name || ''} ${path.basename(m.files?.model || '')} ${m.repo || ''}`);
+}
+// Is this copy one of the Liquid Edition's own models: the ones that came with it, or the same
+// models downloaded by its setup screen? A copy found in another app only counts once you tick it,
+// and a chat model must be the uncensored build (the plain catalog build of the same model is not).
+function liquidOwn(m) {
+  if (!m) return false;
+  if (m.source === 'bundled') return true;
+  if (!catalog.liquidMember(m.catalogId)) return false;
+  if (m.source === 'imported' && !inUse(m)) return false;
+  return (m.kind || 'text') !== 'text' || looksUncensored(m);
+}
+
 // ---------- models in use ----------
 // A chat uses the model you chose for it, or the members of its stack or fusion: nothing else on
 // this PC joins in by itself. The exception is a model you ticked under Models → "Models in use":
@@ -345,10 +365,16 @@ async function trending({ force = false, hw = null } = {}) {
 async function importFile(file, readGguf) {
   const info = await readGguf(file);
   if (info.isProjector) throw new Error('That file is a vision add-on (mmproj), not a model. Import the main model file.');
-  if (!chatFile(file, info)) throw new Error('That file is part of a picture, video, search or speech model, not a chat model, so it can\'t be used for chatting. Picture and video models are added under Models → Images & video.');
-  // Look for a matching vision projector in the same folder.
+  // You chose this file yourself, so its own header decides (a chat model merely named after
+  // Flux or Whisper is still a chat model); the name is only used when the header says nothing.
+  if (info.chat === false || (!info.architecture && !chatFile(file, info))) throw new Error('That file is part of a picture, video, search or speech model, not a chat model, so it can\'t be used for chatting. Picture and video models are added under Models → Images & video.');
+  // A vision add-on in the same folder is paired when it is the only model there, or its name
+  // matches this model's (a shared folder like Downloads may hold another model's add-on).
   const dir = path.dirname(file);
-  const proj = fs.readdirSync(dir).find((n) => /mmproj.*\.gguf$/i.test(n));
+  const names = fs.readdirSync(dir).filter((n) => /\.gguf$/i.test(n));
+  const mains = names.filter((n) => !/mmproj/i.test(n) && !(/-0*(\d+)-of-\d+\.gguf$/i.test(n) && !/-0*1-of-\d+\.gguf$/i.test(n)));
+  const stem = (n) => n.toLowerCase().replace(/\.gguf$/, '').replace(/^mmproj[-_.]?/, '').replace(/[-_.](mmproj|q\d\w*|f16|bf16|fp16|iq\d\w*|ud).*$/, '');
+  const proj = names.filter((n) => /mmproj/i.test(n)).find((n) => mains.length <= 1 || (stem(n).length >= 4 && stem(path.basename(file)).startsWith(stem(n).slice(0, Math.max(4, Math.min(stem(n).length, 12))))));
   const files = { model: file, ...(proj ? { mmproj: path.join(dir, proj) } : {}) };
   return add({ id: `imp-${Date.now().toString(36)}`, ...recognise(info.name || niceName(file), file), kind: 'text', files, size: info.size, vision: Boolean(proj), source: 'imported' });
 }
@@ -370,14 +396,23 @@ function registerStarter(dir) {
   const entries = meta.models || [{ id: 'starter', catalogId: meta.catalogId, name: meta.name, files: meta.files }]; // 2.3 format
   const removed = removedStarters();
   const reg = store.readJSON(REG(), []);
+  // A big model the installer copied in is moved to the data folder (models/kept) at start-up,
+  // so each file is looked for in the app's folder first and there second. That also finds
+  // files that were moved when the list of models could not be saved afterwards.
+  const at = (f) => { const a = path.join(dir, f); if (fs.existsSync(a)) return a; return keepDirs(dir).map((d) => path.join(d, path.basename(f))).find((b) => fs.existsSync(b)) || a; };
+  const here = (m) => Object.values(m.files || {}).every((f) => fs.existsSync(f));
   for (const e of entries) {
     if (removed.has(e.id)) continue;
-    const files = Object.fromEntries(Object.entries(e.files).map(([role, f]) => [role, path.join(dir, f)]));
+    const files = Object.fromEntries(Object.entries(e.files).map(([role, f]) => [role, at(f)]));
+    // You already have it when a copy that is the Liquid Edition's own is installed: for a chat
+    // model that means the uncensored build, and not an unticked file from another app (the
+    // Liquid Edition would not use either, so the setup screen must still fetch the real one).
+    const have = reg.some((m) => m.catalogId === e.catalogId && here(m) && (e.kind || e.media ? m.source !== 'imported' : liquidOwn(m)));
     if (!Object.values(files).every((f) => fs.existsSync(f))) {
-      // Not shipped with this copy: fetch it from the catalog, unless you already have it.
-      const have = reg.some((m) => m.catalogId === e.catalogId && Object.values(m.files || {}).every((f) => fs.existsSync(f)));
       // Search models (embed, rerank) come from their own catalog entry, so they keep their kind.
-      const src = e.repo && !e.kind ? { repo: e.repo, quant: e.quant } : {};
+      // A chat model is fetched from the same uncensored copy the installer uses, with the
+      // other uncensored copies as fallbacks: never the plain catalog build.
+      const src = e.repo && !e.kind ? { repo: e.repo, quant: e.quant, ...(e.alt?.length ? { alt: e.alt } : {}) } : {};
       // Everything in the Liquid Edition's pack is fetched on first run when the folder is missing,
       // the Closer and the picture and video makers (media) included.
       if (e.pack && (!e.optional || e.media || e.ifFits) && !have) out.missing.push({ catalogId: e.catalogId, name: e.name, kind: e.kind || 'text', ...(e.media ? { media: true } : {}), ...src });
@@ -386,44 +421,92 @@ function registerStarter(dir) {
     const known = reg.find((m) => m.id === e.id);
     const size = Object.values(files).reduce((t, f) => t + fs.statSync(f).size, 0);
     if (known && known.files?.model === files.model && known.name === e.name && known.size === size) continue;
-    // A picture or video model you already downloaded yourself isn't registered twice.
-    if (!known && e.media && reg.some((m) => m.catalogId === e.catalogId)) continue;
+    // A model the setup screen (or you) already downloaded isn't registered a second time when
+    // the installer later brings its own copy.
+    if (!known && e.pack && have) continue;
     const entry = add({ id: e.id, name: e.name, kind: e.kind || 'text', catalogId: e.catalogId, files, size, vision: e.kind ? false : Boolean(files.mmproj), source: 'bundled' });
     if (!known) out.added.push(entry);
   }
   return out;
 }
 
+// Where the big models are kept, in order of preference:
+//   1. the data folder (models/kept). In a default install that is the same drive as the app, so
+//      the move is instant and takes no space.
+//   2. a folder beside the app's own folder, on the drive it was installed to ("Quicksilver kept
+//      models"). An install on another drive (D:, because C: is small) keeps its models there:
+//      still an instant move, and outside the folder an update or reinstall replaces.
+function keepDirs(dir) {
+  const out = [path.join(store.userDir(), 'models', 'kept')];
+  const res = path.dirname(path.resolve(dir || '.'));
+  const appDir = path.dirname(res);
+  if (dir && path.basename(res).toLowerCase() === 'resources' && path.dirname(appDir) !== appDir) out.push(path.join(path.dirname(appDir), KEPT_BESIDE));
+  return out;
+}
+const KEPT_BESIDE = 'Quicksilver kept models';
+// Pack files still inside the app's folder that an installed model uses: what an update would
+// take with it if it ran now.
+function packLeft(dir) {
+  const metaFile = dir && path.join(dir, 'STARTER.json');
+  if (!metaFile || !fs.existsSync(metaFile)) return { files: [], bytes: 0 };
+  const meta = JSON.parse(fs.readFileSync(metaFile, 'utf8'));
+  const reg = store.readJSON(REG(), []);
+  const files = [...new Set((meta.models || []).filter((e) => e.pack).flatMap((e) => Object.values(e.files)).map((f) => path.join(dir, f)))]
+    .filter((f) => fs.existsSync(f) && reg.some((m) => Object.values(m.files || {}).some((p) => path.resolve(p) === path.resolve(f))));
+  return { files, bytes: files.reduce((t, f) => t + fs.statSync(f).size, 0) };
+}
+
 // The big "pack" models the installer copied in next to the app are moved to the data folder, so a
 // newer version keeps them instead of downloading them again: installing over the old copy (an
 // update from inside Quicksilver, or a newer setup file run by hand) replaces the app's folder and
 // everything in it. (The small model comes inside every installer.)
-// At start-up this runs with renameOnly: a move on the same drive takes no time and no space; when
-// the data folder is on another drive the files stay where they are (never a slow 30 GB copy
-// behind your back). Before an in-app update it runs in full, copying if it has to.
-function keepPackModels(dir, { renameOnly = false } = {}) {
+// At start-up this runs with renameOnly: a move on the same drive takes no time and no space
+// (see keepDirs for where they go; never a slow 30 GB copy behind your back). Before an in-app
+// update it runs in full: if no move is possible it copies to the data folder, but only when
+// that drive has room (the updater refuses to go on while models are still in the app's folder).
+async function keepPackModels(dir, { renameOnly = false } = {}) {
   const metaFile = dir && path.join(dir, 'STARTER.json');
   if (!metaFile || !fs.existsSync(metaFile)) return 0;
   const meta = JSON.parse(fs.readFileSync(metaFile, 'utf8'));
-  const keep = store.dir('models', 'kept');
-  const all = store.readJSON(REG(), []);
+  const dirs = keepDirs(dir);
+  const freeIn = (d) => { try { const st = fs.statfsSync(d); return st.bavail * st.bsize; } catch { return Infinity; } };
   let moved = 0;
   for (const e of meta.models || []) {
     if (!e.pack) continue;
     for (const f of Object.values(e.files)) {
       const from = path.join(dir, f);
-      const to = path.join(keep, path.basename(f));
+      let to = path.join(dirs[0], path.basename(f));
       if (!fs.existsSync(from)) continue;
+      // Only files an installed model uses are moved: a second copy of something you already
+      // downloaded stays in the app's folder (and goes when the app's folder is replaced).
+      const uses = (m) => Object.values(m.files || {}).some((p) => path.resolve(p) === path.resolve(from));
+      if (!store.readJSON(REG(), []).some(uses)) continue;
       // Each file on its own: one that can't be moved (still in use, or no room on the data
-      // drive) must not lose track of the ones that were. The registry is saved whatever happens.
+      // drive) must not lose track of the ones that were. The list of models is saved after
+      // every file, so a move is never left unrecorded (and registerStarter looks in the data
+      // folder as well, should that ever happen).
       try {
-        try { fs.renameSync(from, to); } catch (err) { if (renameOnly) throw err; fs.copyFileSync(from, to); try { fs.rmSync(from, { force: true }); } catch {} }
+        // An instant move, to the first of the keep folders that takes it.
+        let done = false;
+        for (const d of dirs) {
+          try { fs.mkdirSync(d, { recursive: true }); fs.renameSync(from, path.join(d, path.basename(f))); to = path.join(d, path.basename(f)); done = true; break; } catch { /* another drive, or no permission: try the next */ }
+        }
+        if (!done) {
+          if (renameOnly) throw new Error('not moved');
+          // No move possible (the app's folder is on another drive and nothing can be created
+          // beside it): copy to the data folder, without freezing the window, if it has room.
+          fs.mkdirSync(dirs[0], { recursive: true });
+          if (freeIn(dirs[0]) < fs.statSync(from).size + 2 * 1024 ** 3) throw new Error('no room');
+          await fs.promises.copyFile(from, to);
+          try { fs.rmSync(from, { force: true }); } catch {}
+        }
+        const all = store.readJSON(REG(), []);
         for (const m of all) for (const [role, p] of Object.entries(m.files || {})) if (path.resolve(p) === path.resolve(from)) m.files[role] = to;
+        save(all);
         moved++;
       } catch { if (!renameOnly) { try { fs.rmSync(to, { force: true }); } catch {} } }
     }
   }
-  if (moved) save(all);
   return moved;
 }
 
@@ -457,10 +540,10 @@ function scanRoots() {
   return roots;
 }
 
-const OWN_PACK = /^quicksilver models$/i;
+const OWN_PACK = /^quicksilver (kept )?models$/i;
 // File and model names of GGUF files that are not chat models: picture and video models and their
 // parts, search models, speech models. (The file's own header is checked as well, see chatFile.)
-const NOT_CHAT_NAME = /(^|[^a-z0-9])(umt5|t5[-_. ]?xxl|t5[-_. ]?v1|t5[-_. ]?encoder|clip[-_. ]?[lg]|vae|wan[-_. ]?2|flux[-_. ]?1|sdxl|sd[-_. ]?3|stable[-_. ]?diffusion|z[-_. ]?image|qwen[-_. ]?image|chroma|ltx[-_. ]?video|hunyuan[-_. ]?video|embed(ding)?s?|rerank(er)?|bge[-_. ]|whisper)([^a-z]|$)/i;
+const NOT_CHAT_NAME = /(^|[^a-z0-9])(umt5|t5[-_. ]?xxl|t5[-_. ]?v1|t5[-_. ]?encoder|clip[-_. ]?[lg]|vae|wan[-_. ]?2|wan[-_. ]?vace|flux[-_. ]?[12]|sdxl|sd[-_. ]?xl|sd[-_. ]?3|sd[-_. ]?v?1[-_. ]5|stable[-_. ]?diffusion|z[-_. ]?image|qwen[-_. ]?image|chroma|ltxv?|ltx[-_. ]?video|hunyuan[-_. ]?video|hidream|lumina[-_. ]?2|embed(ding)?s?|embeddinggemma|rerank(er)?|bge[-_. ]?(m3|small|base|large|multilingual|reranker|en|zh)|e5[-_. ](small|base|large|mistral)|gte[-_. ](small|base|large|qwen|multilingual)|whisper)([^a-z]|$)/i;
 function chatFile(file, info, name = '') {
   if (info && info.chat === false) return false;
   return ![path.basename(file || ''), name, info?.name || ''].some((n) => NOT_CHAT_NAME.test(n));
@@ -584,19 +667,23 @@ async function findChat(readGguf) {
 // chat models (a video model, a text encoder), files from the installer's own models folder, and
 // second copies of models Quicksilver already has are taken off the list. No file is deleted, and
 // a model one of your own stacks uses stays.
-async function tidyImported(readGguf, usedByStack = () => false) {
+async function tidyImported(readGguf, inUseElsewhere = () => false) {
   const gone = [];
   const mine = list().filter((m) => m.source !== 'imported' && m.files?.model);
   const prints = new Set(mine.map((m) => fingerprint(m.files.model)).filter(Boolean));
   for (const m of list().filter((x) => x.source === 'imported' && x.files?.model)) {
-    if (usedByStack(m.id)) continue;
     const file = m.files.model;
+    let info = null;
+    try { info = await readGguf(file); } catch { continue; } // unreadable: left alone
     let why = null;
-    if (path.dirname(file).split(/[\\/]/).some((part) => OWN_PACK.test(part))) why = 'pack';
-    else if (!chatFile(file, null, m.name)) why = 'not-chat';
-    else {
-      try { const info = await readGguf(file); if (info.isProjector || !chatFile(file, info, m.name)) why = 'not-chat'; } catch { continue; }
-      if (!why && m.from && prints.has(fingerprint(file))) why = 'copy';
+    // Not a chat model: the file's own header says so (it could never answer). A file found
+    // automatically is also judged by its name; one you imported by hand only by its header.
+    if (info.isProjector || info.chat === false || (m.from && !chatFile(file, info, m.name))) why = 'not-chat';
+    // The installer's own folder and second copies: only files found automatically, and never
+    // one that a stack, a knowledge model, a chat or your default model uses.
+    else if (m.from && !inUseElsewhere(m.id)) {
+      if (path.dirname(file).split(/[\\/]/).some((part) => OWN_PACK.test(part))) why = 'pack';
+      else if (prints.has(fingerprint(file))) why = 'copy';
     }
     if (!why) continue;
     const ignored = new Set(store.config().foundIgnored || []);
@@ -624,4 +711,4 @@ async function addFound(items, readGguf) {
   return added;
 }
 
-module.exports = { keepPackModels, list, get, add, remove, start, cancel, active, planCatalog, planGguf, ggufOptions, search, trending, trendType, paramsOf, importFile, tree, findOnPC, findChat, addFound, tidyImported, inUse, setUse, chatFile, repair, registerStarter };
+module.exports = { keepPackModels, list, get, add, remove, start, cancel, active, planCatalog, planGguf, ggufOptions, search, trending, trendType, paramsOf, importFile, tree, findOnPC, findChat, addFound, tidyImported, inUse, setUse, chatFile, looksUncensored, liquidOwn, keepDirs, packLeft, repair, registerStarter };
