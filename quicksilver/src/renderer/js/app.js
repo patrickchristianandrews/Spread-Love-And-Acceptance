@@ -218,10 +218,12 @@ async function init() {
   });
 
   setTimeout(() => preloadDefault(), 3000);
-  qs.onModelProgress((d) => { S.downloads[d.id] = { ...S.downloads[d.id], ...d }; paintDownloads(); });
+  qs.onModelProgress((d) => { S.downloads[d.id] = { ...S.downloads[d.id], ...d }; paintDownloads(); paintLiquidGate(); });
   qs.onModelDone(async ({ id, model }) => {
     delete S.downloads[id];
     await refreshModels();
+    // One more Liquid Edition model in: re-check what's still missing (opens Quicksilver when none is).
+    if (document.getElementById('liquid-gate')) { await setUpQuicksilver(false).catch(() => {}); if (document.getElementById('liquid-gate')) return; }
     S.est = null;
     if (!(await applyPendingUpgrades(model).catch(() => false))) toast(`${model.name} is ready.`);
     if (!targetValid(S.data.prefs.defaultTarget) && model.kind === 'text') { S.data.prefs.defaultTarget = `local:${model.id}`; save(); }
@@ -231,7 +233,7 @@ async function init() {
     if (!$('#modal').hidden) return;
     render();
   });
-  qs.onModelError(({ id, message, cancelled }) => { delete S.downloads[id]; paintDownloads(); if (!cancelled) toast(message, 8000); else toast(message); if (['models', 'stacks', 'studio'].includes(S.route.view)) render(); });
+  qs.onModelError(({ id, message, cancelled }) => { delete S.downloads[id]; paintDownloads(); if (gateItems.some((m) => m.catalogId === id)) { gateFailed[id] = message; paintLiquidGate(); } if (!cancelled) toast(message, 8000); else toast(message); if (['models', 'stacks', 'studio'].includes(S.route.view)) render(); });
 
   go({ view: 'home' });
   // People updating get the short tour once too (new people see it after the name question).
@@ -256,21 +258,69 @@ async function setUpQuicksilver(firstLook) {
     toast(r.stack ? '👋 Meet Quicksilver Liquid Edition: two AI models working as one, right on your PC. It sees photos, thinks harder when a question needs it, and nothing leaves this computer. Try an idea below.'
       : '👋 Quicksilver is ready to chat, privately on your PC, and it can see photos. Try an idea below.', 10000);
   }
-  // Lustify and Wan 2.2 (the Liquid Edition's picture and video makers) are big: without the models
-  // folder they download by themselves only where they run on the graphics card; elsewhere a chat
-  // offers them with one click when you first ask for a picture or a video.
-  let missing = r.missing.filter((m) => !m.media);
-  if (r.missing.some((m) => m.media)) {
-    if (!S.est) await refreshEstimates().catch(() => {});
-    missing = [...missing, ...r.missing.filter((m) => m.media && S.est?.media?.[m.catalogId]?.fit === 'gpu')];
-  }
-  if (firstLook && missing.length && !S.config?.offline) {
-    for (const m of missing) if (!S.downloads[m.catalogId]) download(m.repo ? { repo: m.repo, quant: m.quant, catalogId: m.catalogId, name: m.name } : { catalogId: m.catalogId }, m.name).catch(() => {});
-    toast(`Finishing Quicksilver in the background (${missing.map((m) => m.name).join(', ')}). You can chat right away.`, 8000);
-  }
+  // Quicksilver doesn't open until the whole Liquid Edition is installed: anything not copied in
+  // from the models folder downloads straight away behind the setup screen.
+  liquidGate(r);
   if (r.stack && !before?.startsWith('stack:quicksilver') && p.defaultTarget === r.stack && !firstLook) toast('💧 Quicksilver Liquid Edition is fully ready: your models now work together as one.', 8000);
   if (['home', 'chat'].includes(S.route.view) && (r.added.length || p.defaultTarget !== before)) render();
   return r;
+}
+
+// ---------- Liquid Edition setup screen ----------
+// Shown over everything while any Liquid Edition model is missing (installed from the setup file
+// alone, or a download that was interrupted). Downloads start at once and resume where they
+// stopped; when the last one is in, the screen goes away and Quicksilver opens.
+let gateItems = [];
+const gateFailed = {};
+function liquidGate(r) {
+  gateItems = (r?.missing || []).filter((m) => !S.installed.some((x) => x.catalogId === m.catalogId));
+  let el = document.getElementById('liquid-gate');
+  if (!gateItems.length) {
+    if (el) { el.remove(); toast('💧 Quicksilver Liquid Edition is fully installed: chat, pictures and video, all on your PC.', 8000); render(); }
+    return;
+  }
+  if (!el) {
+    el = document.createElement('div');
+    el.id = 'liquid-gate';
+    el.setAttribute('role', 'dialog');
+    el.setAttribute('aria-modal', 'true');
+    el.style.cssText = 'position:fixed;inset:0;z-index:10000;display:flex;align-items:center;justify-content:center;padding:16px;background:var(--bg,#0f1117);overflow:auto';
+    document.body.appendChild(el);
+    el.addEventListener('click', async (e) => {
+      if (e.target.closest('[data-gate-online]')) { S.config = await call('config:set', { offline: false }); startGateDownloads(true); }
+      else if (e.target.closest('[data-gate-retry]')) startGateDownloads(true);
+    });
+  }
+  startGateDownloads(false);
+}
+function startGateDownloads(retry) {
+  if (S.config?.offline) { paintLiquidGate(); return; }
+  for (const m of gateItems) {
+    if (S.downloads[m.catalogId] || (gateFailed[m.catalogId] && !retry)) continue;
+    delete gateFailed[m.catalogId];
+    download(m.repo ? { repo: m.repo, quant: m.quant, catalogId: m.catalogId, name: m.name } : { catalogId: m.catalogId }, m.name)
+      .catch((err) => { gateFailed[m.catalogId] = err.message; paintLiquidGate(); });
+  }
+  paintLiquidGate();
+}
+function paintLiquidGate() {
+  const el = document.getElementById('liquid-gate');
+  if (!el) return;
+  const rows = gateItems.map((m) => {
+    const d = S.downloads[m.catalogId];
+    const pct = d?.total ? Math.round((d.downloaded / d.total) * 100) : 0;
+    const what = gateFailed[m.catalogId] ? `⚠️ ${esc(gateFailed[m.catalogId])}` : d ? (d.total ? `${gb(d.downloaded)} of ${gb(d.total)} (${pct}%)` : 'Finding files…') : S.config?.offline ? 'Waiting: offline mode is on' : 'Starting…';
+    return `<div class="stack-v" style="gap:4px"><div class="row"><b class="grow">${esc(m.name)}</b><span class="small muted">${what}</span></div><div class="bar"><i style="width:${pct}%"></i></div></div>`;
+  }).join('');
+  const all = gateItems.map((m) => S.downloads[m.catalogId]).filter(Boolean);
+  const tot = all.reduce((a, d) => a + (d.total || 0), 0);
+  const got = all.reduce((a, d) => a + (d.downloaded || 0), 0);
+  el.innerHTML = `<div class="card" style="max-width:560px;width:100%;padding:24px">
+    <h2 style="margin-top:0">💧 Installing Quicksilver Liquid Edition</h2>
+    <p class="muted">Quicksilver opens as soon as its whole uncensored crew is on this PC: the Brain, the Closer, smarter search, Lustify for pictures and Wan 2.2 for video. ${tot ? `${gb(got)} of ${gb(tot)} so far.` : ''} You can close Quicksilver at any time: downloads pick up where they stopped.</p>
+    <div class="stack-v" style="gap:14px;margin:16px 0">${rows}</div>
+    ${S.config?.offline ? '<button class="btn primary" data-gate-online>Turn off offline mode and download</button>' : Object.keys(gateFailed).length ? '<button class="btn primary" data-gate-retry>Try again</button>' : ''}
+    <p class="small muted" style="margin-bottom:0">Tip: the "Quicksilver models" folder that comes with the installer has all of these already. Keep it next to the setup file and reinstall to skip the download.</p></div>`;
 }
 
 // After the first screen: add models found on this PC, pick a default if there is none, and load

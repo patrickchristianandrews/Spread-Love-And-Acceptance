@@ -174,7 +174,7 @@ jobs:
           mkdir -p "dist/Quicksilver models"
           cp pack/* "dist/Quicksilver models/"
           VERSION=$(node -p "require('./package.json').version")
-          printf 'Installing Quicksilver\r\n\r\n1. Unzip everything into one folder.\r\n2. Run Quicksilver-Setup-%s.exe. Keep the "Quicksilver models" folder next to it:\r\n   the installer copies the full Quicksilver Liquid Edition from there,\r\n   including Lustify (pictures) and Wan 2.2 (video), so it works offline right away.\r\n\r\nIf you only have the setup file, that is fine too: Quicksilver starts with its small model\r\nand downloads the rest in the background the first time it runs.\r\n' "$VERSION" > "dist/READ ME FIRST.txt"
+          printf 'Installing Quicksilver\r\n\r\n1. Unzip everything into one folder.\r\n2. Run Quicksilver-Setup-%s.exe. Keep the "Quicksilver models" folder next to it:\r\n   the installer copies the full Quicksilver Liquid Edition from there,\r\n   including the Qwen3.5 9B Closer, Lustify (pictures) and Wan 2.2 (video),\r\n   so it works offline right away.\r\n\r\nIf you only have the setup file, that is fine too: Quicksilver starts with its small model\r\nand downloads the rest of the Liquid Edition straight away, the first time it opens.\r\n' "$VERSION" > "dist/READ ME FIRST.txt"
         env:
           CSC_IDENTITY_AUTO_DISCOVERY: 'false'
           CSC_LINK: ${{ secrets.WIN_CSC_LINK }}
@@ -208,8 +208,9 @@ jobs:
           Start-Process -Wait -FilePath $setup.FullName -ArgumentList '/S','/D=C:\QS'
           if (!(Test-Path 'C:\QS\Quicksilver.exe')) { throw 'Quicksilver.exe was not installed' }
           if (!(Test-Path 'C:\QS\resources\engine\llama\llama-server.exe')) { throw 'the text engine is missing' }
-          foreach ($f in 'STARTER.json','model.gguf','mmproj.gguf','embed.gguf','qwen3.5-4b.gguf','qwen3.5-4b-mmproj.gguf') { if (!(Test-Path "C:\QS\resources\starter\$f")) { throw "missing resources\starter\$f" } }
+          foreach ($f in 'STARTER.json','model.gguf','mmproj.gguf','embed.gguf','qwen3.5-4b.gguf','qwen3.5-4b-mmproj.gguf','qwen3.5-9b.gguf','qwen3.5-9b-mmproj.gguf','rerank.gguf') { if (!(Test-Path "C:\QS\resources\starter\$f")) { throw "missing resources\starter\$f" } }
           Get-ChildItem C:\QS\resources\starter | ForEach-Object { '{0,-34} {1,8:N0} MB' -f $_.Name, ($_.Length / 1MB) }
+          foreach ($f in 'lustify.safetensors','lustify-vae.safetensors','wan2.2-5b.gguf','wan2.2-5b-turbo.gguf','wan2.2-vae.safetensors','wan-umt5-xxl.gguf') { if (!(Test-Path "C:\QS\resources\starter\$f")) { throw "missing resources\starter\$f (the Liquid Edition's pictures and video)" } }
           Write-Host '✓ installed, and the installer copied the Quicksilver model in'
           node test/installed.test.js C:\QS\Quicksilver.exe full install-shots
           if ($LASTEXITCODE -ne 0) { throw 'the installed app test failed' }

@@ -325,9 +325,11 @@ function registerStarter(dir) {
     if (!Object.values(files).every((f) => fs.existsSync(f))) {
       // Not shipped with this copy: fetch it from the catalog, unless you already have it.
       const have = reg.some((m) => m.catalogId === e.catalogId && Object.values(m.files || {}).every((f) => fs.existsSync(f)));
-      if (e.pack && !e.optional && !have) out.missing.push({ catalogId: e.catalogId, name: e.name, ...(e.repo ? { repo: e.repo, quant: e.quant } : {}) });
-      // The Liquid Edition's picture and video makers are big: the app fetches them only where they run well.
-      else if (e.pack && e.media && !have) out.missing.push({ catalogId: e.catalogId, name: e.name, media: true });
+      // Search models (embed, rerank) come from their own catalog entry, so they keep their kind.
+      const src = e.repo && !e.kind ? { repo: e.repo, quant: e.quant } : {};
+      // Everything in the Liquid Edition's pack is fetched on first run when the folder is missing,
+      // the Closer and the picture and video makers (media) included.
+      if (e.pack && (!e.optional || e.media || e.ifFits) && !have) out.missing.push({ catalogId: e.catalogId, name: e.name, kind: e.kind || 'text', ...(e.media ? { media: true } : {}), ...src });
       continue;
     }
     const known = reg.find((m) => m.id === e.id);

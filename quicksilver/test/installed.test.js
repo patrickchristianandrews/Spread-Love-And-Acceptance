@@ -2,7 +2,7 @@
 // real engine and the models that come with Quicksilver. Run on Windows after a silent install.
 //   node test/installed.test.js <path to Quicksilver.exe> <full|fallback> [screenshot folder]
 //   full:     installed with the "Quicksilver models" folder next to the setup file
-//   fallback: installed from the setup file alone (the main model downloads on first run)
+//   fallback: installed from the setup file alone (the setup screen downloads the Liquid Edition first)
 const { _electron: electron } = require('playwright');
 const path = require('node:path');
 const fs = require('node:fs');
@@ -69,15 +69,20 @@ function redPng(size = 64) {
     s = await state();
     ok(`first launch: ${s.installed.map((m) => m.name).join(' + ')}; default ${s.def}; team ${JSON.stringify(s.stacks.find((x) => x.id === 'quicksilver').members)}`);
   } else {
-    // The default is chosen just after the model list loads: wait for it rather than racing it.
-    await win.waitForFunction(() => S.data.prefs.defaultTarget === 'local:starter', null, { timeout: 30000 })
-      .catch(async () => { throw new Error(`the small model should answer until the main one arrives (default: ${(await state()).def || 'none'})`); });
-    // The download starts once the app has looked the model up online (a second or so later).
-    await win.waitForFunction(() => Boolean(S.downloads['qwen3.5-4b']) || S.installed.some((m) => m.catalogId === 'qwen3.5-4b'), null, { timeout: 60000 })
-      .catch(() => { throw new Error('the main model should start downloading in the background'); });
+    // Without the models folder Quicksilver doesn't open until the whole Liquid Edition is in: the
+    // setup screen covers the app and every missing model starts downloading at once.
+    await win.waitForSelector('#liquid-gate', { timeout: 60000 })
+      .catch(() => { throw new Error('the Liquid Edition setup screen should cover the app until every model is installed'); });
+    const want = ['qwen3.5-4b', 'qwen3.5-9b-uncensored', 'lustify', 'wan2.2-5b'];
+    await win.waitForFunction((ids) => ids.every((id) => S.downloads[id] || S.installed.some((m) => m.catalogId === id)), want, { timeout: 120000 })
+      .catch(async () => { throw new Error(`every Liquid Edition model should start downloading (downloading: ${(await state()).downloads.map((d) => d.id).join(', ') || 'none'})`); });
+    await shot('01-setup');
     s = await state();
-    console.log(`  downloading: ${JSON.stringify(s.downloads)}`);
-    ok('first launch without the models folder: the small model is ready; the main model is downloading');
+    ok(`first launch without the models folder: setup screen up, downloading ${s.downloads.map((d) => d.id).join(', ')}`);
+    assert.deepEqual(errors, [], 'no errors in the app');
+    await app.close();
+    console.log(`\nINSTALLED APP WORKS (${mode})`);
+    return;
   }
   await win.waitForSelector('.best-setup', { timeout: 60000 });
   await shot('01-home');

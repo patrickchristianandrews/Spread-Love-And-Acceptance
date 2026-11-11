@@ -1,6 +1,7 @@
 // Downloads the models that come with Quicksilver, so it works the moment it's installed:
 //   starter/ (inside the installer)  Qwen3.5 2B: quick on any PC, sees photos; the Muse  (Apache 2.0)
 //   pack/    (next to the installer) Qwen3.5 4B: the Brain; sees photos, thinks hard ones through (Apache 2.0)
+//            Qwen3.5 9B: the Closer; BGE Reranker; Lustify (pictures); Wan 2.2 5B and Turbo (video)
 // Together they make the built-in "Quicksilver" model (a stack with smart routing).
 // The 4B model is too big for a Windows installer (about 2 GB at most), so it ships in a folder
 // beside it; the installer copies it in. Writes starter/STARTER.json and the licences.
@@ -8,9 +9,9 @@
 // the refusals taken out, so they answer plainly. The app's parental lock adds a family-safe
 // instruction instead. If no uncensored copy is available, the original models are used.
 // Also next to the installer: the Liquid Edition's uncensored picture and video makers, Lustify
-// (pictures) and Wan 2.2 5B (video), so it makes both offline from the first run. Set
-// QS_NO_MEDIA_PACK=1 to leave them out; a failed media download is a warning, not a failed build
-// (the app then offers them with one click).
+// (pictures) and Wan 2.2 5B and Turbo (video), so it makes both offline from the first run. Set
+// QS_NO_MEDIA_PACK=1 to leave them out (the app then downloads them on first run, before it opens).
+// A failed download fails the build: the Liquid Edition ships complete.
 // Usage: node scripts/fetch-starter.js
 const path = require('node:path');
 const fs = require('node:fs');
@@ -32,6 +33,15 @@ const MODELS = [
   // Next to the installer: the Brain. Sees photos itself and switches its own thinking on for hard questions.
   { id: 'starter-brain', catalogId: 'qwen3.5-4b', name: 'Qwen3.5 4B', vision: true, where: 'pack', limit: 3.6e9, file: 'qwen3.5-4b.gguf', proj: 'qwen3.5-4b-mmproj.gguf', pack: true,
     licenseRepo: 'Qwen/Qwen3.5-4B', repos: ['mradermacher/Huihui-Qwen3.5-4B-abliterated-GGUF', 'mradermacher/Qwen3.5-4B-abliterated-GGUF'] },
+  // Next to the installer: the Closer. The strongest uncensored model in the pack: leads on hard
+  // questions and sees photos, on PCs with a graphics card (on smaller PCs it waits on the bench).
+  { id: 'starter-closer', catalogId: 'qwen3.5-9b-uncensored', name: 'Qwen3.5 9B', vision: true, where: 'pack', limit: 6.6e9, file: 'qwen3.5-9b.gguf', proj: 'qwen3.5-9b-mmproj.gguf', pack: true,
+    licenseRepo: 'Qwen/Qwen3.5-9B', repos: ['mradermacher/Huihui-Qwen3.5-9B-abliterated-GGUF', 'mradermacher/Qwen3.5-9B-abliterated-GGUF'] },
+  // Next to the installer: Sharper search. The reranker puts the passage that answers the question
+  // first (it scores text, writes none, so no filter applies).
+  { id: 'starter-rerank', catalogId: 'bge-reranker-v2-m3', name: 'BGE Reranker v2 M3', kind: 'rerank', where: 'pack', limit: 0.6e9, file: 'rerank.gguf', pack: true,
+    by: 'BAAI', licenseRepo: 'BAAI/bge-reranker-v2-m3', licenceText: 'Licensed under the Apache License, Version 2.0: https://www.apache.org/licenses/LICENSE-2.0\n',
+    repos: ['gpustack/bge-reranker-v2-m3-GGUF', 'sabafallah/bge-reranker-v2-m3-Q4_K_M-GGUF'] },
   // Inside the installer: Smarter search. A tiny embedding model so Your knowledge and Memory are
   // found by meaning out of the box (not uncensored because it writes no text — it only measures
   // how close two pieces of text are in meaning).
@@ -47,6 +57,8 @@ const MEDIA = [
     licence: '==== Lustify (community SDXL checkpoint) ====\n\nBuilt on Stable Diffusion XL 1.0. CreativeML Open RAIL++-M License: https://huggingface.co/stabilityai/stable-diffusion-xl-base-1.0/blob/main/LICENSE.md\nThe SDXL decoder (madebyollin/sdxl-vae-fp16-fix) is MIT licensed.\n' },
   { id: 'starter-wan', catalogId: 'wan2.2-5b', name: 'Wan 2.2 5B', kind: 'video', names: { diffusion: 'wan2.2-5b.gguf', vae: 'wan2.2-vae.safetensors', t5xxl: 'wan-umt5-xxl.gguf' },
     licence: '==== Wan 2.2 TI2V 5B (Alibaba) ====\n\nLicensed under the Apache License, Version 2.0: https://www.apache.org/licenses/LICENSE-2.0\nText encoder: UMT5-XXL (Google), Apache License 2.0.\n' },
+  { id: 'starter-wan-turbo', catalogId: 'wan2.2-5b-turbo', name: 'Wan 2.2 5B Turbo', kind: 'video', names: { diffusion: 'wan2.2-5b-turbo.gguf', vae: 'wan2.2-vae.safetensors', t5xxl: 'wan-umt5-xxl.gguf' },
+    licence: '==== Wan 2.2 TI2V 5B Turbo (Alibaba; Turbo by quanhaol) ====\n\nLicensed under the Apache License, Version 2.0: https://www.apache.org/licenses/LICENSE-2.0\n' },
 ];
 
 async function choose(m) {
@@ -73,6 +85,8 @@ async function choose(m) {
 }
 
 async function get(repo, f, dest) {
+  // Files shared by two models (Wan 2.2's decoder and text encoder) are fetched once.
+  if (f.size && fs.existsSync(dest) && fs.statSync(dest).size === f.size) { console.log(`  ${path.basename(dest)} already here`); return; }
   process.stdout.write(`  ${repo}/${f.path} (${(f.size / 1e9).toFixed(2)} GB)… `);
   await downloadTo(`${HF}/${repo}/resolve/main/${f.path.split('/').map(encodeURIComponent).join('/')}`, dest);
   const size = fs.statSync(dest).size;
@@ -93,9 +107,9 @@ async function get(repo, f, dest) {
     const open = m.uncensored || /abliterat|uncensor/i.test(pick.repo);
     // The Liquid Edition's chat models are completely uncensored: no filtered stand-in, ever. The
     // search model (embeddings) writes no text, so it's exempt.
-    if (m.kind !== 'embed' && !open) throw new Error(`No uncensored copy of ${m.name} could be downloaded (tried ${m.repos.filter((r) => /abliterat|uncensor/i.test(r)).join(', ')}).`);
-    if (m.kind === 'embed') console.log('  ✓ smarter-search model'); else console.log(`  ✓ uncensored copy: ${pick.repo}`);
-    entries.push({ id: m.id, catalogId: m.catalogId, name: m.kind ? m.name : open ? `${m.name} (uncensored)` : m.name, ...(m.kind ? { kind: m.kind } : {}), ...(open && !m.kind ? { uncensored: true } : {}), repo: pick.repo, quant: pick.quant, files: { model: m.file, ...(pick.mmproj ? { mmproj: m.proj || 'mmproj.gguf' } : {}) }, ...(m.pack ? { pack: true } : {}), ...(m.optional ? { optional: true } : {}) });
+    if (!m.kind && !open) throw new Error(`No uncensored copy of ${m.name} could be downloaded (tried ${m.repos.filter((r) => /abliterat|uncensor/i.test(r)).join(', ')}).`);
+    if (m.kind) console.log(`  ✓ ${m.kind === 'rerank' ? 'sharper' : 'smarter'}-search model`); else console.log(`  ✓ uncensored copy: ${pick.repo}`);
+    entries.push({ id: m.id, catalogId: m.catalogId, name: m.kind ? m.name : open ? `${m.name} (uncensored)` : m.name, ...(m.kind ? { kind: m.kind } : {}), ...(open && !m.kind ? { uncensored: true } : {}), repo: pick.repo, quant: pick.quant, files: { model: m.file, ...(pick.mmproj ? { mmproj: m.proj || 'mmproj.gguf' } : {}) }, ...(m.pack ? { pack: true } : {}), ...(m.optional ? { optional: true } : {}), ...(m.ifFits ? { ifFits: true } : {}) });
     let text = m.licenceText;
     if (!text) try {
       const tmp = path.join(os.tmpdir(), `licence-${m.id}.txt`);
@@ -110,14 +124,13 @@ async function get(repo, f, dest) {
       const plan = await models.planCatalog(m.catalogId);
       console.log(`${m.name}: ${plan.items.map((i) => `${i.repo}/${i.path}`).join(', ')}`);
       for (const it of plan.items) await get(it.repo, it, path.join(ROOT, 'pack', m.names[it.role]));
-      // pack + optional: copied in by the installer; without the folder the app offers it in a click
-      // (or downloads it by itself on a PC whose graphics card runs it well).
+      // pack: copied in by the installer; without the folder the app downloads it before it opens.
       entries.push({ id: m.id, catalogId: m.catalogId, name: m.name, kind: m.kind, uncensored: true, files: Object.fromEntries(plan.items.map((i) => [i.role, m.names[i.role]])), pack: true, optional: true, media: true });
       licences.push(m.licence);
       console.log(`  ✓ ${m.kind === 'image' ? 'picture' : 'video'} model for the Liquid Edition`);
     } catch (err) {
-      for (const f of Object.values(m.names)) fs.rmSync(path.join(ROOT, 'pack', f), { force: true });
-      console.log(`::warning::${m.name} was not added next to the installer (${String(err.message).slice(0, 200)}); the app offers it with one click instead`);
+      // The Liquid Edition ships complete or not at all: Quicksilver won't open without these.
+      throw new Error(`${m.name} could not be downloaded for the models folder: ${err.message}`);
     }
   }
   fs.writeFileSync(path.join(ROOT, 'starter', 'STARTER.json'), JSON.stringify({ models: entries }, null, 2));

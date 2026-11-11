@@ -986,7 +986,8 @@ async function ensureQuicksilverStack() {
   if (brain) {
     const score = (id) => { const p = pool.find((x) => x.id === id); return p ? catalog.scoreFor(p, 'general') : 0; };
     // Helpers are uncensored models you added; an older built-in model never joins as a helper.
-    const openPool = pool.filter((p) => p.id !== brain.id && p.id !== eyes?.id && p.id !== thinker?.id && all.find((x) => x.id === p.id)?.source !== 'bundled' && isOpen(p));
+    // (The Closer that ships in the models folder is the exception: it's there to lead.)
+    const openPool = pool.filter((p) => p.id !== brain.id && p.id !== eyes?.id && p.id !== thinker?.id && (all.find((x) => x.id === p.id)?.source !== 'bundled' || p.id === 'starter-closer') && isOpen(p));
     const team = (openPool.length && catalog.compose(openPool, 'general', hw, calib, { vision: false, speed: 10, leadSpeed: 20, budget: 180 })) || { members: { drafters: [] } };
     const lead = team.members.judge || team.members.drafters[0];
     const stronger = lead && score(lead) > score(brain.id) ? lead : null;

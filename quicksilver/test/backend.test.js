@@ -796,7 +796,7 @@ async function collect(gen) {
     ];
     fs.writeFileSync(path.join(sd, 'STARTER.json'), JSON.stringify({ models: MEDIA_STARTERS }));
     r = models.registerStarter(sd);
-    assert.deepEqual(r.missing.map((m) => [m.catalogId, m.media]), [['lustify', true], ['wan2.2-5b', true]], 'Lustify and Wan 2.2 offered when the folder is missing');
+    assert.deepEqual(r.missing.map((m) => [m.catalogId, m.media]), [['lustify', true], ['wan2.2-5b', true]], 'Lustify and Wan 2.2 download on first run when the folder is missing');
     for (const f of ['lustify.safetensors', 'lustify-vae.safetensors', 'wan2.2-5b.gguf', 'wan2.2-vae.safetensors', 'wan-umt5-xxl.gguf']) fs.copyFileSync(TINY, path.join(sd, f));
     r = models.registerStarter(sd);
     assert.deepEqual(r.added.map((m) => [m.id, m.kind]), [['starter-lustify', 'image'], ['starter-wan', 'video']], 'Lustify and Wan 2.2 come with Quicksilver');
