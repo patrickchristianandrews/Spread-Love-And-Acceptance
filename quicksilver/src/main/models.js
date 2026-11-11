@@ -115,11 +115,8 @@ const jobs = new Map(); // id -> { id, name, total, downloaded, controller, file
 function localPath(repo, file) {
   return path.join(store.dir('models'), repo.replace(/[\\/]/g, '__'), file);
 }
-// Where a download item goes: direct links (Civitai) by their own path under the models folder
-// (LoRAs share one folder, which the image engine reads them from).
-const itemPath = (item) => (item.url ? path.join(store.dir('models'), item.path) : localPath(item.repo, item.path));
 
-async function fetchFile(repo, file, dest, onBytes, signal, expected = 0, direct = '') {
+async function fetchFile(repo, file, dest, onBytes, signal, expected = 0) {
   const part = `${dest}.part`;
   if (fs.existsSync(dest)) {
     const have = fs.statSync(dest).size;
@@ -130,12 +127,10 @@ async function fetchFile(repo, file, dest, onBytes, signal, expected = 0, direct
   fs.mkdirSync(path.dirname(dest), { recursive: true });
   if (expected && fs.existsSync(part) && fs.statSync(part).size > expected) fs.unlinkSync(part);
   const have = fs.existsSync(part) ? fs.statSync(part).size : 0;
-  // A direct link (Civitai) or a file in a Hugging Face repository.
-  const url = direct || `${HF}/${repo}/resolve/main/${file.split('/').map(encodeURIComponent).join('/')}?download=true`;
-  const auth = direct ? (/^https:\/\/civitai\.com\//.test(direct) ? require('./civitai').headers() : {}) : hfHeaders();
+  const url = `${HF}/${repo}/resolve/main/${file.split('/').map(encodeURIComponent).join('/')}?download=true`;
+  const auth = hfHeaders();
   const g = require('./engines').stallGuard(signal);
   const res = await fetch(url, { headers: { ...auth, ...(have ? { Range: `bytes=${have}-` } : {}) }, signal: g.signal, redirect: 'follow' }).catch((e) => { g.done(); throw g.stalled() ? new Error('the connection stalled. Start it again to resume where it stopped') : e; });
-  if ((res.status === 401 || res.status === 403) && direct) throw new Error('Civitai needs your API key for this model (many adult models need one). Add it in Models → Civitai, then download again.');
   if (res.status === 401 || res.status === 403) throw new Error('This model needs you to accept its license on huggingface.co first, then add a Hugging Face token in Settings → Accounts.');
   if (!res.ok && res.status !== 206) throw new Error(`Download failed (HTTP ${res.status}).`);
   const resume = res.status === 206 && have > 0;
@@ -177,17 +172,17 @@ function start(plan, emit) {
   (async () => {
     const files = {};
     for (const item of plan.items) {
-      const dest = itemPath(item);
+      const dest = localPath(item.repo, item.path);
       // The role key "model" is the file the engine loads first (for split files: part 1).
       await fetchFile(item.repo, item.path, dest, (b) => {
         doneBytes.set(item.path, b);
         pub.downloaded = [...doneBytes.values()].reduce((a, c) => a + c, 0);
         if (Date.now() - lastEmit > 250) { lastEmit = Date.now(); emit('models:progress', pub); }
-      }, controller.signal, item.approx ? 0 : item.size || 0, item.url || '');
+      }, controller.signal, item.size || 0);
       if (item.role && !files[item.role]) files[item.role] = dest;
     }
-    const size = plan.items.reduce((t, i) => t + (fs.existsSync(itemPath(i)) ? fs.statSync(itemPath(i)).size : 0), 0);
-    const entry = add({ id: plan.id, name: plan.name, kind: plan.kind, catalogId: plan.catalogId, repo: plan.repo, quant: plan.quant, files, size, vision: Boolean(files.mmproj), source: plan.source || 'huggingface', plan: plan.items.map((i) => ({ path: i.path, repo: i.repo, url: i.url, size: i.size })), ...(plan.extra || {}) });
+    const size = plan.items.reduce((t, i) => t + (fs.existsSync(localPath(i.repo, i.path)) ? fs.statSync(localPath(i.repo, i.path)).size : 0), 0);
+    const entry = add({ id: plan.id, name: plan.name, kind: plan.kind, catalogId: plan.catalogId, repo: plan.repo, quant: plan.quant, files, size, vision: Boolean(files.mmproj), source: 'huggingface', plan: plan.items.map((i) => ({ path: i.path, repo: i.repo, size: i.size })) });
     jobs.delete(plan.id);
     emit('models:done', { id: plan.id, model: entry });
   })().catch((err) => {
@@ -256,7 +251,6 @@ async function repair(id, emit) {
   if (!m) throw new Error('That model is not installed.');
   if (m.source === 'imported') throw new Error('This model came from another app or folder, so Quicksilver can\'t re-download it. Remove it, then download it from Models.');
   if (m.source === 'bundled') throw new Error('This model came with Quicksilver. If it stopped working, reinstall Quicksilver.');
-  if (m.source === 'civitai') return start({ id: m.id, name: m.name, kind: m.kind, catalogId: m.catalogId, source: 'civitai', items: (m.plan || []).map((i) => ({ ...i, role: 'model', approx: true })), extra: Object.fromEntries(['family', 'base', 'civitai', 'trainedWords', 'uncensored', 'style', 'promptPrefix'].filter((k) => m[k] !== undefined).map((k) => [k, m[k]])) }, emit);
   const plan = m.repo ? await planGguf(m.repo, { id: m.id, name: m.name, quant: m.quant, catalogId: m.catalogId, vision: m.vision }) : m.catalogId ? await planCatalog(m.catalogId) : null;
   if (!plan) throw new Error('Quicksilver doesn\'t know where this model came from.');
   return start({ ...plan, id: m.id, name: m.name }, emit);

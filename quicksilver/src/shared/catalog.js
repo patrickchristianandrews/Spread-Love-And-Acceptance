@@ -286,9 +286,6 @@ const MEDIA_MODELS = [
   { id: 'chroma-flash', quality: 8, name: 'Chroma1-HD Flash (uncensored)', maker: 'Lodestone Rock (built on FLUX)', kind: 'image', category: 'open', recipe: 'chroma', uncensored: true, sizeGB: 8.8, vramGB: 8, refSec: 12, defaults: { width: 1024, height: 1024, steps: 8, cfg: 1 },
     files: { diffusion: { repo: 'silveroxides/Chroma1-Flash-GGUF', match: 'Chroma1-HD-Flash-Q4_K_M\\.gguf$' }, ...CHROMA_ENCODERS },
     blurb: 'Chroma in 8 steps: uncensored FLUX-class pictures about four times faster.', edit: 'img2img' },
-  // Templates for checkpoints downloaded from Civitai (Models → Civitai): not listed themselves.
-  { id: 'civitai-sd15', quality: 6, name: 'Civitai checkpoint (SD 1.5)', maker: 'Civitai community', kind: 'image', category: 'image', recipe: 'sd', retired: true, template: true, sizeGB: 2.1, vramGB: 3, refSec: 4, defaults: { width: 512, height: 768, steps: 25, cfg: 6 }, files: {}, blurb: 'A community model from Civitai.', edit: 'img2img' },
-  { id: 'civitai-sdxl', quality: 7, name: 'Civitai checkpoint (SDXL)', maker: 'Civitai community', kind: 'image', category: 'image', recipe: 'sd', retired: true, template: true, sizeGB: 6.9, vramGB: 8, refSec: 25, defaults: { width: 1024, height: 1024, steps: 30, cfg: 5 }, files: {}, blurb: 'A community model from Civitai.', edit: 'img2img' },
   { id: 'flux-kontext', quality: 8, name: 'FLUX.1 Kontext (photo editing)', maker: 'Black Forest Labs', kind: 'image', category: 'edit', recipe: 'kontext', sizeGB: 13.5, vramGB: 10, refSec: 60, defaults: { width: 1024, height: 1024, steps: 20, cfg: 1 },
     files: { diffusion: { repo: 'QuantStack/FLUX.1-Kontext-dev-GGUF', match: 'Q4_K_S\\.gguf$' }, ...FLUX_ENCODERS },
     blurb: 'Edit photos by describing the change: "make it sunset", "remove the person", "turn it into a watercolor".', edit: 'instruct' },
@@ -312,8 +309,6 @@ const ANIME_MODELS = new Set(['pony-v6', 'illustrious-xl-v2', 'noobai-xl', 'wai-
 const PONY_MODELS = new Set(['pony-v6', 'cyberrealistic-pony', 'pony-realism', 'realdream-pony']);
 for (const m of MEDIA_MODELS) {
   if (m.kind !== 'image') continue;
-  // family: which LoRAs fit (SD 1.5, SDXL incl. Pony/Illustrious, FLUX).
-  m.family = m.recipe === 'sd' ? (m.sizeGB < 4 ? 'sd15' : 'sdxl') : ['flux', 'kontext'].includes(m.recipe) ? 'flux' : m.recipe;
   m.style = ANIME_MODELS.has(m.id) ? 'anime' : 'photo';
   if (PONY_MODELS.has(m.id)) m.promptPrefix = 'score_9, score_8_up, score_7_up, ';
 }

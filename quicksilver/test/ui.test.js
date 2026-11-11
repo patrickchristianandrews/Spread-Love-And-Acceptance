@@ -118,17 +118,10 @@ function redPng(size = 64) {
   await win.waitForSelector('[data-kit="image"]', { timeout: 30000 });
   await win.click('#kit-create');
   await win.waitForSelector('#ci-model', { timeout: 30000 });
-  await win.waitForSelector('#ci-lora-box:has-text("LoRAs")'); // LoRA add-ons (from Civitai) in Create
   await win.fill('#ci-prompt', 'a cat');
   await win.click('[data-improve="ci-prompt"]');
   await win.waitForFunction(() => document.querySelector('#ci-prompt').value !== 'a cat' && !document.querySelector('[data-improve="ci-prompt"]').disabled, null, { timeout: 30000 });
   console.log('✓ stacks: types, built from installed models, Studio kit with ✨ Improve; Create goals incl. uncensored, anime, video and full songs');
-  // Models → Civitai: the live browser opens (and says so plainly when Civitai can't be reached).
-  await win.click('[data-nav="models"]');
-  await win.click('[data-tab="civitai"]');
-  await win.waitForSelector('#civ-form #civ-type option[value="LORA"]', { state: 'attached' });
-  await win.waitForSelector('.civ-card, #main .notice, #main .empty', { timeout: 30000 });
-  console.log('✓ Models → Civitai: checkpoints and LoRAs browser, API key, adult switch');
   // Each stack type explains how it works, offers three strengths with accuracy levels, and
   // suggests a cloud AI with the paid use it saves.
   await win.click('[data-nav="stacks"]');

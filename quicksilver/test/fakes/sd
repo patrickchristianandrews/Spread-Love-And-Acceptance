@@ -4,7 +4,6 @@ const { execFileSync } = require('child_process');
 const args = process.argv.slice(2);
 const arg = (f) => { const i = args.indexOf(f); return i >= 0 ? args[i + 1] : null; };
 if (args.includes('--help')) { console.log('usage: sd [options]\n -M, --mode [img_gen|vid_gen]\n --llm\n --fps\n --flow-shift\n --offload-to-cpu\n --vae-tiling\n --diffusion-fa\n --video-frames'); process.exit(0); }
-if (process.env.QS_SD_ARGS_LOG) require('fs').appendFileSync(process.env.QS_SD_ARGS_LOG, `${JSON.stringify(args)}\n`);
 const out = arg('-o');
 const steps = Number(arg('--steps') || 4);
 console.log('loading model...');
