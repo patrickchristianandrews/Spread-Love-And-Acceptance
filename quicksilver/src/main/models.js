@@ -324,12 +324,17 @@ function registerStarter(dir) {
     const files = Object.fromEntries(Object.entries(e.files).map(([role, f]) => [role, path.join(dir, f)]));
     if (!Object.values(files).every((f) => fs.existsSync(f))) {
       // Not shipped with this copy: fetch it from the catalog, unless you already have it.
-      if (e.pack && !e.optional && !reg.some((m) => m.catalogId === e.catalogId && Object.values(m.files || {}).every((f) => fs.existsSync(f)))) out.missing.push({ catalogId: e.catalogId, name: e.name, ...(e.repo ? { repo: e.repo, quant: e.quant } : {}) });
+      const have = reg.some((m) => m.catalogId === e.catalogId && Object.values(m.files || {}).every((f) => fs.existsSync(f)));
+      if (e.pack && !e.optional && !have) out.missing.push({ catalogId: e.catalogId, name: e.name, ...(e.repo ? { repo: e.repo, quant: e.quant } : {}) });
+      // The Liquid Edition's picture and video makers are big: the app fetches them only where they run well.
+      else if (e.pack && e.media && !have) out.missing.push({ catalogId: e.catalogId, name: e.name, media: true });
       continue;
     }
     const known = reg.find((m) => m.id === e.id);
     const size = Object.values(files).reduce((t, f) => t + fs.statSync(f).size, 0);
     if (known && known.files?.model === files.model && known.name === e.name && known.size === size) continue;
+    // A picture or video model you already downloaded yourself isn't registered twice.
+    if (!known && e.media && reg.some((m) => m.catalogId === e.catalogId)) continue;
     const entry = add({ id: e.id, name: e.name, kind: e.kind || 'text', catalogId: e.catalogId, files, size, vision: e.kind ? false : Boolean(files.mmproj), source: 'bundled' });
     if (!known) out.added.push(entry);
   }

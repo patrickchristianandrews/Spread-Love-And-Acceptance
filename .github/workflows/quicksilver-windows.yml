@@ -174,7 +174,7 @@ jobs:
           mkdir -p "dist/Quicksilver models"
           cp pack/* "dist/Quicksilver models/"
           VERSION=$(node -p "require('./package.json').version")
-          printf 'Installing Quicksilver\r\n\r\n1. Unzip everything into one folder.\r\n2. Run Quicksilver-Setup-%s.exe. Keep the "Quicksilver models" folder next to it:\r\n   the installer copies the full Quicksilver Liquid Edition from there,\r\n   so it works offline right away.\r\n\r\nIf you only have the setup file, that is fine too: Quicksilver starts with its small model\r\nand downloads the rest in the background the first time it runs.\r\n' "$VERSION" > "dist/READ ME FIRST.txt"
+          printf 'Installing Quicksilver\r\n\r\n1. Unzip everything into one folder.\r\n2. Run Quicksilver-Setup-%s.exe. Keep the "Quicksilver models" folder next to it:\r\n   the installer copies the full Quicksilver Liquid Edition from there,\r\n   including Lustify (pictures) and Wan 2.2 (video), so it works offline right away.\r\n\r\nIf you only have the setup file, that is fine too: Quicksilver starts with its small model\r\nand downloads the rest in the background the first time it runs.\r\n' "$VERSION" > "dist/READ ME FIRST.txt"
         env:
           CSC_IDENTITY_AUTO_DISCOVERY: 'false'
           CSC_LINK: ${{ secrets.WIN_CSC_LINK }}

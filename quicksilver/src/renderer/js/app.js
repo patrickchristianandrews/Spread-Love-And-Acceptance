@@ -256,9 +256,17 @@ async function setUpQuicksilver(firstLook) {
     toast(r.stack ? '👋 Meet Quicksilver Liquid Edition: two AI models working as one, right on your PC. It sees photos, thinks harder when a question needs it, and nothing leaves this computer. Try an idea below.'
       : '👋 Quicksilver is ready to chat, privately on your PC, and it can see photos. Try an idea below.', 10000);
   }
-  if (firstLook && r.missing.length && !S.config?.offline) {
-    for (const m of r.missing) if (!S.downloads[m.catalogId]) download(m.repo ? { repo: m.repo, quant: m.quant, catalogId: m.catalogId, name: m.name } : { catalogId: m.catalogId }, m.name).catch(() => {});
-    toast(`Finishing Quicksilver in the background (${r.missing.map((m) => m.name).join(', ')}). You can chat right away.`, 8000);
+  // Lustify and Wan 2.2 (the Liquid Edition's picture and video makers) are big: without the models
+  // folder they download by themselves only where they run on the graphics card; elsewhere a chat
+  // offers them with one click when you first ask for a picture or a video.
+  let missing = r.missing.filter((m) => !m.media);
+  if (r.missing.some((m) => m.media)) {
+    if (!S.est) await refreshEstimates().catch(() => {});
+    missing = [...missing, ...r.missing.filter((m) => m.media && S.est?.media?.[m.catalogId]?.fit === 'gpu')];
+  }
+  if (firstLook && missing.length && !S.config?.offline) {
+    for (const m of missing) if (!S.downloads[m.catalogId]) download(m.repo ? { repo: m.repo, quant: m.quant, catalogId: m.catalogId, name: m.name } : { catalogId: m.catalogId }, m.name).catch(() => {});
+    toast(`Finishing Quicksilver in the background (${missing.map((m) => m.name).join(', ')}). You can chat right away.`, 8000);
   }
   if (r.stack && !before?.startsWith('stack:quicksilver') && p.defaultTarget === r.stack && !firstLook) toast('💧 Quicksilver Liquid Edition is fully ready: your models now work together as one.', 8000);
   if (['home', 'chat'].includes(S.route.view) && (r.added.length || p.defaultTarget !== before)) render();

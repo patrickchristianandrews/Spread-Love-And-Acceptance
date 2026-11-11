@@ -788,6 +788,20 @@ async function collect(gen) {
     fs.copyFileSync(TINY, path.join(sd, 'thinker.gguf'));
     r = models.registerStarter(sd);
     assert.deepEqual(r.added.map((m) => m.id), ['starter-brain', 'starter-thinker']); assert.equal(r.missing.length, 0);
+    // Lustify and Wan 2.2 next to the installer: registered as the Liquid Edition's picture and video
+    // makers; without the folder they're reported (media) so the app fetches them only where they run well.
+    const MEDIA_STARTERS = [
+      { id: 'starter-lustify', catalogId: 'lustify', name: 'Lustify (uncensored)', kind: 'image', uncensored: true, files: { model: 'lustify.safetensors', vae: 'lustify-vae.safetensors' }, pack: true, optional: true, media: true },
+      { id: 'starter-wan', catalogId: 'wan2.2-5b', name: 'Wan 2.2 5B', kind: 'video', uncensored: true, files: { diffusion: 'wan2.2-5b.gguf', vae: 'wan2.2-vae.safetensors', t5xxl: 'wan-umt5-xxl.gguf' }, pack: true, optional: true, media: true },
+    ];
+    fs.writeFileSync(path.join(sd, 'STARTER.json'), JSON.stringify({ models: MEDIA_STARTERS }));
+    r = models.registerStarter(sd);
+    assert.deepEqual(r.missing.map((m) => [m.catalogId, m.media]), [['lustify', true], ['wan2.2-5b', true]], 'Lustify and Wan 2.2 offered when the folder is missing');
+    for (const f of ['lustify.safetensors', 'lustify-vae.safetensors', 'wan2.2-5b.gguf', 'wan2.2-vae.safetensors', 'wan-umt5-xxl.gguf']) fs.copyFileSync(TINY, path.join(sd, f));
+    r = models.registerStarter(sd);
+    assert.deepEqual(r.added.map((m) => [m.id, m.kind]), [['starter-lustify', 'image'], ['starter-wan', 'video']], 'Lustify and Wan 2.2 come with Quicksilver');
+    assert.equal(models.list().find((m) => m.id === 'starter-wan').files.t5xxl, path.join(sd, 'wan-umt5-xxl.gguf'));
+    for (const id of ['starter-lustify', 'starter-wan']) models.remove(id);
     // Smarter search ships with Quicksilver: a bundled embedding entry registers as kind 'embed'.
     fs.copyFileSync(TINY, path.join(sd, 'embed.gguf'));
     fs.writeFileSync(path.join(sd, 'STARTER.json'), JSON.stringify({ models: [

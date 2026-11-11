@@ -83,6 +83,6 @@ async function prove(m) {
 }
 
 (async () => {
-  for (const m of models.filter((m) => m.kind !== 'embed')) await prove(m);
+  for (const m of models.filter((m) => !m.kind)) await prove(m); // chat models (search, picture and video models are not llama models)
   console.log('every model that comes with Quicksilver works');
 })().catch((err) => { console.error(`FAILED: ${err.message}`); process.exit(1); });

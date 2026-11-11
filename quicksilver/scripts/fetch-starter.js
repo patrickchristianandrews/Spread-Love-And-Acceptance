@@ -7,6 +7,10 @@
 // Both are the uncensored ("abliterated") versions when they can be found: the same models with
 // the refusals taken out, so they answer plainly. The app's parental lock adds a family-safe
 // instruction instead. If no uncensored copy is available, the original models are used.
+// Also next to the installer: the Liquid Edition's uncensored picture and video makers, Lustify
+// (pictures) and Wan 2.2 5B (video), so it makes both offline from the first run. Set
+// QS_NO_MEDIA_PACK=1 to leave them out; a failed media download is a warning, not a failed build
+// (the app then offers them with one click).
 // Usage: node scripts/fetch-starter.js
 const path = require('node:path');
 const fs = require('node:fs');
@@ -34,6 +38,15 @@ const MODELS = [
   { id: 'starter-embed', catalogId: 'nomic-embed-v1.5', name: 'Nomic Embed v1.5', kind: 'embed', where: 'starter', limit: 0.2e9, file: 'embed.gguf',
     by: 'Nomic AI', licenseRepo: 'nomic-ai/nomic-embed-text-v1.5-GGUF', licenceText: 'Licensed under the Apache License, Version 2.0: https://www.apache.org/licenses/LICENSE-2.0\n',
     repos: ['nomic-ai/nomic-embed-text-v1.5-GGUF', 'second-state/Nomic-embed-text-v1.5-Embedding-GGUF'] },
+];
+
+// Picture and video models: several files each (the model, its decoder, its text encoder), named
+// here so they can sit together in one folder.
+const MEDIA = [
+  { id: 'starter-lustify', catalogId: 'lustify', name: 'Lustify (uncensored)', kind: 'image', names: { model: 'lustify.safetensors', vae: 'lustify-vae.safetensors' },
+    licence: '==== Lustify (community SDXL checkpoint) ====\n\nBuilt on Stable Diffusion XL 1.0. CreativeML Open RAIL++-M License: https://huggingface.co/stabilityai/stable-diffusion-xl-base-1.0/blob/main/LICENSE.md\nThe SDXL decoder (madebyollin/sdxl-vae-fp16-fix) is MIT licensed.\n' },
+  { id: 'starter-wan', catalogId: 'wan2.2-5b', name: 'Wan 2.2 5B', kind: 'video', names: { diffusion: 'wan2.2-5b.gguf', vae: 'wan2.2-vae.safetensors', t5xxl: 'wan-umt5-xxl.gguf' },
+    licence: '==== Wan 2.2 TI2V 5B (Alibaba) ====\n\nLicensed under the Apache License, Version 2.0: https://www.apache.org/licenses/LICENSE-2.0\nText encoder: UMT5-XXL (Google), Apache License 2.0.\n' },
 ];
 
 async function choose(m) {
@@ -90,6 +103,22 @@ async function get(repo, f, dest) {
       text = fs.readFileSync(tmp, 'utf8');
     } catch { text = 'Licensed under the Apache License, Version 2.0: https://www.apache.org/licenses/LICENSE-2.0\n'; }
     licences.push(`==== ${m.name} (${m.licenseRepo}) by ${m.by || 'Alibaba Cloud (Qwen)'}${open && !m.by && !m.kind ? `; uncensored version from ${pick.repo}` : ''} ====\n\n${text}`);
+  }
+  if (process.env.QS_NO_MEDIA_PACK) console.log('Lustify and Wan 2.2 left out (QS_NO_MEDIA_PACK)');
+  else for (const m of MEDIA) {
+    try {
+      const plan = await models.planCatalog(m.catalogId);
+      console.log(`${m.name}: ${plan.items.map((i) => `${i.repo}/${i.path}`).join(', ')}`);
+      for (const it of plan.items) await get(it.repo, it, path.join(ROOT, 'pack', m.names[it.role]));
+      // pack + optional: copied in by the installer; without the folder the app offers it in a click
+      // (or downloads it by itself on a PC whose graphics card runs it well).
+      entries.push({ id: m.id, catalogId: m.catalogId, name: m.name, kind: m.kind, uncensored: true, files: Object.fromEntries(plan.items.map((i) => [i.role, m.names[i.role]])), pack: true, optional: true, media: true });
+      licences.push(m.licence);
+      console.log(`  ✓ ${m.kind === 'image' ? 'picture' : 'video'} model for the Liquid Edition`);
+    } catch (err) {
+      for (const f of Object.values(m.names)) fs.rmSync(path.join(ROOT, 'pack', f), { force: true });
+      console.log(`::warning::${m.name} was not added next to the installer (${String(err.message).slice(0, 200)}); the app offers it with one click instead`);
+    }
   }
   fs.writeFileSync(path.join(ROOT, 'starter', 'STARTER.json'), JSON.stringify({ models: entries }, null, 2));
   fs.writeFileSync(path.join(ROOT, 'starter', 'MODEL-LICENCES.txt'), licences.join('\n\n'));
