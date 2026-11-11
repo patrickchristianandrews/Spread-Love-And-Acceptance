@@ -11,7 +11,7 @@
   "private": true,
   "scripts": {
     "start": "electron .",
-    "test": "node test/backend.test.js && node test/media-catalog.test.js && node test/loading.test.js && node test/ui.test.js",
+    "test": "node test/backend.test.js && node test/media-catalog.test.js && node test/loading.test.js && node test/civitai.test.js && node test/ui.test.js",
     "fetch-engines": "node scripts/fetch-engines.js",
     "dist": "electron-builder",
     "dist:win": "electron-builder --win",

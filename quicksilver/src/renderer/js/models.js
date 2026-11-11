@@ -10,7 +10,7 @@ let fitsOnly = false;
 
 views.models = {
   html() {
-    const tabs = { installed: `On this PC (${S.installed.length})`, text: 'Text & vision', media: 'Images & video', trending: '🔥 Trending now', hf: 'Search Hugging Face', api: `Connect an API (${S.providers.length})` };
+    const tabs = { installed: `On this PC (${S.installed.length})`, text: 'Text & vision', media: 'Images & video', trending: '🔥 Trending now', civitai: '🎨 Civitai', hf: 'Search Hugging Face', api: `Connect an API (${S.providers.length})` };
     return `<div class="page">
       <div class="page-head"><h1>Models</h1>
         <button class="btn" id="find-models">Find models on this PC</button><button class="btn" id="import-gguf">Import a .gguf file</button><button class="btn ghost" id="open-folder">Open models folder</button></div>
@@ -19,7 +19,7 @@ views.models = {
       ${shownUpgrades().length || shownStackUpdates().length || modelsTab === 'installed' ? modelUpdatesHTML() : ''}
       ${['installed', 'text'].includes(modelsTab) ? builtinModelHTML() + addonsHTML() : ''}
       <div class="tabs" role="tablist">${Object.entries(tabs).map(([k, l]) => `<button class="tab ${modelsTab === k ? 'active' : ''}" data-tab="${k}" role="tab">${esc(l)}</button>`).join('')}</div>
-      ${({ installed: installedHTML, text: textHTML, media: mediaHTML, trending: trendingHTML, hf: hfHTML, api: apiHTML })[modelsTab]()}
+      ${({ installed: installedHTML, text: textHTML, media: mediaHTML, trending: trendingHTML, civitai: civitaiHTML, hf: hfHTML, api: apiHTML })[modelsTab]()}
     </div>`;
   },
   bind() {
@@ -59,6 +59,7 @@ views.models = {
     $('#fits-only')?.addEventListener('change', (e) => { fitsOnly = e.target.checked; render(); });
     bindHf();
     if (modelsTab === 'trending') bindTrending();
+    if (modelsTab === 'civitai') bindCivitai();
     bindApi();
   },
 };
@@ -77,7 +78,7 @@ function diskSummaryHTML() {
 
 function installedHTML() {
   if (!S.installed.length) return `<div class="notice info">Nothing installed yet. Start with the <a href="#" data-goto-stacks>Setup Advisor</a>, or browse <b>Text & vision</b>.</div>`;
-  const kinds = { text: '💬 Text & vision', image: '🎨 Images', video: '🎬 Video' };
+  const kinds = { text: '💬 Text & vision', image: '🎨 Images', lora: '🧩 LoRAs (add-ons for pictures, from Civitai)', video: '🎬 Video' };
   const onlyStarter = S.installed.filter((m) => m.kind === 'text').every((m) => m.source === 'bundled');
   const note = onlyStarter ? '<div class="notice info" style="margin-bottom:12px"><b>💡 Only the starter models so far.</b> They are limited on their own; download stronger ones under <b>Text &amp; vision</b>, or let the <a href="#" data-goto-stacks>Setup Advisor</a> pick a team for your PC. Quicksilver adds new models to its team automatically.</div>' : '';
   return note + diskSummaryHTML() + Object.entries(kinds).map(([k, label]) => {

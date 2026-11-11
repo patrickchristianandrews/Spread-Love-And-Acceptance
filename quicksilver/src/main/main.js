@@ -39,7 +39,7 @@ handle('data:save', (d) => { store.writeJSON(store.file('app-data.json'), d); re
 // ---------- config and secrets ----------
 const publicConfig = () => {
   const c = store.config();
-  return { ...c, secrets: Object.fromEntries(['huggingface', 'web:brave', 'web:tavily', 'apiServerKey'].map((k) => [k, store.hasSecret(k)])) };
+  return { ...c, secrets: Object.fromEntries(['huggingface', 'civitai', 'web:brave', 'web:tavily', 'apiServerKey'].map((k) => [k, store.hasSecret(k)])) };
 };
 handle('config:get', publicConfig);
 handle('config:set', async (patch) => {
@@ -48,7 +48,7 @@ handle('config:set', async (patch) => {
   return publicConfig();
 });
 handle('secret:set', (name, value) => {
-  if (!['huggingface', 'web:brave', 'web:tavily', 'apiServerKey'].includes(name)) throw new Error('Unknown setting.');
+  if (!['huggingface', 'civitai', 'web:brave', 'web:tavily', 'apiServerKey'].includes(name)) throw new Error('Unknown setting.');
   store.setSecret(name, value);
   return true;
 });
@@ -150,7 +150,7 @@ handle('guide:speeds', async (tiers) => {
     // The strongest setup this kind of PC could run, and what it would be able to do.
     const adv = catalog.advise('general', h, { calib: 1, installed: [] }).best;
     const profiles = adv ? adv.ids.map((id) => catalog.TEXT_MODELS.find((m) => m.id === id)).filter(Boolean) : [];
-    const topImg = catalog.MEDIA_MODELS.filter((m) => m.kind === 'image' && !m.uncensored && catalog.estimateMedia(m, h).fit !== 'no').sort((a, b) => (b.quality || 0) - (a.quality || 0))[0];
+    const topImg = catalog.MEDIA_MODELS.filter((m) => m.kind === 'image' && !m.uncensored && !m.retired && catalog.estimateMedia(m, h).fit !== 'no').sort((a, b) => (b.quality || 0) - (a.quality || 0))[0];
     const topVid = catalog.MEDIA_MODELS.filter((m) => m.kind === 'video' && catalog.estimateMedia(m, h).fit !== 'no').sort((a, b) => (b.quality || 0) - (a.quality || 0))[0];
     out[t.n] = {
       wps: Math.round(q.wordsPerSec || 0), answerSec: q.wordsPerSec ? Math.round(300 / q.wordsPerSec) : null,
@@ -279,6 +279,9 @@ handle('models:download', async (req) => {
   return models.start(plan, emit);
 });
 handle('models:options', (repo) => models.ggufOptions(repo));
+// Civitai: browse checkpoints and LoRAs live, download one straight from Civitai.
+handle('civitai:search', (q) => { if (store.config().offline) throw new Error('Offline mode is on.'); return require('./civitai').search(q); });
+handle('civitai:download', (item) => models.start(require('./civitai').plan(item), emit));
 handle('models:cancel', (id) => models.cancel(id));
 handle('models:remove', (id) => {
   const m = models.get(id);

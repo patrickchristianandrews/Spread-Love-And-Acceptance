@@ -178,7 +178,18 @@ async function generate(jobId, req, { onProgress, onStatus } = {}) {
     args.push('--sampling-method', 'euler');
   }
   // Some community models (the Pony family) need their quality tags at the start of every prompt.
-  const prompt = spec.promptPrefix && !String(req.prompt || '').toLowerCase().startsWith(spec.promptPrefix.split(',')[0]) ? `${spec.promptPrefix}${req.prompt || ''}` : (req.prompt || '');
+  const prefix = installed.promptPrefix || spec.promptPrefix;
+  let prompt = prefix && !String(req.prompt || '').toLowerCase().startsWith(prefix.split(',')[0]) ? `${prefix}${req.prompt || ''}` : (req.prompt || '');
+  // LoRAs (from Civitai): they share one folder; each is switched on by a <lora:name:strength> tag.
+  // Only those made for this model's family (SD 1.5, SDXL, FLUX) are used.
+  const family = installed.family || spec.family;
+  const loras = (req.loras || []).map((l) => ({ m: models.get(l.id), w: Math.max(-2, Math.min(2, Number(l.weight) || 0.8)) }))
+    .filter((l) => l.m?.kind === 'lora' && l.m.files?.model && fs.existsSync(l.m.files.model) && (!l.m.family || !family || l.m.family === family));
+  if (loras.length) {
+    const dir = path.dirname(loras[0].m.files.model);
+    args.push('--lora-model-dir', dir);
+    for (const l of loras.filter((x) => path.dirname(x.m.files.model) === dir)) prompt += ` <lora:${path.basename(l.m.files.model).replace(/\.safetensors$/i, '')}:${l.w}>`;
+  }
   args.push('-p', prompt);
   // Chroma: the attention mask off gives cleaner pictures (stable-diffusion.cpp's advice).
   if (spec.recipe === 'chroma') { if (has('--model-args')) args.push('--model-args', 'chroma_use_dit_mask=false'); else if (has('--chroma-disable-dit-mask')) args.push('--chroma-disable-dit-mask'); }

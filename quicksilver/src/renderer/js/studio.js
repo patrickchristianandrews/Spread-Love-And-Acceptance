@@ -185,6 +185,7 @@ function createHTML() {
       <div class="field"><label for="ci-model">Model</label><select id="ci-model">${opts.map((o) => `<option value="${esc(o.value)}" ${o.value === S.data.prefs.imageModel ? 'selected' : ''}>${esc(o.label)}</option>`).join('')}</select></div>
       <div class="field"><label for="ci-prompt" class="row">Describe the picture<span class="grow"></span>${improveBtn('ci-prompt', 'image')}</label><textarea id="ci-prompt" rows="5" placeholder="A cozy reading nook by a rainy window, warm lamp light, watercolor style">${esc(S.data.prefs.lastPrompt || '')}</textarea></div>
       <div class="field" id="ci-neg-f"><label for="ci-neg">Avoid (optional)</label><input id="ci-neg" placeholder="blurry, text, watermark"></div>
+      <div id="ci-lora-box">${loraPickerHTML($('#ci-model')?.value || (opts.some((o) => o.value === S.data.prefs.imageModel) ? S.data.prefs.imageModel : opts[0]?.value))}</div>
       <div class="field"><label>Shape</label><div class="row">${Object.entries(SIZES).map(([k, [l]], i) => `<label class="btn small"><input type="radio" name="ci-size" value="${k}" ${i === 0 ? 'checked' : ''}> ${l}</label>`).join('')}</div></div>
       <details><summary class="label" style="cursor:pointer">Advanced</summary><div class="grid2" style="margin-top:10px">
         <div class="field"><label for="ci-steps">Steps</label><input id="ci-steps" type="number" min="1" max="80" placeholder="auto"></div>
@@ -202,6 +203,8 @@ function createHTML() {
 function bindCreate() {
   const upd = () => { const n = Number($('#ci-count')?.value) || 1; if ($('#ci-eta')) $('#ci-eta').textContent = mediaEtaText($('#ci-model').value, 'picture', n); };
   $('#ci-model')?.addEventListener('change', upd); $('#ci-count')?.addEventListener('change', upd); if ($('#ci-model')) upd();
+  bindLoraPicker();
+  $('#ci-model')?.addEventListener('change', () => { $('#ci-lora-box').innerHTML = loraPickerHTML($('#ci-model').value); bindLoraPicker(); });
   $('#ci-go')?.addEventListener('click', async () => {
     const model = $('#ci-model').value;
     const prompt = $('#ci-prompt').value.trim();
@@ -220,8 +223,9 @@ function bindCreate() {
     const spec = S.catalog.media.find((c) => c.id === inst.catalogId);
     const [width, height] = sizeFor(spec, preset);
     const seed = $('#ci-seed').value;
+    const lr = loraRequest(model, prompt);
     for (let i = 0; i < count; i++) {
-      await startJob({ modelId: inst.id, mode: 'generate', prompt, negative: $('#ci-neg').value, width, height, steps: Number($('#ci-steps').value) || undefined, cfg: $('#ci-cfg').value === '' ? undefined : Number($('#ci-cfg').value), seed: seed === '' ? '' : Number(seed) + i }, 'Creating', mediaEta(model));
+      await startJob({ modelId: inst.id, mode: 'generate', prompt: lr.prompt, loras: lr.loras, negative: $('#ci-neg').value, width, height, steps: Number($('#ci-steps').value) || undefined, cfg: $('#ci-cfg').value === '' ? undefined : Number($('#ci-cfg').value), seed: seed === '' ? '' : Number(seed) + i }, 'Creating', mediaEta(model));
     }
   });
 }

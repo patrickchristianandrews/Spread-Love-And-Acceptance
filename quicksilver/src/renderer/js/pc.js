@@ -40,7 +40,7 @@ views.pc = {
       </tbody></table>
       <div class="section"><h2>🎨 Image & video models</h2></div>
       <table class="list"><thead><tr><th>Model</th><th>Size</th><th>Runs on</th><th>Time per ${'image / clip'}</th><th>Rating</th></tr></thead><tbody>
-        ${S.catalog.media.map((m) => { const x = e.media[m.id]; return `<tr><td><b>${esc(m.name)}</b><div class="small muted">${esc(S.catalog.mediaCategories[m.category].label)}</div></td><td>${m.sizeGB.toFixed(1)} GB</td><td class="small" style="font-weight:700">${where[x.fit]}</td><td>${x.fit === 'no' ? '—' : `<b>~${fmtSec(x.sec)}</b> per ${m.kind === 'video' ? 'clip' : 'image'}`}</td><td><span class="badge rate-${x.rating}">${esc(x.rating === 'wont' ? "Won't fit" : x.label)}</span></td></tr>`; }).join('')}
+        ${S.catalog.media.filter((m) => !m.retired).map((m) => { const x = e.media[m.id]; return `<tr><td><b>${esc(m.name)}</b><div class="small muted">${esc(S.catalog.mediaCategories[m.category].label)}</div></td><td>${m.sizeGB.toFixed(1)} GB</td><td class="small" style="font-weight:700">${where[x.fit]}</td><td>${x.fit === 'no' ? '—' : `<b>~${fmtSec(x.sec)}</b> per ${m.kind === 'video' ? 'clip' : 'image'}`}</td><td><span class="badge rate-${x.rating}">${esc(x.rating === 'wont' ? "Won't fit" : x.label)}</span></td></tr>`; }).join('')}
       </tbody></table>
       <p class="small muted" style="margin-top:12px">Ratings: <span class="badge rate-great">Fast</span> faster than you can read · <span class="badge rate-good">Smooth</span> comfortable · <span class="badge rate-ok">Usable</span> a short wait · <span class="badge rate-slow">Slow</span> best for background tasks · <span class="badge rate-wont">Won't fit</span> needs more memory.</p>
     </div>`;

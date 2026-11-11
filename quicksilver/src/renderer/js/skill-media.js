@@ -50,8 +50,8 @@ function chatIsLiquid(chat) {
 function pickLiquidMedia(kind, prompt, specOf) {
   const first = S.catalog.picks?.liquid?.pictures || LIQUID_PICTURES;
   const anime = ANIME_RX.test(prompt || '');
-  const unc = S.installed.filter((m) => m.kind === 'image' && specOf(m).uncensored);
-  const score = (m) => { const c = specOf(m); return (c.quality || 0) + (m.catalogId === first && !anime ? 5 : 0) + ((c.style === 'anime') === anime ? 3 : 0); };
+  const unc = S.installed.filter((m) => m.kind === 'image' && (specOf(m).uncensored || m.uncensored));
+  const score = (m) => { const c = specOf(m); return (c.quality || 0) + (m.catalogId === first && !anime ? 5 : 0) + (((m.style || c.style) === 'anime') === anime ? 3 : 0); };
   if (kind === 'image' || kind === 'edit') {
     const local = unc.sort((a, b) => score(b) - score(a))[0];
     if (local) return { value: `local:${local.id}`, inst: local, spec: specOf(local) };
