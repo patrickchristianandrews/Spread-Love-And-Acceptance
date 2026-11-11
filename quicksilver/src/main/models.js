@@ -211,11 +211,17 @@ async function planCatalog(catalogId) {
   if (!m) throw new Error('Unknown model.');
   const items = [];
   for (const [role, spec] of Object.entries(m.files)) {
-    const files = await tree(spec.repo);
     const re = new RegExp(spec.match, 'i');
-    const hit = files.find((f) => re.test(f.path)) || files.find((f) => re.test(path.basename(f.path)));
-    if (!hit) throw new Error(`Could not find the ${role} file for ${m.name} on Hugging Face.`);
-    items.push({ role, repo: spec.repo, path: hit.path, size: hit.size });
+    let found = null;
+    // Community models are often re-uploaded: try each known copy in turn.
+    for (const repo of [spec.repo, ...(spec.alt || [])]) {
+      let files;
+      try { files = await tree(repo); } catch { continue; }
+      const hit = files.find((f) => re.test(f.path)) || files.find((f) => re.test(path.basename(f.path)));
+      if (hit) { found = { repo, hit }; break; }
+    }
+    if (!found) throw new Error(`Could not find the ${role} file for ${m.name} on Hugging Face.`);
+    items.push({ role, repo: found.repo, path: found.hit.path, size: found.hit.size });
   }
   return { id: m.id, name: m.name, kind: m.kind, catalogId: m.id, items };
 }

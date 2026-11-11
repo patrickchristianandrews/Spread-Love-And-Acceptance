@@ -213,7 +213,7 @@ function textSummary(p, r) {
 
 function mineKitHTML(r) {
   const main = r.roles[0];
-  const pool = (role) => (r.yours || []).filter((y) => (role === 'helper' ? y.category === 'text' : role === 'animate' ? y.category === 'video' && y.animate : role === 'image' ? y.category === 'image' : y.category === role));
+  const pool = (role) => (r.yours || []).filter((y) => (role === 'helper' ? y.category === 'text' : role === 'animate' ? y.category === 'video' && y.animate : role === 'image' ? (y.category === 'image' || y.category === 'open') : y.category === role));
   if (!r.mine) return `<div class="card adv-mine"><h3>Use the models you have</h3><p class="muted" style="font-weight:600">You don't have a model that ${esc(r.roleLabels[main].toLowerCase())} yet. Use the setup on the right, or pick one under Models → Images &amp; video.</p></div>`;
   return `<div class="card hl adv-mine">
     <div class="row"><h3 class="grow">Use the models you have</h3><span class="badge b-mint">Nothing to download</span></div>

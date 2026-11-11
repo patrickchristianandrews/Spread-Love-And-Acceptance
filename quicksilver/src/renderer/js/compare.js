@@ -68,7 +68,7 @@ function typicalHTML() {
   const t = targetValid(S.data.prefs.defaultTarget) ? S.data.prefs.defaultTarget : resolveTarget(null, assistantById(S.data.prefs.lastAssistant));
   const pick = (pref, cat) => (pref && S.speed?.media?.[pref.replace(/^local:/, '')] ? pref : Object.entries(S.speed?.media || {}).find(([, m]) => cat(m))?.[0]);
   const media = (pref, cat) => { const id = pick(pref, cat); return id ? S.speed.media[id.replace(/^local:/, '')] : null; };
-  const pic = media(S.data.prefs.imageModel, (m) => m.category === 'image');
+  const pic = media(S.data.prefs.imageModel, (m) => m.category === 'image' || m.category === 'open');
   const vid = media(S.data.prefs.videoModel, (m) => m.kind === 'video');
   const edit = media(S.data.prefs.editModel, (m) => m.category === 'edit') || pic;
   const items = [

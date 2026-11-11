@@ -58,7 +58,7 @@ function sugLocal(targets, task, liquid) {
   if (!SUGGEST_TASKS[task][2]) {
     if (task === 'music') return [];
     const want = { photo: (m) => m.kind === 'image' && m.category !== 'edit', edit: (m) => m.kind === 'image' && (m.category === 'edit' || m.edit), video: (m) => m.kind === 'video' }[task];
-    return (S.catalog.media || []).filter((m) => !m.retired && want(m) && S.est?.media?.[m.id]?.fit !== 'no')
+    return (S.catalog.media || []).filter((m) => !m.retired && want(m) && (!liquid || task === 'video' || m.uncensored) && S.est?.media?.[m.id]?.fit !== 'no')
       .map((m) => ({ id: m.id, name: m.name, score: m.quality ?? 5, est: S.est?.media?.[m.id], installed: Boolean(inst(m.id)), sizeGB: m.sizeGB }))
       .sort((a, b) => b.score - a.score || (a.est?.sec || 0) - (b.est?.sec || 0)).slice(0, 3);
   }

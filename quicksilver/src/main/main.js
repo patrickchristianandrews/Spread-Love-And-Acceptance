@@ -150,7 +150,7 @@ handle('guide:speeds', async (tiers) => {
     // The strongest setup this kind of PC could run, and what it would be able to do.
     const adv = catalog.advise('general', h, { calib: 1, installed: [] }).best;
     const profiles = adv ? adv.ids.map((id) => catalog.TEXT_MODELS.find((m) => m.id === id)).filter(Boolean) : [];
-    const topImg = catalog.MEDIA_MODELS.filter((m) => m.kind === 'image' && catalog.estimateMedia(m, h).fit !== 'no').sort((a, b) => (b.quality || 0) - (a.quality || 0))[0];
+    const topImg = catalog.MEDIA_MODELS.filter((m) => m.kind === 'image' && !m.uncensored && catalog.estimateMedia(m, h).fit !== 'no').sort((a, b) => (b.quality || 0) - (a.quality || 0))[0];
     const topVid = catalog.MEDIA_MODELS.filter((m) => m.kind === 'video' && catalog.estimateMedia(m, h).fit !== 'no').sort((a, b) => (b.quality || 0) - (a.quality || 0))[0];
     out[t.n] = {
       wps: Math.round(q.wordsPerSec || 0), answerSec: q.wordsPerSec ? Math.round(300 / q.wordsPerSec) : null,

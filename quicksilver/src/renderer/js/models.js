@@ -141,6 +141,11 @@ function modelCard(m, est, kind) {
   if (m.ctx >= 100000) tags.push(`<span class="badge b-lemon">📜 ${Math.round(m.ctx / 1024)}K context</span>`);
   if (m.edit === 'instruct') tags.push('<span class="badge b-peach">🪄 edit by instruction</span>');
   if (m.animate) tags.push('<span class="badge b-peach">📷→🎬 animates photos</span>');
+  if (m.uncensored) tags.push('<span class="badge b-lav" title="No content filter">🔓 uncensored</span>');
+  if (m.id === (S.catalog?.picks?.liquid?.pictures || 'lustify')) tags.push('<span class="badge b-mint" title="The Liquid Edition makes its pictures with this model">💧 Liquid Edition pictures</span>');
+  if (m.style === 'anime') tags.push('<span class="badge b-peach">🎌 anime</span>');
+  if (m.promptPrefix) tags.push('<span class="badge b-sky" title="Quicksilver adds this model\'s quality tags (score_9…) to your prompts by itself">🏷 Pony tags added for you</span>');
+  if (m.license) tags.push(`<span class="badge b-lemon" title="Licence">📄 ${esc(m.license)}</span>`);
   return `<div class="card model-card" data-model-card="${esc(m.id)}" tabindex="0" title="Click for details">
     <div class="row"><h3 class="grow">${esc(m.name)}</h3><span class="small" style="font-weight:800">${(m.sizeGB + (m.mmprojGB || 0)).toFixed(1)} GB</span></div>
     <div class="meta" style="margin:4px 0 8px">${esc(m.maker)}${m.params ? ` · ${esc(m.params)} parameters` : ''}</div>
@@ -176,7 +181,7 @@ function mediaHTML() {
     ${filterBar(cats)}${Object.entries(cats).filter(([k]) => catFilter === 'all' || catFilter === k).map(([k, c]) => {
       const list = S.catalog.media.filter((m) => !m.retired && m.category === k && (!fitsOnly || S.est?.media[m.id]?.fit !== 'no'));
       if (!list.length) return '';
-      return `<div class="section"><h2>${esc(c.label)}</h2></div><div class="cards">${list.map((m) => modelCard(m, S.est?.media[m.id], 'media')).join('')}</div>`;
+      return `<div class="section"><h2>${esc(c.icon || '')} ${esc(c.label)} <span class="small muted" style="font-weight:600">· ${list.length}</span></h2>${c.note ? `<span class="small muted">${esc(c.note)}</span>` : ''}</div><div class="cards">${list.map((m) => modelCard(m, S.est?.media[m.id], 'media')).join('')}</div>`;
     }).join('')}`;
 }
 

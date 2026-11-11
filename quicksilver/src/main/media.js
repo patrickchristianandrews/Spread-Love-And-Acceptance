@@ -177,7 +177,12 @@ async function generate(jobId, req, { onProgress, onStatus } = {}) {
     if (f.llm) args.push(has('--llm') ? '--llm' : '--qwen2vl', f.llm);
     args.push('--sampling-method', 'euler');
   }
-  args.push('-p', req.prompt || '');
+  // Some community models (the Pony family) need their quality tags at the start of every prompt.
+  const prompt = spec.promptPrefix && !String(req.prompt || '').toLowerCase().startsWith(spec.promptPrefix.split(',')[0]) ? `${spec.promptPrefix}${req.prompt || ''}` : (req.prompt || '');
+  args.push('-p', prompt);
+  // Chroma: the attention mask off gives cleaner pictures (stable-diffusion.cpp's advice).
+  if (spec.recipe === 'chroma') { if (has('--model-args')) args.push('--model-args', 'chroma_use_dit_mask=false'); else if (has('--chroma-disable-dit-mask')) args.push('--chroma-disable-dit-mask'); }
+  if (spec.recipe === 'qwen-image' && has('--flow-shift')) args.push('--flow-shift', '3');
   if (req.negative && spec.recipe !== 'flux' && spec.recipe !== 'kontext') args.push('-n', req.negative);
   args.push('-W', String(req.width || d.width), '-H', String(req.height || d.height));
   args.push('--steps', String(req.steps || d.steps), '--cfg-scale', String(req.cfg ?? d.cfg));
