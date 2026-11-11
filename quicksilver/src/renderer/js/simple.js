@@ -68,7 +68,12 @@ function autoPick(chat, a, text, hasImage) {
   // When you're on an uncensored model or the Liquid Edition, Automatic only ever picks another
   // uncensored one — it never quietly switches you to a filtered model that would refuse.
   const baseUnc = liquidOk(base);
-  const cands = S.targets.map((t) => t.target).filter((t) => T[t] && !t.startsWith('kb:') && (!t.startsWith('api:') || !local) && (!hasImage || T[t].vision) && (!baseUnc || liquidOk(t)));
+  // A stack or fusion answers with its own models only: Automatic never leaves it for another
+  // model, stack or cloud AI, except a model you ticked under Models → "Models in use". With a
+  // single model, the other models on this PC are only candidates when ticked too.
+  const team = base.startsWith('stack:');
+  const allowed = (t) => t === base || (t.startsWith('local:') ? mayUse(t, base) : !team);
+  const cands = S.targets.map((t) => t.target).filter((t) => T[t] && allowed(t) && !t.startsWith('kb:') && (!t.startsWith('api:') || !local) && (!hasImage || T[t].vision) && (!baseUnc || liquidOk(t)));
   if (!cands.length) return { target: base };
   // A connected cloud AI is scored for this exact task from the rankings (so the best one wins when
   // several are connected); a local model or team uses its measured quality for the job.

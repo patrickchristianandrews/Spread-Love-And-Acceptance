@@ -17,6 +17,7 @@ const TINY = path.join(__dirname, 'fixtures', 'tiny.gguf');
     { id: 'starter-brain', name: 'Qwen3.5 4B (uncensored)', kind: 'text', catalogId: 'qwen3.5-4b', files: { model: copy('brain.gguf'), mmproj: copy('brain-mmproj.gguf') }, size: 2.9e9, vision: true, source: 'bundled' },
     { id: 'starter-closer', name: 'Qwen3.5 9B (uncensored)', kind: 'text', catalogId: 'qwen3.5-9b-uncensored', files: { model: copy('closer.gguf'), mmproj: copy('closer-mmproj.gguf') }, size: 6e9, vision: true, source: 'bundled' },
     { id: 'starter-lustify', name: 'Lustify (uncensored)', kind: 'image', catalogId: 'lustify', files: { model: copy('lustify.safetensors'), vae: copy('lustify-vae.safetensors') }, size: 7e9, source: 'bundled' },
+    { id: 'starter-wan', name: 'Wan 2.2 5B', kind: 'video', catalogId: 'wan2.2-5b', files: { diffusion: copy('wan2.2-5b.gguf'), vae: copy('wan2.2-vae.safetensors'), t5xxl: copy('wan-umt5-xxl.gguf') }, size: 9e9, source: 'bundled' },
   ]));
   const app = await electron.launch({ executablePath: require('electron'), args: ['--no-sandbox', ROOT],
     env: { ...process.env, QUICKSILVER_HOME: HOME, QS_LLAMA_SERVER: path.join(__dirname, 'fakes', 'llama-server'), QS_SD_BIN: path.join(__dirname, 'fakes', 'sd'), QS_SCAN_DIRS: HOME } });
@@ -57,8 +58,18 @@ const TINY = path.join(__dirname, 'fixtures', 'tiny.gguf');
   assert.deepEqual([r.plain, r.labelled, r.video, r.code, r.button], ['make-image', 'make-image', 'make-video', null, true]);
   assert.equal(r.shown, "I'll create a portrait of a lighthouse.");
   assert.deepEqual(r.follow, [true, true, true]); assert.deepEqual(r.notFollow, [false, false, false]);
+  // Everything a skill can make has its maker inside the Liquid Edition: pictures and photo edits
+  // by Lustify, videos and animated photos by Wan 2.2, and every other kind of output (documents,
+  // slides, sheets, charts, apps, beats, speech, the instant photo/video/audio tools) is built in.
+  const cover = await win.evaluate(() => {
+    const pick = (k) => pickMediaModel(k, { liquid: true, prompt: 'a lighthouse at dusk' })?.inst?.catalogId || null;
+    return { kinds: [...new Set(allSkills().map((x) => x.output || 'text'))].sort(), image: pick('image'), edit: pick('edit'), video: pick('video'), animate: pick('animate') };
+  });
+  const BUILT_IN = ['text', 'app', 'docx', 'pptx', 'xlsx', 'chart', 'beat', 'tool', 'speech', 'narrate', 'podcast'];
+  assert.deepEqual(cover.kinds.filter((k) => !BUILT_IN.includes(k)).sort(), ['animate', 'edit', 'image', 'video'], `a new kind of skill output needs a maker in the Liquid Edition: ${cover.kinds.join(', ')}`);
+  assert.deepEqual([cover.image, cover.edit, cover.video, cover.animate], ['lustify', 'lustify', 'wan2.2-5b', 'wan2.2-5b'], 'the Liquid Edition makes all four with its own models');
   assert.deepEqual(errors, []);
   await app.close();
-  console.log('✓ Liquid Edition chat: just asking makes a picture with Lustify; follow-ups continue; ordinary messages get ordinary answers');
+  console.log('✓ Liquid Edition chat: just asking makes a picture with Lustify; follow-ups continue; ordinary messages get ordinary answers; every kind of skill has its maker in the Liquid Edition');
   process.exit(0);
 })().catch((e) => { console.error(`FAIL ${e.message}`); process.exit(1); });

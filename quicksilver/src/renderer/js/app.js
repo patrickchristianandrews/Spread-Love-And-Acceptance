@@ -315,8 +315,17 @@ function liquidGate(r) {
   }
   startGateDownloads(false);
 }
+// Voice typing's speech model (about 60 MB) comes inside the full installer. The web installer
+// carries no models, so there it is fetched quietly alongside the Liquid Edition's models and the
+// microphone is ready as well. It never holds up the setup screen.
+let voiceFetch = null;
+function fetchVoiceQuietly() {
+  if (voiceFetch || S.config?.offline) return;
+  voiceFetch = qs.call('voice:status').then((st) => (st && !st.model && st.canInstall ? qs.call('voice:setup') : null)).catch(() => { voiceFetch = null; });
+}
 function startGateDownloads(retry) {
   if (S.config?.offline) { paintLiquidGate(); return; }
+  fetchVoiceQuietly();
   for (const m of gateItems) {
     if (S.downloads[m.catalogId] || (gateFailed[m.catalogId] && !retry)) continue;
     // After a failure, the catalog's own entry is used: it knows backup copies of each model.

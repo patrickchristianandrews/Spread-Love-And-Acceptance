@@ -845,8 +845,27 @@ async function collect(gen) {
     assert.ok(how.stars >= 3 && how.caps.find((c) => c.key === 'check').on);
     assert.ok(!ids.some((t) => ['local:qwen3-8b', 'local:phi-4', 'local:gemma-3-4b'].includes(t)), 'Quicksilver is uncensored: filtered models never join it');
     assert.ok(ids.includes('local:starter-brain') && ids.includes('local:starter'), 'the built-in brain and eyes');
-    // An uncensored model on this PC joins the team for hard questions.
+    // The Liquid Edition uses its own models and nothing else: another uncensored model on this PC
+    // joins the team for hard questions only once it is ticked under Models → "Models in use".
     models.add({ id: 'dolphin-test', name: 'Dolphin 3.0 8B', kind: 'text', catalogId: 'dolphin-3-llama-3.1-8b', files: { model: copy('dolphin.gguf') }, size: 4.9e9 });
+    await complete.ensureQuicksilverStack();
+    {
+      const pure = complete.stacks().find((x) => x.id === 'quicksilver');
+      assert.ok(!JSON.stringify([pure.members, pure.bench || '']).includes('dolphin-test'), 'a model you did not tick never joins the Liquid Edition');
+      assert.equal(models.inUse(models.get('dolphin-test')), false, 'not in use until ticked');
+      const c0 = complete.councilMembers('stack:quicksilver', {});
+      assert.ok(![c0.structurer, c0.critic, c0.pragmatist, c0.lead].includes('local:dolphin-test'), 'and it does not sit on the Liquid Edition\'s Council');
+      // Suggested Liquid add-ons you download in Quicksilver are in use from the start; models
+      // found in other apps and the built-in ones (members already) are not ticked by default.
+      assert.equal(models.inUse({ kind: 'text', catalogId: 'rocinante-12b' }), true);
+      assert.equal(models.inUse({ kind: 'text', catalogId: 'rocinante-12b', source: 'imported' }), false);
+      assert.equal(models.inUse({ kind: 'text', catalogId: 'rocinante-12b', use: false }), false, 'your own choice wins');
+      assert.equal(models.inUse({ kind: 'image', catalogId: 'lustify', use: true }), false, 'only chat models are ticked');
+      assert.ok(models.setUse('dolphin-test', true) && models.inUse(models.get('dolphin-test')));
+      // Registering the model again (an update or a repair) keeps the tick.
+      models.add({ ...models.get('dolphin-test'), use: undefined });
+      assert.equal(models.get('dolphin-test').use, true, 'the tick survives a re-register');
+    }
     await complete.ensureQuicksilverStack();
     const qs2 = complete.stacks().find((x) => x.id === 'quicksilver');
     const ids2 = [...qs2.members.drafters, qs2.members.judge, qs2.members.vision].filter(Boolean);
@@ -963,12 +982,35 @@ async function collect(gen) {
     big(path.join(lms, 'big', 'Model-00002-of-00002.gguf')); // second part of a split model: skipped
     fs.copyFileSync(TINY, path.join(lms, 'tiny.gguf')); // too small to be a real model: skipped
     const oll = path.join(scan, 'ollama');
-    big(path.join(oll, 'blobs', 'sha256-feed'));
+    // A GGUF file with a header of its own (so it is a different file, not a copy of the one above).
+    const gguf = (p, arch, name, size = 60e6) => {
+      const u32 = (n) => { const b = Buffer.alloc(4); b.writeUInt32LE(n); return b; };
+      const u64 = (n) => { const b = Buffer.alloc(8); b.writeBigUInt64LE(BigInt(n)); return b; };
+      const str = (t) => { const b = Buffer.from(t); return Buffer.concat([u64(b.length), b]); };
+      const kv = (k, v) => Buffer.concat([str(k), u32(8), str(v)]);
+      fs.mkdirSync(path.dirname(p), { recursive: true });
+      fs.writeFileSync(p, Buffer.concat([Buffer.from('GGUF'), u32(3), u64(0), u64(2), kv('general.architecture', arch), kv('general.name', name)]));
+      fs.truncateSync(p, size);
+      return p;
+    };
+    gguf(path.join(oll, 'blobs', 'sha256-feed'), 'qwen3', 'Qwen3 8B');
+    // Never offered as chat models: a second copy of the same file, a video model and its text
+    // encoder (GGUF files too), a search model, and the models folder that ships next to the installer.
+    fs.copyFileSync(llamaFile, path.join(lms, 'copy-of-llama.gguf'));
+    gguf(path.join(lms, 'city96', 'Wan2.2-TI2V-5B-Q4_K_M.gguf'), 'wan', 'Wan 2.2 5B');
+    gguf(path.join(lms, 'city96', 'umt5-xxl-encoder-Q4_K_M.gguf'), 't5encoder', 'UMT5 XXL');
+    gguf(path.join(lms, 'nomic', 'nomic-embed-text-v1.5.Q8_0.gguf'), 'nomic-bert', 'nomic embed');
+    const sneaky = gguf(path.join(lms, 'someone', 'model-q4.gguf'), 'flux', 'Mystery'); // the name says nothing; its header does
+    gguf(path.join(lms, 'Quicksilver models', 'qwen3.5-9b.gguf'), 'qwen35', 'Qwen3.5 9B');
+    assert.equal((await llama.readGguf(sneaky)).chat, false, 'a picture model is not a chat model');
+    assert.equal((await llama.readGguf(llamaFile)).chat, true);
+    assert.ok(!models.chatFile('C:/x/umt5-xxl.gguf') && !models.chatFile('C:/x/wan2.2-5b-turbo.gguf') && !models.chatFile('C:/x/bge-reranker-v2-m3.gguf') && models.chatFile('C:/x/Qwen3.5-9B-abliterated.Q4_K_M.gguf') && models.chatFile('C:/x/Swan2-12B.gguf'));
     fs.mkdirSync(path.join(oll, 'manifests/registry.ollama.ai/library/qwen3'), { recursive: true });
     fs.writeFileSync(path.join(oll, 'manifests/registry.ollama.ai/library/qwen3/8b'), JSON.stringify({ layers: [{ mediaType: 'application/vnd.ollama.image.model', digest: 'sha256:feed', size: 5.2e9 }] }));
     process.env.QS_SCAN_DIRS = [lms, oll].join(path.delimiter);
-    const found = models.findOnPC();
-    assert.deepEqual(found.map((f) => f.name).sort(), ['Llama 3.2 3B Instruct', 'qwen3:8b']);
+    assert.ok(models.findOnPC().some((f) => f.path === sneaky), 'by name alone the mystery file still looks like a model');
+    const found = await models.findChat(llama.readGguf);
+    assert.deepEqual(found.map((f) => f.name).sort(), ['Llama 3.2 3B Instruct', 'qwen3:8b'], 'only real chat models, each once');
     assert.ok(found.find((f) => f.app === 'Ollama').path.endsWith('sha256-feed'));
     assert.ok(found.find((f) => f.name.startsWith('Llama')).vision, 'vision add-on paired');
     const added = await models.addFound(found, llama.readGguf);
@@ -976,13 +1018,35 @@ async function collect(gen) {
     const q = added.find((m) => m.from === 'Ollama');
     assert.equal(q.catalogId, 'qwen3-8b'); assert.equal(q.name, 'Qwen3 8B');
     assert.equal(added.find((m) => m.from !== 'Ollama').catalogId, 'llama-3.2-3b');
-    assert.equal(models.findOnPC().length, 0, 'added models are not offered again');
+    assert.equal((await models.findChat(llama.readGguf)).length, 0, 'added models are not offered again');
+    assert.ok(added.every((m) => !models.inUse(models.get(m.id))), 'a model from another app is only used when you choose it: never ticked by itself');
+    await assert.rejects(models.importFile(sneaky, llama.readGguf), /not a chat model/, 'importing a picture model by hand says what it is');
+    // One-time clean-up of what an older version added by itself: files that are not chat models,
+    // the installer's own models folder and second copies come off the list; real ones, and one
+    // that a stack of yours uses, stay. No file is deleted.
+    {
+      const wan = path.join(lms, 'city96', 'Wan2.2-TI2V-5B-Q4_K_M.gguf');
+      const pack = path.join(lms, 'Quicksilver models', 'qwen3.5-9b.gguf');
+      const own = path.join(dir, 'own-9b.gguf'); fs.copyFileSync(pack, own);
+      const twin = path.join(lms, 'twin', 'Qwen3.5-9B-Q4.gguf'); fs.mkdirSync(path.dirname(twin), { recursive: true }); fs.copyFileSync(pack, twin);
+      models.add({ id: 'own-9b', name: 'Qwen3.5 9B', kind: 'text', files: { model: own }, size: 60e6, source: 'bundled' });
+      const imp = (id, file, name) => models.add({ id, name, kind: 'text', files: { model: file }, size: 60e6, source: 'imported', from: 'Downloads' });
+      imp('imp-wan', wan, 'wan2.2 5b'); imp('imp-mystery', sneaky, 'Mystery'); imp('imp-pack', pack, 'Qwen3.5 9B'); imp('imp-twin', twin, 'Qwen3.5 9B'); imp('imp-kept', path.join(lms, 'copy-of-llama.gguf'), 'Llama copy');
+      const gone = await models.tidyImported(llama.readGguf, (id) => id === 'imp-kept');
+      assert.deepEqual(gone.map((g) => `${g.id}:${g.why}`).sort(), ['imp-mystery:not-chat', 'imp-pack:pack', 'imp-twin:copy', 'imp-wan:not-chat']);
+      const left = models.list().map((m) => m.id);
+      assert.ok(left.includes('imp-kept') && left.includes(added.find((m) => m.from !== 'Ollama').id) && !left.includes('imp-wan'), 'real models and one a stack uses stay');
+      assert.ok([wan, sneaky, pack, twin].every((f) => fs.existsSync(f)), 'no file is deleted');
+      assert.ok(!(await models.findChat(llama.readGguf)).some((f) => [wan, sneaky, pack, twin].includes(f.path)), 'and they are not offered again');
+      models.remove('imp-kept'); models.remove('own-9b'); fs.rmSync(own, { force: true });
+      store.saveConfig({ starterRemoved: [] });
+    }
     models.remove(q.id);
     assert.ok(fs.existsSync(path.join(oll, 'blobs', 'sha256-feed')), 'removing never deletes another app\'s file');
     for (const m of added) models.remove(m.id);
     delete process.env.QS_SCAN_DIRS;
     fs.rmSync(scan, { recursive: true, force: true });
-    console.log('✓ finds models from LM Studio and Ollama and adds them in place');
+    console.log('✓ finds chat models from LM Studio and Ollama and adds them in place; never picture, video or search files, the installer\'s own folder, or second copies');
   }
 
   // Catalog: goals, recognising your models, and the advisor (yours vs best for this PC).

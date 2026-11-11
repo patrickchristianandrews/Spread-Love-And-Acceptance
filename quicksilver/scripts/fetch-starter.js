@@ -11,6 +11,7 @@
 // Also next to the installer: the Liquid Edition's uncensored picture and video makers, Lustify
 // (pictures) and Wan 2.2 5B and Turbo (video), so it makes both offline from the first run. Set
 // QS_NO_MEDIA_PACK=1 to leave them out (the app then downloads them on first run, before it opens).
+// In the models folder too: the speech model for voice typing (Whisper base, about 60 MB).
 // A failed download fails the build: the Liquid Edition ships complete.
 // QS_WEB_INSTALLER=1 makes the web installer instead: no model files at all (not even the small
 // ones that normally go inside it). Only STARTER.json and the licences are written, every model
@@ -149,6 +150,18 @@ async function get(repo, f, dest) {
       throw new Error(`${m.name} could not be downloaded for the models folder: ${err.message}`);
     }
   }
+  // Voice typing: the speech model (Whisper "base", about 60 MB) ships in the models folder with
+  // the rest of the Liquid Edition, so the microphone works offline from the first run. (Reading
+  // aloud uses the voices built into Windows, and the photo, video and audio tools use the ffmpeg
+  // that is already inside the app: neither needs a download.) From the setup file alone, or the
+  // web installer, Quicksilver fetches it with the other models on first run.
+  if (!WEB) {
+    const voice = path.join(ROOT, 'pack', 'ggml-base-q5_1.bin');
+    await get('ggerganov/whisper.cpp', { path: 'ggml-base-q5_1.bin', size: 0 }, voice);
+    if (fs.statSync(voice).size < 30e6) throw new Error(`The speech model for voice typing is incomplete (${fs.statSync(voice).size} bytes).`);
+    console.log('  ✓ speech model for voice typing');
+  }
+  licences.push('==== Whisper base (OpenAI), converted for whisper.cpp by Georgi Gerganov ====\n\nMIT License: https://github.com/openai/whisper/blob/main/LICENSE\n');
   fs.writeFileSync(path.join(ROOT, 'starter', 'STARTER.json'), JSON.stringify({ models: entries }, null, 2));
   fs.writeFileSync(path.join(ROOT, 'starter', 'MODEL-LICENCES.txt'), licences.join('\n\n'));
   fs.copyFileSync(path.join(ROOT, 'starter', 'MODEL-LICENCES.txt'), path.join(ROOT, 'pack', 'MODEL-LICENCES.txt'));

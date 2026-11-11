@@ -81,10 +81,35 @@ function list() {
 function get(id) { return list().find((m) => m.id === id); }
 function save(entries) { store.writeJSON(REG(), entries); }
 function add(entry) {
-  const all = store.readJSON(REG(), []).filter((m) => m.id !== entry.id);
-  all.push({ added: Date.now(), ...entry });
+  const before = store.readJSON(REG(), []);
+  const prev = before.find((m) => m.id === entry.id);
+  const all = before.filter((m) => m.id !== entry.id);
+  // Registering a model again (an update, a repair) keeps your "in use" tick.
+  const next = { added: Date.now(), ...entry };
+  if (typeof next.use !== 'boolean') { delete next.use; if (typeof prev?.use === 'boolean') next.use = prev.use; }
+  all.push(next);
   save(all);
   return entry;
+}
+
+// ---------- models in use ----------
+// A chat uses the model you chose for it, or the members of its stack or fusion: nothing else on
+// this PC joins in by itself. The exception is a model you ticked under Models → "Models in use":
+// those may also be picked by Automatic, double-check an answer, sit on the Council and (when
+// uncensored) help the Liquid Edition. Until you choose, only the suggested Liquid add-ons you
+// downloaded in Quicksilver are ticked; models found in other apps never are.
+function inUse(m) {
+  if (!m || (m.kind || 'text') !== 'text') return false;
+  if (typeof m.use === 'boolean') return m.use;
+  return m.source !== 'imported' && m.source !== 'bundled' && catalog.LIQUID_ADDONS.some((a) => a.id === m.catalogId);
+}
+function setUse(id, on) {
+  const all = store.readJSON(REG(), []);
+  const m = all.find((x) => x.id === id);
+  if (!m) return false;
+  m.use = Boolean(on);
+  save(all);
+  return true;
 }
 function remove(id) {
   const all = store.readJSON(REG(), []);
@@ -320,6 +345,7 @@ async function trending({ force = false, hw = null } = {}) {
 async function importFile(file, readGguf) {
   const info = await readGguf(file);
   if (info.isProjector) throw new Error('That file is a vision add-on (mmproj), not a model. Import the main model file.');
+  if (!chatFile(file, info)) throw new Error('That file is part of a picture, video, search or speech model, not a chat model, so it can\'t be used for chatting. Picture and video models are added under Models → Images & video.');
   // Look for a matching vision projector in the same folder.
   const dir = path.dirname(file);
   const proj = fs.readdirSync(dir).find((n) => /mmproj.*\.gguf$/i.test(n));
@@ -427,6 +453,28 @@ function scanRoots() {
   return roots;
 }
 
+const OWN_PACK = /^quicksilver models$/i;
+// File and model names of GGUF files that are not chat models: picture and video models and their
+// parts, search models, speech models. (The file's own header is checked as well, see chatFile.)
+const NOT_CHAT_NAME = /(^|[^a-z0-9])(umt5|t5[-_. ]?xxl|t5[-_. ]?v1|t5[-_. ]?encoder|clip[-_. ]?[lg]|vae|wan[-_. ]?2|flux[-_. ]?1|sdxl|sd[-_. ]?3|stable[-_. ]?diffusion|z[-_. ]?image|qwen[-_. ]?image|chroma|ltx[-_. ]?video|hunyuan[-_. ]?video|embed(ding)?s?|rerank(er)?|bge[-_. ]|whisper)([^a-z]|$)/i;
+function chatFile(file, info, name = '') {
+  if (info && info.chat === false) return false;
+  return ![path.basename(file || ''), name, info?.name || ''].some((n) => NOT_CHAT_NAME.test(n));
+}
+// The same file twice (a copy in Downloads, the same download in another app) is one model. Told
+// apart by exact size plus the first part of the file, which is quick even for huge files.
+function fingerprint(file) {
+  try {
+    const size = fs.statSync(file).size;
+    const fd = fs.openSync(file, 'r');
+    try {
+      const buf = Buffer.alloc(256 * 1024);
+      const n = fs.readSync(fd, buf, 0, buf.length, 0);
+      return `${size}:${crypto.createHash('sha1').update(buf.subarray(0, n)).digest('hex')}`;
+    } finally { fs.closeSync(fd); }
+  } catch { return null; }
+}
+
 function walk(dir, depth, out, budget = { n: 4000 }) {
   if (depth < 0 || budget.n <= 0) return out;
   let entries;
@@ -434,7 +482,9 @@ function walk(dir, depth, out, budget = { n: 4000 }) {
   for (const e of entries) {
     if (--budget.n <= 0) break;
     const p = path.join(dir, e.name);
-    if (e.isDirectory() && !e.name.startsWith('.') && e.name !== 'node_modules') walk(p, depth - 1, out, budget);
+    // "Quicksilver models" is the folder that ships next to the installer: its files are already
+    // inside Quicksilver, so they are never offered again as models from another app.
+    if (e.isDirectory() && !e.name.startsWith('.') && e.name !== 'node_modules' && !OWN_PACK.test(e.name)) walk(p, depth - 1, out, budget);
     else if (e.isFile() && /\.gguf$/i.test(e.name)) out.push(p);
   }
   return out;
@@ -480,6 +530,12 @@ function findOnPC() {
   const own = path.resolve(store.dir('models')).toLowerCase();
   const seen = new Set();
   const out = [];
+  // Installed files are only read when a size matches (so nothing extra is read otherwise).
+  const installed = list().map((m) => m.files?.model).filter(Boolean);
+  const sizes = new Set(installed.map((f) => { try { return fs.statSync(f).size; } catch { return -1; } }));
+  let prints = null;
+  const installedPrints = () => (prints ||= new Set(installed.map(fingerprint).filter(Boolean)));
+  const seenPrints = new Set();
   for (const r of scanRoots()) {
     if (!fs.existsSync(r.dir)) continue;
     const hits = r.ollama ? scanOllama(r.dir) : walk(r.dir, r.depth ?? 6, []).flatMap((file) => {
@@ -488,6 +544,7 @@ function findOnPC() {
       if (/-0*(\d+)-of-\d+\.gguf$/i.test(base) && !/-0*1-of-\d+\.gguf$/i.test(base)) return []; // later parts of a split model
       let size = 0; try { size = fs.statSync(file).size; } catch { return []; }
       if (size < 50e6) return [];
+      if (!chatFile(file)) return []; // a picture, video, search or speech model
       // Pair a vision add-on that sits in the same model folder (not in a shared folder like Downloads).
       let mmproj = null;
       if (r.app !== 'Downloads') { try { const n = fs.readdirSync(path.dirname(file)).find((x) => /mmproj.*\.gguf$/i.test(x)); if (n) mmproj = path.join(path.dirname(file), n); } catch {} }
@@ -496,11 +553,55 @@ function findOnPC() {
     for (const h of hits) {
       const key = path.resolve(h.path).toLowerCase();
       if (have.has(key) || seen.has(key) || key.startsWith(own)) continue;
+      if (!chatFile('', null, h.name)) continue;
+      // A copy of a model that is already installed, or of one already in this list.
+      const print = fingerprint(h.path);
+      if (print && (seenPrints.has(print) || (sizes.has(Number(print.split(':')[0])) && installedPrints().has(print)))) continue;
       seen.add(key);
+      if (print) seenPrints.add(print);
       out.push({ ...h, vision: Boolean(h.mmproj) });
     }
   }
   return out.sort((a, b) => a.app.localeCompare(b.app) || a.name.localeCompare(b.name));
+}
+
+// What is found, minus files whose own header says they are not chat models (the name doesn't
+// always tell). Reads only the start of each file.
+async function findChat(readGguf) {
+  const out = [];
+  for (const h of findOnPC()) {
+    try { const info = await readGguf(h.path); if (info.isProjector || !chatFile(h.path, info, h.name)) continue; } catch { continue; }
+    out.push(h);
+  }
+  return out;
+}
+
+// One-time clean-up for PCs where an older version added everything it found: files that are not
+// chat models (a video model, a text encoder), files from the installer's own models folder, and
+// second copies of models Quicksilver already has are taken off the list. No file is deleted, and
+// a model one of your own stacks uses stays.
+async function tidyImported(readGguf, usedByStack = () => false) {
+  const gone = [];
+  const mine = list().filter((m) => m.source !== 'imported' && m.files?.model);
+  const prints = new Set(mine.map((m) => fingerprint(m.files.model)).filter(Boolean));
+  for (const m of list().filter((x) => x.source === 'imported' && x.files?.model)) {
+    if (usedByStack(m.id)) continue;
+    const file = m.files.model;
+    let why = null;
+    if (path.dirname(file).split(/[\\/]/).some((part) => OWN_PACK.test(part))) why = 'pack';
+    else if (!chatFile(file, null, m.name)) why = 'not-chat';
+    else {
+      try { const info = await readGguf(file); if (info.isProjector || !chatFile(file, info, m.name)) why = 'not-chat'; } catch { continue; }
+      if (!why && m.from && prints.has(fingerprint(file))) why = 'copy';
+    }
+    if (!why) continue;
+    const ignored = new Set(store.config().foundIgnored || []);
+    ignored.add(path.resolve(file).toLowerCase());
+    store.saveConfig({ foundIgnored: [...ignored] });
+    save(store.readJSON(REG(), []).filter((x) => x.id !== m.id));
+    gone.push({ id: m.id, name: m.name, why });
+  }
+  return gone;
 }
 
 // Adds found models where they are. Their files are never deleted by Quicksilver.
@@ -510,7 +611,7 @@ async function addFound(items, readGguf) {
     if (!it?.path || !fs.existsSync(it.path)) continue;
     let info = null;
     try { info = await readGguf(it.path); } catch { continue; } // not a usable GGUF
-    if (info.isProjector) continue;
+    if (info.isProjector || !chatFile(it.path, info, it.name)) continue; // a vision add-on, or not a chat model
     const id = `imp-${crypto.createHash('sha1').update(path.resolve(it.path).toLowerCase()).digest('hex').slice(0, 10)}`;
     const name = it.app === 'Ollama' ? it.name : (info.name && info.name.length > 3 && !/^(model|models)$/i.test(info.name) ? info.name : it.name);
     const files = { model: it.path, ...(it.mmproj && fs.existsSync(it.mmproj) ? { mmproj: it.mmproj } : {}) };
@@ -519,4 +620,4 @@ async function addFound(items, readGguf) {
   return added;
 }
 
-module.exports = { keepPackModels, list, get, add, remove, start, cancel, active, planCatalog, planGguf, ggufOptions, search, trending, trendType, paramsOf, importFile, tree, findOnPC, addFound, repair, registerStarter };
+module.exports = { keepPackModels, list, get, add, remove, start, cancel, active, planCatalog, planGguf, ggufOptions, search, trending, trendType, paramsOf, importFile, tree, findOnPC, findChat, addFound, tidyImported, inUse, setUse, chatFile, repair, registerStarter };

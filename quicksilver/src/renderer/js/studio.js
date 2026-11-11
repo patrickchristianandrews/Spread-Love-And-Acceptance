@@ -76,8 +76,10 @@ const IMPROVE = {
 function improveBtn(id, kind) { return `<button type="button" class="btn small ghost" data-improve="${id}" data-kind="${kind}" title="Let AI write a more detailed prompt">✨ Improve</button>`; }
 function promptHelper() {
   if (targetValid(S.data.prefs.promptHelper)) return S.data.prefs.promptHelper;
-  // Otherwise the quickest local text model.
-  const local = S.installed.filter((m) => m.kind === 'text').sort((a, b) => a.size - b.size)[0];
+  // Otherwise the quickest local text model: Quicksilver's own or one in use first, a model from
+  // another app only when there is nothing else.
+  const mineFirst = (m) => (m.source === 'bundled' || m.inUse ? 0 : 1);
+  const local = S.installed.filter((m) => m.kind === 'text').sort((a, b) => mineFirst(a) - mineFirst(b) || a.size - b.size)[0];
   return local ? `local:${local.id}` : S.targets.find((t) => t.target.startsWith('api:'))?.target || '';
 }
 async function improvePrompt(btn) {

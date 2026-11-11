@@ -54,6 +54,16 @@ views.models = {
       try { const r = await call('models:repair', b.dataset.repair); S.downloads[r.id] = r; paintDownloads(); toast('Checking the files and downloading anything missing. You can keep working.'); } catch (err) { toast(err.message, 8000); }
       render();
     }));
+    $$('[data-use-model]').forEach((b) => b.addEventListener('change', async () => {
+      const m = S.installed.find((x) => x.id === b.dataset.useModel);
+      b.disabled = true;
+      try {
+        await call('models:use', b.dataset.useModel, b.checked);
+        await refreshModels();
+        toast(b.checked ? `${m?.name || 'The model'} is in use: Quicksilver may now use it by itself.` : `${m?.name || 'The model'} is now only used when you choose it.`, 5000);
+      } catch (err) { toast(err.message, 8000); }
+      render();
+    }));
     $$('[data-default]').forEach((b) => b.addEventListener('click', () => { S.data.prefs.defaultTarget = b.dataset.default; S.data.prefs.defaultAuto = false; S.data.prefs.defaultChosen = true; save(); render(); toast('Default model set.'); }));
     $$('[data-cat]').forEach((b) => b.addEventListener('click', () => { catFilter = b.dataset.cat; render(); }));
     $('#fits-only')?.addEventListener('change', (e) => { fitsOnly = e.target.checked; render(); });
@@ -75,12 +85,49 @@ function diskSummaryHTML() {
     ${low ? '<div class="small" style="color:var(--danger);margin-top:6px">⚠️ Low on space. Remove models you don\'t use (the Remove button next to each) before downloading large ones.</div>' : '<div class="small muted" style="margin-top:6px">Remove any model with its Remove button to free space. Damaged downloads show a Repair button.</div>'}</div>`;
 }
 
+// Models in use: which chat models Quicksilver may use by itself. A chat always uses the model
+// you chose for it, or the members of its stack or fusion; nothing else on this PC joins in
+// unless it is ticked here. (Models from other apps start unticked.)
+function modelsInUseHTML() {
+  const list = S.installed.filter((m) => m.kind === 'text');
+  if (!list.length) return '';
+  const def = resolveTarget(null, null);
+  const team = new Set(teamTargets(def));
+  const defStack = S.stacks.find((x) => `stack:${x.id}` === def);
+  const defName = defStack ? defStack.name : 'your default model';
+  const lp = S.catalog?.liquidPro || {};
+  const proText = new Set([lp.brain, lp.closer, lp.thinker, lp.muse].filter(Boolean));
+  const inStacks = (t) => S.stacks.filter((s) => `stack:${s.id}` !== def && teamTargets(`stack:${s.id}`).includes(t)).map((s) => s.name);
+  // The default's own models first, then ticked ones, then the rest, by name.
+  const rank = (m) => (team.has(`local:${m.id}`) && (liquidLocked(m) || !isLiquidStack(defStack)) ? 0 : m.inUse ? 1 : 2);
+  const rows = [...list].sort((a, b) => rank(a) - rank(b) || a.name.localeCompare(b.name)).map((m) => {
+    const t = `local:${m.id}`;
+    // Locked on: the default's own models. In the Liquid Edition those are the models that come
+    // with it; a helper that joined because you ticked it (or a suggested add-on) can be unticked.
+    const own = team.has(t) && (!isLiquidStack(defStack) || liquidLocked(m) || (defStack.id === 'quicksilver-pro' && proText.has(m.catalogId)));
+    const helper = team.has(t) && !own;
+    const on = own || m.inUse;
+    const also = inStacks(t);
+    const where = m.source === 'imported' ? (m.from ? `from ${m.from}` : 'imported') : liquidLocked(m) ? 'comes with Quicksilver' : 'downloaded here';
+    const role = own ? `🔒 Part of ${esc(defName)}` : helper && on ? `Ticked: helps ${esc(defName)}` : also.length ? `Also in ${esc(also.slice(0, 2).join(', '))}${also.length > 2 ? '…' : ''}` : on ? 'Ticked by you' : 'Only when you choose it';
+    return `<label class="pick-row ${on ? 'on' : ''}"><input type="checkbox" data-use-model="${esc(m.id)}" ${on ? 'checked' : ''} ${own ? 'disabled' : ''} aria-label="Use ${esc(m.name)}">
+      <span class="grow"><b>${esc(m.name)}</b>${m.vision ? ' <span title="Can see photos and video">👁</span>' : ''}${liquidOk(t) ? ' <span class="badge b-lav">uncensored</span>' : ''}<div class="small muted">${gb(m.size)} · ${esc(where)}</div></span>
+      <span class="small muted">${role}</span></label>`;
+  }).join('');
+  const ticked = list.filter((m) => m.inUse && !(team.has(`local:${m.id}`) && (!isLiquidStack(defStack) || liquidLocked(m)))).length;
+  return `<div class="card set-card" id="models-in-use" style="margin-bottom:12px">
+    <div class="row" style="align-items:baseline"><b>✅ Models in use</b><span class="grow"></span><span class="small muted">${team.size ? `${esc(defName)}${ticked ? ` + ${ticked} ticked` : ', nothing else'}` : `${ticked} ticked`}</span></div>
+    <p class="small muted" style="margin:6px 0 10px">A chat uses the model you chose for it, or the members of its stack or fusion, and nothing else on this PC. Tick a model to let Quicksilver also use it by itself: Automatic may pick it, it can double-check answers and sit on the Council, and an uncensored one helps the Liquid Edition. Unticked models are only used when you choose them (as a chat's model, or in a stack you build).</p>
+    <div class="pick-list">${rows}</div>
+  </div>`;
+}
+
 function installedHTML() {
   if (!S.installed.length) return `<div class="notice info">Nothing installed yet. Start with the <a href="#" data-goto-stacks>Setup Advisor</a>, or browse <b>Text & vision</b>.</div>`;
   const kinds = { text: '💬 Text & vision', image: '🎨 Images', video: '🎬 Video', embed: '🔎 Smarter search', rerank: '🔎 Sharper search' };
   const onlyStarter = S.installed.some((m) => m.kind === 'text') && S.installed.filter((m) => m.kind === 'text').every((m) => m.source === 'bundled');
   const note = onlyStarter ? '<div class="notice info" style="margin-bottom:12px"><b>💡 Only the starter models so far.</b> They are limited on their own; download stronger ones under <b>Text &amp; vision</b>, or let the <a href="#" data-goto-stacks>Setup Advisor</a> pick a team for your PC. Quicksilver adds new models to its team automatically.</div>' : '';
-  return note + diskSummaryHTML() + Object.entries(kinds).map(([k, label]) => {
+  return note + diskSummaryHTML() + modelsInUseHTML() + Object.entries(kinds).map(([k, label]) => {
     const list = S.installed.filter((m) => m.kind === k);
     if (!list.length) return '';
     return `<div class="section"><h2>${label}</h2></div><table class="list"><thead><tr><th>Model</th><th>Size</th><th>Abilities</th><th>On your PC</th><th></th></tr></thead><tbody>

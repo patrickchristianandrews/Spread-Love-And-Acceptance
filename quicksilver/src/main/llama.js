@@ -14,6 +14,9 @@ const speeds = require('./speeds');
 // Bytes per weight for the common GGML types (block size / weights per block).
 const TYPE_BYTES = { 0: 4, 1: 2, 2: 18 / 32, 3: 20 / 32, 6: 22 / 32, 7: 24 / 32, 8: 34 / 32, 10: 84 / 256, 11: 110 / 256, 12: 144 / 256, 13: 176 / 256, 14: 210 / 256, 15: 292 / 256, 30: 2, 39: 17 / 32 };
 
+// GGUF is also the file format of picture and video models (Wan, Flux, SDXL…), their text encoders
+// (T5, CLIP), search models (BERT) and speech models. None of those can hold a conversation.
+const NOT_CHAT_ARCH = /^(clip|t5|t5encoder|umt5|bert|nomic-bert|nomic-bert-moe|jina-bert-v2|jina-bert-v3|neo-bert|modern-bert|eurobert|whisper|wavtokenizer-dec|wan|flux|sd1|sd2|sdxl|sd3|aura|ltxv|hyvid|cosmos|lumina2|qwen_image|z_image|hidream|chroma|pig|vae)$/i;
 async function readGguf(file) {
   const fh = await fs.promises.open(file, 'r');
   const CHUNK = 1 << 20;
@@ -97,6 +100,7 @@ async function readGguf(file) {
       experts: Number(meta[`${arch}.expert_count`]) || 0,
       contextLength: meta[`${arch}.context_length`],
       isProjector: arch === 'clip' || Boolean(meta['clip.has_vision_encoder']),
+      chat: !NOT_CHAT_ARCH.test(String(arch || '')) && !meta['clip.has_vision_encoder'],
       size,
       complete: size >= needBytes,
       needBytes,

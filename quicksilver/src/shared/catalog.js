@@ -889,7 +889,8 @@ const LIQUID_PRO = {
 };
 const LIQUID_PRO_MODELS = [LIQUID_PRO.brain, LIQUID_PRO.closer, LIQUID_PRO.thinker, LIQUID_PRO.muse, ...LIQUID_PRO.pictures];
 // Suggested add-ons: not required, not locked, never downloaded by themselves. Each fills a gap in
-// the core; once downloaded it joins the Liquid Edition's crew (any uncensored model does).
+// the core; once downloaded it joins the Liquid Edition's crew. (Any other uncensored model joins
+// only when ticked under Models → "Models in use": see models.inUse.)
 // minVramGB: below this the add-on is shown as not a good fit for this PC.
 const LIQUID_ADDONS = [
   { id: 'wai-nsfw-illustrious', why: 'Anime: Lustify is a photo model, this is the most popular uncensored anime model. Anime requests use it by themselves.' },

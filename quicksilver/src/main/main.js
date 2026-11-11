@@ -252,7 +252,9 @@ handle('advisor:advise', async (job) => {
 
 // Speed test: runs the smallest installed text model and compares the real speed to the estimate.
 handle('bench:run', async () => {
-  const installed = models.list().filter((m) => m.kind === 'text').sort((a, b) => a.size - b.size);
+  // The smallest model that is Quicksilver's own or in use; one from another app only if there is nothing else.
+  const mineFirst = (m) => (m.source === 'bundled' || models.inUse(m) ? 0 : 1);
+  const installed = models.list().filter((m) => m.kind === 'text').sort((a, b) => mineFirst(a) - mineFirst(b) || a.size - b.size);
   if (!installed.length) throw new Error('Download a text model first, then run the speed test.');
   const m = installed[0];
   const hw = await hardware.detect();
@@ -272,7 +274,13 @@ handle('bench:run', async () => {
 });
 
 // ---------- models ----------
-handle('models:list', () => ({ installed: models.list(), downloading: models.active(), running: llama.status() }));
+handle('models:list', () => ({ installed: models.list().map((m) => ({ ...m, inUse: models.inUse(m) })), downloading: models.active(), running: llama.status() }));
+// Models → "Models in use": tick a model to let Quicksilver use it by itself (see models.inUse).
+handle('models:use', async (id, on) => {
+  if (!models.setUse(String(id), Boolean(on))) throw new Error('That model is no longer installed.');
+  await complete.ensureQuicksilverStack().catch(() => {}); // an uncensored one joins or leaves the Liquid Edition's helpers
+  return true;
+});
 handle('models:download', async (req) => {
   // A repository given with a catalog id (the built-in model's exact copy) is used as is.
   const plan = req.repo ? await models.planGguf(req.repo, { quant: req.quant, ...(req.catalogId ? { catalogId: req.catalogId, id: req.catalogId, name: req.name } : {}) }) : await models.planCatalog(req.catalogId);
@@ -306,17 +314,23 @@ handle('models:import', async () => {
   return models.importFile(r.filePaths[0], llama.readGguf);
 });
 handle('models:folder', () => shell.openPath(store.dir('models')));
-handle('models:found', () => models.findOnPC());
+handle('models:found', () => models.findChat(llama.readGguf));
 handle('models:repair', (id) => { llama.stopAll(); return models.repair(id, emit); });
 handle('models:addFound', (items) => models.addFound(items, llama.readGguf));
 // At start-up: add every model found on this PC (other apps, Downloads) without asking.
 // The starter model inside the installer (resources/starter), or QS_STARTER_DIR for tests.
-handle('models:starter', () => {
+handle('models:starter', async () => {
+  // Once: take files that are not chat models, and second copies, off the list an older version built.
+  if (store.config().importTidy !== 1) {
+    const mine = (id) => complete.stacks().some((s) => !['quicksilver', 'quicksilver-pro'].includes(s.id) && JSON.stringify(s.members || {}).includes(`"local:${id}"`));
+    try { await models.tidyImported(llama.readGguf, mine); store.saveConfig({ importTidy: 1 }); } catch { /* tried again next start */ }
+  }
+  whisper.keepShipped().catch(() => {}); // voice typing's speech model: kept across updates
   const r = models.registerStarter(process.env.QS_STARTER_DIR || (app.isPackaged ? path.join(process.resourcesPath, 'starter') : path.join(__dirname, '..', '..', 'starter')));
   return complete.ensureQuicksilverStack().then((stack) => ({ ...r, stack }));
 });
 handle('quicksilver:rebuild', () => complete.ensureQuicksilverStack());
-handle('models:autoAdd', async () => { const found = models.findOnPC(); return found.length ? models.addFound(found, llama.readGguf) : []; });
+handle('models:autoAdd', async () => { const found = await models.findChat(llama.readGguf); return found.length ? models.addFound(found, llama.readGguf) : []; });
 
 // ---------- providers (APIs) ----------
 handle('providers:presets', () => providers.PRESETS);

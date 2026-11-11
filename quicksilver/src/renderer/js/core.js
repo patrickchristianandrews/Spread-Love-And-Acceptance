@@ -195,6 +195,24 @@ const isLiquidStack = (s) => Boolean(s) && (s.builtFor === 'quicksilver' || s.bu
 const liquidLocked = (m) => Boolean(m) && m.source !== 'imported' && (m.source === 'bundled' || (S.catalog?.liquid || []).includes(m.catalogId));
 const LOCK_BADGE = '<span class="badge b-lav" title="Part of Quicksilver Liquid Edition: it stays installed. Choose any other model or stack whenever you like.">🔒 Liquid Edition</span>';
 const targetLabel = (t) => S.targets.find((x) => x.target === t)?.label || 'No model chosen';
+// Every model a target runs by itself: the model, or all the members of its stack or fusion.
+function teamTargets(target) {
+  if (!String(target || '').startsWith('stack:')) return target ? [target] : [];
+  const st = S.stacks.find((x) => `stack:${x.id}` === target);
+  const m = st?.members || {};
+  return [m.vision, ...(m.drafters || []), m.judge, m.muse, m.thinker, st?.bench].filter(Boolean);
+}
+// May this model on the PC take part in a chat that uses `base`, without being asked for? Only
+// the chat's own models (a stack or fusion uses its members and nothing else), plus the models
+// ticked under Models → "Models in use". With a single model, Quicksilver's own built-in models
+// may still step in (to read a photo it can't see, say); with a stack or fusion, not even those.
+function mayUse(t, base) {
+  if (!String(t).startsWith('local:')) return true;
+  if (t === base || teamTargets(base).includes(t)) return true;
+  const m = S.installed.find((x) => `local:${x.id}` === t);
+  if (!m) return false;
+  return Boolean(m.inUse) || (liquidLocked(m) && !String(base || '').startsWith('stack:'));
+}
 
 // Model choice order: the chat's own, the assistant's, the default, then anything installed.
 function resolveTarget(chat, assistant) {

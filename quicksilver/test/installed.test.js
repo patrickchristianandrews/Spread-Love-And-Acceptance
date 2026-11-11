@@ -85,6 +85,15 @@ function redPng(size = 64) {
     await win.waitForFunction(() => S.stacks.some((x) => x.id === 'quicksilver') && S.data.prefs.defaultTarget === 'stack:quicksilver', null, { timeout: 60000 });
     s = await state();
     ok(`first launch: ${s.installed.map((m) => m.name).join(' + ')}; default ${s.def}; team ${JSON.stringify(s.stacks.find((x) => x.id === 'quicksilver').members)}`);
+    // Everything a skill needs is on the PC from the first run: the picture and video makers,
+    // search, and voice typing (its engine and speech model), with nothing left to download.
+    for (const id of ['lustify', 'wan2.2-5b', 'wan2.2-5b-turbo', 'nomic-embed-v1.5', 'bge-reranker-v2-m3']) assert.ok(s.installed.find((m) => m.catalogId === id), `${id} is installed with the Liquid Edition`);
+    const voice = await win.evaluate(() => qs.call('voice:status'));
+    assert.ok(voice.engine, 'the voice-typing engine (whisper.cpp) came inside the installer');
+    assert.ok(voice.model && voice.ready, 'the speech model came with the installer: voice typing works offline from the first run');
+    const kit = await win.evaluate(() => ({ pic: pickMediaModel('image', { liquid: true, prompt: 'a lighthouse' })?.inst?.catalogId, edit: pickMediaModel('edit', { liquid: true, prompt: 'make it night' })?.inst?.catalogId, vid: pickMediaModel('video', { liquid: true })?.inst?.catalogId, anim: pickMediaModel('animate', { liquid: true })?.inst?.catalogId }));
+    assert.deepEqual([kit.pic, kit.edit, /^wan2\.2-5b/.test(kit.vid), /^wan2\.2-5b/.test(kit.anim)], ['lustify', 'lustify', true, true], `pictures and photo edits by Lustify, videos and animated photos by Wan 2.2 (got ${JSON.stringify(kit)})`);
+    ok('everything skills need is installed: pictures, photo edits, video, animation, search and voice typing');
   } else {
     // Without the models folder Quicksilver doesn't open until the whole Liquid Edition is in: the
     // setup screen covers the app and every missing model starts downloading at once.

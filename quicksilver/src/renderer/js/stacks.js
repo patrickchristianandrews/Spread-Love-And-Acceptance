@@ -107,7 +107,7 @@ function foundBanner() {
 function foundModal() {
   const f = S.found || [];
   const b = openModal(`<h2>📦 Models already on this PC</h2>
-    <p class="help">These were downloaded by other apps or are in your Downloads folder. Tick the ones you want to use in Quicksilver; none are added unless you choose them. Quicksilver uses them where they are: nothing is copied, and removing them here never deletes the file.</p>
+    <p class="help">These chat models were downloaded by other apps or are in your Downloads folder. Tick the ones you want to use in Quicksilver; none are added unless you choose them, and an added model is only used when you pick it (or tick it under Models → Models in use). Quicksilver uses them where they are: nothing is copied, and removing them here never deletes the file.</p>
     <div class="pick-list">${f.map((m, i) => `<label class="pick-row"><input type="checkbox" data-found="${i}">
       <span class="grow"><b>${esc(m.name)}</b>${m.vision ? ' <span title="Can see photos">👁</span>' : ''}<div class="small muted">${esc(m.app)} · ${gb(m.size)} · <span title="${esc(m.path)}">${esc(m.path.length > 70 ? `…${m.path.slice(-68)}` : m.path)}</span></div></span></label>`).join('')}</div>
     <div class="modal-actions"><button class="btn" data-close>Cancel</button><button class="btn primary" id="found-add">Add selected</button></div>`, { wide: true });
@@ -119,7 +119,7 @@ function foundModal() {
     closeModal();
     await refreshModels();
     S.found = f.filter((x) => !items.includes(x));
-    toast(added.length ? `Added ${added.length} model${added.length > 1 ? 's' : ''}. No download needed.` : 'Those files could not be read as models.');
+    toast(added.length ? `Added ${added.length} model${added.length > 1 ? 's' : ''}. No download needed. ${added.length > 1 ? 'They are' : 'It is'} only used when you choose ${added.length > 1 ? 'them' : 'it'}; to let Quicksilver use ${added.length > 1 ? 'them' : 'it'} by itself, tick ${added.length > 1 ? 'them' : 'it'} under Models → Models in use.` : 'Those files could not be read as chat models.', 9000);
     if (advJob && S.route.view === 'stacks') runAdvisor(advJob); else render();
   });
 }
@@ -540,7 +540,7 @@ function liquidAddonsHTML() {
 }
 function liquidAddonsModal() {
   openModal(`<h2>💧 Suggested add-ons for the Liquid Edition</h2>
-    <p class="small muted" style="margin-top:-4px">Optional. The Liquid Edition is complete without them; each one fills a gap. Once downloaded it joins the crew by itself, and you can remove it like any other model. More uncensored models are under Models → Uncensored.</p>
+    <p class="small muted" style="margin-top:-4px">Optional. The Liquid Edition is complete without them; each one fills a gap. Once downloaded it joins the crew by itself (untick it under Models → Models in use to keep it out), and you can remove it like any other model. More uncensored models are under Models → Uncensored.</p>
     <div class="cards" id="addon-list">${liquidAddonsHTML()}</div>
     <div class="modal-actions"><button class="btn" data-close>Close</button></div>`, { wide: true });
   $('#addon-list').addEventListener('click', async (e) => {

@@ -60,7 +60,7 @@ jobs:
       - name: Back-end tests
         run: node test/backend.test.js && node test/media-catalog.test.js && node test/loading.test.js && node test/skills-auto.test.js && node test/pro.test.js
       - name: End-to-end tests
-        run: xvfb-run -a node test/ui.test.js && xvfb-run -a node test/liquid-picture.test.js
+        run: xvfb-run -a node test/ui.test.js && xvfb-run -a node test/liquid-picture.test.js && xvfb-run -a node test/in-use.test.js
 
   windows:
     needs: tests
@@ -149,6 +149,17 @@ jobs:
           echo "engine: $SD ($(cat engine/sd/VERSION.txt))"
           "$SD" --help | head -5
 
+      # The Liquid Edition ships complete: voice typing's engine goes inside the installer and its
+      # speech model in the models folder, so the microphone works offline from the first run.
+      - name: Check voice typing ships complete (engine and speech model)
+        shell: pwsh
+        run: |
+          $w = Get-ChildItem -Recurse engine\whisper -Filter whisper-cli.exe -ErrorAction SilentlyContinue | Select-Object -First 1
+          if (!$w) { Write-Host '::error::The voice-typing engine (whisper.cpp) was not downloaded, so the installer would ship without it.'; exit 1 }
+          $m = Get-Item pack\ggml-base-q5_1.bin -ErrorAction SilentlyContinue
+          if (!$m -or $m.Length -lt 30MB) { Write-Host '::error::The speech model for voice typing is missing from the models folder.'; exit 1 }
+          Write-Host "voice typing: $($w.FullName) + speech model $([math]::Round($m.Length / 1MB)) MB"
+
       - name: Prove voice typing works (real whisper.cpp, real speech from Windows)
         continue-on-error: true
         shell: pwsh
@@ -158,8 +169,7 @@ jobs:
           Add-Type -AssemblyName System.Speech
           $s = New-Object System.Speech.Synthesis.SpeechSynthesizer
           $s.SetOutputToWaveFile("$PWD\speech.wav"); $s.Speak('The quick brown fox jumps over the lazy dog.'); $s.Dispose()
-          curl.exe -sSL -o whisper.bin https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-base-q5_1.bin
-          $env:QS_WHISPER_BIN = $w.FullName; $env:QS_WHISPER_MODEL = "$PWD\whisper.bin"; $env:QUICKSILVER_HOME = "$PWD\voice-home"
+          $env:QS_WHISPER_BIN = $w.FullName; $env:QS_WHISPER_MODEL = "$PWD\pack\ggml-base-q5_1.bin"; $env:QUICKSILVER_HOME = "$PWD\voice-home"
           node -e "require('./src/main/whisper').transcribe(require('fs').readFileSync('speech.wav'), { ext: 'wav' }).then((t) => { console.log('heard:', t); if (!/fox/i.test(t)) { console.log('::warning::voice typing heard the wrong words'); process.exit(1); } console.log('voice typing: works'); }).catch((e) => { console.log('::warning::voice typing failed: ' + e.message); process.exit(1); })"
 
       # Signing removes Windows' "unknown publisher" warning. It turns on by itself once either
