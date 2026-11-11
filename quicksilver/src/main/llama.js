@@ -220,12 +220,32 @@ function contextFor(messages, maxTokens = 2048, limit = 32768) {
   return Math.min(limit, CTX_STEPS.find((c) => c >= need) || CTX_STEPS[CTX_STEPS.length - 1]);
 }
 
-// Models nobody has used for a while are unloaded, giving the memory back to the PC.
-const IDLE_MS = 20 * 60 * 1000;
-setInterval(() => { for (const [k, s] of [...servers.entries()]) if (Date.now() - s.lastUsed > IDLE_MS) stop(k); }, 60 * 1000).unref?.();
+// Models nobody has used for a while are unloaded, giving the memory back to the PC. How long is
+// a setting (Settings → Chat → Keep models loaded): minutes, 0 = until Quicksilver closes, or
+// automatic: 2 hours with 32 GB of memory or more, 1 hour with 16 GB, else 20 minutes. Reloading
+// a model from disk is what makes a chat you already used slow to start again.
+let hwCache = null;
+hardware.detect().then((h) => { hwCache = h; }).catch(() => {});
+function idleMs() {
+  let v;
+  try { v = require('./store').config().keepLoaded; } catch {}
+  if (v === 0) return Infinity;
+  if (Number.isFinite(v) && v > 0) return v * 60 * 1000;
+  const ram = hwCache?.ramGB || 0;
+  return (ram >= 32 ? 120 : ram >= 16 ? 60 : 20) * 60 * 1000;
+}
+setInterval(() => { const ms = idleMs(); for (const [k, s] of [...servers.entries()]) if (Date.now() - s.lastUsed > ms) stop(k); }, 60 * 1000).unref?.();
+
+// Starting a model with room for a longer chat costs a little memory but saves a full reload when
+// the chat grows: with plenty of memory to spare it starts at 16K or 32K tokens (never above your
+// Conversation memory setting), instead of the smallest size that fits the first message.
+function roomyContext(asked, limit, headroomGB) {
+  const roomy = headroomGB >= 8 ? 32768 : headroomGB >= 4 ? 16384 : 0;
+  return Math.max(asked, Math.min(roomy, limit || 16384));
+}
 
 // Starts (or reuses) a server for a model. model = { id, file, mmproj?, ctx? }
-async function ensure(model, { contextSize = 8192, gpu = 'auto', onStatus } = {}) {
+async function ensure(model, { contextSize = 8192, limit, gpu = 'auto', onStatus } = {}) {
   const key = `${model.file}|${gpu}`;
   if (model.draft && noDraft.has(model.file)) model = { ...model, draft: null };
   const existing = servers.get(key);
@@ -251,7 +271,9 @@ async function ensure(model, { contextSize = 8192, gpu = 'auto', onStatus } = {}
     stop(oldest[0]);
   }
 
-  const ctx = Math.min(contextSize, info.contextLength || contextSize);
+  const headroomGB = budget - used() - sizeGB;
+  const want = roomyContext(contextSize, limit, headroomGB);
+  const ctx = Math.min(want, info.contextLength || want);
   const otherVram = [...servers.values()].reduce((t, s) => t + (s.vramGB || 0), 0);
   const ngl = gpuLayers(model, info, hw, gpu, otherVram);
   // The model's working memory (KV cache) is stored at 8-bit: about half the memory, with no
@@ -363,7 +385,7 @@ async function* chat(model, opts) {
   const useGpu = cpuOnly.has(model.file) ? 0 : gpu;
   let produced = false;
   try {
-    const s = await ensure(model, { contextSize: contextFor(messages, maxTokens, contextSize || 16384), gpu: useGpu, onStatus });
+    const s = await ensure(model, { contextSize: contextFor(messages, maxTokens, contextSize || 16384), limit: contextSize || 16384, gpu: useGpu, onStatus });
     s.lastUsed = Date.now();
     onStatus?.('');
     for await (const ev of oai.streamChat({
@@ -396,7 +418,7 @@ async function* chat(model, opts) {
 // question only has to read the new message. Only for a model that's already loaded or loading.
 async function prefill(model, messages, { contextSize = 16384, gpu = 'auto' } = {}) {
   const useGpu = cpuOnly.has(model.file) ? 0 : gpu;
-  const s = await ensure(model, { contextSize: contextFor(messages, 4096, contextSize), gpu: useGpu });
+  const s = await ensure(model, { contextSize: contextFor(messages, 4096, contextSize), limit: contextSize, gpu: useGpu });
   s.lastUsed = Date.now();
   await fetch(`http://127.0.0.1:${s.port}/v1/chat/completions`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ messages, max_tokens: 1, temperature: 0, cache_prompt: true }), signal: AbortSignal.timeout(180000) }).then((r) => r.text()).catch(() => {});
   return true;
@@ -409,4 +431,4 @@ const isLoaded = (file) => [...servers.values()].some((s) => s.file === file && 
 
 // The last lines each running engine printed (for "Save diagnostics").
 const logTails = () => [...servers.values()].map((s) => ({ file: require('node:path').basename(s.file), lines: s.log.join('').split('\n').slice(-40).join('\n') }));
-module.exports = { readGguf, ensure, prefill, chat, stop, stopAll, stopFile, status, isLoaded, contextFor, prefetch, logTails };
+module.exports = { roomyContext, idleMs, readGguf, ensure, prefill, chat, stop, stopAll, stopFile, status, isLoaded, contextFor, prefetch, logTails };

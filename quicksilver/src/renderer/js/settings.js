@@ -128,6 +128,7 @@ function chatSetHTML() {
       <div class="field"><label for="c-max">Longest answer (tokens)</label><input id="c-max" type="number" min="256" max="65536" step="256" value="${p.maxTokens}"></div>
     </div>
     <div class="field"><label for="c-gpu">Graphics card use</label><select id="c-gpu"><option value="auto" ${p.gpu !== 0 ? 'selected' : ''}>Automatic (recommended)</option><option value="0" ${p.gpu === 0 ? 'selected' : ''}>Processor only (most compatible)</option></select><span class="help">Choose "Processor only" if models fail to load or crash on your graphics card.</span></div>
+    <div class="field"><label for="c-keep">Keep models loaded</label><select id="c-keep">${[['auto', 'Automatic (longer on PCs with more memory)'], [20, '20 minutes after last use'], [60, '1 hour'], [240, '4 hours'], [0, 'Until I close Quicksilver']].map(([v, l]) => `<option value="${v}" ${String(S.config?.keepLoaded ?? 'auto') === String(v) ? 'selected' : ''}>${l}</option>`).join('')}</select><span class="help">A model that's still loaded answers right away; one that was unloaded to free memory has to load again from disk first. Longer keeps chats quick but holds on to memory.</span></div>
     <div><button class="btn primary" id="c-save">Save</button></div>
   </div>`;
 }
@@ -139,7 +140,10 @@ function bindChatSet() {
       temperature: Number($('#c-temp').value), contextSize: Number($('#c-ctx').value), maxTokens: Math.max(256, Number($('#c-max').value) || 2048), maxTokensSet: true,
       gpu: $('#c-gpu').value === '0' ? 0 : 'auto', sourcesPerAnswer: Number($('#c-src').value),
     });
-    save(); toast('Saved.');
+    save();
+    const keep = $('#c-keep').value;
+    call('config:set', { keepLoaded: keep === 'auto' ? null : Number(keep) }).then((c) => { S.config = c; }).catch(() => {});
+    toast('Saved.');
   });
 }
 
