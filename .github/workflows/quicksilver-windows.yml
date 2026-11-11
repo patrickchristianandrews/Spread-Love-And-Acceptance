@@ -211,15 +211,17 @@ jobs:
           $setup = Get-ChildItem dist\Quicksilver-Setup-*.exe | Select-Object -First 1
           Get-ChildItem 'dist\Quicksilver models' | ForEach-Object { 'in the models folder: {0,-30} {1,8:N0} MB' -f $_.Name, ($_.Length / 1MB) }
           Get-PSDrive C, D -ErrorAction SilentlyContinue | ForEach-Object { 'free on {0}: {1:N0} GB before installing' -f $_.Name, ($_.Free / 1GB) }
-          Start-Process -Wait -FilePath $setup.FullName -ArgumentList '/S','/D=C:\QS'
+          # Installed on D: — the runner's C: drive has under 30 GB free, less than the Liquid
+          # Edition's ~27 GB of models (Windows then copies none of them).
+          Start-Process -Wait -FilePath $setup.FullName -ArgumentList '/S','/D=D:\QS'
           Get-PSDrive C, D -ErrorAction SilentlyContinue | ForEach-Object { 'free on {0}: {1:N0} GB after installing' -f $_.Name, ($_.Free / 1GB) }
-          if (!(Test-Path 'C:\QS\Quicksilver.exe')) { throw 'Quicksilver.exe was not installed' }
-          if (!(Test-Path 'C:\QS\resources\engine\llama\llama-server.exe')) { throw 'the text engine is missing' }
-          foreach ($f in 'STARTER.json','model.gguf','mmproj.gguf','embed.gguf','qwen3.5-4b.gguf','qwen3.5-4b-mmproj.gguf','qwen3.5-9b.gguf','qwen3.5-9b-mmproj.gguf','rerank.gguf') { if (!(Test-Path "C:\QS\resources\starter\$f")) { throw "missing resources\starter\$f" } }
-          Get-ChildItem C:\QS\resources\starter | ForEach-Object { '{0,-34} {1,8:N0} MB' -f $_.Name, ($_.Length / 1MB) }
-          foreach ($f in 'lustify.safetensors','lustify-vae.safetensors','wan2.2-5b.gguf','wan2.2-5b-turbo.gguf','wan2.2-vae.safetensors','wan-umt5-xxl.gguf') { if (!(Test-Path "C:\QS\resources\starter\$f")) { throw "missing resources\starter\$f (the Liquid Edition's pictures and video)" } }
+          if (!(Test-Path 'D:\QS\Quicksilver.exe')) { throw 'Quicksilver.exe was not installed' }
+          if (!(Test-Path 'D:\QS\resources\engine\llama\llama-server.exe')) { throw 'the text engine is missing' }
+          foreach ($f in 'STARTER.json','model.gguf','mmproj.gguf','embed.gguf','qwen3.5-4b.gguf','qwen3.5-4b-mmproj.gguf','qwen3.5-9b.gguf','qwen3.5-9b-mmproj.gguf','rerank.gguf') { if (!(Test-Path "D:\QS\resources\starter\$f")) { throw "missing resources\starter\$f" } }
+          Get-ChildItem D:\QS\resources\starter | ForEach-Object { '{0,-34} {1,8:N0} MB' -f $_.Name, ($_.Length / 1MB) }
+          foreach ($f in 'lustify.safetensors','lustify-vae.safetensors','wan2.2-5b.gguf','wan2.2-5b-turbo.gguf','wan2.2-vae.safetensors','wan-umt5-xxl.gguf') { if (!(Test-Path "D:\QS\resources\starter\$f")) { throw "missing resources\starter\$f (the Liquid Edition's pictures and video)" } }
           Write-Host '✓ installed, and the installer copied the Quicksilver model in'
-          node test/installed.test.js C:\QS\Quicksilver.exe full install-shots
+          node test/installed.test.js D:\QS\Quicksilver.exe full install-shots
           if ($LASTEXITCODE -ne 0) { throw 'the installed app test failed' }
 
       - name: Install from the setup file alone, then uninstall
@@ -299,8 +301,8 @@ jobs:
         shell: pwsh
         run: |
           $setup = Get-ChildItem dist\Quicksilver-Setup-*.exe | Select-Object -First 1
-          Start-Process -Wait -FilePath $setup.FullName -ArgumentList '/S','/D=C:\QS'
-          if (!(Test-Path 'C:\QS\Quicksilver.exe')) { throw 'Quicksilver.exe was not installed' }
+          Start-Process -Wait -FilePath $setup.FullName -ArgumentList '/S','/D=D:\QS'
+          if (!(Test-Path 'D:\QS\Quicksilver.exe')) { throw 'Quicksilver.exe was not installed' }
       - name: Tester sessions (five people, real models)
         timeout-minutes: 110
         shell: pwsh
@@ -310,7 +312,7 @@ jobs:
           QS_TESTER_GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           QS_TESTER_GH_REPO: ${{ github.repository }}
           QS_TESTER_GROUP: ${{ inputs.testers || 'a' }}
-        run: node test/testers.js C:\QS\Quicksilver.exe tester-sessions
+        run: node test/testers.js D:\QS\Quicksilver.exe tester-sessions
       - uses: actions/upload-artifact@v4
         if: always()
         with:
