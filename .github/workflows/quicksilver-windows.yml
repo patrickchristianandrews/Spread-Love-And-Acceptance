@@ -228,10 +228,17 @@ jobs:
         shell: pwsh
         timeout-minutes: 40
         run: |
+          # Clean slate: the first install's app and engines can still be running, and its copy
+          # still installed. A silent installer then waits forever for Quicksilver to close.
+          Get-Process Quicksilver, llama-server, sd-cli, sd, whisper-cli -ErrorAction SilentlyContinue | Stop-Process -Force -ErrorAction SilentlyContinue
+          $old = Get-ChildItem 'D:\QS\Uninstall*.exe' -ErrorAction SilentlyContinue | Select-Object -First 1
+          if ($old) { $u = Start-Process -FilePath $old.FullName -ArgumentList '/S' -PassThru; if (!$u.WaitForExit(600000)) { $u.Kill(); throw 'uninstalling the first copy took over 10 minutes' } }
+          Start-Sleep 5
           New-Item -ItemType Directory -Force C:\lonely | Out-Null
           $setup = Get-ChildItem dist\Quicksilver-Setup-*.exe | Select-Object -First 1
           Copy-Item $setup.FullName C:\lonely\
-          Start-Process -Wait -FilePath (Join-Path C:\lonely $setup.Name) -ArgumentList '/S','/D=C:\QS2'
+          $p = Start-Process -FilePath (Join-Path C:\lonely $setup.Name) -ArgumentList '/S','/D=C:\QS2' -PassThru
+          if (!$p.WaitForExit(600000)) { $p.Kill(); Get-Process | Where-Object { $_.Path -like '*QS*' } | Format-Table Name, Path; throw 'the installer did not finish within 10 minutes' }
           if (!(Test-Path 'C:\QS2\Quicksilver.exe')) { throw 'Quicksilver.exe was not installed' }
           if (Test-Path 'C:\QS2\resources\starter\qwen3.5-4b.gguf') { throw 'without the folder, the main model should not be installed' }
           node test/installed.test.js C:\QS2\Quicksilver.exe fallback install-shots
