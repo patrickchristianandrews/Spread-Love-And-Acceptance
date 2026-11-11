@@ -432,7 +432,12 @@ function bindChat() {
     // Asking for a picture or a video makes one: no need to click the suggested skill first.
     // (Editing or animating needs a photo attached, so those still wait for you to choose.)
     const autoSkill = !chat.pendingSkill ? suggestSkill(text) : null;
-    const autoMedia = autoSkill && ['image', 'video'].includes(autoSkill.output) ? autoSkill.id : null;
+    // A follow-up right after a picture or video ("another one", "now make it night", "same but
+    // blonde") continues with the same skill.
+    const prevAlt = (() => { const m = [...chat.messages].reverse().find((x) => x.role === 'assistant'); return m?.alts?.[m.altIndex]; })();
+    const prevSkill = prevAlt?.media && ['image', 'video'].includes(skillById(prevAlt.skillId)?.output) ? prevAlt.skillId : null;
+    const followUp = prevSkill && text.length < 240 && !/\?\s*$/.test(text) && /\b(another|again|more|same|now|make (her|him|it|them|this|that)|change|but|with|without|instead|bigger|smaller|different|variation|redo|one more|this time|add|remove|closer|wider)\b/i.test(text);
+    const autoMedia = autoSkill && ['image', 'video'].includes(autoSkill.output) ? autoSkill.id : followUp ? prevSkill : null;
     chat.messages.push({ id: uid(), t: now(), role: 'user', text, attachments: atts, skillId: chat.pendingSkill || autoMedia || (skillById(a.skill) ? a.skill : undefined) });
     chat.pendingSkill = null; chat.suggested = null;
     drafts[chat.id] = [];
@@ -902,6 +907,10 @@ qs.onChat(({ requestId, ev }) => {
       chat.updated = now();
       save();
       if (S.route.view === 'chat') render(); else renderChatList();
+      // A reply that is picture (or video) instructions gets made, even when no skill was switched
+      // on for this message: in a chat where you made a picture earlier, the model writes the same
+      // kind of reply to a follow-up, and that must become a picture, not a block of code.
+      if (ev.type === 'done' && !ev.aborted && !alt.skillId) { const auto = mediaReplySkill(alt.text); if (auto) alt.skillId = auto; }
       const maker = isMakerSkill(alt);
       const ok = ev.type === 'done' && !ev.aborted;
       (async () => {

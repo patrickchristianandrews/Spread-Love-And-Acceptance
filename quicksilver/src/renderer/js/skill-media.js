@@ -33,8 +33,19 @@ function parseMediaSpec(text) {
   const out = { prompt: field('prompt'), instruction: field('instruction'), avoid: field('avoid'), shape: field('shape') };
   return out.prompt || out.instruction ? out : null;
 }
+// Does a reply (written without a skill) contain picture or video instructions? A fenced block
+// labelled image or video, or a JSON block with a "prompt" and the usual picture fields.
+function mediaReplySkill(text) {
+  const t = String(text || '');
+  const m = t.match(/```(image|video|json)?\s*\n?\s*(\{[\s\S]*?\})\s*```/i);
+  if (!m || !/"prompt"\s*:\s*"/.test(m[2])) return null;
+  const label = (m[1] || '').toLowerCase();
+  if (label === 'video') return 'make-video';
+  if (label === 'image' || /"(shape|avoid|count)"\s*:/.test(m[2])) return 'make-image';
+  return null;
+}
 // What to show in the bubble: the note, without the JSON block (also while it streams in).
-const stripMediaBlock = (text) => String(text || '').replace(/```(?:image|video|edit|beat)[\s\S]*?(```|$)/g, '').trim();
+const stripMediaBlock = (text) => String(text || '').replace(/```(?:image|video|edit|beat)[\s\S]*?(```|$)/g, '').replace(/```(?:json)?\s*\n?\s*\{[^`]*"prompt"\s*:[^`]*(```|$)/g, '').trim();
 
 // The Liquid Edition is completely uncensored, pictures and video included: in its chats only uncensored
 // picture models are used, Lustify first (or the online pick), with an anime model for anime prompts,
