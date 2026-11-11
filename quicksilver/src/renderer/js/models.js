@@ -54,7 +54,7 @@ views.models = {
       try { const r = await call('models:repair', b.dataset.repair); S.downloads[r.id] = r; paintDownloads(); toast('Checking the files and downloading anything missing. You can keep working.'); } catch (err) { toast(err.message, 8000); }
       render();
     }));
-    $$('[data-default]').forEach((b) => b.addEventListener('click', () => { S.data.prefs.defaultTarget = b.dataset.default; save(); render(); toast('Default model set.'); }));
+    $$('[data-default]').forEach((b) => b.addEventListener('click', () => { S.data.prefs.defaultTarget = b.dataset.default; S.data.prefs.defaultAuto = false; save(); render(); toast('Default model set.'); }));
     $$('[data-cat]').forEach((b) => b.addEventListener('click', () => { catFilter = b.dataset.cat; render(); }));
     $('#fits-only')?.addEventListener('change', (e) => { fitsOnly = e.target.checked; render(); });
     bindHf();

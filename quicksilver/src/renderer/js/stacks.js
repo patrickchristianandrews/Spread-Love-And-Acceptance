@@ -284,7 +284,7 @@ async function saveTextStack(r, stack, waiting = 0) {
   // Point the matching assistant at the new team, with its tuned settings.
   const a = S.data.assistants.find((x) => x.job === r.job);
   if (a) Object.assign(a, { target: `stack:${stack.id}`, temperature: r.settings.temperature, contextSize: r.settings.contextSize, maxTokens: r.settings.maxTokens });
-  if (r.job === 'general' || !targetValid(S.data.prefs.defaultTarget)) S.data.prefs.defaultTarget = `stack:${stack.id}`;
+  if (r.job === 'general' || !targetValid(S.data.prefs.defaultTarget)) { S.data.prefs.defaultTarget = `stack:${stack.id}`; S.data.prefs.defaultAuto = false; }
   save();
   await refreshModels();
   if (waiting) { toast(`Team created. ${waiting} model${waiting > 1 ? 's are' : ' is'} downloading; you can chat as soon as ${waiting > 1 ? 'they finish' : 'it finishes'}.`, 6000); render(); return; }

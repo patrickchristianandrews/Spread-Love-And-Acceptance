@@ -223,7 +223,7 @@ async function init() {
     if (document.getElementById('liquid-gate')) { await setUpQuicksilver(false).catch(() => {}); if (document.getElementById('liquid-gate')) return; }
     S.est = null;
     if (!(await applyPendingUpgrades(model).catch(() => false))) toast(`${model.name} is ready.`);
-    if (!targetValid(S.data.prefs.defaultTarget) && model.kind === 'text') { S.data.prefs.defaultTarget = `local:${model.id}`; save(); }
+    if (!targetValid(S.data.prefs.defaultTarget) && model.kind === 'text') { S.data.prefs.defaultTarget = `local:${model.id}`; S.data.prefs.defaultAuto = true; save(); }
     // Load the default model in the background so the first reply is quick.
     if (model.kind === 'text') await setUpQuicksilver(false).catch(() => {}); // a new model can join Quicksilver's team
     if (model.kind === 'text' && (S.catalog?.liquidPro && Object.values(S.catalog.liquidPro).includes(model.catalogId))) { await qs.call('quicksilver:pro').catch(() => {}); await refreshModels(); }
@@ -249,7 +249,16 @@ async function setUpQuicksilver(firstLook) {
   const r = await qs.call('models:starter');
   if (r.added.length || r.stack) await refreshModels();
   const before = p.defaultTarget;
-  if (r.stack && (!targetValid(p.defaultTarget) || p.defaultTarget === 'local:starter')) p.defaultTarget = r.stack;
+  // The Liquid Edition is the default once it's ready, unless you chose something else yourself.
+  // A default Quicksilver picked by itself (a model found from another app, or the first one to
+  // finish downloading) gives way to it; so does, once, a filtered model left as the default by
+  // an earlier version.
+  const leftover = r.stack && !p.liquidDefaultOnce && targetValid(p.defaultTarget) && p.defaultTarget.startsWith('local:') && !liquidOk(p.defaultTarget);
+  if (r.stack && (!targetValid(p.defaultTarget) || p.defaultTarget === 'local:starter' || p.defaultAuto || leftover)) {
+    if (leftover) toast(`💧 The Liquid Edition is now your default (it was ${targetLabel(p.defaultTarget)}, a filtered model). Change it any time in Settings → Chat.`, 10000);
+    p.defaultTarget = r.stack; p.defaultAuto = false;
+  }
+  if (r.stack && !p.liquidDefaultOnce) { p.liquidDefaultOnce = true; save(); }
   else if (!targetValid(p.defaultTarget) && targetValid('local:starter')) p.defaultTarget = 'local:starter';
   if (p.defaultTarget !== before) save();
   if (firstLook && r.added.length) {
@@ -337,7 +346,7 @@ async function startupModels() {
           // The advisor's pick for everyday use, from the models you now have.
           const r = await qs.call('advisor:advise', 'general').catch(() => null);
           const id = r?.mine?.members.judge || r?.mine?.members.drafters[0] || added.find((m) => m.kind === 'text').id;
-          p.defaultTarget = `local:${id}`;
+          p.defaultTarget = `local:${id}`; p.defaultAuto = true;
           save();
         }
         await setUpQuicksilver(false).catch(() => {});
