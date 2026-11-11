@@ -21,10 +21,15 @@ on:
         type: choice
         options: [a, b, all, none]
         default: a
+      mode:
+        description: 'full: build and test the installers. proofs: only try pictures and video on the real engines and record what comes out (no installer)'
+        type: choice
+        options: [full, proofs]
+        default: full
 
 # A newer run on the same branch or tag replaces one still running, so only the latest is built.
 concurrency:
-  group: quicksilver-${{ github.ref }}
+  group: quicksilver-${{ github.ref }}-${{ inputs.mode || 'full' }}
   cancel-in-progress: true
 
 permissions:
@@ -33,7 +38,71 @@ permissions:
   pull-requests: read
 
 jobs:
+  # Experiments on the real picture and video engines (no graphics card on these machines, so
+  # small sizes and few steps): each try records how long it took and a thumbnail of the result,
+  # printed at the end of the log. Nothing here can fail a release; it runs only when asked for.
+  proofs:
+    if: ${{ github.event_name == 'workflow_dispatch' && inputs.mode == 'proofs' }}
+    runs-on: windows-latest
+    timeout-minutes: 150
+    defaults:
+      run:
+        working-directory: quicksilver
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: quicksilver
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: quicksilver/package-lock.json
+      - name: Install
+        run: npm ci
+        env:
+          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: '1'
+      - name: Download the engines
+        run: node scripts/fetch-engines.js --platform win32
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Download the Liquid Edition's models
+        run: node scripts/fetch-starter.js
+      - name: Download the add-ons being tried
+        run: |
+          mkdir -p extras
+          curl -sSL --retry 3 -o extras/sdxl_lightning_8step_lora.safetensors https://huggingface.co/ByteDance/SDXL-Lightning/resolve/main/sdxl_lightning_8step_lora.safetensors
+          curl -sSL --retry 3 -o extras/sdxl_lightning_4step_lora.safetensors https://huggingface.co/ByteDance/SDXL-Lightning/resolve/main/sdxl_lightning_4step_lora.safetensors
+          curl -sSL --retry 3 -o extras/lcm_lora_sdxl.safetensors https://huggingface.co/latent-consistency/lcm-lora-sdxl/resolve/main/pytorch_lora_weights.safetensors
+          curl -sSL --retry 3 -o extras/taew2_2.safetensors https://huggingface.co/lightx2v/Autoencoders/resolve/main/taew2_2.safetensors
+          ls -la extras pack
+      - name: What the engine can do
+        run: node scripts/try-media.js --help-lines
+      - name: Lustify as it is now (12 steps, small)
+        run: node scripts/try-media.js lustify-plain 20 -- -m pack/lustify.safetensors --vae pack/lustify-vae.safetensors -p "photo of a red apple on a wooden table, soft daylight" -n "blurry" -W 512 -H 512 --steps 12 --cfg-scale 4.5 -s 7
+      - name: Lustify with the Lightning 8-step speed-up
+        run: node scripts/try-media.js lustify-lightning8 20 -- -m pack/lustify.safetensors --vae pack/lustify-vae.safetensors --lora-model-dir extras -p "photo of a red apple on a wooden table, soft daylight<lora:sdxl_lightning_8step_lora:1>" -W 512 -H 512 --steps 8 --cfg-scale 1 --sampling-method euler --scheduler sgm_uniform -s 7
+      - name: Lustify with the Lightning 4-step speed-up
+        run: node scripts/try-media.js lustify-lightning4 15 -- -m pack/lustify.safetensors --vae pack/lustify-vae.safetensors --lora-model-dir extras -p "photo of a red apple on a wooden table, soft daylight<lora:sdxl_lightning_4step_lora:1>" -W 512 -H 512 --steps 4 --cfg-scale 1 --sampling-method euler --scheduler sgm_uniform -s 7
+      - name: Lustify with the LCM speed-up (6 steps)
+        run: node scripts/try-media.js lustify-lcm6 15 -- -m pack/lustify.safetensors --vae pack/lustify-vae.safetensors --lora-model-dir extras -p "photo of a red apple on a wooden table, soft daylight<lora:lcm_lora_sdxl:1>" -W 512 -H 512 --steps 6 --cfg-scale 1 --sampling-method lcm -s 7
+      - name: Wan 2.2 Turbo, a tiny clip, with the small decoder
+        run: node scripts/try-media.js wan-turbo-tae 30 -- -M vid_gen --diffusion-model pack/wan2.2-5b-turbo.gguf --tae extras/taew2_2.safetensors --t5xxl pack/wan-umt5-xxl.gguf -p "a red ball rolling across green grass" --cfg-scale 1 --sampling-method euler --steps 4 -W 320 -H 192 --video-frames 9 --flow-shift 3.0 --offload-to-cpu -s 7
+      - name: Wan 2.2 Turbo, a tiny clip, with the full decoder
+        run: node scripts/try-media.js wan-turbo-vae 30 -- -M vid_gen --diffusion-model pack/wan2.2-5b-turbo.gguf --vae pack/wan2.2-vae.safetensors --t5xxl pack/wan-umt5-xxl.gguf -p "a red ball rolling across green grass" --cfg-scale 1 --sampling-method euler --steps 4 -W 320 -H 192 --video-frames 9 --flow-shift 3.0 --offload-to-cpu --vae-tiling -s 7
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: Quicksilver-proofs
+          path: quicksilver/proofs/
+          if-no-files-found: ignore
+          retention-days: 14
+      - name: Results (thumbnails are the long lines)
+        if: always()
+        run: cat proofs/results.txt || true
+
   tests:
+    if: ${{ github.event_name != 'workflow_dispatch' || inputs.mode != 'proofs' }}
     runs-on: ubuntu-latest
     timeout-minutes: 30
     defaults:
