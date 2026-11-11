@@ -87,11 +87,21 @@ async function choose(m) {
 async function get(repo, f, dest) {
   // Files shared by two models (Wan 2.2's decoder and text encoder) are fetched once.
   if (f.size && fs.existsSync(dest) && fs.statSync(dest).size === f.size) { console.log(`  ${path.basename(dest)} already here`); return; }
-  process.stdout.write(`  ${repo}/${f.path} (${(f.size / 1e9).toFixed(2)} GB)… `);
-  await downloadTo(`${HF}/${repo}/resolve/main/${f.path.split('/').map(encodeURIComponent).join('/')}`, dest);
-  const size = fs.statSync(dest).size;
-  if (f.size && size !== f.size) throw new Error(`${path.basename(dest)} is ${size} bytes, expected ${f.size}`);
-  console.log('ok');
+  // A stalled or dropped connection is tried again (up to 5 times) rather than failing the build.
+  for (let attempt = 1; ; attempt++) {
+    process.stdout.write(`  ${repo}/${f.path} (${(f.size / 1e9).toFixed(2)} GB)${attempt > 1 ? ` — attempt ${attempt}` : ''}… `);
+    try {
+      await downloadTo(`${HF}/${repo}/resolve/main/${f.path.split('/').map(encodeURIComponent).join('/')}`, dest);
+      const size = fs.statSync(dest).size;
+      if (f.size && size !== f.size) throw new Error(`${path.basename(dest)} is ${size} bytes, expected ${f.size}`);
+      console.log('ok');
+      return;
+    } catch (err) {
+      console.log(`failed: ${err.message}`);
+      if (attempt >= 5) throw err;
+      await new Promise((r) => setTimeout(r, attempt * 5000));
+    }
+  }
 }
 
 (async () => {

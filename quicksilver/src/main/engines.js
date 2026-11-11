@@ -92,18 +92,39 @@ async function findRelease(repo, variant, token) {
   throw new Error(`No recent ${repo} release has a ${variant.label} build. Newest files: ${seen.slice(0, 40).join(', ')}`);
 }
 
+// A connection that stops sending data (it happens on long downloads) is given up after
+// STALL_MS instead of waiting forever, so the caller can try again.
+const STALL_MS = 90 * 1000;
+function stallGuard(signal) {
+  const ac = new AbortController();
+  if (signal) { if (signal.aborted) ac.abort(); else signal.addEventListener('abort', () => ac.abort(), { once: true }); }
+  let timer = null;
+  const poke = () => { clearTimeout(timer); timer = setTimeout(() => { ac.stalled = true; ac.abort(); }, STALL_MS); timer.unref?.(); };
+  poke();
+  return { signal: ac.signal, poke, done: () => clearTimeout(timer), stalled: () => Boolean(ac.stalled) };
+}
 async function downloadTo(url, dest, onProgress, signal) {
-  const res = await fetch(url, { headers: { 'User-Agent': 'Quicksilver' }, signal });
-  if (!res.ok || !res.body) throw new Error(`Download failed (HTTP ${res.status}).`);
-  const total = Number(res.headers.get('content-length')) || 0;
+  const g = stallGuard(signal);
   const out = fs.createWriteStream(dest);
-  let done = 0;
-  for await (const chunk of res.body) {
-    done += chunk.length;
-    if (!out.write(chunk)) await new Promise((r) => out.once('drain', r));
-    onProgress?.(done, total);
+  try {
+    const res = await fetch(url, { headers: { 'User-Agent': 'Quicksilver' }, signal: g.signal });
+    if (!res.ok || !res.body) throw new Error(`Download failed (HTTP ${res.status}).`);
+    const total = Number(res.headers.get('content-length')) || 0;
+    let done = 0;
+    for await (const chunk of res.body) {
+      g.poke();
+      done += chunk.length;
+      if (!out.write(chunk)) await new Promise((r) => out.once('drain', r));
+      onProgress?.(done, total);
+    }
+    if (total && done < total) throw new Error(`the connection closed at ${done} of ${total} bytes`);
+  } catch (err) {
+    if (g.stalled()) throw new Error('the connection stalled (no data for 90 seconds)');
+    throw err;
+  } finally {
+    g.done();
+    await new Promise((r) => out.end(() => r()));
   }
-  await new Promise((r, j) => out.end((e) => (e ? j(e) : r())));
 }
 
 function extract(archive, destDir) {
@@ -165,4 +186,4 @@ function version(bin) {
   try { return fs.readFileSync(v, 'utf8').trim(); } catch { return ''; }
 }
 
-module.exports = { installed, resolve, available, install, cancelInstall, remove, version, bundledDir, downloadTo, extract, findRelease };
+module.exports = { installed, resolve, available, install, cancelInstall, remove, version, bundledDir, downloadTo, stallGuard, extract, findRelease };

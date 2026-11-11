@@ -133,7 +133,8 @@ async function fetchFile(repo, file, dest, onBytes, signal, expected = 0, direct
   // A direct link (Civitai) or a file in a Hugging Face repository.
   const url = direct || `${HF}/${repo}/resolve/main/${file.split('/').map(encodeURIComponent).join('/')}?download=true`;
   const auth = direct ? (/^https:\/\/civitai\.com\//.test(direct) ? require('./civitai').headers() : {}) : hfHeaders();
-  const res = await fetch(url, { headers: { ...auth, ...(have ? { Range: `bytes=${have}-` } : {}) }, signal, redirect: 'follow' });
+  const g = require('./engines').stallGuard(signal);
+  const res = await fetch(url, { headers: { ...auth, ...(have ? { Range: `bytes=${have}-` } : {}) }, signal: g.signal, redirect: 'follow' }).catch((e) => { g.done(); throw g.stalled() ? new Error('the connection stalled. Start it again to resume where it stopped') : e; });
   if ((res.status === 401 || res.status === 403) && direct) throw new Error('Civitai needs your API key for this model (many adult models need one). Add it in Models → Civitai, then download again.');
   if (res.status === 401 || res.status === 403) throw new Error('This model needs you to accept its license on huggingface.co first, then add a Hugging Face token in Settings → Accounts.');
   if (!res.ok && res.status !== 206) throw new Error(`Download failed (HTTP ${res.status}).`);
@@ -143,11 +144,16 @@ async function fetchFile(repo, file, dest, onBytes, signal, expected = 0, direct
   onBytes(done);
   try {
     for await (const chunk of res.body) {
+      g.poke();
       done += chunk.length;
       if (!out.write(chunk)) await new Promise((r) => out.once('drain', r));
       onBytes(done);
     }
+  } catch (err) {
+    if (g.stalled()) throw new Error('the connection stalled (no data for 90 seconds). Start it again to resume where it stopped');
+    throw err;
   } finally {
+    g.done();
     await new Promise((r) => out.end(r));
   }
   // The connection can close early without an error: check the size before calling it done.
