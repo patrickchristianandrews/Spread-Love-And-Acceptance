@@ -394,10 +394,14 @@ function registerStarter(dir) {
   return out;
 }
 
-// Before an update replaces the app's folder: the big "pack" models that were copied in next to
-// the app are moved to the data folder, so the new version keeps them instead of downloading
-// them again. (The small model comes inside every installer.)
-function keepPackModels(dir) {
+// The big "pack" models the installer copied in next to the app are moved to the data folder, so a
+// newer version keeps them instead of downloading them again: installing over the old copy (an
+// update from inside Quicksilver, or a newer setup file run by hand) replaces the app's folder and
+// everything in it. (The small model comes inside every installer.)
+// At start-up this runs with renameOnly: a move on the same drive takes no time and no space; when
+// the data folder is on another drive the files stay where they are (never a slow 30 GB copy
+// behind your back). Before an in-app update it runs in full, copying if it has to.
+function keepPackModels(dir, { renameOnly = false } = {}) {
   const metaFile = dir && path.join(dir, 'STARTER.json');
   if (!metaFile || !fs.existsSync(metaFile)) return 0;
   const meta = JSON.parse(fs.readFileSync(metaFile, 'utf8'));
@@ -413,10 +417,10 @@ function keepPackModels(dir) {
       // Each file on its own: one that can't be moved (still in use, or no room on the data
       // drive) must not lose track of the ones that were. The registry is saved whatever happens.
       try {
-        try { fs.renameSync(from, to); } catch { fs.copyFileSync(from, to); try { fs.rmSync(from, { force: true }); } catch {} }
+        try { fs.renameSync(from, to); } catch (err) { if (renameOnly) throw err; fs.copyFileSync(from, to); try { fs.rmSync(from, { force: true }); } catch {} }
         for (const m of all) for (const [role, p] of Object.entries(m.files || {})) if (path.resolve(p) === path.resolve(from)) m.files[role] = to;
         moved++;
-      } catch { try { fs.rmSync(to, { force: true }); } catch {} }
+      } catch { if (!renameOnly) { try { fs.rmSync(to, { force: true }); } catch {} } }
     }
   }
   if (moved) save(all);

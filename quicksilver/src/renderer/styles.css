@@ -129,6 +129,10 @@ kbd { font-size: .72rem; padding: 1px 6px; border-radius: 6px; border: 1px solid
 .collapsed .collapse-btn { transform: rotate(180deg); }
 .nav-new { display: flex; align-items: center; gap: 10px; width: 100%; padding: 10px 12px; margin: 0 0 8px; background: var(--primary-bg); color: var(--accent-ink); border: none; border-radius: 12px; font-weight: 700; box-shadow: 0 6px 16px rgba(67, 56, 202, .28); transition: background .15s, transform .15s; }
 .nav-new:hover { filter: brightness(1.08); transform: translateY(-1px); }
+/* Code chat: the second way to start, quieter than New chat. */
+.nav-new.nav-code { background: transparent; color: var(--text); border: 1.5px solid var(--line-soft); box-shadow: none; padding: 8px 12px; }
+.nav-new.nav-code:hover { background: var(--soft); filter: none; }
+.code-starters { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 18px; }
 .nav-new kbd { margin-left: auto; border-color: currentColor; }
 .nav { display: flex; flex-direction: column; gap: 2px; }
 .nav-label { font-size: .7rem; font-weight: 800; letter-spacing: .09em; text-transform: uppercase; color: var(--faint); padding: 12px 12px 4px; }

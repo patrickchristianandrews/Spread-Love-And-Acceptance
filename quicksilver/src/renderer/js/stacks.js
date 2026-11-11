@@ -177,7 +177,7 @@ function mineTextHTML(r) {
   const rows = textRows(r);
   if (!rows.length) {
     const any = S.installed.some((m) => m.kind === 'text');
-    const why = any && r.job === 'open' ? 'None of your models are unfiltered ones yet. Use the setup on the right, or add a Hermes, Dolphin or Mistral model (from LM Create, Ollama or Models).'
+    const why = any && r.job === 'open' ? 'None of your models are unfiltered ones yet. Use the setup on the right, or add a Hermes, Dolphin or Mistral model (from LM Studio, Ollama or Models).'
       : `No models on this PC yet. Use the setup on the right${S.found?.length ? ', add the ones found on this PC above,' : ''} or import a .gguf file under Models.`;
     return `<div class="card adv-mine"><h3>Use the models you have</h3><p class="muted" style="font-weight:600">${why}</p></div>`;
   }

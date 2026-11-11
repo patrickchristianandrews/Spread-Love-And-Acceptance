@@ -207,6 +207,7 @@ async function init() {
   paintIcons();
   $$('.sidebar [data-nav]').forEach((b) => b.addEventListener('click', () => {
     if (b.dataset.nav === 'newchat') newChat();
+    else if (b.dataset.nav === 'newcode') newCodeChat();
     else if (b.dataset.nav === 'upgrades') { go({ view: 'pc' }); setTimeout(() => document.getElementById('upgrades')?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 300); }
     else go({ view: b.dataset.nav });
   }));
@@ -220,8 +221,9 @@ async function init() {
   $('#dl-mini').addEventListener('click', () => { modelsTab = 'installed'; go({ view: 'models' }); });
   $('#modal').addEventListener('mousedown', (e) => { if (e.target.id === 'modal') closeModal(); });
   document.addEventListener('keydown', (e) => {
+    if (document.getElementById('liquid-gate')) return; // the setup screen: nothing behind it responds
     if (e.key === 'Escape' && !$('#modal').hidden) closeModal();
-    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'n') { e.preventDefault(); newChat(); }
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'n') { e.preventDefault(); if (e.shiftKey) newCodeChat(); else newChat(); }
     if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); $('#chat-search').focus(); }
   });
 
@@ -294,11 +296,17 @@ async function setUpQuicksilver(firstLook) {
 // stopped; when the last one is in, the screen goes away and Quicksilver opens.
 let gateItems = [];
 const gateFailed = {};
+// While the setup screen is up, the app behind it can't be reached at all: not by the Tab key,
+// not by a keyboard shortcut, not by a screen reader. Focus moves to the setup screen.
+function gateInert(on) {
+  for (const id of ['app', 'modal']) { const n = document.getElementById(id); if (n) n.inert = on; }
+  if (on) { const g = document.getElementById('liquid-gate'); if (g) { g.tabIndex = -1; g.focus({ preventScroll: true }); } }
+}
 function liquidGate(r) {
   gateItems = (r?.missing || []).filter((m) => !S.installed.some((x) => x.catalogId === m.catalogId));
   let el = document.getElementById('liquid-gate');
   if (!gateItems.length) {
-    if (el) { el.remove(); S.gateClosedAt = Date.now(); toastAction('💧 Quicksilver Liquid Edition is ready: chat, pictures and video, all on your PC.', 'Suggested add-ons', () => liquidAddonsModal(), 12000); render(); }
+    if (el) { el.remove(); gateInert(false); S.gateClosedAt = Date.now(); toastAction('💧 Quicksilver Liquid Edition is ready: chat, pictures and video, all on your PC.', 'Suggested add-ons', () => liquidAddonsModal(), 12000); render(); }
     return;
   }
   if (!el) {
@@ -308,6 +316,7 @@ function liquidGate(r) {
     el.setAttribute('aria-modal', 'true');
     el.style.cssText = 'position:fixed;inset:0;z-index:10000;display:flex;align-items:center;justify-content:center;padding:16px;background:var(--bg,#0f1117);overflow:auto';
     document.body.appendChild(el);
+    gateInert(true);
     el.addEventListener('click', async (e) => {
       if (e.target.closest('[data-gate-online]')) { S.config = await call('config:set', { offline: false }); paintNet(); startGateDownloads(true); }
       else if (e.target.closest('[data-gate-retry]')) startGateDownloads(true);

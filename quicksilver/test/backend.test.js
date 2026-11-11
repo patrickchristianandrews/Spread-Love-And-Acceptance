@@ -311,7 +311,17 @@ async function collect(gen) {
   // Tools: an MCP server (official SDK, stdio) used by a local model, with approvals.
   const mcp = require('../src/main/mcp');
   const toolbox = require('../src/main/tools');
-  const srv = mcp.upsert({ name: 'Test MCP', transport: 'stdio', command: process.execPath, args: [path.join(__dirname, 'fakes', 'mcp-server.js')] });
+  const srv = mcp.upsert({ name: 'Test MCP', transport: 'stdio', command: process.execPath, args: [path.join(__dirname, 'fakes', 'mcp-server.js')], env: { SERVICE_TOKEN: 'tok-123-secret' } });
+  // A server's environment variables (often a key or token) are kept with the secrets, not in the
+  // plain settings file; the app still gets them back for editing and for starting the server.
+  assert.ok(!fs.readFileSync(store.file('config.json'), 'utf8').includes('tok-123-secret'), 'the value is not in the settings file');
+  assert.deepEqual(store.config().mcp.find((x) => x.id === srv.id).envKeys, ['SERVICE_TOKEN']);
+  assert.equal((await mcp.status()).find((x) => x.id === srv.id).env.SERVICE_TOKEN, 'tok-123-secret');
+  // Settings from an older version (values in the open) are moved the first time they are read.
+  store.saveConfig({ mcp: [...store.config().mcp, { id: 'm-old', name: 'Old', transport: 'stdio', command: 'x', args: [], env: { OLD_KEY: 'old-secret-9' }, enabled: false }] });
+  assert.equal((await mcp.status()).find((x) => x.id === 'm-old').env.OLD_KEY, 'old-secret-9');
+  assert.ok(!fs.readFileSync(store.file('config.json'), 'utf8').includes('old-secret-9'), 'moved out of the settings file');
+  mcp.remove('m-old');
   const avail = await toolbox.available();
   const echo = avail.find((t) => t.name.endsWith('_echo'));
   const note = avail.find((t) => t.name.endsWith('_save_note'));

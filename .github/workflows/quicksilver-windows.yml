@@ -60,7 +60,7 @@ jobs:
       - name: Back-end tests
         run: node test/backend.test.js && node test/media-catalog.test.js && node test/loading.test.js && node test/skills-auto.test.js && node test/pro.test.js
       - name: End-to-end tests
-        run: xvfb-run -a node test/ui.test.js && xvfb-run -a node test/liquid-picture.test.js && xvfb-run -a node test/in-use.test.js
+        run: xvfb-run -a node test/ui.test.js && xvfb-run -a node test/liquid-picture.test.js && xvfb-run -a node test/in-use.test.js && xvfb-run -a node test/gate.test.js
 
   windows:
     needs: tests
@@ -148,6 +148,16 @@ jobs:
           SD=$(find engine/sd \( -name sd-cli.exe -o -name sd.exe \) | head -1)
           echo "engine: $SD ($(cat engine/sd/VERSION.txt))"
           "$SD" --help | head -5
+
+      # Build machines have no graphics card, so this is one small picture on the processor. It
+      # shows the model file loads, the engine takes every option Quicksilver passes, and a real
+      # image comes out. Informational: a slow or memory-starved runner must not block a release.
+      - name: Prove Lustify paints a real picture (real engine, on the processor)
+        continue-on-error: true
+        timeout-minutes: 30
+        run: |
+          mkdir -p install-shots
+          node scripts/prove-picture.js pack install-shots/lustify-proof.png || echo "::warning::Lustify did not produce a picture on the build machine (see the log above). Pictures are still unproven on real hardware."
 
       # The Liquid Edition ships complete: voice typing's engine goes inside the installer and its
       # speech model in the models folder, so the microphone works offline from the first run.
@@ -280,8 +290,8 @@ jobs:
       - name: Fingerprint the installer
         run: for f in dist/Quicksilver-Setup-*.exe; do (cd dist && sha256sum "$(basename "$f")" > "$(basename "$f").sha256" && cat "$(basename "$f").sha256"); done
 
-      # The full offline Liquid Edition (installer + the "Quicksilver models" folder with the 4B Brain)
-      # is ~5 GB — larger than GitHub's 2 GB-per-file limit for release downloads — so it is not
+      # The full offline Liquid Edition (installer + the "Quicksilver models" folder) is about 31 GB,
+      # far larger than GitHub's 2 GB-per-file limit for release downloads, so it is not
       # attached here. It is uploaded as the Quicksilver-Windows-installer build artifact above, which
       # has no such limit (a GitHub sign-in is needed to download it).
       - name: Publish release

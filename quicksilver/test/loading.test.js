@@ -8,6 +8,21 @@ process.env.QUICKSILVER_HOME = fs.mkdtempSync(path.join(os.tmpdir(), 'qs-load-')
 const store = require('../src/main/store');
 const llama = require('../src/main/llama');
 
+// Graphics-card layers: a second model gets the room that is really left. The free-memory reading
+// may already include the first model, so it is never taken off twice.
+{
+  const GB = 1024 ** 3;
+  const second = { size: 5 * GB, layers: 32 };
+  // A 12 GB card with a 4 GB model loaded. Read before that model loaded (12 free) or after (8 free):
+  // either way about 6.4 GB is usable, so a 5 GB model fits whole.
+  assert.equal(llama.gpuLayers({}, second, { vramGB: 12, vramFreeGB: 12 }, 'auto', 4), 999);
+  assert.equal(llama.gpuLayers({}, second, { vramGB: 12, vramFreeGB: 8 }, 'auto', 4), 999, 'not counted twice');
+  // A 7 GB model does not fit beside it: part of it goes on the card, the rest on the processor.
+  const part = llama.gpuLayers({}, { size: 7 * GB, layers: 32 }, { vramGB: 12, vramFreeGB: 8 }, 'auto', 4);
+  assert.ok(part > 20 && part < 32, `a share of the layers: ${part}`);
+  assert.equal(llama.gpuLayers({}, second, { vramGB: 12, vramFreeGB: 12 }, 'cpu', 0), 0);
+  assert.equal(llama.gpuLayers({}, second, { vramGB: 0 }, 'auto', 0), 0, 'no graphics card');
+}
 assert.equal(llama.roomyContext(4096, 32768, 10), 32768, 'plenty of memory: starts at 32K');
 assert.equal(llama.roomyContext(4096, 32768, 5), 16384, 'some memory: starts at 16K');
 assert.equal(llama.roomyContext(4096, 32768, 1), 4096, 'tight memory: smallest size that fits');

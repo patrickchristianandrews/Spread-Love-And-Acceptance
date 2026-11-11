@@ -55,7 +55,7 @@ function bindTabs() {
 }
 
 document.addEventListener('keydown', (e) => {
-  if (!(e.ctrlKey || e.metaKey) || !S.data) return;
+  if (!(e.ctrlKey || e.metaKey) || !S.data || document.getElementById('liquid-gate')) return;
   const k = e.key.toLowerCase();
   if (k === 't' && !e.shiftKey) { e.preventDefault(); newChat(); return; }
   if (S.route.view !== 'chat') return;

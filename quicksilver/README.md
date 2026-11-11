@@ -24,20 +24,28 @@ Quicksilver is a private AI workstation for Windows. Like liquid quicksilver, it
 
 ## Install on Windows
 
-1. Download **Quicksilver-Windows-installer** from the latest run of the **Quicksilver Windows installer** workflow (repository → Actions), or from Releases.
-2. Unzip it and run `Quicksilver-Setup-2.6.1.exe`. Until the installer is code-signed, Windows SmartScreen may warn you: choose **More info → Run anyway**.
-3. Open Quicksilver, go to **Stacks**, pick a job and press **Download & build this stack**.
+Quicksilver comes as **Quicksilver Liquid Edition**: an uncensored set of models for chat (Qwen3.5 2B, 4B and 9B), pictures (Lustify), video (Wan 2.2) and search, about 30 GB in all. Quicksilver does not open until all of it is installed. There are three ways to get it, from the latest run of the **Quicksilver Windows installer** workflow (repository → Actions) or from Releases:
 
-The installer includes the llama.cpp engine (text and vision, using Vulkan on NVIDIA, AMD and Intel cards, or the processor) and the stable-diffusion.cpp engine (images and video). On NVIDIA cards you can download the faster CUDA engines in **Settings → Engines**.
+| Download | Size | What happens |
+|---|---|---|
+| **Full offline package** (`Quicksilver-Windows-installer`) | about 31 GB | The installer plus a "Quicksilver models" folder. Keep them together and run the installer: everything is copied in, nothing is downloaded. |
+| **Installer alone** (`Quicksilver-Setup-x.y.z.exe`, on Releases) | about 1.9 GB | The small 2B model is inside; the setup screen downloads the rest on first launch. |
+| **Web installer** (`Quicksilver-Windows-web-installer`) | about 200 MB | No models inside; the setup screen downloads the whole Liquid Edition on first launch. |
 
-**Reliability:** built-in graphics chips (Intel UHD/Iris, AMD "Radeon Graphics") are skipped, since they cause most crashes. If a model fails on the graphics card, Quicksilver restarts it on the processor and retries automatically. Models start loading as soon as you open a chat, so the first reply comes quickly.
+Until the installer is code-signed, Windows SmartScreen may warn you: choose **More info → Run anyway**. The full package needs about 40 GB free on the drive you install to.
+
+The installer includes the llama.cpp engine (chat and vision, using Vulkan on NVIDIA, AMD and Intel cards, or the processor), the stable-diffusion.cpp engine (pictures and video) and whisper.cpp (voice typing). On NVIDIA cards you can download the faster CUDA engines in **Settings → Engines**.
+
+The big models are kept in your data folder (`%APPDATA%\Quicksilver`), so updating or reinstalling does not download them again. Uninstalling asks whether to remove your chats and models too.
+
+**Reliability:** built-in graphics chips (Intel UHD/Iris, AMD "Radeon Graphics") are skipped, since they cause most crashes. If a model fails on the graphics card, Quicksilver restarts it on the processor and retries automatically. A model loads once and stays ready between messages.
 
 ## Develop
 
 ```bash
 cd quicksilver
 npm install
-npm run fetch-engines     # downloads llama.cpp and stable-diffusion.cpp for this platform into engine/
+npm run fetch-engines     # downloads llama.cpp, stable-diffusion.cpp and whisper.cpp for this platform into engine/
 npm start
 ```
 
@@ -45,7 +53,11 @@ Tests use stand-in engines (`test/fakes`), so they run anywhere:
 
 ```bash
 node test/backend.test.js          # every main-process module
+node test/media-catalog.test.js && node test/loading.test.js && node test/skills-auto.test.js && node test/pro.test.js
 xvfb-run -a node test/ui.test.js   # the real app, clicked through end to end
+xvfb-run -a node test/liquid-picture.test.js   # just ask: pictures in a Liquid Edition chat; Code chat
+xvfb-run -a node test/in-use.test.js           # a stack uses only its own models; Models in use
+xvfb-run -a node test/gate.test.js             # the setup screen; models kept across reinstalls
 ```
 
 Build an installer with `npm run dist:win` (on Windows, after `npm run fetch-engines`).

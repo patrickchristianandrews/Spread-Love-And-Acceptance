@@ -1,15 +1,27 @@
 ### Download
 
-**Quicksilver-Setup-2.18.0.exe** — the installer (about 1.9 GB), below, with a matching `.sha256` to check it. This is the full Quicksilver Liquid Edition, uncensored, with the 2B model built in; the 4B Brain downloads by itself in the background the first time you run it. (A fully-offline package with the 4B already inside — about 5 GB — is built with every release but is too large for a GitHub release file, so it lives as a build artifact on the [Actions run](https://github.com/patrickchristianandrews/Spread-Love-And-Acceptance/actions/workflows/quicksilver-windows.yml); a GitHub sign-in is needed to download it.)
+There are three ways to get Quicksilver 2.19. All install the same app; they differ in how the Liquid Edition's models (about 30 GB) arrive.
+
+- **Quicksilver-Setup-2.19.0.exe** (below, about 1.9 GB, with a matching `.sha256`): the installer with the small 2B model inside. The first time Quicksilver opens, its setup screen downloads the rest of the Liquid Edition before the app starts.
+- **Full offline package** (about 31 GB): the installer plus a "Quicksilver models" folder. Keep the two together when you run the installer and everything is copied in: nothing to download, works with no internet from the first minute. It is too large for a GitHub release file, so it is the **Quicksilver-Windows-installer** build artifact on the [Actions run](https://github.com/patrickchristianandrews/Spread-Love-And-Acceptance/actions/workflows/quicksilver-windows.yml) (a GitHub sign-in is needed to download it).
+- **Web installer** (about 200 MB): no models inside at all; the setup screen downloads the whole Liquid Edition on first launch. It is the **Quicksilver-Windows-web-installer** artifact on the same Actions run.
+
+Updating from 2.18: the Liquid Edition now includes its Closer and its picture and video makers, and Quicksilver does not open until all of them are installed. After the update the setup screen downloads what is missing (about 30 GB) before the app starts. Your chats, settings and the models you already have are kept.
 
 ## What's inside
 
-**The AI in the box — uncensored, runs on your PC:**
+**Quicksilver Liquid Edition: the AI in the box. Uncensored, private, runs on your PC:**
 
-- **Qwen3.5 4B — the Brain** (uncensored/abliterated): reasons step by step on hard questions, reads photos.
-- **Qwen3.5 2B — the fast helper** (uncensored/abliterated): quick on any PC, sees photos, speeds the 4B up. Built into the installer.
-- **Nomic Embed v1.5 — Smarter search**: finds things in Memory and your Library by meaning.
-- **Engines:** llama.cpp (text + vision), stable-diffusion.cpp (pictures), whisper.cpp (voice typing).
+- **Qwen3.5 4B, the Brain** (uncensored): answers everyday messages, reads photos, thinks hard questions through.
+- **Qwen3.5 9B, the Closer** (uncensored): leads on hard questions on PCs with a graphics card; waits on the bench on smaller ones.
+- **Qwen3.5 2B, the Muse** (uncensored): quick on any PC, sees photos, sketches ideas for creative work. Built into the installer.
+- **Lustify**: uncensored pictures and photo edits.
+- **Wan 2.2 5B and Wan 2.2 5B Turbo**: uncensored video from a description or from a photo (Turbo for 6 GB graphics cards).
+- **Nomic Embed and the BGE reranker**: search your files and memories by meaning.
+- **Whisper base**: voice typing, offline.
+- **Engines:** llama.cpp (chat and vision), stable-diffusion.cpp (pictures and video), whisper.cpp (voice typing), FFmpeg (photo, video and audio tools).
+
+The Liquid Edition is locked: it can't be edited or deleted and its models stay installed. You can chat with any other model or stack whenever you like.
 
 **Everything it can do:**
 
@@ -21,6 +33,26 @@
 - **Everyday** — voice typing and read-aloud, use from your phone, Compare models, a Your-PC advisor with upgrade costs, and automatic updates that keep your big models.
 
 All of this is also listed in the app under **Settings → What's inside**.
+
+## What's new in Quicksilver 2.19
+
+The Liquid Edition release. Quicksilver now ships as one complete, uncensored set of models for chat, pictures and video, and behaves like any everyday AI: you just ask.
+
+- **Quicksilver Liquid Edition, complete.** Chat (Qwen3.5 4B, 9B and 2B, uncensored), pictures (Lustify), video (Wan 2.2) and search, installed together. Quicksilver does not open until all of it is in place, so nothing is half set up. It is locked (it can't be edited or deleted), and you can still use any other model or stack.
+- **Just ask.** Ask for a picture, a video, a photo edit, a song, a spoken version, a document, slides, a spreadsheet, a chart or an app and Quicksilver makes it. No skill to pick and nothing to type after "/". Follow-ups such as "another one, at night" keep going. Every skill is still in the / menu, and Settings → Chat has a switch if you prefer to choose skills yourself.
+- **Code chat.** A second button under New chat opens a chat set up for programming: complete code you can copy and run, short explanations, root cause first on bugs. New chat stays the everyday AI.
+- **A stack uses its own models and nothing else.** Models found in other apps (LM Studio, Ollama, Jan, Downloads) are never added or used by themselves. Models → On this PC has a new **Models in use** list: tick a model to let Quicksilver use it by itself (Automatic, double-checking, the Council, and as a helper in the Liquid Edition when it is uncensored).
+- **Only real chat models are listed.** Video and picture model files, text encoders and search models are no longer mistaken for chat models, and second copies of a model you already have are skipped. Entries like that from an older version are cleaned up (no file is deleted).
+- **Liquid Edition Pro** for powerful PCs (16 GB+ graphics card): bigger uncensored models for chat and pictures. It is at the top of Stacks and is only installed if you choose it.
+- **Suggested add-ons**: six optional uncensored models (anime pictures, the highest-quality pictures, low-memory pictures, stories and role-play, a stronger Closer, a strong reasoner). Never downloaded by themselves.
+- **Many more uncensored models** in the catalog: about 20 picture models (Chroma, Pony, Illustrious, NoobAI, CyberRealistic and others), Wan 2.2 Turbo for video, and more chat models.
+- **Models stay loaded.** A model loads once and stays ready between messages and chats (Settings → Chat → Keep models loaded), a busy model is never reloaded, and two requests for the same model share one load.
+- **Create: pictures, video and music** in the Setup Advisor, with one goal for each popular kind of making, including complete songs.
+- **Three ways to install**: the installer, the full offline package, and a small web installer. The big models are kept in your data folder, so updating or reinstalling does not download them again. Uninstalling asks whether to remove your chats and models too.
+- **Private online says what it is doing.** When Private online is on and no VPN is connected, a bar at the top says so and offers one click to connect or to go online without it, instead of updates and downloads failing with an error.
+- **Tidier chat box**: all the options on one line, a plain Online/Offline switch, and a clearer Effort control.
+- **Voice typing works offline from the first run**: its speech model ships with the Liquid Edition.
+- **Fixes from a full review of the app**: safer downloads (stalled connections are retried, a full disk fails cleanly), safer local API (other websites can't call it unless you set a key), picture and video jobs stop when Quicksilver closes, PDF export of long answers, and many smaller ones.
 
 ## What's new in Quicksilver 2.18
 

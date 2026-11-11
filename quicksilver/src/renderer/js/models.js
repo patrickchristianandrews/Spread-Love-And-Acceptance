@@ -35,7 +35,7 @@ views.models = {
     $('#found-review')?.addEventListener('click', foundModal);
     $('#find-models').addEventListener('click', async () => {
       S.found = await call('models:found');
-      if (S.found.length) foundModal(); else toast('No other models found. Checked LM Create, Jan, Ollama, GPT4All and Downloads.', 6000);
+      if (S.found.length) foundModal(); else toast('No other models found. Checked LM Studio, Jan, Ollama, GPT4All and Downloads.', 6000);
       render();
     });
     $$('[data-get]').forEach((b) => b.addEventListener('click', async () => {

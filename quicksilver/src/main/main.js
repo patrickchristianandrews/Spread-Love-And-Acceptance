@@ -326,7 +326,12 @@ handle('models:starter', async () => {
     try { await models.tidyImported(llama.readGguf, mine); store.saveConfig({ importTidy: 1 }); } catch { /* tried again next start */ }
   }
   whisper.keepShipped().catch(() => {}); // voice typing's speech model: kept across updates
-  const r = models.registerStarter(process.env.QS_STARTER_DIR || (app.isPackaged ? path.join(process.resourcesPath, 'starter') : path.join(__dirname, '..', '..', 'starter')));
+  const starterDir = process.env.QS_STARTER_DIR || (app.isPackaged ? path.join(process.resourcesPath, 'starter') : path.join(__dirname, '..', '..', 'starter'));
+  const r = models.registerStarter(starterDir);
+  // The big models the installer copied in leave the app's folder for your data folder straight
+  // away (an instant move on the same drive; see keepPackModels). Installing a newer version over
+  // this one, by any route, replaces the app's folder: this way it never takes 30 GB of models with it.
+  if (app.isPackaged || process.env.QS_KEEP_PACK) { try { models.keepPackModels(starterDir, { renameOnly: true }); } catch { /* they stay where they are */ } }
   return complete.ensureQuicksilverStack().then((stack) => ({ ...r, stack }));
 });
 handle('quicksilver:rebuild', () => complete.ensureQuicksilverStack());

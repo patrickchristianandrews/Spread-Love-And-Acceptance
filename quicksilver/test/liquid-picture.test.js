@@ -58,6 +58,26 @@ const TINY = path.join(__dirname, 'fixtures', 'tiny.gguf');
   assert.deepEqual([r.plain, r.labelled, r.video, r.code, r.button], ['make-image', 'make-image', 'make-video', null, true]);
   assert.equal(r.shown, "I'll create a portrait of a lighthouse.");
   assert.deepEqual(r.follow, [true, true, true]); assert.deepEqual(r.notFollow, [false, false, false]);
+  // Code chat: its own button under New chat. An ordinary chat set up for programming, on the
+  // same model (the Liquid Edition here); New chat stays the everyday AI.
+  const before = await win.evaluate(() => S.data.prefs.lastAssistant);
+  await win.click('[data-nav="newcode"]');
+  await win.waitForSelector('.code-starters [data-code-start]');
+  const code = await win.evaluate(() => { const c = chatById(S.route.id); const a = assistantById(c.assistantId); return { a: a.id, job: a.job, target: resolveTarget(c, a), hint: document.querySelector('#input').placeholder, starters: document.querySelectorAll('[data-code-start]').length }; });
+  assert.deepEqual([code.a, code.job, code.target, code.starters], ['as-code', 'coding', 'stack:quicksilver', 6]);
+  assert.match(code.hint, /paste code or an error/);
+  await win.click('[data-code-start="1"]');
+  assert.equal(await win.inputValue('#input'), 'Write a Python script that ');
+  await win.type('#input', 'prints the first ten square numbers');
+  await win.keyboard.press('Enter');
+  await win.waitForFunction(() => document.querySelectorAll('.msg.assistant').length === 1 && !document.querySelector('.bubble.streaming') && !document.querySelector('.status-line'), null, { timeout: 60000 });
+  const codeChat = await win.evaluate(() => { const c = chatById(S.route.id); return { title: c.title, answer: [...document.querySelectorAll('.msg.assistant .bubble')].pop()?.innerText || '', media: document.querySelectorAll('.msg.assistant .skill-media-item').length }; });
+  assert.ok(codeChat.answer.length > 0 && codeChat.media === 0, 'a code question gets a written answer');
+  assert.match(codeChat.title, /Python script/, 'the chat is named after the first message');
+  assert.equal(await win.evaluate(() => S.data.prefs.lastAssistant), before, 'a code chat does not change what New chat opens');
+  await win.click('[data-nav="newchat"]');
+  await win.waitForFunction(() => chatById(S.route.id)?.messages.length === 0);
+  assert.equal(await win.evaluate(() => chatById(S.route.id).assistantId), before, 'New chat is still the everyday AI');
   // Everything a skill can make has its maker inside the Liquid Edition: pictures and photo edits
   // by Lustify, videos and animated photos by Wan 2.2, and every other kind of output (documents,
   // slides, sheets, charts, apps, beats, speech, the instant photo/video/audio tools) is built in.
@@ -70,6 +90,6 @@ const TINY = path.join(__dirname, 'fixtures', 'tiny.gguf');
   assert.deepEqual([cover.image, cover.edit, cover.video, cover.animate], ['lustify', 'lustify', 'wan2.2-5b', 'wan2.2-5b'], 'the Liquid Edition makes all four with its own models');
   assert.deepEqual(errors, []);
   await app.close();
-  console.log('✓ Liquid Edition chat: just asking makes a picture with Lustify; follow-ups continue; ordinary messages get ordinary answers; every kind of skill has its maker in the Liquid Edition');
+  console.log('✓ Liquid Edition chat: just asking makes a picture with Lustify; follow-ups continue; ordinary messages get ordinary answers; every kind of skill has its maker in the Liquid Edition; Code chat opens a chat set up for programming');
   process.exit(0);
 })().catch((e) => { console.error(`FAIL ${e.message}`); process.exit(1); });

@@ -169,7 +169,11 @@ function gpuLayers(model, info, hw, setting, otherVramGB = 0) {
   if (setting === 0 || setting === 'cpu') return 0;
   if (!hw.vramGB) return 0;
   const sizeGB = (info.size + (model.mmprojSize || 0)) / 1024 ** 3;
-  const free = (hw.vramFreeGB || hw.vramGB) * 0.9 - 0.8 - otherVramGB;
+  // Free graphics memory: what was free when the hardware was last read, or the card's size minus
+  // what Quicksilver's other loaded models hold, whichever is less. (The reading may already
+  // include those models, so taking them off it again would count them twice and push a second
+  // model onto the processor for no reason.)
+  const free = Math.min(hw.vramFreeGB || hw.vramGB, hw.vramGB - otherVramGB) * 0.9 - 0.8;
   if (free <= 0.5) return 0;
   if (sizeGB <= free) return 999;
   const layers = info.layers || 32;
@@ -477,4 +481,4 @@ const isLoaded = (file) => [...servers.values()].some((s) => s.file === file && 
 
 // The last lines each running engine printed (for "Save diagnostics").
 const logTails = () => [...servers.values()].map((s) => ({ file: require('node:path').basename(s.file), lines: s.log.join('').split('\n').slice(-40).join('\n') }));
-module.exports = { roomyContext, idleMs, readGguf, ensure, prefill, chat, stop, stopAll, stopFile, status, isLoaded, contextFor, prefetch, logTails };
+module.exports = { gpuLayers, roomyContext, idleMs, readGguf, ensure, prefill, chat, stop, stopAll, stopFile, status, isLoaded, contextFor, prefetch, logTails };

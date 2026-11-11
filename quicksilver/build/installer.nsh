@@ -18,3 +18,18 @@
       MessageBox MB_OK|MB_ICONEXCLAMATION "Quicksilver was installed, but its models could not be copied in. This drive probably has too little free space: the Liquid Edition needs about 40 GB.$\r$\n$\r$\nFree some space and run the installer again, or open Quicksilver and it will download the models itself." /SD IDOK
   qsNoModels:
 !macroend
+
+; Uninstalling: your chats, settings and downloaded models live in your user folder, not in the
+; app's folder, so they survive updates and reinstalls. On a real uninstall (not when a newer
+; version replaces this one) Quicksilver asks whether to remove them too. Silent uninstalls keep them.
+!macro customUnInstall
+  ${ifNot} ${isUpdated}
+    MessageBox MB_YESNO|MB_ICONQUESTION|MB_DEFBUTTON2 "Remove your Quicksilver data as well?$\r$\n$\r$\nYes: deletes your chats, settings and every downloaded model. This frees the most space (the Liquid Edition's models are about 30 GB).$\r$\n$\r$\nNo: keeps them, so a future install picks up where you left off." /SD IDNO IDNO qsKeepData
+      SetShellVarContext current
+      RMDir /r "$APPDATA\${APP_FILENAME}"
+      !ifdef APP_PRODUCT_FILENAME
+        RMDir /r "$APPDATA\${APP_PRODUCT_FILENAME}"
+      !endif
+    qsKeepData:
+  ${endIf}
+!macroend

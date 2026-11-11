@@ -15,6 +15,38 @@ function newChat(assistantId, projectId) {
   go({ view: 'chat', id: chat.id });
 }
 
+// A code chat: an ordinary chat with the Code chat assistant. It doesn't change which assistant
+// "New chat" opens, so New chat stays the everyday AI and Code chat stays the one for code.
+const CODE_ASSISTANT = 'as-code';
+const isCodeChat = (a) => a?.id === CODE_ASSISTANT;
+function newCodeChat() {
+  const a = S.data.assistants.find((x) => x.id === CODE_ASSISTANT);
+  if (!a) { newChat(); return; }
+  const chat = { id: uid(), assistantId: a.id, title: 'New chat', created: now(), updated: now(), target: '', library: null, web: null, messages: [] };
+  S.data.chats.push(chat);
+  save();
+  go({ view: 'chat', id: chat.id });
+}
+// What people start a code chat with: a click puts the opening words in the message box.
+const CODE_STARTERS = [
+  ['🌐', 'Build a web page', 'Build a single-page website for '],
+  ['🐍', 'Write a script', 'Write a Python script that '],
+  ['🐞', 'Fix an error', 'Fix this error. Here is the message and the code:\n\n'],
+  ['🔎', 'Explain code', 'Explain what this code does, step by step:\n\n'],
+  ['🛡️', 'Review my code', 'Review this code for bugs, security problems and edge cases:\n\n'],
+  ['✅', 'Write tests', 'Write tests for this code:\n\n'],
+];
+document.addEventListener('click', (e) => {
+  const b = e.target.closest?.('[data-code-start]');
+  if (!b) return;
+  const box = $('#input');
+  if (!box) return;
+  box.value = CODE_STARTERS[Number(b.dataset.codeStart)]?.[2] || '';
+  box.dispatchEvent(new Event('input', { bubbles: true }));
+  box.focus();
+  box.setSelectionRange(box.value.length, box.value.length);
+});
+
 // How much effort goes into each answer. "Smart" is the default: your PC answers everyday messages
 // fast and brings in the whole team only on hard ones. "Deep" has three AIs debate, for big decisions.
 const EFFORTS = { quick: '⚡ Fast', balanced: '⚖️ Balanced', thorough: '✨ Smart', council: '⚔️ Deep (3 AIs)' };
@@ -60,7 +92,7 @@ views.chat = {
           <div class="attach-row" id="att-row">${attachmentsHTML(drafts[chat.id] || [], true)}</div>
           <div id="skill-row">${skillChipHTML(chat)}</div>
           <div class="skill-pop" id="skill-pop" hidden></div>
-          <textarea id="input" rows="1" spellcheck="true" placeholder="${esc(chat.pendingSkill ? skillById(chat.pendingSkill)?.hint || 'Add details…' : `Message ${a.name}…  Type / for skills`)}" aria-label="Message"></textarea>
+          <textarea id="input" rows="1" spellcheck="true" placeholder="${esc(chat.pendingSkill ? skillById(chat.pendingSkill)?.hint || 'Add details…' : isCodeChat(a) ? 'Say what to build, or paste code or an error…  Type / for skills' : `Message ${a.name}…  Type / for skills`)}" aria-label="Message"></textarea>
           <div class="composer-bar">
             <button class="icon-btn opts-btn" id="opts-btn" title="Add a file, use a skill, search the web, connect apps, and more" aria-label="Add and options">${icon('plus')}</button>
             <input type="file" id="file-in" multiple hidden accept="image/*,video/*,.pdf,.docx,.xlsx,.xlsm,.csv,.tsv,.pptx,.txt,.md,.json,.html,.htm,.xml,.js,.ts,.py,.java,.c,.cpp,.cs,.go,.rs,.rb,.php,.sql">
@@ -137,6 +169,8 @@ function welcomeHTML(a) {
     <h1>${esc(a.name)}</h1>
     <p class="muted" style="font-size:1.05rem;font-weight:600">${esc(a.description || '')}</p>
     ${a.exam ? studyPanelHTML(a) : ''}
+    ${isCodeChat(a) && !none ? `<div class="code-starters">${CODE_STARTERS.map(([em, label], i) => `<button class="btn small" data-code-start="${i}">${em} ${esc(label)}</button>`).join('')}</div>
+      <p class="small muted" style="margin-top:12px">Paste code or an error, attach a file, or say what to build. Answers come as complete code you can copy; web pages and apps open in a preview.</p>` : ''}
     ${none ? `<div class="notice info" style="text-align:left;margin-top:16px"><b>Let's get you set up.</b> Quicksilver runs AI on your own PC. The <b>Setup Advisor</b> checks your computer and downloads the best free models for the job, in one click. No account or key needed.
       <div class="row" style="margin-top:10px"><button class="btn primary" data-goto="stacks">Open the Setup Advisor</button><button class="btn" data-goto="models">Browse models</button></div></div>` : ''}
     ${S.installed.some((m) => m.kind === 'text') && S.installed.filter((m) => m.kind === 'text').every((m) => m.source === 'bundled') ? '<p class="small muted grow-tip">💡 The starter models are a great start but limited on their own. Answers get sharper as you add models or build teams (<a href="#" data-goto="stacks">Teams</a> · <a href="#" data-goto="models">Models</a>).</p>' : ''}
