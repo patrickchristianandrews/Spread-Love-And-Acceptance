@@ -292,8 +292,21 @@ async function collect(gen) {
   assert.match(streamed.join(''), /phi\.gguf/, 'an easy question to a stack is answered by its lead');
   const imgRes = await (await fetch(`${base}/images/generations`, { method: 'POST', headers: auth, body: JSON.stringify({ model: 'image:sdxl-turbo', prompt: 'a cat', size: '64x64' }) })).json();
   assert.ok(imgRes.data[0].b64_json.length > 50);
+  // Web pages: one served from this PC may call the API; another website may only with the key
+  // required (it is here), and is refused outright when no key is required. Other apps (no Origin)
+  // are unaffected.
+  const localPage = await fetch(`${base}/models`, { headers: { ...auth, Origin: 'http://localhost:3000' } });
+  assert.equal(localPage.status, 200); assert.equal(localPage.headers.get('access-control-allow-origin'), 'http://localhost:3000');
+  const siteWithKey = await fetch(`${base}/models`, { headers: { ...auth, Origin: 'https://example.com' } });
+  assert.equal(siteWithKey.status, 200, 'a website with the key is let in while a key is required');
+  store.saveConfig({ apiServer: { enabled: true, port: 18337, requireKey: false } });
+  const otherSite = await fetch(`${base}/models`, { headers: { Origin: 'https://example.com' } });
+  assert.equal(otherSite.status, 403, 'a website is refused when no key is required'); assert.equal(otherSite.headers.get('access-control-allow-origin'), null);
+  const preflight = await fetch(`${base}/chat/completions`, { method: 'OPTIONS', headers: { Origin: 'https://example.com', 'Access-Control-Request-Method': 'POST' } });
+  assert.equal(preflight.status, 403, 'and so is its preflight');
+  assert.equal((await fetch(`${base}/models`)).status, 200, 'another app on this PC (no Origin) still works without a key');
   apiserver.stop();
-  console.log('✓ API server: auth, models, chat (stream + not), stacks by name, images');
+  console.log('✓ API server: auth, models, chat (stream + not), stacks by name, images; other websites kept out');
 
   // Tools: an MCP server (official SDK, stdio) used by a local model, with approvals.
   const mcp = require('../src/main/mcp');

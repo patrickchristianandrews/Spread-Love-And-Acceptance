@@ -44,7 +44,7 @@ function openTargets() {
     const inst = S.installed.find((m) => `local:${m.id}` === t);
     if (!inst) return false;
     const c = S.catalog?.text?.find((x) => x.id === inst.catalogId);
-    return c?.category === 'open' || /dolphin|hermes|abliterat|uncensor|unfiltered|lexi|rocinante/i.test(`${inst.name} ${inst.files?.model || ''}`);
+    return c?.category === 'open' || /dolphin|hermes|abliterat|uncensor|unfiltered|lexi|rocinante/i.test(modelNameText(inst));
   };
   const teams = S.stacks.filter((s) => s.builtFor === 'open' || /unfiltered|uncensored/i.test(s.name || '')).map((s) => `stack:${s.id}`);
   return [...teams, ...S.targets.map((t) => t.target).filter(openModel)].filter((t, i, arr) => targetValid(t) && arr.indexOf(t) === i);

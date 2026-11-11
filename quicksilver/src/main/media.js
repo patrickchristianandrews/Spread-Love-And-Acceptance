@@ -58,6 +58,9 @@ function ffmpegPath() {
 function runFfmpeg(args, { onProgress, durationSec, signal } = {}) {
   return new Promise((resolve, reject) => {
     const proc = spawn(ffmpegPath(), ['-hide_banner', '-y', ...args], { windowsHide: true });
+    children.add(proc);
+    proc.on('exit', () => children.delete(proc));
+    proc.on('error', () => children.delete(proc));
     let log = '';
     signal?.addEventListener('abort', () => proc.kill());
     proc.stderr.on('data', (d) => {
@@ -99,7 +102,7 @@ async function editVideo(input, ops, { onProgress, signal } = {}) {
   const outLen = ((end - start) || info.duration) / speed;
   if (ops.fadeIn) vf.push(`fade=t=in:st=0:d=${Number(ops.fadeIn)}`);
   if (ops.fadeOut && outLen) vf.push(`fade=t=out:st=${Math.max(0, outLen - Number(ops.fadeOut))}:d=${Number(ops.fadeOut)}`);
-  const format = ops.format || 'mp4';
+  const format = ['mp4', 'webm', 'gif', 'mov', 'mp3', 'wav'].includes(ops.format) ? ops.format : 'mp4';
   const out = path.join(mediaDir(), `${uniq()}.${format}`);
   const args = [];
   if (start) args.push('-ss', String(start));
@@ -151,9 +154,17 @@ async function sdHelp(bin) {
 }
 
 const running = new Map(); // jobId -> proc
+// Picture, video and ffmpeg jobs in progress: all stopped when Quicksilver closes, so nothing keeps
+// the graphics card busy with no window.
+const children = new Set();
+function stopAll() {
+  for (const p of [...running.values(), ...children]) { try { p.kill(); } catch {} }
+  running.clear(); children.clear();
+}
 
 // req = { modelId, mode: 'generate'|'edit'|'animate', prompt, negative, width, height, steps, cfg, seed, strength, image (path), mask (path), frames, fps }
 async function generate(jobId, req, { onProgress, onStatus } = {}) {
+  jobId = String(jobId || '').replace(/[^a-z0-9_-]/gi, '').slice(0, 64) || `job${Date.now().toString(36)}`;
   const hw = await hardware.detect();
   const engine = engines.resolve('sd', hw);
   if (!engine) throw new Error('The image engine is missing. Download one in Settings → Engines.');
@@ -247,4 +258,4 @@ async function generate(jobId, req, { onProgress, onStatus } = {}) {
 
 function stop(jobId) { running.get(jobId)?.kill(); }
 
-module.exports = { runFfmpeg, videoFrames, gallery, addToGallery, removeFromGallery, saveDataUrl, saveBuffer, editVideo, extractFrame, probe, generate, stop, ffmpegPath, mediaDir };
+module.exports = { runFfmpeg, videoFrames, gallery, addToGallery, removeFromGallery, saveDataUrl, saveBuffer, editVideo, extractFrame, probe, generate, stop, stopAll, ffmpegPath, mediaDir };

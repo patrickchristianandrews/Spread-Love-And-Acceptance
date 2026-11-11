@@ -35,13 +35,15 @@ function parseMediaSpec(text) {
 }
 // Does a reply (written without a skill) contain picture or video instructions? A fenced block
 // labelled image or video, or a JSON block with a "prompt" and the usual picture fields.
+// (Used only to offer a "make this" button under such a reply; nothing is made without a skill.)
 function mediaReplySkill(text) {
   const t = String(text || '');
   const m = t.match(/```(image|video|json)?\s*\n?\s*(\{[\s\S]*?\})\s*```/i);
   if (!m || !/"prompt"\s*:\s*"/.test(m[2])) return null;
   const label = (m[1] || '').toLowerCase();
   if (label === 'video') return 'make-video';
-  if (label === 'image' || /"(shape|avoid|count)"\s*:/.test(m[2])) return 'make-image';
+  if (label === 'image') return 'make-image';
+  if (/"(shape|avoid|count)"\s*:/.test(m[2])) return 'make-image';
   return null;
 }
 // What to show in the bubble: the note, without the JSON block (also while it streams in).
@@ -109,6 +111,7 @@ async function runSkillMedia(chat, msg, alt, skill) {
   const user = [...chat.messages.slice(0, chat.messages.indexOf(msg))].reverse().find((m) => m.role === 'user');
   const spec = parseMediaSpec(alt.text) || {};
   const prompt = String(spec.prompt || spec.instruction || user?.text || skill.name).trim().slice(0, 1200);
+  alt.rawText = alt.text;
   alt.text = stripMediaBlock(alt.text) || `Making your ${MEDIA_WORD[kind]}…`;
   alt.media = { kind, prompt, instruction: spec.instruction || '', avoid: spec.avoid || '', shape: SIZES[spec.shape] ? spec.shape : skill.media?.shape || 'square', items: [], jobs: [] };
   const repaint = () => { save(); if (S.route.view === 'chat' && S.route.id === chat.id) paintStreaming(chat, msg); };
@@ -180,10 +183,19 @@ async function makeMedia(chat, msg, alt, pick, { imageId, count = 1 }, repaint) 
 
 function skillMediaHTML(m, alt, streaming) {
   const md = alt.media;
+  // A reply that reads like picture instructions, written without a skill: offer the skill.
+  if (!md && !streaming && alt.mediaOffer && skillById(alt.mediaOffer)) {
+    const sk = skillById(alt.mediaOffer);
+    return `<div class="row small" style="margin-top:6px"><span class="muted">Pictures and videos are made with a skill.</span><button class="btn small" data-act="m-make" data-id="${m.id}">${esc(sk.icon)} Make this with "${esc(sk.name)}"</button></div>`;
+  }
   if (!md || streaming) return '';
   const word = md.gif ? 'GIF' : MEDIA_WORD[md.kind];
   if (md.need) {
     const [cat, text] = MEDIA_NEED[md.need];
+    const chatNow = chatById(S.route.id);
+    if (pickMediaModel(md.kind, { liquid: chatIsLiquid(chatNow), pro: chatIsPro(chatNow), prompt: md.prompt })) {
+      return `<div class="notice ok media-need"><b>Ready.</b> The model is installed now.<div class="row" style="margin-top:8px"><button class="btn primary small" data-act="m-again" data-id="${m.id}">Make the ${MEDIA_WORD[md.kind]} now</button><button class="btn small" data-act="m-copy" data-id="${m.id}">Copy the prompt</button></div></div>`;
+    }
     const vidId = md.need === 'liquid-video' ? liquidVideoToGet() : null;
     const getLustify = md.need === 'liquid' && !S.downloads[LIQUID_PICTURES] ? `<button class="btn primary small" data-act="m-lustify" data-id="${m.id}">⬇ Get Lustify</button>`
       : vidId && !S.downloads[vidId] ? `<button class="btn primary small" data-act="m-wan" data-id="${m.id}">⬇ Get ${vidId === LIQUID_VIDEO ? 'Wan 2.2 5B' : 'Wan 2.2 Turbo'}</button>` : '';
@@ -204,9 +216,15 @@ async function skillMediaAction(chat, m, act, el) {
   const alt = m.alts[m.altIndex];
   const md = alt.media;
   const it = md?.items[Number(el?.dataset.k)];
+  if (act === 'm-make' && alt.mediaOffer) {
+    const sk = skillById(alt.mediaOffer);
+    alt.skillId = alt.mediaOffer; delete alt.mediaOffer;
+    runSkillMedia(chat, m, alt, sk).catch((err) => { alt.media = { ...(alt.media || { kind: sk.output, prompt: '', items: [], jobs: [] }), jobs: [], error: `Couldn't make the ${MEDIA_WORD[sk.output]}: ${err.message}` }; save(); render(); });
+    return;
+  }
   if (act === 'm-get') { modelsTab = 'media'; if (el?.dataset.cat === 'open') catFilter = 'open'; go({ view: 'models' }); return; }
-  if (act === 'm-wan') { const id = liquidVideoToGet(); const name = id === LIQUID_VIDEO ? 'Wan 2.2 5B' : 'Wan 2.2 Turbo'; await download({ catalogId: id }, name); toast(`Downloading ${name}. Press "Make another video" when it's done.`, 6000); render(); return; }
-  if (act === 'm-lustify') { await download({ catalogId: LIQUID_PICTURES }, 'Lustify (uncensored)'); toast('Downloading Lustify. Press "Make another picture" when it\'s done.', 6000); render(); return; }
+  if (act === 'm-wan') { const id = liquidVideoToGet(); const name = id === LIQUID_VIDEO ? 'Wan 2.2 5B' : 'Wan 2.2 Turbo'; await download({ catalogId: id }, name); toast(`Downloading ${name}. A "Make the video now" button appears here when it's done.`, 6000); render(); return; }
+  if (act === 'm-lustify') { await download({ catalogId: LIQUID_PICTURES }, 'Lustify (uncensored)'); toast('Downloading Lustify. A "Make the picture now" button appears here when it\'s done.', 6000); render(); return; }
   if (act === 'm-copy') { navigator.clipboard?.writeText(md.prompt); toast('Prompt copied.'); return; }
   if (act === 'm-save' && it) { if (await call('media:export', it.id)) toast('Saved.'); return; }
   if (act === 'm-open' && it) { openModal(`<img src="${esc(it.url)}" alt="" style="width:100%;border-radius:12px"><div class="modal-actions"><button class="btn" data-close>Close</button></div>`, { wide: true }); return; }
@@ -219,9 +237,9 @@ async function skillMediaAction(chat, m, act, el) {
   }
   if (act === 'm-again') {
     const liquid = chatIsLiquid(chat);
-    const pick = pickMediaModel(md.kind, { liquid, prompt: md.prompt });
+    const pick = pickMediaModel(md.kind, { liquid, pro: chatIsPro(chat), prompt: md.prompt });
     if (!pick) { md.need = liquidNeed(liquid, md.kind); save(); render(); return; }
-    delete md.error;
+    delete md.error; delete md.need;
     const repaint = () => { save(); if (S.route.view === 'chat' && S.route.id === chat.id) paintStreaming(chat, m); };
     let imageId;
     if (md.kind === 'edit' || md.kind === 'animate') {

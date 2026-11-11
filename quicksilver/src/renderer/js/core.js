@@ -172,6 +172,8 @@ const targetValid = (t) => Boolean(t) && S.targets.some((x) => x.target === t);
 // The Liquid Edition is completely uncensored: only uncensored models answer, check or stand in
 // for it (the same rule as complete.js isUncensored).
 const UNCENSORED_RX = /abliterat|uncensor|unfiltered|dolphin|hermes|lexi|rocinante/i;
+// A model's name and file name (never its folder: a Windows user called Alexis has "lexi" in every path).
+const modelNameText = (m) => `${m?.name || ''} ${String(m?.files?.model || '').split(/[\\/]/).pop()} ${m?.repo || ''}`;
 function liquidOk(t) {
   if (!t) return false;
   if (t === 'stack:quicksilver' || t === 'stack:quicksilver-pro') return true;
@@ -179,7 +181,7 @@ function liquidOk(t) {
     const m = S.installed.find((x) => `local:${x.id}` === t);
     if (!m) return false;
     const c = S.catalog?.text?.find((x) => x.id === m.catalogId);
-    return m.source === 'bundled' || c?.category === 'open' || UNCENSORED_RX.test(`${m.name} ${m.files?.model || ''}`);
+    return m.source === 'bundled' || c?.category === 'open' || UNCENSORED_RX.test(modelNameText(m));
   }
   if (t.startsWith('api:')) {
     const [, pid, ...rest] = t.split(':');

@@ -617,11 +617,13 @@ function liquidEditionsHTML() {
     </div>`;
 }
 document.addEventListener('click', async (e) => {
-  if (!e.target.closest('[data-get-pro]')) return;
+  const proBtn = e.target.closest('[data-get-pro]');
+  if (!proBtn || proBtn.disabled) return;
+  proBtn.disabled = true;
   const P = S.catalog.liquidPro;
   const spec = (id) => S.catalog.text.find((m) => m.id === id) || S.catalog.media.find((m) => m.id === id);
-  const missing = [...new Set([P.brain, P.closer, P.thinker, P.muse, ...P.pictures])].filter((id) => !S.installed.some((m) => m.catalogId === id) && spec(id));
-  if (proFit().level === 'no' && !(await confirmBox(`${proFit().text}\n\nDownload Liquid Edition Pro anyway?`, { yes: 'Download anyway', danger: false }))) return;
+  const missing = [...new Set([P.brain, P.closer, P.thinker, P.muse, ...P.pictures])].filter((id) => !S.installed.some((m) => m.catalogId === id) && !S.downloads[id] && spec(id));
+  if (proFit().level === 'no' && !(await confirmBox(`${proFit().text}\n\nDownload Liquid Edition Pro anyway?`, { yes: 'Download anyway', danger: false }))) { proBtn.disabled = false; return; }
   // Pro is only ever set up from this button.
   await call('quicksilver:proGet');
   // The Brain and Closer first (Pro is ready to chat as soon as they're in), then the rest.

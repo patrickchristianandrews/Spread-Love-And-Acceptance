@@ -54,7 +54,7 @@ views.models = {
       try { const r = await call('models:repair', b.dataset.repair); S.downloads[r.id] = r; paintDownloads(); toast('Checking the files and downloading anything missing. You can keep working.'); } catch (err) { toast(err.message, 8000); }
       render();
     }));
-    $$('[data-default]').forEach((b) => b.addEventListener('click', () => { S.data.prefs.defaultTarget = b.dataset.default; S.data.prefs.defaultAuto = false; save(); render(); toast('Default model set.'); }));
+    $$('[data-default]').forEach((b) => b.addEventListener('click', () => { S.data.prefs.defaultTarget = b.dataset.default; S.data.prefs.defaultAuto = false; S.data.prefs.defaultChosen = true; save(); render(); toast('Default model set.'); }));
     $$('[data-cat]').forEach((b) => b.addEventListener('click', () => { catFilter = b.dataset.cat; render(); }));
     $('#fits-only')?.addEventListener('change', (e) => { fitsOnly = e.target.checked; render(); });
     bindHf();
@@ -77,8 +77,8 @@ function diskSummaryHTML() {
 
 function installedHTML() {
   if (!S.installed.length) return `<div class="notice info">Nothing installed yet. Start with the <a href="#" data-goto-stacks>Setup Advisor</a>, or browse <b>Text & vision</b>.</div>`;
-  const kinds = { text: '💬 Text & vision', image: '🎨 Images', video: '🎬 Video' };
-  const onlyStarter = S.installed.filter((m) => m.kind === 'text').every((m) => m.source === 'bundled');
+  const kinds = { text: '💬 Text & vision', image: '🎨 Images', video: '🎬 Video', embed: '🔎 Smarter search', rerank: '🔎 Sharper search' };
+  const onlyStarter = S.installed.some((m) => m.kind === 'text') && S.installed.filter((m) => m.kind === 'text').every((m) => m.source === 'bundled');
   const note = onlyStarter ? '<div class="notice info" style="margin-bottom:12px"><b>💡 Only the starter models so far.</b> They are limited on their own; download stronger ones under <b>Text &amp; vision</b>, or let the <a href="#" data-goto-stacks>Setup Advisor</a> pick a team for your PC. Quicksilver adds new models to its team automatically.</div>' : '';
   return note + diskSummaryHTML() + Object.entries(kinds).map(([k, label]) => {
     const list = S.installed.filter((m) => m.kind === k);
@@ -157,7 +157,7 @@ function modelCard(m, est, kind) {
     <div class="row" style="margin-bottom:10px">${tags.join('')}</div>
     <div class="row" style="margin-bottom:${kind === 'text' && est?.wordsPerSec ? 2 : 12}px"><span class="small" style="font-weight:700">On your PC:</span>${rateBadge(est, kind)}</div>
     ${kind === 'text' && est?.wordsPerSec ? timesHTML(WORDS.chat / Math.max(0.1, est.wordsPerSec), { label: false }) : ''}
-    <div class="row">${S.downloads[m.id] ? downloadBox(m.id) : inst ? '<span class="badge b-mint">✓ Installed</span>' : `<button class="btn primary small" data-get="${m.id}">Download</button>`}<span class="grow"></span>${kind === 'text' ? boostBtn(m.id) : ''}<button class="btn small ghost" data-details="${esc(m.id)}">${est?.rating === 'wont' ? 'Why? What would it need?' : 'Details'}</button></div>
+    <div class="row">${S.downloads[m.id] ? downloadBox(m.id) : inst ? '<span class="badge b-mint">✓ Installed</span>' : `<button class="btn primary small" data-get="${esc(m.id)}">Download</button>`}<span class="grow"></span>${kind === 'text' ? boostBtn(m.id) : ''}<button class="btn small ghost" data-details="${esc(m.id)}">${est?.rating === 'wont' ? 'Why? What would it need?' : 'Details'}</button></div>
   </div>`;
 }
 

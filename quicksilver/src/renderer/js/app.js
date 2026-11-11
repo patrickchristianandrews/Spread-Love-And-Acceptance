@@ -222,8 +222,11 @@ async function init() {
     // One more Liquid Edition model in: re-check what's still missing (opens Quicksilver when none is).
     if (document.getElementById('liquid-gate')) { await setUpQuicksilver(false).catch(() => {}); if (document.getElementById('liquid-gate')) return; }
     S.est = null;
-    if (!(await applyPendingUpgrades(model).catch(() => false))) toast(`${model.name} is ready.`);
-    if (!targetValid(S.data.prefs.defaultTarget) && model.kind === 'text') { S.data.prefs.defaultTarget = `local:${model.id}`; S.data.prefs.defaultAuto = true; save(); }
+    const gateJustClosed = Date.now() - (S.gateClosedAt || 0) < 8000;
+    if (!(await applyPendingUpgrades(model).catch(() => false)) && !gateJustClosed) toast(`${model.name} is ready.`);
+    // An open "Suggested add-ons" window shows the finished download.
+    if (document.getElementById('addon-list')) document.getElementById('addon-list').innerHTML = liquidAddonsHTML();
+    if (!targetValid(S.data.prefs.defaultTarget) && !(S.data.prefs.defaultChosen && !S.data.prefs.defaultTarget) && model.kind === 'text') { S.data.prefs.defaultTarget = `local:${model.id}`; S.data.prefs.defaultAuto = true; save(); }
     // Load the default model in the background so the first reply is quick.
     if (model.kind === 'text') await setUpQuicksilver(false).catch(() => {}); // a new model can join Quicksilver's team
     if (model.kind === 'text' && (S.catalog?.liquidPro && Object.values(S.catalog.liquidPro).includes(model.catalogId))) { await qs.call('quicksilver:pro').catch(() => {}); await refreshModels(); }
@@ -231,7 +234,7 @@ async function init() {
     if (!$('#modal').hidden) return;
     render();
   });
-  qs.onModelError(({ id, message, cancelled }) => { delete S.downloads[id]; paintDownloads(); if (gateItems.some((m) => m.catalogId === id)) { gateFailed[id] = message; paintLiquidGate(); } if (!cancelled) toast(message, 8000); else toast(message); if (['models', 'stacks', 'studio'].includes(S.route.view)) render(); });
+  qs.onModelError(({ id, message, cancelled }) => { delete S.downloads[id]; paintDownloads(); if (document.getElementById('addon-list')) document.getElementById('addon-list').innerHTML = liquidAddonsHTML(); if (gateItems.some((m) => m.catalogId === id)) { gateFailed[id] = message; paintLiquidGate(); } if (!cancelled) toast(message, 8000); else toast(message); if (['models', 'stacks', 'studio'].includes(S.route.view)) render(); });
 
   go({ view: 'home' });
   // People updating get the short tour once too (new people see it after the name question).
@@ -254,7 +257,8 @@ async function setUpQuicksilver(firstLook) {
   // finish downloading) gives way to it; so does, once, a filtered model left as the default by
   // an earlier version.
   const leftover = r.stack && !p.liquidDefaultOnce && targetValid(p.defaultTarget) && p.defaultTarget.startsWith('local:') && !liquidOk(p.defaultTarget);
-  if (r.stack && (!targetValid(p.defaultTarget) || p.defaultTarget === 'local:starter' || p.defaultAuto || leftover)) {
+  const choseAutomatic = p.defaultChosen && !p.defaultTarget; // "Automatic" picked in Settings
+  if (r.stack && !choseAutomatic && (!targetValid(p.defaultTarget) || p.defaultTarget === 'local:starter' || p.defaultAuto || leftover)) {
     if (leftover) toast(`💧 The Liquid Edition is now your default (it was ${targetLabel(p.defaultTarget)}, a filtered model). Change it any time in Settings → Chat.`, 10000);
     p.defaultTarget = r.stack; p.defaultAuto = false;
   }
@@ -268,7 +272,7 @@ async function setUpQuicksilver(firstLook) {
   // Quicksilver doesn't open until the whole Liquid Edition is installed: anything not copied in
   // from the models folder downloads straight away behind the setup screen.
   liquidGate(r);
-  if (r.stack && !before?.startsWith('stack:quicksilver') && p.defaultTarget === r.stack && !firstLook) toast('💧 Quicksilver Liquid Edition is fully ready: your models now work together as one.', 8000);
+  if (r.stack && !before?.startsWith('stack:quicksilver') && p.defaultTarget === r.stack && !firstLook && Date.now() - (S.gateClosedAt || 0) > 8000) toast('💧 Quicksilver Liquid Edition is fully ready: your models now work together as one.', 8000);
   if (['home', 'chat'].includes(S.route.view) && (r.added.length || p.defaultTarget !== before)) render();
   return r;
 }
@@ -283,7 +287,7 @@ function liquidGate(r) {
   gateItems = (r?.missing || []).filter((m) => !S.installed.some((x) => x.catalogId === m.catalogId));
   let el = document.getElementById('liquid-gate');
   if (!gateItems.length) {
-    if (el) { el.remove(); toastAction('💧 Quicksilver Liquid Edition is ready: chat, pictures and video, all on your PC.', 'Suggested add-ons', () => liquidAddonsModal(), 12000); render(); }
+    if (el) { el.remove(); S.gateClosedAt = Date.now(); toastAction('💧 Quicksilver Liquid Edition is ready: chat, pictures and video, all on your PC.', 'Suggested add-ons', () => liquidAddonsModal(), 12000); render(); }
     return;
   }
   if (!el) {
@@ -294,7 +298,7 @@ function liquidGate(r) {
     el.style.cssText = 'position:fixed;inset:0;z-index:10000;display:flex;align-items:center;justify-content:center;padding:16px;background:var(--bg,#0f1117);overflow:auto';
     document.body.appendChild(el);
     el.addEventListener('click', async (e) => {
-      if (e.target.closest('[data-gate-online]')) { S.config = await call('config:set', { offline: false }); startGateDownloads(true); }
+      if (e.target.closest('[data-gate-online]')) { S.config = await call('config:set', { offline: false }); paintNet(); startGateDownloads(true); }
       else if (e.target.closest('[data-gate-retry]')) startGateDownloads(true);
     });
   }
@@ -304,8 +308,10 @@ function startGateDownloads(retry) {
   if (S.config?.offline) { paintLiquidGate(); return; }
   for (const m of gateItems) {
     if (S.downloads[m.catalogId] || (gateFailed[m.catalogId] && !retry)) continue;
+    // After a failure, the catalog's own entry is used: it knows backup copies of each model.
+    const viaCatalog = Boolean(gateFailed[m.catalogId]) || !m.repo;
     delete gateFailed[m.catalogId];
-    download(m.repo ? { repo: m.repo, quant: m.quant, catalogId: m.catalogId, name: m.name } : { catalogId: m.catalogId }, m.name)
+    download(viaCatalog ? { catalogId: m.catalogId } : { repo: m.repo, quant: m.quant, catalogId: m.catalogId, name: m.name }, m.name)
       .catch((err) => { gateFailed[m.catalogId] = err.message; paintLiquidGate(); });
   }
   paintLiquidGate();

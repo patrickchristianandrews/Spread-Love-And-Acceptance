@@ -122,7 +122,14 @@ function stop(key) {
   const s = servers.get(key);
   if (!s) return;
   servers.delete(key);
+  s.stopped = true; // on purpose (unloaded, replaced, removed): not a graphics-card failure
   try { s.proc.kill(); } catch {}
+}
+// A model that is answering right now is never unloaded or reloaded underneath its answer.
+const isBusy = (s) => (s.busy || 0) > 0;
+async function whenFree(s, maxMs = 15 * 60 * 1000) {
+  const until = Date.now() + maxMs;
+  while (isBusy(s) && !s.exited && Date.now() < until) await new Promise((r) => setTimeout(r, 200));
 }
 function stopAll() { for (const k of [...servers.keys()]) stop(k); }
 // Stops one model (every copy of it that's running), giving its memory back to the PC.
@@ -234,7 +241,7 @@ function idleMs() {
   const ram = hwCache?.ramGB || 0;
   return (ram >= 32 ? 120 : ram >= 16 ? 60 : 20) * 60 * 1000;
 }
-setInterval(() => { const ms = idleMs(); for (const [k, s] of [...servers.entries()]) if (Date.now() - s.lastUsed > ms) stop(k); }, 60 * 1000).unref?.();
+setInterval(() => { const ms = idleMs(); for (const [k, s] of [...servers.entries()]) if (!isBusy(s) && Date.now() - s.lastUsed > ms) stop(k); }, 60 * 1000).unref?.();
 
 // Starting a model with room for a longer chat costs a little memory but saves a full reload when
 // the chat grows: with plenty of memory to spare it starts at 16K or 32K tokens (never above your
@@ -245,7 +252,18 @@ function roomyContext(asked, limit, headroomGB) {
 }
 
 // Starts (or reuses) a server for a model. model = { id, file, mmproj?, ctx? }
-async function ensure(model, { contextSize = 8192, limit, gpu = 'auto', onStatus } = {}) {
+// Callers for the same model take turns: when a chat opens, the warm-up, the read-ahead and the
+// message itself all ask at once, and without this each would start its own copy (leaving
+// untracked engines running) or stop the one another caller was still loading.
+const loading = new Map(); // model file -> the latest ensure in progress
+async function ensure(model, opts = {}) {
+  const key = model.file;
+  const prev = loading.get(key);
+  const run = (prev ? prev.catch(() => {}) : Promise.resolve()).then(() => ensureNow(model, opts));
+  loading.set(key, run);
+  try { return await run; } finally { if (loading.get(key) === run) loading.delete(key); }
+}
+async function ensureNow(model, { contextSize = 8192, limit, gpu = 'auto', onStatus } = {}) {
   // One running copy per model, whoever asks (a chat, the warm-up when a chat opens, a stack
   // step): once it's loaded it is reused, never loaded a second time. A model whose graphics
   // card failed earlier stays on the processor for every caller.
@@ -259,7 +277,9 @@ async function ensure(model, { contextSize = 8192, limit, gpu = 'auto', onStatus
     await existing.ready;
     return existing;
   }
-  if (existing) stop(key); // its context was too small for this conversation: restart it bigger
+  // Its context was too small for this conversation: restart it bigger, once it has finished
+  // any answer it is writing.
+  if (existing) { await whenFree(existing); if (servers.get(key) === existing) stop(key); }
   const hw = await hardware.detect();
   const engine = engines.resolve('llama', hw);
   if (!engine) throw new Error('The text engine is missing. Reinstall Quicksilver, or download an engine in Settings → Engines.');
@@ -272,7 +292,8 @@ async function ensure(model, { contextSize = 8192, limit, gpu = 'auto', onStatus
   const budget = Math.max(hw.vramGB, 0) + hw.ramGB * 0.7 - 2;
   const used = () => [...servers.values()].reduce((t, s) => t + s.sizeGB, 0);
   while (servers.size && used() + sizeGB > budget) {
-    const oldest = [...servers.entries()].sort((a, b) => a[1].lastUsed - b[1].lastUsed)[0];
+    const oldest = [...servers.entries()].filter(([, s]) => !isBusy(s)).sort((a, b) => a[1].lastUsed - b[1].lastUsed)[0];
+    if (!oldest) break; // everything loaded is answering: load alongside rather than cut an answer off
     stop(oldest[0]);
   }
 
@@ -286,6 +307,8 @@ async function ensure(model, { contextSize = 8192, limit, gpu = 'auto', onStatus
   let kvq = !kvPlain.has(model.file);
   let useDraft = Boolean(model.draft && fs.existsSync(model.draft));
   if (info.experts > 1 && ngl > 0 && ngl < 999) await checkCpuMoe(engine.bin);
+  let mine = null; // the server this call started
+  const stopMine = () => { if (!mine) return; if (servers.get(key) === mine) stop(key); else { mine.stopped = true; try { mine.proc.kill(); } catch {} } mine = null; };
   const start = async (layers) => {
     const port = await freePort();
     // --cache-reuse lets follow-up messages and stack steps reuse text the model already read.
@@ -323,6 +346,7 @@ async function ensure(model, { contextSize = 8192, limit, gpu = 'auto', onStatus
     proc.on('exit', () => { s.exited = true; if (servers.get(key) === s) servers.delete(key); });
     proc.on('error', (e) => { s.exited = true; s.log.push(String(e)); });
     servers.set(key, s);
+    mine = s;
     s.ready = waitReady(s, 600000);
     await s.ready;
     return s;
@@ -337,21 +361,21 @@ async function ensure(model, { contextSize = 8192, limit, gpu = 'auto', onStatus
       } catch (err) {
         if (!useDraft || err?.code === 'damaged') throw err;
         // The draft model didn't work with this one: run without it from now on.
-        stop(key); useDraft = false; noDraft.add(model.file);
+        stopMine(); useDraft = false; noDraft.add(model.file);
         return await start(ngl);
       }
     } catch (err) {
       if (!kvq || err?.code === 'damaged') throw err;
       // This engine or device couldn't use the 8-bit cache: remember that, and use a normal one.
-      stop(key); kvq = false; kvPlain.add(model.file);
+      stopMine(); kvq = false; kvPlain.add(model.file);
       return await start(ngl);
     }
   } catch (err) {
-    stop(key);
+    stopMine();
     if (ngl > 0 && err?.code !== 'damaged') {
       // Didn't fit on the graphics card: try again on the processor.
       onStatus?.(`Retrying ${model.name || 'model'} on the processor…`);
-      try { return await start(0); } catch (e2) { stop(key); throw friendly(e2); }
+      try { return await start(0); } catch (e2) { stopMine(); throw friendly(e2); }
     }
     throw friendly(err);
   } finally {
@@ -389,8 +413,11 @@ async function* chat(model, opts) {
   if (hasImages && !model.mmproj) throw new Error(`${model.name} can't see images. Use a vision model or a stack with a vision member.`);
   const useGpu = cpuOnly.has(model.file) ? 0 : gpu;
   let produced = false;
+  let srv = null;
   try {
     const s = await ensure(model, { contextSize: contextFor(messages, maxTokens, contextSize || 16384), limit: contextSize || 16384, gpu: useGpu, onStatus });
+    srv = s;
+    s.busy = (s.busy || 0) + 1;
     s.lastUsed = Date.now();
     onStatus?.('');
     for await (const ev of oai.streamChat({
@@ -406,16 +433,23 @@ async function* chat(model, opts) {
         // A real measurement of this model on this PC (see speeds.js).
         try { const hw = await hardware.detect(); const reg = require('./models').get(model.id); if (reg) speeds.record(model.id, ev.tps, ev.tokens, speeds.estimateFor(reg, hw)); } catch {}
       }
+      s.lastUsed = Date.now();
       yield ev;
     }
     s.lastUsed = Date.now();
   } catch (err) {
-    if (!produced && !signal?.aborted && !noLogprobs.has(model.file) && /logprob|n_probs/i.test(String(err?.message || err))) { noLogprobs.add(model.file); yield* chat(model, opts); return; }
+    if (!produced && !signal?.aborted && !noLogprobs.has(model.file) && /logprob|n_probs/i.test(String(err?.message || err))) { noLogprobs.add(model.file); if (srv) { srv.busy = Math.max(0, (srv.busy || 1) - 1); srv = null; } yield* chat(model, opts); return; }
+    // A model that was stopped on purpose (Stop model, removed, engine changed) didn't fail on the
+    // graphics card: say what happened, and don't move it to the processor.
+    if (srv?.stopped && !signal?.aborted && !produced) throw new Error(`${model.name || 'The model'} was stopped before it answered. Send the message again.`);
     if (signal?.aborted || produced || useGpu === 0 || !GPU_FAILURE.test(String(err?.message || err))) throw err;
+    if (srv) { srv.busy = Math.max(0, (srv.busy || 1) - 1); srv = null; }
     cpuOnly.add(model.file);
     for (const [k, srv] of [...servers.entries()]) if (srv.file === model.file) stop(k);
     onStatus?.(`The graphics card failed with ${model.name}; switching to the processor (slower but reliable)…`);
     yield* chat(model, { ...opts, gpu: 0 });
+  } finally {
+    if (srv) { srv.busy = Math.max(0, (srv.busy || 1) - 1); srv.lastUsed = Date.now(); }
   }
 }
 
@@ -425,7 +459,10 @@ async function prefill(model, messages, { contextSize = 16384, gpu = 'auto' } = 
   const useGpu = cpuOnly.has(model.file) ? 0 : gpu;
   const s = await ensure(model, { contextSize: contextFor(messages, 4096, contextSize), limit: contextSize, gpu: useGpu });
   s.lastUsed = Date.now();
+  s.busy = (s.busy || 0) + 1;
+  try {
   await fetch(`http://127.0.0.1:${s.port}/v1/chat/completions`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ messages, max_tokens: 1, temperature: 0, cache_prompt: true }), signal: AbortSignal.timeout(180000) }).then((r) => r.text()).catch(() => {});
+  } finally { s.busy = Math.max(0, (s.busy || 1) - 1); s.lastUsed = Date.now(); }
   return true;
 }
 

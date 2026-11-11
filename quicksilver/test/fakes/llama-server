@@ -5,6 +5,7 @@ const args = process.argv.slice(2);
 const arg = (f) => { const i = args.indexOf(f); return i >= 0 ? args[i + 1] : null; };
 if (args.includes('--list-devices')) { console.log('Available devices:\n  Vulkan0: Fake GPU 8GB (8192 MiB, 7800 MiB free)'); process.exit(0); }
 if (args.includes('--help')) { console.log('-md,   --model-draft FNAME\n-ngld, --gpu-layers-draft N\n--spec-draft-n-max N\n--spec-draft-n-min N\n--draft, --draft-n, --draft-max N   the argument has been removed. use --spec-draft-n-max'); process.exit(0); }
+if (process.env.QS_SPAWN_LOG) require('fs').appendFileSync(process.env.QS_SPAWN_LOG, `${process.pid}\n`); // tests count engine starts
 const port = Number(arg('--port'));
 const model = require('path').basename(arg('-m') || 'model');
 const vision = Boolean(arg('--mmproj'));

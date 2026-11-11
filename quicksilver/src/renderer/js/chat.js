@@ -88,7 +88,7 @@ views.chat = {
 // A warning when a chat is set to a filtered (censored) model while an uncensored one is available,
 // so an unexpected refusal is never a mystery. One click switches to the uncensored Liquid Edition.
 function filteredModelNote(chat, a, target) {
-  if (!target || target.startsWith('api:') || liquidOk(target)) return '';
+  if (!target || !target.startsWith('local:') || liquidOk(target)) return '';
   // Only when an uncensored path exists: the built-in Liquid Edition, or an uncensored model.
   const liquid = S.targets.find((t) => t.target === 'stack:quicksilver' && targetValid('stack:quicksilver'));
   const uncModel = S.targets.find((t) => t.target.startsWith('local:') && liquidOk(t.target));
@@ -429,16 +429,7 @@ function bindChat() {
     }
     if (!resolveTarget(chat, a)) { needModel(chat); return; }
     // An assistant can apply a skill to every message (the Image Artist paints each request).
-    // Asking for a picture or a video makes one: no need to click the suggested skill first.
-    // (Editing or animating needs a photo attached, so those still wait for you to choose.)
-    const autoSkill = !chat.pendingSkill ? suggestSkill(text) : null;
-    // A follow-up right after a picture or video ("another one", "now make it night", "same but
-    // blonde") continues with the same skill.
-    const prevAlt = (() => { const m = [...chat.messages].reverse().find((x) => x.role === 'assistant'); return m?.alts?.[m.altIndex]; })();
-    const prevSkill = prevAlt?.media && ['image', 'video'].includes(skillById(prevAlt.skillId)?.output) ? prevAlt.skillId : null;
-    const followUp = prevSkill && text.length < 240 && !/\?\s*$/.test(text) && /\b(another|again|more|same|now|make (her|him|it|them|this|that)|change|but|with|without|instead|bigger|smaller|different|variation|redo|one more|this time|add|remove|closer|wider)\b/i.test(text);
-    const autoMedia = autoSkill && ['image', 'video'].includes(autoSkill.output) ? autoSkill.id : followUp ? prevSkill : null;
-    chat.messages.push({ id: uid(), t: now(), role: 'user', text, attachments: atts, skillId: chat.pendingSkill || autoMedia || (skillById(a.skill) ? a.skill : undefined) });
+    chat.messages.push({ id: uid(), t: now(), role: 'user', text, attachments: atts, skillId: chat.pendingSkill || (skillById(a.skill) ? a.skill : undefined) });
     chat.pendingSkill = null; chat.suggested = null;
     drafts[chat.id] = [];
     if (chat.title === 'New chat') chat.title = (text || atts[0]?.name || 'New chat').replace(/\s+/g, ' ').slice(0, 60);
@@ -897,6 +888,10 @@ qs.onChat(({ requestId, ev }) => {
         msg.alts.splice(msg.altIndex, 1);
         if (!msg.alts.length) chat.messages = chat.messages.filter((m) => m !== msg); else msg.altIndex = msg.alts.length - 1;
       }
+      // Pictures and videos are only made through a skill. If a reply written without one turns
+      // out to be picture instructions (the model copying an earlier picture reply in the chat),
+      // nothing is made by itself: the answer is shown as written, with a button to make it.
+      if (ev.type === 'done' && !ev.aborted && !alt.skillId) { const offer = mediaReplySkill(alt.text); if (offer) alt.mediaOffer = offer; }
       if (ev.type === 'done' && alt.text && !isMakerSkill(alt)) alt.text = humanize(alt.text); // no chatbot leftovers
       delete alt.status;
       if (alt.t0) { alt.ms = Date.now() - alt.t0; delete alt.t0; }
@@ -907,10 +902,6 @@ qs.onChat(({ requestId, ev }) => {
       chat.updated = now();
       save();
       if (S.route.view === 'chat') render(); else renderChatList();
-      // A reply that is picture (or video) instructions gets made, even when no skill was switched
-      // on for this message: in a chat where you made a picture earlier, the model writes the same
-      // kind of reply to a follow-up, and that must become a picture, not a block of code.
-      if (ev.type === 'done' && !ev.aborted && !alt.skillId) { const auto = mediaReplySkill(alt.text); if (auto) alt.skillId = auto; }
       const maker = isMakerSkill(alt);
       const ok = ev.type === 'done' && !ev.aborted;
       (async () => {

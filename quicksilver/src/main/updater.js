@@ -70,9 +70,13 @@ function download() {
     await require('./engines').downloadTo(u.url, tmp, (d, t) => { state.progress = { downloaded: d, total: t || u.size }; if (Date.now() - last > 400) { last = Date.now(); changed(); } });
     if (u.size && fs.statSync(tmp).size !== u.size) { fs.rmSync(tmp, { force: true }); throw new Error('The update download was incomplete. It will try again later.'); }
     if (u.sumUrl) {
-      const want = (await (await fetch(u.sumUrl, { headers: { 'User-Agent': 'Quicksilver' } })).text()).trim().split(/\s+/)[0].toLowerCase();
-      const got = crypto.createHash('sha256').update(fs.readFileSync(tmp)).digest('hex');
-      if (want && want !== got) { fs.rmSync(tmp, { force: true }); throw new Error('The update didn\'t match its published fingerprint, so it was deleted.'); }
+      const sumRes = await fetch(u.sumUrl, { headers: { 'User-Agent': 'Quicksilver' } });
+      if (!sumRes.ok) { fs.rmSync(tmp, { force: true }); throw new Error('The update\'s fingerprint couldn\'t be downloaded. It will try again later.'); }
+      const want = (await sumRes.text()).trim().split(/\s+/)[0].toLowerCase();
+      if (!/^[0-9a-f]{64}$/.test(want)) { fs.rmSync(tmp, { force: true }); throw new Error('The update\'s fingerprint couldn\'t be read. It will try again later.'); }
+      // Hashed as a stream: the installer is about 2 GB, too big to read into memory in one go.
+      const got = await new Promise((resolve, reject) => { const h = crypto.createHash('sha256'); fs.createReadStream(tmp).on('data', (d) => h.update(d)).on('end', () => resolve(h.digest('hex'))).on('error', reject); });
+      if (want !== got) { fs.rmSync(tmp, { force: true }); throw new Error('The update didn\'t match its published fingerprint, so it was deleted.'); }
     }
     fs.renameSync(tmp, file);
     state.downloaded = { version: u.version, file };

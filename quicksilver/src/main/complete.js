@@ -845,7 +845,7 @@ function isUncensored(target) {
     const m = models.get(p.id);
     if (!m) return false;
     const c = catalog.TEXT_MODELS.find((x) => x.id === m.catalogId);
-    return m.source === 'bundled' || c?.category === 'open' || UNCENSORED.test(`${m.name} ${m.files?.model || ''}`);
+    return m.source === 'bundled' || c?.category === 'open' || UNCENSORED.test(`${m.name} ${require('node:path').basename(m.files?.model || '')} ${m.repo || ''}`);
   }
   if (p.kind === 'api') {
     const [, pid, ...rest] = target.split(':');
@@ -1157,7 +1157,7 @@ async function warm(target, { contextSize, gpu } = {}) {
   if (t.kind !== 'local') return false;
   const m = models.get(t.id);
   if (!m) return false;
-  await llama.ensure(localSpec(m), { contextSize: Math.min(contextSize || 8192, 8192), gpu });
+  await llama.ensure(localSpec(m), { contextSize: Math.min(contextSize || 8192, 8192), limit: contextSize || 16384, gpu });
   return true;
 }
 

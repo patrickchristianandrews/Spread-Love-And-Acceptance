@@ -15,8 +15,21 @@ const media = require('./media');
 let server = null;
 let state = { running: false, port: null, error: '' };
 
+// Which web pages may call this API. Other apps on this PC send no Origin and are never affected.
+// A page in a browser always sends one: pages served from this PC (localhost) are allowed; any
+// other website is only let in when "Require an access key" is on (and it has the key). Without
+// this, any site open in the browser could use your models, your paid cloud keys and your
+// knowledge bases just because the API server is running.
+const LOCAL_ORIGIN = /^https?:\/\/(localhost|127\.0\.0\.1|\[::1\])(:\d+)?$/i;
+function corsOrigin(req, cfg) {
+  const o = req.headers.origin;
+  if (!o) return ''; // not a browser page
+  if (LOCAL_ORIGIN.test(o) || cfg?.requireKey) return o;
+  return null; // a website, and no key is required: refused
+}
+const cors = (res) => (res.qsOrigin ? { 'Access-Control-Allow-Origin': res.qsOrigin, Vary: 'Origin' } : {});
 function send(res, status, obj) {
-  res.writeHead(status, { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' });
+  res.writeHead(status, { 'Content-Type': 'application/json', ...cors(res) });
   res.end(JSON.stringify(obj));
 }
 
@@ -56,7 +69,7 @@ async function chat(req, res, body) {
   const params = { messages: body.messages || [], temperature: body.temperature ?? 0.7, maxTokens: body.max_tokens || body.max_completion_tokens || 4096, contextSize: 16384, signal: controller.signal };
   try {
     if (body.stream) {
-      res.writeHead(200, { 'Content-Type': 'text/event-stream', 'Cache-Control': 'no-cache', Connection: 'keep-alive', 'Access-Control-Allow-Origin': '*' });
+      res.writeHead(200, { 'Content-Type': 'text/event-stream', 'Cache-Control': 'no-cache', Connection: 'keep-alive', ...cors(res) });
       const chunk = (delta, finish = null) => res.write(`data: ${JSON.stringify({ id, object: 'chat.completion.chunk', created, model: body.model, choices: [{ index: 0, delta, finish_reason: finish }] })}\n\n`);
       chunk({ role: 'assistant' });
       for await (const ev of complete.run(target, params)) {
@@ -91,15 +104,20 @@ async function images(res, body) {
 }
 
 function handler(req, res) {
+  const cfg = store.config().apiServer;
+  const origin = corsOrigin(req, cfg);
+  if (origin === null) return send(res, 403, { error: { message: 'This website is not allowed to use the Quicksilver API. To let web pages in, turn on "Require an access key" in Settings → API server and use the key.', type: 'forbidden' } });
+  res.qsOrigin = origin;
   if (req.method === 'OPTIONS') {
-    res.writeHead(204, { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Headers': 'Authorization, Content-Type', 'Access-Control-Allow-Methods': 'GET, POST, OPTIONS' });
+    res.writeHead(204, { ...cors(res), 'Access-Control-Allow-Headers': 'Authorization, Content-Type', 'Access-Control-Allow-Methods': 'GET, POST, OPTIONS' });
     return res.end();
   }
-  const cfg = store.config().apiServer;
   if (cfg.requireKey) {
     const key = store.getSecret('apiServerKey');
     const got = (req.headers.authorization || '').replace(/^Bearer\s+/i, '');
-    if (!key || got.length !== key.length || !crypto.timingSafeEqual(Buffer.from(got), Buffer.from(key))) return send(res, 401, { error: { message: 'Missing or wrong API key.', type: 'authentication_error' } });
+    // Compared as bytes of equal length (a key with accented letters must not crash the check).
+    const a = Buffer.from(got); const b = Buffer.from(key || '');
+    if (!key || a.length !== b.length || !crypto.timingSafeEqual(a, b)) return send(res, 401, { error: { message: 'Missing or wrong API key.', type: 'authentication_error' } });
   }
   const url = (req.url || '').split('?')[0].replace(/\/+$/, '');
   (async () => {

@@ -217,7 +217,7 @@ function builtinModelHTML() {
   if (!brain) return '';
   const est = S.est?.text?.[brain.id];
   const have = S.installed.some((m) => m.source === 'bundled' || m.catalogId === brain.id);
-  const open = S.installed.some((m) => m.source === 'bundled' && /uncensored|abliterat/i.test(`${m.name} ${m.files?.model || ''}`));
+  const open = S.installed.some((m) => m.source === 'bundled' && /uncensored|abliterat/i.test(modelNameText(m)));
   const qst = (S.stacks || []).find((x) => x.id === 'quicksilver');
   const team = qst ? [...new Set([qst.members.judge, ...(qst.members.drafters || []), qst.members.vision].filter(Boolean))].map((t) => S.installed.find((m) => `local:${m.id}` === t)?.name).filter(Boolean) : [];
   const can = [

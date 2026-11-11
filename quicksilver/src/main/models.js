@@ -116,7 +116,18 @@ function localPath(repo, file) {
   return path.join(store.dir('models'), repo.replace(/[\\/]/g, '__'), file);
 }
 
+// Two downloads that share a file take turns on it (Wan 2.2 and its Turbo share a decoder and a
+// text encoder; many picture models share one decoder): the second finds it finished, instead of
+// both writing the same file at once and corrupting it.
+const fetching = new Map(); // dest -> the download in progress
 async function fetchFile(repo, file, dest, onBytes, signal, expected = 0) {
+  const prev = fetching.get(dest);
+  const run = (prev ? prev.catch(() => {}) : Promise.resolve()).then(() => fetchFileNow(repo, file, dest, onBytes, signal, expected));
+  fetching.set(dest, run);
+  try { return await run; } finally { if (fetching.get(dest) === run) fetching.delete(dest); }
+}
+async function fetchFileNow(repo, file, dest, onBytes, signal, expected = 0) {
+  const io = require('./engines');
   const part = `${dest}.part`;
   if (fs.existsSync(dest)) {
     const have = fs.statSync(dest).size;
@@ -127,29 +138,36 @@ async function fetchFile(repo, file, dest, onBytes, signal, expected = 0) {
   fs.mkdirSync(path.dirname(dest), { recursive: true });
   if (expected && fs.existsSync(part) && fs.statSync(part).size > expected) fs.unlinkSync(part);
   const have = fs.existsSync(part) ? fs.statSync(part).size : 0;
+  // A finished part that was never renamed (something held the file for a moment): it is done.
+  if (expected && have === expected) { fs.renameSync(part, dest); onBytes(have); return dest; }
   const url = `${HF}/${repo}/resolve/main/${file.split('/').map(encodeURIComponent).join('/')}?download=true`;
   const auth = hfHeaders();
-  const g = require('./engines').stallGuard(signal);
+  const g = io.stallGuard(signal);
   const res = await fetch(url, { headers: { ...auth, ...(have ? { Range: `bytes=${have}-` } : {}) }, signal: g.signal, redirect: 'follow' }).catch((e) => { g.done(); throw g.stalled() ? new Error('the connection stalled. Start it again to resume where it stopped') : e; });
-  if (res.status === 401 || res.status === 403) throw new Error('This model needs you to accept its license on huggingface.co first, then add a Hugging Face token in Settings → Accounts.');
-  if (!res.ok && res.status !== 206) throw new Error(`Download failed (HTTP ${res.status}).`);
+  const giveUp = (msg) => { g.done(); res.body?.cancel?.().catch(() => {}); return new Error(msg); };
+  if (res.status === 401 || res.status === 403) throw giveUp('This model needs you to accept its license on huggingface.co first, then add a Hugging Face token in Settings → Accounts.');
+  // The saved part no longer matches what the server has: clear it, so the next try starts clean.
+  if (res.status === 416) { try { fs.unlinkSync(part); } catch {} throw giveUp('the saved part of this download was out of date and has been cleared. Start it again'); }
+  if (!res.ok && res.status !== 206) throw giveUp(`Download failed (HTTP ${res.status}).`);
   const resume = res.status === 206 && have > 0;
-  const out = fs.createWriteStream(part, { flags: resume ? 'a' : 'w' });
+  const out = io.openForWrite(part, resume ? 'a' : 'w');
   let done = resume ? have : 0;
   onBytes(done);
   try {
     for await (const chunk of res.body) {
       g.poke();
       done += chunk.length;
-      if (!out.write(chunk)) await new Promise((r) => out.once('drain', r));
+      await io.writeChunk(out, chunk);
       onBytes(done);
     }
+    if (out.writeError) throw out.writeError;
   } catch (err) {
     if (g.stalled()) throw new Error('the connection stalled (no data for 90 seconds). Start it again to resume where it stopped');
+    if (out.writeError || err?.code === 'ENOSPC') throw io.diskError(out.writeError || err);
     throw err;
   } finally {
     g.done();
-    await new Promise((r) => out.end(r));
+    await io.closeWrite(out);
   }
   // The connection can close early without an error: check the size before calling it done.
   const want = expected || (Number(res.headers.get('content-length')) || 0) + (resume ? have : 0);
@@ -366,9 +384,13 @@ function keepPackModels(dir) {
       const from = path.join(dir, f);
       const to = path.join(keep, path.basename(f));
       if (!fs.existsSync(from)) continue;
-      try { fs.renameSync(from, to); } catch { fs.copyFileSync(from, to); fs.rmSync(from, { force: true }); }
-      for (const m of all) for (const [role, p] of Object.entries(m.files || {})) if (path.resolve(p) === path.resolve(from)) m.files[role] = to;
-      moved++;
+      // Each file on its own: one that can't be moved (still in use, or no room on the data
+      // drive) must not lose track of the ones that were. The registry is saved whatever happens.
+      try {
+        try { fs.renameSync(from, to); } catch { fs.copyFileSync(from, to); try { fs.rmSync(from, { force: true }); } catch {} }
+        for (const m of all) for (const [role, p] of Object.entries(m.files || {})) if (path.resolve(p) === path.resolve(from)) m.files[role] = to;
+        moved++;
+      } catch { try { fs.rmSync(to, { force: true }); } catch {} }
     }
   }
   if (moved) save(all);

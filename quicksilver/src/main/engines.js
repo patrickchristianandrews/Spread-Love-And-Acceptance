@@ -103,9 +103,29 @@ function stallGuard(signal) {
   poke();
   return { signal: ac.signal, poke, done: () => clearTimeout(timer), stalled: () => Boolean(ac.stalled) };
 }
+// Writing a download to disk. A write error (most often a full disk) is remembered on the stream
+// and turned into a clear message; without this the loop would wait for ever for the disk to
+// "catch up" and the download could never be cancelled.
+function openForWrite(file, flags = 'w') {
+  const out = fs.createWriteStream(file, { flags });
+  out.on('error', (e) => { out.writeError = e; });
+  return out;
+}
+function writeChunk(out, chunk) {
+  if (out.writeError) return Promise.reject(out.writeError);
+  if (out.write(chunk)) return Promise.resolve();
+  return new Promise((resolve, reject) => {
+    const ok = () => { out.off('error', bad); resolve(); };
+    const bad = (e) => { out.off('drain', ok); reject(e); };
+    out.once('drain', ok); out.once('error', bad);
+  });
+}
+const closeWrite = (out) => new Promise((r) => { if (out.destroyed || out.writeError) r(); else out.end(() => r()); });
+const diskError = (e) => new Error(e?.code === 'ENOSPC' ? 'the disk is full. Free some space, then start it again: it carries on where it stopped' : `the file couldn't be written (${e?.code || e?.message || e}). Start it again to carry on`);
+
 async function downloadTo(url, dest, onProgress, signal) {
   const g = stallGuard(signal);
-  const out = fs.createWriteStream(dest);
+  const out = openForWrite(dest);
   try {
     const res = await fetch(url, { headers: { 'User-Agent': 'Quicksilver' }, signal: g.signal });
     if (!res.ok || !res.body) throw new Error(`Download failed (HTTP ${res.status}).`);
@@ -114,16 +134,18 @@ async function downloadTo(url, dest, onProgress, signal) {
     for await (const chunk of res.body) {
       g.poke();
       done += chunk.length;
-      if (!out.write(chunk)) await new Promise((r) => out.once('drain', r));
+      await writeChunk(out, chunk);
       onProgress?.(done, total);
     }
+    if (out.writeError) throw out.writeError;
     if (total && done < total) throw new Error(`the connection closed at ${done} of ${total} bytes`);
   } catch (err) {
     if (g.stalled()) throw new Error('the connection stalled (no data for 90 seconds)');
+    if (out.writeError || err?.code === 'ENOSPC') throw diskError(out.writeError || err);
     throw err;
   } finally {
     g.done();
-    await new Promise((r) => out.end(() => r()));
+    await closeWrite(out);
   }
 }
 
@@ -186,4 +208,4 @@ function version(bin) {
   try { return fs.readFileSync(v, 'utf8').trim(); } catch { return ''; }
 }
 
-module.exports = { installed, resolve, available, install, cancelInstall, remove, version, bundledDir, downloadTo, stallGuard, extract, findRelease };
+module.exports = { installed, resolve, available, install, cancelInstall, remove, version, bundledDir, downloadTo, stallGuard, openForWrite, writeChunk, closeWrite, diskError, extract, findRelease };

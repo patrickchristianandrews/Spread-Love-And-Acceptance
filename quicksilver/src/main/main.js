@@ -498,8 +498,11 @@ handle('media:importPath', async (p) => {
 });
 const mediaJobs = new Map();
 handle('media:generate', (jobId, req) => {
+  jobId = String(jobId || '').replace(/[^a-z0-9_-]/gi, '').slice(0, 64); // it becomes part of file names
+  if (!jobId) throw new Error('Missing job id.');
   const g = media.gallery();
-  const resolveInput = (id) => (id ? g.find((x) => x.id === id)?.file : undefined);
+  // A picture that was asked for but is no longer in the gallery is an error, not a new picture.
+  const resolveInput = (id) => { if (!id) return undefined; const f = g.find((x) => x.id === id)?.file; if (!f) throw new Error('That picture is no longer in the gallery.'); return f; };
   let maskFile;
   if (req.maskDataUrl) {
     maskFile = path.join(store.dir('tmp'), `${jobId}-mask.png`);
@@ -509,7 +512,8 @@ handle('media:generate', (jobId, req) => {
     onProgress: (f) => emit('media:event', { jobId, type: 'progress', value: f }),
     onStatus: (text) => emit('media:event', { jobId, type: 'status', text }),
   }).then((item) => emit('media:event', { jobId, type: 'done', item: { ...item, url: `qsmedia://g/${item.id}` } }))
-    .catch((err) => emit('media:event', { jobId, type: 'error', message: err.message }));
+    .catch((err) => emit('media:event', { jobId, type: 'error', message: err.message }))
+    .finally(() => mediaJobs.delete(jobId));
   mediaJobs.set(jobId, p);
   return true;
 });
@@ -759,5 +763,5 @@ app.whenReady().then(() => { try { require('./guide').start(); require('./catalo
   app.on('activate', () => { if (BrowserWindow.getAllWindows().length === 0) createWindow(); });
 });
 
-app.on('before-quit', () => { llama.stopAll(); apiserver.stop(); phone.stop(); mcp.disconnectAll(); });
-app.on('window-all-closed', () => { llama.stopAll(); if (process.platform !== 'darwin') app.quit(); });
+app.on('before-quit', () => { llama.stopAll(); media.stopAll(); apiserver.stop(); phone.stop(); mcp.disconnectAll(); });
+app.on('window-all-closed', () => { llama.stopAll(); media.stopAll(); if (process.platform !== 'darwin') app.quit(); });

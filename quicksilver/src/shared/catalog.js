@@ -512,7 +512,7 @@ function profileInstalled(inst) {
   const sizeGB = (inst.size || 0) / 1e9;
   const vision = Boolean(inst.vision || inst.files?.mmproj);
   const c = TEXT_MODELS.find((m) => m.id === inst.catalogId) || matchCatalog(`${inst.name} ${inst.files?.model ? inst.files.model.split(/[\\/]/).pop() : ''}`);
-  const open = /dolphin|hermes|abliterat|uncensored|unfiltered|nemo|mistral/i.test(`${inst.name} ${inst.files?.model || ''}`);
+  const open = /dolphin|hermes|abliterat|uncensored|unfiltered|nemo|mistral/i.test(`${inst.name} ${inst.files?.model ? inst.files.model.split(/[\\/]/).pop() : ''}`);
   if (c) return { ...c, id: inst.id, name: inst.name, catalogId: c.id, sizeGB: sizeGB || c.sizeGB, vision: vision || Boolean(c.vision), open: Boolean(c.open || open), known: true };
   // Unknown model: rate it by size (a 4-bit model is about 0.6 GB per billion parameters).
   const params = Math.max(0.5, sizeGB / 0.6);

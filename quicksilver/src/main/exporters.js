@@ -156,7 +156,7 @@ async function toPptx(markdown, file, { title } = {}) {
 
 async function toPdf(html, file, { title } = {}) {
   const { BrowserWindow } = require('electron');
-  const w = new BrowserWindow({ show: false, webPreferences: { sandbox: true, javascript: false } });
+  const w = new BrowserWindow({ show: false, webPreferences: { sandbox: true, javascript: false, partition: `pdf-export-${Date.now()}` } });
   const page = `<!doctype html><html><head><meta charset="utf-8"><title>${title || 'Document'}</title><style>
     body{font:12pt/1.55 "Segoe UI",system-ui,sans-serif;color:#16122a;margin:0;padding:0}
     h1{font-size:22pt;color:#351c96}h2{font-size:16pt;color:#351c96;margin-top:18pt}h3{font-size:13pt}
@@ -164,10 +164,19 @@ async function toPdf(html, file, { title } = {}) {
     pre{background:#f3effd;padding:8pt;border-radius:6pt;white-space:pre-wrap;font:9.5pt Consolas,monospace}code{font-family:Consolas,monospace}
     blockquote{border-left:3pt solid #a99fd6;margin:0;padding-left:10pt;color:#3d3858}.table-tools,.copy,.bar-top{display:none}
     .cite{font-size:8pt;vertical-align:super;color:#351c96}svg{max-width:100%}</style></head><body>${title ? `<h1>${title}</h1>` : ''}${html}</body></html>`;
-  await w.loadURL(`data:text/html;charset=utf-8,${encodeURIComponent(page)}`);
-  const pdf = await w.webContents.printToPDF({ pageSize: 'A4', printBackground: true, margins: { top: 0.6, bottom: 0.6, left: 0.6, right: 0.6 } });
-  w.destroy();
-  fs.writeFileSync(file, pdf);
+  // Loaded from a temporary file (a long answer with pictures is too big for an address), with
+  // every network request refused, and the hidden window always closed afterwards.
+  const tmp = require('node:path').join(require('node:os').tmpdir(), `quicksilver-pdf-${Date.now().toString(36)}${Math.random().toString(36).slice(2, 8)}.html`);
+  try {
+    fs.writeFileSync(tmp, page);
+    w.webContents.session.webRequest.onBeforeRequest((d, cb) => cb({ cancel: !/^(file|data|blob|about|devtools):/.test(d.url) }));
+    await w.loadFile(tmp);
+    const pdf = await w.webContents.printToPDF({ pageSize: 'A4', printBackground: true, margins: { top: 0.6, bottom: 0.6, left: 0.6, right: 0.6 } });
+    fs.writeFileSync(file, pdf);
+  } finally {
+    try { w.destroy(); } catch {}
+    try { fs.rmSync(tmp, { force: true }); } catch {}
+  }
 }
 
 module.exports = { toDocx, toPptx, toPdf, blocks };

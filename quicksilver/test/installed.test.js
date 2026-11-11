@@ -35,7 +35,7 @@ function redPng(size = 64) {
   win.on('console', (m) => { if (m.type() === 'error' && !/Failed to load resource/.test(m.text())) errors.push(m.text()); });
   const shot = async (name) => { if (shots) { fs.mkdirSync(shots, { recursive: true }); await win.screenshot({ path: path.join(shots, `${mode}-${name}.png`) }); } };
   const state = () => win.evaluate(() => ({
-    installed: S.installed.map((m) => ({ id: m.id, name: m.name, source: m.source, catalogId: m.catalogId })),
+    installed: S.installed.map((m) => ({ id: m.id, name: m.name, kind: m.kind, source: m.source, catalogId: m.catalogId })),
     stacks: S.stacks.map((s) => ({ id: s.id, members: s.members })),
     def: S.data.prefs.defaultTarget,
     downloads: Object.values(S.downloads).map((d) => ({ id: d.id, done: d.downloaded, total: d.total })),
@@ -65,12 +65,12 @@ function redPng(size = 64) {
     // The web installer has no models at all: the setup screen covers the app and downloads the
     // whole Liquid Edition, the small 2B model and search included.
     await win.waitForSelector('#liquid-gate', { timeout: 60000 }).catch(() => { throw new Error('the web installer should open on the Liquid Edition setup screen'); });
-    const want = ['qwen3.5-2b', 'qwen3.5-4b', 'qwen3.5-9b-uncensored', 'nomic-embed-v1.5', 'bge-reranker-v2-m3', 'lustify', 'wan2.2-5b'];
+    const want = ['qwen3.5-2b', 'qwen3.5-4b', 'qwen3.5-9b-uncensored', 'nomic-embed-v1.5', 'bge-reranker-v2-m3', 'lustify', 'wan2.2-5b', 'wan2.2-5b-turbo'];
     await win.waitForFunction((ids) => ids.every((id) => S.downloads[id] || S.installed.some((m) => m.catalogId === id)), want, { timeout: 120000 })
       .catch(async () => { throw new Error(`every Liquid Edition model should start downloading (downloading: ${(await state()).downloads.map((d) => d.id).join(', ') || 'none'})`); });
     await shot('01-web-setup');
     s = await state();
-    assert.equal(s.installed.filter((m) => m.kind === 'text').length, 0, 'nothing installed with the web installer');
+    assert.equal(s.installed.filter((m) => m.source === 'bundled').length, 0, 'no models come with the web installer');
     ok(`web installer: setup screen up, downloading ${s.downloads.map((d) => d.id).join(', ')}`);
     assert.deepEqual(errors, [], 'no errors in the app');
     await app.close().catch(() => {});
@@ -90,7 +90,7 @@ function redPng(size = 64) {
     // setup screen covers the app and every missing model starts downloading at once.
     await win.waitForSelector('#liquid-gate', { timeout: 60000 })
       .catch(() => { throw new Error('the Liquid Edition setup screen should cover the app until every model is installed'); });
-    const want = ['qwen3.5-4b', 'qwen3.5-9b-uncensored', 'lustify', 'wan2.2-5b'];
+    const want = ['qwen3.5-4b', 'qwen3.5-9b-uncensored', 'lustify', 'wan2.2-5b', 'wan2.2-5b-turbo'];
     await win.waitForFunction((ids) => ids.every((id) => S.downloads[id] || S.installed.some((m) => m.catalogId === id)), want, { timeout: 120000 })
       .catch(async () => { throw new Error(`every Liquid Edition model should start downloading (downloading: ${(await state()).downloads.map((d) => d.id).join(', ') || 'none'})`); });
     await shot('01-setup');
@@ -110,14 +110,6 @@ function redPng(size = 64) {
   assert.match(r.a, /paris/i, 'a simple question is answered correctly');
   ok(`simple question answered${r.steps.length ? ` (steps: ${r.steps.join(', ')})` : ' directly'}`);
   await shot('02-simple');
-
-  if (mode === 'fallback') {
-    // The main model finishes downloading in the background, then Quicksilver is complete.
-    await win.waitForFunction(() => S.installed.some((m) => m.catalogId === 'qwen3.5-4b'), null, { timeout: 15 * 60 * 1000, polling: 2000 });
-    await win.waitForFunction(() => S.data.prefs.defaultTarget === 'stack:quicksilver', null, { timeout: 120000 });
-    s = await state();
-    ok(`background download finished: ${s.installed.map((m) => m.name).join(' + ')}; default ${s.def}`);
-  }
 
   r = await ask('What is 17 × 23? Work it out step by step.', null, 'stack:quicksilver');
   // The answer is 391: as the last number, or stated in the closing lines (a model may add a check

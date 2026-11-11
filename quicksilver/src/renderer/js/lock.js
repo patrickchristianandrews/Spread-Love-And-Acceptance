@@ -37,7 +37,7 @@ function isUncensoredTarget(target) {
     const inst = S.installed.find((m) => `local:${m.id}` === t);
     if (!inst || inst.source === 'bundled') return false; // the built-in model follows the family-safe rules instead
     const c = S.catalog?.text?.find((x) => x.id === inst.catalogId);
-    return c?.category === 'open' || /dolphin|hermes|abliterat|uncensor|unfiltered|lexi|rocinante|nsfw/i.test(`${inst.name} ${inst.files?.model || ''}`);
+    return c?.category === 'open' || /dolphin|hermes|abliterat|uncensor|unfiltered|lexi|rocinante|nsfw/i.test(modelNameText(inst));
   });
 }
 // Locked for this target right now?
