@@ -174,7 +174,9 @@ jobs:
           for f in dist/*.exe; do s=$(stat -c %s "$f"); echo "$f: $((s / 1048576)) MB"; [ "$s" -lt 2100000000 ] || { echo "::error::$f is too big for a Windows installer"; exit 1; }; done
           # Quicksilver's full model ships next to the installer, which copies it in.
           mkdir -p "dist/Quicksilver models"
-          cp pack/* "dist/Quicksilver models/"
+          # Moved, not copied: the folder is ~30 GB and the runner's disk is shared with the install test.
+          mv pack/* "dist/Quicksilver models/"
+          df -h . /c 2>/dev/null || true
           VERSION=$(node -p "require('./package.json').version")
           printf 'Installing Quicksilver\r\n\r\n1. Unzip everything into one folder.\r\n2. Run Quicksilver-Setup-%s.exe. Keep the "Quicksilver models" folder next to it:\r\n   the installer copies the full Quicksilver Liquid Edition from there,\r\n   including the Qwen3.5 9B Closer, Lustify (pictures) and Wan 2.2 (video),\r\n   so it works offline right away.\r\n\r\nIf you only have the setup file, that is fine too: Quicksilver starts with its small model\r\nand downloads the rest of the Liquid Edition straight away, the first time it opens.\r\n' "$VERSION" > "dist/READ ME FIRST.txt"
         env:
@@ -207,7 +209,10 @@ jobs:
         timeout-minutes: 60
         run: |
           $setup = Get-ChildItem dist\Quicksilver-Setup-*.exe | Select-Object -First 1
+          Get-ChildItem 'dist\Quicksilver models' | ForEach-Object { 'in the models folder: {0,-30} {1,8:N0} MB' -f $_.Name, ($_.Length / 1MB) }
+          Get-PSDrive C, D -ErrorAction SilentlyContinue | ForEach-Object { 'free on {0}: {1:N0} GB before installing' -f $_.Name, ($_.Free / 1GB) }
           Start-Process -Wait -FilePath $setup.FullName -ArgumentList '/S','/D=C:\QS'
+          Get-PSDrive C, D -ErrorAction SilentlyContinue | ForEach-Object { 'free on {0}: {1:N0} GB after installing' -f $_.Name, ($_.Free / 1GB) }
           if (!(Test-Path 'C:\QS\Quicksilver.exe')) { throw 'Quicksilver.exe was not installed' }
           if (!(Test-Path 'C:\QS\resources\engine\llama\llama-server.exe')) { throw 'the text engine is missing' }
           foreach ($f in 'STARTER.json','model.gguf','mmproj.gguf','embed.gguf','qwen3.5-4b.gguf','qwen3.5-4b-mmproj.gguf','qwen3.5-9b.gguf','qwen3.5-9b-mmproj.gguf','rerank.gguf') { if (!(Test-Path "C:\QS\resources\starter\$f")) { throw "missing resources\starter\$f" } }
