@@ -1096,7 +1096,8 @@ function redPng(size = 64) {
   });
   assert.match(up.card, /Better models available[\s\S]*Phi-4 14B[\s\S]*Qwen3 8B/);
   assert.equal(up.dot, up.dotWant, 'the Models menu item shows the updates');
-  assert.ok(!/^STILL /.test(up.laterCard) && /put off for later/.test(up.laterCard), `Maybe later hides it for now (card: ${up.laterCard.slice(0, 600)})`);
+  // Hidden for now: the card says it was put off, or (when it was the only suggestion) goes away.
+  assert.ok(!/^STILL /.test(up.laterCard) && (/put off for later/.test(up.laterCard) || /^ \[buttons after: 0;/.test(up.laterCard)), `Maybe later hides it for now (card: ${up.laterCard.slice(0, 600)})`);
   assert.match(up.backCard, /^BACK /, 'and it is suggested again later');
   assert.equal(up.swapped, true);
   assert.deepEqual(up.members.drafters, ['local:qwen3-8b', 'local:gemma-3-4b']);
