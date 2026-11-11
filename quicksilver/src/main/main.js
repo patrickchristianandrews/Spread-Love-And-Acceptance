@@ -79,7 +79,7 @@ handle('update:install', () => updater.install({ starterDir: app.isPackaged ? pa
 
 // ---------- hardware, catalog, estimates, advisor ----------
 handle('hw:detect', (fresh) => hardware.detect({ fresh }));
-handle('catalog:get', () => ({ liquid: catalog.LIQUID_MEMBERS, picks: require('./catalog-remote').picks(), scores: catalog.SCORES, scoreBase: catalog.SCORE_BASE, text: catalog.TEXT_MODELS, textCategories: catalog.TEXT_CATEGORIES, media: catalog.MEDIA_MODELS, mediaCategories: catalog.MEDIA_CATEGORIES, jobs: catalog.JOBS }));
+handle('catalog:get', () => ({ liquid: catalog.LIQUID_MEMBERS, liquidAddons: catalog.LIQUID_ADDONS, picks: require('./catalog-remote').picks(), scores: catalog.SCORES, scoreBase: catalog.SCORE_BASE, text: catalog.TEXT_MODELS, textCategories: catalog.TEXT_CATEGORIES, media: catalog.MEDIA_MODELS, mediaCategories: catalog.MEDIA_CATEGORIES, jobs: catalog.JOBS }));
 // Everything the model details view shows: how it runs here, why, and what it would need.
 handle('catalog:details', async (id) => {
   const hw = await hardware.detect();

@@ -848,18 +848,22 @@ const SCORES = require('./scores.json');
 // Uncensored versions are scored by the model they're made from (usually a point or two lower).
 const SCORE_BASE = { 'qwen3-8b-uncensored': 'qwen3-8b', 'qwen3-14b-uncensored': 'qwen3-14b', 'qwen3-30b-a3b-uncensored': 'qwen3-30b-a3b' };
 
-// ---------- the Liquid Edition's members ----------
-// Every uncensored model is part of Quicksilver Liquid Edition: its built-in core (Muse, Brain,
-// Closer, search), every uncensored chat model, every uncensored picture model and Wan 2.2 for
-// video. The Liquid Edition is locked: its models can't be removed and the stack can't be edited
-// or deleted (you can still pick any other model or stack instead). Core first, then chat, then
-// pictures and video: the order they download in.
+// ---------- the Liquid Edition ----------
+// Its core ships with the installer and is locked: these models can't be removed and the stack
+// can't be edited or deleted (you can still pick any other model or stack instead).
 const LIQUID_CORE = ['qwen3.5-2b', 'qwen3.5-4b', 'qwen3.5-9b-uncensored', 'nomic-embed-v1.5', 'bge-reranker-v2-m3', 'lustify', 'wan2.2-5b', 'wan2.2-5b-turbo'];
-const LIQUID_MEMBERS = [...new Set([
-  ...LIQUID_CORE,
-  ...TEXT_MODELS.filter((m) => m.category === 'open' && !RETIRED.has?.(m.id) && !m.retired).map((m) => m.id),
-  ...MEDIA_MODELS.filter((m) => m.uncensored).map((m) => m.id),
-])];
+const LIQUID_MEMBERS = LIQUID_CORE;
 const liquidMember = (catalogId) => Boolean(catalogId) && LIQUID_MEMBERS.includes(catalogId);
+// Suggested add-ons: not required, not locked, never downloaded by themselves. Each fills a gap in
+// the core; once downloaded it joins the Liquid Edition's crew (any uncensored model does).
+// minVramGB: below this the add-on is shown as not a good fit for this PC.
+const LIQUID_ADDONS = [
+  { id: 'wai-nsfw-illustrious', why: 'Anime: Lustify is a photo model, this is the most popular uncensored anime model. Anime requests use it by themselves.' },
+  { id: 'chroma-hd', why: 'The highest-quality uncensored pictures, with negative prompts.', minVramGB: 8 },
+  { id: 'cyberrealistic-sd15', why: 'Uncensored pictures on older 4 GB graphics cards and laptops, where Lustify is slow.' },
+  { id: 'rocinante-12b', why: 'Stories and role-play: vivid prose, far better than the core at fiction.' },
+  { id: 'mistral-small-3.2-uncensored', why: 'A stronger Closer that sees photos, for 16 GB+ graphics cards.', minVramGB: 16 },
+  { id: 'gpt-oss-20b-uncensored', why: 'A strong, fast reasoner for maths and logic on 12 GB+ graphics cards.', minVramGB: 12 },
+];
 
-module.exports = { LIQUID_CORE, LIQUID_MEMBERS, liquidMember, RETIRED, SCORES, SCORE_BASE, SUCCESSORS, FEATURED, TEXT_MODELS, TEXT_CATEGORIES, MEDIA_MODELS, MEDIA_CATEGORIES, JOBS, CLOUD_BOOST, cloudPlan, accuracyLevel, requirements, smallerAlternative, draftFor, DRAFT_FAMILIES, estimateText, estimateMedia, advise, compose, gpuBandwidth, profileInstalled, matchCatalog, scoreFor, familyOf, starsFor, capabilities, upgradeAdvice };
+module.exports = { LIQUID_CORE, LIQUID_MEMBERS, LIQUID_ADDONS, liquidMember, RETIRED, SCORES, SCORE_BASE, SUCCESSORS, FEATURED, TEXT_MODELS, TEXT_CATEGORIES, MEDIA_MODELS, MEDIA_CATEGORIES, JOBS, CLOUD_BOOST, cloudPlan, accuracyLevel, requirements, smallerAlternative, draftFor, DRAFT_FAMILIES, estimateText, estimateMedia, advise, compose, gpuBandwidth, profileInstalled, matchCatalog, scoreFor, familyOf, starsFor, capabilities, upgradeAdvice };

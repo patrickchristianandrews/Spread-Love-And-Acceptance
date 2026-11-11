@@ -60,6 +60,7 @@ views.stacks = {
     if (stacksTab === 'stacks') bindAdvisor(); // the Setup Advisor is only on the Stacks tab
     bindRecipes();
     $$('[data-edit-stack]').forEach((b) => b.addEventListener('click', () => { const st = S.stacks.find((s) => s.id === b.dataset.editStack); if (isFusion(st) && st.infused) infuseModal(() => render(), st); else editStack(st); }));
+    $$('[data-liquid-addons]').forEach((b) => b.addEventListener('click', () => liquidAddonsModal()));
     $$('[data-fz-rate]').forEach((b) => b.addEventListener('click', () => fusionRateModal(b.dataset.fzRate)));
     $$('[data-del-stack]').forEach((b) => b.addEventListener('click', async () => {
       if (!(await confirmBox(`Delete this ${S.stacks.find((s) => s.id === b.dataset.delStack) && isFusion(S.stacks.find((s) => s.id === b.dataset.delStack)) ? 'fusion' : 'stack'}? The models stay installed.`))) return;
@@ -393,7 +394,7 @@ function stackCard(s) {
     ${timesHTML(etaFor(`stack:${s.id}`))}
     ${boostsHTML(rows.map(([, t]) => t), { compact: true, liquid: s.builtFor === 'quicksilver' })}
     ${stackScoresHTML(rows.map(([, t]) => t))}
-    <div class="row"><button class="btn small primary" data-chat-stack="${s.id}">Chat</button>${s.builtFor === 'quicksilver' ? '' : `<button class="btn small" data-edit-stack="${s.id}">Edit</button>`}${isFusion(s) ? `<button class="btn small" data-fz-rate="${s.id}">📊 Rating &amp; tips</button>` : ''}${boostBtn(`stack:${s.id}`)}<button class="btn small ghost" data-sug-open="stack:${s.id}" title="The best model to join and API to add for a task you pick">💡 What to add</button>${isFusion(s) && !s.community ? `<button class="btn small" data-publish="${s.id}">📤 Publish</button>` : ''}${s.builtFor === 'quicksilver' ? '<span class="badge b-lav" title="The Liquid Edition can\'t be edited or deleted; choose another model or stack whenever you like">🔒 Locked</span>' : `<button class="btn small danger" data-del-stack="${s.id}">Delete</button>`}</div>
+    <div class="row"><button class="btn small primary" data-chat-stack="${s.id}">Chat</button>${s.builtFor === 'quicksilver' ? '' : `<button class="btn small" data-edit-stack="${s.id}">Edit</button>`}${isFusion(s) ? `<button class="btn small" data-fz-rate="${s.id}">📊 Rating &amp; tips</button>` : ''}${boostBtn(`stack:${s.id}`)}${s.builtFor === 'quicksilver' ? `<button class="btn small" data-liquid-addons title="Optional models that fill gaps in the Liquid Edition">💧 Suggested add-ons${liquidAddonsLeft() ? ` · ${liquidAddonsLeft()}` : ''}</button>` : ''}<button class="btn small ghost" data-sug-open="stack:${s.id}" title="The best model to join and API to add for a task you pick">💡 What to add</button>${isFusion(s) && !s.community ? `<button class="btn small" data-publish="${s.id}">📤 Publish</button>` : ''}${s.builtFor === 'quicksilver' ? '<span class="badge b-lav" title="The Liquid Edition can\'t be edited or deleted; choose another model or stack whenever you like">🔒 Locked</span>' : `<button class="btn small danger" data-del-stack="${s.id}">Delete</button>`}</div>
   </div>`;
 }
 
@@ -512,5 +513,39 @@ function infuseModal(onCreated, existing) {
     closeModal();
     toast(`${name} is ready. It works like any model: pick it in a chat, an assistant or the API.`, 6000);
     if (onCreated) onCreated(stack); else render();
+  });
+}
+
+// ---------- the Liquid Edition's suggested add-ons ----------
+// Optional, never required or locked: each fills a gap in the core, and joins the crew once downloaded.
+const addonSpec = (id) => S.catalog.text.find((m) => m.id === id) || S.catalog.media.find((m) => m.id === id);
+const addonHave = (id) => S.installed.some((m) => m.catalogId === id);
+const addonFits = (a) => !a.minVramGB || (S.est?.hardware?.vramGB || 0) >= a.minVramGB - 0.5;
+const liquidAddonsLeft = () => (S.catalog?.liquidAddons || []).filter((a) => !addonHave(a.id) && addonFits(a)).length;
+function liquidAddonsHTML() {
+  return (S.catalog?.liquidAddons || []).map((a) => {
+    const c = addonSpec(a.id);
+    if (!c) return '';
+    const kind = S.catalog.text.some((m) => m.id === a.id) ? 'text' : 'media';
+    const est = S.est?.[kind]?.[a.id];
+    const size = (c.sizeGB || 0) + (c.mmprojGB || 0);
+    const action = addonHave(a.id) ? '<span class="badge b-mint">✓ Installed: on the crew</span>'
+      : S.downloads[a.id] ? downloadBox(a.id)
+      : `<button class="btn small ${addonFits(a) ? 'primary' : ''}" data-addon-get="${esc(a.id)}">Download · ${size.toFixed(1)} GB</button>`;
+    return `<div class="card"><div class="row"><h3 class="grow">${esc(c.name)}</h3>${est ? rateBadge(est, kind) : ''}</div>
+      <p class="desc">${esc(a.why)}</p>${addonFits(a) ? '' : `<p class="small muted">Best with a ${a.minVramGB} GB+ graphics card; it will be slow on this PC.</p>`}${action}</div>`;
+  }).join('');
+}
+function liquidAddonsModal() {
+  openModal(`<h2>💧 Suggested add-ons for the Liquid Edition</h2>
+    <p class="small muted" style="margin-top:-4px">Optional. The Liquid Edition is complete without them; each one fills a gap. Once downloaded it joins the crew by itself, and you can remove it like any other model. More uncensored models are under Models → Uncensored.</p>
+    <div class="cards" id="addon-list">${liquidAddonsHTML()}</div>
+    <div class="modal-actions"><button class="btn" data-close>Close</button></div>`, { wide: true });
+  $('#addon-list').addEventListener('click', async (e) => {
+    const b = e.target.closest('[data-addon-get]');
+    if (!b) return;
+    const c = addonSpec(b.dataset.addonGet);
+    await download({ catalogId: b.dataset.addonGet }, c?.name).catch((err) => toast(err.message, 6000));
+    $('#addon-list').innerHTML = liquidAddonsHTML();
   });
 }

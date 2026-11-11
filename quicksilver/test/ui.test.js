@@ -1065,6 +1065,10 @@ function redPng(size = 64) {
     if (!/locked/i.test(lockErr)) throw new Error('the Liquid Edition should refuse to be deleted');
     const editErr = await qs.call('stacks:save', { id: 'quicksilver', name: 'Mine', members: { drafters: [] } }).then(() => '', (e) => e.message);
     if (!/locked/i.test(editErr)) throw new Error('the Liquid Edition should refuse to be edited');
+    // Six suggested add-ons, optional: listed with a download button, none of them locked.
+    const addons = liquidAddonsHTML();
+    if (!['Rocinante', 'WAI-NSFW', 'Chroma1-HD', 'CyberRealistic', 'Mistral Small', 'gpt-oss'].every((n) => addons.includes(n))) throw new Error('the six suggested add-ons should be listed');
+    if (S.catalog.liquidAddons.some((a) => S.catalog.liquid.includes(a.id))) throw new Error('add-ons must not be locked');
     S.data.chats = S.data.chats.filter((c) => c.id !== 'c-up');
     for (const l of Object.values(keep)) for (const [x, t] of l) x.target = t;
     for (const st0 of stacksBefore) await qs.call('stacks:save', st0);

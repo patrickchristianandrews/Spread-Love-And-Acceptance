@@ -224,7 +224,6 @@ async function init() {
     await refreshModels();
     // One more Liquid Edition model in: re-check what's still missing (opens Quicksilver when none is).
     if (document.getElementById('liquid-gate')) { await setUpQuicksilver(false).catch(() => {}); if (document.getElementById('liquid-gate')) return; }
-    else setTimeout(liquidBackfill, 2000); // the next Liquid Edition model
     S.est = null;
     if (!(await applyPendingUpgrades(model).catch(() => false))) toast(`${model.name} is ready.`);
     if (!targetValid(S.data.prefs.defaultTarget) && model.kind === 'text') { S.data.prefs.defaultTarget = `local:${model.id}`; save(); }
@@ -234,7 +233,7 @@ async function init() {
     if (!$('#modal').hidden) return;
     render();
   });
-  qs.onModelError(({ id, message, cancelled }) => { delete S.downloads[id]; paintDownloads(); if ((S.catalog?.liquid || []).includes(id) && !gateItems.some((m) => m.catalogId === id)) { backfillSkip.add(id); setTimeout(liquidBackfill, 5000); } if (gateItems.some((m) => m.catalogId === id)) { gateFailed[id] = message; paintLiquidGate(); } if (!cancelled) toast(message, 8000); else toast(message); if (['models', 'stacks', 'studio'].includes(S.route.view)) render(); });
+  qs.onModelError(({ id, message, cancelled }) => { delete S.downloads[id]; paintDownloads(); if (gateItems.some((m) => m.catalogId === id)) { gateFailed[id] = message; paintLiquidGate(); } if (!cancelled) toast(message, 8000); else toast(message); if (['models', 'stacks', 'studio'].includes(S.route.view)) render(); });
 
   go({ view: 'home' });
   // People updating get the short tour once too (new people see it after the name question).
@@ -277,8 +276,7 @@ function liquidGate(r) {
   gateItems = (r?.missing || []).filter((m) => !S.installed.some((x) => x.catalogId === m.catalogId));
   let el = document.getElementById('liquid-gate');
   if (!gateItems.length) {
-    if (el) { el.remove(); toast('💧 Quicksilver Liquid Edition is ready: chat, pictures and video, all on your PC. Its other uncensored models now download in the background.', 9000); render(); }
-    liquidBackfill();
+    if (el) { el.remove(); toastAction('💧 Quicksilver Liquid Edition is ready: chat, pictures and video, all on your PC.', 'Suggested add-ons', () => liquidAddonsModal(), 12000); render(); }
     return;
   }
   if (!el) {
@@ -323,27 +321,6 @@ function paintLiquidGate() {
     <div class="stack-v" style="gap:14px;margin:16px 0">${rows}</div>
     ${S.config?.offline ? '<button class="btn primary" data-gate-online>Turn off offline mode and download</button>' : Object.keys(gateFailed).length ? '<button class="btn primary" data-gate-retry>Try again</button>' : ''}
     <p class="small muted" style="margin-bottom:0">Tip: the "Quicksilver models" folder that comes with the installer has all of these already. Keep it next to the setup file and reinstall to skip the download.</p></div>`;
-}
-
-// Every other uncensored model is part of the Liquid Edition too: once the core is in, they download
-// one at a time in the background (chat models first, then pictures), while there's room on the disk.
-const backfillSkip = new Set();
-async function liquidBackfill() {
-  // Only where the Liquid Edition is installed (it comes with the installer).
-  if (S.config?.offline || document.getElementById('liquid-gate') || !S.installed.some((m) => m.source === 'bundled')) return;
-  const members = S.catalog?.liquid || [];
-  if (members.some((id) => S.downloads[id])) return; // one at a time
-  const next = members.find((id) => !backfillSkip.has(id) && !S.installed.some((m) => m.catalogId === id));
-  if (!next) return;
-  const c = S.catalog.text.find((m) => m.id === next) || S.catalog.media.find((m) => m.id === next);
-  if (!c) { backfillSkip.add(next); return liquidBackfill(); }
-  const disk = await call('disk:info').catch(() => null);
-  const need = ((c.sizeGB || 0) + (c.mmprojGB || 0) + 10) * 1024 ** 3; // keep 10 GB free for Windows
-  if (disk?.freeBytes && disk.freeBytes < need) {
-    if (!S.backfillDiskNote) { S.backfillDiskNote = true; toast(`💧 The rest of the Liquid Edition is waiting for disk space (${c.name} needs ${Math.ceil(c.sizeGB)} GB). It continues when there's room.`, 9000); }
-    return;
-  }
-  download({ catalogId: next }, c.name).catch(() => { backfillSkip.add(next); liquidBackfill(); });
 }
 
 // After the first screen: add models found on this PC, pick a default if there is none, and load
