@@ -96,11 +96,15 @@ function redPng(size = 64) {
     ok('everything skills need is installed: pictures, photo edits, video, animation, search and voice typing');
     // The big models have left the app's folder (which an update or reinstall replaces) for a
     // folder that is kept; the small one stays inside the app, where every installer puts it.
-    const where = await win.evaluate(() => Object.fromEntries(S.installed.filter((m) => m.source === 'bundled').map((m) => [m.id, m.files.model])));
+    // (Every file of each model: a chat model and its vision add-on, a video model's three parts.)
+    const where = await win.evaluate(() => Object.fromEntries(S.installed.filter((m) => m.source === 'bundled').map((m) => [m.id, Object.values(m.files || {})])));
     const inApp = (f) => /resources[\\/]starter[\\/]/i.test(f || '');
-    console.log(`  kept: Brain at ${where['starter-brain']}; Lustify at ${where['starter-lustify']}`);
-    for (const id of ['starter-brain', 'starter-closer', 'starter-lustify', 'starter-wan']) assert.ok(where[id] && !inApp(where[id]) && fs.existsSync(where[id]), `${id} was moved out of the app's folder and is still there (${where[id]})`);
-    assert.ok(inApp(where.starter), 'the small model stays inside the app');
+    console.log(`  kept: Brain at ${where['starter-brain']?.[0]}; Lustify at ${where['starter-lustify']?.[0]}; Wan 2.2 at ${where['starter-wan']?.[0]}`);
+    for (const id of ['starter-brain', 'starter-closer', 'starter-lustify', 'starter-wan', 'starter-wan-turbo', 'starter-rerank']) {
+      assert.ok(where[id]?.length, `${id} is installed`);
+      for (const f of where[id]) assert.ok(!inApp(f) && fs.existsSync(f), `${id}: ${f} was moved out of the app's folder and is still there`);
+    }
+    assert.ok(where.starter?.length && where.starter.every(inApp), 'the small model stays inside the app');
     ok('the big models are kept outside the app\'s folder, so an update or reinstall does not remove them');
   } else {
     // Without the models folder Quicksilver doesn't open until the whole Liquid Edition is in: the
