@@ -959,14 +959,17 @@ function smoothHelper(p, hw, calib = 1) {
 // The Liquid Editions: Quicksilver's own uncensored crews (locked).
 const LIQUID_STACKS = new Set(['quicksilver', 'quicksilver-pro']);
 
-// Quicksilver Liquid Edition Pro: built as soon as its Brain and Closer are on this PC, from the
-// Pro line-up (catalog.LIQUID_PRO). Members that aren't downloaded yet are left out until they are.
+// Quicksilver Liquid Edition Pro: only ever set up when the user asks for it (the "Get Liquid
+// Edition Pro" button sets liquidProWanted). Having its models, for instance as add-ons, never
+// creates it by itself. Once asked for, it is built as soon as its Brain and Closer are on this
+// PC; members that aren't downloaded yet are left out until they are.
 function ensureQuicksilverProStack() {
   const P = catalog.LIQUID_PRO;
   const all = models.list().filter((m) => m.kind === 'text');
   const pick = (cid) => all.find((m) => m.catalogId === cid);
   const brain = pick(P.brain); const closer = pick(P.closer); const thinker = pick(P.thinker); const muse = pick(P.muse);
   const have = stacks().find((s) => s.id === 'quicksilver-pro');
+  if (!store.config().liquidProWanted) return null;
   if (!brain || !closer) return have ? 'stack:quicksilver-pro' : null;
   const local = (m) => (m ? `local:${m.id}` : undefined);
   const members = { drafters: [local(brain)], judge: local(closer), vision: closer.files?.mmproj ? local(closer) : undefined, thinker: local(thinker), muse: local(muse), mode: 'auto' };

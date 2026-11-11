@@ -367,6 +367,8 @@ const LIQUID_LOCKED = '🔒 Quicksilver Liquid Edition is locked: it can\'t be c
 handle('stacks:save', (s) => { if (['quicksilver', 'quicksilver-pro'].includes(s?.id) || ['quicksilver', 'quicksilver-pro'].includes(s?.builtFor)) throw new Error(LIQUID_LOCKED); return complete.saveStack(s); });
 handle('stacks:delete', (id) => { if (['quicksilver', 'quicksilver-pro'].includes(id)) throw new Error(LIQUID_LOCKED); return complete.deleteStack(id); });
 handle('quicksilver:pro', () => complete.ensureQuicksilverProStack());
+// The user pressed "Get Liquid Edition Pro": the only way Pro is ever set up.
+handle('quicksilver:proGet', () => { store.saveConfig({ liquidProWanted: true }); return complete.ensureQuicksilverProStack(); });
 handle('kbm:list', () => complete.kbModels());
 handle('kbm:save', (m) => complete.saveKbModel(m));
 handle('kbm:delete', (id) => complete.deleteKbModel(id));

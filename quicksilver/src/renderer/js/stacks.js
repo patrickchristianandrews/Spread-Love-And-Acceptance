@@ -609,9 +609,10 @@ function liquidEditionsHTML() {
         <div class="stack-v" style="gap:4px;margin:8px 0">${rows.map(([role, id]) => { const c = spec(id); return c ? `<div class="row small"><span class="grow">${role}: <b>${esc(c.name)}</b></span>${have(id) ? '<span class="badge b-mint">✓</span>' : S.downloads[id] ? '<span class="badge b-sky">⬇</span>' : `<span class="muted">${((c.sizeGB || 0) + (c.mmprojGB || 0)).toFixed(1)} GB</span>`}</div>` : ''; }).join('')}
           <div class="row small"><span class="grow">🎬 Video: <b>Wan 2.2</b> · photoreal pictures: <b>Lustify</b></span><span class="muted">from the Liquid Edition</span></div></div>
         <p class="small" style="margin:6px 0;${fit.level === 'no' ? 'color:var(--danger)' : ''}">${esc(fit.text)}</p>
+        ${ready ? '' : '<p class="small muted" style="margin:0 0 6px">Optional: it is only installed if you choose it here.</p>'}
         <div class="row">${ready && !missing.length ? '<button class="btn small primary" data-chat-stack="quicksilver-pro">Chat</button><span class="badge b-lav">🔒 Locked</span>'
           : downloading.length ? `<span class="badge b-sky">Downloading ${downloading.length} of ${missing.length}…</span>`
-          : `<button class="btn small ${fit.level === 'no' ? '' : 'primary'}" data-get-pro>${ready ? 'Finish' : 'Get'} Liquid Edition Pro · ${missingGB.toFixed(0)} GB</button>${ready ? '<button class="btn small" data-chat-stack="quicksilver-pro">Chat</button>' : ''}`}</div>
+          : `<button class="btn small ${fit.level === 'no' ? '' : 'primary'}" data-get-pro>${!missing.length ? 'Turn on Liquid Edition Pro' : `${ready ? 'Finish' : 'Get'} Liquid Edition Pro · ${missingGB.toFixed(0)} GB`}</button>${ready ? '<button class="btn small" data-chat-stack="quicksilver-pro">Chat</button>' : ''}`}</div>
       </div>
     </div>`;
 }
@@ -621,8 +622,11 @@ document.addEventListener('click', async (e) => {
   const spec = (id) => S.catalog.text.find((m) => m.id === id) || S.catalog.media.find((m) => m.id === id);
   const missing = [...new Set([P.brain, P.closer, P.thinker, P.muse, ...P.pictures])].filter((id) => !S.installed.some((m) => m.catalogId === id) && spec(id));
   if (proFit().level === 'no' && !(await confirmBox(`${proFit().text}\n\nDownload Liquid Edition Pro anyway?`, { yes: 'Download anyway', danger: false }))) return;
+  // Pro is only ever set up from this button.
+  await call('quicksilver:proGet');
   // The Brain and Closer first (Pro is ready to chat as soon as they're in), then the rest.
   for (const id of missing) await download({ catalogId: id }, spec(id).name).catch((err) => toast(err.message, 6000));
-  toast('Downloading Liquid Edition Pro. It appears under Built in as soon as its Brain and Closer are in.', 8000);
+  await refreshModels();
+  toast(missing.length ? 'Downloading Liquid Edition Pro. It appears under Built in as soon as its Brain and Closer are in.' : '💎 Liquid Edition Pro is ready.', 8000);
   render();
 });
