@@ -1491,6 +1491,10 @@ code.sel { user-select: all; background: var(--soft); padding: 1px 6px; border-r
 .filtered-note { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin: 0 0 8px; padding: 7px 10px; border-radius: 10px; font-size: .82rem; background: color-mix(in srgb, #e5484d 12%, transparent); border: 1px solid color-mix(in srgb, #e5484d 35%, transparent); }
 .filtered-note .btn { margin-left: auto; }
 .composer-bar .pill-select .muted { white-space: nowrap; }
+/* A pill with a word before the choice ("Effort: Smart"): the word sits after the icon, and the
+   choice follows it closely (the icon is positioned over the pill's left edge). */
+.pill-select.labelled .pill-label { margin-left: 30px; white-space: nowrap; pointer-events: none; }
+.pill-select.labelled select, .pill-select.small.labelled select { padding-left: 6px !important; }
 
 /* Settings → What's inside */
 .about-page .ab-row { display: flex; gap: 10px; align-items: flex-start; padding: 7px 0; border-top: 1px solid color-mix(in srgb, var(--fg, #222) 8%, transparent); }

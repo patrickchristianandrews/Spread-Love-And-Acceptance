@@ -746,8 +746,8 @@ function redPng(size = 64) {
   await win.click('#vpn-box [data-pv-mode="offline"]');
   await win.waitForSelector('#vpn-box .pv-link.cut:has-text("nothing leaves")');
   assert.equal(await win.evaluate(() => sessionPrivacy('local:qwen3-8b').label), 'Private session');
-  await win.evaluate(() => { S.vpn = { connected: true, proton: true }; S.config.offline = false; S.config.vpnOnly = true; });
-  assert.equal(await win.evaluate(() => sessionPrivacy('local:qwen3-8b').label), 'Protected session');
+  // (Set and read in one step, so the background VPN check can't change it in between.)
+  assert.equal(await win.evaluate(() => { S.vpn = { connected: true, proton: true }; S.config.offline = false; S.config.vpnOnly = true; return sessionPrivacy('local:qwen3-8b').label; }), 'Protected session');
   await win.evaluate(() => { S.config.offline = true; S.config.vpnOnly = false; S.vpn = null; });
   assert.match(await win.locator('#net-toggle').innerText(), /Offline/);
   await win.click('#vpn-box [data-pv-mode="online"]');
@@ -1003,7 +1003,6 @@ function redPng(size = 64) {
   await win.click('#net-pill');
   await win.waitForSelector('#net-toggle.off');
   await win.waitForSelector('#net-pill.off');
-  await win.waitForSelector('.web-state.off');
   await shot(win, '14-offline');
   await win.click('#net-toggle');
   await win.waitForSelector('#net-toggle:not(.off)');
@@ -1539,7 +1538,8 @@ function redPng(size = 64) {
   await win.click('[data-nav="newchat"]');
   // Everything is findable: the menu shows Stacks, Models, Upgrades… and the chat options are in the bar.
   for (const v of ['stacks', 'models', 'upgrades', 'assistants', 'skills', 'integrations']) assert.ok(await win.isVisible(`.nav [data-nav="${v}"]`), `${v} is in the menu`);
-  assert.ok(await win.isVisible('.web-state') && await win.isVisible('#tog-fact') && await win.isVisible('#pick-effort'), 'chat options are in the message bar');
+  assert.ok(await win.isVisible('#tog-fact') && await win.isVisible('#pick-effort'), 'chat options are in the message bar');
+  assert.equal(await win.locator('.web-state').count(), 0, 'no separate web-search label: the Online/Offline switch says it');
   // A tidy menu: no list of stacks; the Explore pages fold into one section.
   assert.equal(await win.locator('#side-stacks').count(), 0, 'stacks are not listed in the menu');
   await win.click('#nav-explore');
