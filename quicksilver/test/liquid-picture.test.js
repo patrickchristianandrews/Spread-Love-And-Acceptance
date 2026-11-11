@@ -88,8 +88,29 @@ const TINY = path.join(__dirname, 'fixtures', 'tiny.gguf');
   const BUILT_IN = ['text', 'app', 'docx', 'pptx', 'xlsx', 'chart', 'beat', 'tool', 'speech', 'narrate', 'podcast'];
   assert.deepEqual(cover.kinds.filter((k) => !BUILT_IN.includes(k)).sort(), ['animate', 'edit', 'image', 'video'], `a new kind of skill output needs a maker in the Liquid Edition: ${cover.kinds.join(', ')}`);
   assert.deepEqual([cover.image, cover.edit, cover.video, cover.animate], ['lustify', 'lustify', 'wan2.2-5b', 'wan2.2-5b'], 'the Liquid Edition makes all four with its own models');
+  // Where Venice is suggested for the Liquid Edition, it says what the pairing gives you: how
+  // much less of Venice you use, how much faster hard answers are on this PC, and the quality.
+  await win.evaluate(() => { go({ view: 'models' }); });
+  await win.waitForSelector('.pair-card .venice-facts');
+  const venice = await win.evaluate(() => {
+    const card = document.querySelector('.pair-card .venice-facts').innerText;
+    const first = veniceLiquidFacts();
+    // With enough of your own chats, the share of hard questions is yours: 10 hard in 40 here.
+    const mk = (text) => ({ id: uid(), role: 'user', text, t: now() });
+    S.data.chats.push({ id: 'v-test', assistantId: 'as-general', title: 't', created: now(), updated: now(), messages: [...Array.from({ length: 30 }, () => mk('hi there')), ...Array.from({ length: 10 }, () => mk('Prove that the square root of 2 is irrational, step by step.'))] });
+    veniceFactsMemo = null;
+    const own = veniceLiquidFacts();
+    S.data.chats = S.data.chats.filter((c) => c.id !== 'v-test'); veniceFactsMemo = null;
+    return { card, first, own, line: veniceLiquidText(), rec: recommendFor('Reasoning & maths', 7.5, { liquid: true }).note, pics: recommendFor('Photo creation', 9, { liquid: true }).pick };
+  });
+  assert.match(venice.card, /About \d+% less Venice use/); assert.match(venice.card, /last about [\d.]+× longer/);
+  assert.match(venice.card, /Hard answers (about [\d.]+× faster|in about)|No faster on this PC/); assert.match(venice.card, /Quality/);
+  assert.match(venice.card, /Pictures and video use none of it/);
+  assert.equal(venice.first.less, 65, 'before there are enough chats: the usual share (about 1 in 3 hard)');
+  assert.ok(venice.own.measured && venice.own.less >= 70 && venice.own.less <= 80, `from your own chats: ${venice.own.less}% less`);
+  assert.match(venice.rec, /less Venice use than Venice alone/); assert.match(venice.pics, /Lustify on your PC/);
   assert.deepEqual(errors, []);
   await app.close();
-  console.log('✓ Liquid Edition chat: just asking makes a picture with Lustify; follow-ups continue; ordinary messages get ordinary answers; every kind of skill has its maker in the Liquid Edition; Code chat opens a chat set up for programming');
+  console.log('✓ Liquid Edition chat: just asking makes a picture with Lustify; follow-ups continue; ordinary messages get ordinary answers; every kind of skill has its maker in the Liquid Edition; Code chat opens a chat set up for programming; Venice suggestions say what the pairing saves, speeds up and how good it is');
   process.exit(0);
 })().catch((e) => { console.error(`FAIL ${e.message}`); process.exit(1); });

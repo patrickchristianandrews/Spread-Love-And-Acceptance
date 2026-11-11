@@ -10,7 +10,7 @@ const MEDIA_NEED = {
   video: ['video', 'To make videos here, get a video model.'],
   edit: ['edit', 'To edit photos by describing the change, get a photo-editing model (FLUX.1 Kontext or Qwen Image Edit), or any image model for lighter changes.'],
   animate: ['video', 'To bring photos to life, get Wan 2.2 5B (it animates photos).'],
-  liquid: ['open', 'The Liquid Edition makes pictures with uncensored models only. Get Lustify (free, 7 GB, runs on 8 GB graphics cards), or connect Venice for uncensored pictures in the cloud.'],
+  liquid: ['open', 'The Liquid Edition makes pictures with uncensored models only. Get Lustify (free, 7 GB, runs on 8 GB graphics cards), or connect Venice for uncensored pictures in the cloud. With Lustify on your PC every picture is free and uses no Venice credits at all, and it is the same model Venice uses, so the quality is the same; Venice is only quicker on a PC without a good graphics card.'],
   'liquid-video': ['video', 'The Liquid Edition makes videos with Wan 2.2: open weights with no content filter, from a description or by animating a photo. It\'s free and runs on this PC.'],
 };
 

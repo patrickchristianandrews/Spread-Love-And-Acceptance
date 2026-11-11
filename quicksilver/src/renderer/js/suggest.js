@@ -118,6 +118,7 @@ function sugPanelHTML({ fixedBase, fixedTargets, scope } = {}) {
         : `<p class="small muted">${task === 'music' ? 'No music model runs on a PC yet beyond the built-in synth (instrumentals); use a cloud service for full songs.' : liquid ? 'No stronger uncensored model runs well on this PC; a graphics card unlocks Qwen3.5 9B.' : 'Nothing better runs well on this PC; a cloud service is the way up.'}</p>`}
       ${liquid ? '<p class="small muted">A suggested add-on joins the Liquid Edition by itself; any other uncensored model joins when you tick it under Models → Models in use.</p>' : ''}</div>
       <div><h4>☁️ Best API to add</h4>
+      ${liquid && apis.some(([, r]) => r[0] === 'venice') && SUGGEST_TASKS[task][2] ? veniceLiquidHTML() : ''}
       ${apis.map(([why, r]) => `<div class="sug-item"><span class="grow"><b>${esc(r[1])}</b> <span class="badge ${why === 'Best free' ? 'b-mint' : 'b-lav'}">${why}</span><span class="small muted">${esc(r[3])} · free: ${esc(r[4])}</span></span>${tenStarsHTML(r[6])}${gain(r[6])}${connected(r[0]) ? '<span class="badge b-mint">✓ connected</span>' : r[9] === 'site' ? '<span class="badge b-lav">on their site</span>' : '<button class="btn small" data-sug-api="' + esc(r[1]) + '">Connect</button>'}</div>`).join('') || '<p class="small muted">No cloud service needed for this.</p>'}</div></div>
   </div>`;
 }

@@ -269,9 +269,12 @@ function dolphinOfferHTML(qst) {
 // cloud AIs (Cerebras, Groq, Mistral…) still work in your other chats, never for the Liquid Edition.
 function cloudPartnerHTML() {
   const unc = (S.providers || []).filter((p) => p.preset === 'venice' && (p.hasKey || p.noKey));
-  if (unc.length) return `<p class="small muted" style="margin:6px 0">☁️ Paired with ${unc.map((p) => esc(p.name)).join(' + ')}: with "use my cloud AI for hard questions" on, hard ones can go to its uncensored model. Filtered cloud AIs are never used for the Liquid Edition.</p>`;
+  if (unc.length) return `<div class="pair-card"><div class="grow"><b>☁️ Paired with ${unc.map((p) => esc(p.name)).join(' + ')}</b>
+      <div class="small muted">With "use my cloud AI for hard questions" on${S.data.prefs.cloudHard ? '' : ' (it is off: Settings → Features)'}, hard ones go to its uncensored model; everything else stays on your PC. Filtered cloud AIs are never used for the Liquid Edition.</div>
+      ${veniceLiquidHTML()}</div></div>`;
   return `<div class="pair-card"><div class="grow"><b>☁️ Uncensored cloud partner: Venice AI</b>
-      <div class="small muted">The Liquid Edition is completely uncensored, so it only hands hard questions to an uncensored cloud AI. Venice runs uncensored models and says it doesn't store your prompts; it has a small free allowance, then Pro or credits. Filtered cloud AIs like Cerebras or Groq still work in your other chats, never for the Liquid Edition.</div></div>
+      <div class="small muted">The Liquid Edition is completely uncensored, so it only hands hard questions to an uncensored cloud AI. Venice runs uncensored models and says it doesn't store your prompts; it has a small free allowance, then Pro or credits. Filtered cloud AIs like Cerebras or Groq still work in your other chats, never for the Liquid Edition.</div>
+      ${veniceLiquidHTML()}</div>
     <div class="row" style="gap:6px;flex-wrap:wrap"><button class="btn small primary" data-pair="venice">Connect Venice</button></div></div>`;
 }
 document.addEventListener('click', async (e) => {

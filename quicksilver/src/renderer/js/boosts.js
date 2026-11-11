@@ -102,7 +102,7 @@ function recommendFor(job, own, { liquid = false } = {}) {
   const gpu = vram >= 8;
   const fal = hasConn('fal') ? '✓ connected' : 'connect in Models → Connect an API';
   const text = (free, best, why) => (liquid
-    ? { pick: 'Venice AI (uncensored)', note: 'the Liquid Edition only uses uncensored cloud AIs', preset: 'venice' }
+    ? { pick: 'Venice AI (uncensored)', note: `the Liquid Edition only uses uncensored cloud AIs; ${veniceLiquidText()}`, preset: 'venice' }
     : { pick: free, best, note: why });
   const pcNote = gpu ? `your ${vram} GB graphics card handles everyday work; the cloud is for the hardest` : 'without a graphics card this PC is slow on long, hard answers, so a fast cloud AI helps most';
   switch (job) {
@@ -112,7 +112,7 @@ function recommendFor(job, own, { liquid = false } = {}) {
     case 'Writing': return text('Google Gemini (free plan)', 'Anthropic Claude (paid, most natural writing)', own >= 8 ? 'this already writes well; a cloud AI adds polish' : pcNote);
     case 'Coding': return text('Groq gpt-oss-120b (free plan, 88% coding test)', 'Anthropic Claude (paid)', pcNote);
     case 'Reading photos & screenshots': return text('Google Gemini (free plan)', 'OpenAI GPT-6 (paid)', own ? 'this already sees photos; the cloud reads small print better' : 'adds the ability to see photos');
-    case 'Photo creation': return { pick: liquid ? 'Venice AI pictures (uncensored, small free allowance)' : 'Pollinations (free, no key, 6/10) in Create → Cloud', best: liquid ? 'Venice AI pictures with safe mode off' : `fal.ai Nano Banana 2.1 (about $0.04 a picture, 9/10) or OpenAI GPT Image (10/10) · ${fal}`, note: own ? (gpu ? 'draft free on your graphics card, finish the keepers in the cloud' : 'this PC makes pictures slowly, so the cloud is much quicker') : 'this can\'t make pictures itself: an API (or a picture model on this PC) is needed' };
+    case 'Photo creation': return { pick: liquid ? (own ? 'Lustify on your PC (free, unlimited: no Venice credits used, and the same model Venice uses)' : 'Venice AI pictures (uncensored, small free allowance)') : 'Pollinations (free, no key, 6/10) in Create → Cloud', best: liquid ? 'Venice AI pictures with safe mode off' : `fal.ai Nano Banana 2.1 (about $0.04 a picture, 9/10) or OpenAI GPT Image (10/10) · ${fal}`, note: own ? (gpu ? 'draft free on your graphics card, finish the keepers in the cloud' : 'this PC makes pictures slowly, so the cloud is much quicker') : 'this can\'t make pictures itself: an API (or a picture model on this PC) is needed' };
     case 'Photo editing': return { pick: own ? 'Your PC (free, private)' : 'Replicate ($5 free credits; type black-forest-labs/flux-kontext-pro in Create → Cloud)', best: `fal.ai Nano Banana 2.1 Edit (about $0.04 an edit, 9/10) · ${fal}`, note: own ? 'keeps faces and details when you change a photo by description' : 'this can\'t edit photos itself: an API is needed (or a graphics card for FLUX Kontext here)' };
     case 'Video creation': return { pick: 'Kling AI free daily credits (on Kling\'s site) or Replicate $5 credits', best: `fal.ai Veo 3.1 (10/10, with sound, about $0.40 a second) · ${fal}`, note: vram >= 12 ? 'preview free on your graphics card, make the final clip in the cloud' : 'this can\'t make good video itself: an API is needed, and Quicksilver writes the shot list' };
     case 'Music (full songs)': return { pick: `Free: Suno, about 5 songs a day (on Suno's site) · in Quicksilver: fal.ai MiniMax Music 2.6 (about $0.15 a song) · ${fal}`, best: 'fal.ai ElevenLabs Music (9/10, full songs of any length, about $0.80 a minute)', note: 'full compositions with verses, chorus and vocals; the built-in synth only makes instrumentals' };
@@ -130,6 +130,67 @@ function boostJobsHTML(targets, opts = {}) {
       return `<div class="bz-jr"><span><b>${ic} ${esc(job)}</b>${boostBar((a ?? 0) * 10, best * 10)}<span class="small muted">${esc(how)}</span><span class="small bz-web">🌐 ${esc(webHow)}</span>${rec ? `<span class="small bz-rec">💡 <b>Recommended for this PC:</b> ${esc(rec.pick)}${rec.best ? ` · <b>best quality:</b> ${esc(rec.best)}` : ''} <span class="muted">(${esc(rec.note)})</span></span>` : ''}</span><span>${a ? `<b>${a}/10</b>` : '<span class="muted">Can’t</span>'}</span><span>${webCell(w, a, same, webHow)}</span><span>${cell(c, a)}</span></div>`;
     }).join('')}
     <p class="small muted" style="margin:4px 0 0">Quality of the output out of 10. Reasoning and coding come from independent tests; the rest are Quicksilver's ratings. "+ Cloud AI" is ${esc(boostCloud({ uncensoredOnly: opts.liquid }).name)}${opts.liquid ? ' (the Liquid Edition only uses uncensored cloud AIs)' : ''} for words, and the best cloud picture and video services for media.</p></div>`;
+}
+
+// ---------- Venice with the Liquid Edition: what the pairing gives you, in numbers ----------
+// Shown wherever Venice is suggested for the Liquid Edition. Three things, each worked out for this
+// PC and compared the way a person would ask it:
+//   use:     how much less of Venice you use than chatting on Venice alone (only hard questions
+//            go to it; pictures and video are made on the PC and use none)
+//   speed:   how much sooner a hard answer arrives than from this PC alone
+//   quality: hard questions out of 10, on this PC and from Venice (the same ratings used elsewhere)
+// The share of hard questions comes from your own chats once there are enough of them.
+let veniceFactsAt = 0;
+let veniceFactsMemo = null;
+function veniceLiquidFacts() {
+  // Worked out once for a page (several rows show it), not once per row.
+  if (veniceFactsMemo && Date.now() - veniceFactsAt < 2000) return veniceFactsMemo;
+  veniceFactsAt = Date.now();
+  return (veniceFactsMemo = veniceLiquidFactsNow());
+}
+function veniceLiquidFactsNow() {
+  const asked = (S.data?.chats || []).flatMap((c) => c.messages || []).filter((m) => m.role === 'user' && m.text);
+  const measured = asked.length >= 30;
+  const share = measured ? Math.min(0.9, Math.max(0.05, asked.filter((m) => looksHard(m.text)).length / asked.length)) : calcState.hard / 100;
+  const st = (S.stacks || []).find((x) => x.id === 'quicksilver');
+  const team = st ? [...(st.members.drafters || []), st.members.judge].filter(Boolean) : [];
+  const wps = S.est?.text?.['qwen3.5-4b']?.wordsPerSec;
+  const hardHere = etaFor('stack:quicksilver', WORDS.hard, { hard: true }) ?? (wps ? WORDS.hard / wps : null);
+  const easyHere = etaFor('stack:quicksilver', WORDS.chat) ?? (wps ? WORDS.chat / wps : null);
+  const hardCloud = 1.5 + WORDS.hard / CLOUD_WPS;
+  const sci = boostBase(team.length ? team : ['qwen3.5-4b']);
+  const pic = S.installed?.some((m) => m.catalogId === 'lustify') ? S.est?.media?.lustify : null;
+  return { share, measured, less: Math.round((1 - share) * 100), lasts: 1 / share, hardHere, easyHere, hardCloud,
+    faster: hardHere ? hardHere / hardCloud : null, sci, own: sci != null ? r10(sci / 10) : null, venice: CHAT_SERVICES.venice[4],
+    picsHere: Boolean(pic), picSec: pic?.sec ?? null };
+}
+const veniceTimes = (x) => (x >= 10 ? Math.round(x) : Math.round(x * 2) / 2);
+function veniceLiquidLines() {
+  const f = veniceLiquidFacts();
+  const oneIn = Math.max(2, Math.round(1 / f.share));
+  const use = `<b>About ${f.less}% less Venice use</b> than using Venice for everything: only hard questions go to it (about 1 in ${oneIn}${f.measured ? ' of your messages so far' : ' messages'}), so its free allowance or credits last about <b>${f.lasts.toFixed(1)}×</b> longer.${f.picsHere ? ' Pictures and video use none of it: Lustify and Wan 2.2 make them on your PC.' : ' Once Lustify and Wan 2.2 are on your PC, pictures and video use none of it.'}`;
+  const everyday = ` Everyday answers stay on your PC${f.easyHere ? ` (about ${fmtSec(f.easyHere)})` : ''}, with no waiting on the internet.`;
+  const speed = f.faster == null ? `<b>Hard answers in about ${fmtSec(f.hardCloud)}</b> from Venice, however fast or slow this PC is.${everyday}`
+    : f.faster >= 1.3 ? `<b>Hard answers about ${veniceTimes(f.faster)}× faster</b> on this PC: about ${fmtSec(f.hardCloud)} from Venice instead of about ${fmtSec(f.hardHere)} here.${everyday}`
+      : `<b>No faster on this PC</b>: it already answers hard questions in about ${fmtSec(f.hardHere)}, as quick as Venice (about ${fmtSec(f.hardCloud)}).${everyday}`;
+  const pics = ' Pictures are the same quality either way: Lustify is the model Venice itself uses for uncensored pictures.';
+  const quality = f.own == null ? `<b>Quality:</b> Venice's uncensored model rates about ${f.venice}/10 on hard questions.${pics}`
+    : f.venice > f.own ? `<b>Quality: hard questions go from ${f.own}/10 to about ${f.venice}/10</b> with Venice's uncensored model.${pics}`
+      : `<b>Quality: about the same, not better.</b> On hard questions this PC rates ${f.own}/10${f.sci != null ? ` (${f.sci}% on a graduate-level science test)` : ''} and Venice's uncensored model about ${f.venice}/10, so what Venice adds is speed, not better answers.${pics}`;
+  return { f, use, speed, quality };
+}
+// The block for cards and panels.
+function veniceLiquidHTML() {
+  const v = veniceLiquidLines();
+  return `<div class="venice-facts small" title="Estimates for this PC: your own chats (the share of hard questions), its measured speed, and Quicksilver's ratings.">
+    <span>💸 ${v.use}</span><span>⚡ ${v.speed}</span><span>🎯 ${v.quality}</span></div>`;
+}
+// One plain line, for notes and tooltips.
+function veniceLiquidText() {
+  const f = veniceLiquidFacts();
+  const speed = f.faster == null ? '' : f.faster >= 1.3 ? `, hard answers about ${veniceTimes(f.faster)}× faster here` : ', no faster on this PC';
+  const quality = f.own == null ? '' : f.venice > f.own ? `, hard questions ${f.own}/10 → ${f.venice}/10` : `, quality about the same (${f.venice}/10 vs ${f.own}/10 here)`;
+  return `with the Liquid Edition only hard questions go to Venice: about ${f.less}% less Venice use than Venice alone${speed}${quality}`;
 }
 
 // targets: what answers (local:/api: targets or catalogue ids). opts.liquid: the Liquid Edition
@@ -155,6 +216,7 @@ function boostsHTML(targets, { liquid = false, compact = false, fusion = false }
     rows.push(`<div class="bz-row"><span class="bz-ic">☁️</span><span class="grow"><b>A connected cloud AI</b> <span class="badge ${cloudOn ? 'b-mint' : ''}">${cloud.connected ? (cloudOn ? 'On for hard questions' : 'Connected, not used for hard questions') : 'Not connected'}</span>
       <span class="small">${fusion ? `Add ${esc(cloud.name)} as the lead: your PC's models draft, the cloud AI writes the final answer.` : `Hard questions go to ${esc(cloud.name)}; everyday messages stay on your PC.`}${liquid ? ' The Liquid Edition only uses uncensored cloud AIs, so it stays uncensored.' : ''}</span>
       ${lift ? `<span class="small bz-num">Graduate-level science: <b>${base}%</b> → <b>${lift}%</b> ${boostBar(base, lift)}</span>` : base != null && cloud.science != null ? `<span class="small bz-num">This already scores ${base}% on graduate-level science, as high as ${esc(cloud.name)} (${cloud.science}%): a cloud AI mainly adds speed on a slower PC.</span>` : '<span class="small bz-num">Usually a big step up on hard reasoning, maths and long writing.</span>'}
+      ${liquid ? veniceLiquidHTML() : ''}
       <span class="small muted">Cost: needs internet; hard questions leave your PC; free plans have daily limits. ${cloud.connected ? (cloudOn || fusion ? '' : 'Turn it on in Settings → Features → Cloud AI for hard questions.') : 'Connect one in Models → Connect an API (free plans available).'}</span></span></div>`);
   }
   rows.push(`<div class="bz-row"><span class="bz-ic">🔌</span><span class="grow"><b>Connected apps</b><span class="small">With Gmail, Calendar, Drive, Spotify and others connected, answers come from your real data instead of general advice ("what's on my calendar Friday?"). It asks before sending or changing anything.</span></span></div>`);
