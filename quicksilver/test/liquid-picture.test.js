@@ -1,4 +1,4 @@
-// Pictures in a Liquid Edition chat: made through the Create a picture skill, painted by Lustify.
+// Pictures in a Liquid Edition chat: just ask (no skill to pick), painted by Lustify.
 'use strict';
 const { _electron: electron } = require('playwright');
 const path = require('node:path');
@@ -28,29 +28,37 @@ const TINY = path.join(__dirname, 'fixtures', 'tiny.gguf');
   await win.evaluate(() => { document.querySelector('#wc-close')?.click(); S.data.prefs.preanswer = false; S.data.prefs.readAhead = false; newChat(); });
   await win.waitForSelector('#input');
   assert.equal(await win.evaluate(() => resolveTarget(chatById(S.route.id), assistantById(chatById(S.route.id).assistantId))), 'stack:quicksilver');
-  // Asking without a skill gets an ordinary answer: no picture is made by itself.
+  // Just ask: no skill picked, nothing typed after "/".
   await win.fill('#input', 'make me a picture of a lantern in the rain');
-  await win.waitForSelector('#skill-row [data-skill-use="make-image"]'); // the skill is suggested
   await win.keyboard.press('Enter');
-  await win.waitForFunction(() => !document.querySelector('.bubble.streaming') && document.querySelectorAll('.msg.assistant').length === 1, null, { timeout: 60000 });
-  assert.equal(await win.locator('.skill-media-item').count(), 0, 'no picture without the skill');
-  // With the "Create a picture" skill, Lustify paints it.
-  await win.fill('#input', 'a lantern in the rain');
-  await win.evaluate(() => { const c = chatById(S.route.id); c.pendingSkill = 'make-image'; save(); });
-  await win.keyboard.press('Enter');
-  await win.waitForFunction(() => { const it = [...document.querySelectorAll('.msg.assistant')].pop()?.querySelector('.skill-media-item img'); return it && /qsmedia:/.test(it.src); }, null, { timeout: 120000 })
-    .catch(async () => { throw new Error(`no picture appeared. Last answer: ${(await win.evaluate(() => [...document.querySelectorAll('.msg.assistant')].pop()?.innerText || '(none)')).slice(0, 500)} | errors: ${errors.join('; ')}`); });
+  const lastPicture = () => win.waitForFunction(() => { const it = [...document.querySelectorAll('.msg.assistant')].pop()?.querySelector('.skill-media-item img'); return it && /qsmedia:/.test(it.src); }, null, { timeout: 120000 });
+  await lastPicture().catch(async () => { throw new Error(`no picture appeared. Last answer: ${(await win.evaluate(() => [...document.querySelectorAll('.msg.assistant')].pop()?.innerText || '(none)')).slice(0, 500)} | errors: ${errors.join('; ')}`); });
   assert.match(await win.evaluate(() => [...document.querySelectorAll('.msg.assistant')].pop().innerText), /Made with Lustify/);
-  // A reply that reads like picture instructions, written without a skill, is never made by
-  // itself: it is offered with a button.
+  // A follow-up about the picture keeps making pictures.
+  await win.fill('#input', 'another one, this time at night');
+  await win.keyboard.press('Enter');
+  await win.waitForFunction(() => document.querySelectorAll('.msg.assistant').length === 2, null, { timeout: 60000 });
+  await lastPicture().catch(() => { throw new Error('the follow-up request made no picture'); });
+  // An ordinary message afterwards gets an ordinary answer: the chat is still a normal AI.
+  await win.fill('#input', 'Thanks! Now write a short poem about lanterns.');
+  await win.keyboard.press('Enter');
+  await win.waitForFunction(() => document.querySelectorAll('.msg.assistant').length === 3 && !document.querySelector('.bubble.streaming') && !document.querySelector('.status-line'), null, { timeout: 60000 });
+  await win.waitForTimeout(800);
+  assert.equal(await win.evaluate(() => [...document.querySelectorAll('.msg.assistant')].pop().querySelectorAll('.skill-media-item, .progress-box').length), 0, 'no picture for an ordinary message');
+  assert.equal(await win.locator('.skill-media-item img').count(), 2);
+  // Replies that read like picture instructions: recognised (labelled or plain JSON), ordinary
+  // JSON is not; where it isn't clear-cut the answer keeps its code and offers a button.
   const r = await win.evaluate(() => {
     const reply = 'I\'ll create a portrait of a lighthouse.\n```json\n{"prompt": "a lighthouse at dusk, warm light", "shape": "portrait", "count": 1}\n```';
     const html = skillMediaHTML({ id: 'x' }, { text: reply, mediaOffer: mediaReplySkill(reply) }, false);
-    return { offer: mediaReplySkill(reply), code: mediaReplySkill('```json\n{"name": "x"}\n```'), button: /data-act="m-make"/.test(html) };
+    return { plain: mediaReplySkill(reply), labelled: mediaReplySkill('Sure.\n```image\n{"prompt": "a cat"}\n```'), video: mediaReplySkill('```video\n{"prompt": "waves"}\n```'), code: mediaReplySkill('```json\n{"name": "x"}\n```'), button: /data-act="m-make"/.test(html), shown: stripMediaBlock(reply),
+      follow: ['another one, this time at night', 'make her smile', 'same but in winter'].map(isMediaFollowUp), notFollow: ['Thanks! Now write a short poem about lanterns.', 'Lovely, but how do diffusion models work, explain briefly', 'Summarise the history of lanterns with dates'].map(isMediaFollowUp) };
   });
-  assert.deepEqual([r.offer, r.code, r.button], ['make-image', null, true]);
+  assert.deepEqual([r.plain, r.labelled, r.video, r.code, r.button], ['make-image', 'make-image', 'make-video', null, true]);
+  assert.equal(r.shown, "I'll create a portrait of a lighthouse.");
+  assert.deepEqual(r.follow, [true, true, true]); assert.deepEqual(r.notFollow, [false, false, false]);
   assert.deepEqual(errors, []);
   await app.close();
-  console.log('✓ Liquid Edition chat: pictures are made through the skill, with Lustify; without a skill the chat answers normally');
+  console.log('✓ Liquid Edition chat: just asking makes a picture with Lustify; follow-ups continue; ordinary messages get ordinary answers');
   process.exit(0);
 })().catch((e) => { console.error(`FAIL ${e.message}`); process.exit(1); });

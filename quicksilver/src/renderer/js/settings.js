@@ -128,6 +128,7 @@ function chatSetHTML() {
       <div class="field"><label for="c-max">Longest answer (tokens)</label><input id="c-max" type="number" min="256" max="65536" step="256" value="${p.maxTokens}"></div>
     </div>
     <div class="field"><label for="c-gpu">Graphics card use</label><select id="c-gpu"><option value="auto" ${p.gpu !== 0 ? 'selected' : ''}>Automatic (recommended)</option><option value="0" ${p.gpu === 0 ? 'selected' : ''}>Processor only (most compatible)</option></select><span class="help">Choose "Processor only" if models fail to load or crash on your graphics card.</span></div>
+    <label class="row"><input type="checkbox" id="c-autoskill" ${p.autoSkills !== false ? 'checked' : ''}> <span><b>⚡ Just ask</b> <span class="help">Asking for a picture, a video, a photo edit, music, a spoken version, a document, a chart or an app makes it straight away, with no skill to pick. Turn off to choose skills yourself (the / menu and the suggestions stay).</span></span></label>
     <div class="field"><label for="c-keep">Keep models loaded</label><select id="c-keep">${[['auto', 'Automatic (longer on PCs with more memory)'], [20, '20 minutes after last use'], [60, '1 hour'], [240, '4 hours'], [0, 'Until I close Quicksilver']].map(([v, l]) => `<option value="${v}" ${String(S.config?.keepLoaded ?? 'auto') === String(v) ? 'selected' : ''}>${l}</option>`).join('')}</select><span class="help">A model that's still loaded answers right away; one that was unloaded to free memory has to load again from disk first. Longer keeps chats quick but holds on to memory.</span></div>
     <div><button class="btn primary" id="c-save">Save</button></div>
   </div>`;
@@ -136,7 +137,7 @@ function bindChatSet() {
   $('#c-temp').addEventListener('input', (e) => { $('#c-temp-v').textContent = e.target.value; });
   $('#c-save').addEventListener('click', () => {
     Object.assign(P(), {
-      defaultTarget: $('#c-default').value, defaultAuto: false, defaultChosen: true, addFoundModels: $('#c-auto').checked, preloadDefault: $('#c-preload').checked, effortLevel: $('#c-effort').value, factCheck: $('#c-fact').checked, factChecker: $('#c-checker').value,
+      defaultTarget: $('#c-default').value, defaultAuto: false, defaultChosen: true, autoSkills: $('#c-autoskill').checked, addFoundModels: $('#c-auto').checked, preloadDefault: $('#c-preload').checked, effortLevel: $('#c-effort').value, factCheck: $('#c-fact').checked, factChecker: $('#c-checker').value,
       temperature: Number($('#c-temp').value), contextSize: Number($('#c-ctx').value), maxTokens: Math.max(256, Number($('#c-max').value) || 2048), maxTokensSet: true,
       gpu: $('#c-gpu').value === '0' ? 0 : 'auto', sourcesPerAnswer: Number($('#c-src').value),
     });

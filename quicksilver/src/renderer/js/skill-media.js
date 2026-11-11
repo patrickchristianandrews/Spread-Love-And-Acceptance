@@ -35,7 +35,6 @@ function parseMediaSpec(text) {
 }
 // Does a reply (written without a skill) contain picture or video instructions? A fenced block
 // labelled image or video, or a JSON block with a "prompt" and the usual picture fields.
-// (Used only to offer a "make this" button under such a reply; nothing is made without a skill.)
 function mediaReplySkill(text) {
   const t = String(text || '');
   const m = t.match(/```(image|video|json)?\s*\n?\s*(\{[\s\S]*?\})\s*```/i);
@@ -45,6 +44,13 @@ function mediaReplySkill(text) {
   if (label === 'image') return 'make-image';
   if (/"(shape|avoid|count)"\s*:/.test(m[2])) return 'make-image';
   return null;
+}
+// Is a short message right after a picture about that picture ("another one", "same but at
+// night", "make her smile")? Requests to write, explain or answer something are not.
+function isMediaFollowUp(text) {
+  const t = String(text || '');
+  if (/\b(write|explain|summar|tell|describe|what|why|how|who|when|joke|poem|story|essay|email|code|translate|list|calculate)\w*\b/i.test(t)) return false;
+  return /\b(another|again|one more|a few more|variation|redo|try again|same (but|one|thing|again)|this time|make (her|him|it|them|this|that)\b|(now|but) (make|with|without|in|at|as|from)\b|more like|closer|wider|zoom(ed)? (in|out))/i.test(t);
 }
 // What to show in the bubble: the note, without the JSON block (also while it streams in).
 const stripMediaBlock = (text) => String(text || '').replace(/```(?:image|video|edit|beat)[\s\S]*?(```|$)/g, '').replace(/```(?:json)?\s*\n?\s*\{[^`]*"prompt"\s*:[^`]*(```|$)/g, '').trim();
@@ -186,7 +192,7 @@ function skillMediaHTML(m, alt, streaming) {
   // A reply that reads like picture instructions, written without a skill: offer the skill.
   if (!md && !streaming && alt.mediaOffer && skillById(alt.mediaOffer)) {
     const sk = skillById(alt.mediaOffer);
-    return `<div class="row small" style="margin-top:6px"><span class="muted">Pictures and videos are made with a skill.</span><button class="btn small" data-act="m-make" data-id="${m.id}">${esc(sk.icon)} Make this with "${esc(sk.name)}"</button></div>`;
+    return `<div class="row small" style="margin-top:6px"><button class="btn small" data-act="m-make" data-id="${m.id}">${esc(sk.icon)} Make this with "${esc(sk.name)}"</button></div>`;
   }
   if (!md || streaming) return '';
   const word = md.gif ? 'GIF' : MEDIA_WORD[md.kind];

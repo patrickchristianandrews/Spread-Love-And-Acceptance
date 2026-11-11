@@ -21,6 +21,60 @@ function suggestSkill(text) {
   return allSkills().find((s) => (s.triggers || []).some((p) => { try { return new RegExp(p, 'i').test(t); } catch { return false; } })) || null;
 }
 
+// ---------- just ask: requests that make something use the right skill by themselves ----------
+// Like any AI assistant, you shouldn't have to pick a skill (or type /) to get a picture, a video,
+// a photo edit, music, a spoken version, a document, a chart or an app: asking for it is enough.
+// The rules are deliberately strict, so an ordinary question is never turned into a picture or a
+// file: there must be a clear "make me…" request, not just a word like "wallpaper" or "research".
+// Skills that only shape a written answer are left to the model (it answers those well as it is);
+// they are still suggested above the message box, and every skill is still in the / menu.
+const ASK_FOR_IT = /\b(make|create|generate|draw|paint|design|render|sketch|illustrate|produce|show me|give me|send me|i (need|want|would like)|i'd like|can you (make|create|draw|paint|design|generate|show|give|do)|could you (make|create|draw|paint|design|generate|show|give))\b/i;
+const WRITE_IT = /\b(write|draft|prepare|build|code|put together|compose|record|plan|turn (this|it|these|that|my .{1,30}) into)\b/i;
+// "make me a picture of…": the verb, then the thing asked for within a few words (so "generate
+// a list of image ideas" or "make a photo editor" are not picture requests).
+const NOT_THE_THING = '(?! (ideas?|prompts?|captions?|descriptions?|editor|generator|model|files?|formats?|sizes?|search|gallery|library|folder|frame|album|viewer|app|tool|classifier|dataset))';
+const ASK_START = '\\b(make|create|generate|draw|paint|design|render|produce|show|give|send|want|need|like)\\b(?: me| us)?(?: (?:a|an|another|some|the|one|two|three|four|\\d+))?(?: [\\w\'-]+){0,4}? ';
+const PICTURE_ASK = new RegExp(`${ASK_START}(pictures?|images?|photos?|photographs?|pics?|drawings?|paintings?|illustrations?|portraits?|artworks?|selfies?)\\b${NOT_THE_THING}`, 'i');
+const VIDEO_ASK = new RegExp(`${ASK_START}(videos?|clips?|animations?|gifs?)\\b${NOT_THE_THING}`, 'i');
+// "draw a cat", "paint a sunset": the verb alone asks for a picture (but not "draw a conclusion").
+const DRAW_IT = /^(please |can you |could you |would you |will you )?(draw|paint|sketch)\b(?! (a |an |the )?(conclusion|comparison|line|distinction|parallel|blank|crowd)| up| on| from| out| attention| near)/i;
+// A question about how to do something is answered, not carried out ("how do I make a logo?").
+const JUST_ASKING = /^\s*(how|what|why|when|where|who|which|is|are|was|were|does|do|did|should|would it|can i|could i|may i|am i)\b/i;
+const ABOUT_WORDS = /\b(prompt for|describe|explain|caption|what(?:'s| is) (in|on)|analy[sz]e|read the text)\b/i;
+function autoSkillFor(text, atts = [], chat = null) {
+  if (S.data.prefs.autoSkills === false) return null;
+  const t = String(text || '').trim();
+  if (t.length < 6 || t.length > 1500) return null;
+  const off = new Set(chat?.dismissed || []);
+  const pick = (s) => (s && !off.has(s.id) ? s : null);
+  const polite = /\b(can|could|would|will) you\b|\bplease\b/i.test(t);
+  if (JUST_ASKING.test(t) && !polite) return null;
+  const has = (type) => atts.some((x) => x.type === type);
+  const asks = ASK_FOR_IT.test(t);
+  const cand = suggestSkill(t);
+  const out = cand?.output;
+  // Photo edits and bringing a photo to life: with the photo attached.
+  if ((out === 'edit' || out === 'animate') && has('image')) return pick(cand);
+  // Instant tools work on an attached file (upscale, remove vocals, 60 fps…).
+  if (out === 'tool') return has('image') || has('video') || has('audio') ? pick(cand) : null;
+  // Reading aloud, narration, podcasts, beats and melodies.
+  if (out === 'speech' || out === 'narrate' || out === 'podcast') return asks || WRITE_IT.test(t) || /\b(read|narrate)\b/i.test(t) ? pick(cand) : null;
+  if (out === 'beat') return asks || WRITE_IT.test(t) ? pick(cand) : null;
+  // Documents, slides, spreadsheets, charts and apps: a clear request to make one.
+  if (['docx', 'pptx', 'xlsx', 'chart', 'app'].includes(out)) return asks || WRITE_IT.test(t) ? pick(cand) : null;
+  // Pictures and video. A specific picture skill (logo, poster, avatar…) when its words match;
+  // otherwise the general one. Never for requests about a picture (describe it, write a prompt).
+  if (ABOUT_WORDS.test(t)) return null;
+  if (out === 'image' || out === 'video') return asks || /^(a|an|the)?\s*\w*\s*(picture|image|photo|pic|drawing|painting|portrait|video|clip|gif) of\b/i.test(t) ? pick(cand) : null;
+  if (cand && out && out !== 'text') return null;
+  if (has('image')) return null; // with a photo attached, "make…" is about that photo: left to you
+  if (asks && VIDEO_ASK.test(t)) return pick(skillById('make-video'));
+  if (asks && PICTURE_ASK.test(t)) return pick(skillById('make-image'));
+  if (DRAW_IT.test(t)) return pick(skillById('make-image'));
+  if (/^(a|an|the)?\s*(picture|image|photo|pic|drawing|painting|portrait) of\b/i.test(t)) return pick(skillById('make-image'));
+  return null;
+}
+
 views.skills = {
   html() {
     const list = allSkills().filter((s) => (skillCat === 'all' || s.category === skillCat) && (!skillQuery || `${s.name} ${s.description}`.toLowerCase().includes(skillQuery.toLowerCase())));

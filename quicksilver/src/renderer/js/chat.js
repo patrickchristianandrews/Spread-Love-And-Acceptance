@@ -428,8 +428,15 @@ function bindChat() {
       return;
     }
     if (!resolveTarget(chat, a)) { needModel(chat); return; }
+    // Just ask: a request to make something (a picture, a video, a document, an app…) uses the
+    // right skill by itself. Right after a picture or video, a short follow-up about it ("another
+    // one", "same but at night") continues with the same skill.
+    const prevAlt = (() => { const m = [...chat.messages].reverse().find((x) => x.role === 'assistant'); return m?.alts?.[m.altIndex]; })();
+    const prevSkill = prevAlt?.media?.items?.length && ['image', 'video'].includes(skillById(prevAlt.skillId)?.output) ? prevAlt.skillId : null;
+    const autoSkill = chat.pendingSkill ? null : autoSkillFor(text, atts, chat);
+    const followUp = !autoSkill && prevSkill && S.data.prefs.autoSkills !== false && text.length < 240 && !/\?\s*$/.test(text) && isMediaFollowUp(text) ? prevSkill : null;
     // An assistant can apply a skill to every message (the Image Artist paints each request).
-    chat.messages.push({ id: uid(), t: now(), role: 'user', text, attachments: atts, skillId: chat.pendingSkill || (skillById(a.skill) ? a.skill : undefined) });
+    chat.messages.push({ id: uid(), t: now(), role: 'user', text, attachments: atts, skillId: chat.pendingSkill || autoSkill?.id || followUp || (skillById(a.skill) ? a.skill : undefined) });
     chat.pendingSkill = null; chat.suggested = null;
     drafts[chat.id] = [];
     if (chat.title === 'New chat') chat.title = (text || atts[0]?.name || 'New chat').replace(/\s+/g, ' ').slice(0, 60);
@@ -888,10 +895,21 @@ qs.onChat(({ requestId, ev }) => {
         msg.alts.splice(msg.altIndex, 1);
         if (!msg.alts.length) chat.messages = chat.messages.filter((m) => m !== msg); else msg.altIndex = msg.alts.length - 1;
       }
-      // Pictures and videos are only made through a skill. If a reply written without one turns
-      // out to be picture instructions (the model copying an earlier picture reply in the chat),
-      // nothing is made by itself: the answer is shown as written, with a button to make it.
-      if (ev.type === 'done' && !ev.aborted && !alt.skillId) { const offer = mediaReplySkill(alt.text); if (offer) alt.mediaOffer = offer; }
+      // A reply that is picture (or video) instructions gets made, even when no skill was on for
+      // this message: in a chat that has made pictures, the model answers a follow-up the same way,
+      // and that must become a picture, not a block of code. Where it isn't clear-cut (no picture
+      // made in this chat yet, or you asked for JSON or code yourself), the answer stays as written
+      // with a button to make it.
+      if (ev.type === 'done' && !ev.aborted && !alt.skillId) {
+        const kind = mediaReplySkill(alt.text);
+        if (kind) {
+          const asked = [...chat.messages.slice(0, chat.messages.indexOf(msg))].reverse().find((m) => m.role === 'user')?.text || '';
+          const madeBefore = chat.messages.some((m) => m !== msg && m.role === 'assistant' && (m.alts || []).some((x) => x.media?.items?.length));
+          const labelled = /```(image|video)\b/i.test(alt.text);
+          const wantsCode = /\b(json|code|payload|api|schema|script|function)\b/i.test(asked);
+          if (S.data.prefs.autoSkills !== false && !wantsCode && (labelled || madeBefore)) alt.skillId = kind; else alt.mediaOffer = kind;
+        }
+      }
       if (ev.type === 'done' && alt.text && !isMakerSkill(alt)) alt.text = humanize(alt.text); // no chatbot leftovers
       delete alt.status;
       if (alt.t0) { alt.ms = Date.now() - alt.t0; delete alt.t0; }
