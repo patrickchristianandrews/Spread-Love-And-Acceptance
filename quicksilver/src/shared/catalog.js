@@ -236,7 +236,7 @@ const MEDIA_MODELS = [
     files: { diffusion: { repo: 'QuantStack/Qwen-Image-GGUF', match: 'Qwen_Image-Q4_K_S\\.gguf$' }, vae: { repo: 'Comfy-Org/Qwen-Image_ComfyUI', match: 'qwen_image_vae\\.safetensors$' }, llm: { repo: 'unsloth/Qwen2.5-VL-7B-Instruct-GGUF', match: 'Q4_K_M\\.gguf$' } },
     blurb: 'The best open model for posters, signs and long text in pictures, with excellent prompt following.', edit: 'img2img' },
   // ---------- uncensored picture models (no content filter; the Liquid Edition's pictures) ----------
-  sdxlTune('lustify', 8, 'Lustify (uncensored)', 'Lustify (community, SDXL)', 'kkkkk26/lustify_v9', 'lustify.*\\.safetensors$',
+  sdxlTune('lustify', 9, 'Lustify (uncensored)', 'Lustify (community, SDXL)', 'kkkkk26/lustify_v9', 'lustify.*\\.safetensors$',
     'Uncensored, photorealistic pictures, including adult content: the model Venice uses for its uncensored pictures, free here on your own PC. The Liquid Edition\'s picture maker.',
     { alt: ['shootstuff/LUSTIFY-v2.0', 'TheImposterImposters/LUSTIFY-v2.0'], defaults: { cfg: 4.5, steps: 30 } }),
   sdxlTune('bigasp-v2', 7, 'bigASP v2 (uncensored)', 'fancyfeast (community, SDXL)', 'TheImposterImposters/bigasp_v20_fp16', '^bigasp_v20\\.safetensors$',
@@ -257,7 +257,7 @@ const MEDIA_MODELS = [
     'Soft, dreamy realism on the Pony base. Uncensored.', { defaults: { cfg: 6, steps: 30 } }),
   sdxlTune('epicrealism-xl', 7, 'epiCRealism XL (uncensored)', 'epinikion (community, SDXL)', 'misri/epicrealismXL_v9', '^epicrealismXL_v9\\.safetensors$',
     'Natural, unretouched-looking photos of people. Few limits on content.', { defaults: { cfg: 5, steps: 30 } }),
-  sdxlTune('wai-nsfw-illustrious', 8, 'WAI-NSFW Illustrious (uncensored)', 'WAI0731 (community, Illustrious SDXL)', 'TheReprinter/WAI-NSFW-illustrious-SDXL', '^waiNSFWIllustrious_v14\\.safetensors$',
+  sdxlTune('wai-nsfw-illustrious', 9, 'WAI-NSFW Illustrious (uncensored)', 'WAI0731 (community, Illustrious SDXL)', 'TheReprinter/WAI-NSFW-illustrious-SDXL', '^waiNSFWIllustrious_v14\\.safetensors$',
     'The most popular uncensored anime model: clean, vivid anime art with adult content. Understands booru-style tags.', { alt: ['Ine007/waiNSFWIllustrious_v140'], defaults: { cfg: 6, steps: 28 } }),
   sdxlTune('nova-anime-xl', 8, 'Nova Anime XL (uncensored)', 'Crody (community, Illustrious SDXL)', 'frankjoshua/novaAnimeXL_ilV140', '^novaAnimeXL_ilV140\\.safetensors$',
     'Polished, colourful anime with strong backgrounds and lighting. Uncensored.', { defaults: { cfg: 5, steps: 28 } }),
@@ -347,8 +347,17 @@ const JOBS = {
     assistant: { name: 'Unfiltered', emoji: '🔓', instructions: 'You are a direct, candid assistant. Answer fully and frankly. Do not moralise, lecture or add disclaimers the user did not ask for, and do not water answers down. Follow the user\'s instructions on tone, style, persona and content, including for fiction and mature themes.' } },
   coding: { kind: 'text', words: 700, label: 'App development', icon: '💻', pitch: 'Build apps and websites: plan, write, debug and review code.', speed: 10, budget: 180, temperature: 0.2, contextSize: 32768, maxTokens: 8192, library: false, web: false, mode: 'debate',
     assistant: { name: 'App Builder', emoji: '💻', instructions: 'You are an expert software engineer who builds complete apps. For new work, outline the structure first (files, components, data), then write correct, idiomatic, complete code in fenced code blocks with the file name and language. Explain briefly what changed and why. Point out bugs, edge cases and security issues. Ask a short clarifying question when a request is ambiguous.' } },
-  create: { kind: 'media', label: 'Photo & video generation', icon: '🎨', pitch: 'Pictures and short videos from a description, with AI-written prompts.', roles: ['image', 'video', 'helper'] },
-  edit: { kind: 'media', label: 'Photo & video editing', icon: '🪄', pitch: 'Change photos by describing the edit, and bring photos to life.', roles: ['edit', 'animate', 'helper'] },
+  // Create: the popular kinds of making, one each, in the order people reach for them.
+  pictures: { kind: 'media', label: 'Pictures', icon: '🖼️', pitch: 'Photos and art from a description, with AI-written prompts.', roles: ['image', 'helper'] },
+  openpics: { kind: 'media', label: 'Uncensored pictures', icon: '🔓', pitch: 'No content filter: Lustify and other uncensored models, private on this PC.', roles: ['openimage', 'helper'], uncensored: true },
+  anime: { kind: 'media', label: 'Anime & illustration', icon: '🎌', pitch: 'Anime, manga and drawn styles, from booru-style tags or plain words.', roles: ['anime', 'helper'], uncensored: true },
+  video: { kind: 'media', label: 'Video', icon: '🎬', pitch: 'Short video clips from a description (Wan 2.2).', roles: ['video', 'helper'] },
+  animate: { kind: 'media', label: 'Animate a photo', icon: '✨', pitch: 'Bring a still photo to life as a short clip.', roles: ['animate', 'helper'] },
+  photoedit: { kind: 'media', label: 'Photo editing', icon: '🪄', pitch: 'Change a photo by describing the edit: sky, background, style, objects.', roles: ['edit', 'helper'] },
+  songs: { kind: 'music', label: 'Full songs', icon: '🎵', pitch: 'Lyrics, chords and a demo on this PC; complete sung songs in the cloud.' },
+  // Earlier all-in-one kits, kept for stacks set up with them (not shown as choices).
+  create: { kind: 'media', label: 'Photo & video generation', icon: '🎨', pitch: 'Pictures and short videos from a description, with AI-written prompts.', roles: ['image', 'video', 'helper'], hidden: true },
+  edit: { kind: 'media', label: 'Photo & video editing', icon: '🪄', pitch: 'Change photos by describing the edit, and bring photos to life.', roles: ['edit', 'animate', 'helper'], hidden: true },
 };
 
 // How good a model is at a kind of work (0-10). Writing and reasoning are derived.
@@ -575,6 +584,8 @@ const MEDIA_ROLES = {
   image: { label: 'Creates pictures', pick: (m) => m.category === 'image' || m.category === 'open' },
   video: { label: 'Makes videos', pick: (m) => m.category === 'video' },
   edit: { label: 'Edits photos', pick: (m) => m.category === 'edit' },
+  openimage: { label: 'Creates uncensored pictures', pick: (m) => m.kind === 'image' && Boolean(m.uncensored) },
+  anime: { label: 'Draws anime & illustration', pick: (m) => m.kind === 'image' && m.style === 'anime' },
   animate: { label: 'Brings photos to life', pick: (m) => m.category === 'video' && m.animate },
   helper: { label: 'Writes better prompts', text: true },
 };
@@ -632,6 +643,13 @@ const CLOUD_BOOST = {
   open: { provider: 'openrouter', alt: 'xai', mode: 'hard', share: 0.2, why: 'OpenRouter has free uncensored community models, so hard requests get a bigger model with the same freedom.' },
   coding: { provider: 'anthropic', alt: 'github', mode: 'check', why: 'A frontier model reviews each answer for bugs and security issues before you run it.' },
   create: { provider: 'together', alt: 'openai', mode: 'image', why: 'For pictures beyond what this PC can make: FLUX Schnell is free on Together; OpenAI gpt-image-1 for the best results.' },
+  pictures: { provider: 'together', alt: 'openai', mode: 'image', why: 'For pictures beyond what this PC can make: FLUX Schnell is free on Together; OpenAI gpt-image-1 for the best results.' },
+  openpics: { provider: 'venice', alt: 'venice', mode: 'image', why: 'Venice makes uncensored pictures in the cloud (Lustify, HiDream) with safe mode off.' },
+  anime: { provider: 'venice', alt: 'venice', mode: 'image', why: 'Venice makes uncensored pictures in the cloud with safe mode off.' },
+  video: { provider: 'fal', alt: 'replicate', mode: 'image', why: 'Longer, sharper clips with sound: Veo, Kling and others on fal.ai, paid per second.' },
+  animate: { provider: 'fal', alt: 'replicate', mode: 'image', why: 'Veo 3.1 on fal.ai brings a photo to life, with sound, paid per second.' },
+  photoedit: { provider: 'openai', alt: 'fal', mode: 'image', why: 'gpt-image-1 and Nano Banana make precise edits from a description, at a cost per image.' },
+  songs: { provider: 'fal', alt: 'replicate', mode: 'image', why: 'ElevenLabs Music, MiniMax Music and Mureka on fal.ai make complete sung songs from your lyrics.' },
   edit: { provider: 'openai', alt: 'together', mode: 'image', why: 'gpt-image-1 makes precise edits from a description, at a cost per image.' },
 };
 // Estimated paid use compared with asking the cloud model directly for every answer.
@@ -659,13 +677,16 @@ function advise(job, hw, opts = {}) {
   const installed = opts.installed || [];
   const text = installed.filter((m) => m.kind === 'text').map(profileInstalled);
   const base = { job, kind: j.kind, label: j.label };
+  // Songs: no open model sings a whole song on a PC yet, so the plan is a songwriter stack here
+  // (lyrics, chords, melody and a demo beat) plus cloud services for complete sung songs.
+  if (j.kind === 'music') return { ...base, recipe: 'song-complete', cloud: cloudPlan(job) };
   if (j.kind === 'media') {
     // Installed media models are catalog models (matched by catalogId); keep the installed id.
     const media = installed.filter((m) => m.kind !== 'text').map((m) => { const c = MEDIA_MODELS.find((x) => x.id === m.catalogId); return c ? { ...c, id: m.id, catalogId: c.id, name: m.name } : null; }).filter(Boolean);
     const mine = media.some((m) => MEDIA_ROLES[j.roles[0]].pick(m)) ? composeMedia(job, hw, calib, media, text) : null;
     // The prompt writer only needs a small model: reuse one you have, else a small download.
     // Recommended downloads stay with the standard models; uncensored ones are your own choice (or the Liquid Edition's).
-    const best = composeMedia(job, hw, calib, live(MEDIA_MODELS).filter((m) => !m.uncensored), text.length ? text : live(TEXT_MODELS).filter((m) => m.sizeGB <= 3.5));
+    const best = composeMedia(job, hw, calib, live(MEDIA_MODELS).filter((m) => j.uncensored || !m.uncensored), text.length ? text : live(TEXT_MODELS).filter((m) => m.sizeGB <= 3.5));
     const haveCat = (id) => (media.find((m) => m.catalogId === id) || text.find((m) => m.catalogId === id))?.id || null;
     best.have = Object.fromEntries(best.ids.map((id) => [id, text.some((m) => m.id === id) ? id : haveCat(id)]));
     best.missingGB = best.ids.filter((id) => !best.have[id]).reduce((t, id) => { const m = MEDIA_MODELS.find((x) => x.id === id) || TEXT_MODELS.find((x) => x.id === id); return t + m.sizeGB + (m.mmprojGB || 0); }, 0);

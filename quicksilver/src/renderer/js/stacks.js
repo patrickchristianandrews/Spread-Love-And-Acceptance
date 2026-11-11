@@ -13,11 +13,11 @@ const ROLE = {
   draft: '<span class="badge b-lav">✏️ Answers</span>',
   lead: '<span class="badge b-mint">★ Leads</span>',
 };
-const ROLE_ICON = { image: '🎨', video: '🎬', edit: '🪄', animate: '✨', helper: '✍️' };
+const ROLE_ICON = { image: '🎨', openimage: '🔓', anime: '🎌', video: '🎬', edit: '🪄', animate: '✨', helper: '✍️' };
 
 views.stacks = {
   html() {
-    const jobs = Object.entries(S.catalog.jobs);
+    const jobs = Object.entries(S.catalog.jobs).filter(([, j]) => !j.hidden);
     const goal = ([k, j]) => `<button class="goal ${advJob === k ? 'on' : ''}" data-job="${k}" aria-pressed="${advJob === k}">
       <span class="goal-ic">${j.icon}</span><span><b>${esc(j.label)}</b><span class="small muted">${esc(j.pitch)}</span></span></button>`;
     const head = `<div class="page-head"><h1>Stacks &amp; Fusion</h1><a href="#" class="small og-link" data-guide="stacks" style="align-self:center">ⓘ What's the difference?</a></div>
@@ -35,7 +35,7 @@ views.stacks = {
       ${shownUpgrades().length || shownStackUpdates().length ? modelUpdatesHTML() : ''}
       <div class="section"><h2>1. What do you want to do?</h2>${hwLine()}<button class="btn small" data-goto="compare" style="margin-left:auto">Compare stacks</button></div>
       <div class="goal-group"><div class="label">Think &amp; work</div><div class="goal-grid">${jobs.filter(([, j]) => j.kind === 'text').map(goal).join('')}</div></div>
-      <div class="goal-group"><div class="label">Create</div><div class="goal-grid">${jobs.filter(([, j]) => j.kind === 'media').map(goal).join('')}</div></div>
+      <div class="goal-group"><div class="label">Create: pictures, video &amp; music</div><div class="goal-grid">${jobs.filter(([, j]) => j.kind === 'media' || j.kind === 'music').map(goal).join('')}</div></div>
       <div class="section"><h2>2. Set it up</h2></div>
       <div id="adv-out">${advResult ? advisorHTML(advResult) : '<div class="empty">Checking your PC and your models…</div>'}</div>
       <div class="section"><h2>Your stacks</h2><span class="small muted">Stacks you've set up. Your fusions are on the <a href="#" data-sf-tab="fusion">⚗️ Fusion</a> tab.</span></div>
@@ -140,6 +140,7 @@ async function runAdvisor(job) {
 }
 
 function advisorHTML(r) {
+  if (r.kind === 'music') return songsHTML(r);
   return `${howItWorksHTML(r)}<div class="adv-grid">${r.kind === 'media' ? mineKitHTML(r) : mineTextHTML(r)}${bestHTML(r)}</div>${tiersHTML(r)}${cloudHTML(r)}`;
 }
 
@@ -549,3 +550,22 @@ function liquidAddonsModal() {
     $('#addon-list').innerHTML = liquidAddonsHTML();
   });
 }
+
+// ----- Full songs: a songwriter stack on this PC, complete sung songs in the cloud -----
+function songsHTML(r) {
+  const rx = (typeof STACK_RECIPES !== 'undefined' ? STACK_RECIPES : []).find((x) => x.id === r.recipe);
+  const have = S.stacks.some((x) => x.id === `rx-${r.recipe}`);
+  return `<div class="adv-grid">
+    <div class="card adv-mine"><h3>🎶 On this PC: free and private</h3>
+      <p class="small">${esc(rx?.name || 'Songwriter')}. A stack of your models writes the lyrics, chords and melody, and the built-in synth plays a demo beat (instrumental). Nothing leaves this computer.</p>
+      <div class="row">${have ? '<span class="badge b-mint">✓ Set up</span>' : '<button class="btn small primary" data-song-setup>Set up the Songwriter stack</button>'}<button class="btn small" data-song-open="music">Open Create → Music</button></div></div>
+    <div class="card adv-best"><h3>🎤 Complete sung songs: cloud</h3>
+      <p class="small">Whole songs with vocals, verses, chorus and bridge, from your lyrics: ElevenLabs Music (about $0.80 a minute), MiniMax Music 2.6 (about $0.15 a song) or Mureka v9, all on fal.ai with one key. No open model sings a full song on a PC yet.</p>
+      <div class="row"><button class="btn small primary" data-song-open="cloud">Open Create → Cloud</button></div></div>
+  </div>`;
+}
+document.addEventListener('click', (e) => {
+  if (e.target.closest('[data-song-setup]')) { setUpRecipe('song-complete').then(() => render()).catch((err) => toast(err.message, 6000)); return; }
+  const o = e.target.closest('[data-song-open]');
+  if (o) { studioTab = o.dataset.songOpen; go({ view: 'studio' }); }
+});

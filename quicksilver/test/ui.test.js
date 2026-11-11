@@ -100,14 +100,20 @@ function redPng(size = 64) {
   await win.waitForSelector('#pick-model option[value="stack:office-mine"]:checked', { state: 'attached', timeout: 30000 });
   // Photo & video stacks are Studio setups.
   await win.click('[data-nav="stacks"]');
-  await win.click('[data-job="create"]');
+  // Create's popular goals, one each: pictures, uncensored, anime, video, animate, editing, full songs.
+  for (const g of ['pictures', 'openpics', 'anime', 'video', 'animate', 'photoedit', 'songs']) await win.waitForSelector(`[data-job="${g}"]`);
+  assert.equal(await win.locator('[data-job="create"], [data-job="edit"]').count(), 0, 'the old all-in-one kits are not shown as choices');
+  await win.click('[data-job="songs"]');
+  await win.waitForSelector('[data-song-open="cloud"]', { timeout: 30000 });
+  assert.match(await win.locator('#adv-out').innerText(), /Songwriter[\s\S]*ElevenLabs Music/);
+  await win.click('[data-job="pictures"]');
   await win.waitForSelector('[data-kit="image"]', { timeout: 30000 });
   await win.click('#kit-create');
   await win.waitForSelector('#ci-model', { timeout: 30000 });
   await win.fill('#ci-prompt', 'a cat');
   await win.click('[data-improve="ci-prompt"]');
   await win.waitForFunction(() => document.querySelector('#ci-prompt').value !== 'a cat' && !document.querySelector('[data-improve="ci-prompt"]').disabled, null, { timeout: 30000 });
-  console.log('✓ stacks: types, built from installed models, Studio kit with ✨ Improve');
+  console.log('✓ stacks: types, built from installed models, Studio kit with ✨ Improve; Create goals incl. uncensored, anime, video and full songs');
   // Each stack type explains how it works, offers three strengths with accuracy levels, and
   // suggests a cloud AI with the paid use it saves.
   await win.click('[data-nav="stacks"]');
