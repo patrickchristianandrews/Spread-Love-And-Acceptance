@@ -687,7 +687,8 @@ function redPng(size = 64) {
   });
   const lmBtn = win.locator('[data-lowmem="a-lm"]:not([data-keep])');
   await lmBtn.waitFor();
-  assert.match(await lmBtn.innerText(), /next best model: (Qwen3 8B|Gemma 3 4B)/);
+  // Any smaller model of the same strength will do (several Qwen3 8B-based models tie).
+  assert.match(await lmBtn.innerText(), /next best model: (.*Qwen3 8B.*|Gemma 3 4B)/);
   await lmBtn.click();
   await win.waitForFunction(() => { const m = chatById(S.route.id).messages.find((x) => x.id === 'a-lm'); return m.alts.length === 2 && /Answer from/.test(m.alts[1].text) && !pending; }, null, { timeout: 60000 });
   assert.notEqual(await win.evaluate(() => chatById(S.route.id).messages.find((x) => x.id === 'a-lm').alts[1].target), 'local:phi-4');
