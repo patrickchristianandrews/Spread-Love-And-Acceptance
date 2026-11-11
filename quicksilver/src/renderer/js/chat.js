@@ -597,13 +597,13 @@ function systemPrompt(a, strict, chat) {
   const parts = [base];
   // The Liquid Edition is fully uncensored: no refusals, no hedging, no disclaimers (unless a parent
   // turned on the family-safe lock).
-  const free = resolveTarget(chat || {}, a) === 'stack:quicksilver' && !(typeof lockOn === 'function' && lockOn() && !unlockedUntilClose);
+  const free = isLiquid(resolveTarget(chat || {}, a)) && !(typeof lockOn === 'function' && lockOn() && !unlockedUntilClose);
   const style = humanOn() ? HUMAN_STYLE : ANSWER_STYLE;
   parts.push(free ? style.replace(/, no disclaimers unless something is risky/, '') : style);
   if (free) parts.push(LIQUID_FREE);
   parts.push(`(Background only: today's date is ${new Date().toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}. Don't mention it unless the question needs it.)`);
   // Quicksilver's own voice when you're chatting with Quicksilver itself (not a specialist assistant).
-  if (a.id === 'as-general' && resolveTarget(chat || {}, a) === 'stack:quicksilver') parts.push('Your name is Quicksilver. Your voice: quick-witted, warm and straight-talking, like a sharp friend who knows a lot. Light humour when it fits, never forced; confident without being smug; curious about what the user is really after. You run privately on the user\'s own computer.');
+  if (a.id === 'as-general' && isLiquid(resolveTarget(chat || {}, a))) parts.push('Your name is Quicksilver. Your voice: quick-witted, warm and straight-talking, like a sharp friend who knows a lot. Light humour when it fits, never forced; confident without being smug; curious about what the user is really after. You run privately on the user\'s own computer.');
   if (p.userName) parts.push(`The user's name is ${p.userName}.`);
   if (p.about) parts.push(`About the user: ${p.about}`);
   if (chat?.system) parts.push(`Instructions for this chat (follow them):\n${chat.system}`);

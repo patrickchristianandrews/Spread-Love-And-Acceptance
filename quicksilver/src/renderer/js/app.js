@@ -229,6 +229,7 @@ async function init() {
     if (!targetValid(S.data.prefs.defaultTarget) && model.kind === 'text') { S.data.prefs.defaultTarget = `local:${model.id}`; save(); }
     // Load the default model in the background so the first reply is quick.
     if (model.kind === 'text') await setUpQuicksilver(false).catch(() => {}); // a new model can join Quicksilver's team
+    if (model.kind === 'text' && (S.catalog?.liquidPro && Object.values(S.catalog.liquidPro).includes(model.catalogId))) { await qs.call('quicksilver:pro').catch(() => {}); await refreshModels(); }
     if (model.kind === 'text') qs.call('models:warm', S.data.prefs.defaultTarget || `local:${model.id}`, { contextSize: S.data.prefs.contextSize, gpu: S.data.prefs.gpu }).catch(() => {});
     if (!$('#modal').hidden) return;
     render();

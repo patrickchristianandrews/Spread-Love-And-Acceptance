@@ -79,7 +79,7 @@ handle('update:install', () => updater.install({ starterDir: app.isPackaged ? pa
 
 // ---------- hardware, catalog, estimates, advisor ----------
 handle('hw:detect', (fresh) => hardware.detect({ fresh }));
-handle('catalog:get', () => ({ liquid: catalog.LIQUID_MEMBERS, liquidAddons: catalog.LIQUID_ADDONS, picks: require('./catalog-remote').picks(), scores: catalog.SCORES, scoreBase: catalog.SCORE_BASE, text: catalog.TEXT_MODELS, textCategories: catalog.TEXT_CATEGORIES, media: catalog.MEDIA_MODELS, mediaCategories: catalog.MEDIA_CATEGORIES, jobs: catalog.JOBS }));
+handle('catalog:get', () => ({ liquid: catalog.LIQUID_MEMBERS, liquidAddons: catalog.LIQUID_ADDONS, liquidPro: catalog.LIQUID_PRO, picks: require('./catalog-remote').picks(), scores: catalog.SCORES, scoreBase: catalog.SCORE_BASE, text: catalog.TEXT_MODELS, textCategories: catalog.TEXT_CATEGORIES, media: catalog.MEDIA_MODELS, mediaCategories: catalog.MEDIA_CATEGORIES, jobs: catalog.JOBS }));
 // Everything the model details view shows: how it runs here, why, and what it would need.
 handle('catalog:details', async (id) => {
   const hw = await hardware.detect();
@@ -241,7 +241,7 @@ handle('advisor:overview', async () => {
   });
   const quicksilver = (await complete.ensureQuicksilverStack()) ? await complete.explainStack('quicksilver') : null;
   const yours = [];
-  for (const s of complete.stacks()) if (s.id !== 'quicksilver') { const e = await complete.explainStack(s.id); if (e) yours.push(e); }
+  for (const s of complete.stacks()) if (s.id !== 'quicksilver' && s.id !== 'quicksilver-pro') { const e = await complete.explainStack(s.id); if (e) yours.push(e); }
   const measured = require('./speeds').measured();
   return { hardware: hw, quicksilver, jobs, yours, measuredCount: Object.keys(measured).length };
 });
@@ -364,8 +364,9 @@ handle('page:check', (html) => new Promise((resolve) => {
 handle('stacks:list', () => complete.stacks());
 // The Liquid Edition is locked: it can't be edited or deleted (choose another model or stack instead).
 const LIQUID_LOCKED = '🔒 Quicksilver Liquid Edition is locked: it can\'t be changed or deleted. You can still choose any other model or stack.';
-handle('stacks:save', (s) => { if (s?.id === 'quicksilver' || s?.builtFor === 'quicksilver') throw new Error(LIQUID_LOCKED); return complete.saveStack(s); });
-handle('stacks:delete', (id) => { if (id === 'quicksilver') throw new Error(LIQUID_LOCKED); return complete.deleteStack(id); });
+handle('stacks:save', (s) => { if (['quicksilver', 'quicksilver-pro'].includes(s?.id) || ['quicksilver', 'quicksilver-pro'].includes(s?.builtFor)) throw new Error(LIQUID_LOCKED); return complete.saveStack(s); });
+handle('stacks:delete', (id) => { if (['quicksilver', 'quicksilver-pro'].includes(id)) throw new Error(LIQUID_LOCKED); return complete.deleteStack(id); });
+handle('quicksilver:pro', () => complete.ensureQuicksilverProStack());
 handle('kbm:list', () => complete.kbModels());
 handle('kbm:save', (m) => complete.saveKbModel(m));
 handle('kbm:delete', (id) => complete.deleteKbModel(id));

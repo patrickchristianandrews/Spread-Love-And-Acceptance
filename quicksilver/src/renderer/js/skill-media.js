@@ -42,13 +42,14 @@ const stripMediaBlock = (text) => String(text || '').replace(/```(?:image|video|
 const LIQUID_PICTURES = 'lustify';
 const LIQUID_VIDEO = 'wan2.2-5b';
 const ANIME_RX = /\b(anime|manga|hentai|cartoon|toon|chibi|waifu|furry|illustrat\w*|cel[- ]shad\w*|drawn|drawing|comic)\b/i;
+function chatIsPro(chat) { return Boolean(chat) && resolveTarget(chat, assistantById(chat.assistantId)) === 'stack:quicksilver-pro'; }
 function chatIsLiquid(chat) {
   if (!chat) return false;
   const t = resolveTarget(chat, assistantById(chat.assistantId));
-  return isLiquid(t) || S.stacks?.find((x) => `stack:${x.id}` === t)?.builtFor === 'quicksilver';
+  return isLiquid(t) || isLiquidStack(S.stacks?.find((x) => `stack:${x.id}` === t));
 }
-function pickLiquidMedia(kind, prompt, specOf) {
-  const first = S.catalog.picks?.liquid?.pictures || LIQUID_PICTURES;
+function pickLiquidMedia(kind, prompt, specOf, pro = false) {
+  const first = pro && S.installed.some((m) => m.catalogId === 'chroma-hd') ? 'chroma-hd' : S.catalog.picks?.liquid?.pictures || LIQUID_PICTURES;
   const anime = ANIME_RX.test(prompt || '');
   const unc = S.installed.filter((m) => m.kind === 'image' && (specOf(m).uncensored || m.uncensored));
   const score = (m) => { const c = specOf(m); return (c.quality || 0) + (m.catalogId === first && !anime ? 5 : 0) + (((m.style || c.style) === 'anime') === anime ? 3 : 0); };
@@ -76,7 +77,7 @@ const liquidNeed = (liquid, kind) => (!liquid ? kind : kind === 'image' || kind 
 function pickMediaModel(kind, opts = {}) {
   const specOf = (m) => S.catalog.media.find((c) => c.id === m.catalogId) || {};
   const q = (m) => specOf(m).quality || 0;
-  if (opts.liquid) { const p = pickLiquidMedia(kind, opts.prompt, specOf); if (p !== undefined) return p; }
+  if (opts.liquid) { const p = pickLiquidMedia(kind, opts.prompt, specOf, opts.pro); if (p !== undefined) return p; }
   let list = [];
   if (kind === 'image') list = S.installed.filter((m) => m.kind === 'image' && specOf(m).edit !== 'instruct');
   if (kind === 'edit') list = [...S.installed.filter((m) => m.kind === 'image' && specOf(m).edit === 'instruct').sort((a, b) => q(b) - q(a)), ...S.installed.filter((m) => m.kind === 'image' && specOf(m).edit === 'img2img').sort((a, b) => q(b) - q(a))];
@@ -101,7 +102,7 @@ async function runSkillMedia(chat, msg, alt, skill) {
   alt.media = { kind, prompt, instruction: spec.instruction || '', avoid: spec.avoid || '', shape: SIZES[spec.shape] ? spec.shape : skill.media?.shape || 'square', items: [], jobs: [] };
   const repaint = () => { save(); if (S.route.view === 'chat' && S.route.id === chat.id) paintStreaming(chat, msg); };
   const liquid = chatIsLiquid(chat);
-  const pick = pickMediaModel(kind, { liquid, prompt });
+  const pick = pickMediaModel(kind, { liquid, pro: chatIsPro(chat), prompt });
   if (!pick) { alt.media.need = liquidNeed(liquid, kind); repaint(); return; }
   alt.media.model = pick.api ? pick.label : pick.inst.name;
   let imageId;

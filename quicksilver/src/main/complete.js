@@ -548,7 +548,7 @@ async function* quicksilverThink(stackDef, req) {
 async function* stack(stackDef, req) {
   const { members } = stackDef;
   // The Liquid Edition's Thinker takes hard maths and logic (not quick answers, photos or app work).
-  if (stackDef.id === 'quicksilver' && members.thinker && exists(members.thinker) && req.level !== 'quick' && !req.points && !req.toolList && !hasImages(req.messages) && req.stepByStep !== false) {
+  if (LIQUID_STACKS.has(stackDef.id) && members.thinker && exists(members.thinker) && req.level !== 'quick' && !req.points && !req.toolList && !hasImages(req.messages) && req.stepByStep !== false) {
     const hardMaths = thinkWorthy(lastUserText(req.messages));
     // A Brain that thinks for itself thinks through every question that needs working out, unless
     // a stronger model or a second opinion is on the team (then the team handles those).
@@ -560,9 +560,9 @@ async function* stack(stackDef, req) {
     }
   }
   // Everything else from a Brain that can think: answered straight away, without thinking.
-  if (stackDef.id === 'quicksilver' && members.thinker && members.thinker === (members.drafters || [])[0]) req = { ...req, noThink: true };
-  if (stackDef.id === 'quicksilver' && req.stepByStep !== false) req = { ...req, stepByStep: true };
-  if (stackDef.id === 'quicksilver' && !req.noMuse && req.level !== 'quick' && !req.toolList && !hasImages(req.messages) && CREATIVE.test(lastUserText(req.messages))) {
+  if (LIQUID_STACKS.has(stackDef.id) && members.thinker && members.thinker === (members.drafters || [])[0]) req = { ...req, noThink: true };
+  if (LIQUID_STACKS.has(stackDef.id) && req.stepByStep !== false) req = { ...req, stepByStep: true };
+  if (LIQUID_STACKS.has(stackDef.id) && !req.noMuse && req.level !== 'quick' && !req.toolList && !hasImages(req.messages) && CREATIVE.test(lastUserText(req.messages))) {
     const steps0 = [];
     const step0 = (s) => { s.index = steps0.length; steps0.push(s); return { type: 'step', step: s }; };
     const live0 = (s) => (t) => { s.text = t; req.onStep?.(s); };
@@ -839,7 +839,7 @@ const UNCENSORED = /abliterat|uncensor|unfiltered|dolphin|hermes|lexi|rocinante/
 const UNCENSORED_CLOUD = ['venice'];
 function isUncensored(target) {
   if (!target) return false;
-  if (target === 'stack:quicksilver') return true;
+  if (target === 'stack:quicksilver' || target === 'stack:quicksilver-pro') return true;
   const p = parse(target);
   if (p.kind === 'local') {
     const m = models.get(p.id);
@@ -855,7 +855,7 @@ function isUncensored(target) {
 }
 
 function councilMembers(target, req) {
-  const liquid = target === 'stack:quicksilver';
+  const liquid = target === 'stack:quicksilver' || target === 'stack:quicksilver-pro';
   const textTargets = targets().filter((t) => t.target.startsWith('local:') && exists(t.target) && !t.mediaOnly && (!liquid || isUncensored(t.target)));
   const score = (t, job = 'general') => { const m = models.get(parse(t).id); return m ? catalog.scoreFor(catalog.profileInstalled(m), job) : 0; };
   const fits = (t) => { const m = models.get(parse(t).id); return m && m.kind === 'text'; };
@@ -956,6 +956,27 @@ function smoothHelper(p, hw, calib = 1) {
   return ['great', 'good'].includes(e.rating) && (e.fit === 'gpu' || (hw.ramGB || 0) >= 15);
 }
 
+// The Liquid Editions: Quicksilver's own uncensored crews (locked).
+const LIQUID_STACKS = new Set(['quicksilver', 'quicksilver-pro']);
+
+// Quicksilver Liquid Edition Pro: built as soon as its Brain and Closer are on this PC, from the
+// Pro line-up (catalog.LIQUID_PRO). Members that aren't downloaded yet are left out until they are.
+function ensureQuicksilverProStack() {
+  const P = catalog.LIQUID_PRO;
+  const all = models.list().filter((m) => m.kind === 'text');
+  const pick = (cid) => all.find((m) => m.catalogId === cid);
+  const brain = pick(P.brain); const closer = pick(P.closer); const thinker = pick(P.thinker); const muse = pick(P.muse);
+  const have = stacks().find((s) => s.id === 'quicksilver-pro');
+  if (!brain || !closer) return have ? 'stack:quicksilver-pro' : null;
+  const local = (m) => (m ? `local:${m.id}` : undefined);
+  const members = { drafters: [local(brain)], judge: local(closer), vision: closer.files?.mmproj ? local(closer) : undefined, thinker: local(thinker), muse: local(muse), mode: 'auto' };
+  for (const k of Object.keys(members)) if (members[k] === undefined) delete members[k];
+  const def = { id: 'quicksilver-pro', name: 'Quicksilver Liquid Edition Pro', emoji: '💎', builtIn: true, autoManaged: true, custom: true, builtFor: 'quicksilver-pro',
+    description: 'Quicksilver Liquid Edition Pro, for a powerful PC (16–24 GB graphics card, 32–64 GB memory): the Liquid Edition with bigger, smarter uncensored models. Qwen3 30B-A3B (the Brain) answers with 30B knowledge at 3B speed, Mistral Small 3.2 24B (the Closer) leads hard questions and reads photos, gpt-oss 20B (the Thinker) works through maths and logic, and Rocinante 12B (the Muse) writes stories. Pictures come from Chroma1-HD (top quality) and Lustify, with WAI-NSFW Illustrious for anime; video from Wan 2.2. Locked: it can\'t be edited or deleted.', members };
+  if (!have || JSON.stringify(have.members) !== JSON.stringify(members) || have.name !== def.name) saveStack(def);
+  return 'stack:quicksilver-pro';
+}
+
 async function ensureQuicksilverStack() {
   const have = stacks().find((s) => s.id === 'quicksilver');
   // Locked: the Liquid Edition is always Quicksilver's own crew (older versions let it be edited or deleted).
@@ -1023,6 +1044,7 @@ async function ensureQuicksilverStack() {
   const def = { id: 'quicksilver', name: 'Quicksilver Liquid Edition', emoji: '💧', builtIn: true, autoManaged: true, custom: true, builtFor: 'quicksilver', ...(bench ? { bench } : {}),
     description: "Quicksilver Liquid Edition, Quicksilver's own uncensored crew (locked: it can't be edited or deleted, and its core models stay installed; choose any other model or stack whenever you like). Suggested add-ons and any other uncensored model you download join by themselves: the built-in Qwen3.5 4B (the Brain) answers, sees photos and thinks hard questions through, Qwen3.5 2B (the Muse) sketches fresh angles for creative work, and a stronger uncensored model you add (the Closer, such as Qwen3.5 9B on a PC with a graphics card) leads on hard questions. Pictures are uncensored too: Lustify makes them (or the best uncensored picture model you add, with an anime model for anime requests), and Venice in the cloud when nothing is downloaded yet. Videos come from Wan 2.2 (open weights, no content filter), from a description or by animating a photo. Smarter search (finds your files and memories by meaning) is built in; the reranker is an optional add-on for even sharper results.", members };
   if (!have || JSON.stringify(have.members) !== JSON.stringify(members) || have.builtFor !== 'quicksilver' || have.name !== def.name || (have.bench || null) !== (def.bench || null)) saveStack(def);
+  ensureQuicksilverProStack();
   return 'stack:quicksilver';
 }
 
@@ -1078,8 +1100,8 @@ function targets() {
   // Built in first, then ready-made stacks, then your fusions, then single models.
   const st = stacks();
   const fusion = (s) => s.infused || s.builtFor === 'power';
-  for (const s of st.filter((x) => x.id === 'quicksilver')) out.push({ target: `stack:${s.id}`, label: `${s.emoji || '💧'} ${s.name}`, name: s.name, group: '💧 Built in', stack: true });
-  for (const s of st.filter((x) => x.id !== 'quicksilver' && !fusion(x))) out.push({ target: `stack:${s.id}`, label: `${s.emoji || '🧩'} ${s.name}`, name: s.name, group: '🧩 Stacks', stack: true });
+  for (const s of st.filter((x) => LIQUID_STACKS.has(x.id)).sort((a, b) => a.id.length - b.id.length)) out.push({ target: `stack:${s.id}`, label: `${s.emoji || '💧'} ${s.name}`, name: s.name, group: '💧 Built in', stack: true });
+  for (const s of st.filter((x) => !LIQUID_STACKS.has(x.id) && !fusion(x))) out.push({ target: `stack:${s.id}`, label: `${s.emoji || '🧩'} ${s.name}`, name: s.name, group: '🧩 Stacks', stack: true });
   for (const s of st.filter(fusion)) out.push({ target: `stack:${s.id}`, label: `${s.emoji || '⚗️'} ${s.name}`, name: s.name, group: '⚗️ Fusions', stack: true, fusion: true });
   for (const m of models.list().filter((x) => x.kind === 'text')) out.push({ target: `local:${m.id}`, label: m.name, name: m.name, group: 'On this PC', vision: Boolean(m.files.mmproj) });
   for (const k of kbModels()) if (exists(k.base)) out.push({ target: `kbm:${k.id}`, label: `${k.emoji || '📚'} ${k.name}`, name: k.name, group: 'Knowledge models', vision: canSee(k.base), knowledge: true });
@@ -1129,4 +1151,4 @@ async function warm(target, { contextSize, gpu } = {}) {
   return true;
 }
 
-module.exports = { smoothHelper, isUncensored, councilMembers, thinkWorthy, answerNow, warm, prefill, run, targets, stacks, saveStack, deleteStack, kbModels, saveKbModel, deleteKbModel, label, exists, canSee, parse, autoLevel, ensureQuicksilverStack, explainStack };
+module.exports = { smoothHelper, isUncensored, councilMembers, thinkWorthy, answerNow, warm, prefill, run, targets, stacks, saveStack, deleteStack, kbModels, saveKbModel, deleteKbModel, label, exists, canSee, parse, autoLevel, ensureQuicksilverStack, ensureQuicksilverProStack, explainStack };

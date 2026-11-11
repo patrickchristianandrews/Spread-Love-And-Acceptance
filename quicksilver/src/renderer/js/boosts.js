@@ -168,7 +168,7 @@ function boostModal(target, { ids, name } = {}) {
   const targets = ids || (s ? [...(s.members.drafters || []), s.members.judge, s.members.vision].filter(Boolean) : [target]);
   const title = name || (s ? s.name : String(target).startsWith('local:') || String(target).startsWith('api:') ? targetLabel(target) : catModel(target)?.name || target);
   const kind = s ? (isFusion(s) ? 'custom AI (fusion)' : 'stack') : ids ? 'stack' : 'model';
-  const liquid = s?.builtFor === 'quicksilver' || (!s && !ids && (catModel(String(target).replace(/^local:/, ''))?.category === 'open' || catModel(S.installed.find((m) => `local:${m.id}` === target)?.catalogId)?.category === 'open'));
+  const liquid = isLiquidStack(s) || (!s && !ids && (catModel(String(target).replace(/^local:/, ''))?.category === 'open' || catModel(S.installed.find((m) => `local:${m.id}` === target)?.catalogId)?.category === 'open'));
   openModal(`<h2>⚡ ${esc(title)}: what the web and a cloud AI add</h2><p class="small muted" style="margin-top:-4px">For this ${kind}, on this PC: each job's quality out of 10 on its own, with web search, and with a cloud AI or service, plus the service to add for it.</p>${boostsHTML(targets, { liquid, fusion: Boolean(s && isFusion(s)) })}<div class="modal-actions"><button class="btn" data-close>Close</button></div>`, { wide: true });
 }
 document.addEventListener('click', (e) => {
@@ -192,7 +192,7 @@ function boostToastText(target) {
   if (target.startsWith('stack:')) {
     const s = S.stacks.find((x) => `stack:${x.id}` === target);
     if (!s) return '';
-    liquid = s.builtFor === 'quicksilver';
+    liquid = isLiquidStack(s);
     targets = [...(s.members.drafters || []), s.members.judge, s.members.vision].filter(Boolean);
     if (targets.some((t) => t.startsWith('api:'))) return '';
   }

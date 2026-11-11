@@ -25,7 +25,7 @@ const TIPS = [
 // Answers from the models that come with Quicksilver (the Quicksilver stack, or a bundled model).
 function isStarterTarget(t) {
   if (!t) return false;
-  if (t === 'stack:quicksilver') return true;
+  if (t === 'stack:quicksilver' || t === 'stack:quicksilver-pro') return true;
   const inst = S.installed.find((m) => `local:${m.id}` === t);
   return inst?.source === 'bundled';
 }

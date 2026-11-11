@@ -100,6 +100,9 @@ function redPng(size = 64) {
   await win.waitForSelector('#pick-model option[value="stack:office-mine"]:checked', { state: 'attached', timeout: 30000 });
   // Photo & video stacks are Studio setups.
   await win.click('[data-nav="stacks"]');
+  // The Liquid Editions at the top of Stacks: the Liquid Edition and Liquid Edition Pro, each explained.
+  await win.waitForSelector('#liquid-editions:has-text("Liquid Edition Pro"):has-text("For a powerful PC")');
+  assert.match(await win.locator('#liquid-editions').innerText(), /Qwen3 30B-A3B[\s\S]*Mistral Small 3\.2[\s\S]*(Get|Finish|Chat)/);
   // Create's popular goals, one each: pictures, uncensored, anime, video, animate, editing, full songs.
   for (const g of ['pictures', 'openpics', 'anime', 'video', 'animate', 'photoedit', 'songs']) await win.waitForSelector(`[data-job="${g}"]`);
   assert.equal(await win.locator('[data-job="create"], [data-job="edit"]').count(), 0, 'the old all-in-one kits are not shown as choices');
@@ -1088,6 +1091,8 @@ function redPng(size = 64) {
     // The Liquid Edition is locked: it can't be deleted or edited; other stacks can.
     const lockErr = await qs.call('stacks:delete', 'quicksilver').then(() => '', (e) => e.message);
     if (!/locked/i.test(lockErr)) throw new Error('the Liquid Edition should refuse to be deleted');
+    const proErr = await qs.call('stacks:delete', 'quicksilver-pro').then(() => '', (e) => e.message);
+    if (!/locked/i.test(proErr)) throw new Error('Liquid Edition Pro should refuse to be deleted');
     const editErr = await qs.call('stacks:save', { id: 'quicksilver', name: 'Mine', members: { drafters: [] } }).then(() => '', (e) => e.message);
     if (!/locked/i.test(editErr)) throw new Error('the Liquid Edition should refuse to be edited');
     // Six suggested add-ons, optional: listed with a download button, none of them locked.

@@ -32,6 +32,7 @@ views.stacks = {
       ${head}
       <p class="lede"><b>A stack is a ready-made combination of AI models, picked and set up by Quicksilver for a job and fitted to this PC.</b> They answer separately, then a lead combines the best of each and fixes mistakes. Pick what you want to do and Quicksilver shows the best stack for this PC. Want to choose the AIs yourself, cloud ones included? That's <a href="#" data-sf-tab="fusion">⚗️ Fusion</a>.</p>
       ${foundBanner()}
+      ${liquidEditionsHTML()}
       ${shownUpgrades().length || shownStackUpdates().length ? modelUpdatesHTML() : ''}
       <div class="section"><h2>1. What do you want to do?</h2>${hwLine()}<button class="btn small" data-goto="compare" style="margin-left:auto">Compare stacks</button></div>
       <div class="goal-group"><div class="label">Think &amp; work</div><div class="goal-grid">${jobs.filter(([, j]) => j.kind === 'text').map(goal).join('')}</div></div>
@@ -393,9 +394,9 @@ function stackCard(s) {
     <div class="stack-v" style="gap:6px;margin:12px 0">${rows.map(([role, t]) => `<div class="row">${ROLE[role]}<b class="small">${esc(targetLabel(t))}</b>${targetValid(t) ? '' : '<span class="badge b-pink">not installed yet</span>'}</div>`).join('')}</div>
     ${isFusion(s) ? fusionRatingsHTML(s.members, { compact: true }) : ''}
     ${timesHTML(etaFor(`stack:${s.id}`))}
-    ${boostsHTML(rows.map(([, t]) => t), { compact: true, liquid: s.builtFor === 'quicksilver' })}
+    ${boostsHTML(rows.map(([, t]) => t), { compact: true, liquid: isLiquidStack(s) })}
     ${stackScoresHTML(rows.map(([, t]) => t))}
-    <div class="row"><button class="btn small primary" data-chat-stack="${s.id}">Chat</button>${s.builtFor === 'quicksilver' ? '' : `<button class="btn small" data-edit-stack="${s.id}">Edit</button>`}${isFusion(s) ? `<button class="btn small" data-fz-rate="${s.id}">📊 Rating &amp; tips</button>` : ''}${boostBtn(`stack:${s.id}`)}${s.builtFor === 'quicksilver' ? `<button class="btn small" data-liquid-addons title="Optional models that fill gaps in the Liquid Edition">💧 Suggested add-ons${liquidAddonsLeft() ? ` · ${liquidAddonsLeft()}` : ''}</button>` : ''}<button class="btn small ghost" data-sug-open="stack:${s.id}" title="The best model to join and API to add for a task you pick">💡 What to add</button>${isFusion(s) && !s.community ? `<button class="btn small" data-publish="${s.id}">📤 Publish</button>` : ''}${s.builtFor === 'quicksilver' ? '<span class="badge b-lav" title="The Liquid Edition can\'t be edited or deleted; choose another model or stack whenever you like">🔒 Locked</span>' : `<button class="btn small danger" data-del-stack="${s.id}">Delete</button>`}</div>
+    <div class="row"><button class="btn small primary" data-chat-stack="${s.id}">Chat</button>${isLiquidStack(s) ? '' : `<button class="btn small" data-edit-stack="${s.id}">Edit</button>`}${isFusion(s) ? `<button class="btn small" data-fz-rate="${s.id}">📊 Rating &amp; tips</button>` : ''}${boostBtn(`stack:${s.id}`)}${s.builtFor === 'quicksilver' ? `<button class="btn small" data-liquid-addons title="Optional models that fill gaps in the Liquid Edition">💧 Suggested add-ons${liquidAddonsLeft() ? ` · ${liquidAddonsLeft()}` : ''}</button>` : ''}<button class="btn small ghost" data-sug-open="stack:${s.id}" title="The best model to join and API to add for a task you pick">💡 What to add</button>${isFusion(s) && !s.community ? `<button class="btn small" data-publish="${s.id}">📤 Publish</button>` : ''}${isLiquidStack(s) ? '<span class="badge b-lav" title="The Liquid Edition can\'t be edited or deleted; choose another model or stack whenever you like">🔒 Locked</span>' : `<button class="btn small danger" data-del-stack="${s.id}">Delete</button>`}</div>
   </div>`;
 }
 
@@ -568,4 +569,60 @@ document.addEventListener('click', (e) => {
   if (e.target.closest('[data-song-setup]')) { setUpRecipe('song-complete').then(() => render()).catch((err) => toast(err.message, 6000)); return; }
   const o = e.target.closest('[data-song-open]');
   if (o) { studioTab = o.dataset.songOpen; go({ view: 'studio' }); }
+});
+
+// ---------- the Liquid Editions, at the top of Stacks ----------
+// The Liquid Edition (any PC, comes with Quicksilver) and Liquid Edition Pro (a powerful PC):
+// what each is, what it needs, whether this PC is up to it, and one button to get Pro.
+function proFit() {
+  const P = S.catalog?.liquidPro || {};
+  const hw = S.est?.hardware || {};
+  const v = hw.vramGB || 0; const r = hw.ramGB || 0;
+  if (!S.est) return { level: 'unknown', text: 'Checking this PC…' };
+  const spec = `this PC: ${v ? `${Math.round(v)} GB graphics card` : 'no graphics card'}, ${Math.round(r)} GB memory`;
+  if (v >= P.recVramGB - 0.5 && r >= P.recRamGB - 2) return { level: 'great', text: `✓ Runs great on ${spec}.` };
+  if (v >= P.minVramGB - 0.5 && r >= P.minRamGB - 2) return { level: 'ok', text: `✓ Runs on ${spec}; a 24 GB graphics card and 64 GB memory make it faster.` };
+  return { level: 'no', text: `⚠️ Too much for ${spec}. Pro needs at least a ${P.minVramGB} GB graphics card and ${P.minRamGB} GB memory; it would be very slow here. The Liquid Edition is the one for this PC.` };
+}
+function liquidEditionsHTML() {
+  const P = S.catalog?.liquidPro;
+  if (!P) return '';
+  const spec = (id) => S.catalog.text.find((m) => m.id === id) || S.catalog.media.find((m) => m.id === id);
+  const have = (id) => S.installed.some((m) => m.catalogId === id);
+  const rows = [['🧠 Brain', P.brain], ['🏁 Closer · sees photos', P.closer], ['🧮 Thinker', P.thinker], ['🎨 Muse · stories', P.muse], ['🖼️ Pictures', P.pictures[0]], ['🎌 Anime', P.pictures[1]]];
+  const missing = [...new Set([P.brain, P.closer, P.thinker, P.muse, ...P.pictures])].filter((id) => !have(id) && spec(id));
+  const missingGB = missing.reduce((t, id) => t + (spec(id).sizeGB || 0) + (spec(id).mmprojGB || 0), 0);
+  const downloading = missing.filter((id) => S.downloads[id]);
+  const ready = S.stacks.some((s) => s.id === 'quicksilver-pro');
+  const fit = proFit();
+  const liquidReady = S.stacks.some((s) => s.id === 'quicksilver');
+  return `<div class="section"><h2>💧 The Liquid Editions</h2><span class="small muted">Quicksilver's own uncensored crews: several AI models working as one, all on this PC. Locked, so they always work the way they were built.</span></div>
+    <div class="cards" id="liquid-editions" style="margin-bottom:18px">
+      <div class="card">
+        <div class="row"><span class="emoji-badge">💧</span><h3 class="grow">Liquid Edition</h3><span class="badge b-mint">For any PC</span></div>
+        <p class="desc">Comes with Quicksilver. Qwen3.5 4B answers and sees photos, Qwen3.5 9B leads hard questions, Qwen3.5 2B adds fresh angles; Lustify makes pictures and Wan 2.2 makes video. Runs on laptops and everyday PCs; best with an 8 GB graphics card.</p>
+        <div class="row">${liquidReady ? '<button class="btn small primary" data-chat-stack="quicksilver">Chat</button><span class="badge b-lav">🔒 Locked</span>' : '<span class="badge b-lemon">Setting up…</span>'}</div>
+      </div>
+      <div class="card ${fit.level === 'no' ? '' : 'hl'}">
+        <div class="row"><span class="emoji-badge">💎</span><h3 class="grow">Liquid Edition Pro</h3><span class="badge b-lav">For a powerful PC</span></div>
+        <p class="desc">The Liquid Edition with bigger, smarter uncensored models in every role: sharper answers, better reasoning and writing, and top-quality pictures. Needs a ${P.minVramGB}–${P.recVramGB} GB graphics card and ${P.minRamGB}–${P.recRamGB} GB memory.</p>
+        <div class="stack-v" style="gap:4px;margin:8px 0">${rows.map(([role, id]) => { const c = spec(id); return c ? `<div class="row small"><span class="grow">${role}: <b>${esc(c.name)}</b></span>${have(id) ? '<span class="badge b-mint">✓</span>' : S.downloads[id] ? '<span class="badge b-sky">⬇</span>' : `<span class="muted">${((c.sizeGB || 0) + (c.mmprojGB || 0)).toFixed(1)} GB</span>`}</div>` : ''; }).join('')}
+          <div class="row small"><span class="grow">🎬 Video: <b>Wan 2.2</b> · photoreal pictures: <b>Lustify</b></span><span class="muted">from the Liquid Edition</span></div></div>
+        <p class="small" style="margin:6px 0;${fit.level === 'no' ? 'color:var(--danger)' : ''}">${esc(fit.text)}</p>
+        <div class="row">${ready && !missing.length ? '<button class="btn small primary" data-chat-stack="quicksilver-pro">Chat</button><span class="badge b-lav">🔒 Locked</span>'
+          : downloading.length ? `<span class="badge b-sky">Downloading ${downloading.length} of ${missing.length}…</span>`
+          : `<button class="btn small ${fit.level === 'no' ? '' : 'primary'}" data-get-pro>${ready ? 'Finish' : 'Get'} Liquid Edition Pro · ${missingGB.toFixed(0)} GB</button>${ready ? '<button class="btn small" data-chat-stack="quicksilver-pro">Chat</button>' : ''}`}</div>
+      </div>
+    </div>`;
+}
+document.addEventListener('click', async (e) => {
+  if (!e.target.closest('[data-get-pro]')) return;
+  const P = S.catalog.liquidPro;
+  const spec = (id) => S.catalog.text.find((m) => m.id === id) || S.catalog.media.find((m) => m.id === id);
+  const missing = [...new Set([P.brain, P.closer, P.thinker, P.muse, ...P.pictures])].filter((id) => !S.installed.some((m) => m.catalogId === id) && spec(id));
+  if (proFit().level === 'no' && !(await confirmBox(`${proFit().text}\n\nDownload Liquid Edition Pro anyway?`, { yes: 'Download anyway', danger: false }))) return;
+  // The Brain and Closer first (Pro is ready to chat as soon as they're in), then the rest.
+  for (const id of missing) await download({ catalogId: id }, spec(id).name).catch((err) => toast(err.message, 6000));
+  toast('Downloading Liquid Edition Pro. It appears under Built in as soon as its Brain and Closer are in.', 8000);
+  render();
 });

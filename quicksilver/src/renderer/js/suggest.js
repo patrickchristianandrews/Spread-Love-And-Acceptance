@@ -26,7 +26,7 @@ function sugTargets(base) {
   if (base) return [base];
   return S.installed.filter((m) => (m.kind || 'text') === 'text').map((m) => `local:${m.id}`);
 }
-const sugLiquid = (base) => sugState.unc || base === 'stack:quicksilver' || S.stacks.find((x) => `stack:${x.id}` === base)?.builtFor === 'quicksilver';
+const sugLiquid = (base) => sugState.unc || isLiquid(base) || isLiquidStack(S.stacks.find((x) => `stack:${x.id}` === base));
 // A text model's rating for a task, out of 10 (reasoning uses its independent science score).
 function textScore(m, task) {
   if (!m) return null;

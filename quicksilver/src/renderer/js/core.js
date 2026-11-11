@@ -174,7 +174,7 @@ const targetValid = (t) => Boolean(t) && S.targets.some((x) => x.target === t);
 const UNCENSORED_RX = /abliterat|uncensor|unfiltered|dolphin|hermes|lexi|rocinante/i;
 function liquidOk(t) {
   if (!t) return false;
-  if (t === 'stack:quicksilver') return true;
+  if (t === 'stack:quicksilver' || t === 'stack:quicksilver-pro') return true;
   if (t.startsWith('local:')) {
     const m = S.installed.find((x) => `local:${x.id}` === t);
     if (!m) return false;
@@ -187,7 +187,8 @@ function liquidOk(t) {
   }
   return false;
 }
-const isLiquid = (t) => t === 'stack:quicksilver';
+const isLiquid = (t) => t === 'stack:quicksilver' || t === 'stack:quicksilver-pro';
+const isLiquidStack = (s) => Boolean(s) && (s.builtFor === 'quicksilver' || s.builtFor === 'quicksilver-pro');
 // A model that's part of the Liquid Edition can't be removed (imported files from other apps can).
 const liquidLocked = (m) => Boolean(m) && m.source !== 'imported' && (m.source === 'bundled' || (S.catalog?.liquid || []).includes(m.catalogId));
 const LOCK_BADGE = '<span class="badge b-lav" title="Part of Quicksilver Liquid Edition: it stays installed. Choose any other model or stack whenever you like.">🔒 Liquid Edition</span>';

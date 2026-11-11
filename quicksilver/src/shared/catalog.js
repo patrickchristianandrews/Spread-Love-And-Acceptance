@@ -880,6 +880,19 @@ const SCORE_BASE = { 'qwen3-8b-uncensored': 'qwen3-8b', 'qwen3-14b-uncensored': 
 const LIQUID_CORE = ['qwen3.5-2b', 'qwen3.5-4b', 'qwen3.5-9b-uncensored', 'nomic-embed-v1.5', 'bge-reranker-v2-m3', 'lustify', 'wan2.2-5b', 'wan2.2-5b-turbo'];
 const LIQUID_MEMBERS = LIQUID_CORE;
 const liquidMember = (catalogId) => Boolean(catalogId) && LIQUID_MEMBERS.includes(catalogId);
+// Quicksilver Liquid Edition Pro: the same idea for a powerful PC (a 16–24 GB graphics card and
+// 32–64 GB of memory) — bigger, smarter uncensored models in every role. Its models are a
+// download (about 70 GB on top of the Liquid Edition); the stack itself is locked like the Liquid
+// Edition's. Lustify and Wan 2.2 come from the Liquid Edition.
+const LIQUID_PRO = {
+  brain: 'qwen3-30b-a3b-uncensored',      // answers: 30B knowledge at 3B speed (mixture of experts)
+  closer: 'mistral-small-3.2-uncensored', // leads hard questions and reads photos
+  thinker: 'gpt-oss-20b-uncensored',      // maths and logic, thought through
+  muse: 'rocinante-12b',                  // stories, role-play and fresh angles
+  pictures: ['chroma-hd', 'wai-nsfw-illustrious'], // top-quality pictures; anime
+  minVramGB: 16, recVramGB: 24, minRamGB: 32, recRamGB: 64,
+};
+const LIQUID_PRO_MODELS = [LIQUID_PRO.brain, LIQUID_PRO.closer, LIQUID_PRO.thinker, LIQUID_PRO.muse, ...LIQUID_PRO.pictures];
 // Suggested add-ons: not required, not locked, never downloaded by themselves. Each fills a gap in
 // the core; once downloaded it joins the Liquid Edition's crew (any uncensored model does).
 // minVramGB: below this the add-on is shown as not a good fit for this PC.
@@ -892,4 +905,4 @@ const LIQUID_ADDONS = [
   { id: 'gpt-oss-20b-uncensored', why: 'A strong, fast reasoner for maths and logic on 12 GB+ graphics cards.', minVramGB: 12 },
 ];
 
-module.exports = { LIQUID_CORE, LIQUID_MEMBERS, LIQUID_ADDONS, liquidMember, RETIRED, SCORES, SCORE_BASE, SUCCESSORS, FEATURED, TEXT_MODELS, TEXT_CATEGORIES, MEDIA_MODELS, MEDIA_CATEGORIES, JOBS, CLOUD_BOOST, cloudPlan, accuracyLevel, requirements, smallerAlternative, draftFor, DRAFT_FAMILIES, estimateText, estimateMedia, advise, compose, gpuBandwidth, profileInstalled, matchCatalog, scoreFor, familyOf, starsFor, capabilities, upgradeAdvice };
+module.exports = { LIQUID_CORE, LIQUID_MEMBERS, LIQUID_ADDONS, LIQUID_PRO, LIQUID_PRO_MODELS, liquidMember, RETIRED, SCORES, SCORE_BASE, SUCCESSORS, FEATURED, TEXT_MODELS, TEXT_CATEGORIES, MEDIA_MODELS, MEDIA_CATEGORIES, JOBS, CLOUD_BOOST, cloudPlan, accuracyLevel, requirements, smallerAlternative, draftFor, DRAFT_FAMILIES, estimateText, estimateMedia, advise, compose, gpuBandwidth, profileInstalled, matchCatalog, scoreFor, familyOf, starsFor, capabilities, upgradeAdvice };
