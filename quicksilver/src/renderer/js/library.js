@@ -12,6 +12,8 @@ async function refreshKb() {
   kb = { ...(await qs.call('kb:list')), models: await qs.call('kbm:list') };
   if (!kb.collections.some((c) => c.id === kbSel)) kbSel = kb.collections[0]?.id || null;
   kbDocs = kbSel ? await qs.call('kb:docs', kbSel) : [];
+  // Home's "your knowledge" card counts the same list.
+  S.kbSummary = { bases: kb.collections.length, docs: kb.collections.reduce((t, c) => t + (c.docs || 0), 0) };
 }
 
 views.library = {

@@ -72,9 +72,26 @@ async function connect(s) {
     const token = s.auth ? store.getSecret(`mcp:${s.id}`) : '';
     transport = new StreamableHTTPClientTransport(new URL(s.url), { requestInit: { headers: token ? { Authorization: `Bearer ${token}` } : {} } });
   }
-  const timeout = new Promise((_, j) => setTimeout(() => j(new Error('The server did not respond within 60 seconds.')), 60000));
-  await Promise.race([client.connect(transport), timeout]);
-  const { tools } = await client.listTools();
+  // What the server prints is read as it comes (a pipe nobody reads fills up, and the server then
+  // stops mid-answer); the last of it is kept to say why a start failed.
+  let said = '';
+  let draining = false;
+  const drain = () => { if (draining || !transport.stderr) return; draining = true; transport.stderr.on('data', (b) => { said = (said + b).slice(-4000); }); };
+  drain();
+  // A server that stops or crashes is forgotten, so the next use starts it again.
+  client.onclose = () => { if (live.get(s.id)?.client === client) live.delete(s.id); };
+  let timer;
+  const timeout = new Promise((_, j) => { timer = setTimeout(() => j(new Error('The server did not respond within 60 seconds.')), 60000); });
+  let tools;
+  try {
+    await Promise.race([client.connect(transport), timeout]);
+    drain();
+    ({ tools } = await Promise.race([client.listTools(), timeout]));
+  } catch (err) {
+    try { await client.close(); } catch { /* it never started */ } // nothing is left running after a failed start
+    const last = said.trim().split('\n').filter(Boolean).pop();
+    throw new Error(`${err.message}${last ? ` The server said: ${last.slice(0, 300)}` : ''}`);
+  } finally { clearTimeout(timer); }
   const entry = { client, tools, error: '' };
   live.set(s.id, entry);
   return entry;

@@ -7,7 +7,8 @@ const store = require('./store');
 const { extract, SUPPORTED, stripHtml } = require('./docs');
 
 const STOP = new Set('a an and are as at be by for from has have in is it its of on or that the to was were will with this these those you your we our they their i me my not but if then than so do does did can could would should what which who whom how when where why'.split(' '));
-const tokenize = (s) => s.toLowerCase().normalize('NFKD').replace(/[̀-ͯ]/g, '').split(/[^a-z0-9]+/).filter((w) => w.length > 1 && !STOP.has(w));
+// Words in any alphabet (Cyrillic, Greek, Arabic, Hebrew… as well as Latin), not only a to z.
+const tokenize = (s) => s.toLowerCase().normalize('NFKD').replace(/[̀-ͯ]/g, '').split(/[^\p{L}\p{N}]+/u).filter((w) => w.length > 1 && !STOP.has(w));
 
 function chunk(text, size = 1100, overlap = 150) {
   const out = [];
@@ -92,7 +93,9 @@ function removeDoc(id) {
 
 function walk(root, out = [], depth = 0) {
   if (depth > 8 || out.length > 5000) return out;
-  for (const e of fs.readdirSync(root, { withFileTypes: true })) {
+  let list = [];
+  try { list = fs.readdirSync(root, { withFileTypes: true }); } catch { return out; } // a folder Windows will not let us read is skipped, not fatal
+  for (const e of list) {
     if (e.name.startsWith('.') || e.name === 'node_modules') continue;
     const p = path.join(root, e.name);
     if (e.isDirectory()) walk(p, out, depth + 1);
@@ -103,8 +106,8 @@ function walk(root, out = [], depth = 0) {
 
 async function addPaths(collectionId, paths, onProgress) {
   load();
-  const files = paths.flatMap((p) => (fs.statSync(p).isDirectory() ? walk(p) : [p]));
   const errors = [];
+  const files = paths.flatMap((p) => { try { return fs.statSync(p).isDirectory() ? walk(p) : [p]; } catch (err) { errors.push(`${path.basename(p)}: ${err.code === 'ENOENT' ? 'not found' : 'cannot be read'}`); return []; } });
   let added = 0;
   for (let i = 0; i < files.length; i++) {
     onProgress?.({ done: i, total: files.length, file: path.basename(files[i]) });
@@ -125,8 +128,9 @@ async function addPaths(collectionId, paths, onProgress) {
 // same path), up to maxPages pages.
 async function addWebsite(collectionId, startUrl, { maxPages = 40, onProgress, signal } = {}) {
   load();
-  const start = new URL(startUrl);
-  const prefix = start.pathname.replace(/[^/]*$/, '');
+  let start = new URL(startUrl);
+  let prefix = start.pathname.replace(/[^/]*$/, '');
+  let first = true;
   const seen = new Set();
   const queue = [start.href.split('#')[0]];
   let added = 0;
@@ -140,6 +144,11 @@ async function addWebsite(collectionId, startUrl, { maxPages = 40, onProgress, s
       const res = await fetch(url, { headers: { 'User-Agent': 'Mozilla/5.0 Quicksilver knowledge base' }, redirect: 'follow', signal: AbortSignal.timeout(15000) });
       const type = res.headers.get('content-type') || '';
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      // Where the site actually sent us (www., a trailing slash, another folder): links are read
+      // from there, and the first page's final address decides which site and folder to stay in.
+      const base = res.url || url;
+      seen.add(base.split('#')[0]);
+      if (first) { first = false; try { start = new URL(base); prefix = start.pathname.replace(/[^/]*$/, ''); } catch { /* keep what was typed */ } }
       let text;
       let title = url;
       if (/pdf/.test(type)) {
@@ -151,7 +160,7 @@ async function addWebsite(collectionId, startUrl, { maxPages = 40, onProgress, s
         text = stripHtml(main.replace(/<(nav|header|footer|aside)[\s\S]*?<\/\1>/gi, ' '));
         for (const m of html.matchAll(/href\s*=\s*["']([^"'#]+)/gi)) {
           try {
-            const u = new URL(m[1], url);
+            const u = new URL(m[1], base);
             if (u.host === start.host && u.pathname.startsWith(prefix) && !/\.(png|jpe?g|gif|svg|css|js|zip|mp4|mp3|ico|woff2?)$/i.test(u.pathname) && !seen.has(u.href.split('#')[0])) queue.push(u.href.split('#')[0]);
           } catch {}
         }

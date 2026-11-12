@@ -42,8 +42,10 @@ function profileTable(name, rows, maxRows = 300) {
     const nums = vals.map((v) => (typeof v === 'number' ? v : Number(String(v).replace(/[$,%\s£€]/g, '')))).filter((n) => Number.isFinite(n));
     const dates = vals.filter((v) => v instanceof Date || (typeof v === 'string' && /^\d{4}-\d{2}-\d{2}/.test(v)));
     if (vals.length && nums.length >= vals.length * 0.9) {
-      const sum = nums.reduce((a, b) => a + b, 0);
-      lines.push(`- ${h} (number): count ${nums.length}, sum ${fmt(sum)}, mean ${fmt(sum / nums.length)}, min ${fmt(Math.min(...nums))}, max ${fmt(Math.max(...nums))}${blanks ? `, blanks ${blanks}` : ''}`);
+      // One pass (Math.min(...nums) fails on a column with more than about 125,000 numbers).
+      let sum = 0; let lo = Infinity; let hi = -Infinity;
+      for (const n of nums) { sum += n; if (n < lo) lo = n; if (n > hi) hi = n; }
+      lines.push(`- ${h} (number): count ${nums.length}, sum ${fmt(sum)}, mean ${fmt(sum / nums.length)}, min ${fmt(lo)}, max ${fmt(hi)}${blanks ? `, blanks ${blanks}` : ''}`);
     } else if (vals.length && dates.length >= vals.length * 0.9) {
       const ds = dates.map((v) => (v instanceof Date ? v : new Date(v))).filter((x) => !Number.isNaN(+x)).sort((a, b) => a - b);
       lines.push(`- ${h} (date): ${ds.length} values from ${ds[0]?.toISOString().slice(0, 10)} to ${ds[ds.length - 1]?.toISOString().slice(0, 10)}${blanks ? `, blanks ${blanks}` : ''}`);

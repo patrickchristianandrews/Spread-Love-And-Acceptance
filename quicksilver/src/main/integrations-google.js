@@ -107,7 +107,7 @@ module.exports = ({ http, clip, cfg }) => {
   async function tokenRequest(params) {
     const res = await fetch('https://oauth2.googleapis.com/token', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: new URLSearchParams(params), signal: AbortSignal.timeout(30000) });
     const j = await res.json().catch(() => ({}));
-    if (!res.ok) throw new Error(j.error_description || j.error || `Google said ${res.status}`);
+    if (!res.ok) { const err = new Error(j.error_description || j.error || `Google said ${res.status}`); err.code = j.error; throw err; }
     return j;
   }
   const access = new Map();
@@ -118,7 +118,13 @@ module.exports = ({ http, clip, cfg }) => {
     const refresh = own || store.getSecret(refreshKey('google'));
     if (!refresh) throw new Error(`Sign in to ${CONNECTORS[id].name} first (Connectors).`);
     const { id: client, secret } = clientOf(own ? id : 'google');
-    const tok = await tokenRequest({ refresh_token: refresh, client_id: client, client_secret: secret, grant_type: 'refresh_token' });
+    let tok;
+    try { tok = await tokenRequest({ refresh_token: refresh, client_id: client, client_secret: secret, grant_type: 'refresh_token' }); } catch (err) {
+      // Google ended this sign-in (it expires after a week for an app in testing, and on a
+      // password change). It is forgotten, so the next Sign in opens the browser again.
+      if (err.code === 'invalid_grant') { store.setSecret(refreshKey(own ? id : 'google'), ''); access.clear(); throw new Error(`Your Google sign-in has ended. Open Connectors and sign in to ${CONNECTORS[id].name} again.`); }
+      throw err;
+    }
     access.set(id, { token: tok.access_token, until: Date.now() + (tok.expires_in - 60) * 1000 });
     return tok.access_token;
   }
@@ -201,7 +207,9 @@ module.exports = ({ http, clip, cfg }) => {
       run: async ({ title, start, end, location, description, attendees }) => {
         const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
         const allDay = /^\d{4}-\d{2}-\d{2}$/.test(start);
-        const endAt = end || (allDay ? start : new Date(new Date(start).getTime() + 3600000).toISOString().slice(0, 19));
+        // One hour later, as a local clock time (the event is sent with the local time zone).
+        const local = (ms) => new Date(ms - new Date(ms).getTimezoneOffset() * 60000).toISOString().slice(0, 19);
+        const endAt = end || (allDay ? start : local(new Date(start).getTime() + 3600000));
         const at = (v) => (allDay ? { date: v } : { dateTime: v.length === 16 ? `${v}:00` : v, timeZone: tz });
         const e = await g('gcalendar', `${CAL}${attendees ? '?sendUpdates=all' : ''}`, { method: 'POST', body: { summary: title, location, description, start: at(start), end: at(endAt), ...(attendees ? { attendees: attendees.split(',').map((x) => ({ email: x.trim() })).filter((x) => x.email) } : {}) } });
         return `Added: ${e.summary} on ${when(e)}. ${e.htmlLink || ''}`;
