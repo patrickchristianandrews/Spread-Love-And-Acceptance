@@ -1297,8 +1297,8 @@ async function collect(gen) {
     const ok = remote.clean(data);
     assert.ok(ok && Object.keys(ok.successors).length >= 5, 'the published picks file is valid');
     // (A newer model may be one the file itself adds: the daily catalogue search writes those.)
-    const real = (id) => catalog.TEXT_MODELS.some((m) => m.id === id) || ok.models.some((m) => m.id === id);
-    for (const [a, b] of Object.entries(ok.successors)) assert.ok(real(a) && real(b), `successor ${a} → ${b} names real models`);
+    const inFile = (id) => catalog.TEXT_MODELS.some((m) => m.id === id) || ok.models.some((m) => m.id === id);
+    for (const [a, b] of Object.entries(ok.successors)) assert.ok(inFile(a) && inFile(b), `successor ${a} → ${b} names real models`);
     assert.ok(ok.models.length <= 40 && ok.models.every((m) => m.repo && m.sizeGB > 0 && m.jobs), 'every model the file adds is complete');
     for (const l of Object.values(ok.featured)) for (const id of l) assert.ok(catalog.TEXT_MODELS.some((m) => m.id === id), `featured ${id} is in the catalog`);
     assert.equal(remote.clean({ version: 2 }), null, 'unknown versions are ignored');
