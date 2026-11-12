@@ -137,7 +137,7 @@ function successorsFor(fresh, known) {
   // One entry for each model: the same family, version, size and kind from two converters is one model (the more popular copy).
   const kind = (d) => `${d._p.family}|${d._p.version}|${d._p.params}|${d._p.coder}|${d._p.open}|${d._p.thinks}`;
   const all = [];
-  for (const m of await candidates()) { const d = await describe(m).catch(() => null); if (d && !byHand.some((x) => x.id === d.id)) all.push(d); }
+  for (const m of await candidates()) { const d = await describe(m).catch(() => null); if (d && !byHand.some((x) => x.id === d.id || x.repo.toLowerCase() === d.repo.toLowerCase())) all.push(d); }
   for (const d of all.sort((a, b) => b.popularity - a.popularity)) if (!found.some((x) => x.id === d.id || (d._p.family && kind(x) === kind(d)))) found.push(d);
   if (!found.length && !DRY) { console.log('Nothing found (Hugging Face may be unreachable): the catalog is left as it is.'); return; }
   // Keep the date a model was first added; drop automatic ones that are gone or old and no longer popular.

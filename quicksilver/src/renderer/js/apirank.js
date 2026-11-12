@@ -24,6 +24,7 @@ const API_RANK = [
   ['openai', 'OpenAI (GPT-6 Astra, GPT Image)', ['chat', 'reasoning', 'coding', 'photos'], 'The highest scores (96% science) and the best pictures', 'None (the ChatGPT plan doesn\'t include the API)', 'Astra $10 in / $50 out per million tokens; pictures about $0.05', 10, 0, 3, 'app'],
   ['anthropic', 'Anthropic (Claude)', ['writing', 'coding', 'reasoning'], 'The most natural writing and the best for long code', 'None', 'Pay as you go, premium', 10, 0, 3.5, 'app'],
   ['perplexity', 'Perplexity Sonar', ['research'], 'Web research with sources in every answer', 'None (a little with Pro)', 'Pay as you go', 9, 1, 6, 'app'],
+  ['uncensoredllm', 'UncensoredLLM', ['chat', 'uncensored', 'writing', 'coding'], 'The widest choice of uncensored models: 171 with one key, from GLM-5.3 and DeepSeek V4 to role-play and novel-writing builds', 'None: prepaid from $10 (never expires)', 'From about $0.11 in / $0.37 out per million tokens (GLM-5.3 Flash Uncensored); big models $1 to $6', 8.5, 0, 8, 'app'],
   ['venice', 'Venice AI', ['chat', 'uncensored'], 'Uncensored and private (the only cloud AI the Liquid Edition uses)', 'A small free allowance', 'About $0.70 in / $2.80 out per million tokens', 7, 3, 7.5, 'app'],
   ['', 'Pollinations', ['photos'], 'Free pictures with no account at all', 'Free, no key (rate limited)', 'Free', 6, 10, 10, 'app'],
   ['replicate', 'Replicate', ['photos', 'video', 'music'], 'Thousands of image, video and music models', '$5 credits, no card', 'FLUX.1 Schnell about $0.003 a picture', 7.5, 7, 9, 'app'],

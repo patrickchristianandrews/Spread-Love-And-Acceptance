@@ -1,6 +1,6 @@
 # Quicksilver API directory
 
-Every cloud service Quicksilver can use (45 of them), by task. In each task: free ones first, then free to start, then paid, with what the free plan gives you, what it costs after, and a link to get its key. A service appears under every task it is good at.
+Every cloud service Quicksilver can use (46 of them), by task. In each task: free ones first, then free to start, then paid, with what the free plan gives you, what it costs after, and a link to get its key. A service appears under every task it is good at.
 
 Free allowances and prices are as of November 2026 and change often: the "prices" link shows today's. Quicksilver works without any of these; they are optional additions. The same list is in the app under Guide → Best cloud AIs, and under Models → Connect an API → API directory.
 
@@ -49,6 +49,7 @@ Tasks: 💬 Everyday chat · 🧠 Hard reasoning & maths · 💻 Coding · ✍�
 | Service | Best for | What free gets you | After that | Links |
 |---|---|---|---|---|
 | **OpenAI (GPT-6 Astra, GPT Image)** (10/10) | The highest scores (96% science) and the best pictures | None (the ChatGPT plan doesn't include the API) | Astra $10 in / $50 out per million tokens; pictures about $0.05 | [Get a key](https://platform.openai.com/api-keys) · [Prices](https://openai.com/api/pricing) |
+| **UncensoredLLM** (8.5/10) | The widest choice of uncensored models: 171 with one key, from GLM-5.3 and DeepSeek V4 to role-play and novel-writing builds | None: prepaid from $10 (never expires) | From about $0.11 in / $0.37 out per million tokens (GLM-5.3 Flash Uncensored); big models $1 to $6 | [Get a key](https://app.uncensoredllm.ai/console) · [Prices](https://uncensoredllm.ai/pricing) |
 | **DeepInfra** | Very low prices for big open models. | Pay as you go, at some of the lowest prices for open models. | See its price page | [Get a key](https://deepinfra.com/dash/api_keys) · [Prices](https://deepinfra.com/pricing) |
 | **Featherless (thousands of open models)** | A flat monthly price for thousands of open and uncensored fine-tunes. | Monthly subscription, unlimited use of its models. | See its price page | [Get a key](https://featherless.ai/account/api-keys) · [Prices](https://featherless.ai/#pricing) |
 | **MiniMax** | Strong at coding and agent tasks for its price. | Pay as you go. | See its price page | [Get a key](https://www.minimax.io/platform) · [Prices](https://www.minimax.io/platform/document/Price) |
@@ -107,6 +108,7 @@ Tasks: 💬 Everyday chat · 🧠 Hard reasoning & maths · 💻 Coding · ✍�
 | **Anthropic (Claude)** (10/10) | The most natural writing and the best for long code | None | Pay as you go, premium | [Get a key](https://console.anthropic.com/settings/keys) · [Prices](https://www.anthropic.com/pricing#api) |
 | **OpenAI (GPT-6 Astra, GPT Image)** (10/10) | The highest scores (96% science) and the best pictures | None (the ChatGPT plan doesn't include the API) | Astra $10 in / $50 out per million tokens; pictures about $0.05 | [Get a key](https://platform.openai.com/api-keys) · [Prices](https://openai.com/api/pricing) |
 | **DeepSeek** (9.3/10) | Top-level reasoning at a very low price (93% science) | None | Very low: well under $1 per million tokens | [Get a key](https://platform.deepseek.com/api_keys) · [Prices](https://api-docs.deepseek.com/quick_start/pricing) |
+| **UncensoredLLM** (8.5/10) | The widest choice of uncensored models: 171 with one key, from GLM-5.3 and DeepSeek V4 to role-play and novel-writing builds | None: prepaid from $10 (never expires) | From about $0.11 in / $0.37 out per million tokens (GLM-5.3 Flash Uncensored); big models $1 to $6 | [Get a key](https://app.uncensoredllm.ai/console) · [Prices](https://uncensoredllm.ai/pricing) |
 | **MiniMax** | Strong at coding and agent tasks for its price. | Pay as you go. | See its price page | [Get a key](https://www.minimax.io/platform) · [Prices](https://www.minimax.io/platform/document/Price) |
 | **Moonshot (Kimi)** | Kimi: strong at coding and long documents. | Pay as you go. New accounts sometimes get a small credit. | See its price page | [Get a key](https://platform.moonshot.ai/console/api-keys) · [Prices](https://platform.moonshot.ai/docs/pricing) |
 
@@ -123,6 +125,7 @@ Tasks: 💬 Everyday chat · 🧠 Hard reasoning & maths · 💻 Coding · ✍�
 | Service | Best for | What free gets you | After that | Links |
 |---|---|---|---|---|
 | **Anthropic (Claude)** (10/10) | The most natural writing and the best for long code | None | Pay as you go, premium | [Get a key](https://console.anthropic.com/settings/keys) · [Prices](https://www.anthropic.com/pricing#api) |
+| **UncensoredLLM** (8.5/10) | The widest choice of uncensored models: 171 with one key, from GLM-5.3 and DeepSeek V4 to role-play and novel-writing builds | None: prepaid from $10 (never expires) | From about $0.11 in / $0.37 out per million tokens (GLM-5.3 Flash Uncensored); big models $1 to $6 | [Get a key](https://app.uncensoredllm.ai/console) · [Prices](https://uncensoredllm.ai/pricing) |
 
 ## 🔎 Research with sources
 
@@ -173,6 +176,12 @@ Tasks: 💬 Everyday chat · 🧠 Hard reasoning & maths · 💻 Coding · ✍�
 | Service | Best for | What free gets you | After that | Links |
 |---|---|---|---|---|
 | **Venice AI** (7/10) | Uncensored and private (the only cloud AI the Liquid Edition uses) | A small free allowance | About $0.70 in / $2.80 out per million tokens | [Get a key](https://venice.ai/settings/api) · [Prices](https://docs.venice.ai/overview/pricing) |
+
+### Paid
+
+| Service | Best for | What free gets you | After that | Links |
+|---|---|---|---|---|
+| **UncensoredLLM** (8.5/10) | The widest choice of uncensored models: 171 with one key, from GLM-5.3 and DeepSeek V4 to role-play and novel-writing builds | None: prepaid from $10 (never expires) | From about $0.11 in / $0.37 out per million tokens (GLM-5.3 Flash Uncensored); big models $1 to $6 | [Get a key](https://app.uncensoredllm.ai/console) · [Prices](https://uncensoredllm.ai/pricing) |
 
 ## 🖼️ Making pictures
 
