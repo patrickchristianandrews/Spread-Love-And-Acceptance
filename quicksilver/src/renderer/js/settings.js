@@ -191,7 +191,7 @@ function apiSrvHTML() {
   -H "Content-Type: application/json"${a.requireKey ? ' \\\n  -H "Authorization: Bearer YOUR_KEY"' : ''} \\
   -d '{"model": "${esc(S.stacks[0]?.name || 'local:qwen3-8b')}", "messages": [{"role": "user", "content": "Hello"}], "stream": true}'</pre>
       <p class="small muted" style="font-weight:600">Also: <code>POST /v1/images/generations</code> with a local image model.</p></div>
-    <div class="card"><h3>🤖 Coding agents</h3><p class="small muted" style="font-weight:600">OpenCode and OpenHands can work on whole projects with your models through this API (tool calls included).</p><button class="btn" data-agents>Set up OpenCode or OpenHands</button></div>
+    <div class="card"><h3>🤖 Coding agents</h3><p class="small muted" style="font-weight:600">OpenCode, Kilo Code, Cline, Roo Code, Continue, Aider and OpenHands can work on whole projects with your models through this API (tool calls included).</p><button class="btn" data-agents>Set up a coding agent</button></div>
   </div>`;
 }
 function bindApiSrv() {

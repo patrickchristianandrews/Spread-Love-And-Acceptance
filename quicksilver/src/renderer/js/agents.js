@@ -11,7 +11,7 @@ async function agentsModal() {
     const opts = st.models.map((m) => `<option value="${esc(m.id)}">${esc(m.name)}${m.id.startsWith('api:') ? ' (cloud)' : ''}</option>`).join('');
     const small = local.length && !st.models.some((m) => /30b|32b|24b|27b|70b|coder|devstral|api:/i.test(m.id));
     b.querySelector('#ag-body').innerHTML = `
-      <p class="help">A coding agent works on a whole project: it reads your files, makes the changes, runs the commands and fixes what breaks until the job is done. These two are free and open source; Quicksilver gives them the AI, so they run on your own models (private and free) or on a cloud API you have connected.</p>
+      <p class="help">A coding agent works on a whole project: it reads your files, makes the changes, runs the commands and fixes what breaks until the job is done. These are free and open source; Quicksilver gives them the AI, so they run on your own models (private and free) or on a cloud API you have connected.</p>
       ${!st.models.length ? '<div class="notice">No model to offer yet: download one (a coding model works best) or connect a cloud API first.</div>' : ''}
       ${small ? '<div class="notice info">Agents need a strong model to follow their steps. Small models often get lost; a coding model of 24B or more (such as Qwen3 Coder 30B or Devstral) or a connected cloud API works much better.</div>' : ''}
       <div class="card" style="margin-bottom:12px"><h3 style="margin:0 0 4px">OpenCode <span class="badge b-mint">recommended</span></h3>
@@ -20,6 +20,19 @@ async function agentsModal() {
         <div class="row" style="flex-wrap:wrap"><label class="small" for="ag-model">Model</label><select id="ag-model" ${st.models.length ? '' : 'disabled'}>${opts}</select>
           <button class="btn primary" id="ag-oc" ${st.models.length ? '' : 'disabled'}>${st.configured ? 'Update OpenCode\'s settings' : 'Set up OpenCode'}</button></div>
         <p class="small muted" style="margin:8px 0 0">Then open a terminal in your project folder and type <code>opencode</code>. Your models are under the "Quicksilver (this PC)" provider (<code>/models</code> in OpenCode). Quicksilver must be open while you use it. Settings file: <code>${esc(st.file)}</code></p></div>
+      <div class="card" style="margin-bottom:12px"><h3 style="margin:0 0 4px">In VS Code: Kilo Code, Cline, Roo Code or Continue</h3>
+        <p class="small" style="margin:0 0 8px">Agents that live inside the VS Code editor: you see each change and approve it with a click. ${st.vscode ? '✓ VS Code is installed.' : 'VS Code is not installed: <a href="https://code.visualstudio.com" title="Opens code.visualstudio.com">get it free ↗</a>.'} Install one from VS Code's Extensions panel (search its name):
+          <a href="https://kilocode.ai" title="Opens kilocode.ai">Kilo Code ↗</a> · <a href="https://cline.bot" title="Opens cline.bot">Cline ↗</a> · <a href="https://roocode.com" title="Opens roocode.com">Roo Code ↗</a> · <a href="https://continue.dev" title="Opens continue.dev">Continue ↗</a> (Continue also works in JetBrains editors).</p>
+        <p class="small" style="margin:0 0 4px">In its settings choose the <b>OpenAI Compatible</b> provider (Continue: provider <code>openai</code> with an <code>apiBase</code>) and enter:</p>
+        <table class="list small"><tbody>
+          <tr><td>Base URL</td><td><code>${esc(st.base)}</code> <button class="btn small ghost" data-ag-copy="${esc(st.base)}">Copy</button></td></tr>
+          <tr><td>API key</td><td>${st.api.requireKey || st.api.docker ? '<button class="btn small" data-ag-key>Copy the access key</button>' : '<code>quicksilver</code> <span class="muted">(any text: no key is required)</span>'}</td></tr>
+          <tr><td>Model ID</td><td><code id="ag-mid">${esc(st.models[0]?.id || 'local:your-model')}</code> <button class="btn small ghost" data-ag-copy-model>Copy</button> <span class="muted">(the model picked above)</span></td></tr></tbody></table>
+        ${st.api.enabled ? '' : '<p class="small" style="margin:6px 0 0"><button class="btn small" id="ag-on">Turn on Quicksilver\'s API</button> <span class="muted">These need it on (OpenCode turns it on by itself).</span></p>'}</div>
+      <div class="card" style="margin-bottom:12px"><h3 style="margin:0 0 4px">Aider</h3>
+        <p class="small" style="margin:0 0 8px">A terminal agent that is very good at changing existing code and commits each change to git. ${st.aider ? '✓ Aider is installed.' : 'Not installed: <a href="https://aider.chat" title="Opens aider.chat">get it from aider.chat ↗</a>.'} Start it in your project folder with:</p>
+        <pre style="white-space:pre-wrap;margin:0" id="ag-aider">aider --openai-api-base ${esc(st.base)} --openai-api-key ${st.api.requireKey || st.api.docker ? 'YOUR_KEY' : 'quicksilver'} --model openai/${esc(st.models[0]?.id || 'local:your-model')}</pre>
+        <button class="btn small ghost" data-ag-copy-aider style="margin-top:6px">Copy the command</button></div>
       <div class="card"><h3 style="margin:0 0 4px">OpenHands</h3>
         <p class="small" style="margin:0 0 8px">Works more on its own, in a browser window: give it a task and it plans, codes, tests and reports back. It runs inside <b>Docker Desktop</b>, which is a separate install.</p>
         <p class="small" style="margin:0 0 8px">${st.docker ? '✓ Docker is installed.' : 'Docker is not installed: <a href="https://www.docker.com/products/docker-desktop/" title="Opens docker.com">get Docker Desktop ↗</a>.'} Then follow <a href="https://docs.all-hands.dev" title="Opens the OpenHands docs">OpenHands' install steps ↗</a>.</p>
@@ -29,12 +42,20 @@ async function agentsModal() {
           <tr><td>Custom model</td><td><code>openai/${esc(st.models[0]?.id || 'local:your-model')}</code> <span class="muted">(any id from the list above, after "openai/")</span></td></tr>
           <tr><td>Base URL</td><td><code>${esc(st.dockerBase)}</code></td></tr>
           <tr><td>API key</td><td><button class="btn small" id="ag-key">Copy the access key</button></td></tr></tbody></table>` : ''}</div>
-      <p class="small muted" style="margin:10px 0 0">Neither app has been run by Quicksilver's own tests; Quicksilver's side (the models and tool calls they use) is tested. They change often: if a step differs, their own pages are right.</p>`;
+      <p class="small muted" style="margin:10px 0 0">None of these apps is run by Quicksilver's own tests; Quicksilver's side (the models and tool calls they use) is tested. They change often: if a step differs, their own pages are right.</p>`;
     b.querySelector('#ag-oc')?.addEventListener('click', async () => {
       try { const r = await call('agents:opencode', b.querySelector('#ag-model').value); toast(`OpenCode is set up with ${r.models} model${r.models === 1 ? '' : 's'}. Type "opencode" in your project folder.`, 7000); paint(); } catch (err) { toast(err.message, 7000); }
     });
     b.querySelector('#ag-docker')?.addEventListener('change', async (e) => { await call('agents:docker', e.target.checked); S.config = await call('config:get'); paint(); });
     b.querySelector('#ag-key')?.addEventListener('click', async () => { navigator.clipboard?.writeText(await call('apiserver:revealKey')); toast('Access key copied.'); });
+    b.querySelectorAll('[data-ag-key]').forEach((x) => x.addEventListener('click', async () => { navigator.clipboard?.writeText(await call('apiserver:revealKey')); toast('Access key copied.'); }));
+    b.querySelectorAll('[data-ag-copy]').forEach((x) => x.addEventListener('click', () => { navigator.clipboard?.writeText(x.dataset.agCopy); toast('Copied.'); }));
+    const sel = b.querySelector('#ag-model');
+    const syncModel = () => { const id = sel?.value || ''; const mid = b.querySelector('#ag-mid'); if (mid) mid.textContent = id; const ad = b.querySelector('#ag-aider'); if (ad) ad.textContent = ad.textContent.replace(/--model openai\/\S+/, `--model openai/${id}`); };
+    sel?.addEventListener('change', syncModel);
+    b.querySelector('[data-ag-copy-model]')?.addEventListener('click', () => { navigator.clipboard?.writeText(sel?.value || ''); toast('Model ID copied.'); });
+    b.querySelector('[data-ag-copy-aider]')?.addEventListener('click', () => { navigator.clipboard?.writeText(b.querySelector('#ag-aider').textContent); toast('Command copied. Replace YOUR_KEY with the access key if one is shown.'); });
+    b.querySelector('#ag-on')?.addEventListener('click', async () => { S.config = await call('config:set', { apiServer: { ...S.config.apiServer, enabled: true } }); paint(); });
   };
   paint();
 }

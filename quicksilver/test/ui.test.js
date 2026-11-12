@@ -1542,7 +1542,7 @@ function redPng(size = 64) {
   console.log('✓ meme battle: two hidden memes on one topic, vote, its own leaderboard');
   // Coding agents: the setup box opens from Settings and lists the models it would use.
   await win.evaluate(() => agentsModal());
-  await win.waitForFunction(() => /OpenCode[\s\S]*OpenHands/.test(document.querySelector('#modal')?.textContent || '') && document.querySelectorAll('#ag-model option').length > 0, null, { timeout: 15000 });
+  await win.waitForFunction(() => /OpenCode[\s\S]*Kilo Code[\s\S]*Cline[\s\S]*Aider[\s\S]*OpenHands/.test(document.querySelector('#modal')?.textContent || '') && document.querySelectorAll('#ag-model option').length > 0, null, { timeout: 15000 });
   assert.ok(!(await win.evaluate(() => [...document.querySelectorAll('#ag-model option')].some((o) => o.value.startsWith('stack:')))), 'only single models are offered');
   await shot(win, '16d-coding-agents');
   await win.click('#modal [data-close]');

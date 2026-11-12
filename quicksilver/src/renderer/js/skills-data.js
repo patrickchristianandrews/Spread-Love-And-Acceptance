@@ -32,7 +32,7 @@ const BUILTIN_SKILLS = [
     description: 'Clearer, tighter and more persuasive, in your voice.',
     hint: 'Paste the text to improve…',
     instructions: 'Rewrite the text to be clearer, more concise and more compelling while keeping the author\'s meaning, facts and voice. Fix grammar and flow, cut filler, use active voice and strong verbs, and order points logically. Return the improved version first, then a short bullet list of the main changes.' },
-  { id: 'tone', name: 'Change tone', icon: '🎚️', category: 'writing', output: 'text', triggers: ['more formal', 'more casual', 'friendlier', 'more professional', 'tone'],
+  { id: 'tone', name: 'Change tone', icon: '🎚️', category: 'writing', output: 'text', triggers: ['more formal', 'more casual', 'friendlier', 'more professional', '\\btone\\b'],
     description: 'Make text formal, friendly, concise, confident or diplomatic.',
     hint: 'Paste the text and say the tone you want (e.g. "more formal")…',
     instructions: 'Rewrite the text in the tone the user asks for (formal, friendly, concise, confident, diplomatic, enthusiastic, etc.). If no tone is given, make it professional and warm. Keep every fact and commitment the same. Return only the rewritten text, then one line naming the tone used.' },

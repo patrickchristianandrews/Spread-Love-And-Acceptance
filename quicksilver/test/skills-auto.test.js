@@ -9,7 +9,7 @@ const assert = require('node:assert/strict');
 const ctx = { S: { data: { prefs: {}, skills: [] } }, console, views: {}, MEDIA_RULES: {}, DIRECT_OUTPUTS: new Set(), MEDIA_OUTPUTS: new Set(), SKILL_JOB: {} };
 vm.createContext(ctx);
 const load = (f) => { try { vm.runInContext(fs.readFileSync(path.join(__dirname, '..', 'src', 'renderer', 'js', f), 'utf8').replace(/^(const|let) /gm, 'var '), ctx, { filename: f }); } catch (e) { if (!/is not defined/.test(e.message)) throw e; } };
-load('skills-data.js'); load('skills-more.js'); load('skills-pro.js'); load('skill-media.js'); load('skills.js');
+load('skills-data.js'); load('skills-more.js'); load('skills-pro.js'); load('skills-games.js'); load('skill-media.js'); load('skills.js');
 const img = [{ type: 'image' }];
 ctx.isCodeChat = (a) => a?.id === 'as-code';
 ctx.assistantById = (id) => ({ id });
@@ -135,10 +135,15 @@ const PRO = [
   ['explain this statute to me', 'read-law'], ['write a case brief for Marbury v. Madison', 'case-brief'], ['questions to ask my doctor about knee surgery', 'doctor-questions'],
   ['what did this study find', 'read-paper'], ['is this source reliable?', 'source-check'], ['I need a risk register for the office move', 'risk-register'],
   ['help me respond to this RFP from the city', 'procurement'], ['I have a hard conversation with my brother coming up', 'hard-talk'], ['I can\'t sleep lately', 'sleep-plan'],
+  ['write a player controller for my Godot platformer', 'game-player'], ['I need enemy AI that patrols and chases in Unity', 'game-enemy'], ['unreal crash when the level loads, here is the log', 'game-fix'],
+  ['make a seamless texture of mossy cobblestone', 'make-texture'], ['a branching dialogue for the blacksmith', 'game-dialogue'], ['write a game design document for my roguelike', 'game-design-doc'],
   ['summarize this article', 'summarize'], ['write an email to my landlord', 'email'], ['translate this to Spanish', 'translate'], ['write a SQL query for top customers', 'sql'],
 ];
 const proOff = PRO.map(([t, want]) => [t, ctx.suggestSkill(t)?.id || null, want]).filter(([, got, want]) => got !== want);
 assert.deepEqual(proOff, [], `specialist skills wrong: ${proOff.map(([t, got, want]) => `"${t}" → ${got} (wanted ${want})`).join('; ')}`);
+assert.equal(ctx.autoSkillFor('make me a pixel art sprite of a knight', [], null)?.id, 'make-sprite', 'a sprite is painted by the sprite skill');
+assert.equal(ctx.autoSkillFor('make me a picture of a knight', [], null)?.id, 'make-image', 'an ordinary picture is still an ordinary picture');
+assert.ok(ctx.SKILL_CATEGORIES.games && ctx.allSkills().filter((s) => s.category === 'games').length >= 13, 'a Game development group');
 assert.ok(ctx.SKILL_CATEGORIES.policy && ctx.SKILL_CATEGORIES.security && ctx.allSkills().filter((s) => ['policy', 'security'].includes(s.category)).length >= 15, 'two new groups, each with its skills');
 for (const s of ctx.allSkills()) for (const p of s.triggers || []) assert.doesNotThrow(() => new RegExp(p, 'i'), `${s.id}: ${p}`);
 console.log(`✓ specialist skills: ${ctx.allSkills().length} skills in all; each offered for its own requests, everyday ones unchanged`);

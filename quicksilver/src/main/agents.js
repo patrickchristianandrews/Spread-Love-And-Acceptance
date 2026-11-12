@@ -37,10 +37,10 @@ function apiBase(forDocker = false) {
 
 async function status() {
   const cfg = store.config().apiServer;
-  const [opencode, docker] = await Promise.all([onPath('opencode'), onPath('docker')]);
+  const [opencode, docker, vscode, aider] = await Promise.all([onPath('opencode'), onPath('docker'), onPath('code'), onPath('aider')]);
   let configured = false;
   try { configured = Boolean(JSON.parse(fs.readFileSync(opencodeFile(), 'utf8')).provider?.quicksilver); } catch {}
-  return { opencode: Boolean(opencode), docker: Boolean(docker), configured, file: opencodeFile(), api: { enabled: cfg.enabled, port: cfg.port, requireKey: cfg.requireKey, docker: Boolean(cfg.docker) }, base: apiBase(), dockerBase: apiBase(true), models: agentModels() };
+  return { opencode: Boolean(opencode), docker: Boolean(docker), vscode: Boolean(vscode), aider: Boolean(aider), configured, file: opencodeFile(), api: { enabled: cfg.enabled, port: cfg.port, requireKey: cfg.requireKey, docker: Boolean(cfg.docker) }, base: apiBase(), dockerBase: apiBase(true), models: agentModels() };
 }
 
 // Adds (or refreshes) the Quicksilver provider in OpenCode's settings, keeping everything else.
