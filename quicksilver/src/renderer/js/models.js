@@ -44,6 +44,8 @@ views.models = {
       const est = S.est?.text[m.id] || S.est?.media[m.id];
       if (est?.fit === 'no' && !(await confirmBox(`${m.name} probably won't fit in this PC's memory (${est.label}). Download anyway?`, { yes: 'Download anyway', danger: false }))) return;
       await download({ catalogId: m.id }, m.name); render();
+      const line = pcForecastLine(m.id); // how it will run here, said as the download starts
+      if (line) toast(`Downloading ${m.name}. ${line}`, 9000);
     }));
     $$('[data-remove]').forEach((b) => b.addEventListener('click', async () => {
       const m = S.installed.find((x) => x.id === b.dataset.remove);

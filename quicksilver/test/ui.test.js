@@ -229,6 +229,29 @@ function redPng(size = 64) {
   assert.match(await win.locator('#inf-preview').innerText(), /Overall on this PC[\s\S]*\/10[\s\S]*Recommended changes/);
   // How the web and a cloud AI would improve it, in numbers.
   assert.match(await win.locator('#inf-preview .bz').innerText(), /Web search[\s\S]*9 in 10[\s\S]*cloud AI/i);
+  // 🔮 On this PC: while you build it, a forecast of how it will behave here with everything
+  // counted: this PC, where each model runs, whether they fit together, how long answers take.
+  assert.match(await win.locator('#inf-preview .fc').innerText(), /On this PC: how your custom AI will behave[\s\S]*This PC[\s\S]*Where each one runs[\s\S]*How long answers take[\s\S]*everyday reply/i);
+  const fc = await win.evaluate(() => {
+    const real = S.est.hardware; const disk = S.disk;
+    const local = S.installed.filter((m) => (m.kind || 'text') === 'text').map((m) => `local:${m.id}`);
+    const big = [...S.catalog.text].filter((m) => !m.retired).sort((a, b) => b.sizeGB - a.sizeGB)[0];
+    const small = [...S.catalog.text].filter((m) => !m.retired && !S.installed.some((x) => x.catalogId === m.id)).sort((a, b) => a.sizeGB - b.sizeGB)[0];
+    const run = (hw, targets, opts) => { S.est.hardware = hw; const f = pcForecast(targets, opts); return f && { worst: f.worst, verdict: f.verdict.text, titles: f.lines.map((l) => l.title), text: f.lines.map((l) => l.html || l.text).join(' | ') }; };
+    S.disk = { freeBytes: 20e9 };
+    const out = {
+      tooBig: run({ ramGB: 16, vramGB: 8, vramFreeGB: 7.5, gpuName: 'Test card', cpuThreads: 8 }, [big.id], { adding: [big.id] }),
+      noCard: run({ ramGB: 16, vramGB: 0, vramFreeGB: 0, gpuName: '', cpuThreads: 8 }, [small.id], { adding: [small.id] }),
+      bigCard: run({ ramGB: 64, vramGB: 24, vramFreeGB: 23, gpuName: 'Test card', cpuThreads: 16 }, local.slice(0, 2), { members: { drafters: local.slice(0, 1), judge: local[1] || local[0], mode: 'blend' } }),
+      line: (S.est.hardware = { ramGB: 16, vramGB: 0, vramFreeGB: 0, gpuName: '', cpuThreads: 8 }, pcForecastLine(small.id)),
+    };
+    S.est.hardware = real; S.disk = disk;
+    return out;
+  });
+  assert.equal(fc.tooBig.worst, 'bad'); assert.match(fc.tooBig.verdict, /will not run on this PC as it is/); assert.match(fc.tooBig.text, /does not fit in this PC's memory[\s\S]*which is not enough: free some space first/);
+  assert.notEqual(fc.noCard.worst, 'bad'); assert.match(fc.noCard.text, /No graphics card[\s\S]*in ordinary memory, on the processor[\s\S]*will be left/); assert.ok(fc.noCard.titles.includes('While it answers') && fc.noCard.titles.includes('Disk space'));
+  assert.match(fc.bigCard.text, /on the graphics card \(the fast way\)/); assert.ok(fc.bigCard.titles.includes('How long answers take'));
+  assert.match(fc.line, /^On this PC it runs in ordinary memory, on the processor/);
   await shot(win, '13-infuse');
   // The builder suggests what to add for a task you pick.
   await win.waitForSelector('#inf-suggest .sug-now');

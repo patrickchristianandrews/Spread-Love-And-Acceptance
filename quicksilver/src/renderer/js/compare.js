@@ -211,6 +211,11 @@ function fusionRatings(members) {
   else if (slow.length) runs = { cls: 'warn', icon: '⚠', text: `Runs, but slowly: ${slow.map(name).join(', ')} is slow on this PC.` };
   else if (roomGB && memGB > roomGB) runs = { cls: 'warn', icon: '⚠', text: `Runs, but its models (${memGB.toFixed(1)} GB) don't all fit in memory at once, so they take turns and hard answers wait longer.` };
   else runs = { cls: 'ok', icon: '✓', text: 'Runs well on this PC.' };
+  // The forecast counts more (the graphics card, what else is loaded, taking turns): where it
+  // sees a wait this short verdict would miss, the verdict says so too, so the two never disagree.
+  const fc = typeof pcForecast === 'function' ? pcForecast(t.all, { members }) : null;
+  if (fc && runs.cls === 'ok' && fc.worst === 'warn') runs = { cls: 'warn', icon: '⚠', text: `Runs, but with waits: ${fc.reasons.slice(0, 2).join('; ')}.` };
+  if (fc && runs.cls !== 'bad' && fc.worst === 'bad') runs = { cls: 'bad', icon: '✕', text: `Won't run on this PC as it is: ${fc.reasons[0]}.` };
   if (clouds.length) runs.text += ' Its cloud AI needs the internet.';
   // Power: how capable it is on hard work (its strongest member, plus teamwork).
   const power = half(Math.max(t.stars('general'), t.stars('reasoning')));

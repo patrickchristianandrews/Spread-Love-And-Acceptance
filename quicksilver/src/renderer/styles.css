@@ -137,6 +137,14 @@ kbd { font-size: .72rem; padding: 1px 6px; border-radius: 6px; border: 1px solid
 .api-sug-h { font-weight: 700; font-size: .86rem; }
 .api-sug-row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; padding: 6px 8px; border-radius: 9px; background: var(--hover); }
 .api-sug-row .grow { display: flex; flex-direction: column; gap: 2px; min-width: 180px; }
+/* 🔮 On this PC: the forecast for a team you are building or a model you are adding. */
+.fc { border: 1px solid var(--line); border-radius: 14px; padding: 12px 14px; margin: 10px 0; display: flex; flex-direction: column; gap: 8px; }
+.fc-title { font-weight: 700; }
+.fc-line { display: flex; gap: 10px; align-items: flex-start; }
+.fc-line .grow { display: flex; flex-direction: column; gap: 2px; }
+.fc-line.warn b { color: var(--warn, #e0a030); }
+.fc-line.bad b { color: var(--danger, #e5484d); }
+.fc-ic { width: 1.5em; text-align: center; flex: none; }
 /* The API directory: tasks, then free / free to start / paid, one row a service. */
 .ad-task { margin: 14px 0 4px; }
 .ad-task h4 { margin: 0 0 6px; display: flex; gap: 8px; align-items: baseline; flex-wrap: wrap; }

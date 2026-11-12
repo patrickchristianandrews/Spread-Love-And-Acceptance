@@ -421,7 +421,9 @@ function editStack(s) {
     <div class="modal-actions"><button class="btn" data-close>Cancel</button><button class="btn primary" id="st-save">Save team</button></div>`, { wide: true });
   const preview = () => {
     const drafters = [0, 1, 2].map((i) => b.querySelector(`#st-d${i}`).value).filter(Boolean);
-    b.querySelector('#st-preview').innerHTML = teamPreviewHTML({ drafters, judge: b.querySelector('#st-lead').value || undefined, vision: b.querySelector('#st-vision').value || undefined, mode: v.members.mode });
+    const mem = { drafters, judge: b.querySelector('#st-lead').value || undefined, vision: b.querySelector('#st-vision').value || undefined, mode: v.members.mode };
+    // What to expect on this PC with these models, redone on every change, then speed and quality.
+    b.querySelector('#st-preview').innerHTML = (drafters.length ? pcForecastHTML([...drafters, mem.judge, mem.vision], { members: mem, title: 'On this PC: how this team will behave' }) : '') + teamPreviewHTML(mem);
   };
   b.querySelector('.stack-v').addEventListener('change', preview); // this window's own fields (the modal frame is shared)
   preview();
@@ -499,7 +501,7 @@ function infuseModal(onCreated, existing) {
     const sees = (t) => S.targets.find((x) => x.target === t)?.vision;
     const vision = drafters.some(sees) ? undefined : S.targets.find((t) => t.vision && !t.stack)?.target;
     const mem = { drafters, judge, vision, mode: b.querySelector('input[name="im"]:checked').value };
-    el.innerHTML = fusionRatingsHTML(mem) + fusionAdviceHTML(mem) + boostsHTML([...drafters, judge], { fusion: true }) + teamPreviewHTML(mem, { title: 'How your custom AI will work on this PC' });
+    el.innerHTML = fusionRatingsHTML(mem) + pcForecastHTML([...drafters, judge, vision], { members: mem, title: 'On this PC: how your custom AI will behave', noVerdict: true }) + fusionAdviceHTML(mem) + boostsHTML([...drafters, judge], { fusion: true }) + teamPreviewHTML(mem, { title: 'How your custom AI will work on this PC' });
   };
   b.querySelector('.stack-v').addEventListener('change', preview); // this window's own fields (the modal frame is shared)
   preview();
