@@ -7,7 +7,7 @@
 // worded as one ("about"), and the same numbers are used everywhere else in the app.
 'use strict';
 
-// The same allowances the catalogue's estimates use (shared/catalog.js: usableVram, usableRam).
+// The same allowances the catalog's estimates use (shared/catalog.js: usableVram, usableRam).
 const fcRoom = (hw) => ({ vram: hw?.vramGB ? Math.max(0, (hw.vramFreeGB || hw.vramGB) * 0.92 - 0.4) : 0, ram: hw ? Math.max(0, hw.ramGB * 0.8 - 2) : 0 });
 const fcGB = (n) => `${n >= 10 ? Math.round(n) : Math.round(n * 10) / 10} GB`;
 // Loading a model from disk into memory before its first answer (an SSD reads about 1 GB a second).
@@ -17,7 +17,7 @@ const FC_WHERE = {
   cpu: 'in ordinary memory, on the processor', no: 'does not fit in this PC\'s memory', cloud: 'in the cloud (needs the internet)',
 };
 
-// One member: a model on this PC ("local:…"), a catalogue model not installed yet (its id), or a cloud AI ("api:…").
+// One member: a model on this PC ("local:…"), a catalog model not installed yet (its id), or a cloud AI ("api:…").
 function fcMember(t, hw) {
   const s = String(t);
   if (s.startsWith('api:')) return { t: s, name: targetLabel(s), kind: 'text', cloud: true, fit: 'cloud', needGB: 0, sizeGB: 0, wps: S.speed?.targets?.[s]?.wps || 40, installed: true };
@@ -28,9 +28,9 @@ function fcMember(t, hw) {
   const sizeGB = inst?.size ? inst.size / 1e9 : (cat?.sizeGB || 0) + (cat?.mmprojGB || 0);
   const est = kind === 'text' ? S.est?.text?.[cat?.id] : S.est?.media?.[cat?.id];
   const room = fcRoom(hw);
-  // A model Quicksilver has no catalogue entry for: worked out from its size alone.
+  // A model Quicksilver has no catalog entry for: worked out from its size alone.
   const needGB = kind === 'text' ? (est?.need ?? sizeGB + 0.8) : (cat?.vramGB || sizeGB + 2);
-  // Where it runs: the catalogue's own rules, worked out from the same memory figures the rest of
+  // Where it runs: the catalog's own rules, worked out from the same memory figures the rest of
   // the forecast uses, so the lines never disagree with each other.
   const fit = kind === 'text' ? (room.vram && needGB <= room.vram ? 'gpu' : room.vram && needGB <= room.vram + room.ram ? 'split' : needGB <= room.ram ? 'cpu' : 'no')
     : (room.vram && needGB <= room.vram + 0.5 ? 'gpu' : room.vram && sizeGB <= room.vram + room.ram ? 'split' : sizeGB + 2 <= room.ram ? 'cpu' : 'no');
@@ -39,7 +39,7 @@ function fcMember(t, hw) {
 }
 
 // members: { drafters, judge, vision, mode } for a team, or null with targets for loose models.
-// opts.adding: catalogue ids being added (shown with their download and disk space).
+// opts.adding: catalog ids being added (shown with their download and disk space).
 function pcForecast(targets, { members = null, adding = [] } = {}) {
   const hw = S.est?.hardware;
   if (!hw) return null;

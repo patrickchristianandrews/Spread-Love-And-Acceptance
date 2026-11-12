@@ -7,7 +7,7 @@ if (args.includes('--help')) { console.log('usage: sd [options]\n -M, --mode [im
 // For tests of what Quicksilver does when the engine misbehaves:
 //   QS_SD_LOG=<file>        every run appends "start <ms> <args>" and "end <ms>" (to see runs don't overlap)
 //   QS_SD_FAIL_ONCE=<file>  the first run fails like a card out of memory, after its steps; later runs work
-//   QS_SD_FAIL=memory|crash|nofile|blank  every run fails that way (blank: one flat colour)
+//   QS_SD_FAIL=memory|crash|nofile|blank  every run fails that way (blank: one flat color)
 //   QS_SD_SLOW=<ms>         each step takes this long
 const fs = require('fs');
 const note = (t) => { if (process.env.QS_SD_LOG) fs.appendFileSync(process.env.QS_SD_LOG, `${t}\n`); };
@@ -30,7 +30,7 @@ const color = arg('-i') || arg('-r') ? 'blue' : 'pink';
 console.log('decoding 1 latents');
 if (arg('-M') === 'vid_gen') execFileSync('ffmpeg', ['-y', '-loglevel', 'error', '-f', 'lavfi', '-i', `testsrc=size=${Math.min(W, 320)}x${Math.min(H, 240)}:rate=8:duration=1`, out]);
 else if (mode === 'blank') execFileSync('ffmpeg', ['-y', '-loglevel', 'error', '-f', 'lavfi', '-i', `color=c=black:s=${W}x${H}`, '-frames:v', '1', out]);
-// A real-looking picture (many colours), so it is never mistaken for a blank one.
+// A real-looking picture (many colors), so it is never mistaken for a blank one.
 else execFileSync('ffmpeg', ['-y', '-loglevel', 'error', '-f', 'lavfi', '-i', `testsrc2=size=${W}x${H}:rate=1`, '-vf', `drawbox=x=0:y=0:w=24:h=24:color=${color}:t=fill`, '-frames:v', '1', out]);
 console.log('decode_first_stage completed');
 note(`end ${Date.now()} ok`);

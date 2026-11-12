@@ -112,7 +112,7 @@ const TEXT_MODELS = [
   { id: 'dolphin-3-qwen2.5-3b', name: 'Dolphin 3.0 3B', maker: 'Cognitive Computations', params: '3B', category: 'open', repo: 'bartowski/Dolphin3.0-Qwen2.5-3b-GGUF', quant: 'Q4_K_M', sizeGB: 1.9, ctx: 32768, open: true,
     blurb: 'Uncensored general assistant in a small size: you set the rules in the system prompt.', jobs: { general: 5, office: 4, research: 4, coding: 4, vision: 0, fast: 8 }, judge: 3 },
   { id: 'rocinante-12b', name: 'Rocinante 12B', maker: 'TheDrummer', params: '12B', category: 'open', repo: 'TheDrummer/Rocinante-12B-v1.1-GGUF', quant: 'Q4_K_M', sizeGB: 7.5, ctx: 32768, open: true,
-    blurb: 'A favourite for stories and role-play: vivid prose, few refusals.', jobs: { general: 7, office: 5, research: 5, coding: 4, vision: 0, fast: 4 }, judge: 5 },
+    blurb: 'A favorite for stories and role-play: vivid prose, few refusals.', jobs: { general: 7, office: 5, research: 5, coding: 4, vision: 0, fast: 4 }, judge: 5 },
   { id: 'hermes-4-14b', name: 'Hermes 4 14B', maker: 'Nous Research', params: '14B', category: 'open', repo: 'NousResearch/Hermes-4-14B-GGUF', quant: 'Q4_K_M', sizeGB: 9.0, ctx: 40960, open: true, reasoning: true,
     blurb: 'Newest Hermes: strong reasoning and writing, highly steerable, few refusals.', jobs: { general: 8, office: 7, research: 7, coding: 7, vision: 0, fast: 3 }, judge: 7 },
   { id: 'dolphin-3-mistral-24b', name: 'Dolphin 3.0 Mistral 24B', maker: 'Cognitive Computations', params: '24B', category: 'open', repo: 'bartowski/cognitivecomputations_Dolphin3.0-Mistral-24B-GGUF', quant: 'Q4_K_M', sizeGB: 14.3, ctx: 32768, open: true,
@@ -169,7 +169,7 @@ const TEXT_MODELS = [
   { id: 'devstral-small', name: 'Devstral Small 2507', maker: 'Mistral AI', params: '24B', category: 'coding', repo: 'unsloth/Devstral-Small-2507-GGUF', quant: 'Q4_K_M', sizeGB: 14.3, ctx: 131072,
     blurb: 'Built for coding agents: works across whole projects, edits files and fixes bugs.', jobs: { general: 7, office: 7, research: 6, coding: 9, vision: 0, fast: 2 }, judge: 7 },
   { id: 'qwen2.5-coder-32b', name: 'Qwen2.5 Coder 32B', maker: 'Alibaba', params: '32B', category: 'coding', repo: 'unsloth/Qwen2.5-Coder-32B-Instruct-GGUF', quant: 'Q4_K_M', sizeGB: 19.9, ctx: 32768,
-    blurb: 'A favourite for serious coding on a 24 GB graphics card.', jobs: { general: 7, office: 7, research: 7, coding: 10, vision: 0, fast: 1 }, judge: 8 },
+    blurb: 'A favorite for serious coding on a 24 GB graphics card.', jobs: { general: 7, office: 7, research: 7, coding: 10, vision: 0, fast: 1 }, judge: 8 },
   // Vision
   { id: 'qwen3-vl-4b', name: 'Qwen3-VL 4B', maker: 'Alibaba', params: '4B', category: 'vision', repo: 'Qwen/Qwen3-VL-4B-Instruct-GGUF', quant: 'Q4_K_M', sizeGB: 2.5, mmprojGB: 0.8, vision: true, ctx: 262144,
     blurb: 'Reads photos, documents and charts well, and answers quickly.', jobs: { general: 6, office: 7, research: 6, coding: 5, vision: 8, fast: 7 }, judge: 5 },
@@ -225,7 +225,7 @@ const MEDIA_MODELS = [
   sdxlTune('realvisxl-v5', 8, 'RealVisXL V5.0', 'SG161222 (community)', 'SG161222/RealVisXL_V5.0', '^RealVisXL_V5\\.0_fp16\\.safetensors$',
     'Photorealistic people, places and products: one of the most popular realistic SDXL models.', { category: 'image', defaults: { cfg: 5, steps: 30 } }),
   sdxlTune('juggernaut-xl-v9', 8, 'Juggernaut XL v9', 'RunDiffusion', 'RunDiffusion/Juggernaut-XL-v9', '^Juggernaut-XL_v9_RunDiffusionPhoto_v2\\.safetensors$',
-    'Cinematic, realistic pictures with strong lighting and detail. A favourite all-rounder.', { category: 'image', defaults: { cfg: 5, steps: 30 } }),
+    'Cinematic, realistic pictures with strong lighting and detail. A favorite all-rounder.', { category: 'image', defaults: { cfg: 5, steps: 30 } }),
   { id: 'flux-dev', quality: 9, name: 'FLUX.1 Dev', maker: 'Black Forest Labs', kind: 'image', category: 'image', recipe: 'flux', sizeGB: 10.6, vramGB: 10, refSec: 90, defaults: { width: 1024, height: 1024, steps: 20, cfg: 1 },
     files: { diffusion: { repo: 'city96/FLUX.1-dev-gguf', match: 'flux1-dev-Q4_K_S\\.gguf$' }, ...FLUX_ENCODERS },
     blurb: 'FLUX at full quality: finer detail and better hands than Schnell, in 20 steps. Free for personal use.', edit: 'img2img', license: 'Non-commercial' },
@@ -260,7 +260,7 @@ const MEDIA_MODELS = [
   sdxlTune('wai-nsfw-illustrious', 9, 'WAI-NSFW Illustrious (uncensored)', 'WAI0731 (community, Illustrious SDXL)', 'TheReprinter/WAI-NSFW-illustrious-SDXL', '^waiNSFWIllustrious_v14\\.safetensors$',
     'The most popular uncensored anime model: clean, vivid anime art with adult content. Understands booru-style tags.', { alt: ['Ine007/waiNSFWIllustrious_v140'], defaults: { cfg: 6, steps: 28 } }),
   sdxlTune('nova-anime-xl', 8, 'Nova Anime XL (uncensored)', 'Crody (community, Illustrious SDXL)', 'frankjoshua/novaAnimeXL_ilV140', '^novaAnimeXL_ilV140\\.safetensors$',
-    'Polished, colourful anime with strong backgrounds and lighting. Uncensored.', { defaults: { cfg: 5, steps: 28 } }),
+    'Polished, colorful anime with strong backgrounds and lighting. Uncensored.', { defaults: { cfg: 5, steps: 28 } }),
   // SD 1.5 community classics: small and quick, run on 4 GB cards.
   { id: 'cyberrealistic-sd15', quality: 6, name: 'CyberRealistic (SD 1.5, uncensored)', maker: 'Cyberdelia (community, SD 1.5)', kind: 'image', category: 'open', recipe: 'sd', uncensored: true, sizeGB: 2.1, vramGB: 3, refSec: 4, defaults: { width: 512, height: 768, steps: 25, cfg: 5 },
     files: { model: { repo: 'cyberdelia/CyberRealistic', match: '^CyberRealistic_FINAL_FP16\\.safetensors$' } },
@@ -273,7 +273,7 @@ const MEDIA_MODELS = [
     blurb: 'Natural-looking uncensored photos in seconds on any graphics card.', edit: 'img2img' },
   { id: 'majicmix-realistic', quality: 6, name: 'majicMIX realistic v7 (SD 1.5, uncensored)', maker: 'Merjic (community, SD 1.5)', kind: 'image', category: 'open', recipe: 'sd', uncensored: true, sizeGB: 2.1, vramGB: 3, refSec: 4, defaults: { width: 512, height: 768, steps: 25, cfg: 6 },
     files: { model: { repo: 'digiplay/majicMIX_realistic_v7', match: '^majicmixRealistic_v7\\.safetensors$' } },
-    blurb: 'Beautiful, soft-lit portraits, a long-time favourite. Uncensored.', edit: 'img2img' },
+    blurb: 'Beautiful, soft-lit portraits, a long-time favorite. Uncensored.', edit: 'img2img' },
   { id: 'z-image-cyberrealistic', quality: 8, name: 'Z-Image CyberRealistic (uncensored)', maker: 'Cyberdelia (community, Z-Image Turbo)', kind: 'image', category: 'open', recipe: 'zimage', uncensored: true, sizeGB: 8.0, vramGB: 8, refSec: 12, defaults: { width: 1024, height: 1024, steps: 8, cfg: 1 },
     files: { diffusion: { repo: 'gimly13/z-image-cyberrealistic-v9-gguf', match: 'zit_CyberRealistic_v9-Q4_K\\.gguf$' }, vae: { repo: 'black-forest-labs/FLUX.1-schnell', match: '^ae\\.safetensors$' }, llm: { repo: 'unsloth/Qwen3-4B-Instruct-2507-GGUF', match: 'Qwen3-4B-Instruct-2507-Q4_K_M\\.gguf$' } },
     blurb: 'CyberRealistic\'s lifelike, uncensored look on the fast Z-Image Turbo: 8 steps a picture.', edit: 'img2img' },
@@ -328,7 +328,7 @@ const MEDIA_CATEGORIES = {
 
 const JOBS = {
   general: { kind: 'text', words: 300, label: 'Everyday', icon: '⚡', pitch: 'Quick, reliable answers for questions, advice and small tasks.', speed: 25, budget: 60, temperature: 0.7, contextSize: 16384, maxTokens: 4096, library: false, web: true, mode: 'blend',
-    assistant: { name: 'Quicksilver', emoji: '💧', instructions: 'You are Quicksilver, a capable, honest assistant running privately on the user\'s computer. Give clear, direct, well-organised answers. Check any arithmetic before you give it. If you are unsure, say so instead of guessing.' } },
+    assistant: { name: 'Quicksilver', emoji: '💧', instructions: 'You are Quicksilver, a capable, honest assistant running privately on the user\'s computer. Give clear, direct, well-organized answers. Check any arithmetic before you give it. If you are unsure, say so instead of guessing.' } },
   // Back from Quicksilver 2.0/2.1: quick answers on modest PCs.
   fast: { kind: 'text', words: 250, label: 'Fast on a modest PC', icon: '🏃', pitch: 'Quick answers on laptops and older computers: the best model that still answers in seconds.', single: true, speed: 30, budget: 30, temperature: 0.6, contextSize: 8192, maxTokens: 2048, library: false, web: true, mode: 'blend',
     assistant: { name: 'Quick Helper', emoji: '🏃', instructions: 'You are a fast, concise assistant. Keep answers short and to the point unless asked for more. Use a short list when it helps. If a question needs a long, careful answer, say so and give the key points first.' } },
@@ -342,9 +342,9 @@ const JOBS = {
     assistant: { name: 'Writer', emoji: '✍️', instructions: 'You are a skilled writer and editor. Match the tone the user asks for (or the tone of what they paste). Write clearly and concisely, in plain English, with no filler. When editing, keep the user\'s meaning and voice, and briefly list the main changes. For emails, include a subject line.' } },
   // Back from Quicksilver 2.0/2.1: understanding photos, screenshots, scans and video.
   vision: { kind: 'text', words: 350, label: 'Photos & video', icon: '📷', pitch: 'Understand photos, screenshots, scans, charts and video clips.', speed: 10, budget: 120, temperature: 0.4, contextSize: 16384, maxTokens: 4096, library: false, web: false, mode: 'blend',
-    assistant: { name: 'Vision Analyst', emoji: '📷', instructions: 'You analyse images and video frames. Describe what matters for the user\'s question, read any text exactly, extract tables and chart values, and note anything unclear. For video, describe what happens over time using the frame timestamps.' } },
+    assistant: { name: 'Vision Analyst', emoji: '📷', instructions: 'You analyze images and video frames. Describe what matters for the user\'s question, read any text exactly, extract tables and chart values, and note anything unclear. For video, describe what happens over time using the frame timestamps.' } },
   open: { kind: 'text', words: 400, label: 'Unfiltered', icon: '🔓', pitch: 'Models that follow your instructions with far fewer refusals: fiction, mature themes, frank answers.', speed: 12, budget: 120, temperature: 0.8, contextSize: 16384, maxTokens: 4096, library: false, web: false, mode: 'blend', only: 'open',
-    assistant: { name: 'Unfiltered', emoji: '🔓', instructions: 'You are a direct, candid assistant. Answer fully and frankly. Do not moralise, lecture or add disclaimers the user did not ask for, and do not water answers down. Follow the user\'s instructions on tone, style, persona and content, including for fiction and mature themes.' } },
+    assistant: { name: 'Unfiltered', emoji: '🔓', instructions: 'You are a direct, candid assistant. Answer fully and frankly. Do not moralize, lecture or add disclaimers the user did not ask for, and do not water answers down. Follow the user\'s instructions on tone, style, persona and content, including for fiction and mature themes.' } },
   coding: { kind: 'text', words: 700, label: 'App development', icon: '💻', pitch: 'Build apps and websites: plan, write, debug and review code.', speed: 10, budget: 180, temperature: 0.2, contextSize: 32768, maxTokens: 8192, library: false, web: false, mode: 'debate',
     assistant: { name: 'App Builder', emoji: '💻', instructions: 'You are an expert software engineer who builds complete apps. For new work, outline the structure first (files, components, data), then write correct, idiomatic, complete code in fenced code blocks with the file name and language. Explain briefly what changed and why. Point out bugs, edge cases and security issues. Ask a short clarifying question when a request is ambiguous.' } },
   // Create: the popular kinds of making, one each, in the order people reach for them.

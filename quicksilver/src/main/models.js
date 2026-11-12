@@ -354,7 +354,7 @@ async function trending({ force = false, hw = null } = {}) {
   }
   // Everything else that is trending on Hugging Face, by what it makes: pictures, video, voice,
   // music and search. Shown so you can see what is new; Quicksilver runs chat models straight
-  // from Hugging Face, and the other kinds once they are in its catalogue (each needs its own
+  // from Hugging Face, and the other kinds once they are in its catalog (each needs its own
   // set of files and is tried on the real engine first).
   let more = store.config().trendingMore;
   if (force || !more || Date.now() - (more.at || 0) > TREND_TTL) {
@@ -362,13 +362,13 @@ async function trending({ force = false, hw = null } = {}) {
     for (const [key, tag] of Object.entries(TREND_KINDS)) {
       try {
         const raw = await hfJSON(`${HF}/api/models?pipeline_tag=${tag}&sort=trendingScore&direction=-1&limit=10`);
-        groups[key] = raw.map((m) => ({ repo: m.id || m.modelId, likes: m.likes || 0, downloads: m.downloads || 0, created: m.createdAt, licence: ((m.tags || []).find((t) => /^license:/.test(t)) || '').replace('license:', '') })).filter((m) => m.repo);
+        groups[key] = raw.map((m) => ({ repo: m.id || m.modelId, likes: m.likes || 0, downloads: m.downloads || 0, created: m.createdAt, license: ((m.tags || []).find((t) => /^license:/.test(t)) || '').replace('license:', '') })).filter((m) => m.repo);
       } catch { groups[key] = more?.groups?.[key] || []; }
     }
     more = { at: Date.now(), groups };
     store.saveConfig({ trendingMore: more });
   }
-  // Which catalogue model a trending one is, so the page can say whether it runs on this PC.
+  // Which catalog model a trending one is, so the page can say whether it runs on this PC.
   const ours = new Map(catalog.MEDIA_MODELS.flatMap((c) => Object.values(c.files || {}).map((f) => [String(f.repo || '').toLowerCase(), c.id])));
   const others = Object.fromEntries(Object.entries(more.groups).map(([k, l]) => [k, l.map((m) => ({ ...m, inCatalog: ours.has(m.repo.toLowerCase()), catalogId: ours.get(m.repo.toLowerCase()) || null }))]));
   const at = store.config().trendingCache?.at || Date.now();
@@ -396,7 +396,7 @@ async function importFile(file, readGguf) {
   const stem = (n) => n.toLowerCase().replace(/\.gguf$/, '').replace(/^mmproj[-_.]?/, '').replace(/[-_.](mmproj|q\d\w*|f16|bf16|fp16|iq\d\w*|ud).*$/, '');
   const proj = names.filter((n) => /mmproj/i.test(n)).find((n) => mains.length <= 1 || (stem(n).length >= 4 && stem(path.basename(file)).startsWith(stem(n).slice(0, Math.max(4, Math.min(stem(n).length, 12))))));
   const files = { model: file, ...(proj ? { mmproj: path.join(dir, proj) } : {}) };
-  return add({ id: `imp-${Date.now().toString(36)}`, ...recognise(info.name || niceName(file), file), kind: 'text', files, size: info.size, vision: Boolean(proj), source: 'imported' });
+  return add({ id: `imp-${Date.now().toString(36)}`, ...recognize(info.name || niceName(file), file), kind: 'text', files, size: info.size, vision: Boolean(proj), source: 'imported' });
 }
 
 
@@ -600,8 +600,8 @@ function walk(dir, depth, out, budget = { n: 4000 }) {
 const niceName = (file) => path.basename(file).replace(/\.gguf$/i, '').replace(/-0*1-of-\d+$/i, '')
   .replace(/[-_.](?:UD-)?(?:I?Q\d(?:_[A-Z0-9]+)*|F16|BF16|F32|MXFP4)$/i, '').replace(/[-_]+/g, ' ').trim();
 
-// A recognised model gets its proper name, and counts as installed for the catalog (no re-download).
-function recognise(name, file) {
+// A recognized model gets its proper name, and counts as installed for the catalog (no re-download).
+function recognize(name, file) {
   const c = catalog.matchCatalog(`${name} ${path.basename(file)}`);
   return c ? { name: c.name, catalogId: c.id } : { name };
 }
@@ -726,7 +726,7 @@ async function addFound(items, readGguf) {
     const id = `imp-${crypto.createHash('sha1').update(path.resolve(it.path).toLowerCase()).digest('hex').slice(0, 10)}`;
     const name = it.app === 'Ollama' ? it.name : (info.name && info.name.length > 3 && !/^(model|models)$/i.test(info.name) ? info.name : it.name);
     const files = { model: it.path, ...(it.mmproj && fs.existsSync(it.mmproj) ? { mmproj: it.mmproj } : {}) };
-    added.push(add({ id, ...recognise(name, it.path), kind: 'text', files, size: info.size || it.size, vision: Boolean(files.mmproj), source: 'imported', from: it.app }));
+    added.push(add({ id, ...recognize(name, it.path), kind: 'text', files, size: info.size || it.size, vision: Boolean(files.mmproj), source: 'imported', from: it.app }));
   }
   return added;
 }

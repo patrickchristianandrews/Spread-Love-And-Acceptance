@@ -151,7 +151,7 @@ function redPng(size = 64) {
   await shot('03-hard');
 
   if (mode === 'full') {
-    r = await ask('What colour is this picture? Answer with one word.', { name: 'red.png', mimeType: 'image/png', buffer: redPng() });
+    r = await ask('What color is this picture? Answer with one word.', { name: 'red.png', mimeType: 'image/png', buffer: redPng() });
     console.log(`  photo answer: ${r.a.replace(/\s+/g, ' ').slice(0, 120)}; steps: ${r.steps.join(' → ') || '(none)'}`);
     assert.match(r.a, /red/i, 'the photo is read correctly');
     ok('photo question: read by the vision model, answered correctly');

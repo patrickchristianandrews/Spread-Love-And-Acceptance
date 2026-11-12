@@ -1,5 +1,5 @@
 // Hugging Face datasets as knowledge, and the Spaces people are using right now.
-// A dataset is searched by name, shown with its licence and size, and only then (when you say so)
+// A dataset is searched by name, shown with its license and size, and only then (when you say so)
 // its text and tables are downloaded into a knowledge base. After that it is on this PC and
 // nothing more is sent. Pictures, sound and video inside a dataset are skipped: a knowledge base
 // is searched as text. Nothing here ever downloads by itself.
@@ -39,7 +39,7 @@ function summary(m) {
   const kinds = tagOf(tags, 'modality');
   return {
     id: m.id, likes: m.likes || 0, downloads: m.downloads || 0, updated: m.lastModified || '', gated: Boolean(m.gated),
-    licence: tagOf(tags, 'license')[0] || '', rows: rowsLabel(tagOf(tags, 'size_categories')[0]), kinds,
+    license: tagOf(tags, 'license')[0] || '', rows: rowsLabel(tagOf(tags, 'size_categories')[0]), kinds,
     // Readable as knowledge when it holds text or tables (or does not say what it holds).
     readable: !kinds.length || kinds.some((k) => k === 'text' || k === 'tabular'),
     about: short(m.description),
@@ -69,7 +69,7 @@ async function datasetInfo(id) {
   files.sort((a, b) => rank(a.path) - rank(b.path) || a.path.localeCompare(b.path));
   const s = summary({ ...meta, id });
   const card = meta.cardData || {};
-  return { ...s, licence: s.licence || String(card.license || ''), name: card.pretty_name || id.split('/').pop(), files, totalBytes: files.reduce((n, f) => n + f.size, 0), limitMB: MAX_BYTES / 1024 / 1024, limitRows: MAX_ROWS };
+  return { ...s, license: s.license || String(card.license || ''), name: card.pretty_name || id.split('/').pop(), files, totalBytes: files.reduce((n, f) => n + f.size, 0), limitMB: MAX_BYTES / 1024 / 1024, limitRows: MAX_ROWS };
 }
 
 // One row of a table as readable lines ("question: …"). Pictures, sound and long number lists are left out.
@@ -169,7 +169,7 @@ async function addDataset(knowledge, collectionId, id, { onProgress } = {}) {
   }
   if (!items.length) throw new Error(errors.length ? `Nothing could be read: ${errors.slice(0, 2).join('; ')}` : 'This dataset has no readable text in it.');
   knowledge.addTexts(collectionId, items);
-  return { added: items.length, rows, bytes, cut, errors, licence: info.licence, id: info.id };
+  return { added: items.length, rows, bytes, cut, errors, license: info.license, id: info.id };
 }
 
 // The Spaces (small apps hosted on Hugging Face) people are using most right now. They run on

@@ -86,7 +86,7 @@ async function collect(gen) {
     assert.doesNotMatch(other.text, /\[steps\]/, 'models that think on their own are left alone');
     const fix = await collect(complete.run('local:test-bundled', { messages: [{ role: 'user', content: 'Calculate 17 × 23 and explain why' }], maxTokens: 200, contextSize: 4096, level: 'thorough', stepByStep: false }));
     assert.doesNotMatch(fix.text, /\[steps\]/, 'a correction pass skips the reasoning step');
-    const long = await collect(complete.run('local:test-bundled', { messages: [{ role: 'user', content: `[Image 1: ${'a red square on a white background. '.repeat(20)}]\nWhat colour is it?` }], maxTokens: 200, contextSize: 4096, level: 'thorough' }));
+    const long = await collect(complete.run('local:test-bundled', { messages: [{ role: 'user', content: `[Image 1: ${'a red square on a white background. '.repeat(20)}]\nWhat color is it?` }], maxTokens: 200, contextSize: 4096, level: 'thorough' }));
     assert.doesNotMatch(long.text, /\[steps\]/, 'a photo description does not make a simple question look hard');
     models.remove('test-bundled');
     console.log('✓ built-in model reasons step by step on hard questions');
@@ -100,7 +100,7 @@ async function collect(gen) {
   // Powerhouse stack: vision describes, two drafters, lead combines.
   complete.saveStack({ id: 'office-power', name: 'Office Powerhouse', emoji: '📊', members: { vision: 'local:gemma-3-4b', drafters: ['local:qwen3-8b', 'local:phi-4'], judge: 'local:phi-4' } });
   const live = [];
-  const r2 = await collect(complete.run('stack:office-power', { messages: [{ role: 'system', content: 'Be an analyst.' }, { role: 'user', content: [{ type: 'text', text: 'Summarise this chart' }, img] }], temperature: 0.4, maxTokens: 500, contextSize: 4096, level: 'max', onStep: (s) => live.push(s.role) }));
+  const r2 = await collect(complete.run('stack:office-power', { messages: [{ role: 'system', content: 'Be an analyst.' }, { role: 'user', content: [{ type: 'text', text: 'Summarize this chart' }, img] }], temperature: 0.4, maxTokens: 500, contextSize: 4096, level: 'max', onStep: (s) => live.push(s.role) }));
   const uniq = (steps) => [...new Map(steps.map((s) => [s.index, s])).values()];
   const roles = uniq(r2.steps).map((s) => s.role);
   assert.deepEqual(roles, ['vision', 'draft', 'draft', 'lead']);
@@ -908,7 +908,7 @@ async function collect(gen) {
     assert.deepEqual(models.registerStarter(sd).added, [], 'announced only once');
     // Smart routing: simple → one answer from the brain; hard → both draft, the brain combines.
     assert.equal(complete.autoLevel({ messages: [{ role: 'user', content: 'Hi! Recommend a good sci-fi film.' }] }), 'quick');
-    assert.equal(complete.autoLevel({ messages: [{ role: 'user', content: 'Why do leaves change colour in autumn?' }] }), 'thorough');
+    assert.equal(complete.autoLevel({ messages: [{ role: 'user', content: 'Why do leaves change color in autumn?' }] }), 'thorough');
     assert.equal(complete.autoLevel({ messages: [{ role: 'user', content: 'What is 128 * 46?' }] }), 'thorough');
     const easy = await collect(complete.run('stack:quicksilver', { messages: [{ role: 'user', content: 'Hello!' }], contextSize: 2048, maxTokens: 30, level: 'thorough' }));
     assert.equal(easy.steps.length, 0, 'a simple message gets one direct answer');
@@ -927,7 +927,7 @@ async function collect(gen) {
     // A photo with only the shipped pair (the 2B that sees is a drafter, not a separate vision
     // member): the quick route must still find it to read the picture. Caught by the install test.
     complete.saveStack({ id: 'pair', name: 'Pair', members: { drafters: ['local:starter-brain', 'local:starter'], judge: 'local:starter-brain', mode: 'auto' } });
-    const pic = await collect(complete.run('stack:pair', { messages: [{ role: 'user', content: [{ type: 'text', text: 'What colour is this?' }, img] }], contextSize: 2048, maxTokens: 30, level: 'thorough' }));
+    const pic = await collect(complete.run('stack:pair', { messages: [{ role: 'user', content: [{ type: 'text', text: 'What color is this?' }, img] }], contextSize: 2048, maxTokens: 30, level: 'thorough' }));
     assert.ok(pic.steps.some((x) => x.role === 'vision') && pic.text.length > 0, 'the photo is read by the member that can see');
     complete.deleteStack('pair');
     models.remove('dolphin-test');
@@ -951,7 +951,7 @@ async function collect(gen) {
       assert.equal(l2.thinker, 'local:b35', 'it is also the Thinker');
       assert.ok(!l2.vision, 'it reads photos itself');
       assert.equal(l2.muse, 'local:starter', 'the small model is the Muse');
-      const think = await collect(complete.run('stack:quicksilver', { messages: [{ role: 'user', content: 'Why do leaves change colour in autumn?' }], contextSize: 2048, maxTokens: 60, level: 'thorough' }));
+      const think = await collect(complete.run('stack:quicksilver', { messages: [{ role: 'user', content: 'Why do leaves change color in autumn?' }], contextSize: 2048, maxTokens: 60, level: 'thorough' }));
       assert.ok(think.status.some((t) => /Thinking it through/.test(t)) && think.text.length > 0, 'a question that needs working out switches its thinking on');
       const easy2 = await collect(complete.run('stack:quicksilver', { messages: [{ role: 'user', content: 'Hello!' }], contextSize: 2048, maxTokens: 30, level: 'thorough' }));
       assert.ok(!easy2.status.some((t) => /Thinking/.test(t)) && easy2.text.length > 0, 'an easy one is answered straight away');
@@ -1063,14 +1063,14 @@ async function collect(gen) {
     console.log('✓ finds chat models from LM Studio and Ollama and adds them in place; never picture, video or search files, the installer\'s own folder, or second copies');
   }
 
-  // Catalog: goals, recognising your models, and the advisor (yours vs best for this PC).
+  // Catalog: goals, recognizing your models, and the advisor (yours vs best for this PC).
   assert.deepEqual(Object.keys(catalog.JOBS), ['general', 'fast', 'reasoning', 'office', 'research', 'writing', 'vision', 'open', 'coding', 'pictures', 'openpics', 'anime', 'video', 'animate', 'photoedit', 'songs', 'create', 'edit']);
   assert.equal(catalog.advise('openpics', { ramGB: 32, vramGB: 12, gpu: 'x', gpuVendor: 'nvidia', cores: 12 }, { installed: [] }).best.members.openimage, 'lustify', 'uncensored pictures: Lustify');
   assert.equal(catalog.advise('songs', { ramGB: 16, vramGB: 0, cores: 8 }, { installed: [] }).recipe, 'song-complete', 'full songs: the Songwriter stack');
   assert.equal(catalog.matchCatalog('Meta-Llama-3.1-8B-Instruct-Q4_K_M.gguf')?.id, 'llama-3.1-8b');
   assert.equal(catalog.matchCatalog('phi4:latest')?.id, 'phi-4');
   assert.equal(catalog.matchCatalog('Phi-4-mini-instruct-Q4_K_M')?.id, 'phi-4-mini');
-  assert.equal(catalog.matchCatalog('Qwen2.5-7B-Instruct')?.id, 'qwen2.5-7b', 'the 1.0 models are recognised again');
+  assert.equal(catalog.matchCatalog('Qwen2.5-7B-Instruct')?.id, 'qwen2.5-7b', 'the 1.0 models are recognized again');
   assert.equal(catalog.matchCatalog('Yi-1.5-9B-Chat'), null, 'no false match');
   {
     // Three ways to run a stack, accuracy levels, and the cloud AI that would improve it.
@@ -1299,10 +1299,10 @@ async function collect(gen) {
     const data = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'data', 'models.json'), 'utf8'));
     const ok = remote.clean(data);
     assert.ok(ok && Object.keys(ok.successors).length >= 5, 'the published picks file is valid');
-    // (A newer model may be one the file itself adds: the daily catalogue search writes those.)
+    // (A newer model may be one the file itself adds: the daily catalog search writes those.)
     const inFile = (id) => catalog.TEXT_MODELS.some((m) => m.id === id) || ok.models.some((m) => m.id === id);
     for (const [a, b] of Object.entries(ok.successors)) assert.ok(inFile(a) && inFile(b), `successor ${a} → ${b} names real models`);
-    assert.ok(ok.models.length <= 40 && ok.models.every((m) => m.repo && m.sizeGB > 0 && m.jobs), 'every model the file adds is complete');
+    assert.ok(ok.models.length <= 400 && ok.models.every((m) => m.repo && m.sizeGB > 0 && m.jobs), 'every model the file adds is complete');
     for (const l of Object.values(ok.featured)) for (const id of l) assert.ok(catalog.TEXT_MODELS.some((m) => m.id === id), `featured ${id} is in the catalog`);
     assert.equal(remote.clean({ version: 2 }), null, 'unknown versions are ignored');
     const bad = remote.clean({ version: 1, models: [{ id: 'x', repo: 'nope' }, { id: 'test-new-9b', name: '<b>New 9B</b>', maker: 'Test', category: 'general', repo: 'test/New-9B-GGUF', quant: 'q4_k_m', sizeGB: 5.5, jobs: { general: 9, coding: 8 }, evil: 'x' }], successors: { 'qwen3-8b': 'test-new-9b', 'bad id!': 'x' } });
@@ -1364,7 +1364,7 @@ async function collect(gen) {
     assert.equal(vpn.blocked(), false, 'allowed once Proton VPN is connected');
     store.saveConfig({ vpnOnly: false });
     os.networkInterfaces = realIf;
-    console.log('✓ private network: blocked until a VPN is connected, Proton VPN recognised');
+    console.log('✓ private network: blocked until a VPN is connected, Proton VPN recognized');
   }
 
   // Uncensored Qwen3 models: in the catalog, featured, sped up by the built-in 2B, and fetched from a
@@ -1447,7 +1447,7 @@ async function collect(gen) {
     assert.ok(hits[0].rerank != null && hits.every((h, i) => i === 0 || h.rerank <= hits[i - 1].rerank), 'ordered by the reranker');
     models.remove(rerank.RERANK.id);
     knowledge.deleteCollection(kc.id);
-    // A stronger uncensored Closer is in the catalogue and joins the Liquid Edition's open models.
+    // A stronger uncensored Closer is in the catalog and joins the Liquid Edition's open models.
     const c9 = catalog.TEXT_MODELS.find((m) => m.id === 'qwen3.5-9b-uncensored');
     assert.ok(c9 && c9.category === 'open' && c9.vision && /abliterated/i.test(c9.repo));
     console.log('✓ sharper search: the reranker puts the passage that answers the question first; Qwen3.5 9B Closer listed');

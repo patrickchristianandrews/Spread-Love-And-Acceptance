@@ -354,7 +354,7 @@ function sdArgs(req, { spec, files: f, hw, has, safe = false, out, help = helper
   return { args, width, height, frames, notes, fast, tae: Boolean(tae) };
 }
 
-// Is a finished picture just one flat colour (what a failed run can produce)? Counts how many
+// Is a finished picture just one flat color (what a failed run can produce)? Counts how many
 // different byte values its pixel data has.
 function looksBlank(file) {
   try {
@@ -481,7 +481,7 @@ async function generateNow(jobId, req, { onProgress, onStatus } = {}) {
     if (safe) onProgress?.(0.01);
     try {
       made = await runEngine(jobId, { engine, args: used.args, out, isVideo, onProgress, onStatus: say });
-      if (!isVideo && looksBlank(made)) { const e = new Error(`the ${word} came out as one flat colour`); e.blank = true; e.log = ''; throw e; }
+      if (!isVideo && looksBlank(made)) { const e = new Error(`the ${word} came out as one flat color`); e.blank = true; e.log = ''; throw e; }
       break;
     } catch (err) {
       made = null;

@@ -96,7 +96,7 @@ views.library = {
     });
     $('#kb-hf').addEventListener('click', () => hfDatasetModal((id) => busy(async () => {
       const r = await call('kb:dataset', kbSel, id);
-      toast(`Added ${r.rows.toLocaleString()} rows from ${r.id}${r.licence ? ` (licence: ${r.licence})` : ''}.${r.cut ? ' It is a large dataset: the first part was added, up to the limit.' : ''}`, 9000);
+      toast(`Added ${r.rows.toLocaleString()} rows from ${r.id}${r.license ? ` (license: ${r.license})` : ''}.${r.cut ? ' It is a large dataset: the first part was added, up to the limit.' : ''}`, 9000);
       return { errors: r.errors };
     })));
     $('#kb-rename').addEventListener('click', () => kbEdit(kb.collections.find((x) => x.id === kbSel)));
@@ -205,7 +205,7 @@ function kbEdit(c) {
 }
 qs.onLibrary((p) => { if (kbBusy && p?.kind !== 'index') { kbBusy = p; if (S.route.view === 'library') render(); } });
 
-// ---------- "Connect your knowledge", front and centre ----------
+// ---------- "Connect your knowledge", front and center ----------
 // On Home (and in new chats): your own files, folders and websites, answered from with sources.
 S.kbSummary = null;
 function loadKbSummary() {
@@ -284,27 +284,27 @@ qs.onLibrary?.((p) => {
 qs.onModelDone?.(({ model }) => { if (model?.kind === 'embed') { S.kbSemantic = null; toast('🧠 Smarter search is on. Your passages are being prepared in the background.', 7000); } });
 
 // ---------- Hugging Face datasets as knowledge ----------
-// Search the public datasets, see the licence and size of one, then add its text and tables to
+// Search the public datasets, see the license and size of one, then add its text and tables to
 // the open knowledge base. Nothing is downloaded until "Add" is pressed.
 const mb = (n) => (n >= 1024 ** 3 ? `${(n / 1024 ** 3).toFixed(1)} GB` : n >= 1024 ** 2 ? `${Math.round(n / 1024 ** 2)} MB` : n ? `${Math.max(1, Math.round(n / 1024))} KB` : 'size not given');
 function hfDatasetModal(onAdd) {
   const b = openModal(`<h2>🤗 Add a Hugging Face dataset</h2>
-    <p class="help">Hugging Face hosts public collections of text and tables: question-and-answer sets, legal and medical texts, recipes, catalogues. Pick one and its text is downloaded into this knowledge base, so answers can be searched and cited from it. After the download it stays on this PC.</p>
+    <p class="help">Hugging Face hosts public collections of text and tables: question-and-answer sets, legal and medical texts, recipes, catalogs. Pick one and its text is downloaded into this knowledge base, so answers can be searched and cited from it. After the download it stays on this PC.</p>
     <div class="row"><input id="hd-q" class="grow" placeholder="Search, for example: recipes, legal contracts, medical questions" autofocus><button class="btn primary" id="hd-go">Search</button></div>
-    <p class="small muted" style="margin:6px 0 10px">Or paste a dataset's name (owner/name). Only datasets with text or tables are listed. Anyone can publish one, so check the licence and the quality before relying on it.</p>
+    <p class="small muted" style="margin:6px 0 10px">Or paste a dataset's name (owner/name). Only datasets with text or tables are listed. Anyone can publish one, so check the license and the quality before relying on it.</p>
     <div id="hd-out"><div class="empty">Loading what is trending…</div></div>
     <div class="modal-actions"><button class="btn" data-close>Close</button></div>`, { wide: true });
   const out = b.querySelector('#hd-out');
   const listHTML = (list) => (list.length ? list.map((d) => `<div class="ad-row"><span class="grow"><span><b>${esc(d.id)}</b> ${d.gated ? '<span class="badge b-lav" title="You must accept its terms on huggingface.co and add a Hugging Face token">gated</span>' : ''}</span>
       ${d.about ? `<span class="small">${esc(d.about)}</span>` : ''}
-      <span class="small muted"><b>Licence:</b> ${esc(d.licence || 'not stated')}${d.rows ? ` · ${esc(d.rows)}` : ''} · ⬇ ${d.downloads.toLocaleString()} · ❤ ${d.likes.toLocaleString()}</span></span>
+      <span class="small muted"><b>License:</b> ${esc(d.license || 'not stated')}${d.rows ? ` · ${esc(d.rows)}` : ''} · ⬇ ${d.downloads.toLocaleString()} · ❤ ${d.likes.toLocaleString()}</span></span>
       <button class="btn small" data-hd="${esc(d.id)}">Look…</button></div>`).join('') : '<div class="empty">No text or table datasets found for that.</div>');
   const show = async (fn) => {
     out.innerHTML = '<div class="empty">Searching Hugging Face…</div>';
     try { out.innerHTML = listHTML(await fn()); } catch (err) { out.innerHTML = `<div class="notice">${esc(err.message)}</div>`; }
     out.querySelectorAll('[data-hd]').forEach((x) => x.addEventListener('click', () => look(x.dataset.hd)));
   };
-  // One dataset: what would come down, how big, under which licence. Then the choice.
+  // One dataset: what would come down, how big, under which license. Then the choice.
   const look = async (id) => {
     out.innerHTML = '<div class="empty">Checking what is in it…</div>';
     try {
@@ -312,7 +312,7 @@ function hfDatasetModal(onAdd) {
       const big = d.totalBytes > d.limitMB * 1024 * 1024;
       out.innerHTML = `<div class="card" id="hd-one"><h3 style="margin:0 0 6px">${esc(d.name)} <span class="small muted">${esc(d.id)}</span></h3>
         ${d.about ? `<p class="small" style="margin:0 0 8px">${esc(d.about)}</p>` : ''}
-        <p class="small" style="margin:0 0 4px"><b>Licence:</b> ${esc(d.licence || 'not stated (ask the publisher before using it for work)')}</p>
+        <p class="small" style="margin:0 0 4px"><b>License:</b> ${esc(d.license || 'not stated (ask the publisher before using it for work)')}</p>
         <p class="small" style="margin:0 0 4px"><b>Size:</b> ${d.files.length} file${d.files.length === 1 ? '' : 's'} with text or tables${d.totalBytes ? `, ${mb(d.totalBytes)}` : ''}${d.rows ? `, ${esc(d.rows)}` : ''}</p>
         <p class="small muted" style="margin:0 0 8px">${d.files.length ? `Quicksilver keeps up to ${d.limitRows.toLocaleString()} rows or ${d.limitMB} MB of text from one dataset${big ? ': <b>this one is bigger, so only the first part will be added</b>' : ''}. Pictures, sound and video inside it are skipped.` : 'It has no text or table files Quicksilver can read, so it cannot be added.'}</p>
         <div class="row"><button class="btn" id="hd-back">← Back</button><span class="grow"></span><a class="small" href="https://huggingface.co/datasets/${esc(d.id)}" title="Opens the dataset's page on Hugging Face">See it on Hugging Face ↗</a>${d.files.length ? '<button class="btn primary" id="hd-add">Add to this knowledge base</button>' : ''}</div></div>`;

@@ -35,7 +35,7 @@ const idList = (v, max = 16) => (Array.isArray(v) ? v.filter((x) => typeof x ===
 // Checks the file's shape; keeps only known, plain fields.
 function clean(j) {
   if (!j || typeof j !== 'object' || j.version !== 1) return null;
-  const models = (Array.isArray(j.models) ? j.models : []).map(cleanModel).filter(Boolean).slice(0, 40);
+  const models = (Array.isArray(j.models) ? j.models : []).map(cleanModel).filter(Boolean).slice(0, 400);
   const successors = {};
   for (const [a, b] of Object.entries(j.successors && typeof j.successors === 'object' ? j.successors : {})) if (ID.test(a) && typeof b === 'string' && ID.test(b) && a !== b) successors[a] = b;
   const featured = {}; const ladders = {};
@@ -146,7 +146,12 @@ function upgradesFor(installed, hw, calib = 1) {
 
 function start(changed) {
   if (changed) onChange = changed;
-  apply(store.readJSON(FILE(), null)); // the last good copy, straight away
+  // The last good copy straight away; on a first start (or if the copy that came with this version
+  // is newer) the list that ships inside the app, so the full catalog is there offline too.
+  const saved = store.readJSON(FILE(), null);
+  let shipped = null;
+  try { shipped = clean(JSON.parse(require('node:fs').readFileSync(require('node:path').join(__dirname, '..', '..', 'data', 'models.json'), 'utf8'))); } catch {}
+  apply(shipped && (!saved || String(shipped.updated || '') > String(saved.updated || '')) ? { ...shipped, fetchedAt: 0 } : saved);
   setTimeout(() => refresh().catch(() => {}), 20 * 1000).unref?.();
   setInterval(() => refresh().catch(() => {}), 6 * 60 * 60 * 1000).unref?.();
 }

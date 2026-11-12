@@ -47,7 +47,8 @@
     "files": [
       "src/**/*",
       "build/icon.png",
-      "package.json"
+      "package.json",
+      "data/models.json"
     ],
     "asarUnpack": [
       "node_modules/ffmpeg-static/**"

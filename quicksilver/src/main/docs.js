@@ -30,7 +30,7 @@ function parseCSV(text, delim) {
 
 const fmt = (n) => (Math.abs(n) >= 1000 ? n.toLocaleString('en-US', { maximumFractionDigits: 2 }) : String(Math.round(n * 1000) / 1000));
 
-// A compact profile of a table, so a model can analyse it without reading every row.
+// A compact profile of a table, so a model can analyze it without reading every row.
 function profileTable(name, rows, maxRows = 300) {
   if (!rows.length) return `Sheet "${name}": empty.`;
   const header = rows[0].map((h, i) => String(h || `Column ${i + 1}`).trim());

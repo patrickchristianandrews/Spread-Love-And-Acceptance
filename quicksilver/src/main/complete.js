@@ -280,7 +280,7 @@ async function collect(target, req, onPartial) {
 
 // One picture: no headings, no talk of other images or video. Describe only what's visible.
 const DESCRIBE_ONE = 'Describe this one image in detail for a colleague who cannot see it. Describe only what is visible; never mention other images or video. Transcribe all visible text exactly, give table contents and chart values, and note people, objects, layout and anything unusual.';
-const DESCRIBE = 'Describe each image below in detail for a colleague who cannot see it. Transcribe all visible text exactly, give table contents and chart values, and note people, objects, layout and anything unusual. Video frames are labelled with their timestamps; describe what changes over time. Answer with one section per image, headed "### Image 1", "### Image 2" and so on.';
+const DESCRIBE = 'Describe each image below in detail for a colleague who cannot see it. Transcribe all visible text exactly, give table contents and chart values, and note people, objects, layout and anything unusual. Video frames are labeled with their timestamps; describe what changes over time. Answer with one section per image, headed "### Image 1", "### Image 2" and so on.';
 
 const LEAD = `You are the lead of a team of AI models. Several models have independently drafted answers to the user's latest message. Your job is to produce the single best final answer:
 - Keep everything that is correct, useful and well-argued from any draft.
@@ -296,7 +296,7 @@ const CONSENSUS = `You are the lead of a panel of AI models that answered the us
 - End with a short "Where the models disagreed" section (or "The models agreed on all key points").
 Write the final answer only; do not number or quote the drafts.`;
 
-const DEBATE_LEAD = `You are the judge of a debate between AI models. Each model answered the user's latest message, then read the others' answers, criticised them and revised its own. Using the revised answers and critiques, write the single best final answer: adopt the arguments that survived criticism, correct anything shown to be wrong, and resolve remaining disagreements with your own careful judgment. Write only the final answer, as if you wrote it yourself.`;
+const DEBATE_LEAD = `You are the judge of a debate between AI models. Each model answered the user's latest message, then read the others' answers, criticized them and revised its own. Using the revised answers and critiques, write the single best final answer: adopt the arguments that survived criticism, correct anything shown to be wrong, and resolve remaining disagreements with your own careful judgment. Write only the final answer, as if you wrote it yourself.`;
 
 const CRITIQUE = `Other AI models answered the same question as you. Read their answers below, then:
 1. In a section "Critique", list concrete errors, gaps or weak reasoning in the other answers (and in your own), briefly.

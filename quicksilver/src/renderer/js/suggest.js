@@ -3,7 +3,7 @@
 // each with its rating for that task out of 10 and how much it would add.
 'use strict';
 
-// [icon, label, catalogue job, API use]
+// [icon, label, catalog job, API use]
 const SUGGEST_TASKS = {
   chat: ['💬', 'Everyday chat', 'general', 'chat'],
   reasoning: ['🧠', 'Hard reasoning & maths', 'reasoning', 'reasoning'],

@@ -200,7 +200,7 @@ function modelCard(m, est, kind) {
   if (/^wan2\.2/.test(m.id)) tags.push(`<span class="badge b-mint" title="The Liquid Edition makes its videos with Wan 2.2">💧 Liquid Edition videos${m.id === (S.catalog?.picks?.liquid?.videos || 'wan2.2-5b') ? '' : ' (fast)'}</span>`);
   if (m.style === 'anime') tags.push('<span class="badge b-peach">🎌 anime</span>');
   if (m.promptPrefix) tags.push('<span class="badge b-sky" title="Quicksilver adds this model\'s quality tags (score_9…) to your prompts by itself">🏷 Pony tags added for you</span>');
-  if (m.license) tags.push(`<span class="badge b-lemon" title="Licence">📄 ${esc(m.license)}</span>`);
+  if (m.license) tags.push(`<span class="badge b-lemon" title="License">📄 ${esc(m.license)}</span>`);
   return `<div class="card model-card" data-model-card="${esc(m.id)}" tabindex="0" title="Click for details">
     <div class="row"><h3 class="grow">${esc(m.name)}</h3><span class="small" style="font-weight:800">${(m.sizeGB + (m.mmprojGB || 0)).toFixed(1)} GB</span></div>
     <div class="meta" style="margin:4px 0 8px">${esc(m.maker)}${m.params ? ` · ${esc(m.params)} parameters` : ''}</div>
@@ -290,13 +290,13 @@ const TREND_OTHER = { pictures: '🖼️ Pictures', editing: '🪄 Photo editing
 function trendOthersHTML() {
   const g = trend?.others;
   if (!g || !Object.values(g).some((l) => l.length)) return '';
-  // These kinds run here only from the catalogue, so "runs on this PC" means: in it, and it fits.
+  // These kinds run here only from the catalog, so "runs on this PC" means: in it, and it fits.
   const fits = (m) => m.inCatalog && (!m.catalogId || S.est?.media?.[m.catalogId]?.fit !== 'no');
   const shown = Object.entries(TREND_OTHER).map(([k, label]) => [k, label, (g[k] || []).filter((m) => trendAll || fits(m)).slice(0, 8)]).filter(([, , l]) => l.length);
   const hidden = Object.values(g).flat().filter((m) => !fits(m)).length;
   return `<div class="section sf-new"><h2>Also trending on Hugging Face</h2><span class="small muted">Pictures, video, voice, music and search models people are picking up right now. ${trendAll ? 'Everything is listed; only the ones marked "in Quicksilver" run here.' : `Only the ones Quicksilver can run on this PC are listed.${hidden ? ` ${hidden} more are hidden: not in Quicksilver yet, or too big for this PC.` : ''}`}</span></div>
     ${shown.length ? `<div class="cards" style="grid-template-columns:repeat(auto-fill,minmax(280px,1fr))">${shown.map(([, label, l]) => `<div class="card"><h3 style="margin:0 0 8px">${label}</h3>
-      ${l.map((m, i) => `<div class="row small" style="gap:6px;margin:3px 0"><span class="muted">${i + 1}</span><a class="grow" href="https://huggingface.co/${esc(m.repo)}" title="Opens ${esc(m.repo)} on Hugging Face${m.licence ? ` · licence: ${esc(m.licence)}` : ''}">${esc(m.repo.split('/').pop())}</a>${m.inCatalog ? `<span class="badge b-mint">in Quicksilver</span>` : ''}<span class="muted">❤ ${Number(m.likes).toLocaleString()}</span></div>`).join('')}</div>`).join('')}</div>` : '<div class="empty">None of these that are trending right now can run on this PC yet.</div>'}`;
+      ${l.map((m, i) => `<div class="row small" style="gap:6px;margin:3px 0"><span class="muted">${i + 1}</span><a class="grow" href="https://huggingface.co/${esc(m.repo)}" title="Opens ${esc(m.repo)} on Hugging Face${m.license ? ` · license: ${esc(m.license)}` : ''}">${esc(m.repo.split('/').pop())}</a>${m.inCatalog ? `<span class="badge b-mint">in Quicksilver</span>` : ''}<span class="muted">❤ ${Number(m.likes).toLocaleString()}</span></div>`).join('')}</div>`).join('')}</div>` : '<div class="empty">None of these that are trending right now can run on this PC yet.</div>'}`;
 }
 // Trending Spaces: small apps hosted on Hugging Face. They run on its computers, in the browser,
 // so they work whatever this PC is. Links only: what you type there goes to that app's owner.

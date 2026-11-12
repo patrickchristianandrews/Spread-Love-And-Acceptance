@@ -6,7 +6,7 @@
 let cloudKind = 'image';
 let cloudModels = null; // { service: { name, free, noKey, models: { kind: [[id, name, rating, price, best]] } } }
 const CLOUD_KINDS = { image: ['🖼️', 'Photo'], edit: ['🪄', 'Edit a photo'], video: ['🎬', 'Video'], animate: ['📸', 'Photo to video'], music: ['🎵', 'Full songs'] };
-const LYRICS_SYS = 'Write complete, original song lyrics for the user\'s idea: [Intro], two [Verse] sections, a [Chorus] that repeats, a [Bridge] and an [Outro], each section labelled in square brackets. Natural, singable lines that rhyme where it sounds good. Reply with the lyrics only.';
+const LYRICS_SYS = 'Write complete, original song lyrics for the user\'s idea: [Intro], two [Verse] sections, a [Chorus] that repeats, a [Bridge] and an [Outro], each section labeled in square brackets. Natural, singable lines that rhyme where it sounds good. Reply with the lyrics only.';
 // The connection for a service ('pollinations' needs none), or null if it isn't connected yet.
 const serviceConn = (svc) => (svc === 'pollinations' ? { id: 'pollinations', name: 'Pollinations' } : (S.providers || []).find((p) => p.preset === svc && p.hasKey) || null);
 // Every model for this kind across services: free ones first, then the best rated.

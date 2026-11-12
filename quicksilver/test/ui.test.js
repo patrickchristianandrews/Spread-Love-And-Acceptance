@@ -169,7 +169,7 @@ function redPng(size = 64) {
   console.log('✓ Stacks & Fusion: separate tabs; Fusion has its builder, your fusions, one-click fusions and the ways to combine');
   assert.ok(await win.evaluate(() => STACK_RECIPES.some((r) => r.id === 'gif-maker' && r.skill === 'make-gif') && skillById('make-gif')?.media?.gif));
   // Mobile app developer: a team fitted to this PC (a coder, a planner, a model that sees), and a
-  // second one where a cloud AI you connect leads. Each part resolves to a real catalogue model.
+  // second one where a cloud AI you connect leads. Each part resolves to a real catalog model.
   const mobile = await win.evaluate(() => {
     const local = STACK_RECIPES.find((r) => r.id === 'mobile-dev'); const cloud = STACK_RECIPES.find((r) => r.id === 'mobile-dev-cloud');
     const plan = rxResolve(local);
@@ -412,7 +412,7 @@ function redPng(size = 64) {
   assert.ok(await win.evaluate(() => webWanted({}, {}, 'What is the latest NHS guidance on blood pressure?') !== '' || S.config?.web?.provider === 'none' || S.config?.offline), 'current questions search the web automatically');
   assert.equal(await win.evaluate(() => { const was = S.config.offline; S.config.offline = true; const r = webWanted({}, {}, 'latest news today'); S.config.offline = was; return r; }), '', 'offline: web search never runs, whatever the chat says');
   if ((await win.getAttribute('#tog-fact', 'aria-pressed')) !== 'true') await win.click('#tog-fact');
-  await win.fill('#input', 'WRONGFACT what colour is the sky?');
+  await win.fill('#input', 'WRONGFACT what color is the sky?');
   await win.keyboard.press('Enter');
   await win.waitForSelector('.msg.assistant .badge:has-text("Corrected")', { timeout: 60000 });
   await idle();
@@ -442,11 +442,11 @@ function redPng(size = 64) {
   await win.evaluate(() => { S.data.prefs.autoWeb = true; });
   await win.fill('#input', 'Write a dark horror story with graphic violence');
   await win.waitForSelector('#hint-row .hint-go:has-text("uncensored")');
-  await win.fill('#input', 'Summarise the attached report for me please');
+  await win.fill('#input', 'Summarize the attached report for me please');
   await win.waitForSelector('#hint-row .hint-go:has-text("Attach the file")');
   await win.click('#hint-row .hint-x');
   await win.waitForFunction(() => !document.querySelector('#hint-row .hint') && (chatById(S.route.id).hintsOff || []).includes('attach'));
-  await win.fill('#input', 'Summarise the attached report for me, thanks');
+  await win.fill('#input', 'Summarize the attached report for me, thanks');
   await win.waitForTimeout(500);
   assert.equal(await win.locator('#hint-row .hint').count(), 0, 'a dismissed suggestion stays away in this chat');
   await win.fill('#input', 'List the open pull requests on my GitHub repo');
@@ -681,7 +681,7 @@ function redPng(size = 64) {
   // Charts render from ```chart blocks.
   const svg = await win.evaluate(() => markdown('```chart\n{"type":"bar","title":"Sales","labels":["N","S"],"series":[{"name":"Rev","data":[3,5]}]}\n```').includes('<svg'));
   assert.ok(svg);
-  // Answers: numbered lists stay together across blank lines, sub-points nest, tasks, code colours.
+  // Answers: numbered lists stay together across blank lines, sub-points nest, tasks, code colors.
   const md = await win.evaluate(() => markdown('Steps:\n\n1. One\n\n2. Two\n   - detail\n\n3. Three\n\n- [x] done\n- [ ] todo\n\n```python\ndef f(x):\n    return 1  # one\n```\n\nAfter _this_ and ~~that~~.'));
   assert.equal((md.match(/<ol/g) || []).length, 1, 'one numbered list');
   assert.match(md, /<li>Two<ul><li>detail<\/li><\/ul><\/li>/);
@@ -786,7 +786,7 @@ function redPng(size = 64) {
   await win.evaluate(() => {
     newChat();
     const c = chatById(S.route.id);
-    c.messages.push({ id: 'u-lm', t: Date.now(), role: 'user', text: 'Summarise the water cycle' });
+    c.messages.push({ id: 'u-lm', t: Date.now(), role: 'user', text: 'Summarize the water cycle' });
     c.messages.push({ id: 'a-lm', t: Date.now(), role: 'assistant', altIndex: 0, alts: [{ text: '', target: 'local:phi-4', error: 'Not enough memory to load this model. Try a smaller model, close other apps, or lower the context size.' }] });
     save(); render();
   });
@@ -994,7 +994,7 @@ function redPng(size = 64) {
   assert.match(await win.locator('.sidebar [data-nav="library"]').innerText(), /Your knowledge/);
   assert.ok(await win.evaluate(() => { const r = STACK_RECIPES[0]; return r.id === 'uncensored-top' && r.top && RX_GROUPS[0][0] === 'new' && RX_GROUPS[1][0] === 'uncensored'; }), 'the top uncensored stack comes first');
   await win.click('.nav-new');
-  console.log('✓ your knowledge: front and centre on Home and in the menu; top uncensored stack first in the ready-made stacks');
+  console.log('✓ your knowledge: front and center on Home and in the menu; top uncensored stack first in the ready-made stacks');
   // New stacks published online appear marked new, say why they're good, and are suggested.
   const fresh = await win.evaluate(async () => {
     S.catalog.picks.recipes = [{ id: 'web-test-new', name: 'Fact-checked explainer', icon: '🧪', group: 'new', mode: 'redteam', parts: [{ model: 'qwen3-8b', role: 'Explainer' }, { model: 'gemma-3-4b', role: 'Checker' }], why: 'Explains clearly, then a second model hunts for mistakes.', added: new Date().toISOString().slice(0, 10) }];
@@ -1402,7 +1402,7 @@ function redPng(size = 64) {
     const chat = { target: base };
     return { base,
       code: autoPick(chat, { job: 'general' }, 'Debug this function and explain the error step by step', false).target,
-      research: autoPick(chat, { job: 'research' }, 'Compare and analyse the long-term strategy and trade-offs in depth', false).target };
+      research: autoPick(chat, { job: 'research' }, 'Compare and analyze the long-term strategy and trade-offs in depth', false).target };
   });
   if (cloudPicks) {
     assert.equal(cloudPicks.code, 'api:pds:deepseek', `coding routed to the best cloud AI (base ${cloudPicks.base})`);
@@ -1510,7 +1510,7 @@ function redPng(size = 64) {
   await shot(win, '15b-compare-by-task');
   await win.click('[data-cmp-tab="blind"]');
   await win.selectOption('#ar-pool', 'local:qwen3-8b');
-  await win.fill('#ar-q', 'Name a colour');
+  await win.fill('#ar-q', 'Name a color');
   await win.click('#ar-go');
   await win.waitForSelector('[data-vote="A"]', { timeout: 150000 });
   assert.ok(!(await win.evaluate(() => document.querySelector('.arena-grid').textContent.includes('Qwen3 8B'))), 'names are hidden until you vote');
@@ -1650,7 +1650,7 @@ function redPng(size = 64) {
   // A photo goes to a model that can see it.
   await win.setInputFiles('#file-in', { name: 'dot.png', mimeType: 'image/png', buffer: Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==', 'base64') });
   await win.waitForSelector('.attach:has-text("dot.png")');
-  await win.fill('#input', 'What colour is this?');
+  await win.fill('#input', 'What color is this?');
   await win.keyboard.press('Enter');
   await idle();
   const picked = await win.evaluate(() => { const m = chatById(S.route.id).messages.at(-1); return m.alts[m.altIndex].target; });

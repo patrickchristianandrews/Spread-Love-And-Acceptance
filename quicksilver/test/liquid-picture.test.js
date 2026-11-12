@@ -47,13 +47,13 @@ const TINY = path.join(__dirname, 'fixtures', 'tiny.gguf');
   await win.waitForTimeout(800);
   assert.equal(await win.evaluate(() => [...document.querySelectorAll('.msg.assistant')].pop().querySelectorAll('.skill-media-item, .progress-box').length), 0, 'no picture for an ordinary message');
   assert.equal(await win.locator('.skill-media-item img').count(), 2);
-  // Replies that read like picture instructions: recognised (labelled or plain JSON), ordinary
+  // Replies that read like picture instructions: recognized (labeled or plain JSON), ordinary
   // JSON is not; where it isn't clear-cut the answer keeps its code and offers a button.
   const r = await win.evaluate(() => {
     const reply = 'I\'ll create a portrait of a lighthouse.\n```json\n{"prompt": "a lighthouse at dusk, warm light", "shape": "portrait", "count": 1}\n```';
     const html = skillMediaHTML({ id: 'x' }, { text: reply, mediaOffer: mediaReplySkill(reply) }, false);
-    return { plain: mediaReplySkill(reply), labelled: mediaReplySkill('Sure.\n```image\n{"prompt": "a cat"}\n```'), video: mediaReplySkill('```video\n{"prompt": "waves"}\n```'), code: mediaReplySkill('```json\n{"name": "x"}\n```'), button: /data-act="m-make"/.test(html), shown: stripMediaBlock(reply),
-      follow: ['another one, this time at night', 'make her smile', 'same but in winter'].map(isMediaFollowUp), notFollow: ['Thanks! Now write a short poem about lanterns.', 'Lovely, but how do diffusion models work, explain briefly', 'Summarise the history of lanterns with dates', 'thanks, again you nailed it', 'another question: what is the capital of France', 'now in spanish'].map(isMediaFollowUp) };
+    return { plain: mediaReplySkill(reply), labeled: mediaReplySkill('Sure.\n```image\n{"prompt": "a cat"}\n```'), video: mediaReplySkill('```video\n{"prompt": "waves"}\n```'), code: mediaReplySkill('```json\n{"name": "x"}\n```'), button: /data-act="m-make"/.test(html), shown: stripMediaBlock(reply),
+      follow: ['another one, this time at night', 'make her smile', 'same but in winter'].map(isMediaFollowUp), notFollow: ['Thanks! Now write a short poem about lanterns.', 'Lovely, but how do diffusion models work, explain briefly', 'Summarize the history of lanterns with dates', 'thanks, again you nailed it', 'another question: what is the capital of France', 'now in spanish'].map(isMediaFollowUp) };
   });
   assert.deepEqual([r.plain, r.labelled, r.video, r.code, r.button], ['make-image', 'make-image', 'make-video', null, true]);
   assert.equal(r.shown, "I'll create a portrait of a lighthouse.");

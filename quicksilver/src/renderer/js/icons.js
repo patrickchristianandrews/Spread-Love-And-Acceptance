@@ -1,5 +1,5 @@
 // Line icons (24×24, 2px strokes, round joins). icon('name') returns inline SVG that inherits
-// the text colour, so icons stay as readable as the label next to them.
+// the text color, so icons stay as readable as the label next to them.
 'use strict';
 
 const ICON_PATHS = {

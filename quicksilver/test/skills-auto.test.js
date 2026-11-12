@@ -79,7 +79,7 @@ const CASES = [
   ['can you give me a clip-path example in css', [], null],
   // the thing must be what is asked for, not just a word in the message
   ['I need the big picture on climate change', [], null],
-  ['the picture of dorian gray is my favourite book, write a review', [], null],
+  ['the picture of dorian gray is my favorite book, write a review', [], null],
   ['draw two cards from a deck and tell me the probability they are both aces', [], null],
   ['generate a video script about recycling', [], null],
   ['I need the video to autoplay on my landing page', [], null],

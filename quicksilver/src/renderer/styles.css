@@ -670,7 +670,7 @@ select optgroup { font-weight: 800; color: var(--muted); }
 .sel-group:first-child { padding-top: 4px; }
 select.sel-open { border-color: var(--accent) !important; }
 .pill-select:has(select.sel-open) { border-color: var(--accent); color: var(--accent); }
-/* If the system list ever shows, it still gets solid, readable colours. */
+/* If the system list ever shows, it still gets solid, readable colors. */
 select { background-color: var(--panel); color: var(--text); }
 .pill-select select { background-color: var(--panel) !important; }
 .int-group { margin: 18px 0 10px; font-size: .78rem; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
@@ -1535,8 +1535,8 @@ code.sel { user-select: all; background: var(--soft); padding: 1px 6px; border-r
 .composer-bar .pill-select .muted { white-space: nowrap; }
 /* A pill with a word before the choice ("Effort: Smart"): the word sits after the icon, and the
    choice follows it closely (the icon is positioned over the pill's left edge). */
-.pill-select.labelled .pill-label { margin-left: 30px; white-space: nowrap; pointer-events: none; }
-.pill-select.labelled select, .pill-select.small.labelled select { padding-left: 6px !important; }
+.pill-select.labeled .pill-label { margin-left: 30px; white-space: nowrap; pointer-events: none; }
+.pill-select.labeled select, .pill-select.small.labeled select { padding-left: 6px !important; }
 
 /* Settings → What's inside */
 .about-page .ab-row { display: flex; gap: 10px; align-items: flex-start; padding: 7px 0; border-top: 1px solid color-mix(in srgb, var(--fg, #222) 8%, transparent); }
@@ -1566,7 +1566,7 @@ code.sel { user-select: all; background: var(--soft); padding: 1px 6px; border-r
 .composer-bar .pill-select select { min-width: 0; max-width: 150px; text-overflow: ellipsis; }
 @container (max-width: 800px) {
   .composer-bar .chip-tog > span, .composer-bar .pill-label { display: none; }
-  .composer-bar .pill-select.labelled select, .composer-bar .pill-select.small.labelled select { padding-left: 32px !important; }
+  .composer-bar .pill-select.labeled select, .composer-bar .pill-select.small.labeled select { padding-left: 32px !important; }
   .composer-bar .pill-select select { max-width: 130px; }
 }
 @container (max-width: 520px) {

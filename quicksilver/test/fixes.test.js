@@ -130,7 +130,7 @@ const exporters = require('../src/main/exporters');
     setTimeout(() => ctl.abort(), 300);
     await assert.rejects((async () => { for await (const ev of oai.streamChat({ baseUrl: base, signal: ctl.signal, body: { messages: [{ role: 'user', content: 'hang' }] } })) void ev; })(), (e) => e.name === 'AbortError');
     assert.ok(Date.now() - t0 < 3000 && hung, 'Stop ends a request the engine has not started answering');
-    // An error from the engine keeps its message (it is how a graphics-card fault is recognised).
+    // An error from the engine keeps its message (it is how a graphics-card fault is recognized).
     const bad = await oai.localFetch(`http://127.0.0.1:${engine.address().port}/nope`, { method: 'POST', body: '{}' });
     assert.equal(bad.ok, false); assert.match(await oai.errorText(bad), /CUDA error/);
     hung.destroy(); engine.close();
@@ -160,21 +160,21 @@ const exporters = require('../src/main/exporters');
     try {
       const found = await hf.searchDatasets('recipes');
       assert.deepEqual(found.map((d) => d.id), ['cook/recipes'], 'picture-only and private datasets are not offered as knowledge');
-      assert.equal(found[0].licence, 'cc0-1.0'); assert.equal(found[0].rows, 'under 1K rows');
+      assert.equal(found[0].license, 'cc0-1.0'); assert.equal(found[0].rows, 'under 1K rows');
       const info = await hf.datasetInfo('cook/recipes');
       assert.deepEqual(info.files.map((f) => f.path), ['train.csv', 'test.jsonl'], 'text and table files only, the main split first');
       const before = asked.length;
       const c = knowledge.createCollection({ name: 'Cooking' });
       assert.equal(asked.length, before, 'nothing is downloaded until it is added');
       const r = await hf.addDataset(knowledge, c.id, 'cook/recipes');
-      assert.equal(r.rows, 31); assert.equal(r.cut, false); assert.equal(r.licence, 'cc0-1.0');
+      assert.equal(r.rows, 31); assert.equal(r.cut, false); assert.equal(r.license, 'cc0-1.0');
       const hits = await knowledge.search('flour water salt number 17', { k: 2, collectionIds: [c.id] });
       assert.match([...hits][0].text, /Recipe \d+/); assert.match([...hits][0].url, /huggingface\.co\/datasets\/cook\/recipes/);
       store.saveConfig({ offline: true });
       await assert.rejects(hf.searchDatasets('x'), /offline/);
       store.saveConfig({ offline: false });
     } finally { global.fetch = realFetch; }
-    console.log('✓ Hugging Face datasets: text and tables only, licence and size shown first, nothing downloaded until added, then searchable');
+    console.log('✓ Hugging Face datasets: text and tables only, license and size shown first, nothing downloaded until added, then searchable');
   }
   process.exit(0);
 })().catch((e) => { console.error(`FAIL ${e.stack || e.message}`); process.exit(1); });

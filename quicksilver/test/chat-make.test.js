@@ -139,7 +139,7 @@ const PNG = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAIAAABLbSncA
     P.factCheck = true; out.factPref = factOn({}, { ...builtIn, factCheck: false }); out.factChatOff = factOn({ factCheck: false }, { ...builtIn, factCheck: false });
     P.factCheck = false; out.factNone = factOn({}, { ...builtIn, factCheck: false, effort: 'quick' });
     // Conversation memory and Longest answer: what you set in Settings wins over a built-in
-    // assistant's catalogue number; an untouched setting changes nothing; your own assistant keeps its own.
+    // assistant's catalog number; an untouched setting changes nothing; your own assistant keeps its own.
     P.contextSize = 65536; P.maxTokens = 7000; delete P.contextSizeMine; delete P.maxTokensMine;
     out.untouched = [ctxOf(builtIn) === builtIn.contextSize, maxOf({}, builtIn) === builtIn.maxTokens];
     P.contextSizeMine = true; P.maxTokensMine = true;

@@ -109,10 +109,10 @@ async function freshFromSummary(chat) {
   const a = assistantById(chat.assistantId);
   const target = resolveTarget(chat, a);
   if (!target) return;
-  toast('Summarising this chat…', 30000);
+  toast('Summarizing this chat…', 30000);
   try {
     const transcript = chat.messages.map((m) => `${m.role === 'user' ? 'User' : 'Assistant'}: ${msgText(m).slice(0, 4000)}`).join('\n\n').slice(-60000);
-    const sum = await askAI(target, 'Summarise this conversation so it can continue in a new chat. Keep every decision, fact, number, name, open question and the user\'s preferences; drop small talk. Use short headed sections and bullet points. Reply with the summary only.', transcript, { temperature: 0.2, maxTokens: 1200, level: 'quick', contextSize: 32768 });
+    const sum = await askAI(target, 'Summarize this conversation so it can continue in a new chat. Keep every decision, fact, number, name, open question and the user\'s preferences; drop small talk. Use short headed sections and bullet points. Reply with the summary only.', transcript, { temperature: 0.2, maxTokens: 1200, level: 'quick', contextSize: 32768 });
     const fresh = { ...JSON.parse(JSON.stringify(chat)), id: uid(), title: `${chat.title} (continued)`.slice(0, 70), created: now(), updated: now(), messages: [], pinned: false, doc: undefined, branchOf: chat.id,
       system: `${chat.system ? `${chat.system}\n\n` : ''}This chat continues an earlier one. Summary of it so far:\n${sum}` };
     S.data.chats.push(fresh);

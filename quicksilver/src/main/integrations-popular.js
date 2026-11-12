@@ -106,7 +106,7 @@ module.exports = ({ http, clip, secret, cfg }) => {
       fields: [{ key: 'client', label: 'Client ID', placeholder: 'From your Spotify app', help: 'One-time setup: developer.spotify.com/dashboard → Create app, Redirect URI http://127.0.0.1:53683/, tick Web API. Copy the Client ID here.', url: 'https://developer.spotify.com/dashboard' }] },
     hubspot: { name: 'HubSpot', icon: '🧲', group: 'Sales & support', blurb: 'Search contacts, companies and deals; add contacts and notes (asks first).',
       fields: [{ key: 'token', label: 'Private app access token', secret: true, help: 'HubSpot → Settings → Integrations → Private apps → Create, with CRM scopes for contacts, companies, deals (read and write). Copy the access token.', url: 'https://app.hubspot.com/private-apps/' }] },
-    pipedrive: { name: 'Pipedrive', icon: '🟢', group: 'Sales & support', blurb: 'Your open deals, search people and organisations, add notes to deals (asks first).',
+    pipedrive: { name: 'Pipedrive', icon: '🟢', group: 'Sales & support', blurb: 'Your open deals, search people and organizations, add notes to deals (asks first).',
       fields: [{ key: 'token', label: 'Personal API token', secret: true, help: 'Pipedrive → your name → Personal preferences → API.', url: 'https://app.pipedrive.com/settings/api' }] },
     zendesk: { name: 'Zendesk', icon: '🎧', group: 'Sales & support', blurb: 'Search and read support tickets; reply to customers (asks first).',
       fields: [{ key: 'site', label: 'Zendesk address', placeholder: 'yourcompany.zendesk.com' }, { key: 'email', label: 'Your agent email' }, { key: 'token', label: 'API token', secret: true, help: 'Admin Center → Apps and integrations → Zendesk API → Add API token.' }] },
@@ -337,7 +337,7 @@ module.exports = ({ http, clip, secret, cfg }) => {
   const PIPEDRIVE_TOOLS = [
     { name: 'pipedrive_deals', description: 'Your Pipedrive deals (open by default).', parameters: { type: 'object', properties: { status: { type: 'string', description: 'open (default), won, lost or all_not_deleted' } } },
       run: async ({ status = 'open' }) => { const r = await pd(`/deals?status=${encodeURIComponent(status)}&limit=30&sort=update_time%20DESC`); return (r.data || []).map((d) => `[${d.id}] ${d.title} · ${money(d.value, d.currency)} · ${d.org_name || d.person_name || ''} · ${d.status}`).join('\n') || 'No deals.'; } },
-    { name: 'pipedrive_search', description: 'Search Pipedrive people, organisations and deals.', parameters: { type: 'object', properties: { query: { type: 'string' } }, required: ['query'] },
+    { name: 'pipedrive_search', description: 'Search Pipedrive people, organizations and deals.', parameters: { type: 'object', properties: { query: { type: 'string' } }, required: ['query'] },
       run: async ({ query }) => { const r = await pd(`/itemSearch?term=${encodeURIComponent(query)}&limit=10`); return (r.data?.items || []).map(({ item: i }) => `${i.type} [${i.id}] ${i.title || i.name}${i.organization?.name ? ` · ${i.organization.name}` : ''}`).join('\n') || 'Nothing matches.'; } },
     { name: 'pipedrive_add_note', write: true, description: 'Add a note to a Pipedrive deal.', parameters: { type: 'object', properties: { deal_id: { type: 'integer' }, text: { type: 'string' } }, required: ['deal_id', 'text'] },
       run: async ({ deal_id: id, text }) => { await pd('/notes', { method: 'POST', body: { content: text, deal_id: id } }); return 'Note added.'; } },

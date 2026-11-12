@@ -37,7 +37,7 @@ const PERSONAS = [
     { ask: 'My grandson says I should use a password manager. What is that, in simple words, and is it safe?' },
     { ask: 'Give me a gentle 10-minute morning stretching routine for someone with stiff knees.' },
     { action: 'followup' },
-    { ask: 'What colour is this picture? Answer with one word.', file: 'red', note: 'photo question' },
+    { ask: 'What color is this picture? Answer with one word.', file: 'red', note: 'photo question' },
   ] },
   { id: 'jay', who: 'Jay, 19, student and bedroom musician; wants songs, ideas and study help fast', steps: [
     { ask: 'Write a short pop song about missing the last bus home, with chords.', skill: 'song-writer' },
@@ -50,7 +50,7 @@ const PERSONAS = [
     { ask: 'What is the normal adult resting heart rate range, and when should a fast resting heart rate be checked by a doctor?', fact: true, note: 'double-check on' },
     { ask: 'What does the latest NHS guidance say about vitamin D supplements in winter?', web: true, note: 'web search' },
     { action: 'project', name: 'Night shift study', instructions: 'Answers are for a nurse. Be precise and cite the file when used.', file: { name: 'notes.txt', text: 'Ward policy: patients on warfarin need INR checked every Monday and Thursday. Escalate an INR above 4.5 to the on-call doctor.' }, ask: 'When do patients on warfarin get their INR checked, and when do I escalate?' },
-    { ask: 'Summarise the pros and cons of 12-hour nursing shifts in a short table.', private: true, note: 'private chat (no memory)' },
+    { ask: 'Summarize the pros and cons of 12-hour nursing shifts in a short table.', private: true, note: 'private chat (no memory)' },
   ] },
 ];
 

@@ -1,6 +1,6 @@
 // Proves the bundled starter model really works with the real engine before it ships:
 // loads it on the processor (like the slowest PC would), asks a question, and (when it can see)
-// shows it a picture and asks what colour it is.
+// shows it a picture and asks what color it is.
 // Usage: node scripts/prove-starter.js <path to llama-server>
 const path = require('node:path');
 const fs = require('node:fs');
@@ -12,7 +12,7 @@ const ROOT = path.join(__dirname, '..');
 const { models } = JSON.parse(fs.readFileSync(path.join(ROOT, 'starter', 'STARTER.json'), 'utf8'));
 const PORT = 8098;
 
-// A plain 64×64 PNG of one colour, built by hand (no image library needed).
+// A plain 64×64 PNG of one color, built by hand (no image library needed).
 function png(r, g, b, size = 64) {
   const crcTable = Array.from({ length: 256 }, (_, n) => { let c = n; for (let k = 0; k < 8; k++) c = c & 1 ? 0xedb88320 ^ (c >>> 1) : c >>> 1; return c >>> 0; });
   const crc = (buf) => { let c = 0xffffffff; for (const x of buf) c = crcTable[(c ^ x) & 0xff] ^ (c >>> 8); return (c ^ 0xffffffff) >>> 0; };
@@ -88,8 +88,8 @@ async function prove(m) {
     }
     if (m.files.mmproj) {
       const img = `data:image/png;base64,${png(220, 30, 30).toString('base64')}`;
-      const seen = await ask([{ type: 'text', text: 'What colour is this image? Answer with one word.' }, { type: 'image_url', image_url: { url: img } }]);
-      console.log(`  Q: colour of a red image → ${seen}`);
+      const seen = await ask([{ type: 'text', text: 'What color is this image? Answer with one word.' }, { type: 'image_url', image_url: { url: img } }]);
+      console.log(`  Q: color of a red image → ${seen}`);
       if (!/red/i.test(seen)) throw new Error(`${m.name} could not see the image`);
     }
   } catch (err) {

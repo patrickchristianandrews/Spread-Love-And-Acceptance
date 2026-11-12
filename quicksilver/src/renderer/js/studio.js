@@ -73,7 +73,7 @@ async function importFile(f) {
 // ---------- Improve: a text model turns a short idea into a detailed prompt ----------
 
 const IMPROVE = {
-  image: 'Rewrite the user\'s idea as one detailed prompt for an AI image generator: subject, setting, composition, lighting, colours and style (and camera and lens if it is a photo). Keep everything the user asked for. Reply with the prompt only, under 80 words, no quotes or labels.',
+  image: 'Rewrite the user\'s idea as one detailed prompt for an AI image generator: subject, setting, composition, lighting, colors and style (and camera and lens if it is a photo). Keep everything the user asked for. Reply with the prompt only, under 80 words, no quotes or labels.',
   video: 'Rewrite the user\'s idea as one detailed prompt for an AI video generator: subject, action and motion, camera movement, setting, lighting and style. Keep everything the user asked for. Reply with the prompt only, under 70 words, no quotes or labels.',
   edit: 'Rewrite the user\'s photo edit request as one clear, specific instruction for an AI photo editor: say exactly what to change, and that everything else stays the same. Reply with the instruction only, under 40 words, no quotes or labels.',
 };

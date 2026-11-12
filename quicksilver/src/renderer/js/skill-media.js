@@ -16,7 +16,7 @@ const MEDIA_NEED = {
 
 // The extra instructions a media skill adds: the model replies with a short note and a JSON block.
 const MEDIA_RULES = {
-  image: 'Reply with ONE short sentence saying what you will create, then a ```image code block containing only JSON: {"prompt": "a detailed image prompt under 70 words: subject, composition, setting, lighting, colours, style", "avoid": "things to leave out", "shape": "square|portrait|landscape|wide|tall", "count": 1}. Quicksilver turns it into the picture, so do not say you cannot make images.',
+  image: 'Reply with ONE short sentence saying what you will create, then a ```image code block containing only JSON: {"prompt": "a detailed image prompt under 70 words: subject, composition, setting, lighting, colors, style", "avoid": "things to leave out", "shape": "square|portrait|landscape|wide|tall", "count": 1}. Quicksilver turns it into the picture, so do not say you cannot make images.',
   video: 'Reply with ONE short sentence saying what you will create, then a ```video code block containing only JSON: {"prompt": "one continuous shot under 60 words: subject, the motion, camera movement, lighting, style", "shape": "wide|tall|square"}. Quicksilver turns it into the video, so do not say you cannot make videos.',
   edit: 'Reply with ONE short sentence saying what you will change, then an ```edit code block containing only JSON: {"instruction": "the edit as a short command, e.g. Replace the sky with a sunset", "prompt": "a full description of how the finished photo should look"}. Quicksilver edits the attached photo, so do not say you cannot edit images.',
   animate: 'Reply with ONE short sentence saying how the photo will move, then a ```video code block containing only JSON: {"prompt": "the photo\'s scene, plus the natural motion and camera movement, under 60 words"}. Quicksilver animates the attached photo, so do not say you cannot.',
@@ -34,7 +34,7 @@ function parseMediaSpec(text) {
   return out.prompt || out.instruction ? out : null;
 }
 // Does a reply (written without a skill) contain picture or video instructions? A fenced block
-// labelled image or video, or a JSON block with a "prompt" and the usual picture fields.
+// labeled image or video, or a JSON block with a "prompt" and the usual picture fields.
 function mediaReplySkill(text) {
   const t = String(text || '');
   const m = t.match(/```(image|video|json)?\s*\n?\s*(\{[\s\S]*?\})\s*```/i);
@@ -46,7 +46,7 @@ function mediaReplySkill(text) {
   return null;
 }
 // An instruction to change a picture: "make her smile", "add a hat", "remove the car", "change
-// the background to a beach", "turn it into a watercolour". Said about a photo you attached, or
+// the background to a beach", "turn it into a watercolor". Said about a photo you attached, or
 // about the picture just made in the chat. Requests for words (a caption, a summary, a table, a
 // web page, a shorter version) are not changes to the picture.
 const WORDS_WANTED = /\b(poem|story|essay|caption|description|summary|email|letter|recipe|list|table|spreadsheet|document|code|script|translation|joke|song|lyrics|prompt|report|post|tweet|headline|title|slogan|paragraph|sentence|section|chapter|bullets?|heading|comment|function|class|column|row|test|numbers?|totals?|sum|amounts?|prices?|costs?|receipt|invoice|bill|equation|error|bug|word|pdf|slides?|presentation|chart|graph|notes?|plan|quiz|answer|chat|web ?site|web ?page|site|app|html|css|component|concise|formal|informal|professional|polite|simpler|clearer|funnier|persuasive|casual|rewrite|rephrase|reword|proofread|grammar|spelling|tone)\b/i;

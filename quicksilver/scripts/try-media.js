@@ -61,7 +61,7 @@ proc.on('exit', (code) => {
       extra = ` ${(info.match(/Duration: ([\d:.]+)/) || [])[1] || '?'} long, ${(info.match(/, (\d{2,5}x\d{2,5})/) || [])[1] || '?'}`;
       execFileSync(ffmpeg, ['-hide_banner', '-loglevel', 'error', '-y', '-i', made, '-vf', 'select=eq(n\\,4),scale=176:-2', '-frames:v', '1', '-q:v', '10', thumb]);
     } else {
-      extra = media.looksBlank(made) ? ' BLANK (one flat colour)' : '';
+      extra = media.looksBlank(made) ? ' BLANK (one flat color)' : '';
       execFileSync(ffmpeg, ['-hide_banner', '-loglevel', 'error', '-y', '-i', made, '-vf', 'scale=176:-2', '-q:v', '10', thumb]);
     }
   } catch (e) { extra += ` (no thumbnail: ${String(e.message).slice(0, 120)})`; }

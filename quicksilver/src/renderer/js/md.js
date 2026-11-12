@@ -1,6 +1,6 @@
 // Markdown for answers: headings, paragraphs, numbered and bulleted lists (kept together across
 // blank lines, nested by indent, numbered from where they start), task lists, quotes, tables,
-// code with syntax colours, charts, links and inline styles. Text is escaped first, so models
+// code with syntax colors, charts, links and inline styles. Text is escaped first, so models
 // can't inject HTML.
 'use strict';
 
@@ -34,7 +34,7 @@ function tableHtml(lines) {
 }
 tableHtml.store = {};
 
-// ---------- syntax colours (light, dependency-free) ----------
+// ---------- syntax colors (light, dependency-free) ----------
 
 const HL_KEYWORDS = new Set(('if else elif for while do return function def class import from export default const let var new try catch except finally '
   + 'throw raise async await yield in of not and or is None True False null true false undefined this self super public private protected static '

@@ -21,14 +21,14 @@ const timesText = (sec, words = WORDS.chat) => { const t = threeTimes(sec, words
 // Cloud AIs that answer questions (fal.ai is for photos, video and music only).
 const MEDIA_PRESETS = ['fal', 'replicate', 'stability'];
 const connectedClouds = () => (S.providers || []).filter((p) => (p.hasKey || p.noKey) && !MEDIA_PRESETS.includes(p.preset));
-// The best tested science score among the given targets (local ones by their catalogue id).
+// The best tested science score among the given targets (local ones by their catalog id).
 function boostBase(targets) {
   let best = null;
   for (const t of targets || []) {
     let sc = null;
     if (String(t).startsWith('local:')) sc = scoresFor(S.installed.find((m) => `local:${m.id}` === t)?.catalogId);
     else if (String(t).startsWith('api:')) sc = cloudScoresFor(S.providers.find((p) => p.id === String(t).split(':')[1])?.preset);
-    else sc = scoresFor(t); // a catalogue id
+    else sc = scoresFor(t); // a catalog id
     if (sc?.science != null && !(best >= sc.science)) best = sc.science;
   }
   return best;
@@ -87,7 +87,7 @@ function boostJobs(targets, { liquid = false } = {}) {
     ['🔎', 'Research & current facts', a2, 9, 9.5, 'On its own a model only knows facts from before its training; with the web it reads today\'s pages and cites them.', 'With web: reads today\'s pages and cites them, so recent facts are right far more often.', false],
     ['✍️', 'Writing', a3, plus(a3, 0.5), Math.max(cloudText, 8.5), 'Emails, stories and essays: a cloud AI writes with more polish and range; the web adds facts to cite.', 'With web: accurate facts, names and dates to cite, so articles and emails need fewer corrections.', false],
     ['💻', 'Coding', a4, plus(a4, 1), ccode != null ? ccode / 10 : liquid ? 7 : 9, 'Bigger programs and harder bugs: a cloud AI writes working code first time more often; the web finds current docs.', 'With web: reads current library docs and looks up error messages, so code works with today\'s versions.', false],
-    ['👁️', 'Reading photos & screenshots', a5, sees ? plus(a5, 0.5) : null, liquid ? 7 : 9, sees ? 'Reads charts, receipts and handwriting more accurately with a cloud AI.' : 'This one can\'t see photos on its own; a cloud AI (or a model that sees) can.', 'With web: looks up what it recognises (a product, a plant, a landmark) for more detail.', false],
+    ['👁️', 'Reading photos & screenshots', a5, sees ? plus(a5, 0.5) : null, liquid ? 7 : 9, sees ? 'Reads charts, receipts and handwriting more accurately with a cloud AI.' : 'This one can\'t see photos on its own; a cloud AI (or a model that sees) can.', 'With web: looks up what it recognizes (a product, a plant, a landmark) for more detail.', false],
     ['🖼️', 'Photo creation', a6, a6, maxOf(IMAGE_SERVICES, 2), 'A connected picture service (GPT Image, Nano Banana, FLUX) makes sharper, more detailed pictures with readable text; Quicksilver writes the prompt.', 'Web search doesn\'t change how pictures look; the cloud service does.', true],
     ['🪄', 'Photo editing', a7, a7, IMAGE_SERVICES.nano[2], 'Edits from a description ("remove the person", "make it sunset") keep faces and details better with Nano Banana or GPT Image.', 'Web search doesn\'t change edits; the cloud service does.', true],
     ['🎬', 'Video creation', a8, a8, maxOf(VIDEO_SERVICES, 2), 'Cloud video (Veo, Kling) is sharper, longer and has sound; it\'s used on the service\'s site and Quicksilver writes the shot list and prompts.', 'Web search doesn\'t change video quality; the cloud service does.', true],
@@ -199,7 +199,7 @@ function veniceLiquidText() {
   return `with the Liquid Edition only hard questions go to Venice: about ${f.less}% less Venice use than Venice alone${speed}${quality}`;
 }
 
-// targets: what answers (local:/api: targets or catalogue ids). opts.liquid: the Liquid Edition
+// targets: what answers (local:/api: targets or catalog ids). opts.liquid: the Liquid Edition
 // (uses only uncensored cloud AIs). opts.compact: one short line for cards.
 function boostsHTML(targets, { liquid = false, compact = false, fusion = false } = {}) {
   const base = boostBase(targets);
@@ -229,8 +229,8 @@ function boostsHTML(targets, { liquid = false, compact = false, fusion = false }
   return `<div class="bz"><div class="bz-title">⚡ How the web and a cloud AI improve ${fusion ? 'this custom AI' : 'it'} <button class="btn small ghost" data-free-paid>💸 Free vs paid</button></div>${boostJobsHTML(targets, { liquid })}${rows.join('')}</div>`;
 }
 // The full explanation for a model or stack you picked.
-// target: a stack ("stack:…"), a model on this PC ("local:…"), a catalogue model id, or a list of
-// catalogue ids (a ready-made stack recipe) with its name.
+// target: a stack ("stack:…"), a model on this PC ("local:…"), a catalog model id, or a list of
+// catalog ids (a ready-made stack recipe) with its name.
 function boostModal(target, { ids, name } = {}) {
   const s = String(target).startsWith('stack:') && S.stacks.find((x) => `stack:${x.id}` === target);
   const targets = ids || (s ? [...(s.members.drafters || []), s.members.judge, s.members.vision].filter(Boolean) : [target]);

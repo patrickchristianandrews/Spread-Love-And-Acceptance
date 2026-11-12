@@ -15,7 +15,7 @@ const dir = path.resolve(process.argv[2] || path.join(ROOT, 'pack'));
 const models = require('../src/main/models');
 const media = require('../src/main/media');
 
-// How many different byte values the picture's pixels have: a blank or single-colour image (what
+// How many different byte values the picture's pixels have: a blank or single-color image (what
 // a broken run produces) has almost none.
 function pngVariety(file) {
   const b = fs.readFileSync(file);

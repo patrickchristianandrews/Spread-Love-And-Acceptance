@@ -28,7 +28,7 @@ function gguf(p, arch, name, size = 2e6) {
   const other = path.join(HOME, 'other-app');
   const copy = (n) => { const p = path.join(mdir, n); fs.copyFileSync(TINY, p); return p; };
   // Another app's models: real chat models, each a different file (an exact copy of a model
-  // Quicksilver already has would be recognised as the same model and left out).
+  // Quicksilver already has would be recognized as the same model and left out).
   const theirs = (n) => gguf(path.join(other, n), 'llama', n);
   fs.writeFileSync(path.join(HOME, 'models.json'), JSON.stringify([
     { id: 'starter', name: 'Qwen3.5 2B (uncensored)', kind: 'text', catalogId: 'qwen3.5-2b', files: { model: copy('model.gguf'), mmproj: copy('mmproj.gguf') }, size: 1.5e9, vision: true, source: 'bundled' },

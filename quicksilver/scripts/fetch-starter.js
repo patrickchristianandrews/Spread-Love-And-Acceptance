@@ -4,7 +4,7 @@
 //            Qwen3.5 9B: the Closer; BGE Reranker; Lustify (pictures); Wan 2.2 5B and Turbo (video)
 // Together they make the built-in "Quicksilver" model (a stack with smart routing).
 // The 4B model is too big for a Windows installer (about 2 GB at most), so it ships in a folder
-// beside it; the installer copies it in. Writes starter/STARTER.json and the licences.
+// beside it; the installer copies it in. Writes starter/STARTER.json and the licenses.
 // Both are the uncensored ("abliterated") versions when they can be found: the same models with
 // the refusals taken out, so they answer plainly. The app's parental lock adds a family-safe
 // instruction instead. If no uncensored copy is available, the original models are used.
@@ -14,7 +14,7 @@
 // In the models folder too: the speech model for voice typing (Whisper base, about 60 MB).
 // A failed download fails the build: the Liquid Edition ships complete.
 // QS_WEB_INSTALLER=1 makes the web installer instead: no model files at all (not even the small
-// ones that normally go inside it). Only STARTER.json and the licences are written, every model
+// ones that normally go inside it). Only STARTER.json and the licenses are written, every model
 // marked to download — Quicksilver's setup screen fetches the whole Liquid Edition on first launch.
 // Usage: node scripts/fetch-starter.js
 const path = require('node:path');
@@ -45,13 +45,13 @@ const MODELS = [
   // Next to the installer: Sharper search. The reranker puts the passage that answers the question
   // first (it scores text, writes none, so no filter applies).
   { id: 'starter-rerank', catalogId: 'bge-reranker-v2-m3', name: 'BGE Reranker v2 M3', kind: 'rerank', where: 'pack', limit: 0.6e9, file: 'rerank.gguf', pack: true,
-    by: 'BAAI', licenseRepo: 'BAAI/bge-reranker-v2-m3', licenceText: 'Licensed under the Apache License, Version 2.0: https://www.apache.org/licenses/LICENSE-2.0\n',
+    by: 'BAAI', licenseRepo: 'BAAI/bge-reranker-v2-m3', licenseText: 'Licensed under the Apache License, Version 2.0: https://www.apache.org/licenses/LICENSE-2.0\n',
     repos: ['gpustack/bge-reranker-v2-m3-GGUF', 'sabafallah/bge-reranker-v2-m3-Q4_K_M-GGUF'] },
   // Inside the installer: Smarter search. A tiny embedding model so Your knowledge and Memory are
   // found by meaning out of the box (not uncensored because it writes no text — it only measures
   // how close two pieces of text are in meaning).
   { id: 'starter-embed', catalogId: 'nomic-embed-v1.5', name: 'Nomic Embed v1.5', kind: 'embed', where: 'starter', limit: 0.2e9, file: 'embed.gguf',
-    by: 'Nomic AI', licenseRepo: 'nomic-ai/nomic-embed-text-v1.5-GGUF', licenceText: 'Licensed under the Apache License, Version 2.0: https://www.apache.org/licenses/LICENSE-2.0\n',
+    by: 'Nomic AI', licenseRepo: 'nomic-ai/nomic-embed-text-v1.5-GGUF', licenseText: 'Licensed under the Apache License, Version 2.0: https://www.apache.org/licenses/LICENSE-2.0\n',
     repos: ['nomic-ai/nomic-embed-text-v1.5-GGUF', 'second-state/Nomic-embed-text-v1.5-Embedding-GGUF'] },
 ];
 
@@ -59,11 +59,11 @@ const MODELS = [
 // here so they can sit together in one folder.
 const MEDIA = [
   { id: 'starter-lustify', catalogId: 'lustify', name: 'Lustify (uncensored)', kind: 'image', names: { model: 'lustify.safetensors', vae: 'lustify-vae.safetensors' },
-    licence: '==== Lustify (community SDXL checkpoint) ====\n\nBuilt on Stable Diffusion XL 1.0. CreativeML Open RAIL++-M License: https://huggingface.co/stabilityai/stable-diffusion-xl-base-1.0/blob/main/LICENSE.md\nThe SDXL decoder (madebyollin/sdxl-vae-fp16-fix) is MIT licensed.\n' },
+    license: '==== Lustify (community SDXL checkpoint) ====\n\nBuilt on Stable Diffusion XL 1.0. CreativeML Open RAIL++-M License: https://huggingface.co/stabilityai/stable-diffusion-xl-base-1.0/blob/main/LICENSE.md\nThe SDXL decoder (madebyollin/sdxl-vae-fp16-fix) is MIT licensed.\n' },
   { id: 'starter-wan', catalogId: 'wan2.2-5b', name: 'Wan 2.2 5B', kind: 'video', names: { diffusion: 'wan2.2-5b.gguf', vae: 'wan2.2-vae.safetensors', t5xxl: 'wan-umt5-xxl.gguf' },
-    licence: '==== Wan 2.2 TI2V 5B (Alibaba) ====\n\nLicensed under the Apache License, Version 2.0: https://www.apache.org/licenses/LICENSE-2.0\nText encoder: UMT5-XXL (Google), Apache License 2.0.\n' },
+    license: '==== Wan 2.2 TI2V 5B (Alibaba) ====\n\nLicensed under the Apache License, Version 2.0: https://www.apache.org/licenses/LICENSE-2.0\nText encoder: UMT5-XXL (Google), Apache License 2.0.\n' },
   { id: 'starter-wan-turbo', catalogId: 'wan2.2-5b-turbo', name: 'Wan 2.2 5B Turbo', kind: 'video', names: { diffusion: 'wan2.2-5b-turbo.gguf', vae: 'wan2.2-vae.safetensors', t5xxl: 'wan-umt5-xxl.gguf' },
-    licence: '==== Wan 2.2 TI2V 5B Turbo (Alibaba; Turbo by quanhaol) ====\n\nLicensed under the Apache License, Version 2.0: https://www.apache.org/licenses/LICENSE-2.0\n' },
+    license: '==== Wan 2.2 TI2V 5B Turbo (Alibaba; Turbo by quanhaol) ====\n\nLicensed under the Apache License, Version 2.0: https://www.apache.org/licenses/LICENSE-2.0\n' },
 ];
 
 async function choose(m) {
@@ -112,7 +112,7 @@ async function get(repo, f, dest) {
 (async () => {
   for (const d of ['starter', 'pack']) { fs.rmSync(path.join(ROOT, d), { recursive: true, force: true }); fs.mkdirSync(path.join(ROOT, d), { recursive: true }); }
   const entries = [];
-  const licences = [];
+  const licenses = [];
   for (const m of MODELS) {
     const pick = await choose(m);
     console.log(`${m.name}: ${pick.quant} from ${pick.repo}`);
@@ -127,13 +127,13 @@ async function get(repo, f, dest) {
     if (!m.kind && !open) throw new Error(`No uncensored copy of ${m.name} could be downloaded (tried ${m.repos.filter((r) => /abliterat|uncensor/i.test(r)).join(', ')}).`);
     if (m.kind) console.log(`  ✓ ${m.kind === 'rerank' ? 'sharper' : 'smarter'}-search model`); else console.log(`  ✓ uncensored copy: ${pick.repo}`);
     entries.push({ id: m.id, catalogId: m.catalogId, name: m.kind ? m.name : open ? `${m.name} (uncensored)` : m.name, ...(m.kind ? { kind: m.kind } : {}), ...(open && !m.kind ? { uncensored: true } : {}), repo: pick.repo, quant: pick.quant, ...(m.repos.filter((r) => r !== pick.repo).length ? { alt: m.repos.filter((r) => r !== pick.repo) } : {}), files: { model: m.file, ...(pick.mmproj ? { mmproj: m.proj || 'mmproj.gguf' } : {}) }, ...(m.pack || WEB ? { pack: true } : {}), ...(m.optional ? { optional: true } : {}), ...(m.ifFits ? { ifFits: true } : {}) });
-    let text = m.licenceText;
+    let text = m.licenseText;
     if (!text) try {
-      const tmp = path.join(os.tmpdir(), `licence-${m.id}.txt`);
+      const tmp = path.join(os.tmpdir(), `license-${m.id}.txt`);
       await downloadTo(`${HF}/${m.licenseRepo}/resolve/main/LICENSE`, tmp);
       text = fs.readFileSync(tmp, 'utf8');
     } catch { text = 'Licensed under the Apache License, Version 2.0: https://www.apache.org/licenses/LICENSE-2.0\n'; }
-    licences.push(`==== ${m.name} (${m.licenseRepo}) by ${m.by || 'Alibaba Cloud (Qwen)'}${open && !m.by && !m.kind ? `; uncensored version from ${pick.repo}` : ''} ====\n\n${text}`);
+    licenses.push(`==== ${m.name} (${m.licenseRepo}) by ${m.by || 'Alibaba Cloud (Qwen)'}${open && !m.by && !m.kind ? `; uncensored version from ${pick.repo}` : ''} ====\n\n${text}`);
   }
   if (process.env.QS_NO_MEDIA_PACK) console.log('Lustify and Wan 2.2 left out (QS_NO_MEDIA_PACK)');
   else for (const m of MEDIA) {
@@ -143,7 +143,7 @@ async function get(repo, f, dest) {
       if (!WEB) for (const it of plan.items) await get(it.repo, it, path.join(ROOT, 'pack', m.names[it.role]));
       // pack: copied in by the installer; without the folder the app downloads it before it opens.
       entries.push({ id: m.id, catalogId: m.catalogId, name: m.name, kind: m.kind, uncensored: true, files: Object.fromEntries(plan.items.map((i) => [i.role, m.names[i.role]])), pack: true, optional: true, media: true });
-      licences.push(m.licence);
+      licenses.push(m.license);
       console.log(`  ✓ ${m.kind === 'image' ? 'picture' : 'video'} model for the Liquid Edition`);
     } catch (err) {
       // The Liquid Edition ships complete or not at all: Quicksilver won't open without these.
@@ -170,11 +170,11 @@ async function get(repo, f, dest) {
     }
     console.log('  ✓ speed helpers for pictures and video');
   }
-  licences.push('==== SDXL-Lightning 8-step (ByteDance): the fast picture mode ====\n\nCreativeML Open RAIL++-M License: https://huggingface.co/ByteDance/SDXL-Lightning/blob/main/LICENSE.md\n');
-  licences.push('==== TAEHV for Wan 2.2 (Ollin Boer Bohan; file from lightx2v/Autoencoders): the quick video decoder ====\n\nMIT License: https://github.com/madebyollin/taehv/blob/main/LICENSE\n');
-  licences.push('==== Whisper base (OpenAI), converted for whisper.cpp by Georgi Gerganov ====\n\nMIT License: https://github.com/openai/whisper/blob/main/LICENSE\n');
+  licenses.push('==== SDXL-Lightning 8-step (ByteDance): the fast picture mode ====\n\nCreativeML Open RAIL++-M License: https://huggingface.co/ByteDance/SDXL-Lightning/blob/main/LICENSE.md\n');
+  licenses.push('==== TAEHV for Wan 2.2 (Ollin Boer Bohan; file from lightx2v/Autoencoders): the quick video decoder ====\n\nMIT License: https://github.com/madebyollin/taehv/blob/main/LICENSE\n');
+  licenses.push('==== Whisper base (OpenAI), converted for whisper.cpp by Georgi Gerganov ====\n\nMIT License: https://github.com/openai/whisper/blob/main/LICENSE\n');
   fs.writeFileSync(path.join(ROOT, 'starter', 'STARTER.json'), JSON.stringify({ models: entries }, null, 2));
-  fs.writeFileSync(path.join(ROOT, 'starter', 'MODEL-LICENCES.txt'), licences.join('\n\n'));
+  fs.writeFileSync(path.join(ROOT, 'starter', 'MODEL-LICENCES.txt'), licenses.join('\n\n'));
   fs.copyFileSync(path.join(ROOT, 'starter', 'MODEL-LICENCES.txt'), path.join(ROOT, 'pack', 'MODEL-LICENCES.txt'));
   const size = (d) => fs.readdirSync(path.join(ROOT, d)).reduce((t, n) => t + fs.statSync(path.join(ROOT, d, n)).size, 0);
   console.log(`inside the installer: ${(size('starter') / 1e9).toFixed(2)} GB · next to it: ${(size('pack') / 1e9).toFixed(2)} GB${WEB ? ' · web installer: every model downloads on first launch' : ''}`);
