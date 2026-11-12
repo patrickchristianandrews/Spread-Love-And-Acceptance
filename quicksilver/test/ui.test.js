@@ -168,6 +168,17 @@ function redPng(size = 64) {
   await win.click('.sf-tabs [data-sf-tab="stacks"]');
   console.log('✓ Stacks & Fusion: separate tabs; Fusion has its builder, your fusions, one-click fusions and the ways to combine');
   assert.ok(await win.evaluate(() => STACK_RECIPES.some((r) => r.id === 'gif-maker' && r.skill === 'make-gif') && skillById('make-gif')?.media?.gif));
+  // Mobile app developer: a team fitted to this PC (a coder, a planner, a model that sees), and a
+  // second one where a cloud AI you connect leads. Each part resolves to a real catalogue model.
+  const mobile = await win.evaluate(() => {
+    const local = STACK_RECIPES.find((r) => r.id === 'mobile-dev'); const cloud = STACK_RECIPES.find((r) => r.id === 'mobile-dev-cloud');
+    const plan = rxResolve(local);
+    const models = plan.parts.filter((p) => p.kind === 'model' && !p.helper);
+    return { group: [local?.group, cloud?.group, cloud?.where], known: models.every((p) => S.catalog.text.some((m) => m.id === p.id)), n: models.length, sees: models.some((p) => S.catalog.text.find((m) => m.id === p.id)?.vision), lead: Boolean(plan.lead),
+      clouds: cloud.parts.filter((p) => p.kind === 'cloud').map((p) => p.provider), first: STACK_RECIPES.filter((r) => r.group === 'code')[0].id, card: document.querySelector('[data-rx="mobile-dev"]') ? 'shown' : (typeof recipeCard === 'function' ? /Mobile app developer/.test(recipeCard(local)) : 'n/a') };
+  });
+  assert.deepEqual(mobile.group, ['code', 'code', 'hybrid']); assert.ok(mobile.known && mobile.n === 3 && mobile.sees && mobile.lead, `the mobile team is a coder, a planner and a model that sees: ${JSON.stringify(mobile)}`);
+  assert.deepEqual(mobile.clouds, ['anthropic', 'google']); assert.equal(mobile.first, 'mobile-dev', 'it is the first of the coding stacks');
   console.log(`✓ stacks for specific work: ${await win.evaluate(() => STACK_RECIPES.length)} teams incl. 3 song stacks and a GIF maker, tuned to this PC, set up as a stack and an assistant`);
 
   // Chat with the powerhouse stack, a spreadsheet attached and fact check on.

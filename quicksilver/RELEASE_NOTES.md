@@ -26,7 +26,7 @@ The Liquid Edition is locked: it can't be edited or deleted and its models stay 
 **Everything it can do:**
 
 - **Private by design** — answers offline; fully private / Proton-VPN private / online, shown on every chat; uncensored by default with an optional parental-lock PIN.
-- **Smarter answers** — Automatic model choice, ~78 AI Teams, a Fusion builder with a model/API suggester, Double-check that corrects its own maths and facts, and learning from your 👍/👎.
+- **Smarter answers** — Automatic model choice, ~80 AI Teams, a Fusion builder with a model/API suggester, Double-check that corrects its own maths and facts, and learning from your 👍/👎.
 - **Knows what you need** — Memory (Mem0-style, on by default, found by meaning), your Library (cited answers from your files and sites), and web search with no key.
 - **Create** — pictures, video and music on your PC or in the cloud; **free with Pollinations (no key, no account)**, paid services for top quality, Venice for uncensored pictures, plus a GIF maker and video editing.
 - **Gets things done** — Skills (find-a-product-from-a-photo, vibe-hacking, charts), Connectors (GitHub, Slack, Google…), CPA/CIA exam coaches, a document editor and projects.
@@ -48,6 +48,7 @@ The Liquid Edition release. Quicksilver now ships as one complete, uncensored se
 - **API suggestions for what you built.** Every stack and custom AI, and every build in progress, shows the APIs that would add the most to it: the best free one, the best whatever it costs and one you already have, with what each lifts and what it costs. Connect in one click (a build in progress comes back afterwards).
 - **API directory.** All 45 cloud services in one list, by task, free ones first, with what the free plan gives you, what it costs after and a link to each (Guide, Connect an API, and API-DIRECTORY.md).
 - **Clearer pages.** Stacks & Fusion shows your stacks first; Models has its tabs at the top with storage and the models in use first.
+- **Mobile app developer stacks.** Two ready-made teams for building phone apps (iPhone, Android, Flutter, React Native): one that runs entirely on your PC (a coder, a planner that traces crashes, and a model that reads your mockups and screenshots), and one where a cloud AI you connect leads.
 - **Code chat.** A second button under New chat opens a chat set up for programming: complete code you can copy and run, short explanations, root cause first on bugs. New chat stays the everyday AI. In a Code chat (and for any message about code) nothing is turned into a picture or a document; a web page or app you ask for opens in a preview.
 - **A way back when it guesses wrong.** An answer made with a skill Quicksilver chose by itself has an "Answer normally" button, "No thanks" on a suggested skill now really dismisses it, and editing a message re-reads it.
 - **A stack uses its own models and nothing else.** Models found in other apps (LM Studio, Ollama, Jan, Downloads) are never added or used by themselves. Models → On this PC has a new **Models in use** list: tick a model to let Quicksilver use it by itself (Automatic, double-checking, the Council, and as a helper in the Liquid Edition when it is uncensored).
