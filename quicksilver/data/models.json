@@ -4,6 +4,31 @@
   "note": "Model picks that update Quicksilver when online: add new models (same fields as the built-in catalog), mark featured picks, map an older model to the newer one that replaces it, and set the ladders stack recipes choose from (strongest first). \"liquid\" names the Liquid Edition's core models (uncensored): set brain/eyes to a newer catalog or added model and every Quicksilver updates its built-in model to it. \"recipes\" adds new ready-made stacks: {id, name, icon, group, mode (blend/debate/consensus/auto/vote/redteam/plan/panel), parts: [{model, role, ladder}], lead, instructions, why, added (YYYY-MM-DD), uncensored}.",
   "models": [
     {
+      "id": "deepseek-v4-pro-qwen3.5-9b-heretic",
+      "name": "DeepSeek V4 Pro Qwen3.5 9B Uncensored",
+      "maker": "xtools-at",
+      "params": "9B",
+      "category": "open",
+      "repo": "Sakura721/DeepSeek-V4-Pro-Qwen3.5-9B-UNCENSORED-heretic-GGUF",
+      "quant": "Q4_K_M",
+      "sizeGB": 5.63,
+      "ctx": 32768,
+      "jobs": {
+        "general": 7,
+        "office": 6,
+        "research": 6,
+        "coding": 6,
+        "vision": 6,
+        "fast": 6
+      },
+      "judge": 6,
+      "blurb": "Qwen3.5 9B trained on DeepSeek V4 Pro's answers, with refusals removed (heretic): DeepSeek-style step-by-step thinking and uncensored replies on an ordinary PC. Reads photos. Also on UncensoredLLM (cloud). License: Apache 2.0.",
+      "vision": true,
+      "mmprojGB": 0.92,
+      "reasoning": true,
+      "open": true
+    },
+    {
       "id": "cydonia-24b-v4.3",
       "name": "Cydonia 24B v4.3",
       "maker": "TheDrummer",
