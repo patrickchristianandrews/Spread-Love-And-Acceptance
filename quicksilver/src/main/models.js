@@ -188,8 +188,8 @@ async function fetchFileNow(repo, file, dest, onBytes, signal, expected = 0) {
   const url = `${HF}/${repo}/resolve/main/${file.split('/').map(encodeURIComponent).join('/')}?download=true`;
   const auth = hfHeaders();
   const g = io.stallGuard(signal);
-  const res = await fetch(url, { headers: { ...auth, ...(have ? { Range: `bytes=${have}-` } : {}) }, signal: g.signal, redirect: 'follow' }).catch((e) => { g.done(); throw g.stalled() ? new Error('the connection stalled. Start it again to resume where it stopped') : e; });
-  const giveUp = (msg) => { g.done(); res.body?.cancel?.().catch(() => {}); return new Error(msg); };
+  const res = await io.httpGet(url, { headers: { ...auth, ...(have ? { Range: `bytes=${have}-` } : {}) }, signal: g.signal }).catch((e) => { g.done(); throw g.stalled() ? new Error('the connection stalled. Start it again to resume where it stopped') : e; });
+  const giveUp = (msg) => { g.done(); res.cancel(); return new Error(msg); };
   if (res.status === 401 || res.status === 403) throw giveUp('This model needs you to accept its license on huggingface.co first, then add a Hugging Face token in Settings → Accounts.');
   // The saved part no longer matches what the server has: clear it, so the next try starts clean.
   if (res.status === 416) { try { fs.unlinkSync(part); } catch {} throw giveUp('the saved part of this download was out of date and has been cleared. Start it again'); }

@@ -176,5 +176,28 @@ const exporters = require('../src/main/exporters');
     } finally { global.fetch = realFetch; }
     console.log('✓ Hugging Face datasets: text and tables only, license and size shown first, nothing downloaded until added, then searchable');
   }
+  // --- Big downloads: plain http streams (fetch() can crash the process under back-pressure) ---
+  {
+    const io = require('../src/main/engines');
+    const big = Buffer.alloc(3 * 1024 * 1024, 7);
+    let sawAuth = null;
+    const cdn = http.createServer((req, res) => { sawAuth = req.headers.authorization || ''; res.writeHead(200, { 'content-length': big.length }); res.end(big); });
+    await new Promise((r) => cdn.listen(0, '127.0.0.1', r));
+    const origin = http.createServer((req, res) => { res.writeHead(302, { location: `http://localhost:${cdn.address().port}/file.bin` }); res.end(); });
+    await new Promise((r) => origin.listen(0, '127.0.0.1', r));
+    const dest = path.join(os.tmpdir(), `qs-dl-${Date.now()}.bin`);
+    const r = await io.httpGet(`http://127.0.0.1:${origin.address().port}/f`, { headers: { Authorization: 'Bearer secret' } });
+    assert.equal(r.status, 200); assert.equal(r.headers.get('content-length'), String(big.length));
+    r.cancel();
+    assert.equal(sawAuth, '', 'the token is not sent on to another host after a redirect');
+    // A slow disk: the stream waits and every byte arrives.
+    await io.downloadTo(`http://127.0.0.1:${origin.address().port}/f`, dest);
+    assert.equal(fs.statSync(dest).size, big.length, 'the whole file arrives through the redirect');
+    const ctl = new AbortController(); setTimeout(() => ctl.abort(), 5);
+    await assert.rejects(io.downloadTo(`http://127.0.0.1:${origin.address().port}/f`, `${dest}.2`, null, ctl.signal));
+    fs.rmSync(dest, { force: true }); fs.rmSync(`${dest}.2`, { force: true });
+    cdn.close(); origin.close();
+    console.log('✓ big downloads use plain streams: redirects followed, the token stays with Hugging Face, Stop still stops');
+  }
   process.exit(0);
 })().catch((e) => { console.error(`FAIL ${e.stack || e.message}`); process.exit(1); });

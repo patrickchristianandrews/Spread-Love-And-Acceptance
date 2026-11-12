@@ -123,12 +123,42 @@ function writeChunk(out, chunk) {
 const closeWrite = (out) => new Promise((r) => { if (out.destroyed || out.writeError) r(); else out.end(() => r()); });
 const diskError = (e) => new Error(e?.code === 'ENOSPC' ? 'the disk is full. Free some space, then start it again: it carries on where it stopped' : `the file couldn't be written (${e?.code || e?.message || e}). Start it again to carry on`);
 
+// Big downloads go through Node's own http/https streams, not fetch(): under heavy back-pressure
+// (a slow disk while gigabytes arrive) fetch's parser can hit an internal assertion when the
+// connection closes, which throws outside any try/catch and kills the whole process. A plain
+// response stream pauses and resumes safely. Redirects are followed (Hugging Face sends files
+// from its CDN), and the Authorization header is not sent on to another host.
+function httpGet(url, { headers = {}, signal } = {}, hops = 0) {
+  return new Promise((resolve, reject) => {
+    if (signal?.aborted) { const e = new Error('This operation was aborted'); e.name = 'AbortError'; reject(e); return; }
+    const u = new URL(url);
+    const lib = u.protocol === 'http:' ? require('node:http') : require('node:https');
+    const req = lib.get(u, { headers: { 'User-Agent': 'Quicksilver', ...headers } }, (res) => {
+      const code = res.statusCode || 0;
+      if ([301, 302, 303, 307, 308].includes(code) && res.headers.location) {
+        res.resume();
+        if (hops >= 8) { reject(new Error('Download failed (too many redirects).')); return; }
+        const next = new URL(res.headers.location, u);
+        const h = { ...headers };
+        if (next.host !== u.host) { delete h.Authorization; delete h.authorization; }
+        resolve(httpGet(next.toString(), { headers: h, signal }, hops + 1));
+        return;
+      }
+      const cancel = () => { try { res.destroy(); } catch {} };
+      signal?.addEventListener('abort', () => { const e = new Error('This operation was aborted'); e.name = 'AbortError'; res.destroy(e); }, { once: true });
+      resolve({ status: code, ok: code >= 200 && code < 300, headers: { get: (k) => { const v = res.headers[String(k).toLowerCase()]; return v == null ? null : String(v); } }, body: res, cancel });
+    });
+    req.on('error', reject);
+    signal?.addEventListener('abort', () => { const e = new Error('This operation was aborted'); e.name = 'AbortError'; req.destroy(e); }, { once: true });
+  });
+}
+
 async function downloadTo(url, dest, onProgress, signal) {
   const g = stallGuard(signal);
   const out = openForWrite(dest);
   try {
-    const res = await fetch(url, { headers: { 'User-Agent': 'Quicksilver' }, signal: g.signal });
-    if (!res.ok || !res.body) throw new Error(`Download failed (HTTP ${res.status}).`);
+    const res = await httpGet(url, { signal: g.signal });
+    if (!res.ok) { res.cancel(); throw new Error(`Download failed (HTTP ${res.status}).`); }
     const total = Number(res.headers.get('content-length')) || 0;
     let done = 0;
     for await (const chunk of res.body) {
@@ -208,4 +238,4 @@ function version(bin) {
   try { return fs.readFileSync(v, 'utf8').trim(); } catch { return ''; }
 }
 
-module.exports = { installed, resolve, available, install, cancelInstall, remove, version, bundledDir, downloadTo, stallGuard, openForWrite, writeChunk, closeWrite, diskError, extract, findRelease };
+module.exports = { httpGet, installed, resolve, available, install, cancelInstall, remove, version, bundledDir, downloadTo, stallGuard, openForWrite, writeChunk, closeWrite, diskError, extract, findRelease };

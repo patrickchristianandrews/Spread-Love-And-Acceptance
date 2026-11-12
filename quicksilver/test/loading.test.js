@@ -84,9 +84,14 @@ assert.ok(llama.idleMs() >= 20 * 60 * 1000, 'automatic: at least 20 minutes');
   // 4. Two downloads that share a file (Wan 2.2 and its Turbo share a decoder) fetch it once and
   //    both finish; a finished-but-unrenamed part is completed without downloading again.
   const models = require('../src/main/models');
-  const realFetch = globalThis.fetch; let calls = 0;
+  // (Big downloads use io.httpGet, a plain response stream; a stand-in answers here.)
+  const eng = require('../src/main/engines'); const realGet = eng.httpGet; let calls = 0;
   const body = Buffer.alloc(300000, 5);
-  globalThis.fetch = async (url) => { calls++; await new Promise((r) => setTimeout(r, 150)); return new Response(new ReadableStream({ async start(ctl) { for (let i = 0; i < 3; i++) { ctl.enqueue(body.subarray(i * 100000, (i + 1) * 100000)); await new Promise((r) => setTimeout(r, 60)); } ctl.close(); } }), { status: 200, headers: { 'content-length': String(body.length) } }); };
+  eng.httpGet = async () => {
+    calls++; await new Promise((r) => setTimeout(r, 150));
+    async function* chunks() { for (let i = 0; i < 3; i++) { yield body.subarray(i * 100000, (i + 1) * 100000); await new Promise((r) => setTimeout(r, 60)); } }
+    return { status: 200, ok: true, headers: { get: (k) => (String(k).toLowerCase() === 'content-length' ? String(body.length) : null) }, body: chunks(), cancel: () => {} };
+  };
   const item = { role: 'vae', repo: 'someone/shared', path: 'vae.safetensors', size: body.length };
   const run = (id) => new Promise((resolve, reject) => models.start({ id, name: id, kind: 'video', items: [item] }, (ev, d) => { if (d.id !== id) return; if (ev === 'models:done') resolve(d.model); if (ev === 'models:error') reject(new Error(d.message)); }));
   const [x, y] = await Promise.all([run('wan-a'), run('wan-b')]);
@@ -96,7 +101,7 @@ assert.ok(llama.idleMs() >= 20 * 60 * 1000, 'automatic: at least 20 minutes');
   fs.writeFileSync(`${dest2}.part`, body); calls = 0;
   await new Promise((resolve, reject) => models.start({ id: 'wan-c', name: 'c', kind: 'video', items: [{ role: 'vae', repo: 'someone/shared', path: 'other.safetensors', size: body.length }] }, (ev, d) => { if (ev === 'models:done') resolve(); if (ev === 'models:error') reject(new Error(d.message)); }));
   assert.equal(calls, 0, 'a finished part is completed without downloading again'); assert.ok(fs.existsSync(dest2));
-  globalThis.fetch = realFetch;
+  eng.httpGet = realGet;
 
   console.log('✓ loading: models kept loaded (setting), roomy start context, one engine per model, a busy model is never reloaded, a deliberate stop is not a graphics-card failure, a full disk fails cleanly, shared files download once');
   process.exit(0);
