@@ -55,7 +55,7 @@ const TINY = path.join(__dirname, 'fixtures', 'tiny.gguf');
     return { plain: mediaReplySkill(reply), labeled: mediaReplySkill('Sure.\n```image\n{"prompt": "a cat"}\n```'), video: mediaReplySkill('```video\n{"prompt": "waves"}\n```'), code: mediaReplySkill('```json\n{"name": "x"}\n```'), button: /data-act="m-make"/.test(html), shown: stripMediaBlock(reply),
       follow: ['another one, this time at night', 'make her smile', 'same but in winter'].map(isMediaFollowUp), notFollow: ['Thanks! Now write a short poem about lanterns.', 'Lovely, but how do diffusion models work, explain briefly', 'Summarize the history of lanterns with dates', 'thanks, again you nailed it', 'another question: what is the capital of France', 'now in spanish'].map(isMediaFollowUp) };
   });
-  assert.deepEqual([r.plain, r.labelled, r.video, r.code, r.button], ['make-image', 'make-image', 'make-video', null, true]);
+  assert.deepEqual([r.plain, r.labeled, r.video, r.code, r.button], ['make-image', 'make-image', 'make-video', null, true]);
   assert.equal(r.shown, "I'll create a portrait of a lighthouse.");
   assert.deepEqual(r.follow, [true, true, true]); assert.deepEqual(r.notFollow, [false, false, false, false, false, false]);
   // Code chat: its own button under New chat. An ordinary chat set up for programming, on the
