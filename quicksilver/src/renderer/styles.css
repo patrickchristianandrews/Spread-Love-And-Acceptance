@@ -129,6 +129,48 @@ kbd { font-size: .72rem; padding: 1px 6px; border-radius: 6px; border: 1px solid
 .collapsed .collapse-btn { transform: rotate(180deg); }
 .nav-new { display: flex; align-items: center; gap: 10px; width: 100%; padding: 10px 12px; margin: 0 0 8px; background: var(--primary-bg); color: var(--accent-ink); border: none; border-radius: 12px; font-weight: 700; box-shadow: 0 6px 16px rgba(67, 56, 202, .28); transition: background .15s, transform .15s; }
 .nav-new:hover { filter: brightness(1.08); transform: translateY(-1px); }
+/* Code chat: the second way to start, quieter than New chat. */
+.nav-new.nav-code { background: transparent; color: var(--text); border: 1.5px solid var(--line-soft); box-shadow: none; padding: 8px 12px; }
+.nav-new.nav-code:hover { background: var(--soft); filter: none; }
+/* On a built stack or custom AI: the API that would add the most to it. */
+.api-sug { border: 1px solid var(--line); border-radius: 12px; padding: 9px 10px; margin: 10px 0; display: flex; flex-direction: column; gap: 6px; }
+.api-sug-h { font-weight: 700; font-size: .86rem; }
+.api-sug-row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; padding: 6px 8px; border-radius: 9px; background: var(--hover); }
+.api-sug-row .grow { display: flex; flex-direction: column; gap: 2px; min-width: 180px; }
+/* 🔮 On this PC: the forecast for a team you are building or a model you are adding. */
+.fc { border: 1px solid var(--line); border-radius: 14px; padding: 12px 14px; margin: 10px 0; display: flex; flex-direction: column; gap: 8px; }
+.fc-title { font-weight: 700; }
+.fc-line { display: flex; gap: 10px; align-items: flex-start; }
+.fc-line .grow { display: flex; flex-direction: column; gap: 2px; }
+.fc-line.warn b { color: var(--warn, #e0a030); }
+.fc-line.bad b { color: var(--danger, #e5484d); }
+.fc-ic { width: 1.5em; text-align: center; flex: none; }
+.api-sug-list { display: flex; flex-direction: column; gap: 5px; margin-top: 6px; }
+/* The API directory: tasks, then free / free to start / paid, one row a service. */
+.ad-task { margin: 14px 0 4px; }
+.ad-task h4 { margin: 0 0 6px; display: flex; gap: 8px; align-items: baseline; flex-wrap: wrap; }
+.ad-kind { margin: 8px 0 4px; }
+.ad-row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; padding: 8px 10px; border-radius: 10px; background: var(--hover); margin-bottom: 5px; }
+.ad-row .grow { display: flex; flex-direction: column; gap: 2px; min-width: 220px; }
+/* Details that fold away on a card, and the card's buttons wrapping tidily. */
+.card-fold { margin: 6px 0 10px; }
+.card-fold > summary { cursor: pointer; }
+.card-fold[open] > summary { margin-bottom: 8px; }
+.card-acts { flex-wrap: wrap; gap: 6px; }
+.section.sf-new { margin-top: 28px; padding-top: 18px; border-top: 1px solid var(--line); }
+/* Under a message that is about the picture made before it: a small copy of that picture. */
+.from-media { display: flex; align-items: center; justify-content: flex-end; gap: 6px; margin-top: 4px; }
+.from-media img { width: 28px; height: 28px; object-fit: cover; border-radius: 6px; border: 1px solid var(--line); }
+/* The "what to make" choice on the message box: tinted when it is not Auto, so it is noticed. */
+.pill-select.make-pick.on { border-color: var(--accent-line); background: var(--accent-tint); color: var(--accent); }
+/* A Create job that failed: stays, says why, offers another try. */
+.progress-box.failed { border-color: var(--danger, #e5484d); }
+.progress-box.failed .jt { white-space: normal; }
+.progress-box .jp { min-width: 3.2em; text-align: right; font-variant-numeric: tabular-nums; }
+/* Venice with the Liquid Edition: use, speed and quality, one line each. */
+.venice-facts { display: flex; flex-direction: column; gap: 4px; margin: 8px 0 4px; padding: 8px 10px; border: 1px solid var(--line-soft); border-radius: 10px; background: var(--soft); }
+.venice-facts > span { display: block; line-height: 1.4; }
+.code-starters { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 18px; }
 .nav-new kbd { margin-left: auto; border-color: currentColor; }
 .nav { display: flex; flex-direction: column; gap: 2px; }
 .nav-label { font-size: .7rem; font-weight: 800; letter-spacing: .09em; text-transform: uppercase; color: var(--faint); padding: 12px 12px 4px; }
@@ -628,7 +670,7 @@ select optgroup { font-weight: 800; color: var(--muted); }
 .sel-group:first-child { padding-top: 4px; }
 select.sel-open { border-color: var(--accent) !important; }
 .pill-select:has(select.sel-open) { border-color: var(--accent); color: var(--accent); }
-/* If the system list ever shows, it still gets solid, readable colours. */
+/* If the system list ever shows, it still gets solid, readable colors. */
 select { background-color: var(--panel); color: var(--text); }
 .pill-select select { background-color: var(--panel) !important; }
 .int-group { margin: 18px 0 10px; font-size: .78rem; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
@@ -1491,6 +1533,10 @@ code.sel { user-select: all; background: var(--soft); padding: 1px 6px; border-r
 .filtered-note { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin: 0 0 8px; padding: 7px 10px; border-radius: 10px; font-size: .82rem; background: color-mix(in srgb, #e5484d 12%, transparent); border: 1px solid color-mix(in srgb, #e5484d 35%, transparent); }
 .filtered-note .btn { margin-left: auto; }
 .composer-bar .pill-select .muted { white-space: nowrap; }
+/* A pill with a word before the choice ("Effort: Smart"): the word sits after the icon, and the
+   choice follows it closely (the icon is positioned over the pill's left edge). */
+.pill-select.labeled .pill-label { margin-left: 30px; white-space: nowrap; pointer-events: none; }
+.pill-select.labeled select, .pill-select.small.labeled select { padding-left: 6px !important; }
 
 /* Settings → What's inside */
 .about-page .ab-row { display: flex; gap: 10px; align-items: flex-start; padding: 7px 0; border-top: 1px solid color-mix(in srgb, var(--fg, #222) 8%, transparent); }
@@ -1509,3 +1555,32 @@ code.sel { user-select: all; background: var(--soft); padding: 1px 6px; border-r
 /* Composer web status: read-only, follows the Online/Offline switch at the top of the chat. */
 .web-state { display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px; border-radius: 999px; font-size: .8rem; font-weight: 650; white-space: nowrap; background: color-mix(in srgb, #2fa36b 14%, transparent); color: var(--fg, inherit); border: 1px solid color-mix(in srgb, #2fa36b 35%, transparent); cursor: default; }
 .web-state.off { background: color-mix(in srgb, #8a8f98 14%, transparent); border-color: color-mix(in srgb, #8a8f98 35%, transparent); }
+
+/* The chat options sit on one line. When the window is narrow, the buttons keep their icons and
+   drop their words (hover shows what each does), and the two menus shorten, so nothing wraps. */
+.composer-card { container-type: inline-size; }
+.composer-bar { flex-wrap: nowrap; row-gap: 0; }
+.composer-bar > * { flex-shrink: 0; }
+.composer-bar > .grow { flex-shrink: 1; min-width: 0; }
+.composer-bar .pill-select { flex-shrink: 1; min-width: 0; }
+.composer-bar .pill-select select { min-width: 0; max-width: 150px; text-overflow: ellipsis; }
+@container (max-width: 800px) {
+  .composer-bar .chip-tog > span, .composer-bar .pill-label { display: none; }
+  .composer-bar .pill-select.labeled select, .composer-bar .pill-select.small.labeled select { padding-left: 32px !important; }
+  .composer-bar .pill-select select { max-width: 130px; }
+}
+@container (max-width: 520px) {
+  .composer-bar .pill-select select { max-width: 84px; }
+  .composer-bar .bar-sep { display: none; }
+}
+
+/* Meme battle */
+.meme { position: relative; aspect-ratio: 1 / 1; border-radius: 12px; overflow: hidden; background: #111; display: grid; }
+.meme-img { grid-area: 1 / 1; width: 100%; height: 100%; object-fit: cover; }
+.meme-plain { display: flex; align-items: center; justify-content: center; padding: 22% 12%; color: rgba(255,255,255,.88); font-weight: 600; text-align: center; font-size: 15px; }
+.meme-empty { display: flex; align-items: center; justify-content: center; background: var(--panel-2, #f3f3f6); }
+.meme-t { position: absolute; left: 4%; right: 4%; text-align: center; color: #fff; font: 900 clamp(18px, 3.2vw, 34px)/1.05 Impact, "Anton", "Arial Black", sans-serif; text-transform: uppercase; letter-spacing: .5px;
+  paint-order: stroke fill; -webkit-text-stroke: 1.5px #000; text-shadow: 2px 2px 0 #000, -2px 2px 0 #000, 2px -2px 0 #000, -2px -2px 0 #000; overflow-wrap: anywhere; }
+.meme-t.top { top: 3%; }
+.meme-t.bottom { bottom: 3%; }
+.meme-busy { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); background: rgba(0,0,0,.6); color: #fff; padding: 6px 10px; border-radius: 8px; }

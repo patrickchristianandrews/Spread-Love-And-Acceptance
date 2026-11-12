@@ -116,7 +116,7 @@ function chatSetHTML() {
   const p = P();
   return `<div class="stack-v">
     <div class="field"><label for="c-default">Default model or team</label><select id="c-default">${targetOptions(p.defaultTarget, { includeNone: true, noneLabel: 'Automatic' })}</select></div>
-    <label class="row"><input type="checkbox" id="c-auto" ${p.autoAddFound !== false ? 'checked' : ''}> <span><b>📦 Add models from other apps automatically</b> <span class="help">LM Create, Jan, Ollama, GPT4All and Downloads, checked each time Quicksilver starts. Files stay where they are.</span></span></label>
+    <label class="row"><input type="checkbox" id="c-auto" ${p.addFoundModels === true ? 'checked' : ''}> <span><b>📦 Add models from other apps automatically</b> <span class="help">LM Studio, Jan, Ollama, GPT4All and Downloads, checked each time Quicksilver starts. Files stay where they are.</span></span></label>
     <label class="row"><input type="checkbox" id="c-preload" ${p.preloadDefault !== false ? 'checked' : ''}> <span><b>⚡ Load my default model when Quicksilver starts</b> <span class="help">the first reply is much quicker; the model waits in memory in the background</span></span></label>
     <div class="field"><label for="c-effort">Default effort</label><span class="help">Instant uses one model and answers fastest. Auto (recommended) brings in the team only for hard questions. Council has three AIs look at every question and agree an answer (slower, for big decisions).</span><select id="c-effort">${Object.entries(EFFORTS).map(([k, l]) => `<option value="${k}" ${k === (p.effortLevel || 'thorough') ? 'selected' : ''}>${l}</option>`).join('')}</select></div>
     <label class="row"><input type="checkbox" id="c-fact" ${p.factCheck ? 'checked' : ''}> <span><b>✅ Double-check every answer</b> <span class="help">in all chats (you can still turn it off per chat)</span></span></label>
@@ -128,18 +128,26 @@ function chatSetHTML() {
       <div class="field"><label for="c-max">Longest answer (tokens)</label><input id="c-max" type="number" min="256" max="65536" step="256" value="${p.maxTokens}"></div>
     </div>
     <div class="field"><label for="c-gpu">Graphics card use</label><select id="c-gpu"><option value="auto" ${p.gpu !== 0 ? 'selected' : ''}>Automatic (recommended)</option><option value="0" ${p.gpu === 0 ? 'selected' : ''}>Processor only (most compatible)</option></select><span class="help">Choose "Processor only" if models fail to load or crash on your graphics card.</span></div>
+    <label class="row"><input type="checkbox" id="c-autoskill" ${p.autoSkills !== false ? 'checked' : ''}> <span><b>⚡ Just ask</b> <span class="help">Asking for a picture, a video, a photo edit, music, a spoken version, a document, a chart or an app makes it straight away, with no skill to pick. Turn off to choose skills yourself (the / menu and the suggestions stay).</span></span></label>
+    <div class="field"><label for="c-keep">Keep models loaded</label><select id="c-keep">${[['auto', 'Automatic (longer on PCs with more memory)'], [20, '20 minutes after last use'], [60, '1 hour'], [240, '4 hours'], [0, 'Until I close Quicksilver']].map(([v, l]) => `<option value="${v}" ${String(S.config?.keepLoaded ?? 'auto') === String(v) ? 'selected' : ''}>${l}</option>`).join('')}</select><span class="help">A model that's still loaded answers right away; one that was unloaded to free memory has to load again from disk first. Longer keeps chats quick but holds on to memory.</span></div>
     <div><button class="btn primary" id="c-save">Save</button></div>
   </div>`;
 }
 function bindChatSet() {
   $('#c-temp').addEventListener('input', (e) => { $('#c-temp-v').textContent = e.target.value; });
   $('#c-save').addEventListener('click', () => {
+    const was = { ctx: P().contextSize, max: P().maxTokens };
+    // (A length or memory you change here is yours: it then also applies to the built-in assistants.)
+    setTimeout(() => { if (P().contextSize !== was.ctx) P().contextSizeMine = true; if (P().maxTokens !== was.max) P().maxTokensMine = true; save(); }, 0);
     Object.assign(P(), {
-      defaultTarget: $('#c-default').value, autoAddFound: $('#c-auto').checked, preloadDefault: $('#c-preload').checked, effortLevel: $('#c-effort').value, factCheck: $('#c-fact').checked, factChecker: $('#c-checker').value,
+      defaultTarget: $('#c-default').value, defaultAuto: false, defaultChosen: true, autoSkills: $('#c-autoskill').checked, addFoundModels: $('#c-auto').checked, preloadDefault: $('#c-preload').checked, effortLevel: $('#c-effort').value, factCheck: $('#c-fact').checked, factChecker: $('#c-checker').value,
       temperature: Number($('#c-temp').value), contextSize: Number($('#c-ctx').value), maxTokens: Math.max(256, Number($('#c-max').value) || 2048), maxTokensSet: true,
       gpu: $('#c-gpu').value === '0' ? 0 : 'auto', sourcesPerAnswer: Number($('#c-src').value),
     });
-    save(); toast('Saved.');
+    save();
+    const keep = $('#c-keep').value;
+    call('config:set', { keepLoaded: keep === 'auto' ? null : Number(keep) }).then((c) => { S.config = c; }).catch(() => {});
+    toast('Saved.');
   });
 }
 
@@ -183,12 +191,13 @@ function apiSrvHTML() {
   -H "Content-Type: application/json"${a.requireKey ? ' \\\n  -H "Authorization: Bearer YOUR_KEY"' : ''} \\
   -d '{"model": "${esc(S.stacks[0]?.name || 'local:qwen3-8b')}", "messages": [{"role": "user", "content": "Hello"}], "stream": true}'</pre>
       <p class="small muted" style="font-weight:600">Also: <code>POST /v1/images/generations</code> with a local image model.</p></div>
+    <div class="card"><h3>🤖 Coding agents</h3><p class="small muted" style="font-weight:600">OpenCode, Kilo Code, Cline, Roo Code, Continue, Aider and OpenHands can work on whole projects with your models through this API (tool calls included).</p><button class="btn" data-agents>Set up a coding agent</button></div>
   </div>`;
 }
 function bindApiSrv() {
   qs.call('apiserver:status').then((s) => { const changed = JSON.stringify(s) !== JSON.stringify(S.apiStatus); S.apiStatus = s; if (changed && setTab === 'advanced' && S.route.view === 'settings') render(); });
   $('#a-save').addEventListener('click', async () => {
-    S.config = await call('config:set', { apiServer: { enabled: $('#a-on').checked, port: Number($('#a-port').value) || 1337, requireKey: $('#a-key').checked } });
+    S.config = await call('config:set', { apiServer: { enabled: $('#a-on').checked, port: Number($('#a-port').value) || 1337, requireKey: $('#a-key').checked, docker: Boolean(S.config.apiServer.docker) } });
     S.apiStatus = await qs.call('apiserver:status'); render(); toast(S.apiStatus.running ? 'API server running.' : S.apiStatus.error || 'API server off.');
   });
   $('#a-newkey').addEventListener('click', async () => { const k = await call('apiserver:newKey'); navigator.clipboard?.writeText(k); S.config = await call('config:get'); render(); toast('New key created and copied.'); });

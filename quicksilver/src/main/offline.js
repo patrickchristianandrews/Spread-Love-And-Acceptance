@@ -18,7 +18,7 @@ globalThis.fetch = function guardedFetch(input, init) {
   }
   // Private network: "only go online through a VPN" is on and no VPN is connected.
   if (!LOCAL.test(hostOf(input)) && require('./vpn').blocked()) {
-    return Promise.reject(new Error('Private network is on, but no VPN is connected. Connect Proton VPN (Settings → Private network), or turn the setting off.'));
+    return Promise.reject(new Error('Private online is on, but no VPN is connected, so Quicksilver isn\'t connecting to the internet. Connect your VPN, or press "Go online without a VPN" at the top of the page (the setting is under Settings → General → Privacy).'));
   }
   return realFetch(input, init);
 };

@@ -13,11 +13,11 @@ const ROLE = {
   draft: '<span class="badge b-lav">✏️ Answers</span>',
   lead: '<span class="badge b-mint">★ Leads</span>',
 };
-const ROLE_ICON = { image: '🎨', video: '🎬', edit: '🪄', animate: '✨', helper: '✍️' };
+const ROLE_ICON = { image: '🎨', openimage: '🔓', anime: '🎌', video: '🎬', edit: '🪄', animate: '✨', helper: '✍️' };
 
 views.stacks = {
   html() {
-    const jobs = Object.entries(S.catalog.jobs);
+    const jobs = Object.entries(S.catalog.jobs).filter(([, j]) => !j.hidden);
     const goal = ([k, j]) => `<button class="goal ${advJob === k ? 'on' : ''}" data-job="${k}" aria-pressed="${advJob === k}">
       <span class="goal-ic">${j.icon}</span><span><b>${esc(j.label)}</b><span class="small muted">${esc(j.pitch)}</span></span></button>`;
     const head = `<div class="page-head"><h1>Stacks &amp; Fusion</h1><a href="#" class="small og-link" data-guide="stacks" style="align-self:center">ⓘ What's the difference?</a></div>
@@ -33,16 +33,18 @@ views.stacks = {
       <p class="lede"><b>A stack is a ready-made combination of AI models, picked and set up by Quicksilver for a job and fitted to this PC.</b> They answer separately, then a lead combines the best of each and fixes mistakes. Pick what you want to do and Quicksilver shows the best stack for this PC. Want to choose the AIs yourself, cloud ones included? That's <a href="#" data-sf-tab="fusion">⚗️ Fusion</a>.</p>
       ${foundBanner()}
       ${shownUpgrades().length || shownStackUpdates().length ? modelUpdatesHTML() : ''}
+      <div class="section"><h2>Your stacks</h2><span class="small muted">The stacks on this PC, each with the API that would add the most to it. Your fusions are on the <a href="#" data-sf-tab="fusion">⚗️ Fusion</a> tab.</span></div>
+      ${yourStacksHTML()}
+      ${kitsHTML()}
+      ${liquidEditionsHTML()}
+      <div class="section sf-new"><h2>Set up another stack</h2><span class="small muted">Two steps: pick the job, then press the button.</span></div>
       <div class="section"><h2>1. What do you want to do?</h2>${hwLine()}<button class="btn small" data-goto="compare" style="margin-left:auto">Compare stacks</button></div>
       <div class="goal-group"><div class="label">Think &amp; work</div><div class="goal-grid">${jobs.filter(([, j]) => j.kind === 'text').map(goal).join('')}</div></div>
-      <div class="goal-group"><div class="label">Create</div><div class="goal-grid">${jobs.filter(([, j]) => j.kind === 'media').map(goal).join('')}</div></div>
+      <div class="goal-group"><div class="label">Pictures, video &amp; music</div><div class="goal-grid">${jobs.filter(([, j]) => j.kind === 'media' || j.kind === 'music').map(goal).join('')}</div></div>
       <div class="section"><h2>2. Set it up</h2></div>
       <div id="adv-out">${advResult ? advisorHTML(advResult) : '<div class="empty">Checking your PC and your models…</div>'}</div>
-      <div class="section"><h2>Your stacks</h2><span class="small muted">Stacks you've set up. Your fusions are on the <a href="#" data-sf-tab="fusion">⚗️ Fusion</a> tab.</span></div>
-      ${yourStacksHTML()}
-      ${suggestSectionHTML('stacks')}
       ${recipesHTML()}
-      ${kitsHTML()}
+      ${suggestSectionHTML('stacks')}
     </div>`;
   },
   bind() {
@@ -51,6 +53,7 @@ views.stacks = {
     $$('[data-sf-tab]').forEach((b) => b.addEventListener('click', (e) => { e.preventDefault(); stacksTab = b.dataset.sfTab; render(); }));
     if (stacksTab !== 'community' && document.querySelector('.sug-sec')) bindSuggest(document.querySelector('.sug-sec'));
     $$('[data-sug-open]').forEach((b) => b.addEventListener('click', () => suggestModal(b.dataset.sugOpen)));
+    bindStackApi();
     $$('#fusion-new-main').forEach((b) => b.addEventListener('click', () => infuseModal(() => render())));
     if (stacksTab === 'community') bindCommunity();
     if (!advJob) { runAdvisor('general'); return; }
@@ -60,6 +63,7 @@ views.stacks = {
     if (stacksTab === 'stacks') bindAdvisor(); // the Setup Advisor is only on the Stacks tab
     bindRecipes();
     $$('[data-edit-stack]').forEach((b) => b.addEventListener('click', () => { const st = S.stacks.find((s) => s.id === b.dataset.editStack); if (isFusion(st) && st.infused) infuseModal(() => render(), st); else editStack(st); }));
+    $$('[data-liquid-addons]').forEach((b) => b.addEventListener('click', () => liquidAddonsModal()));
     $$('[data-fz-rate]').forEach((b) => b.addEventListener('click', () => fusionRateModal(b.dataset.fzRate)));
     $$('[data-del-stack]').forEach((b) => b.addEventListener('click', async () => {
       if (!(await confirmBox(`Delete this ${S.stacks.find((s) => s.id === b.dataset.delStack) && isFusion(S.stacks.find((s) => s.id === b.dataset.delStack)) ? 'fusion' : 'stack'}? The models stay installed.`))) return;
@@ -105,19 +109,20 @@ function foundBanner() {
 function foundModal() {
   const f = S.found || [];
   const b = openModal(`<h2>📦 Models already on this PC</h2>
-    <p class="help">These were downloaded by other apps or are in your Downloads folder. Quicksilver uses them where they are: nothing is copied, and removing them here never deletes the file.</p>
-    <div class="pick-list">${f.map((m, i) => `<label class="pick-row"><input type="checkbox" data-found="${i}" checked>
+    <p class="help">These chat models were downloaded by other apps or are in your Downloads folder. Tick the ones you want to use in Quicksilver; none are added unless you choose them, and an added model is only used when you pick it (or tick it under Models → Models in use). Quicksilver uses them where they are: nothing is copied, and removing them here never deletes the file.</p>
+    <div class="pick-list">${f.map((m, i) => `<label class="pick-row"><input type="checkbox" data-found="${i}">
       <span class="grow"><b>${esc(m.name)}</b>${m.vision ? ' <span title="Can see photos">👁</span>' : ''}<div class="small muted">${esc(m.app)} · ${gb(m.size)} · <span title="${esc(m.path)}">${esc(m.path.length > 70 ? `…${m.path.slice(-68)}` : m.path)}</span></div></span></label>`).join('')}</div>
     <div class="modal-actions"><button class="btn" data-close>Cancel</button><button class="btn primary" id="found-add">Add selected</button></div>`, { wide: true });
   b.querySelector('#found-add').addEventListener('click', async () => {
     const items = [...b.querySelectorAll('[data-found]:checked')].map((x) => f[Number(x.dataset.found)]);
     if (!items.length) { closeModal(); return; }
     const btn = b.querySelector('#found-add'); btn.disabled = true; btn.textContent = 'Adding…';
-    const added = await call('models:addFound', items);
+    let added;
+    try { added = await qs.call('models:addFound', items); } catch (err) { btn.disabled = false; btn.textContent = 'Add selected'; toast(err.message, 8000); return; }
     closeModal();
     await refreshModels();
     S.found = f.filter((x) => !items.includes(x));
-    toast(added.length ? `Added ${added.length} model${added.length > 1 ? 's' : ''}. No download needed.` : 'Those files could not be read as models.');
+    toast(added.length ? `Added ${added.length} model${added.length > 1 ? 's' : ''}. No download needed. ${added.length > 1 ? 'They are' : 'It is'} only used when you choose ${added.length > 1 ? 'them' : 'it'}; to let Quicksilver use ${added.length > 1 ? 'them' : 'it'} by itself, tick ${added.length > 1 ? 'them' : 'it'} under Models → Models in use.` : 'Those files could not be read as chat models.', 9000);
     if (advJob && S.route.view === 'stacks') runAdvisor(advJob); else render();
   });
 }
@@ -139,6 +144,7 @@ async function runAdvisor(job) {
 }
 
 function advisorHTML(r) {
+  if (r.kind === 'music') return songsHTML(r);
   return `${howItWorksHTML(r)}<div class="adv-grid">${r.kind === 'media' ? mineKitHTML(r) : mineTextHTML(r)}${bestHTML(r)}</div>${tiersHTML(r)}${cloudHTML(r)}`;
 }
 
@@ -174,7 +180,7 @@ function mineTextHTML(r) {
   const rows = textRows(r);
   if (!rows.length) {
     const any = S.installed.some((m) => m.kind === 'text');
-    const why = any && r.job === 'open' ? 'None of your models are unfiltered ones yet. Use the setup on the right, or add a Hermes, Dolphin or Mistral model (from LM Create, Ollama or Models).'
+    const why = any && r.job === 'open' ? 'None of your models are unfiltered ones yet. Use the setup on the right, or add a Hermes, Dolphin or Mistral model (from LM Studio, Ollama or Models).'
       : `No models on this PC yet. Use the setup on the right${S.found?.length ? ', add the ones found on this PC above,' : ''} or import a .gguf file under Models.`;
     return `<div class="card adv-mine"><h3>Use the models you have</h3><p class="muted" style="font-weight:600">${why}</p></div>`;
   }
@@ -213,17 +219,17 @@ function textSummary(p, r) {
 
 function mineKitHTML(r) {
   const main = r.roles[0];
-  const pool = (role) => (r.yours || []).filter((y) => (role === 'helper' ? y.category === 'text' : role === 'animate' ? y.category === 'video' && y.animate : role === 'image' ? y.category === 'image' : y.category === role));
+  const pool = (role) => (r.yours || []).filter((y) => (role === 'helper' ? y.category === 'text' : role === 'animate' ? y.category === 'video' && y.animate : role === 'image' ? (y.category === 'image' || y.category === 'open') : y.category === role));
   if (!r.mine) return `<div class="card adv-mine"><h3>Use the models you have</h3><p class="muted" style="font-weight:600">You don't have a model that ${esc(r.roleLabels[main].toLowerCase())} yet. Use the setup on the right, or pick one under Models → Images &amp; video.</p></div>`;
   return `<div class="card hl adv-mine">
     <div class="row"><h3 class="grow">Use the models you have</h3><span class="badge b-mint">Nothing to download</span></div>
-    <p class="small muted adv-help">Choose a model for each job. Create will use these by default.</p>
+    <p class="small muted adv-help">Choose a model for each job. Chats and Gallery & tools will use these by default.</p>
     <div class="kit-rows">${r.roles.map((role) => {
       const opts = pool(role);
       return `<div class="kit-row"><span class="kit-role">${ROLE_ICON[role]} ${esc(r.roleLabels[role])}</span>
         <select data-kit="${role}" ${opts.length ? '' : 'disabled'}>${opts.length ? `<option value="">None</option>${opts.map((y) => `<option value="local:${esc(y.id)}" ${advKit[role] === `local:${y.id}` ? 'selected' : ''}>${esc(y.name)}</option>`).join('')}` : '<option>None installed</option>'}</select></div>`;
     }).join('')}</div>
-    <div class="adv-foot"><span class="grow small muted">✍️ The prompt writer powers the ✨ Improve buttons in Create.</span><button class="btn primary" id="kit-create">Use this setup</button></div>
+    <div class="adv-foot"><span class="grow small muted">✍️ The prompt writer powers the ✨ Improve buttons in Gallery &amp; tools.</span><button class="btn primary" id="kit-create">Use this setup</button></div>
   </div>`;
 }
 
@@ -281,7 +287,7 @@ async function saveTextStack(r, stack, waiting = 0) {
   // Point the matching assistant at the new team, with its tuned settings.
   const a = S.data.assistants.find((x) => x.job === r.job);
   if (a) Object.assign(a, { target: `stack:${stack.id}`, temperature: r.settings.temperature, contextSize: r.settings.contextSize, maxTokens: r.settings.maxTokens });
-  if (r.job === 'general' || !targetValid(S.data.prefs.defaultTarget)) S.data.prefs.defaultTarget = `stack:${stack.id}`;
+  if (r.job === 'general' || !targetValid(S.data.prefs.defaultTarget)) { S.data.prefs.defaultTarget = `stack:${stack.id}`; S.data.prefs.defaultAuto = false; }
   save();
   await refreshModels();
   if (waiting) { toast(`Team created. ${waiting} model${waiting > 1 ? 's are' : ' is'} downloading; you can chat as soon as ${waiting > 1 ? 'they finish' : 'it finishes'}.`, 6000); render(); return; }
@@ -302,8 +308,8 @@ function saveKit(r, kit, waiting = 0) {
   if (k.animate && !p.videoModel) p.videoModel = k.animate;
   if (k.helper) p.promptHelper = k.helper;
   save();
-  if (waiting) { toast(`Setting up ${r.label}. ${waiting} model${waiting > 1 ? 's are' : ' is'} downloading; Create is ready when ${waiting > 1 ? 'they finish' : 'it finishes'}.`, 6000); render(); return; }
-  toast(`${r.label} is set up. Create now uses these models.`);
+  if (waiting) { toast(`Setting up ${r.label}. ${waiting} model${waiting > 1 ? 's are' : ' is'} downloading; pictures and video are ready when ${waiting > 1 ? 'they finish' : 'it finishes'}.`, 6000); render(); return; }
+  toast(`${r.label} is set up. Pictures and video now use these models.`);
   studioTab = r.job === 'edit' ? 'edit' : 'create';
   go({ view: 'studio' });
 }
@@ -337,14 +343,14 @@ const isFusion = (s) => Boolean(s?.infused || s?.builtFor === 'power');
 let stacksTab = 'stacks';
 function yourStacksHTML() {
   const list = S.stacks.filter((s) => !isFusion(s));
-  if (!list.length) return '<p class="muted">No stacks yet. Pick what you want to do above, or set up a ready-made one below.</p>';
+  if (!list.length) return '<p class="muted">No stacks yet. Pick what you want to do below, or set up a ready-made one further down.</p>';
   return `<div class="cards">${list.map(stackCard).join('')}</div>`;
 }
 // Create kits are the picture and video models Create uses: not a stack, so they get their own section.
 function kitsHTML() {
   const kits = Object.entries(S.data.mediaKits || {}).filter(([k]) => S.catalog.jobs[k]);
   if (!kits.length) return '';
-  return `<div class="section"><h2>🎨 Create kits</h2><span class="small muted">The picture and video models Create uses. Not stacks: they make media, they don't answer chats.</span></div>
+  return `<div class="section"><h2>🎨 Picture &amp; video kits</h2><span class="small muted">The picture and video models Quicksilver uses when you ask for one. Not stacks: they make media, they don't answer chats.</span></div>
     <div class="cards">${kits.map(([k, kit]) => kitCard(k, kit)).join('')}</div>`;
 }
 
@@ -369,9 +375,9 @@ function kitCard(k, kit) {
   const j = S.catalog.jobs[k];
   const labels = { image: 'Creates pictures', video: 'Makes videos', edit: 'Edits photos', animate: 'Brings photos to life', helper: 'Writes prompts' };
   return `<div class="card">
-    <div class="row"><span class="emoji-badge">${j.icon}</span><h3 class="grow">${esc(j.label)}</h3><span class="badge b-peach">Create</span></div>
+    <div class="row"><span class="emoji-badge">${j.icon}</span><h3 class="grow">${esc(j.label)}</h3><span class="badge b-peach">Pictures &amp; video</span></div>
     <div class="stack-v" style="gap:6px;margin:12px 0">${Object.entries(kit).map(([role, t]) => `<div class="row"><span class="badge b-lav">${ROLE_ICON[role]} ${labels[role]}</span><b class="small">${esc(targetLabel(t) === 'No model chosen' ? modelName(t.replace(/^local:/, '')) : targetLabel(t))}</b>${isInstalled(t.replace(/^local:/, '')) ? '' : '<span class="badge b-pink">downloading</span>'}</div>`).join('')}</div>
-    <div class="row"><button class="btn small primary" data-kit-open="${k}">Open Create</button><button class="btn small danger" data-kit-del="${k}">Remove</button></div>
+    <div class="row"><button class="btn small primary" data-kit-open="${k}">Open Gallery &amp; tools</button><button class="btn small danger" data-kit-del="${k}">Remove</button></div>
   </div>`;
 }
 
@@ -391,9 +397,9 @@ function stackCard(s) {
     <div class="stack-v" style="gap:6px;margin:12px 0">${rows.map(([role, t]) => `<div class="row">${ROLE[role]}<b class="small">${esc(targetLabel(t))}</b>${targetValid(t) ? '' : '<span class="badge b-pink">not installed yet</span>'}</div>`).join('')}</div>
     ${isFusion(s) ? fusionRatingsHTML(s.members, { compact: true }) : ''}
     ${timesHTML(etaFor(`stack:${s.id}`))}
-    ${boostsHTML(rows.map(([, t]) => t), { compact: true, liquid: s.builtFor === 'quicksilver' })}
-    ${stackScoresHTML(rows.map(([, t]) => t))}
-    <div class="row"><button class="btn small primary" data-chat-stack="${s.id}">Chat</button><button class="btn small" data-edit-stack="${s.id}">Edit</button>${isFusion(s) ? `<button class="btn small" data-fz-rate="${s.id}">📊 Rating &amp; tips</button>` : ''}${boostBtn(`stack:${s.id}`)}<button class="btn small ghost" data-sug-open="stack:${s.id}" title="The best model to join and API to add for a task you pick">💡 What to add</button>${isFusion(s) && !s.community ? `<button class="btn small" data-publish="${s.id}">📤 Publish</button>` : ''}<button class="btn small danger" data-del-stack="${s.id}">Delete</button></div>
+    ${stackApiHTML(s)}
+    <details class="card-fold"><summary class="small muted">Test scores and what it can make</summary>${stackScoresHTML(rows.map(([, t]) => t))}${boostsHTML(rows.map(([, t]) => t), { compact: true, liquid: isLiquidStack(s) })}</details>
+    <div class="row card-acts"><button class="btn small primary" data-chat-stack="${s.id}">Chat</button>${isLiquidStack(s) ? '' : `<button class="btn small" data-edit-stack="${s.id}">Edit</button>`}${isFusion(s) ? `<button class="btn small" data-fz-rate="${s.id}">📊 Rating &amp; tips</button>` : ''}${boostBtn(`stack:${s.id}`)}${s.builtFor === 'quicksilver' ? `<button class="btn small" data-liquid-addons title="Optional models that fill gaps in the Liquid Edition">💧 Suggested add-ons${liquidAddonsLeft() ? ` · ${liquidAddonsLeft()}` : ''}</button>` : ''}<button class="btn small ghost" data-sug-open="stack:${s.id}" title="The best model to join and API to add for a task you pick">💡 What to add</button>${isFusion(s) && !s.community ? `<button class="btn small" data-publish="${s.id}">📤 Publish</button>` : ''}${isLiquidStack(s) ? '<span class="badge b-lav" title="The Liquid Edition can\'t be edited or deleted; choose another model or stack whenever you like">🔒 Locked</span>' : `<button class="btn small danger" data-del-stack="${s.id}">Delete</button>`}</div>
   </div>`;
 }
 
@@ -402,7 +408,7 @@ function editStack(s) {
   const nonStack = { ...S, targets: S.targets.filter((t) => !t.stack) };
   const opts = (sel, none) => { const keep = S.targets; S.targets = nonStack.targets; const h = targetOptions(sel, { includeNone: true, noneLabel: none }); S.targets = keep; return h; };
   const visionOpts = () => `<option value="">None (or a drafter can see)</option>${S.targets.filter((t) => t.vision && !t.stack).map((t) => `<option value="${esc(t.target)}" ${t.target === v.members.vision ? 'selected' : ''}>${esc(t.label)}</option>`).join('')}`;
-  const b = openModal(`<h2>${s ? 'Edit team' : 'Build your own team'}</h2>
+  const b = openModal(`<h2>${s?.id ? 'Edit team' : 'Build your own team'}</h2>
     <p class="help">Mix any models: ones on this PC and ones from connected APIs (for example, two local drafters with Claude or GPT as the lead). Local models take turns; cloud models run at the same time.</p>
     <div class="stack-v">
       <div class="row"><div class="field" style="width:110px"><label for="st-emoji">Icon</label><select id="st-emoji">${['🧩', '🚀', '📊', '🔎', '💻', '📷', '⚖️', '🧠'].map((e) => `<option ${e === v.emoji ? 'selected' : ''}>${e}</option>`).join('')}</select></div>
@@ -415,9 +421,22 @@ function editStack(s) {
     <div class="modal-actions"><button class="btn" data-close>Cancel</button><button class="btn primary" id="st-save">Save team</button></div>`, { wide: true });
   const preview = () => {
     const drafters = [0, 1, 2].map((i) => b.querySelector(`#st-d${i}`).value).filter(Boolean);
-    b.querySelector('#st-preview').innerHTML = teamPreviewHTML({ drafters, judge: b.querySelector('#st-lead').value || undefined, vision: b.querySelector('#st-vision').value || undefined, mode: v.members.mode });
+    const mem = { drafters, judge: b.querySelector('#st-lead').value || undefined, vision: b.querySelector('#st-vision').value || undefined, mode: v.members.mode };
+    // What to expect on this PC with these models, redone on every change, then speed and quality.
+    const all = [...drafters, mem.judge, mem.vision];
+    const fc = drafters.length ? pcForecast(all, { members: mem }) : null;
+    b.querySelector('#st-preview').innerHTML = (fc ? pcForecastHTML(all, { members: mem, title: 'On this PC: how this team will behave', extra: buildApiHTML(all, { addLabel: 'Use as the lead', hardSec: fc.hardSec }) }) : '') + teamPreviewHTML(mem);
+    // A suggested API you have connected becomes the lead; one you have not opens its connect
+    // box, and the team you were building comes back afterwards.
+    b.querySelectorAll('#st-preview [data-api-pick]').forEach((x) => x.addEventListener('click', () => { const lead = b.querySelector('#st-lead'); if (![...lead.options].some((o) => o.value === x.dataset.apiPick)) { toast('That cloud AI is not in the list yet.'); return; } lead.value = x.dataset.apiPick; preview(); toast(`${targetLabel(x.dataset.apiPick)} is now the lead: it writes the final answer.`); }));
+    b.querySelectorAll('#st-preview [data-api-connect-back]').forEach((x) => x.addEventListener('click', () => {
+      const draft = { ...(s || {}), name: b.querySelector('#st-name').value, emoji: b.querySelector('#st-emoji').value, members: { ...mem } };
+      connectThenReturn(x.dataset.apiConnectBack, () => editStack(draft));
+    }));
   };
-  b.querySelector('.stack-v').addEventListener('change', preview); // this window's own fields (the modal frame is shared)
+  // Redrawn when the models change, not when the name does: leaving the name box by clicking a
+  // button in the preview would otherwise replace that button mid-click, and the click was lost.
+  b.querySelector('.stack-v').addEventListener('change', (e) => { if (!['st-name', 'st-emoji'].includes(e.target?.id)) preview(); }); // this window's own fields (the modal frame is shared)
   preview();
   b.querySelector('#st-save').addEventListener('click', async () => {
     const drafters = [0, 1, 2].map((i) => b.querySelector(`#st-d${i}`).value).filter(Boolean);
@@ -449,7 +468,7 @@ function strengthOf(t) {
 function infuseModal(onCreated, existing) {
   const options = S.targets.filter((t) => !t.stack);
   if (options.length < 2) { toast('A fusion needs at least two AIs: install a model or connect a cloud AI (Models).', 6000); return; }
-  const b = openModal(`<h2>⚗️ ${existing ? `Edit ${esc(existing.name)}` : 'Build a custom AI'}</h2>
+  const b = openModal(`<h2>⚗️ ${existing?.id ? `Edit ${esc(existing.name)}` : 'Build a custom AI'}</h2>
     <p class="help">Choose 2 to 4 AIs. Mixing different makers (for example Qwen + Llama + Claude) gives the biggest boost: they make different mistakes, so they catch each other's.</p>
     <div class="stack-v">
       <div class="row" style="justify-content:space-between;flex-wrap:wrap;gap:6px"><div class="label">1. Pick the AIs to fuse (2 to 4)</div><label class="row small" style="gap:6px"><input type="checkbox" id="inf-unc"> 🔓 Uncensored only</label></div>
@@ -475,7 +494,7 @@ function infuseModal(onCreated, existing) {
     for (const t of m.drafters || []) { const cb = b.querySelector(`.infuse-opt input[value="${CSS.escape(t)}"]`); if (cb) cb.checked = true; }
     const r = b.querySelector(`input[name="im"][value="${m.mode || 'blend'}"]`); if (r) r.checked = true;
     if (m.judge) b.querySelector('#inf-lead').value = m.judge;
-    b.querySelector('#inf-name').value = existing.name;
+    b.querySelector('#inf-name').value = existing.name || '';
   }
   b.querySelector('.infuse-pick').addEventListener('change', () => {
     const n = picked().length;
@@ -493,9 +512,27 @@ function infuseModal(onCreated, existing) {
     const sees = (t) => S.targets.find((x) => x.target === t)?.vision;
     const vision = drafters.some(sees) ? undefined : S.targets.find((t) => t.vision && !t.stack)?.target;
     const mem = { drafters, judge, vision, mode: b.querySelector('input[name="im"]:checked').value };
-    el.innerHTML = fusionRatingsHTML(mem) + fusionAdviceHTML(mem) + boostsHTML([...drafters, judge], { fusion: true }) + teamPreviewHTML(mem, { title: 'How your custom AI will work on this PC' });
+    const all = [...drafters, judge, vision];
+    const fc = pcForecast(all, { members: mem });
+    const apis = buildApiHTML(all, { liquid: b.querySelector('#inf-unc').checked, hardSec: fc?.hardSec });
+    el.innerHTML = fusionRatingsHTML(mem) + pcForecastHTML(all, { members: mem, title: 'On this PC: how your custom AI will behave', noVerdict: true, extra: apis }) + fusionAdviceHTML(mem) + boostsHTML([...drafters, judge], { fusion: true }) + teamPreviewHTML(mem, { title: 'How your custom AI will work on this PC' });
+    // A suggested API you have connected is ticked in the list above; one you have not opens
+    // its connect box, and this build comes back afterwards exactly as it was.
+    el.querySelectorAll('[data-api-pick]').forEach((x) => x.addEventListener('click', () => {
+      const cb = b.querySelector(`.infuse-opt input[value="${CSS.escape(x.dataset.apiPick)}"]`);
+      if (!cb) { toast('That cloud AI is not in the list yet.'); return; }
+      if (picked().length >= 4 && !cb.checked) { toast('Four is the most: untick one first.'); return; }
+      cb.checked = true; cb.dispatchEvent(new Event('change', { bubbles: true }));
+      toast(`${targetLabel(x.dataset.apiPick)} added to your custom AI.`);
+    }));
+    el.querySelectorAll('[data-api-connect-back]').forEach((x) => x.addEventListener('click', () => {
+      const draft = { ...(existing || {}), name: b.querySelector('#inf-name').value, members: { drafters, mode: mem.mode, judge: b.querySelector('#inf-lead').value || undefined } };
+      connectThenReturn(x.dataset.apiConnectBack, () => infuseModal(onCreated, draft));
+    }));
   };
-  b.querySelector('.stack-v').addEventListener('change', preview); // this window's own fields (the modal frame is shared)
+  // Redrawn when the picks change, not when the name does: leaving the name box by clicking a
+  // button in the preview would otherwise replace that button mid-click, and the click was lost.
+  b.querySelector('.stack-v').addEventListener('change', (e) => { if (e.target?.id !== 'inf-name') preview(); }); // this window's own fields (the modal frame is shared)
   preview();
   b.querySelector('#inf-go').addEventListener('click', async () => {
     const drafters = picked();
@@ -514,3 +551,118 @@ function infuseModal(onCreated, existing) {
     if (onCreated) onCreated(stack); else render();
   });
 }
+
+// ---------- the Liquid Edition's suggested add-ons ----------
+// Optional, never required or locked: each fills a gap in the core, and joins the crew once downloaded.
+const addonSpec = (id) => S.catalog.text.find((m) => m.id === id) || S.catalog.media.find((m) => m.id === id);
+const addonHave = (id) => S.installed.some((m) => m.catalogId === id);
+const addonFits = (a) => !a.minVramGB || (S.est?.hardware?.vramGB || 0) >= a.minVramGB - 0.5;
+const liquidAddonsLeft = () => (S.catalog?.liquidAddons || []).filter((a) => !addonHave(a.id) && addonFits(a)).length;
+function liquidAddonsHTML() {
+  return (S.catalog?.liquidAddons || []).map((a) => {
+    const c = addonSpec(a.id);
+    if (!c) return '';
+    const kind = S.catalog.text.some((m) => m.id === a.id) ? 'text' : 'media';
+    const est = S.est?.[kind]?.[a.id];
+    const size = (c.sizeGB || 0) + (c.mmprojGB || 0);
+    const action = addonHave(a.id) ? '<span class="badge b-mint">✓ Installed: on the crew</span>'
+      : S.downloads[a.id] ? downloadBox(a.id)
+      : `<button class="btn small ${addonFits(a) ? 'primary' : ''}" data-addon-get="${esc(a.id)}">Download · ${size.toFixed(1)} GB</button>`;
+    return `<div class="card"><div class="row"><h3 class="grow">${esc(c.name)}</h3>${est ? rateBadge(est, kind) : ''}</div>
+      <p class="desc">${esc(a.why)}</p>${addonFits(a) ? '' : `<p class="small muted">Best with a ${a.minVramGB} GB+ graphics card; it will be slow on this PC.</p>`}${action}</div>`;
+  }).join('');
+}
+function liquidAddonsModal() {
+  openModal(`<h2>💧 Suggested add-ons for the Liquid Edition</h2>
+    <p class="small muted" style="margin-top:-4px">Optional. The Liquid Edition is complete without them; each one fills a gap. Once downloaded it joins the crew by itself (untick it under Models → Models in use to keep it out), and you can remove it like any other model. More uncensored models are under Models → Uncensored.</p>
+    <div class="cards" id="addon-list">${liquidAddonsHTML()}</div>
+    <div class="modal-actions"><button class="btn" data-close>Close</button></div>`, { wide: true });
+  $('#addon-list').addEventListener('click', async (e) => {
+    const b = e.target.closest('[data-addon-get]');
+    if (!b) return;
+    const c = addonSpec(b.dataset.addonGet);
+    await download({ catalogId: b.dataset.addonGet }, c?.name).catch((err) => toast(err.message, 6000));
+    $('#addon-list').innerHTML = liquidAddonsHTML();
+  });
+}
+
+// ----- Full songs: a songwriter stack on this PC, complete sung songs in the cloud -----
+function songsHTML(r) {
+  const rx = (typeof STACK_RECIPES !== 'undefined' ? STACK_RECIPES : []).find((x) => x.id === r.recipe);
+  const have = S.stacks.some((x) => x.id === `rx-${r.recipe}`);
+  return `<div class="adv-grid">
+    <div class="card adv-mine"><h3>🎶 On this PC: free and private</h3>
+      <p class="small">${esc(rx?.name || 'Songwriter')}. A stack of your models writes the lyrics, chords and melody, and the built-in synth plays a demo beat (instrumental). Nothing leaves this computer.</p>
+      <div class="row">${have ? '<span class="badge b-mint">✓ Set up</span>' : '<button class="btn small primary" data-song-setup>Set up the Songwriter stack</button>'}<button class="btn small" data-song-open="music">Open Gallery & tools → Music</button></div></div>
+    <div class="card adv-best"><h3>🎤 Complete sung songs: cloud</h3>
+      <p class="small">Whole songs with vocals, verses, chorus and bridge, from your lyrics: ElevenLabs Music (about $0.80 a minute), MiniMax Music 2.6 (about $0.15 a song) or Mureka v9, all on fal.ai with one key. No open model sings a full song on a PC yet.</p>
+      <div class="row"><button class="btn small primary" data-song-open="cloud">Open Gallery & tools → Cloud</button></div></div>
+  </div>`;
+}
+document.addEventListener('click', (e) => {
+  if (e.target.closest('[data-song-setup]')) { setUpRecipe('song-complete').then(() => render()).catch((err) => toast(err.message, 6000)); return; }
+  const o = e.target.closest('[data-song-open]');
+  if (o) { studioTab = o.dataset.songOpen; go({ view: 'studio' }); }
+});
+
+// ---------- the Liquid Editions, at the top of Stacks ----------
+// The Liquid Edition (any PC, comes with Quicksilver) and Liquid Edition Pro (a powerful PC):
+// what each is, what it needs, whether this PC is up to it, and one button to get Pro.
+function proFit() {
+  const P = S.catalog?.liquidPro || {};
+  const hw = S.est?.hardware || {};
+  const v = hw.vramGB || 0; const r = hw.ramGB || 0;
+  if (!S.est) return { level: 'unknown', text: 'Checking this PC…' };
+  const spec = `this PC: ${v ? `${Math.round(v)} GB graphics card` : 'no graphics card'}, ${Math.round(r)} GB memory`;
+  if (v >= P.recVramGB - 0.5 && r >= P.recRamGB - 2) return { level: 'great', text: `✓ Runs great on ${spec}.` };
+  if (v >= P.minVramGB - 0.5 && r >= P.minRamGB - 2) return { level: 'ok', text: `✓ Runs on ${spec}; a 24 GB graphics card and 64 GB memory make it faster.` };
+  return { level: 'no', text: `⚠️ Too much for ${spec}. Pro needs at least a ${P.minVramGB} GB graphics card and ${P.minRamGB} GB memory; it would be very slow here. The Liquid Edition is the one for this PC.` };
+}
+function liquidEditionsHTML() {
+  const P = S.catalog?.liquidPro;
+  if (!P) return '';
+  const spec = (id) => S.catalog.text.find((m) => m.id === id) || S.catalog.media.find((m) => m.id === id);
+  const have = (id) => S.installed.some((m) => m.catalogId === id);
+  const rows = [['🧠 Brain', P.brain], ['🏁 Closer · sees photos', P.closer], ['🧮 Thinker', P.thinker], ['🎨 Muse · stories', P.muse], ['🖼️ Pictures', P.pictures[0]], ['🎌 Anime', P.pictures[1]]];
+  const missing = [...new Set([P.brain, P.closer, P.thinker, P.muse, ...P.pictures])].filter((id) => !have(id) && spec(id));
+  const missingGB = missing.reduce((t, id) => t + (spec(id).sizeGB || 0) + (spec(id).mmprojGB || 0), 0);
+  const downloading = missing.filter((id) => S.downloads[id]);
+  const ready = S.stacks.some((s) => s.id === 'quicksilver-pro');
+  const fit = proFit();
+  const liquidReady = S.stacks.some((s) => s.id === 'quicksilver');
+  return `<div class="section"><h2>💧 The Liquid Editions</h2><span class="small muted">Quicksilver's own uncensored crews: several AI models working as one, all on this PC. Locked, so they always work the way they were built.</span></div>
+    <div class="cards" id="liquid-editions" style="margin-bottom:18px">
+      <div class="card">
+        <div class="row"><span class="emoji-badge">💧</span><h3 class="grow">Liquid Edition</h3><span class="badge b-mint">For any PC</span></div>
+        <p class="desc">Comes with Quicksilver. Qwen3.5 4B answers and sees photos, Qwen3.5 9B leads hard questions, Qwen3.5 2B adds fresh angles; Lustify makes pictures and Wan 2.2 makes video. Runs on laptops and everyday PCs; best with an 8 GB graphics card.</p>
+        <div class="row">${liquidReady ? '<button class="btn small primary" data-chat-stack="quicksilver">Chat</button><span class="badge b-lav">🔒 Locked</span>' : '<span class="badge b-lemon">Setting up…</span>'}</div>
+      </div>
+      <div class="card ${fit.level === 'no' ? '' : 'hl'}">
+        <div class="row"><span class="emoji-badge">💎</span><h3 class="grow">Liquid Edition Pro</h3><span class="badge b-lav">For a powerful PC</span></div>
+        <p class="desc">The Liquid Edition with bigger, smarter uncensored models in every role: sharper answers, better reasoning and writing, and top-quality pictures. Needs a ${P.minVramGB}–${P.recVramGB} GB graphics card and ${P.minRamGB}–${P.recRamGB} GB memory.</p>
+        <div class="stack-v" style="gap:4px;margin:8px 0">${rows.map(([role, id]) => { const c = spec(id); return c ? `<div class="row small"><span class="grow">${role}: <b>${esc(c.name)}</b></span>${have(id) ? '<span class="badge b-mint">✓</span>' : S.downloads[id] ? '<span class="badge b-sky">⬇</span>' : `<span class="muted">${((c.sizeGB || 0) + (c.mmprojGB || 0)).toFixed(1)} GB</span>`}</div>` : ''; }).join('')}
+          <div class="row small"><span class="grow">🎬 Video: <b>Wan 2.2</b> · photoreal pictures: <b>Lustify</b></span><span class="muted">from the Liquid Edition</span></div></div>
+        <p class="small" style="margin:6px 0;${fit.level === 'no' ? 'color:var(--danger)' : ''}">${esc(fit.text)}</p>
+        ${ready ? '' : '<p class="small muted" style="margin:0 0 6px">Optional: it is only installed if you choose it here.</p>'}
+        <div class="row">${ready && !missing.length ? '<button class="btn small primary" data-chat-stack="quicksilver-pro">Chat</button><span class="badge b-lav">🔒 Locked</span>'
+          : downloading.length ? `<span class="badge b-sky">Downloading ${downloading.length} of ${missing.length}…</span>`
+          : `<button class="btn small ${fit.level === 'no' ? '' : 'primary'}" data-get-pro>${!missing.length ? 'Turn on Liquid Edition Pro' : `${ready ? 'Finish' : 'Get'} Liquid Edition Pro · ${missingGB.toFixed(0)} GB`}</button>${ready ? '<button class="btn small" data-chat-stack="quicksilver-pro">Chat</button>' : ''}`}</div>
+      </div>
+    </div>`;
+}
+document.addEventListener('click', async (e) => {
+  const proBtn = e.target.closest('[data-get-pro]');
+  if (!proBtn || proBtn.disabled) return;
+  proBtn.disabled = true;
+  const P = S.catalog.liquidPro;
+  const spec = (id) => S.catalog.text.find((m) => m.id === id) || S.catalog.media.find((m) => m.id === id);
+  const missing = [...new Set([P.brain, P.closer, P.thinker, P.muse, ...P.pictures])].filter((id) => !S.installed.some((m) => m.catalogId === id) && !S.downloads[id] && spec(id));
+  if (proFit().level === 'no' && !(await confirmBox(`${proFit().text}\n\nDownload Liquid Edition Pro anyway?`, { yes: 'Download anyway', danger: false }))) { proBtn.disabled = false; return; }
+  // Pro is only ever set up from this button.
+  await call('quicksilver:proGet');
+  // The Brain and Closer first (Pro is ready to chat as soon as they're in), then the rest.
+  for (const id of missing) await download({ catalogId: id }, spec(id).name).catch((err) => toast(err.message, 6000));
+  await refreshModels();
+  toast(missing.length ? 'Downloading Liquid Edition Pro. It appears under Built in as soon as its Brain and Closer are in.' : '💎 Liquid Edition Pro is ready.', 8000);
+  render();
+});

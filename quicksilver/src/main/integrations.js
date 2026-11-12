@@ -47,13 +47,21 @@ function list() {
 
 async function save(id, values, token) {
   if (!CONNECTORS[id]) throw new Error('Unknown integration.');
+  const was = Boolean(cfg()[id]?.enabled);
+  const oldToken = token && store.hasSecret(`int:${id}`) ? store.getSecret(`int:${id}`) : '';
   if (token) store.setSecret(`int:${id}`, token.trim());
   const c = cfg();
-  c[id] = { ...(c[id] || {}), ...values, enabled: true };
+  // What you typed is saved (the test needs it), but it only counts as connected once the test
+  // passes: a mistyped key or a cancelled sign-in must not leave a green "connected".
+  c[id] = { ...(c[id] || {}), ...values, enabled: was };
   store.saveConfig({ integrations: c });
-  const account = await test(id);
+  let account;
+  try { account = await test(id); } catch (err) {
+    if (token && !was) store.setSecret(`int:${id}`, oldToken); // a key that did not work is not kept
+    throw err;
+  }
   const after = cfg(); // test() may have changed other connectors (Google: every service)
-  after[id] = { ...(after[id] || c[id]), account };
+  after[id] = { ...(after[id] || c[id]), account, enabled: true };
   store.saveConfig({ integrations: after });
   return account;
 }

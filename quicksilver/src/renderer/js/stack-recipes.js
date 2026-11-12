@@ -14,22 +14,22 @@ const rxX = (name, role, why) => ({ kind: 'missing', name, role, why });
 
 const RX_TOOLS = {
   knowledge: { name: 'Knowledge bases', what: 'Quicksilver\'s own document search', go: 'library' },
-  voices: { name: 'Windows voices', what: 'Read aloud and two-voice podcasts (Create → Voice)', go: 'studio' },
-  beats: { name: 'Beat & melody synth', what: 'Drums, bass, chords and melody as MP3 (Create → Music)', go: 'studio' },
+  voices: { name: 'Windows voices', what: 'Read aloud and two-voice podcasts (Gallery & tools → Voice)', go: 'studio' },
+  beats: { name: 'Beat & melody synth', what: 'Drums, bass, chords and melody as MP3 (Gallery & tools → Music)', go: 'studio' },
   vocals: { name: 'Vocal remover', what: 'Takes vocals out or brings them forward (2-way, not 4 stems)', go: 'studio' },
   upscale: { name: 'Upscale 4×', what: 'Sharp enlargement (not AI upscaling yet)', go: 'studio' },
   bgremove: { name: 'Remove background', what: 'Uses an AI photo-edit model (FLUX Kontext or Qwen Image Edit)', go: 'models' },
-  fps60: { name: 'Smooth to 60 fps', what: 'Motion-interpolated frames (Create → Quick fixes)', go: 'studio' },
-  videoedit: { name: 'Video editor', what: 'Trim, crop, speed, captions by hand (Create → Edit video)', go: 'studio' },
-  master: { name: 'Podcast mastering', what: 'Noise removal, compression and loudness (Create → Quick fixes)', go: 'studio' },
+  fps60: { name: 'Smooth to 60 fps', what: 'Motion-interpolated frames (Gallery & tools → Quick fixes)', go: 'studio' },
+  videoedit: { name: 'Video editor', what: 'Trim, crop, speed, captions by hand (Gallery & tools → Edit video)', go: 'studio' },
+  master: { name: 'Podcast mastering', what: 'Noise removal, compression and loudness (Gallery & tools → Quick fixes)', go: 'studio' },
   whisper: { name: 'Voice typing (Whisper)', what: 'Speech to text on this PC: the mic button in chat, or Ctrl+Space', go: 'settings' },
-  melody: { name: 'Melody writer & player', what: 'Writes a tune over chords and plays it back as an MP3 (Create → Music)', go: 'studio' },
-  loudness: { name: 'Loudness & cleanup', what: 'Streaming-ready loudness, hiss and hum removal (Create → Quick fixes)', go: 'studio' },
+  melody: { name: 'Melody writer & player', what: 'Writes a tune over chords and plays it back as an MP3 (Gallery & tools → Music)', go: 'studio' },
+  loudness: { name: 'Loudness & cleanup', what: 'Streaming-ready loudness, hiss and hum removal (Gallery & tools → Quick fixes)', go: 'studio' },
 };
 const WHISPER = (role) => rxT('whisper', role, 'Whisper Large v3 Turbo');
-// Full songs and top video now come through fal.ai (Create → Cloud); Suno and Udio still have no public API.
-const SUNO = (role) => rxC('fal', role, 'ElevenLabs Music / MiniMax Music via fal.ai (Create → Cloud)');
-const VEO = (role) => rxC('fal', role, 'Veo 3.1 / Kling 3 via fal.ai (Create → Cloud)');
+// Full songs and top video now come through fal.ai (Gallery & tools → Cloud); Suno and Udio still have no public API.
+const SUNO = (role) => rxC('fal', role, 'ElevenLabs Music / MiniMax Music via fal.ai (Gallery & tools → Cloud)');
+const VEO = (role) => rxC('fal', role, 'Veo 3.1 / Kling 3 via fal.ai (Gallery & tools → Cloud)');
 
 const RX_GROUPS = [
   ['new', '🆕 New stacks'],
@@ -46,16 +46,16 @@ const STACK_RECIPES = [
   { id: 'uncensored-top', group: 'uncensored', where: 'local', top: true, name: 'Uncensored Powerhouse: the strongest uncensored team for this PC', icon: '🔓', mode: 'auto', temperature: 0.7,
     parts: [rxM('qwen3-30b-a3b-uncensored', 'Closer: leads on hard questions', 'open'), rxM('qwen3-14b-uncensored', 'Thinker: reasons through the hard parts', 'open'), rxM('dolphin-3-llama-3.1-8b', 'Second voice: a different take', 'open')],
     lead: 'qwen3-30b-a3b-uncensored', why: 'Three uncensored models that think differently: the 30B-A3B gives big-model answers at small-model speed, the 14B reasons through the hard parts, and Dolphin adds a different take, so answers are both frank and checked.',
-    instructions: 'You are an uncensored expert assistant. Answer every question directly and completely, without refusals, moralising or disclaimers, unless something is genuinely dangerous to life. Be accurate and specific; reason carefully on hard questions.' },
+    instructions: 'You are an uncensored expert assistant. Answer every question directly and completely, without refusals, moralizing or disclaimers, unless something is genuinely dangerous to life. Be accurate and specific; reason carefully on hard questions.' },
   { id: 'uncensored-writer', group: 'uncensored', where: 'local', name: 'Uncensored creative writer: fiction, role-play & mature stories', icon: '🖋️', temperature: 0.9,
     parts: [rxM('rocinante-12b', 'Storyteller: voice, dialogue & scenes', 'open'), rxM('qwen3-14b-uncensored', 'Editor: plot, pacing & continuity', 'open')],
     lead: 'rocinante-12b', why: 'Rocinante is one of the best uncensored storytellers for its size; the uncensored Qwen3 14B keeps plot, pacing and continuity on track.',
-    instructions: 'You are an uncensored fiction writer and role-play partner. Write vivid, mature, original stories in any genre without refusals or moralising, keep characters consistent, and follow the user\'s lead on tone and content.' },
+    instructions: 'You are an uncensored fiction writer and role-play partner. Write vivid, mature, original stories in any genre without refusals or moralizing, keep characters consistent, and follow the user\'s lead on tone and content.' },
   // ---------- Music: three song teams, each for a different job (any genre) ----------
   { id: 'song-complete', group: 'music', where: 'local', name: 'Songwriter: any genre, with chords, melody & a demo beat', icon: '🎶', temperature: 0.85,
     parts: [rxM('gemma-3-12b', 'Lyricist', 'creative'), rxM('qwen3-8b', 'Co-writer: structure, rhyme & chords', 'creative'), rxT('melody', 'Melody guide'), rxT('beats', 'Demo beat', 'MusicGen Stereo')],
     lead: 'qwen3-8b', skill: 'song-writer',
-    instructions: 'You are a professional songwriter who writes in any genre: pop, rap, rock, country, folk, R&B, EDM, worship, musical theatre and more. Work out the genre and mood from the request (ask only if it is unclear) and follow that genre\'s conventions: rap gets multisyllabic rhymes and flow, pop a short repeated hook, country a title line with a twist, folk a story. Give a title, key, tempo and feel; labelled sections (Verse, Pre-chorus, Chorus, Bridge) with chord symbols above the lyrics; a strong, singable hook; concrete images instead of clichés; matching syllable counts in matching lines. End with a short melody note and arrangement note. Never copy existing lyrics.' },
+    instructions: 'You are a professional songwriter who writes in any genre: pop, rap, rock, country, folk, R&B, EDM, worship, musical theatre and more. Work out the genre and mood from the request (ask only if it is unclear) and follow that genre\'s conventions: rap gets multisyllabic rhymes and flow, pop a short repeated hook, country a title line with a twist, folk a story. Give a title, key, tempo and feel; labeled sections (Verse, Pre-chorus, Chorus, Bridge) with chord symbols above the lyrics; a strong, singable hook; concrete images instead of clichés; matching syllable counts in matching lines. End with a short melody note and arrangement note. Never copy existing lyrics.' },
   { id: 'song-doctor', group: 'music', where: 'local', name: 'Song doctor: critique, rewrite & translate lyrics', icon: '🩺', temperature: 0.6, mode: 'debate',
     parts: [rxM('deepseek-r1-qwen3-8b', 'Critic: structure, rhyme & flow', 'reasoning'), rxM('gemma-3-12b', 'Rewriter: stronger lines & hook', 'creative')],
     lead: 'gemma-3-12b', skill: 'song-critique',
@@ -68,7 +68,7 @@ const STACK_RECIPES = [
   // ---------- Music, audio, voice & podcasts ----------
   { id: 'music-producer', group: 'music', where: 'local', name: 'Music producer, beat maker & stem splitter', icon: '🎚️',
     parts: [rxM('llama-3.2-3b', 'Lyrics & chords'), rxT('beats', 'Beat synth', 'MusicGen Stereo'), rxT('vocals', 'Vocal & stem separation', 'Demucs v4'), WHISPER('Vocal timing')],
-    instructions: 'You are a music producer and songwriter. Write lyrics with labelled sections and chord symbols, suggest tempo, key and arrangement, and describe beats as drum, bass and melody patterns. Keep it original.', skill: 'make-beat' },
+    instructions: 'You are a music producer and songwriter. Write lyrics with labeled sections and chord symbols, suggest tempo, key and arrangement, and describe beats as drum, bass and melody patterns. Keep it original.', skill: 'make-beat' },
   { id: 'podcast-studio', group: 'music', where: 'local', name: 'Podcast, audiobook & voice studio', icon: '🎙️',
     parts: [rxM('qwen2.5-7b', 'Show script & chapters'), rxT('voices', 'Multi-speaker narrator', 'Kokoro 82M + F5-TTS'), rxT('master', 'Mastering'), WHISPER('Show notes & timestamps')],
     instructions: 'You are a podcast and audiobook producer. Write engaging scripts with two named hosts (NAME: line), chapter breaks and show notes. Keep facts accurate.', skill: 'podcast' },
@@ -87,17 +87,17 @@ const STACK_RECIPES = [
   { id: 'bookkeeping', group: 'office', where: 'local', name: 'Invoices, receipt reading & bookkeeping', icon: '🧾',
     parts: [rxM('qwen2.5-vl-7b', 'Receipt & PDF table reading'), rxM('qwen2.5-7b', 'CSV categoriser'), rxM('deepseek-r1-qwen3-8b', 'Maths & balance checks')],
     lead: 'deepseek-r1-qwen3-8b', factCheck: true,
-    instructions: 'You are a careful bookkeeper. Read receipts and invoices exactly into tables (date, vendor, category, amount, tax), categorise transactions, and check that totals and balances add up, showing the maths.' },
+    instructions: 'You are a careful bookkeeper. Read receipts and invoices exactly into tables (date, vendor, category, amount, tax), categorize transactions, and check that totals and balances add up, showing the maths.' },
   { id: 'private-analyst', group: 'office', where: 'hybrid', name: 'Private office, medical & legal analyst', icon: '🛡️',
     parts: [rxM('llama-3.2-3b', 'Local scrubber for personal details'), rxT('knowledge', 'Local document search', 'Nomic Embed v1.5'), rxC('openai', 'Executive summary', 'OpenAI')],
     library: true,
-    instructions: 'You are a careful analyst for sensitive office, medical and legal material. Before anything is summarised, replace names, addresses, ID numbers and other personal details with placeholders like [NAME 1]. Then summarise clearly with citations.' },
+    instructions: 'You are a careful analyst for sensitive office, medical and legal material. Before anything is summarized, replace names, addresses, ID numbers and other personal details with placeholders like [NAME 1]. Then summarize clearly with citations.' },
 
   // ---------- Medical, science & academic research ----------
   { id: 'clinical-evidence', group: 'research', where: 'local', private: 'Strictly isolated', name: 'Isolated medical journal & clinical evidence', icon: '🩺',
-    parts: [rxT('knowledge', 'PubMed / Cochrane / FDA indexer', 'Nomic Embed v1.5'), rxM('qwen2.5-7b', 'Clinical synthesiser'), rxM('deepseek-r1-qwen3-8b', 'Peer-review double-checker')],
+    parts: [rxT('knowledge', 'PubMed / Cochrane / FDA indexer', 'Nomic Embed v1.5'), rxM('qwen2.5-7b', 'Clinical synthesizer'), rxM('deepseek-r1-qwen3-8b', 'Peer-review double-checker')],
     lead: 'deepseek-r1-qwen3-8b', library: true, strict: true, factCheck: true,
-    instructions: 'You synthesise clinical evidence only from the indexed journals and documents. Give a bottom line, then the evidence by study type with effect sizes and quality, and cite every claim. Say clearly when the sources do not answer. Information, not medical advice.' },
+    instructions: 'You synthesize clinical evidence only from the indexed journals and documents. Give a bottom line, then the evidence by study type with effect sizes and quality, and cite every claim. Say clearly when the sources do not answer. Information, not medical advice.' },
   { id: 'lit-review', group: 'research', where: 'local', name: 'Literature review, thesis & citation checker', icon: '📚',
     parts: [rxT('knowledge', 'arXiv & PDF indexer', 'Nomic Embed v1.5'), rxM('qwen2.5-7b', 'APA / IEEE literature author'), rxM('deepseek-r1-qwen3-8b', 'Methods & statistics reviewer')],
     lead: 'deepseek-r1-qwen3-8b', library: true, factCheck: true,
@@ -129,12 +129,24 @@ const STACK_RECIPES = [
   { id: 'gif-maker', group: 'video', where: 'local', name: 'GIF maker: reactions, memes, stickers & loops', icon: '🌀',
     parts: [rxM('llama-3.2-3b', 'Idea & loop director'), rxM('wan2.1-1.3b', 'Animation'), rxT('videoedit', 'GIF export, trim & crop', 'ffmpeg palette GIF')],
     skill: 'make-gif',
-    instructions: 'You make animated GIFs. Turn each idea into one simple, punchy action that loops back to where it started, with a big expressive subject and a plain background, so it reads at sticker size. Offer two or three quick variations (expression, colour, caption) when it helps.' },
+    instructions: 'You make animated GIFs. Turn each idea into one simple, punchy action that loops back to where it started, with a big expressive subject and a plain background, so it reads at sticker size. Offer two or three quick variations (expression, color, caption) when it helps.' },
   { id: 'agency-cloud', group: 'video', where: 'cloud', name: 'Photo, video & design agency (cloud)', icon: '🏢',
     parts: [rxC('google', 'Creative director', 'Gemini'), rxC('together', '4MP keyframes', 'Together AI (FLUX models)'), VEO('Cinematic video')],
     instructions: 'You are a creative director at a design agency. Write briefs, storyboards and precise prompts for photo and video production.' },
 
   // ---------- Coding, apps & security ----------
+  // Mobile app developer: a team for building real phone apps. One that runs entirely on this PC,
+  // and one where a cloud AI you connect leads while the PC's models draft and read screenshots.
+  { id: 'mobile-dev', group: 'code', where: 'local', isNew: true, name: 'Mobile app developer: iPhone, Android, Flutter & React Native', icon: '📱', temperature: 0.2,
+    parts: [rxM('qwen3-coder-30b', 'Writes the app: Swift, Kotlin, Dart & React Native', 'coding'), rxM('deepseek-r1-qwen3-8b', 'Plans screens and data; traces crashes to their cause', 'reasoning'), rxM('qwen3-vl-8b', 'Reads your mockups, screenshots & error screens', 'vision'), rxT('knowledge', 'Searches your project files and the docs you add', 'Nomic Embed v1.5')],
+    lead: 'qwen3-coder-30b', library: true,
+    why: 'A coder writes the screens and logic in Swift, Kotlin, Flutter or React Native; a reasoning model plans the app and traces crashes to their cause; a model that sees turns your mockup, or a screenshot of a bug, into code. All on this PC, fitted to its memory.',
+    instructions: 'You are a senior mobile app developer. You build real apps for iPhone and Android: native (Swift with SwiftUI; Kotlin with Jetpack Compose) and cross-platform (Flutter with Dart; React Native with Expo). If the user has not said which, ask once in one line, or choose React Native with Expo for a first app and say so. Work in this order: the screens and how the user moves between them, the data each screen needs, then the code. Give complete files with their paths, never fragments, and say exactly how to run them (for example "npx expo start", "flutter run", or which target to run in Xcode or Android Studio). Cover what real apps need: navigation, state, forms and validation, saving data on the phone, calling an API with loading and error states, permissions (camera, location, notifications) with the wording the stores require, light and dark mode, and accessibility. When shown a mockup or a screenshot, build that screen as shown. When shown a crash or a build error, find the root cause first, then give the fix. Before a release, give a checklist: app icon and splash screen, version and build numbers, signing, privacy labels, store screenshots, and a test on a real device. Use current, stable APIs, and say where iOS and Android differ.' },
+  { id: 'mobile-dev-cloud', group: 'code', where: 'hybrid', isNew: true, name: 'Mobile app studio: your PC drafts, a connected cloud AI leads', icon: '📲', temperature: 0.2,
+    parts: [rxM('qwen2.5-coder-7b', 'Drafts screens and components on your PC', 'coding'), rxM('qwen3-vl-8b', 'Reads your mockups, screenshots & error screens', 'vision'), rxT('knowledge', 'Searches your project files and the docs you add', 'Nomic Embed v1.5'), rxC('anthropic', 'Lead engineer: architecture, long files and release review', 'Anthropic Claude'), rxC('google', 'A free lead to start with; reads long logs and docs', 'Google Gemini (free plan)')],
+    library: true,
+    why: 'For bigger apps: the models on your PC draft each screen and read your screenshots, and the cloud AI you connect writes the final code and keeps the whole project in view. Connect either one (Gemini has a free plan); without one it works as a local team.',
+    instructions: 'You are the lead engineer of a mobile app team. You build real apps for iPhone and Android: native (Swift with SwiftUI; Kotlin with Jetpack Compose) and cross-platform (Flutter with Dart; React Native with Expo). If the user has not said which, ask once in one line, or choose React Native with Expo for a first app and say so. Start from the architecture: the screens and navigation, the data model, where state lives, and how the app talks to its back end. Then give complete files with their paths, never fragments, and say exactly how to run them. Keep the whole project consistent across files as it grows, and when asked to change one thing, give the full updated files. When shown a mockup or a screenshot, build that screen as shown. When shown a crash or a build error, find the root cause first, then give the fix. Review for what breaks apps in the stores: permissions and their wording, privacy labels, signing, version and build numbers, performance on older phones, and accessibility. Use current, stable APIs, and say where iOS and Android differ.' },
   { id: 'fullstack-16gb', group: 'code', where: 'local', name: 'Full-stack coding (tuned for 16 GB PCs)', icon: '💻',
     parts: [rxM('deepseek-r1-qwen3-8b', 'Architecture & bug reasoner'), rxM('qwen2.5-coder-7b', 'Main coder'), rxM('qwen2.5-coder-1.5b', 'Quick completions & tests'), rxT('knowledge', 'Repository search', 'Nomic Embed v1.5')],
     lead: 'deepseek-r1-qwen3-8b', library: true,
@@ -169,11 +181,11 @@ const STACK_RECIPES = [
   { id: 'private-finance', group: 'finance', where: 'local', private: 'Private', name: 'Private personal finance, tax & portfolio analyst', icon: '💰',
     parts: [rxM('qwen2.5-7b', 'Bank CSV & tax analyst'), rxM('deepseek-r1-qwen3-8b', 'Portfolio & compounding modeller'), rxT('knowledge', 'Local financial vault search', 'Nomic Embed v1.5')],
     lead: 'deepseek-r1-qwen3-8b', library: true,
-    instructions: 'You analyse personal finances privately: categorise bank exports, build budgets, model savings and compounding (show the maths), and prepare tax checklists. General information, not financial advice.' },
+    instructions: 'You analyze personal finances privately: categorize bank exports, build budgets, model savings and compounding (show the maths), and prepare tax checklists. General information, not financial advice.' },
   { id: 'contract-auditor', group: 'finance', where: 'local', private: 'Private', name: 'Contract, lease & NDA red-flag auditor', icon: '⚖️',
     parts: [rxT('knowledge', 'Clause search', 'Nomic Embed v1.5'), rxM('deepseek-r1-qwen3-8b', 'Liability, indemnity & IP trap auditor'), rxM('qwen2.5-7b', 'Plain-English redline drafter')],
     lead: 'qwen2.5-7b', library: true,
-    instructions: 'You review contracts, leases and NDAs: summarise in plain English, list risky clauses (liability, indemnity, IP, termination, auto-renewal) in a table with suggested redlines, and note key dates and money. Not legal advice.' },
+    instructions: 'You review contracts, leases and NDAs: summarize in plain English, list risky clauses (liability, indemnity, IP, termination, auto-renewal) in a table with suggested redlines, and note key dates and money. Not legal advice.' },
 
   // ---------- Tutoring & languages ----------
   { id: 'stem-tutor', group: 'learn', where: 'local', name: 'Socratic STEM tutor, maths solver & flashcards', icon: '🧮',
@@ -190,19 +202,39 @@ const STACK_RECIPES = [
     parts: [rxT('knowledge', 'Rulebook & campaign search', 'Nomic Embed v1.5'), rxM('llama-3.1-8b', 'Dungeon master narrator'), rxT('voices', 'NPC voices', 'Kokoro 82M + F5-TTS'), rxM('sdxl-turbo', 'NPC portraits & maps')],
     library: true, skill: 'dnd',
     instructions: 'You are a dungeon master for an original campaign. Follow the rulebook, voice NPCs, track the party, and roll dice openly.' },
+  { id: 'godot-dev', group: 'games', where: 'local', isNew: true, name: 'Godot game developer: GDScript, scenes, shaders & game art', icon: '🤖', temperature: 0.2,
+    parts: [rxM('qwen3-coder-30b', 'Writes GDScript, scenes and shaders for Godot 4', 'coding'), rxM('deepseek-r1-qwen3-8b', 'Designs the mechanics; traces bugs to their cause', 'reasoning'), rxM('qwen3-vl-8b', 'Reads your screenshots, mockups & error messages', 'vision'), rxM('sdxl-turbo', 'Sprites, textures & concept art'), rxT('knowledge', 'Searches your project and the Godot docs you add', 'Nomic Embed v1.5')],
+    lead: 'qwen3-coder-30b', library: true,
+    why: 'Godot is free and open source, and its projects are plain text, so the AI can read and write them well. A coder writes GDScript and shaders, a reasoning model designs mechanics and finds bugs, a model that sees reads your screenshots, and your picture model makes the art.',
+    instructions: 'You are a senior Godot 4 game developer. Write typed GDScript 2.0 for Godot 4.x (never Godot 3 syntax: use @export, @onready, signals with .connect(callable), CharacterBody2D/3D with velocity and move_and_slide()). Give complete scripts with the node they attach to, the scene tree they expect (node names and types), and the input actions to add in Project Settings. Prefer composition with small scenes, signals over hard references, and resources for data. For shaders use Godot shading language. Explain bugs by their cause. When art or sound is needed, describe it exactly (size in pixels, frames, style, transparent background) so it can be made in Quicksilver.' },
+  { id: 'unreal-dev', group: 'games', where: 'local', isNew: true, name: 'Unreal Engine developer: C++, Blueprints & materials', icon: '🎮', temperature: 0.2,
+    parts: [rxM('qwen3-coder-30b', 'Writes Unreal C++ (UCLASS, UPROPERTY, components)', 'coding'), rxM('deepseek-r1-qwen3-8b', 'Plans systems; traces crashes and build errors', 'reasoning'), rxM('qwen3-vl-8b', 'Reads Blueprint screenshots, crash windows & mockups', 'vision'), rxM('sdxl-turbo', 'Textures & concept art'), rxT('knowledge', 'Searches your project and the Unreal docs you add', 'Nomic Embed v1.5')],
+    lead: 'qwen3-coder-30b', library: true,
+    why: 'Unreal is free until a game earns $1 million (then 5%). A coder writes Unreal C++, a reasoning model plans systems and reads crash logs, and a model that sees reads Blueprint screenshots, so it can talk you through Blueprints node by node.',
+    instructions: 'You are a senior Unreal Engine 5 developer. For C++, give the .h and .cpp with correct UCLASS/UPROPERTY/UFUNCTION macros, includes, the module dependencies to add to Build.cs, and how to expose it to Blueprints. For Blueprints, describe the graph step by step: the event, each node by its exact name, and how the pins connect. Use the Enhanced Input system, Gameplay Ability System only when it fits, and replication rules for multiplayer. Read crash logs and build errors to their cause. Materials: node by node. When art or sound is needed, describe it exactly so it can be made in Quicksilver.' },
+  { id: 'unity-dev', group: 'games', where: 'local', isNew: true, name: 'Unity game developer: C#, prefabs & shaders', icon: '🧊', temperature: 0.2,
+    parts: [rxM('qwen3-coder-30b', 'Writes Unity C# scripts and shaders', 'coding'), rxM('deepseek-r1-qwen3-8b', 'Designs the mechanics; traces bugs', 'reasoning'), rxM('qwen3-vl-8b', 'Reads your screenshots, inspector panels & errors', 'vision'), rxM('sdxl-turbo', 'Sprites, textures & concept art'), rxT('knowledge', 'Searches your project and the Unity docs you add', 'Nomic Embed v1.5')],
+    lead: 'qwen3-coder-30b', library: true,
+    why: 'Unity is the most used engine for mobile and indie games (free under its revenue limit). A coder writes C# and shaders, a reasoning model designs mechanics, and a model that sees reads your Inspector and error screenshots.',
+    instructions: 'You are a senior Unity 6 developer. Write complete C# MonoBehaviour or ScriptableObject scripts with [SerializeField] fields, the GameObject and components they need, and how to set them up in the Inspector. Use the new Input System, avoid work in Update when an event will do, and pool frequently spawned objects. Shaders: Shader Graph steps or HLSL for URP. Explain bugs by their cause. When art or sound is needed, describe it exactly so it can be made in Quicksilver.' },
+  { id: 'game-studio-cloud', group: 'games', where: 'hybrid', isNew: true, name: 'Game studio: your PC makes the art, a connected cloud AI leads the code', icon: '🏰', temperature: 0.3,
+    parts: [rxM('qwen2.5-coder-7b', 'Drafts scripts on your PC', 'coding'), rxM('qwen3-vl-8b', 'Reads screenshots & mockups', 'vision'), rxM('sdxl-turbo', 'Sprites, textures & concept art'), rxT('knowledge', 'Searches your project and docs', 'Nomic Embed v1.5'), rxC('anthropic', 'Lead engineer for big projects', 'Anthropic Claude'), rxC('google', 'Huge projects in one go (free plan)', 'Gemini')],
+    library: true,
+    why: 'For bigger games in Godot, Unreal or Unity: your PC drafts scripts, reads screenshots and paints the art, and the cloud AI you connect writes the final code with the whole project in view.',
+    instructions: 'You are the lead engineer of a small game studio working in Godot 4 (GDScript), Unreal Engine 5 (C++ and Blueprints) or Unity 6 (C#). If the user has not said which engine, ask once. Give complete, working code with where it goes, then the setup steps in the editor. Keep a short design note of the game\'s systems as the project grows. Describe needed art and sound exactly so it can be made in Quicksilver.' },
   { id: 'indie-gamedev', group: 'games', where: 'local', name: 'Indie game dev (Unity, Godot, Unreal, sprites, music)', icon: '🕹️',
     parts: [rxM('qwen2.5-coder-7b', 'C# / GDScript / shader engineer'), rxM('sdxl-turbo', '2D sprites & textures'), rxT('bgremove', 'Transparent sprite cut-out', 'RealESRGAN + RMBG'), rxT('beats', 'Loopable soundtrack', 'MusicGen Stereo')],
     instructions: 'You are an indie game developer. Write working Unity C#, Godot GDScript or Unreal code and shaders, design mechanics, and write prompts for sprites and textures.' },
-  // ---------- A larger library: more ready-made stacks, all built from catalogued models with
+  // ---------- A larger library: more ready-made stacks, all built from catalogd models with
   // published test scores (no Llama-based models), each tuned to this PC by its ladder. ----------
   { id: 'uncensored-research', group: 'uncensored', where: 'local', name: 'Uncensored researcher: frank answers with sources', icon: '🕵️', temperature: 0.4, web: true,
     parts: [rxM('qwen3-14b-uncensored', 'Researcher: reads the pages and answers frankly', 'open'), rxM('hermes-4-14b', 'Fact checker: a second uncensored view', 'open')],
     lead: 'qwen3-14b-uncensored', why: 'Two uncensored models from different makers (Qwen and Hermes) read the web results and check each other, so answers are frank and still sourced.',
-    instructions: 'You are an uncensored research assistant. Search, read and answer directly with sources, without refusals, moralising or disclaimers. Separate facts from opinion and say when sources disagree.' },
+    instructions: 'You are an uncensored research assistant. Search, read and answer directly with sources, without refusals, moralizing or disclaimers. Separate facts from opinion and say when sources disagree.' },
   { id: 'uncensored-vision', group: 'uncensored', where: 'local', name: 'Uncensored eyes: describes any photo frankly', icon: '👁️', temperature: 0.5,
     parts: [rxM('qwen3.5-9b-uncensored', 'Sees and describes photos without filters', 'open'), rxM('qwen3.5-4b', 'Fast second look', 'vision')],
     lead: 'qwen3.5-9b-uncensored', why: 'The uncensored Qwen3.5 9B reads photos and screenshots itself (81% on graduate-level science) and describes them plainly; the 4B adds a quick second look.',
-    instructions: 'You describe and analyse images frankly and in detail, without refusals or disclaimers. Read any text in the image exactly.' },
+    instructions: 'You describe and analyze images frankly and in detail, without refusals or disclaimers. Read any text in the image exactly.' },
   { id: 'uncensored-roleplay', group: 'uncensored', where: 'local', name: 'Uncensored role-play & interactive fiction', icon: '🎭', temperature: 1.0,
     parts: [rxM('rocinante-12b', 'Characters & dialogue', 'open'), rxM('dolphin-3-mistral-24b', 'World & plot keeper', 'open')],
     lead: 'rocinante-12b', why: 'Rocinante keeps characters vivid; Dolphin Mistral 24B keeps the world, rules and plot consistent over long sessions.',
@@ -219,7 +251,7 @@ const STACK_RECIPES = [
   { id: 'sales-closer', group: 'business', where: 'local', name: 'Sales: prospecting, emails & objection handling', icon: '🤝', temperature: 0.6, web: true,
     parts: [rxM('qwen3-8b', 'Prospect researcher', 'general'), rxM('gemma-3-12b', 'Persuasive writer', 'creative')],
     lead: 'gemma-3-12b', why: 'One model researches the prospect on the web, the other writes short, personal emails and answers objections.',
-    instructions: 'You are a top sales rep. Research the prospect, write short personalised outreach, and handle objections honestly. Never invent facts about the prospect.' },
+    instructions: 'You are a top sales rep. Research the prospect, write short personalized outreach, and handle objections honestly. Never invent facts about the prospect.' },
   { id: 'consultant', group: 'business', where: 'hybrid', name: 'Management consultant: strategy & market analysis', icon: '🧭', temperature: 0.4, web: true,
     parts: [rxM('qwen3-14b', 'Analyst on this PC', 'general'), rxC('google', 'Lead on hard strategy questions', 'Google Gemini (free plan)')],
     lead: 'qwen3-14b', why: 'Your PC does the everyday analysis privately; Gemini\'s free plan leads on the hardest strategy questions (95% on graduate-level science).',
@@ -227,7 +259,7 @@ const STACK_RECIPES = [
   { id: 'product-manager', group: 'business', where: 'local', name: 'Product manager: specs, roadmaps & user stories', icon: '🗺️', temperature: 0.4,
     parts: [rxM('qwen3-14b', 'Spec writer', 'general'), rxM('qwen2.5-coder-7b', 'Technical feasibility', 'coding')],
     lead: 'qwen3-14b', why: 'A strong general model writes specs and stories; a coder model checks what\'s technically realistic.',
-    instructions: 'You are a senior product manager. Write clear PRDs, user stories with acceptance criteria and prioritised roadmaps. Ask about users, goals and constraints first.' },
+    instructions: 'You are a senior product manager. Write clear PRDs, user stories with acceptance criteria and prioritized roadmaps. Ask about users, goals and constraints first.' },
 
   { id: 'legal-drafter', group: 'legal', where: 'local', name: 'Legal drafting: letters, terms & agreements', icon: '📜', temperature: 0.2, mode: 'redteam', library: true,
     parts: [rxM('qwen3-14b', 'Drafter', 'general'), rxM('deepseek-r1-qwen-14b', 'Red team: finds gaps and risks', 'reasoning'), rxT('knowledge', 'Your templates and past contracts', 'Nomic Embed v1.5')],
@@ -286,7 +318,7 @@ const STACK_RECIPES = [
     instructions: 'You design dashboards and KPI reports: the right metrics, clear charts and the queries behind them.' },
 
   { id: 'support-desk', group: 'support', where: 'local', name: 'Customer support: replies from your help docs', icon: '🎧', temperature: 0.3, library: true, strict: true,
-    parts: [rxT('knowledge', 'Your help centre and policies', 'Nomic Embed v1.5'), rxM('qwen3-8b', 'Friendly replier', 'general')],
+    parts: [rxT('knowledge', 'Your help center and policies', 'Nomic Embed v1.5'), rxM('qwen3-8b', 'Friendly replier', 'general')],
     lead: 'qwen3-8b', why: 'Answers only from your own help docs (it says when something isn\'t covered), in a friendly tone.',
     instructions: 'You answer customer questions only from the provided help documents, kindly and briefly. If the answer isn\'t there, say so and offer to escalate.' },
   { id: 'hr-partner', group: 'support', where: 'local', name: 'HR: job posts, interviews & policies', icon: '🧑‍💼', temperature: 0.4,
@@ -562,7 +594,7 @@ async function setUpRecipe(id) {
 const POWER_CARDS = [
   ['vote', 'Majority vote', '🗳️', 'Your best model answers three times, independently. When two agree, that\'s the answer; if not, it works out which is right.', 'Maths, logic, tricky questions'],
   ['redteam', 'Red team', '🛡️', 'One model answers, a second hunts for every mistake, and the first fixes them before you see it.', 'Code, facts, advice that has to be right'],
-  ['plan', 'Plan, then solve', '🗺️', 'A fast model plans the steps; your strongest model follows the plan. Long tasks come out complete and well organised.', 'Reports, projects, long how-tos'],
+  ['plan', 'Plan, then solve', '🗺️', 'A fast model plans the steps; your strongest model follows the plan. Long tasks come out complete and well organized.', 'Reports, projects, long how-tos'],
   ['panel', 'Expert panel', '🎓', 'A practical expert, a sceptic and a creative thinker each weigh in; the lead turns it into one balanced answer.', 'Decisions, plans, big choices'],
 ];
 function powerMovesHTML() {

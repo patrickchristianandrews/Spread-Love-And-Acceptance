@@ -239,7 +239,7 @@ function preanswer(chat, msg, alt, tries = 0) {
     resolve: (t) => { bgJobs.delete(requestId); if (alt.pre) { alt.pre.text = t || ''; alt.pre.done = Boolean(t); } },
     reject: () => { bgJobs.delete(requestId); delete alt.pre; },
   });
-  qs.sendChat({ requestId, target, messages, temperature: Number(chat.temperature ?? a.temperature ?? p.temperature), maxTokens: Number(chat.maxTokens || a.maxTokens || p.maxTokens) || 2048, contextSize: ctx, level: effortOf(chat, a), gpu: p.gpu, effort: p.effort });
+  qs.sendChat({ requestId, target, messages, temperature: Number(chat.temperature ?? a.temperature ?? p.temperature), maxTokens: Number(maxOf(chat, a) || p.maxTokens) || 2048, contextSize: ctx, level: effortOf(chat, a), gpu: p.gpu, effort: p.effort });
 }
 // Used by generate(): the question you sent is the one answered in advance.
 function takePreanswer(chat) {
@@ -255,11 +255,11 @@ function takePreanswer(chat) {
 // ---------- 8. the model is ready before the first question ----------
 // At start-up, the usual model loads in the background and reads the assistant's instructions.
 function preloadDefault() {
-  if (S.data.prefs.preload === false || !S.data?.assistants?.length) return;
+  if (S.data.prefs.preloadDefault === false || !S.data?.assistants?.length) return; // "Load my default model when Quicksilver starts", unticked
   const a = assistantById(S.data.prefs.lastAssistant) || S.data.assistants[0];
   const target = a.target || S.data.prefs.defaultTarget;
   if (!target || target.startsWith('api:') || !targetValid(target)) return;
-  qs.call('models:prefill', target, [{ role: 'system', content: systemPrompt(a, false, {}) }], { contextSize: Number(a.contextSize || S.data.prefs.contextSize) || 16384, gpu: S.data.prefs.gpu }).catch(() => {});
+  qs.call('models:prefill', target, [{ role: 'system', content: systemPrompt(a, false, {}) }], { contextSize: ctxOf(a), gpu: S.data.prefs.gpu }).catch(() => {});
 }
 
 // Which kind of question an answer was for (for learning which model suits what).
@@ -282,7 +282,7 @@ function speedNudge(chat, msg, alt) {
   // Options that are ON and cost time, each with a one-click way to turn it off.
   const opts = [];
   if (factOn(chat, a) && effortOf(chat, a) !== 'max') opts.push(['Double-check every answer', 'checks every claim with a second model — about twice the time', () => { chat.factCheck = false; P.factCheck = false; }]);
-  if (effortOf(chat, a) === 'council') opts.push(['Council effort', 'runs three AIs then writes one verdict — 3–4× the time', () => { chat.effort = 'auto'; }]);
+  if (effortOf(chat, a) === 'council') opts.push(['Council effort', 'runs three AIs then writes one verdict — 3–4× the time', () => { chat.effort = 'thorough'; }]);
   if (P.thinking !== false) opts.push(['Thinking for hard questions', 'the model works hard questions out first — slower, but more accurate', () => { P.thinking = false; }]);
   if (P.checkUnsure === true) opts.push(['Double-check uncertain numbers', 'a second model re-checks shaky figures', () => { P.checkUnsure = false; }]);
   if (!hasGpu() && P.preanswer !== false) opts.push(['Answers in advance', 'prepares likely follow-ups in the background — competes with your answer on a PC with no graphics card', () => { P.preanswer = false; }]);

@@ -93,7 +93,12 @@ module.exports = ({ http, clip, secret, cfg }) => {
       run: async ({ place, days = 3 }) => {
         const where = place || C('weather').home;
         if (!where) throw new Error('Say which place.');
-        const g = (await http(`https://geocoding-api.open-meteo.com/v1/search?count=1&name=${encodeURIComponent(where.split(',')[0])}`)).results?.[0];
+        // The town is looked up by name; anything after a comma (state, region, country) picks
+        // the right one among places with that name.
+        const [town, ...rest] = where.split(',').map((x) => x.trim()).filter(Boolean);
+        const found = (await http(`https://geocoding-api.open-meteo.com/v1/search?count=10&name=${encodeURIComponent(town || where)}`)).results || [];
+        const region = rest.join(' ').toLowerCase();
+        const g = (region && found.find((r) => [r.admin1, r.admin2, r.country, r.country_code].filter(Boolean).some((x) => { const v = String(x).toLowerCase(); return v === region || region.split(/\s+/).includes(v) || region.includes(v); }))) || found[0];
         if (!g) return `No place called ${where} was found.`;
         const f = /^f/i.test(C('weather').units || '');
         const w = await http(`https://api.open-meteo.com/v1/forecast?latitude=${g.latitude}&longitude=${g.longitude}&current=temperature_2m,apparent_temperature,weather_code,wind_speed_10m,relative_humidity_2m&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max&timezone=auto&forecast_days=${Math.min(7, Math.max(1, days))}${f ? '&temperature_unit=fahrenheit&wind_speed_unit=mph' : ''}`);

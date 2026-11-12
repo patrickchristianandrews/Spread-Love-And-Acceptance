@@ -1,7 +1,7 @@
 {
   "name": "quicksilver",
   "productName": "Quicksilver",
-  "version": "2.18.0",
+  "version": "2.20.1",
   "description": "Quicksilver: forms to fit your work. Private AI on your own PC: multi-model stacks, fact checking, knowledge bases, a photo & video studio and an OpenAI-compatible API.",
   "main": "src/main/main.js",
   "author": {
@@ -11,7 +11,7 @@
   "private": true,
   "scripts": {
     "start": "electron .",
-    "test": "node test/backend.test.js && node test/ui.test.js",
+    "test": "node test/backend.test.js && node test/media-catalog.test.js && node test/loading.test.js && node test/skills-auto.test.js && node test/pro.test.js && node test/fixes.test.js && node scripts/api-directory.js --check && node test/ui.test.js && node test/liquid-picture.test.js",
     "fetch-engines": "node scripts/fetch-engines.js",
     "dist": "electron-builder",
     "dist:win": "electron-builder --win",
@@ -25,6 +25,7 @@
     "docx": "^9.15.2",
     "exceljs": "^4.4.0",
     "ffmpeg-static": "^5.3.0",
+    "hyparquet": "^1.33.0",
     "mammoth": "^1.13.0",
     "pptxgenjs": "^4.0.1",
     "qrcode": "^1.5.4",
@@ -46,7 +47,8 @@
     "files": [
       "src/**/*",
       "build/icon.png",
-      "package.json"
+      "package.json",
+      "data/models.json"
     ],
     "asarUnpack": [
       "node_modules/ffmpeg-static/**"

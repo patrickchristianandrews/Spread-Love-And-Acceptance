@@ -16,28 +16,36 @@ Quicksilver is a private AI workstation for Windows. Like liquid quicksilver, it
 | 📚 **Knowledge bases** | Separate, isolated collections of your data: files, folders and whole websites, plus live sources searched fresh for every question: PubMed, Europe PMC, ClinicalTrials.gov, Semantic Scholar, OpenAlex, Crossref, arXiv, Wikipedia, and any search page you add. Link knowledge bases to an assistant, optionally with "only answer from this knowledge". Answers cite sources as [1], [2]. |
 | 🧑‍💼 **Assistants** | Ready-made helpers (Office Analyst, Researcher, Code Partner, Vision Analyst…), each with instructions, a model or stack, and default tools. Create your own. |
 | 📷 **Photos & video in chat** | Attach photos, screenshots and videos (sampled into frames) for any vision model, or for a stack with a vision member. |
-| 🎨 **Studio** | Create images (SD 1.5, SDXL, SDXL Turbo, FLUX), edit photos by instruction (FLUX Kontext, Qwen Image Edit), with a paint-the-area mask or by hand (crop, rotate, colour, looks, resize), create videos from text or a photo (Wan 2.1 / 2.2), and edit videos (trim, crop, speed, colour, fades, mute, reverse, MP4/WebM/GIF, frame grabs). |
-| 📦 **Models** | 23 curated text and vision models by category, from 1 GB to 88 GB, plus 8 image and video models, each rated for your PC. Search all of Hugging Face and pick a size (quantization) that fits. Import any `.gguf`. |
+| 🎨 **Studio** | Create images (SD 1.5, SDXL, FLUX, Z-Image, Qwen-Image, and uncensored community models: Lustify, Chroma, Pony, Illustrious, CyberRealistic and more), edit photos by instruction (FLUX Kontext, Qwen Image Edit), with a paint-the-area mask or by hand (crop, rotate, color, looks, resize), create videos from text or a photo (Wan 2.1 / 2.2, Wan 2.2 Turbo), and edit videos (trim, crop, speed, color, fades, mute, reverse, MP4/WebM/GIF, frame grabs). |
+| 📦 **Models** | 69 curated text and vision models by category, from 1 GB to 88 GB, plus 34 image and video models (including 20 uncensored picture models such as Lustify, Chroma, Pony and Illustrious), each rated for your PC. Search all of Hugging Face and pick a size (quantization) that fits. Import any `.gguf`. |
 | 🖥️ **Your PC** | Your hardware, and how every model will run on it (words per second, seconds per image), calibrated by a one-click speed test. |
 | ☁️ **Cloud APIs** | Optional: Anthropic (Claude), OpenAI, Google Gemini, OpenRouter, Groq, Mistral, DeepSeek, xAI, Together, Ollama, LM Studio or any OpenAI-compatible endpoint. Mix them into stacks, for example local drafts with a cloud lead. |
 | 🔌 **API server** | Quicksilver serves an OpenAI-compatible API on `127.0.0.1` (`/v1/models`, `/v1/chat/completions`, `/v1/images/generations`), so other apps can use your local models and stacks. An access key is optional. |
 
 ## Install on Windows
 
-1. Download **Quicksilver-Windows-installer** from the latest run of the **Quicksilver Windows installer** workflow (repository → Actions), or from Releases.
-2. Unzip it and run `Quicksilver-Setup-2.6.1.exe`. Until the installer is code-signed, Windows SmartScreen may warn you: choose **More info → Run anyway**.
-3. Open Quicksilver, go to **Stacks**, pick a job and press **Download & build this stack**.
+Quicksilver comes as **Quicksilver Liquid Edition**: an uncensored set of models for chat (Qwen3.5 2B, 4B and 9B), pictures (Lustify), video (Wan 2.2) and search, about 30 GB in all. Quicksilver does not open until all of it is installed. There are three ways to get it, from the latest run of the **Quicksilver Windows installer** workflow (repository → Actions) or from Releases:
 
-The installer includes the llama.cpp engine (text and vision, using Vulkan on NVIDIA, AMD and Intel cards, or the processor) and the stable-diffusion.cpp engine (images and video). On NVIDIA cards you can download the faster CUDA engines in **Settings → Engines**.
+| Download | Size | What happens |
+|---|---|---|
+| **Full offline package** (`Quicksilver-Windows-installer`) | about 31 GB | The installer plus a "Quicksilver models" folder. Keep them together and run the installer: everything is copied in, nothing is downloaded. |
+| **Installer alone** (`Quicksilver-Setup-x.y.z.exe`, on Releases) | about 1.9 GB | The small 2B model is inside; the setup screen downloads the rest on first launch. |
+| **Web installer** (`Quicksilver-Windows-web-installer`) | about 200 MB | No models inside; the setup screen downloads the whole Liquid Edition on first launch. |
 
-**Reliability:** built-in graphics chips (Intel UHD/Iris, AMD "Radeon Graphics") are skipped, since they cause most crashes. If a model fails on the graphics card, Quicksilver restarts it on the processor and retries automatically. Models start loading as soon as you open a chat, so the first reply comes quickly.
+Until the installer is code-signed, Windows SmartScreen may warn you: choose **More info → Run anyway**. Quicksilver needs about 40 GB free on the drive you install to. The full package also needs room for the download itself (about 31 GB zipped and the same again unzipped; both can be deleted after installing). Build artifacts on the Actions page are kept for 90 days and need a GitHub sign-in.
+
+The installer includes the llama.cpp engine (chat and vision, using Vulkan on NVIDIA, AMD and Intel cards, or the processor), the stable-diffusion.cpp engine (pictures and video) and whisper.cpp (voice typing). On NVIDIA cards you can download the faster CUDA engines in **Settings → Engines**.
+
+The big models are kept outside the app's own folder, so updating or reinstalling does not download them again: in your data folder (`%APPDATA%\Quicksilver`), or, when you install on another drive, in a "Quicksilver kept models" folder beside the app on that drive. Uninstalling asks whether to remove your chats and models too.
+
+**Reliability:** built-in graphics chips (Intel UHD/Iris, AMD "Radeon Graphics") are skipped, since they cause most crashes. If a model fails on the graphics card, Quicksilver restarts it on the processor and retries automatically. A model loads once and stays ready between messages.
 
 ## Develop
 
 ```bash
 cd quicksilver
 npm install
-npm run fetch-engines     # downloads llama.cpp and stable-diffusion.cpp for this platform into engine/
+npm run fetch-engines     # downloads llama.cpp, stable-diffusion.cpp and whisper.cpp for this platform into engine/
 npm start
 ```
 
@@ -45,10 +53,14 @@ Tests use stand-in engines (`test/fakes`), so they run anywhere:
 
 ```bash
 node test/backend.test.js          # every main-process module
+node test/media-catalog.test.js && node test/loading.test.js && node test/skills-auto.test.js && node test/pro.test.js
 xvfb-run -a node test/ui.test.js   # the real app, clicked through end to end
+xvfb-run -a node test/liquid-picture.test.js   # just ask: pictures in a Liquid Edition chat; Code chat
+xvfb-run -a node test/in-use.test.js           # a stack uses only its own models; Models in use
+xvfb-run -a node test/gate.test.js             # the setup screen; models kept across reinstalls
 ```
 
-Build an installer with `npm run dist:win` (on Windows, after `npm run fetch-engines`).
+Build an installer with `npm run dist:win` (on Windows, after `npm run fetch-engines` and `node scripts/fetch-starter.js`, which downloads the Liquid Edition's models and writes `starter/STARTER.json`; without it the build has no Liquid Edition).
 
 ## Layout
 

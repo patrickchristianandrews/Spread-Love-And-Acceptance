@@ -1,0 +1,11 @@
+#!/usr/bin/env node
+// Stand-in engine for tests: on the "graphics card" it accepts a question and never answers (a
+// model still reading a long prompt); on the processor it answers at once.
+const http=require('http');const args=process.argv.slice(2);
+if(args.includes('--list-devices')){console.log('Available devices:\n  Vulkan0: Fake GPU 8GB (8192 MiB, 7800 MiB free)');process.exit(0);}
+if(args.includes('--help')){console.log('x');process.exit(0);}
+const port=Number(args[args.indexOf('--port')+1]);
+const cpu=args[args.indexOf('-ngl')+1]==='0';
+http.createServer((req,res)=>{ if(req.url==='/health'){res.writeHead(200);return res.end('{}');}
+ if(cpu){res.writeHead(200,{'Content-Type':'text/event-stream'});res.write('data: '+JSON.stringify({choices:[{delta:{content:'answered on CPU'}}]})+'\n\n');return res.end('data: [DONE]\n\n');}
+ /* GPU: hang (reading the prompt) */ }).listen(port,'127.0.0.1');

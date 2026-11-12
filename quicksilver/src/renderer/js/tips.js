@@ -19,13 +19,13 @@ const TIPS = [
   { id: 'connect', when: () => true, text: 'Connect your apps (calendar, GitHub, Slack, notes…) and I can use them when you mention them.', label: 'See connectors', go: () => go({ view: 'integrations' }) },
   { id: 'phone', when: () => true, text: 'Use Quicksilver from your phone on the same Wi-Fi — your PC does the work. Set it up in Settings → Phone.', label: 'Set up phone', go: () => { setTab = 'phone'; go({ view: 'settings' }); } },
   { id: 'compare', when: () => true, text: 'Not sure which model suits you? Compare models runs a blind test and builds your own leaderboard.', label: 'Compare models', go: () => go({ view: 'arena' }) },
-  { id: 'create', when: () => true, text: 'Create makes pictures, short videos and music on this PC — get a picture model there in one click.', label: 'Open Create', go: () => go({ view: 'studio' }) },
+  { id: 'create', when: () => true, text: 'Ask for a picture or a short video in any chat and it is made on this PC. Everything you make is kept in Gallery & tools, with photo and video editing.', label: 'Open Gallery & tools', go: () => go({ view: 'studio' }) },
 ];
 
 // Answers from the models that come with Quicksilver (the Quicksilver stack, or a bundled model).
 function isStarterTarget(t) {
   if (!t) return false;
-  if (t === 'stack:quicksilver') return true;
+  if (t === 'stack:quicksilver' || t === 'stack:quicksilver-pro') return true;
   const inst = S.installed.find((m) => `local:${m.id}` === t);
   return inst?.source === 'bundled';
 }

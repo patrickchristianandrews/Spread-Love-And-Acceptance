@@ -21,6 +21,112 @@ function suggestSkill(text) {
   return allSkills().find((s) => (s.triggers || []).some((p) => { try { return new RegExp(p, 'i').test(t); } catch { return false; } })) || null;
 }
 
+// ---------- just ask: requests that make something use the right skill by themselves ----------
+// Like any AI assistant, you shouldn't have to pick a skill (or type /) to get a picture, a video,
+// a photo edit, music, a spoken version, a document, a chart or an app: asking for it is enough.
+// The rules are deliberately strict, so an ordinary question is never turned into a picture or a
+// file: there must be a clear "make me…" request, not just a word like "wallpaper" or "research".
+// Skills that only shape a written answer are left to the model (it answers those well as it is);
+// they are still suggested above the message box, and every skill is still in the / menu.
+// A message about code is answered as code: it is never turned into a picture, a video or a
+// document, however it is worded ("make the image smaller in this html", "write a python script
+// to generate an image"). Only clear signs count, so "a picture of a python" is still a picture.
+const CODE_TALK = /```|<\/?[a-z][\w-]*[\s>/]|[{};]\s*$|=>|\b(html|css|javascript|typescript|jsx|tsx|sql|php|regex|json|xml|yaml|react|vue|svelte|angular|django|flask|api|endpoint|sdk|compile[sd]?|traceback|stack trace|typeerror|syntaxerror|referenceerror|undefined|debug|svg|div|selector|schema|migration|database|localhost|source code|the code|this code|my code|code for|(python|js|bash|shell|powershell|node) script|script (to|that)|in (python|java|ruby|rust|go|c\+\+|c#|kotlin|swift)|function|variable)\b/i;
+// Talk about some day, or about learning how, is not a request to make the thing now.
+const NOT_NOW = /\b(someday|some day|one day|eventually|in the future|thinking (about|of)|dream of|learn(ing)? (how )?to|how (do|can|would|should) (i|we|you))\b/i;
+// "make me a picture of…": a making verb, then "a/an/some/two…", then the thing within a few
+// words, and after it "of / with / showing…" or the end of the sentence. So "make the image
+// smaller", "I need the big picture", "a photo column" and "a video player" are not requests.
+const ASK_VERB = '\\b(make|create|generate|draw|paint|design|render|produce|show|give|send|want|need|like|get|gimme)\\b(?: me| us)?';
+const SOME = '(?:a|an|another|some|one|two|three|four|five|six|\\d+|a few|a couple of|several|more)';
+const NOT_MINE = "(?:(?!(?:the|this|that|these|those|my|your|his|her|their|our|its|with|and|about|for|of|in|on|to|from|or)\\b)[\\w'-]+ )";
+const THEN = '(?= (?:of|with|showing|featuring|depicting|that shows|where|for|in|like|from|about|please)\\b|\\s*[.,!?:;]|\\s*$)';
+const PIC = '(pictures?|images?|photos?|photographs?|pics?|drawings?|paintings?|illustrations?|portraits?|artworks?|selfies?)';
+const VID = '(videos?|clips?|animations?|gifs?)';
+const PICTURE_ASK = new RegExp(`${ASK_VERB} ${SOME} ${NOT_MINE}{0,8}?${PIC}\\b${THEN}|\\b(show|give|send|make|draw|paint|generate|get)\\b (?:me|us) (?:some |more )?${NOT_MINE}{0,3}?${PIC}\\b${THEN}|\\bgimme\\b ${NOT_MINE}{0,4}?${PIC}\\b${THEN}`, 'i');
+const VIDEO_ASK = new RegExp(`${ASK_VERB} ${SOME} ${NOT_MINE}{0,8}?${VID}\\b${THEN}|\\b(show|give|send|make|generate|get)\\b (?:me|us) (?:some |more )?${NOT_MINE}{0,3}?${VID}\\b${THEN}`, 'i');
+// "A photo of a woman in a red dress": the thing itself, said first.
+const PICTURE_FIRST = new RegExp(`^(?:(?:a|an|some|one|two|three|\\d+) )?(?:[\\w'-]+ ){0,2}?${PIC} of\\b`, 'i');
+const VIDEO_FIRST = new RegExp(`^(?:(?:a|an|some|one|two|three|\\d+) )?(?:[\\w'-]+ ){0,2}?${VID} of\\b`, 'i');
+// "draw a cat", "paint a sunset": the verb alone asks for a picture (but not "draw a conclusion",
+// "draw two cards from a deck" or anything that goes on to ask for a calculation).
+const DRAW_IT = /^(please |can you |could you |would you |will you )?(draw|paint|sketch)\b(?! (a |an |the |me |us |one |two |three |four |five |\d+ )*(conclusions?|comparisons?|lines?|distinctions?|parallels?|blank|crowd|cards?|lots|straws|numbers?|samples?|names?|marbles?|balls?|tickets?|inferences?|lessons?)\b| up| on| from| out| attention| near| upon)/i;
+const SUMS = /\b(probabilit|chance|odds|calculate|how many|how much|expected value)\w*/i;
+// A question about how to do something is answered, not carried out ("how do I make a logo?").
+const JUST_ASKING = /^\s*(how|what|why|when|where|who|which|is|are|was|were|does|do|did|should|would it|can i|could i|may i|am i)\b/i;
+const ABOUT_WORDS = /\b(prompt for|describe|explain|caption|what(?:'s| is) (in|on)|analy[sz]e|read the text|review of|write a review|summar)\w*/i;
+// Is the thing a skill makes really what is being asked for? Its own words (the trigger) must
+// either start with the making verb ("write a report", "make a chart"), or follow one closely
+// with "a / an / my…" in between ("I need a business plan", "create a presentation"). So "I need
+// to research dogs", "can you make sense of this invoice" and "I want to know about SEO" stay
+// ordinary messages.
+const OWN_VERB = /^\(?(make|create|generate|write|draft|prepare|build|code|plan|compose|produce|design|plot|turn|read|narrate|record|score|track|clean|extract|analy)/i;
+const LEAD_IN = /\b(make|create|generate|write|draft|prepare|build|put together|compose|produce|design|record|give|send|need|want|like|get|do)\b(?: me| us)? (?:a|an|another|some|one|my|our|the|this|that)(?: [\w'-]+){0,3} ?$/i;
+const NEXT_WORD_ELSE = /^[\s-]*(ideas?|prompts?|captions?|descriptions?|scripts?|editors?|editing|generators?|players?|models?|files?|formats?|sizes?|search|gallery|library|folder|frames?|albums?|viewer|apps?|tools?|classifier|dataset|tags?|elements?|columns?|fields?|uploads?|urls?|paths?|codecs?|streams?|components?|tutorials?|courses?|essay|review|call|calls|games?|cards?)\b/i;
+function askedFor(t, skill) {
+  for (const p of skill?.triggers || []) {
+    let m;
+    try { m = new RegExp(p, 'i').exec(t); } catch { continue; }
+    if (!m) continue;
+    // A whole word, not part of another one: "memo" is not asked for by "memory" (a plural or an
+    // -ing form still counts: "flashcards", "vibe coding").
+    const tail = t.slice(m.index + m[0].length);
+    if (/[a-z]$/i.test(m[0]) && /^[a-z]/i.test(tail) && !/^(s|es|e|ed|er|ing)\b|^'s\b/i.test(tail)) continue;
+    if (m.index > 0 && /[a-z0-9]/i.test(t[m.index - 1]) && /^[a-z0-9]/i.test(m[0])) continue;
+    // "a video script", "an image editor", "a photo column": about the thing, not the thing.
+    if (['image', 'video'].includes(skill.output) && NEXT_WORD_ELSE.test(t.slice(m.index + m[0].length))) continue;
+    if (OWN_VERB.test(m[0]) && !/^(research|plan\b(?! (a|my|the|our)\b))/i.test(m[0])) return true;
+    if (LEAD_IN.test(t.slice(Math.max(0, m.index - 60), m.index))) return true;
+  }
+  return false;
+}
+function autoSkillFor(text, atts = [], chat = null) {
+  if (S.data.prefs.autoSkills === false) return null;
+  const t = String(text || '').trim();
+  if (t.length < 6 || t.length > 1500) return null;
+  const off = new Set(chat?.dismissed || []);
+  const pick = (s) => (s && !off.has(s.id) ? s : null);
+  const polite = /\b(can|could|would|will) you\b|\bplease\b/i.test(t);
+  if (JUST_ASKING.test(t) && !polite) return null;
+  if (NOT_NOW.test(t)) return null;
+  const has = (type) => atts.some((x) => x.type === type);
+  // In a Code chat, and for any message about code, only an app or a web page is made by
+  // itself (it opens in a preview): never a picture, a video or a document.
+  const coding = CODE_TALK.test(t) || (typeof isCodeChat === 'function' && Boolean(chat) && isCodeChat(assistantById(chat.assistantId)));
+  const cand = suggestSkill(t);
+  const out = cand?.output;
+  if (coding) return out === 'app' && askedFor(t, cand) ? pick(cand) : null;
+  // Photo edits and bringing a photo to life: with the photo attached.
+  if ((out === 'edit' || out === 'animate') && has('image')) return pick(cand);
+  // A photo attached and an instruction to change it ("make the sky pink", "remove the car",
+  // "add a hat") edits that photo; "animate it" or "make it move" brings it to life. A question
+  // about the photo, or a request for words about it, is answered as usual.
+  if (has('image') && !has('doc') && out !== 'tool') {
+    if (animateAsk(t)) return pick(skillById('animate-photo'));
+    if (changeAsk(t)) return pick(skillById('edit-photo'));
+  }
+  // A plain request for a picture or a video comes first: "make me a picture of my memory of
+  // the beach" is a picture, whatever other skill's words turn up in the description. A specific
+  // picture skill (logo, poster, GIF…) when it is what is asked for; otherwise the general one.
+  if (!has('image') && !ABOUT_WORDS.test(t)) {
+    const video = VIDEO_ASK.test(t) || VIDEO_FIRST.test(t);
+    const picture = PICTURE_ASK.test(t) || PICTURE_FIRST.test(t) || (DRAW_IT.test(t) && !SUMS.test(t));
+    if (video || picture) return pick((out === 'image' || out === 'video') && askedFor(t, cand) ? cand : skillById(video ? 'make-video' : 'make-image'));
+  }
+  // Instant tools work on an attached file (upscale, remove vocals, 60 fps…).
+  if (out === 'tool') return has('image') || has('video') || has('audio') ? pick(cand) : null;
+  // Reading aloud, narration, podcasts, beats, documents, slides, spreadsheets, charts and
+  // apps: a clear request to make that very thing.
+  if (['speech', 'narrate', 'podcast', 'beat', 'docx', 'pptx', 'xlsx', 'chart', 'app'].includes(out)) return askedFor(t, cand) ? pick(cand) : null;
+  // Pictures and video. A specific picture skill (logo, poster, avatar…) when it is what is
+  // asked for; otherwise the general one. Never for requests about a picture (describe it,
+  // write a prompt, review a book with "picture" in its title).
+  if (ABOUT_WORDS.test(t)) return null;
+  // A specific picture or video skill asked for in its own words ("design a logo for my bakery").
+  if ((out === 'image' || out === 'video') && !has('image') && askedFor(t, cand)) return pick(cand);
+  return null; // (with a photo attached, "make…" is about that photo: left to you)
+}
+
 views.skills = {
   html() {
     const list = allSkills().filter((s) => (skillCat === 'all' || s.category === skillCat) && (!skillQuery || `${s.name} ${s.description}`.toLowerCase().includes(skillQuery.toLowerCase())));

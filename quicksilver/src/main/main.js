@@ -15,9 +15,11 @@ const providers = require('./providers');
 const complete = require('./complete');
 const docs = require('./docs');
 const knowledge = require('./knowledge');
+const hfData = require('./hf-data');
 const websearch = require('./websearch');
 const media = require('./media');
 const apiserver = require('./apiserver');
+const agents = require('./agents');
 const integrations = require('./integrations');
 const mcp = require('./mcp');
 const whisper = require('./whisper');
@@ -62,6 +64,19 @@ handle('apiserver:newKey', () => {
 });
 handle('apiserver:revealKey', () => store.getSecret('apiServerKey'));
 handle('apiserver:status', () => apiserver.status());
+// Coding agents (OpenCode, OpenHands) on Quicksilver's models.
+handle('agents:status', () => agents.status());
+handle('agents:opencode', async (model) => {
+  if (!store.config().apiServer.enabled) { store.saveConfig({ apiServer: { ...store.config().apiServer, enabled: true } }); await apiserver.start(); }
+  return agents.setupOpencode({ model });
+});
+handle('agents:docker', async (on) => {
+  const cur = store.config().apiServer;
+  if (on && !store.getSecret('apiServerKey')) store.setSecret('apiServerKey', `qs-${require('node:crypto').randomBytes(18).toString('base64url')}`);
+  store.saveConfig({ apiServer: { ...cur, enabled: true, docker: Boolean(on) } });
+  await apiserver.start();
+  return agents.status();
+});
 
 // ---------- voice typing, phone access, updates ----------
 handle('voice:status', () => whisper.status());
@@ -79,7 +94,7 @@ handle('update:install', () => updater.install({ starterDir: app.isPackaged ? pa
 
 // ---------- hardware, catalog, estimates, advisor ----------
 handle('hw:detect', (fresh) => hardware.detect({ fresh }));
-handle('catalog:get', () => ({ picks: require('./catalog-remote').picks(), scores: catalog.SCORES, scoreBase: catalog.SCORE_BASE, text: catalog.TEXT_MODELS, textCategories: catalog.TEXT_CATEGORIES, media: catalog.MEDIA_MODELS, mediaCategories: catalog.MEDIA_CATEGORIES, jobs: catalog.JOBS }));
+handle('catalog:get', () => ({ liquid: catalog.LIQUID_MEMBERS, liquidAddons: catalog.LIQUID_ADDONS, liquidPro: catalog.LIQUID_PRO, picks: require('./catalog-remote').picks(), scores: catalog.SCORES, scoreBase: catalog.SCORE_BASE, text: catalog.TEXT_MODELS, textCategories: catalog.TEXT_CATEGORIES, media: catalog.MEDIA_MODELS, mediaCategories: catalog.MEDIA_CATEGORIES, jobs: catalog.JOBS }));
 // Everything the model details view shows: how it runs here, why, and what it would need.
 handle('catalog:details', async (id) => {
   const hw = await hardware.detect();
@@ -150,7 +165,7 @@ handle('guide:speeds', async (tiers) => {
     // The strongest setup this kind of PC could run, and what it would be able to do.
     const adv = catalog.advise('general', h, { calib: 1, installed: [] }).best;
     const profiles = adv ? adv.ids.map((id) => catalog.TEXT_MODELS.find((m) => m.id === id)).filter(Boolean) : [];
-    const topImg = catalog.MEDIA_MODELS.filter((m) => m.kind === 'image' && catalog.estimateMedia(m, h).fit !== 'no').sort((a, b) => (b.quality || 0) - (a.quality || 0))[0];
+    const topImg = catalog.MEDIA_MODELS.filter((m) => m.kind === 'image' && !m.uncensored && !m.retired && catalog.estimateMedia(m, h).fit !== 'no').sort((a, b) => (b.quality || 0) - (a.quality || 0))[0];
     const topVid = catalog.MEDIA_MODELS.filter((m) => m.kind === 'video' && catalog.estimateMedia(m, h).fit !== 'no').sort((a, b) => (b.quality || 0) - (a.quality || 0))[0];
     out[t.n] = {
       wps: Math.round(q.wordsPerSec || 0), answerSec: q.wordsPerSec ? Math.round(300 / q.wordsPerSec) : null,
@@ -215,7 +230,9 @@ handle('speed:map', async () => {
   }
   for (const m of models.list().filter((x) => x.kind !== 'text')) {
     const c = catalog.MEDIA_MODELS.find((x) => x.id === m.catalogId);
-    if (c) out.media[m.id] = { sec: catalog.estimateMedia(c, hw, calib.media).sec, kind: c.kind, category: c.category, stars: Math.round(c.quality || 5) / 2, frames: c.defaults?.frames || null };
+    // Where fast pictures are used by themselves, the time shown is the fast one (about a fifth).
+    const fast = c && c.kind === 'image' && media.fastPicture(c, hw);
+    if (c) out.media[m.id] = { sec: catalog.estimateMedia(c, hw, calib.media).sec * (fast ? 0.2 : 1), fast: Boolean(fast), canFast: Boolean(c.kind === 'image' && media.fastPicture(c, hw, { fast: true })), kind: c.kind, category: c.category, stars: Math.round(c.quality || 5) / 2, frames: c.defaults?.frames || null };
   }
   return out;
 });
@@ -241,7 +258,7 @@ handle('advisor:overview', async () => {
   });
   const quicksilver = (await complete.ensureQuicksilverStack()) ? await complete.explainStack('quicksilver') : null;
   const yours = [];
-  for (const s of complete.stacks()) if (s.id !== 'quicksilver') { const e = await complete.explainStack(s.id); if (e) yours.push(e); }
+  for (const s of complete.stacks()) if (s.id !== 'quicksilver' && s.id !== 'quicksilver-pro') { const e = await complete.explainStack(s.id); if (e) yours.push(e); }
   const measured = require('./speeds').measured();
   return { hardware: hw, quicksilver, jobs, yours, measuredCount: Object.keys(measured).length };
 });
@@ -252,7 +269,9 @@ handle('advisor:advise', async (job) => {
 
 // Speed test: runs the smallest installed text model and compares the real speed to the estimate.
 handle('bench:run', async () => {
-  const installed = models.list().filter((m) => m.kind === 'text').sort((a, b) => a.size - b.size);
+  // The smallest model that is Quicksilver's own or in use; one from another app only if there is nothing else.
+  const mineFirst = (m) => (m.source === 'bundled' || models.inUse(m) ? 0 : 1);
+  const installed = models.list().filter((m) => m.kind === 'text').sort((a, b) => mineFirst(a) - mineFirst(b) || a.size - b.size);
   if (!installed.length) throw new Error('Download a text model first, then run the speed test.');
   const m = installed[0];
   const hw = await hardware.detect();
@@ -272,7 +291,13 @@ handle('bench:run', async () => {
 });
 
 // ---------- models ----------
-handle('models:list', () => ({ installed: models.list(), downloading: models.active(), running: llama.status() }));
+handle('models:list', () => ({ installed: models.list().map((m) => ({ ...m, inUse: models.inUse(m) })), downloading: models.active(), running: llama.status() }));
+// Models → "Models in use": tick a model to let Quicksilver use it by itself (see models.inUse).
+handle('models:use', async (id, on) => {
+  if (!models.setUse(String(id), Boolean(on))) throw new Error('That model is no longer installed.');
+  await complete.ensureQuicksilverStack().catch(() => {}); // an uncensored one joins or leaves the Liquid Edition's helpers
+  return true;
+});
 handle('models:download', async (req) => {
   // A repository given with a catalog id (the built-in model's exact copy) is used as is.
   const plan = req.repo ? await models.planGguf(req.repo, { quant: req.quant, ...(req.catalogId ? { catalogId: req.catalogId, id: req.catalogId, name: req.name } : {}) }) : await models.planCatalog(req.catalogId);
@@ -280,7 +305,14 @@ handle('models:download', async (req) => {
 });
 handle('models:options', (repo) => models.ggufOptions(repo));
 handle('models:cancel', (id) => models.cancel(id));
-handle('models:remove', (id) => { llama.stopAll(); return models.remove(id); });
+handle('models:remove', (id) => {
+  const m = models.get(id);
+  // Models that are part of the Liquid Edition stay (an imported file from another app is yours to remove).
+  // (The plain catalog build of the same model is not the Liquid Edition's: that one can go.)
+  if (m && m.source !== 'imported' && models.liquidOwn(m)) throw new Error(`🔒 ${m.name} is part of Quicksilver Liquid Edition, so it can't be removed. Models outside the Liquid Edition can be.`);
+  llama.stopAll();
+  return models.remove(id);
+});
 // Stop a running model (or all of them) to free memory; it loads again the next time it's needed.
 handle('models:stop', (file) => (file ? llama.stopFile(file) : (llama.stopAll(), true)));
 handle('models:search', (q) => models.search(q));
@@ -293,24 +325,45 @@ handle('system:load', () => {
   cpuPrev = t;
   return { cpu, memFreeGB: os.freemem() / 1024 ** 3, memTotalGB: os.totalmem() / 1024 ** 3, engines: llama.status() };
 });
-handle('models:trending', async (force) => models.trending({ force, hw: await hardware.detect() }));
+handle('models:trending', async (force) => ({ ...(await models.trending({ force, hw: await hardware.detect() })), spaces: await hfData.trendingSpaces({ force }) }));
+// Hugging Face datasets as knowledge: search, look at what would come down, then add it.
+handle('hf:datasets', (q) => hfData.searchDatasets(q));
+handle('hf:dataset', (id) => hfData.datasetInfo(id));
+handle('kb:dataset', (collectionId, id) => hfData.addDataset(knowledge, collectionId, id, { onProgress: (p) => emit('library:progress', p) }));
 handle('models:import', async () => {
   const r = await dialog.showOpenDialog(win, { title: 'Import a GGUF model', properties: ['openFile'], filters: [{ name: 'GGUF model', extensions: ['gguf'] }] });
   if (r.canceled || !r.filePaths[0]) return null;
   return models.importFile(r.filePaths[0], llama.readGguf);
 });
 handle('models:folder', () => shell.openPath(store.dir('models')));
-handle('models:found', () => models.findOnPC());
+handle('models:found', () => models.findChat(llama.readGguf));
 handle('models:repair', (id) => { llama.stopAll(); return models.repair(id, emit); });
 handle('models:addFound', (items) => models.addFound(items, llama.readGguf));
 // At start-up: add every model found on this PC (other apps, Downloads) without asking.
 // The starter model inside the installer (resources/starter), or QS_STARTER_DIR for tests.
-handle('models:starter', () => {
-  const r = models.registerStarter(process.env.QS_STARTER_DIR || (app.isPackaged ? path.join(process.resourcesPath, 'starter') : path.join(__dirname, '..', '..', 'starter')));
-  return complete.ensureQuicksilverStack().then((stack) => ({ ...r, stack }));
+handle('models:starter', async () => {
+  // Once: take files that are not chat models, and second copies, off the list an older version built.
+  let tidied = [];
+  if (store.config().importTidy !== 1) {
+    // Anything of yours that uses the model keeps it: a stack or fusion, a knowledge model, a
+    // chat, an assistant, or your default model (the last three are in your saved app data).
+    const saved = JSON.stringify(store.readJSON(store.file('app-data.json'), null) || {});
+    const mine = (id) => complete.stacks().some((s) => !['quicksilver', 'quicksilver-pro'].includes(s.id) && JSON.stringify(s.members || {}).includes(`"local:${id}"`))
+      || complete.kbModels().some((k) => k.base === `local:${id}`) || saved.includes(`"local:${id}"`);
+    try { tidied = await models.tidyImported(llama.readGguf, mine); store.saveConfig({ importTidy: 1 }); } catch { /* tried again next start */ }
+  }
+  whisper.keepShipped().catch(() => {}); // voice typing's speech model: kept across updates
+  media.keepHelpers().catch(() => {}); // the speed helpers for pictures and video: kept too
+  const starterDir = process.env.QS_STARTER_DIR || (app.isPackaged ? path.join(process.resourcesPath, 'starter') : path.join(__dirname, '..', '..', 'starter'));
+  const r = models.registerStarter(starterDir);
+  // The big models the installer copied in leave the app's folder for your data folder straight
+  // away (an instant move on the same drive; see keepPackModels). Installing a newer version over
+  // this one, by any route, replaces the app's folder: this way it never takes 30 GB of models with it.
+  if (app.isPackaged || process.env.QS_KEEP_PACK) { try { await models.keepPackModels(starterDir, { renameOnly: true }); } catch { /* they stay where they are */ } }
+  return complete.ensureQuicksilverStack().then((stack) => ({ ...r, stack, tidied }));
 });
 handle('quicksilver:rebuild', () => complete.ensureQuicksilverStack());
-handle('models:autoAdd', async () => { const found = models.findOnPC(); return found.length ? models.addFound(found, llama.readGguf) : []; });
+handle('models:autoAdd', async () => { const found = await models.findChat(llama.readGguf); return found.length ? models.addFound(found, llama.readGguf) : []; });
 
 // ---------- providers (APIs) ----------
 handle('providers:presets', () => providers.PRESETS);
@@ -353,8 +406,13 @@ handle('page:check', (html) => new Promise((resolve) => {
   w.loadFile(file).catch(() => { clearTimeout(timer); done(); });
 }));
 handle('stacks:list', () => complete.stacks());
-handle('stacks:save', (s) => complete.saveStack(s));
-handle('stacks:delete', (id) => complete.deleteStack(id));
+// The Liquid Edition is locked: it can't be edited or deleted (choose another model or stack instead).
+const LIQUID_LOCKED = '🔒 Quicksilver Liquid Edition is locked: it can\'t be changed or deleted. You can still choose any other model or stack.';
+handle('stacks:save', (s) => { if (['quicksilver', 'quicksilver-pro'].includes(s?.id) || ['quicksilver', 'quicksilver-pro'].includes(s?.builtFor)) throw new Error(LIQUID_LOCKED); return complete.saveStack(s); });
+handle('stacks:delete', (id) => { if (['quicksilver', 'quicksilver-pro'].includes(id)) throw new Error(LIQUID_LOCKED); return complete.deleteStack(id); });
+handle('quicksilver:pro', () => complete.ensureQuicksilverProStack());
+// The user pressed "Get Liquid Edition Pro": the only way Pro is ever set up.
+handle('quicksilver:proGet', () => { store.saveConfig({ liquidProWanted: true }); return complete.ensureQuicksilverProStack(); });
 handle('kbm:list', () => complete.kbModels());
 handle('kbm:save', (m) => complete.saveKbModel(m));
 handle('kbm:delete', (id) => complete.deleteKbModel(id));
@@ -487,8 +545,11 @@ handle('media:importPath', async (p) => {
 });
 const mediaJobs = new Map();
 handle('media:generate', (jobId, req) => {
+  jobId = String(jobId || '').replace(/[^a-z0-9_-]/gi, '').slice(0, 64); // it becomes part of file names
+  if (!jobId) throw new Error('Missing job id.');
   const g = media.gallery();
-  const resolveInput = (id) => (id ? g.find((x) => x.id === id)?.file : undefined);
+  // A picture that was asked for but is no longer in the gallery is an error, not a new picture.
+  const resolveInput = (id) => { if (!id) return undefined; const f = g.find((x) => x.id === id)?.file; if (!f) throw new Error('That picture is no longer in the gallery.'); return f; };
   let maskFile;
   if (req.maskDataUrl) {
     maskFile = path.join(store.dir('tmp'), `${jobId}-mask.png`);
@@ -498,7 +559,8 @@ handle('media:generate', (jobId, req) => {
     onProgress: (f) => emit('media:event', { jobId, type: 'progress', value: f }),
     onStatus: (text) => emit('media:event', { jobId, type: 'status', text }),
   }).then((item) => emit('media:event', { jobId, type: 'done', item: { ...item, url: `qsmedia://g/${item.id}` } }))
-    .catch((err) => emit('media:event', { jobId, type: 'error', message: err.message }));
+    .catch((err) => emit('media:event', { jobId, type: 'error', message: err.message }))
+    .finally(() => mediaJobs.delete(jobId));
   mediaJobs.set(jobId, p);
   return true;
 });
@@ -650,9 +712,14 @@ async function diagnostics() {
   lines.push('## Connectors on', integrations.list().filter((c) => c.enabled).map((c) => c.name).join(', ') || 'none', '');
   lines.push('## Running engines', ...llama.status().map((s) => `${path.basename(s.file)} · ${s.layers} layers on GPU · ctx ${s.ctx} · ${s.ready ? 'running' : 'stopped'}`), '');
   for (const t of llama.logTails()) lines.push(`## Engine log: ${t.file}`, t.lines, '');
-  lines.push('## Recent errors', ...(recentErrors.length ? recentErrors : ['none']));
+  lines.push('## Recent errors', ...(recentErrors.length ? recentErrors : ['none']), '');
+  // The last picture or video that failed: the engine's command line and what it said.
+  try { lines.push('## Create: last failure', fs.readFileSync(path.join(store.dir('logs'), 'create-last-failure.log'), 'utf8').slice(-6000)); } catch { lines.push('## Create: last failure', 'none'); }
   return lines.join('\n');
 }
+// The speed helpers for the Liquid Edition's pictures and video: which are here, and (when
+// asked) fetching the missing ones in the background.
+handle('media:helpers', (fetch) => (fetch ? media.fetchHelpers() : { got: [], have: media.helpers() }));
 handle('disk:info', () => {
   try {
     const s = fs.statfsSync(store.dir('models'));
@@ -748,5 +815,5 @@ app.whenReady().then(() => { try { require('./guide').start(); require('./catalo
   app.on('activate', () => { if (BrowserWindow.getAllWindows().length === 0) createWindow(); });
 });
 
-app.on('before-quit', () => { llama.stopAll(); apiserver.stop(); phone.stop(); mcp.disconnectAll(); });
-app.on('window-all-closed', () => { llama.stopAll(); if (process.platform !== 'darwin') app.quit(); });
+app.on('before-quit', () => { llama.stopAll(); media.stopAll(); apiserver.stop(); phone.stop(); mcp.disconnectAll(); });
+app.on('window-all-closed', () => { llama.stopAll(); media.stopAll(); if (process.platform !== 'darwin') app.quit(); });

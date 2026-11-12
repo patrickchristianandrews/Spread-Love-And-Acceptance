@@ -82,7 +82,7 @@ function vpnCardHTML() {
 
 function bindVpnCard() {
   const repaint = () => { const box = $('#vpn-box'); if (box) { box.innerHTML = vpnCardHTML(); bindVpnCard(); } };
-  $$('[data-pv-mode]').forEach((b) => b.addEventListener('click', async () => { await setPrivacyMode(b.dataset.pvMode); repaint(); }));
+  $$('[data-pv-mode]').forEach((b) => b.addEventListener('click', async () => { await setPrivacyMode(b.dataset.pvMode); await refreshModels().catch(() => {}); repaint(); render(); }));
   $('#vpn-open')?.addEventListener('click', async () => { const r = await call('vpn:open').catch(() => ''); toast(r === 'download' ? 'Opening the Proton VPN download page in your browser.' : 'Opening Proton VPN. Press Connect there; Quicksilver notices within a few seconds.', 6000); });
   $$('[data-vpn-go]').forEach((b) => b.addEventListener('click', async () => {
     const r = await call('vpn:go', b.dataset.vpnGo).catch(() => '');

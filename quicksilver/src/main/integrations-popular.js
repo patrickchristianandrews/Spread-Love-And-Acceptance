@@ -32,19 +32,27 @@ module.exports = ({ http, clip, secret, cfg }) => {
   };
   const refreshKey = (id) => `int:${id}:refresh`;
   const access = new Map();
+  // Dropbox reads its arguments from a header, which can only carry plain ASCII: accents, dashes
+  // and other scripts in a file name are written as \uXXXX escapes (as Dropbox asks).
+  const dbxArg = (arg) => JSON.stringify(arg).replace(/[\u007f-\uffff]/g, (c) => `\\u${c.charCodeAt(0).toString(16).padStart(4, '0')}`);
   async function tokenRequest(o, params) {
     const res = await fetch(o.token, { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: new URLSearchParams(params), signal: AbortSignal.timeout(30000) });
     const j = await res.json().catch(() => ({}));
-    if (!res.ok) throw new Error(j.error_description || j.error?.message || j.error || `sign-in failed (${res.status})`);
+    if (!res.ok) { const err = new Error(j.error_description || j.error?.message || j.error || `sign-in failed (${res.status})`); err.code = typeof j.error === 'string' ? j.error : ''; throw err; }
     return j;
   }
+  // A sign-in page left open keeps its address in use (Dropbox and Spotify use a fixed one): a
+  // new try closes the one before it instead of failing with "address in use".
+  const waiting = new Map();
   async function signIn(id) {
     const o = OAUTH[id];
     const client = C(id).client;
     if (!client) throw new Error('Paste the app\'s client ID first.');
     const verifier = b64url(crypto.randomBytes(32));
     const state = b64url(crypto.randomBytes(16));
+    try { waiting.get(id)?.close(); } catch { /* already closed */ }
     const server = nodeHttp.createServer();
+    waiting.set(id, server);
     await new Promise((res, rej) => { server.once('error', rej); server.listen(o.port || 0, o.host, res); });
     const redirect = `http://${o.host}:${server.address().port}/`;
     try {
@@ -73,7 +81,12 @@ module.exports = ({ http, clip, secret, cfg }) => {
     if (a && a.until > Date.now()) return a.token;
     const refresh = store.getSecret(refreshKey(id));
     if (!refresh) throw new Error('Sign in first (Connectors).');
-    const t = await tokenRequest(OAUTH[id], { client_id: C(id).client, grant_type: 'refresh_token', refresh_token: refresh, ...(OAUTH[id].scope && id === 'microsoft' ? { scope: OAUTH[id].scope } : {}) });
+    let t;
+    try { t = await tokenRequest(OAUTH[id], { client_id: C(id).client, grant_type: 'refresh_token', refresh_token: refresh, ...(OAUTH[id].scope && id === 'microsoft' ? { scope: OAUTH[id].scope } : {}) }); } catch (err) {
+      // The service ended this sign-in: it is forgotten, so the next Sign in opens the browser again.
+      if (err.code === 'invalid_grant') { forget(id); throw new Error('That sign-in has ended. Open Connectors and sign in again.'); }
+      throw err;
+    }
     if (t.refresh_token) store.setSecret(refreshKey(id), t.refresh_token); // Microsoft and Spotify may rotate it
     access.set(id, { token: t.access_token, until: Date.now() + ((t.expires_in || 3600) - 60) * 1000 });
     return t.access_token;
@@ -93,7 +106,7 @@ module.exports = ({ http, clip, secret, cfg }) => {
       fields: [{ key: 'client', label: 'Client ID', placeholder: 'From your Spotify app', help: 'One-time setup: developer.spotify.com/dashboard → Create app, Redirect URI http://127.0.0.1:53683/, tick Web API. Copy the Client ID here.', url: 'https://developer.spotify.com/dashboard' }] },
     hubspot: { name: 'HubSpot', icon: '🧲', group: 'Sales & support', blurb: 'Search contacts, companies and deals; add contacts and notes (asks first).',
       fields: [{ key: 'token', label: 'Private app access token', secret: true, help: 'HubSpot → Settings → Integrations → Private apps → Create, with CRM scopes for contacts, companies, deals (read and write). Copy the access token.', url: 'https://app.hubspot.com/private-apps/' }] },
-    pipedrive: { name: 'Pipedrive', icon: '🟢', group: 'Sales & support', blurb: 'Your open deals, search people and organisations, add notes to deals (asks first).',
+    pipedrive: { name: 'Pipedrive', icon: '🟢', group: 'Sales & support', blurb: 'Your open deals, search people and organizations, add notes to deals (asks first).',
       fields: [{ key: 'token', label: 'Personal API token', secret: true, help: 'Pipedrive → your name → Personal preferences → API.', url: 'https://app.pipedrive.com/settings/api' }] },
     zendesk: { name: 'Zendesk', icon: '🎧', group: 'Sales & support', blurb: 'Search and read support tickets; reply to customers (asks first).',
       fields: [{ key: 'site', label: 'Zendesk address', placeholder: 'yourcompany.zendesk.com' }, { key: 'email', label: 'Your agent email' }, { key: 'token', label: 'API token', secret: true, help: 'Admin Center → Apps and integrations → Zendesk API → Add API token.' }] },
@@ -147,7 +160,8 @@ module.exports = ({ http, clip, secret, cfg }) => {
     { name: 'outlook_create_event', write: true, description: 'Add an event to your Outlook calendar.', parameters: { type: 'object', properties: { title: { type: 'string' }, start: { type: 'string', description: 'Local date-time, e.g. 2026-11-12T15:00' }, end: { type: 'string', description: 'Default one hour later' }, location: { type: 'string' }, attendees: { type: 'string', description: 'Emails, comma-separated (they get an invite)' } }, required: ['title', 'start'] },
       run: async ({ title, start, end, location, attendees }) => {
         const s = start.length === 16 ? `${start}:00` : start;
-        const e = end ? (end.length === 16 ? `${end}:00` : end) : new Date(new Date(s).getTime() + 3600000 - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 19);
+        const later = new Date(s).getTime() + 3600000; // one hour on, as a local clock time (with that day's own offset)
+        const e = end ? (end.length === 16 ? `${end}:00` : end) : new Date(later - new Date(later).getTimezoneOffset() * 60000).toISOString().slice(0, 19);
         const ev = await ms('/me/events', { method: 'POST', body: { subject: title, start: { dateTime: s, timeZone: tz() }, end: { dateTime: e, timeZone: tz() }, ...(location ? { location: { displayName: location } } : {}), ...(attendees ? { attendees: recips(attendees).map((a) => ({ ...a, type: 'required' })) } : {}) } });
         return `Added "${ev.subject}". ${ev.webLink || ''}`;
       } },
@@ -197,14 +211,14 @@ module.exports = ({ http, clip, secret, cfg }) => {
       } },
     { name: 'dropbox_read', description: 'Read a Dropbox file: Word, Excel, PowerPoint, PDF or text (path from dropbox_search).', parameters: { type: 'object', properties: { path: { type: 'string' } }, required: ['path'] },
       run: async ({ path: p }) => {
-        const res = await dbx('https://content.dropboxapi.com/2/files/download', { method: 'POST', raw: true, headers: { 'Dropbox-API-Arg': JSON.stringify({ path: p }) } });
+        const res = await dbx('https://content.dropboxapi.com/2/files/download', { method: 'POST', raw: true, headers: { 'Dropbox-API-Arg': dbxArg({ path: p }) } });
         if (!res.ok) throw new Error(`Dropbox said ${res.status}`);
         const text = await fileText(path.basename(p), Buffer.from(await res.arrayBuffer()));
         return text ? clip(`${p}\n\n${text}`) : `${p} can't be read as text here.`;
       } },
     { name: 'dropbox_save', write: true, description: 'Save text as a new file in your Dropbox.', parameters: { type: 'object', properties: { path: { type: 'string', description: 'e.g. /Notes/meeting.md' }, text: { type: 'string' } }, required: ['path', 'text'] },
       run: async ({ path: p, text }) => {
-        const f = await dbx('https://content.dropboxapi.com/2/files/upload', { method: 'POST', headers: { 'Dropbox-API-Arg': JSON.stringify({ path: p.startsWith('/') ? p : `/${p}`, mode: 'add', autorename: true }), 'Content-Type': 'application/octet-stream' }, body: Buffer.from(String(text), 'utf8') });
+        const f = await dbx('https://content.dropboxapi.com/2/files/upload', { method: 'POST', headers: { 'Dropbox-API-Arg': dbxArg({ path: p.startsWith('/') ? p : `/${p}`, mode: 'add', autorename: true }), 'Content-Type': 'application/octet-stream' }, body: Buffer.from(String(text), 'utf8') });
         return `Saved ${f.path_display}.`;
       } },
   ];
@@ -323,7 +337,7 @@ module.exports = ({ http, clip, secret, cfg }) => {
   const PIPEDRIVE_TOOLS = [
     { name: 'pipedrive_deals', description: 'Your Pipedrive deals (open by default).', parameters: { type: 'object', properties: { status: { type: 'string', description: 'open (default), won, lost or all_not_deleted' } } },
       run: async ({ status = 'open' }) => { const r = await pd(`/deals?status=${encodeURIComponent(status)}&limit=30&sort=update_time%20DESC`); return (r.data || []).map((d) => `[${d.id}] ${d.title} · ${money(d.value, d.currency)} · ${d.org_name || d.person_name || ''} · ${d.status}`).join('\n') || 'No deals.'; } },
-    { name: 'pipedrive_search', description: 'Search Pipedrive people, organisations and deals.', parameters: { type: 'object', properties: { query: { type: 'string' } }, required: ['query'] },
+    { name: 'pipedrive_search', description: 'Search Pipedrive people, organizations and deals.', parameters: { type: 'object', properties: { query: { type: 'string' } }, required: ['query'] },
       run: async ({ query }) => { const r = await pd(`/itemSearch?term=${encodeURIComponent(query)}&limit=10`); return (r.data?.items || []).map(({ item: i }) => `${i.type} [${i.id}] ${i.title || i.name}${i.organization?.name ? ` · ${i.organization.name}` : ''}`).join('\n') || 'Nothing matches.'; } },
     { name: 'pipedrive_add_note', write: true, description: 'Add a note to a Pipedrive deal.', parameters: { type: 'object', properties: { deal_id: { type: 'integer' }, text: { type: 'string' } }, required: ['deal_id', 'text'] },
       run: async ({ deal_id: id, text }) => { await pd('/notes', { method: 'POST', body: { content: text, deal_id: id } }); return 'Note added.'; } },

@@ -70,9 +70,13 @@ function download() {
     await require('./engines').downloadTo(u.url, tmp, (d, t) => { state.progress = { downloaded: d, total: t || u.size }; if (Date.now() - last > 400) { last = Date.now(); changed(); } });
     if (u.size && fs.statSync(tmp).size !== u.size) { fs.rmSync(tmp, { force: true }); throw new Error('The update download was incomplete. It will try again later.'); }
     if (u.sumUrl) {
-      const want = (await (await fetch(u.sumUrl, { headers: { 'User-Agent': 'Quicksilver' } })).text()).trim().split(/\s+/)[0].toLowerCase();
-      const got = crypto.createHash('sha256').update(fs.readFileSync(tmp)).digest('hex');
-      if (want && want !== got) { fs.rmSync(tmp, { force: true }); throw new Error('The update didn\'t match its published fingerprint, so it was deleted.'); }
+      const sumRes = await fetch(u.sumUrl, { headers: { 'User-Agent': 'Quicksilver' } });
+      if (!sumRes.ok) { fs.rmSync(tmp, { force: true }); throw new Error('The update\'s fingerprint couldn\'t be downloaded. It will try again later.'); }
+      const want = (await sumRes.text()).trim().split(/\s+/)[0].toLowerCase();
+      if (!/^[0-9a-f]{64}$/.test(want)) { fs.rmSync(tmp, { force: true }); throw new Error('The update\'s fingerprint couldn\'t be read. It will try again later.'); }
+      // Hashed as a stream: the installer is about 2 GB, too big to read into memory in one go.
+      const got = await new Promise((resolve, reject) => { const h = crypto.createHash('sha256'); fs.createReadStream(tmp).on('data', (d) => h.update(d)).on('end', () => resolve(h.digest('hex'))).on('error', reject); });
+      if (want !== got) { fs.rmSync(tmp, { force: true }); throw new Error('The update didn\'t match its published fingerprint, so it was deleted.'); }
     }
     fs.renameSync(tmp, file);
     state.downloaded = { version: u.version, file };
@@ -91,12 +95,33 @@ async function install({ starterDir } = {}) {
   // Models must be closed before their files can be moved out of the app's folder.
   require('./llama').stopAll();
   await new Promise((r) => setTimeout(r, 1200));
-  try { require('./models').keepPackModels(starterDir); } catch {}
+  const models = require('./models');
+  try { await models.keepPackModels(starterDir); } catch {}
+  // Installing replaces the app's folder. Models that could not be moved out of it first (the
+  // app is on another drive and the drive with your data has no room, or no permission) would go
+  // with it and have to be downloaded again, so the update waits and says what to do.
+  let left = { bytes: 0 };
+  try { left = models.packLeft(starterDir); } catch {}
+  if (left.bytes > 500e6) {
+    const gbs = Math.ceil(left.bytes / 1024 ** 3);
+    throw new Error(`This update is ready, but about ${gbs} GB of Quicksilver's models are still inside the app's folder and could not be moved out of it (the drive with your data is short of room, or the folder can't be written to). Installing now would delete them. Free about ${gbs + 2} GB on the drive that holds your user folder and press Install again.`);
+  }
   spawn(d.file, ['--updated', '/S', '--force-run'], { detached: true, stdio: 'ignore', windowsHide: true }).unref();
   setTimeout(() => electron?.app?.quit(), 300);
   return true;
 }
 
-function init(emitter) { emit = emitter; }
+// An installer that has done its job is not kept: after an update (or if the same version is
+// already running) the downloaded setup file, about 2 GB, is removed.
+function tidyDownloads() {
+  try {
+    const dir = store.dir('updates');
+    for (const f of fs.readdirSync(dir)) {
+      const v = (f.match(/(\d+\.\d+\.\d+)/) || [])[1];
+      if (/\.part$/i.test(f) ? false : !v || cmp(v, current()) <= 0) fs.rmSync(path.join(dir, f), { force: true });
+    }
+  } catch { /* nothing to tidy */ }
+}
+function init(emitter) { emit = emitter; tidyDownloads(); }
 
-module.exports = { init, check, download, install, state: publicState, cmp };
+module.exports = { init, check, download, install, tidyDownloads, state: publicState, cmp };

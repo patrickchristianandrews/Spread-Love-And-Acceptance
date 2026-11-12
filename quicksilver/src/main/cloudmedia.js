@@ -41,7 +41,7 @@ const SERVICES = {
     image: [['black-forest-labs/flux-schnell', 'FLUX.1 Schnell (Replicate)', 7, 'about $0.003 a picture ($5 free credits)', 'Fast, good pictures; the free credits last a long time']],
   }, custom: true },
   venice: { name: 'Venice AI (uncensored)', models: {
-    image: [['hidream', 'HiDream (Venice, uncensored)', 8, 'Venice credits; small free allowance', 'Detailed pictures with safe mode off'], ['venice-sd35', 'Stable Diffusion 3.5 (Venice, uncensored)', 7, 'Venice credits', 'Many styles, safe mode off']],
+    image: [['lustify-v8', 'Lustify v8 (Venice, uncensored)', 8, 'about $0.01 a picture', 'Uncensored photoreal pictures, including adult content: the Liquid Edition\'s picture model, in the cloud'], ['lustify-sdxl', 'Lustify SDXL (Venice, uncensored)', 7, 'about $0.01 a picture', 'The original Lustify, uncensored'], ['hidream', 'HiDream (Venice, uncensored)', 8, 'Venice credits; small free allowance', 'Detailed pictures with safe mode off'], ['venice-sd35', 'Stable Diffusion 3.5 (Venice, uncensored)', 7, 'Venice credits', 'Many styles, safe mode off']],
   }, custom: true },
   stability: { name: 'Stability AI', models: {
     image: [['core', 'Stable Image Core (Stability AI)', 7, '3 credits a picture (25 free credits a month)', 'Reliable pictures in many styles'], ['ultra', 'Stable Image Ultra (Stability AI)', 8, '8 credits a picture', 'Stability\'s most detailed pictures']],

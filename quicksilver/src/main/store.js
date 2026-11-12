@@ -53,7 +53,7 @@ function hasSecret(name) { return Boolean(secrets()[name]); }
 
 // App settings shared by the main process (engines, API server, providers, web search).
 const DEFAULT_CONFIG = {
-  apiServer: { enabled: false, port: 1337, requireKey: false },
+  apiServer: { enabled: false, port: 1337, requireKey: false, docker: false },
   web: { provider: 'free', searxngUrl: '' },
   providers: [], // [{ id, preset, name, baseUrl, models: [], imageModels: [] }]
   engine: { llama: 'auto', sd: 'auto' },

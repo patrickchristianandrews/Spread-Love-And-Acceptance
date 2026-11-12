@@ -83,14 +83,16 @@ async function detect({ fresh = false } = {}) {
   if (main) {
     hw.vramGB = main.vramGB;
     hw.vramFreeGB = main.freeGB ?? main.vramGB;
+    hw.vramFreeLive = main.freeGB != null; // a real "free right now" figure, not just the card's size
     hw.gpuName = main.name;
   } else {
     hw.gpuName = hw.integrated[0] ? `${hw.integrated[0]} (built-in, using the processor instead)` : hw.adapters[0] ? `${hw.adapters[0]} (not used for AI)` : 'None found';
   }
   hw.nvidia = gpus.some((g) => g.vendor === 'nvidia') || hw.adapters.some((a) => /nvidia/i.test(a));
   hw.engineReady = Boolean(llama);
+  hw.readAt = Date.now();
   cache = hw;
-  cacheAt = Date.now();
+  cacheAt = hw.readAt;
   return hw;
 }
 

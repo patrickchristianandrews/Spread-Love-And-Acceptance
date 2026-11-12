@@ -36,8 +36,8 @@ const FEATURE_GROUPS = [
     ['📚', 'Your Library', 'Load your own files and websites; answers are searched and cited from them.'],
     ['🌐', 'Web search, no key', 'Checks the web by itself for current questions (news, prices, weather) and says so. Falls back to Wikipedia if search is blocked.'],
   ]],
-  ['Create', [
-    ['🖼️', 'Pictures, video and music', 'Make images on your own PC, or in the cloud. Free with Pollinations (no key, no account); connect fal.ai, Replicate or Stability for top quality; Venice for uncensored pictures.'],
+  ['Pictures, video and music', [
+    ['🖼️', 'Pictures, video and music', 'Ask in any chat, or set the message box to Picture or Video. Made on your own PC, or in the cloud. Free with Pollinations (no key, no account); connect fal.ai, Replicate or Stability for top quality; Venice for uncensored pictures.'],
     ['🎬', 'GIF maker & editing', 'Type /gif for a looping GIF made on your PC; trim, speed, crop and upscale video; vocal remover and read-aloud.'],
   ]],
   ['Gets things done', [
@@ -62,7 +62,7 @@ const RELEASE_NOTES_2_18 = [
   ['Faster everywhere', 'Reads ahead while you type, answers your likely next question in the background, gives instant repeats of answers you rated 👍, and makes better use of your graphics card.'],
   ['Does more by itself', 'Checks the web for current questions, searches your Library when it clearly has the answer, and uses apps you have connected when you mention them.'],
   ['Memory that finds by meaning', 'Remembers lasting facts about you across chats and, with Smarter search, recalls them the way Mem0 does — all on this PC.'],
-  ['Free cloud pictures built in', 'Pollinations makes pictures with no key or account, under Create → Cloud, when your PC can\'t or would be slow.'],
+  ['Free cloud pictures built in', 'Pollinations makes pictures with no key or account, under Gallery & tools → Cloud, when your PC can\'t or would be slow.'],
   ['New teams & skills', 'A vibe-hacking team (idea → runnable app), a GIF maker, CPA and CIA exam coaches, and a find-this-product-from-a-photo skill.'],
   ['Clearer, calmer screen', 'Fewer buttons under each answer, the privacy state shown at the top, and upgrades that separate "faster" from "smarter" with real costs.'],
 ];

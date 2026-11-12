@@ -188,7 +188,10 @@ const hasImages = (messages) => messages.some((m) => Array.isArray(m.content) &&
 // (speculative decoding). Warm-up, reading ahead and answers must agree, or the answer would
 // reuse a server started without the helper.
 function localSpec(m, messages = []) {
-  const d = !m.files.mmproj && !hasImages(messages) ? catalog.draftFor(m.catalogId, models.list()) : null;
+  // The speed helper (a small model of the same family that drafts ahead; the answer is still the
+  // big model's own) is a model that came with Quicksilver or was downloaded in it, or one you
+  // ticked as in use: never a file found in another app.
+  const d = !m.files.mmproj && !hasImages(messages) ? catalog.draftFor(m.catalogId, models.list().filter((x) => x.source !== 'imported' || models.inUse(x))) : null;
   return { id: m.id, name: m.name, file: m.files.model, mmproj: m.files.mmproj, draft: d?.files.model };
 }
 
@@ -277,7 +280,7 @@ async function collect(target, req, onPartial) {
 
 // One picture: no headings, no talk of other images or video. Describe only what's visible.
 const DESCRIBE_ONE = 'Describe this one image in detail for a colleague who cannot see it. Describe only what is visible; never mention other images or video. Transcribe all visible text exactly, give table contents and chart values, and note people, objects, layout and anything unusual.';
-const DESCRIBE = 'Describe each image below in detail for a colleague who cannot see it. Transcribe all visible text exactly, give table contents and chart values, and note people, objects, layout and anything unusual. Video frames are labelled with their timestamps; describe what changes over time. Answer with one section per image, headed "### Image 1", "### Image 2" and so on.';
+const DESCRIBE = 'Describe each image below in detail for a colleague who cannot see it. Transcribe all visible text exactly, give table contents and chart values, and note people, objects, layout and anything unusual. Video frames are labeled with their timestamps; describe what changes over time. Answer with one section per image, headed "### Image 1", "### Image 2" and so on.';
 
 const LEAD = `You are the lead of a team of AI models. Several models have independently drafted answers to the user's latest message. Your job is to produce the single best final answer:
 - Keep everything that is correct, useful and well-argued from any draft.
@@ -293,7 +296,7 @@ const CONSENSUS = `You are the lead of a panel of AI models that answered the us
 - End with a short "Where the models disagreed" section (or "The models agreed on all key points").
 Write the final answer only; do not number or quote the drafts.`;
 
-const DEBATE_LEAD = `You are the judge of a debate between AI models. Each model answered the user's latest message, then read the others' answers, criticised them and revised its own. Using the revised answers and critiques, write the single best final answer: adopt the arguments that survived criticism, correct anything shown to be wrong, and resolve remaining disagreements with your own careful judgment. Write only the final answer, as if you wrote it yourself.`;
+const DEBATE_LEAD = `You are the judge of a debate between AI models. Each model answered the user's latest message, then read the others' answers, criticized them and revised its own. Using the revised answers and critiques, write the single best final answer: adopt the arguments that survived criticism, correct anything shown to be wrong, and resolve remaining disagreements with your own careful judgment. Write only the final answer, as if you wrote it yourself.`;
 
 const CRITIQUE = `Other AI models answered the same question as you. Read their answers below, then:
 1. In a section "Critique", list concrete errors, gaps or weak reasoning in the other answers (and in your own), briefly.
@@ -548,7 +551,7 @@ async function* quicksilverThink(stackDef, req) {
 async function* stack(stackDef, req) {
   const { members } = stackDef;
   // The Liquid Edition's Thinker takes hard maths and logic (not quick answers, photos or app work).
-  if (stackDef.id === 'quicksilver' && members.thinker && exists(members.thinker) && req.level !== 'quick' && !req.points && !req.toolList && !hasImages(req.messages) && req.stepByStep !== false) {
+  if (LIQUID_STACKS.has(stackDef.id) && members.thinker && exists(members.thinker) && req.level !== 'quick' && !req.points && !req.toolList && !hasImages(req.messages) && req.stepByStep !== false) {
     const hardMaths = thinkWorthy(lastUserText(req.messages));
     // A Brain that thinks for itself thinks through every question that needs working out, unless
     // a stronger model or a second opinion is on the team (then the team handles those).
@@ -560,9 +563,9 @@ async function* stack(stackDef, req) {
     }
   }
   // Everything else from a Brain that can think: answered straight away, without thinking.
-  if (stackDef.id === 'quicksilver' && members.thinker && members.thinker === (members.drafters || [])[0]) req = { ...req, noThink: true };
-  if (stackDef.id === 'quicksilver' && req.stepByStep !== false) req = { ...req, stepByStep: true };
-  if (stackDef.id === 'quicksilver' && !req.noMuse && req.level !== 'quick' && !req.toolList && !hasImages(req.messages) && CREATIVE.test(lastUserText(req.messages))) {
+  if (LIQUID_STACKS.has(stackDef.id) && members.thinker && members.thinker === (members.drafters || [])[0]) req = { ...req, noThink: true };
+  if (LIQUID_STACKS.has(stackDef.id) && req.stepByStep !== false) req = { ...req, stepByStep: true };
+  if (LIQUID_STACKS.has(stackDef.id) && !req.noMuse && req.level !== 'quick' && !req.toolList && !hasImages(req.messages) && CREATIVE.test(lastUserText(req.messages))) {
     const steps0 = [];
     const step0 = (s) => { s.index = steps0.length; steps0.push(s); return { type: 'step', step: s }; };
     const live0 = (s) => (t) => { s.text = t; req.onStep?.(s); };
@@ -611,7 +614,7 @@ async function* stack(stackDef, req) {
     // left out the member that can see (e.g. the Quicksilver model's 2B, which reads photos).
     const vision = (members.vision && exists(members.vision) && members.vision) || everyone.find(canSee)
       || [...(members.drafters || []), members.judge].filter((t) => t && exists(t)).find(canSee);
-    if (!vision) throw new Error('This chat has images, but no model in the stack can see. Add a vision model to the stack.');
+    if (!vision) throw new Error('This chat has a photo, but no model in this stack can see, and a stack only uses its own models. Pick a model that sees for this chat (the Liquid Edition does), add one to the stack, or tick one under Models → Models in use.');
     const imgs = messages.flatMap((m) => (Array.isArray(m.content) ? m.content.filter((p) => p.type === 'image_url') : []));
     const s = { role: 'vision', label: 'Looking at the images', model: label(vision), text: '', done: false };
     yield step(s);
@@ -839,13 +842,10 @@ const UNCENSORED = /abliterat|uncensor|unfiltered|dolphin|hermes|lexi|rocinante/
 const UNCENSORED_CLOUD = ['venice'];
 function isUncensored(target) {
   if (!target) return false;
-  if (target === 'stack:quicksilver') return true;
+  if (target === 'stack:quicksilver' || target === 'stack:quicksilver-pro') return true;
   const p = parse(target);
   if (p.kind === 'local') {
-    const m = models.get(p.id);
-    if (!m) return false;
-    const c = catalog.TEXT_MODELS.find((x) => x.id === m.catalogId);
-    return m.source === 'bundled' || c?.category === 'open' || UNCENSORED.test(`${m.name} ${m.files?.model || ''}`);
+    return models.looksUncensored(models.get(p.id));
   }
   if (p.kind === 'api') {
     const [, pid, ...rest] = target.split(':');
@@ -854,12 +854,32 @@ function isUncensored(target) {
   return false;
 }
 
+// Every model a target runs by itself: the model, or all the members of its stack or fusion.
+function teamOf(target) {
+  const t = parse(target);
+  if (t.kind === 'kbm') { const km = kbModels().find((m) => m.id === t.id); return km ? teamOf(km.base) : []; }
+  if (t.kind !== 'stack') return [target];
+  const st = stacks().find((x) => x.id === t.id);
+  const m = st?.members || {};
+  return [m.vision, ...(m.drafters || []), m.judge, m.muse, m.thinker, st?.bench].filter(Boolean);
+}
+// May this local model take part in a chat with that target? Only the target's own models, plus
+// the ones ticked under Models → "Models in use". Nothing else on this PC is pulled in.
+// With a single model or a cloud AI, Quicksilver's own built-in models may still take part (they
+// fill the Council's seats, say); with a stack or fusion, not even those.
+function mayUse(t, base) {
+  const m = models.get(parse(t).id);
+  if (!m) return false;
+  if (teamOf(base).includes(t) || models.inUse(m)) return true;
+  return parse(base).kind !== 'stack' && models.liquidOwn(m);
+}
+
 function councilMembers(target, req) {
-  const liquid = target === 'stack:quicksilver';
+  const liquid = target === 'stack:quicksilver' || target === 'stack:quicksilver-pro';
   const textTargets = targets().filter((t) => t.target.startsWith('local:') && exists(t.target) && !t.mediaOnly && (!liquid || isUncensored(t.target)));
   const score = (t, job = 'general') => { const m = models.get(parse(t).id); return m ? catalog.scoreFor(catalog.profileInstalled(m), job) : 0; };
   const fits = (t) => { const m = models.get(parse(t).id); return m && m.kind === 'text'; };
-  const local = textTargets.map((t) => t.target).filter(fits);
+  const local = textTargets.map((t) => t.target).filter(fits).filter((t) => mayUse(t, target));
   // The chat's own model (or its team's lead) structures; a thinker critiques; a quick one keeps it practical.
   const own = parse(target).kind === 'stack' ? (stacks().find((x) => `stack:${x.id}` === target)?.members?.drafters || []).find((t) => exists(t) && fits(t)) : (exists(target) && fits(target) ? target : null);
   const byGeneral = [...local].sort((a, b) => score(b) - score(a));
@@ -874,7 +894,7 @@ function councilMembers(target, req) {
 
 async function* council(target, req) {
   const m = councilMembers(target, req);
-  if (!m.structurer) throw new Error('The Council needs at least one model on this PC.');
+  if (!m.structurer) throw new Error('The Council needs at least one model on this PC that it may use. Tick one under Models → Models in use.');
   const steps = [];
   const step = (s) => { s.index = steps.length; steps.push(s); return { type: 'step', step: s }; };
   const notes = [];
@@ -888,7 +908,7 @@ async function* council(target, req) {
     const messages = [...msgs.slice(0, -1), { role: 'system', content: role.prompt }, msgs[msgs.length - 1]];
     try {
       s.text = await collect(who, { ...req, stepByStep: false, messages, level: role.key === 'critic' ? req.level : 'quick', maxTokens: 450, temperature: role.key === 'pragmatist' ? 0.6 : 0.4 }, (t) => { s.text = t; req.onStep?.(s); });
-    } catch (err) { s.error = String(err?.message || err); }
+    } catch (err) { if (req.signal?.aborted) throw err; s.error = String(err?.message || err); } // Stop stops the whole council, not one member
     s.done = true; s.ms = Date.now() - t0;
     yield { type: 'step', step: s };
     if (s.text) notes.push(`<note role="${role.label}">\n${s.text.slice(0, 2500)}\n</note>`);
@@ -956,9 +976,44 @@ function smoothHelper(p, hw, calib = 1) {
   return ['great', 'good'].includes(e.rating) && (e.fit === 'gpu' || (hw.ramGB || 0) >= 15);
 }
 
-async function ensureQuicksilverStack() {
+// The Liquid Editions: Quicksilver's own uncensored crews (locked).
+const LIQUID_STACKS = new Set(['quicksilver', 'quicksilver-pro']);
+
+// Quicksilver Liquid Edition Pro: only ever set up when the user asks for it (the "Get Liquid
+// Edition Pro" button sets liquidProWanted). Having its models, for instance as add-ons, never
+// creates it by itself. Once asked for, it is built as soon as its Brain and Closer are on this
+// PC; members that aren't downloaded yet are left out until they are.
+function ensureQuicksilverProStack() {
+  const P = catalog.LIQUID_PRO;
+  const all = models.list().filter((m) => m.kind === 'text');
+  // A copy found in another app is never taken by itself (only once you tick it as in use).
+  const pick = (cid) => all.find((m) => m.catalogId === cid && (m.source !== 'imported' || models.inUse(m)));
+  const brain = pick(P.brain); const closer = pick(P.closer); const thinker = pick(P.thinker); const muse = pick(P.muse);
+  const have = stacks().find((s) => s.id === 'quicksilver-pro');
+  if (!store.config().liquidProWanted) return null;
+  if (!brain || !closer) return have ? 'stack:quicksilver-pro' : null;
+  const local = (m) => (m ? `local:${m.id}` : undefined);
+  const members = { drafters: [local(brain)], judge: local(closer), vision: closer.files?.mmproj ? local(closer) : undefined, thinker: local(thinker), muse: local(muse), mode: 'auto' };
+  for (const k of Object.keys(members)) if (members[k] === undefined) delete members[k];
+  const def = { id: 'quicksilver-pro', name: 'Quicksilver Liquid Edition Pro', emoji: '💎', builtIn: true, autoManaged: true, custom: true, builtFor: 'quicksilver-pro',
+    description: 'Quicksilver Liquid Edition Pro, for a powerful PC (16–24 GB graphics card, 32–64 GB memory): the Liquid Edition with bigger, smarter uncensored models. Qwen3 30B-A3B (the Brain) answers with 30B knowledge at 3B speed, Mistral Small 3.2 24B (the Closer) leads hard questions and reads photos, gpt-oss 20B (the Thinker) works through maths and logic, and Rocinante 12B (the Muse) writes stories. Pictures come from Chroma1-HD (top quality) and Lustify, with WAI-NSFW Illustrious for anime; video from Wan 2.2. Locked: it can\'t be edited or deleted.', members };
+  if (!have || JSON.stringify(have.members) !== JSON.stringify(members) || have.name !== def.name) saveStack(def);
+  return 'stack:quicksilver-pro';
+}
+
+// One rebuild at a time: a tick under Models, a finished download and Home can all ask at once,
+// and each reads the models, waits for the hardware, then saves. Run together, an older reading
+// could be saved last.
+let stackBuild = Promise.resolve();
+function ensureQuicksilverStack() {
+  const run = stackBuild.then(buildQuicksilverStack, buildQuicksilverStack);
+  stackBuild = run.catch(() => {});
+  return run;
+}
+async function buildQuicksilverStack() {
   const have = stacks().find((s) => s.id === 'quicksilver');
-  if (store.config().quicksilverRemoved || (have && have.autoManaged === false)) return have ? 'stack:quicksilver' : null;
+  // Locked: the Liquid Edition is always Quicksilver's own crew (older versions let it be edited or deleted).
+  if (have && have.autoManaged === false) saveStack({ ...have, autoManaged: true });
   const all = models.list().filter((m) => m.kind === 'text');
   const pool = all.map(catalog.profileInstalled);
   // The Liquid Edition's core follows the online picks: when a newer, better uncensored Brain or
@@ -967,14 +1022,17 @@ async function ensureQuicksilverStack() {
   // Quicksilver is completely uncensored, so every model on its crew must be uncensored — including
   // the fallbacks. A filtered model of a matching name (e.g. a plain "Qwen3 4B Instruct" found from
   // another app) is NEVER adopted as the Brain, Eyes or Thinker.
-  const unc = (m) => m && isUncensored(`local:${m.id}`);
+  // Nor is a copy found in another app, however well it matches, unless you ticked it as in use.
+  const unc = (m) => m && isUncensored(`local:${m.id}`) && (m.source !== 'imported' || models.inUse(m));
   const brain = all.find((m) => core.brain && m.catalogId === core.brain && m.source !== 'bundled' && unc(m)) || all.find((m) => m.id === 'starter-brain') || all.find((m) => /^qwen3(\.5)?-4b$/.test(m.catalogId || '') && unc(m));
-  const eyes = all.find((m) => core.eyes && m.catalogId === core.eyes && m.source !== 'bundled' && unc(m)) || all.find((m) => m.id === 'starter') || all.find((m) => /^qwen3(\.5-2b|-vl-)/.test(m.catalogId || '') && unc(m));
+  // The Eyes must see: a copy with its vision add-on comes first.
+  const eyesOk = (m) => core.eyes && m.catalogId === core.eyes && m.source !== 'bundled' && unc(m);
+  const eyes = all.find((m) => eyesOk(m) && m.files?.mmproj) || all.find((m) => m.id === 'starter') || all.find(eyesOk) || all.find((m) => /^qwen3(\.5-2b|-vl-)/.test(m.catalogId || '') && unc(m));
   // A Brain that thinks for itself (Qwen3.5) is also the Thinker; one that sees is also the Eyes.
   const brainThinks = Boolean(brain && catalog.TEXT_MODELS.find((c) => c.id === brain.catalogId)?.reasoning);
   const brainSees = Boolean(brain?.files?.mmproj);
   // The Thinker: an uncensored thinking model for hard maths and logic (comes with Quicksilver).
-  const thinker = brainThinks ? brain : all.find((m) => m.id === 'starter-thinker') || all.find((m) => /^qwen3-4b-thinking/.test(m.catalogId || '') && isUncensored(`local:${m.id}`));
+  const thinker = brainThinks ? brain : all.find((m) => m.id === 'starter-thinker') || all.find((m) => /^qwen3-4b-thinking/.test(m.catalogId || '') && unc(m));
   // Quicksilver is uncensored, so only uncensored models are on its team: the ones that come with
   // it, and uncensored ones you add.
   const isOpen = (p) => isUncensored(`local:${p.id}`);
@@ -986,16 +1044,29 @@ async function ensureQuicksilverStack() {
   if (brain) {
     const score = (id) => { const p = pool.find((x) => x.id === id); return p ? catalog.scoreFor(p, 'general') : 0; };
     // Helpers are uncensored models you added; an older built-in model never joins as a helper.
-    const openPool = pool.filter((p) => p.id !== brain.id && p.id !== eyes?.id && p.id !== thinker?.id && all.find((x) => x.id === p.id)?.source !== 'bundled' && isOpen(p));
+    // (The Closer that ships in the models folder is the exception: it's there to lead.)
+    // Only models in use join (see models.inUse): the suggested add-ons you downloaded, and any
+    // uncensored model you ticked under Models. A model found in another app never joins by itself.
+    // (The Liquid Edition's own Closer counts whichever way it arrived: in the models folder, or
+    // downloaded by the setup screen after the web installer.)
+    const mine = (id) => { const m = all.find((x) => x.id === id); return id === 'starter-closer' || (Boolean(m) && m.source !== 'bundled' && ((m.source !== 'imported' && catalog.liquidMember(m.catalogId)) || models.inUse(m))); };
+    const openPool = pool.filter((p) => p.id !== brain.id && p.id !== eyes?.id && p.id !== thinker?.id && mine(p.id) && isOpen(p));
     const team = (openPool.length && catalog.compose(openPool, 'general', hw, calib, { vision: false, speed: 10, leadSpeed: 20, budget: 180 })) || { members: { drafters: [] } };
     const lead = team.members.judge || team.members.drafters[0];
-    const stronger = lead && score(lead) > score(brain.id) ? lead : null;
+    // The Closer leads only where it and the Brain both stay loaded (the same memory budget the
+    // engine uses). Otherwise every hard question would unload one to load the other, and the
+    // next message would swap them back: slow, every time. Then it waits on the bench instead.
+    const gbOf = (id) => (all.find((x) => x.id === id)?.size || 0) / 1024 ** 3;
+    const roomGB = Math.max(hw.vramGB || 0, 0) + (hw.ramGB || 0) * 0.7 - 2;
+    const together = (id) => gbOf(brain.id) + gbOf(id) + (eyes && eyes.id !== brain.id ? gbOf(eyes.id) : 0) <= roomGB;
+    const leadFits = Boolean(lead) && together(lead);
+    const stronger = lead && leadFits && score(lead) > score(brain.id) ? lead : null;
     // A second opinion on hard questions: the best other uncensored model that isn't the lead.
     // It joins only where it runs smoothly, so hard answers don't get much slower; on a slower PC
     // it waits on the bench (it still sits on the Council, and you can chat with it directly).
     const candidate = [...team.members.drafters, team.members.judge].find((id) => id && id !== stronger);
-    const second = candidate && smoothHelper(pool.find((p) => p.id === candidate), hw, calib) ? candidate : null;
-    bench = candidate && !second ? local(candidate) : undefined;
+    const second = candidate && together(candidate) && smoothHelper(pool.find((p) => p.id === candidate), hw, calib) ? candidate : null;
+    bench = lead && !leadFits ? local(lead) : candidate && !second ? local(candidate) : undefined;
     members = {
       drafters: [brain.id, ...(stronger ? [] : second ? [second] : [])].map(local),
       // With nobody to combine, the brain answers on its own (step by step on hard questions).
@@ -1008,7 +1079,8 @@ async function ensureQuicksilverStack() {
     };
   } else {
     // The built-in brain isn't here yet (still downloading): the best fast uncensored team for now.
-    const openPool = pool.filter(isOpen);
+    const own = (m) => Boolean(m) && (m.source === 'bundled' || (m.source !== 'imported' && catalog.liquidMember(m.catalogId)) || models.inUse(m));
+    const openPool = pool.filter((p) => isOpen(p) && own(all.find((x) => x.id === p.id)));
     if (openPool.length < 2) return have?.builtFor === 'quicksilver' ? 'stack:quicksilver' : null;
     const team = catalog.compose(openPool, 'general', hw, calib, { vision: true, speed: 10, leadSpeed: 20, budget: 180 });
     if (!team || team.ids.length < 2) return have?.builtFor === 'quicksilver' ? 'stack:quicksilver' : null;
@@ -1019,8 +1091,9 @@ async function ensureQuicksilverStack() {
   if (!members.thinker) delete members.thinker;
   if (!members.muse || members.muse === members.drafters?.[0]) delete members.muse;
   const def = { id: 'quicksilver', name: 'Quicksilver Liquid Edition', emoji: '💧', builtIn: true, autoManaged: true, custom: true, builtFor: 'quicksilver', ...(bench ? { bench } : {}),
-    description: "Quicksilver Liquid Edition, Quicksilver's own uncensored crew: the built-in Qwen3.5 4B (the Brain) answers, sees photos and thinks hard questions through, Qwen3.5 2B (the Muse) sketches fresh angles for creative work, and a stronger uncensored model you add (the Closer, such as Qwen3.5 9B on a PC with a graphics card) leads on hard questions. Smarter search (finds your files and memories by meaning) is built in; the reranker is an optional add-on for even sharper results.", members };
+    description: "Quicksilver Liquid Edition, Quicksilver's own uncensored crew (locked: it can't be edited or deleted, and its core models stay installed; choose any other model or stack whenever you like). It uses its own models and nothing else on this PC; a suggested add-on you download joins by itself, and any other uncensored model joins when you tick it under Models → Models in use. The built-in Qwen3.5 4B (the Brain) answers, sees photos and thinks hard questions through, Qwen3.5 2B (the Muse) sketches fresh angles for creative work, and a stronger uncensored model you add (the Closer, such as Qwen3.5 9B on a PC with a graphics card) leads on hard questions. Pictures are uncensored too: Lustify makes them (or the best uncensored picture model you add, with an anime model for anime requests), and Venice in the cloud when nothing is downloaded yet. Videos come from Wan 2.2 (open weights, no content filter), from a description or by animating a photo. Smarter search (finds your files and memories by meaning) is built in; the reranker is an optional add-on for even sharper results.", members };
   if (!have || JSON.stringify(have.members) !== JSON.stringify(members) || have.builtFor !== 'quicksilver' || have.name !== def.name || (have.bench || null) !== (def.bench || null)) saveStack(def);
+  ensureQuicksilverProStack();
   return 'stack:quicksilver';
 }
 
@@ -1076,8 +1149,8 @@ function targets() {
   // Built in first, then ready-made stacks, then your fusions, then single models.
   const st = stacks();
   const fusion = (s) => s.infused || s.builtFor === 'power';
-  for (const s of st.filter((x) => x.id === 'quicksilver')) out.push({ target: `stack:${s.id}`, label: `${s.emoji || '💧'} ${s.name}`, name: s.name, group: '💧 Built in', stack: true });
-  for (const s of st.filter((x) => x.id !== 'quicksilver' && !fusion(x))) out.push({ target: `stack:${s.id}`, label: `${s.emoji || '🧩'} ${s.name}`, name: s.name, group: '🧩 Stacks', stack: true });
+  for (const s of st.filter((x) => LIQUID_STACKS.has(x.id)).sort((a, b) => a.id.length - b.id.length)) out.push({ target: `stack:${s.id}`, label: `${s.emoji || '💧'} ${s.name}`, name: s.name, group: '💧 Built in', stack: true });
+  for (const s of st.filter((x) => !LIQUID_STACKS.has(x.id) && !fusion(x))) out.push({ target: `stack:${s.id}`, label: `${s.emoji || '🧩'} ${s.name}`, name: s.name, group: '🧩 Stacks', stack: true });
   for (const s of st.filter(fusion)) out.push({ target: `stack:${s.id}`, label: `${s.emoji || '⚗️'} ${s.name}`, name: s.name, group: '⚗️ Fusions', stack: true, fusion: true });
   for (const m of models.list().filter((x) => x.kind === 'text')) out.push({ target: `local:${m.id}`, label: m.name, name: m.name, group: 'On this PC', vision: Boolean(m.files.mmproj) });
   for (const k of kbModels()) if (exists(k.base)) out.push({ target: `kbm:${k.id}`, label: `${k.emoji || '📚'} ${k.name}`, name: k.name, group: 'Knowledge models', vision: canSee(k.base), knowledge: true });
@@ -1123,8 +1196,8 @@ async function warm(target, { contextSize, gpu } = {}) {
   if (t.kind !== 'local') return false;
   const m = models.get(t.id);
   if (!m) return false;
-  await llama.ensure(localSpec(m), { contextSize: Math.min(contextSize || 8192, 8192), gpu });
+  await llama.ensure(localSpec(m), { contextSize: Math.min(contextSize || 8192, 8192), limit: contextSize || 16384, gpu });
   return true;
 }
 
-module.exports = { smoothHelper, isUncensored, councilMembers, thinkWorthy, answerNow, warm, prefill, run, targets, stacks, saveStack, deleteStack, kbModels, saveKbModel, deleteKbModel, label, exists, canSee, parse, autoLevel, ensureQuicksilverStack, explainStack };
+module.exports = { single, smoothHelper, isUncensored, councilMembers, thinkWorthy, answerNow, warm, prefill, run, targets, stacks, saveStack, deleteStack, kbModels, saveKbModel, deleteKbModel, label, exists, canSee, parse, autoLevel, ensureQuicksilverStack, ensureQuicksilverProStack, explainStack };

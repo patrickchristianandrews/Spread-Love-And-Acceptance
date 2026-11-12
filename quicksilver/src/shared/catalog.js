@@ -112,11 +112,20 @@ const TEXT_MODELS = [
   { id: 'dolphin-3-qwen2.5-3b', name: 'Dolphin 3.0 3B', maker: 'Cognitive Computations', params: '3B', category: 'open', repo: 'bartowski/Dolphin3.0-Qwen2.5-3b-GGUF', quant: 'Q4_K_M', sizeGB: 1.9, ctx: 32768, open: true,
     blurb: 'Uncensored general assistant in a small size: you set the rules in the system prompt.', jobs: { general: 5, office: 4, research: 4, coding: 4, vision: 0, fast: 8 }, judge: 3 },
   { id: 'rocinante-12b', name: 'Rocinante 12B', maker: 'TheDrummer', params: '12B', category: 'open', repo: 'TheDrummer/Rocinante-12B-v1.1-GGUF', quant: 'Q4_K_M', sizeGB: 7.5, ctx: 32768, open: true,
-    blurb: 'A favourite for stories and role-play: vivid prose, few refusals.', jobs: { general: 7, office: 5, research: 5, coding: 4, vision: 0, fast: 4 }, judge: 5 },
+    blurb: 'A favorite for stories and role-play: vivid prose, few refusals.', jobs: { general: 7, office: 5, research: 5, coding: 4, vision: 0, fast: 4 }, judge: 5 },
   { id: 'hermes-4-14b', name: 'Hermes 4 14B', maker: 'Nous Research', params: '14B', category: 'open', repo: 'NousResearch/Hermes-4-14B-GGUF', quant: 'Q4_K_M', sizeGB: 9.0, ctx: 40960, open: true, reasoning: true,
     blurb: 'Newest Hermes: strong reasoning and writing, highly steerable, few refusals.', jobs: { general: 8, office: 7, research: 7, coding: 7, vision: 0, fast: 3 }, judge: 7 },
   { id: 'dolphin-3-mistral-24b', name: 'Dolphin 3.0 Mistral 24B', maker: 'Cognitive Computations', params: '24B', category: 'open', repo: 'bartowski/cognitivecomputations_Dolphin3.0-Mistral-24B-GGUF', quant: 'Q4_K_M', sizeGB: 14.3, ctx: 32768, open: true,
     blurb: 'The strongest Dolphin: an uncensored, capable assistant for 16 GB+ graphics cards.', jobs: { general: 8, office: 8, research: 7, coding: 7, vision: 0, fast: 2 }, judge: 8 },
+  // Uncensored (abliterated) copies of strong mainstream models: same smarts, far fewer refusals.
+  { id: 'gemma-3-12b-uncensored', name: 'Gemma 3 12B (uncensored, vision)', maker: 'Google · uncensored by mlabonne', params: '12B', category: 'open', repo: 'bartowski/mlabonne_gemma-3-12b-it-abliterated-GGUF', alt: ['mlabonne/gemma-3-12b-it-abliterated-v2-GGUF'], verify: true, quant: 'Q4_K_M', sizeGB: 7.3, mmprojGB: 0.85, vision: true, ctx: 131072, open: true,
+    blurb: 'Gemma 3 12B without the refusals: a strong writer that also sees photos, uncensored.', jobs: { general: 8, office: 7, research: 7, coding: 6, vision: 8, fast: 3 }, judge: 7 },
+  { id: 'gemma-3-27b-uncensored', name: 'Gemma 3 27B (uncensored, vision)', maker: 'Google · uncensored by mlabonne', params: '27B', category: 'open', repo: 'mlabonne/gemma-3-27b-it-abliterated-GGUF', alt: ['bartowski/mlabonne_gemma-3-27b-it-abliterated-GGUF'], verify: true, quant: 'Q4_K_M', sizeGB: 16.5, mmprojGB: 0.86, vision: true, ctx: 131072, open: true,
+    blurb: 'Google\'s largest open model, uncensored: top-tier writing and vision for 20 GB+ graphics cards.', jobs: { general: 9, office: 8, research: 8, coding: 7, vision: 9, fast: 1 }, judge: 8 },
+  { id: 'mistral-small-3.2-uncensored', name: 'Mistral Small 3.2 24B (uncensored, vision)', maker: 'Mistral AI · uncensored by huihui-ai', params: '24B', category: 'open', repo: 'mradermacher/Huihui-Mistral-Small-3.2-24B-Instruct-2506-abliterated-llamacppfixed-GGUF', verify: true, quant: 'Q4_K_M', sizeGB: 14.3, mmprojGB: 0.88, vision: true, ctx: 131072, open: true,
+    blurb: 'Mistral Small 3.2 uncensored: precise and capable, sees images, answers anything.', jobs: { general: 9, office: 8, research: 8, coding: 7, vision: 8, fast: 2 }, judge: 8 },
+  { id: 'gpt-oss-20b-uncensored', name: 'gpt-oss 20B (uncensored)', maker: 'OpenAI · uncensored by huihui-ai', params: '21B (3.6B active)', category: 'open', repo: 'bartowski/huihui-ai_Huihui-gpt-oss-20b-BF16-abliterated-GGUF', verify: true, quant: 'MXFP4_MOE', sizeGB: 12.1, activeGB: 2.4, ctx: 131072, reasoning: true, open: true,
+    blurb: 'OpenAI\'s open model with its refusals removed: strong reasoning, fast for its size.', jobs: { general: 8, office: 7, research: 7, coding: 7, vision: 0, fast: 5 }, judge: 7 },
 
   // ---------- more of the most popular open models ----------
   // Small
@@ -160,7 +169,7 @@ const TEXT_MODELS = [
   { id: 'devstral-small', name: 'Devstral Small 2507', maker: 'Mistral AI', params: '24B', category: 'coding', repo: 'unsloth/Devstral-Small-2507-GGUF', quant: 'Q4_K_M', sizeGB: 14.3, ctx: 131072,
     blurb: 'Built for coding agents: works across whole projects, edits files and fixes bugs.', jobs: { general: 7, office: 7, research: 6, coding: 9, vision: 0, fast: 2 }, judge: 7 },
   { id: 'qwen2.5-coder-32b', name: 'Qwen2.5 Coder 32B', maker: 'Alibaba', params: '32B', category: 'coding', repo: 'unsloth/Qwen2.5-Coder-32B-Instruct-GGUF', quant: 'Q4_K_M', sizeGB: 19.9, ctx: 32768,
-    blurb: 'A favourite for serious coding on a 24 GB graphics card.', jobs: { general: 7, office: 7, research: 7, coding: 10, vision: 0, fast: 1 }, judge: 8 },
+    blurb: 'A favorite for serious coding on a 24 GB graphics card.', jobs: { general: 7, office: 7, research: 7, coding: 10, vision: 0, fast: 1 }, judge: 8 },
   // Vision
   { id: 'qwen3-vl-4b', name: 'Qwen3-VL 4B', maker: 'Alibaba', params: '4B', category: 'vision', repo: 'Qwen/Qwen3-VL-4B-Instruct-GGUF', quant: 'Q4_K_M', sizeGB: 2.5, mmprojGB: 0.8, vision: true, ctx: 262144,
     blurb: 'Reads photos, documents and charts well, and answers quickly.', jobs: { general: 6, office: 7, research: 6, coding: 5, vision: 8, fast: 7 }, judge: 5 },
@@ -188,6 +197,17 @@ const FLUX_ENCODERS = {
   t5xxl: { repo: 'city96/t5-v1_1-xxl-encoder-gguf', match: 'Q4_K_M\\.gguf$' },
 };
 
+// Chroma (an uncensored model built on FLUX) uses FLUX's picture decoder and T5 text encoder, but no CLIP.
+const CHROMA_ENCODERS = { vae: FLUX_ENCODERS.vae, t5xxl: FLUX_ENCODERS.t5xxl };
+// The standard SDXL picture decoder, fixed to work in half precision (avoids black pictures).
+const SDXL_VAE = { repo: 'madebyollin/sdxl-vae-fp16-fix', match: '^sdxl_vae\\.safetensors$' };
+// An SDXL community checkpoint: one file, the same size and speed as SDXL 1.0.
+// alt: other Hugging Face copies of the same file, tried in order if the first is gone.
+const sdxlTune = (id, quality, name, maker, repo, match, blurb, extra = {}) => ({ id, quality, name, maker, kind: 'image', category: extra.category || 'open', recipe: 'sd', sizeGB: 7.3, vramGB: 8, refSec: 25,
+  defaults: { width: 1024, height: 1024, steps: 30, cfg: 5, ...extra.defaults }, files: { model: { repo, match, ...(extra.alt ? { alt: extra.alt } : {}) }, vae: SDXL_VAE }, blurb, edit: 'img2img',
+  ...(extra.category === 'image' ? {} : { uncensored: true }), ...(extra.license ? { license: extra.license } : {}),
+});
+
 const MEDIA_MODELS = [
   { id: 'sd15', quality: 4, name: 'Stable Diffusion 1.5', maker: 'Stability AI / RunwayML', kind: 'image', category: 'image', recipe: 'sd', sizeGB: 4.3, vramGB: 3, refSec: 4, defaults: { width: 512, height: 512, steps: 25, cfg: 7 },
     files: { model: { repo: 'stable-diffusion-v1-5/stable-diffusion-v1-5', match: '^v1-5-pruned-emaonly\\.safetensors$' } },
@@ -201,6 +221,71 @@ const MEDIA_MODELS = [
   { id: 'flux-schnell', quality: 9, name: 'FLUX.1 Schnell', maker: 'Black Forest Labs', kind: 'image', category: 'image', recipe: 'flux', sizeGB: 13.5, vramGB: 10, refSec: 20, defaults: { width: 1024, height: 1024, steps: 4, cfg: 1 },
     files: { diffusion: { repo: 'city96/FLUX.1-schnell-gguf', match: 'Q4_K_S\\.gguf$' }, ...FLUX_ENCODERS },
     blurb: 'State-of-the-art quality in 4 steps. Follows prompts closely and can write text in images.', edit: 'img2img' },
+  // ---------- more picture models: community checkpoints people use most ----------
+  sdxlTune('realvisxl-v5', 8, 'RealVisXL V5.0', 'SG161222 (community)', 'SG161222/RealVisXL_V5.0', '^RealVisXL_V5\\.0_fp16\\.safetensors$',
+    'Photorealistic people, places and products: one of the most popular realistic SDXL models.', { category: 'image', defaults: { cfg: 5, steps: 30 } }),
+  sdxlTune('juggernaut-xl-v9', 8, 'Juggernaut XL v9', 'RunDiffusion', 'RunDiffusion/Juggernaut-XL-v9', '^Juggernaut-XL_v9_RunDiffusionPhoto_v2\\.safetensors$',
+    'Cinematic, realistic pictures with strong lighting and detail. A favorite all-rounder.', { category: 'image', defaults: { cfg: 5, steps: 30 } }),
+  { id: 'flux-dev', quality: 9, name: 'FLUX.1 Dev', maker: 'Black Forest Labs', kind: 'image', category: 'image', recipe: 'flux', sizeGB: 10.6, vramGB: 10, refSec: 90, defaults: { width: 1024, height: 1024, steps: 20, cfg: 1 },
+    files: { diffusion: { repo: 'city96/FLUX.1-dev-gguf', match: 'flux1-dev-Q4_K_S\\.gguf$' }, ...FLUX_ENCODERS },
+    blurb: 'FLUX at full quality: finer detail and better hands than Schnell, in 20 steps. Free for personal use.', edit: 'img2img', license: 'Non-commercial' },
+  { id: 'z-image-turbo', quality: 9, name: 'Z-Image Turbo', maker: 'Alibaba Tongyi', kind: 'image', category: 'image', recipe: 'zimage', sizeGB: 6.5, vramGB: 6, refSec: 10, defaults: { width: 1024, height: 1024, steps: 8, cfg: 1 },
+    files: { diffusion: { repo: 'leejet/Z-Image-Turbo-GGUF', match: 'z_image_turbo-Q4_0\\.gguf$' }, vae: FLUX_ENCODERS.vae, llm: { repo: 'unsloth/Qwen3-4B-Instruct-2507-GGUF', match: 'Qwen3-4B-Instruct-2507-Q4_K_M\\.gguf$' } },
+    blurb: 'Photorealistic pictures in 8 steps that fit on a 6 GB card. Writes English and Chinese text in images.', edit: 'img2img' },
+  { id: 'qwen-image', quality: 9, name: 'Qwen-Image', maker: 'Alibaba', kind: 'image', category: 'image', recipe: 'qwen-image', sizeGB: 18.5, vramGB: 16, refSec: 90, defaults: { width: 1024, height: 1024, steps: 20, cfg: 2.5 },
+    files: { diffusion: { repo: 'QuantStack/Qwen-Image-GGUF', match: 'Qwen_Image-Q4_K_S\\.gguf$' }, vae: { repo: 'Comfy-Org/Qwen-Image_ComfyUI', match: 'qwen_image_vae\\.safetensors$' }, llm: { repo: 'unsloth/Qwen2.5-VL-7B-Instruct-GGUF', match: 'Q4_K_M\\.gguf$' } },
+    blurb: 'The best open model for posters, signs and long text in pictures, with excellent prompt following.', edit: 'img2img' },
+  // ---------- uncensored picture models (no content filter; the Liquid Edition's pictures) ----------
+  sdxlTune('lustify', 9, 'Lustify (uncensored)', 'Lustify (community, SDXL)', 'kkkkk26/lustify_v9', 'lustify.*\\.safetensors$',
+    'Uncensored, photorealistic pictures, including adult content: the model Venice uses for its uncensored pictures, free here on your own PC. The Liquid Edition\'s picture maker.',
+    { alt: ['shootstuff/LUSTIFY-v2.0', 'TheImposterImposters/LUSTIFY-v2.0'], defaults: { cfg: 4.5, steps: 30 } }),
+  sdxlTune('bigasp-v2', 7, 'bigASP v2 (uncensored)', 'fancyfeast (community, SDXL)', 'TheImposterImposters/bigasp_v20_fp16', '^bigasp_v20\\.safetensors$',
+    'Uncensored photographic pictures, trained on millions of real photos. Natural skin, lighting and bodies.', { defaults: { cfg: 4, steps: 35 } }),
+  sdxlTune('pony-v6', 7, 'Pony Diffusion V6 XL (uncensored)', 'PurpleSmartAI (community, SDXL)', 'LyliaEngine/Pony_Diffusion_V6_XL', '^ponyDiffusionV6XL.*\\.safetensors$',
+    'Uncensored anime, cartoon and furry art. Start prompts with "score_9, score_8_up, score_7_up" for the best results.', { defaults: { cfg: 7, steps: 25 }, license: 'No paid online services without permission' }),
+  sdxlTune('illustrious-xl-v2', 8, 'Illustrious XL 2.0 (uncensored)', 'OnomaAI', 'OnomaAIResearch/Illustrious-XL-v2.0', '^Illustrious-XL-v2\\.0\\.safetensors$',
+    'Uncensored anime and illustration with excellent character knowledge. Understands booru-style tags.', { defaults: { cfg: 5, steps: 28 } }),
+  sdxlTune('noobai-xl', 8, 'NoobAI XL 1.1 (uncensored)', 'Laxhar Lab', 'Laxhar/noobai-XL-1.1', '^NoobAI-XL-v1\\.1\\.safetensors$',
+    'Uncensored anime built on Illustrious and trained further: more characters and artist styles. Understands booru-style tags.', { defaults: { cfg: 5, steps: 28 }, license: 'Fair AI Public License (no paid services built on it)' }),
+  sdxlTune('cyberrealistic-pony', 8, 'CyberRealistic Pony (uncensored)', 'Cyberdelia (community, Pony SDXL)', 'cyberdelia/CyberRealisticPony', '^CyberRealisticPony_V15\\.0_FP16\\.safetensors$',
+    'Pony\'s uncensored freedom with photographic realism: one of the most downloaded realistic adult models. Start prompts with "score_9, score_8_up".', { defaults: { cfg: 5, steps: 30 } }),
+  sdxlTune('cyberrealistic-xl', 8, 'CyberRealistic XL (uncensored)', 'Cyberdelia (community, SDXL)', 'cyberdelia/CyberRealisticXL', '^CyberRealisticXLPlay_V10\\.0_FP16\\.safetensors$',
+    'Lifelike people and skin, uncensored, from the maker of CyberRealistic. Plain-English prompts.', { defaults: { cfg: 4.5, steps: 30 } }),
+  sdxlTune('pony-realism', 7, 'Pony Realism (uncensored)', 'Pony Realism (community, Pony SDXL)', 'LyliaEngine/ponyRealism_v21MainVAE', '^ponyRealism_v21MainVAE\\.safetensors$',
+    'Realistic photos on the Pony base: uncensored, with Pony\'s understanding of poses and anatomy.', { alt: ['TheImposterImposters/PonyRealism-v2.2MainVAE'], defaults: { cfg: 6, steps: 30 } }),
+  sdxlTune('realdream-pony', 7, 'RealDream Pony (uncensored)', 'RealDream (community, Pony SDXL)', 'TheImposterImposters/RealDream-SDXLPony12', '^realDream_sdxlPony12\\.safetensors$',
+    'Soft, dreamy realism on the Pony base. Uncensored.', { defaults: { cfg: 6, steps: 30 } }),
+  sdxlTune('epicrealism-xl', 7, 'epiCRealism XL (uncensored)', 'epinikion (community, SDXL)', 'misri/epicrealismXL_v9', '^epicrealismXL_v9\\.safetensors$',
+    'Natural, unretouched-looking photos of people. Few limits on content.', { defaults: { cfg: 5, steps: 30 } }),
+  sdxlTune('wai-nsfw-illustrious', 9, 'WAI-NSFW Illustrious (uncensored)', 'WAI0731 (community, Illustrious SDXL)', 'TheReprinter/WAI-NSFW-illustrious-SDXL', '^waiNSFWIllustrious_v14\\.safetensors$',
+    'The most popular uncensored anime model: clean, vivid anime art with adult content. Understands booru-style tags.', { alt: ['Ine007/waiNSFWIllustrious_v140'], defaults: { cfg: 6, steps: 28 } }),
+  sdxlTune('nova-anime-xl', 8, 'Nova Anime XL (uncensored)', 'Crody (community, Illustrious SDXL)', 'frankjoshua/novaAnimeXL_ilV140', '^novaAnimeXL_ilV140\\.safetensors$',
+    'Polished, colorful anime with strong backgrounds and lighting. Uncensored.', { defaults: { cfg: 5, steps: 28 } }),
+  // SD 1.5 community classics: small and quick, run on 4 GB cards.
+  { id: 'cyberrealistic-sd15', quality: 6, name: 'CyberRealistic (SD 1.5, uncensored)', maker: 'Cyberdelia (community, SD 1.5)', kind: 'image', category: 'open', recipe: 'sd', uncensored: true, sizeGB: 2.1, vramGB: 3, refSec: 4, defaults: { width: 512, height: 768, steps: 25, cfg: 5 },
+    files: { model: { repo: 'cyberdelia/CyberRealistic', match: '^CyberRealistic_FINAL_FP16\\.safetensors$' } },
+    blurb: 'Uncensored realistic people in seconds, even on older graphics cards with 4 GB.', edit: 'img2img' },
+  { id: 'realistic-vision-v6', quality: 6, name: 'Realistic Vision V6 (SD 1.5, uncensored)', maker: 'SG161222 (community, SD 1.5)', kind: 'image', category: 'open', recipe: 'sd', uncensored: true, sizeGB: 2.5, vramGB: 3, refSec: 4, defaults: { width: 512, height: 768, steps: 25, cfg: 5 },
+    files: { model: { repo: 'SG161222/Realistic_Vision_V6.0_B1_noVAE', match: '^Realistic_Vision_V6\\.0_NV_B1_fp16\\.safetensors$' }, vae: { repo: 'stabilityai/sd-vae-ft-mse-original', match: '^vae-ft-mse-840000-ema-pruned\\.safetensors$' } },
+    blurb: 'The classic photorealistic SD 1.5 model, uncensored. Light and fast.', edit: 'img2img' },
+  { id: 'epicrealism-natural-sin', quality: 6, name: 'epiCRealism Natural Sin (SD 1.5, uncensored)', maker: 'epinikion (community, SD 1.5)', kind: 'image', category: 'open', recipe: 'sd', uncensored: true, sizeGB: 2.1, vramGB: 3, refSec: 4, defaults: { width: 512, height: 768, steps: 25, cfg: 5 },
+    files: { model: { repo: 'TheImposterImposters/epiCRealism-NaturalSin', match: '^epicrealism_naturalSin\\.safetensors$' } },
+    blurb: 'Natural-looking uncensored photos in seconds on any graphics card.', edit: 'img2img' },
+  { id: 'majicmix-realistic', quality: 6, name: 'majicMIX realistic v7 (SD 1.5, uncensored)', maker: 'Merjic (community, SD 1.5)', kind: 'image', category: 'open', recipe: 'sd', uncensored: true, sizeGB: 2.1, vramGB: 3, refSec: 4, defaults: { width: 512, height: 768, steps: 25, cfg: 6 },
+    files: { model: { repo: 'digiplay/majicMIX_realistic_v7', match: '^majicmixRealistic_v7\\.safetensors$' } },
+    blurb: 'Beautiful, soft-lit portraits, a long-time favorite. Uncensored.', edit: 'img2img' },
+  { id: 'z-image-cyberrealistic', quality: 8, name: 'Z-Image CyberRealistic (uncensored)', maker: 'Cyberdelia (community, Z-Image Turbo)', kind: 'image', category: 'open', recipe: 'zimage', uncensored: true, sizeGB: 8.0, vramGB: 8, refSec: 12, defaults: { width: 1024, height: 1024, steps: 8, cfg: 1 },
+    files: { diffusion: { repo: 'gimly13/z-image-cyberrealistic-v9-gguf', match: 'zit_CyberRealistic_v9-Q4_K\\.gguf$' }, vae: { repo: 'black-forest-labs/FLUX.1-schnell', match: '^ae\\.safetensors$' }, llm: { repo: 'unsloth/Qwen3-4B-Instruct-2507-GGUF', match: 'Qwen3-4B-Instruct-2507-Q4_K_M\\.gguf$' } },
+    blurb: 'CyberRealistic\'s lifelike, uncensored look on the fast Z-Image Turbo: 8 steps a picture.', edit: 'img2img' },
+  { id: 'chroma-hd', quality: 9, name: 'Chroma1-HD (uncensored)', maker: 'Lodestone Rock (built on FLUX)', kind: 'image', category: 'open', recipe: 'chroma', uncensored: true, sizeGB: 8.8, vramGB: 8, refSec: 45, defaults: { width: 1024, height: 1024, steps: 26, cfg: 4 },
+    files: { diffusion: { repo: 'silveroxides/Chroma1-HD-GGUF', match: 'Chroma1-HD-Q4_K_M\\.gguf$' }, ...CHROMA_ENCODERS },
+    blurb: 'The most capable fully uncensored picture model: FLUX-class quality and prompt following, retrained with nothing taken out. Takes negative prompts.', edit: 'img2img' },
+  { id: 'z-image-turbo-uncensored', quality: 8, name: 'Z-Image Turbo (uncensored)', maker: 'Alibaba Tongyi · uncensored community tune', kind: 'image', category: 'open', recipe: 'zimage', uncensored: true, sizeGB: 10.0, vramGB: 10, refSec: 14, defaults: { width: 1024, height: 1024, steps: 8, cfg: 1 },
+    files: { diffusion: { repo: 'lesliemore/z-image-turbo-nsfw-v2-GGUF', match: 'z_image_nsfw.*\\.gguf$' }, vae: FLUX_ENCODERS.vae, llm: { repo: 'unsloth/Qwen3-4B-Instruct-2507-GGUF', match: 'Qwen3-4B-Instruct-2507-Q4_K_M\\.gguf$' } },
+    blurb: 'Z-Image Turbo retrained without its content limits: fast, photorealistic, uncensored.', edit: 'img2img' },
+  { id: 'chroma-flash', quality: 8, name: 'Chroma1-HD Flash (uncensored)', maker: 'Lodestone Rock (built on FLUX)', kind: 'image', category: 'open', recipe: 'chroma', uncensored: true, sizeGB: 8.8, vramGB: 8, refSec: 12, defaults: { width: 1024, height: 1024, steps: 8, cfg: 1 },
+    files: { diffusion: { repo: 'silveroxides/Chroma1-Flash-GGUF', match: 'Chroma1-HD-Flash-Q4_K_M\\.gguf$' }, ...CHROMA_ENCODERS },
+    blurb: 'Chroma in 8 steps: uncensored FLUX-class pictures about four times faster.', edit: 'img2img' },
   { id: 'flux-kontext', quality: 8, name: 'FLUX.1 Kontext (photo editing)', maker: 'Black Forest Labs', kind: 'image', category: 'edit', recipe: 'kontext', sizeGB: 13.5, vramGB: 10, refSec: 60, defaults: { width: 1024, height: 1024, steps: 20, cfg: 1 },
     files: { diffusion: { repo: 'QuantStack/FLUX.1-Kontext-dev-GGUF', match: 'Q4_K_S\\.gguf$' }, ...FLUX_ENCODERS },
     blurb: 'Edit photos by describing the change: "make it sunset", "remove the person", "turn it into a watercolor".', edit: 'instruct' },
@@ -212,11 +297,25 @@ const MEDIA_MODELS = [
     blurb: 'Short video clips from a description. Fits on graphics cards (GPUs) with 8 GB of their own memory.' },
   { id: 'wan2.2-5b', quality: 8, name: 'Wan 2.2 Text/Image-to-Video 5B', maker: 'Alibaba', kind: 'video', category: 'video', recipe: 'wan', sizeGB: 9.5, vramGB: 12, refSec: 420, defaults: { width: 1280, height: 704, steps: 20, cfg: 5, frames: 49, fps: 24 },
     files: { diffusion: { repo: 'QuantStack/Wan2.2-TI2V-5B-GGUF', match: 'Q4_K_M\\.gguf$' }, vae: { repo: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', match: 'wan2\\.2_vae\\.safetensors$' }, t5xxl: { repo: 'city96/umt5-xxl-encoder-gguf', match: 'Q4_K_M\\.gguf$' } },
-    blurb: 'Higher-quality 720p clips, from text or by animating a photo.', animate: true },
+    blurb: 'Higher-quality 720p clips, from text or by animating a photo. Open weights with no content filter: the Liquid Edition\'s video maker.', animate: true },
+  { id: 'wan2.2-5b-turbo', quality: 7, name: 'Wan 2.2 5B Turbo (4-step video)', maker: 'Alibaba · Turbo by quanhaol', kind: 'video', category: 'video', recipe: 'wan', sizeGB: 9.5, vramGB: 6, refSec: 90, defaults: { width: 1280, height: 704, steps: 4, cfg: 1, frames: 49, fps: 24 },
+    files: { diffusion: { repo: 'hum-ma/Wan2.2-TI2V-5B-Turbo-GGUF', match: 'Wan2_2-TI2V-5B-Turbo-Q4_K_M\\.gguf$' }, vae: { repo: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', match: 'wan2\\.2_vae\\.safetensors$' }, t5xxl: { repo: 'city96/umt5-xxl-encoder-gguf', match: 'Q4_K_M\\.gguf$' } },
+    blurb: 'Wan 2.2 in 4 steps: about five times faster, from text or a photo, and usable on 6 GB cards. Open weights with no built-in content filter.', animate: true },
 ];
+
+// style: what a picture model draws best (the Liquid Edition picks an anime model for anime prompts).
+// promptPrefix: quality tags a model needs at the start of every prompt (added by itself).
+const ANIME_MODELS = new Set(['pony-v6', 'illustrious-xl-v2', 'noobai-xl', 'wai-nsfw-illustrious', 'nova-anime-xl']);
+const PONY_MODELS = new Set(['pony-v6', 'cyberrealistic-pony', 'pony-realism', 'realdream-pony']);
+for (const m of MEDIA_MODELS) {
+  if (m.kind !== 'image') continue;
+  m.style = ANIME_MODELS.has(m.id) ? 'anime' : 'photo';
+  if (PONY_MODELS.has(m.id)) m.promptPrefix = 'score_9, score_8_up, score_7_up, ';
+}
 
 const MEDIA_CATEGORIES = {
   image: { label: 'Image generation', icon: '🎨' },
+  open: { label: 'Uncensored pictures', icon: '🔓', note: 'No content filter. Lustify is the Liquid Edition\'s picture maker.' },
   edit: { label: 'Photo editing (AI)', icon: '🪄' },
   video: { label: 'Video generation', icon: '🎬' },
 };
@@ -229,7 +328,7 @@ const MEDIA_CATEGORIES = {
 
 const JOBS = {
   general: { kind: 'text', words: 300, label: 'Everyday', icon: '⚡', pitch: 'Quick, reliable answers for questions, advice and small tasks.', speed: 25, budget: 60, temperature: 0.7, contextSize: 16384, maxTokens: 4096, library: false, web: true, mode: 'blend',
-    assistant: { name: 'Quicksilver', emoji: '💧', instructions: 'You are Quicksilver, a capable, honest assistant running privately on the user\'s computer. Give clear, direct, well-organised answers. Check any arithmetic before you give it. If you are unsure, say so instead of guessing.' } },
+    assistant: { name: 'Quicksilver', emoji: '💧', instructions: 'You are Quicksilver, a capable, honest assistant running privately on the user\'s computer. Give clear, direct, well-organized answers. Check any arithmetic before you give it. If you are unsure, say so instead of guessing.' } },
   // Back from Quicksilver 2.0/2.1: quick answers on modest PCs.
   fast: { kind: 'text', words: 250, label: 'Fast on a modest PC', icon: '🏃', pitch: 'Quick answers on laptops and older computers: the best model that still answers in seconds.', single: true, speed: 30, budget: 30, temperature: 0.6, contextSize: 8192, maxTokens: 2048, library: false, web: true, mode: 'blend',
     assistant: { name: 'Quick Helper', emoji: '🏃', instructions: 'You are a fast, concise assistant. Keep answers short and to the point unless asked for more. Use a short list when it helps. If a question needs a long, careful answer, say so and give the key points first.' } },
@@ -243,13 +342,22 @@ const JOBS = {
     assistant: { name: 'Writer', emoji: '✍️', instructions: 'You are a skilled writer and editor. Match the tone the user asks for (or the tone of what they paste). Write clearly and concisely, in plain English, with no filler. When editing, keep the user\'s meaning and voice, and briefly list the main changes. For emails, include a subject line.' } },
   // Back from Quicksilver 2.0/2.1: understanding photos, screenshots, scans and video.
   vision: { kind: 'text', words: 350, label: 'Photos & video', icon: '📷', pitch: 'Understand photos, screenshots, scans, charts and video clips.', speed: 10, budget: 120, temperature: 0.4, contextSize: 16384, maxTokens: 4096, library: false, web: false, mode: 'blend',
-    assistant: { name: 'Vision Analyst', emoji: '📷', instructions: 'You analyse images and video frames. Describe what matters for the user\'s question, read any text exactly, extract tables and chart values, and note anything unclear. For video, describe what happens over time using the frame timestamps.' } },
+    assistant: { name: 'Vision Analyst', emoji: '📷', instructions: 'You analyze images and video frames. Describe what matters for the user\'s question, read any text exactly, extract tables and chart values, and note anything unclear. For video, describe what happens over time using the frame timestamps.' } },
   open: { kind: 'text', words: 400, label: 'Unfiltered', icon: '🔓', pitch: 'Models that follow your instructions with far fewer refusals: fiction, mature themes, frank answers.', speed: 12, budget: 120, temperature: 0.8, contextSize: 16384, maxTokens: 4096, library: false, web: false, mode: 'blend', only: 'open',
-    assistant: { name: 'Unfiltered', emoji: '🔓', instructions: 'You are a direct, candid assistant. Answer fully and frankly. Do not moralise, lecture or add disclaimers the user did not ask for, and do not water answers down. Follow the user\'s instructions on tone, style, persona and content, including for fiction and mature themes.' } },
+    assistant: { name: 'Unfiltered', emoji: '🔓', instructions: 'You are a direct, candid assistant. Answer fully and frankly. Do not moralize, lecture or add disclaimers the user did not ask for, and do not water answers down. Follow the user\'s instructions on tone, style, persona and content, including for fiction and mature themes.' } },
   coding: { kind: 'text', words: 700, label: 'App development', icon: '💻', pitch: 'Build apps and websites: plan, write, debug and review code.', speed: 10, budget: 180, temperature: 0.2, contextSize: 32768, maxTokens: 8192, library: false, web: false, mode: 'debate',
     assistant: { name: 'App Builder', emoji: '💻', instructions: 'You are an expert software engineer who builds complete apps. For new work, outline the structure first (files, components, data), then write correct, idiomatic, complete code in fenced code blocks with the file name and language. Explain briefly what changed and why. Point out bugs, edge cases and security issues. Ask a short clarifying question when a request is ambiguous.' } },
-  create: { kind: 'media', label: 'Photo & video generation', icon: '🎨', pitch: 'Pictures and short videos from a description, with AI-written prompts.', roles: ['image', 'video', 'helper'] },
-  edit: { kind: 'media', label: 'Photo & video editing', icon: '🪄', pitch: 'Change photos by describing the edit, and bring photos to life.', roles: ['edit', 'animate', 'helper'] },
+  // Create: the popular kinds of making, one each, in the order people reach for them.
+  pictures: { kind: 'media', label: 'Pictures', icon: '🖼️', pitch: 'Photos and art from a description, with AI-written prompts.', roles: ['image', 'helper'] },
+  openpics: { kind: 'media', label: 'Uncensored pictures', icon: '🔓', pitch: 'No content filter: Lustify and other uncensored models, private on this PC.', roles: ['openimage', 'helper'], uncensored: true },
+  anime: { kind: 'media', label: 'Anime & illustration', icon: '🎌', pitch: 'Anime, manga and drawn styles, from booru-style tags or plain words.', roles: ['anime', 'helper'], uncensored: true },
+  video: { kind: 'media', label: 'Video', icon: '🎬', pitch: 'Short video clips from a description (Wan 2.2).', roles: ['video', 'helper'] },
+  animate: { kind: 'media', label: 'Animate a photo', icon: '✨', pitch: 'Bring a still photo to life as a short clip.', roles: ['animate', 'helper'] },
+  photoedit: { kind: 'media', label: 'Photo editing', icon: '🪄', pitch: 'Change a photo by describing the edit: sky, background, style, objects.', roles: ['edit', 'helper'] },
+  songs: { kind: 'music', label: 'Full songs', icon: '🎵', pitch: 'Lyrics, chords and a demo on this PC; complete sung songs in the cloud.' },
+  // Earlier all-in-one kits, kept for stacks set up with them (not shown as choices).
+  create: { kind: 'media', label: 'Photo & video generation', icon: '🎨', pitch: 'Pictures and short videos from a description, with AI-written prompts.', roles: ['image', 'video', 'helper'], hidden: true },
+  edit: { kind: 'media', label: 'Photo & video editing', icon: '🪄', pitch: 'Change photos by describing the edit, and bring photos to life.', roles: ['edit', 'animate', 'helper'], hidden: true },
 };
 
 // How good a model is at a kind of work (0-10). Writing and reasoning are derived.
@@ -404,7 +512,7 @@ function profileInstalled(inst) {
   const sizeGB = (inst.size || 0) / 1e9;
   const vision = Boolean(inst.vision || inst.files?.mmproj);
   const c = TEXT_MODELS.find((m) => m.id === inst.catalogId) || matchCatalog(`${inst.name} ${inst.files?.model ? inst.files.model.split(/[\\/]/).pop() : ''}`);
-  const open = /dolphin|hermes|abliterat|uncensored|unfiltered|nemo|mistral/i.test(`${inst.name} ${inst.files?.model || ''}`);
+  const open = /dolphin|hermes|abliterat|uncensored|unfiltered|nemo|mistral/i.test(`${inst.name} ${inst.files?.model ? inst.files.model.split(/[\\/]/).pop() : ''}`);
   if (c) return { ...c, id: inst.id, name: inst.name, catalogId: c.id, sizeGB: sizeGB || c.sizeGB, vision: vision || Boolean(c.vision), open: Boolean(c.open || open), known: true };
   // Unknown model: rate it by size (a 4-bit model is about 0.6 GB per billion parameters).
   const params = Math.max(0.5, sizeGB / 0.6);
@@ -473,9 +581,11 @@ function compose(pool, job, hw, calib, { vision = true, budget = 150, speed = 10
 // ---------- media kits (photo & video) ----------
 
 const MEDIA_ROLES = {
-  image: { label: 'Creates pictures', pick: (m) => m.category === 'image' },
+  image: { label: 'Creates pictures', pick: (m) => m.category === 'image' || m.category === 'open' },
   video: { label: 'Makes videos', pick: (m) => m.category === 'video' },
   edit: { label: 'Edits photos', pick: (m) => m.category === 'edit' },
+  openimage: { label: 'Creates uncensored pictures', pick: (m) => m.kind === 'image' && Boolean(m.uncensored) },
+  anime: { label: 'Draws anime & illustration', pick: (m) => m.kind === 'image' && m.style === 'anime' },
   animate: { label: 'Brings photos to life', pick: (m) => m.category === 'video' && m.animate },
   helper: { label: 'Writes better prompts', text: true },
 };
@@ -533,6 +643,13 @@ const CLOUD_BOOST = {
   open: { provider: 'openrouter', alt: 'xai', mode: 'hard', share: 0.2, why: 'OpenRouter has free uncensored community models, so hard requests get a bigger model with the same freedom.' },
   coding: { provider: 'anthropic', alt: 'github', mode: 'check', why: 'A frontier model reviews each answer for bugs and security issues before you run it.' },
   create: { provider: 'together', alt: 'openai', mode: 'image', why: 'For pictures beyond what this PC can make: FLUX Schnell is free on Together; OpenAI gpt-image-1 for the best results.' },
+  pictures: { provider: 'together', alt: 'openai', mode: 'image', why: 'For pictures beyond what this PC can make: FLUX Schnell is free on Together; OpenAI gpt-image-1 for the best results.' },
+  openpics: { provider: 'venice', alt: 'venice', mode: 'image', why: 'Venice makes uncensored pictures in the cloud (Lustify, HiDream) with safe mode off. With Lustify on your PC you need no Venice credits for pictures at all: it is the same model, so the same quality, free and unlimited; Venice is only quicker where the PC has no good graphics card.' },
+  anime: { provider: 'venice', alt: 'venice', mode: 'image', why: 'Venice makes uncensored pictures in the cloud with safe mode off. An anime model on your PC makes them free and unlimited, with no Venice credits used; Venice is only quicker where the PC has no good graphics card.' },
+  video: { provider: 'fal', alt: 'replicate', mode: 'image', why: 'Longer, sharper clips with sound: Veo, Kling and others on fal.ai, paid per second.' },
+  animate: { provider: 'fal', alt: 'replicate', mode: 'image', why: 'Veo 3.1 on fal.ai brings a photo to life, with sound, paid per second.' },
+  photoedit: { provider: 'openai', alt: 'fal', mode: 'image', why: 'gpt-image-1 and Nano Banana make precise edits from a description, at a cost per image.' },
+  songs: { provider: 'fal', alt: 'replicate', mode: 'image', why: 'ElevenLabs Music, MiniMax Music and Mureka on fal.ai make complete sung songs from your lyrics.' },
   edit: { provider: 'openai', alt: 'together', mode: 'image', why: 'gpt-image-1 makes precise edits from a description, at a cost per image.' },
 };
 // Estimated paid use compared with asking the cloud model directly for every answer.
@@ -560,12 +677,16 @@ function advise(job, hw, opts = {}) {
   const installed = opts.installed || [];
   const text = installed.filter((m) => m.kind === 'text').map(profileInstalled);
   const base = { job, kind: j.kind, label: j.label };
+  // Songs: no open model sings a whole song on a PC yet, so the plan is a songwriter stack here
+  // (lyrics, chords, melody and a demo beat) plus cloud services for complete sung songs.
+  if (j.kind === 'music') return { ...base, recipe: 'song-complete', cloud: cloudPlan(job) };
   if (j.kind === 'media') {
     // Installed media models are catalog models (matched by catalogId); keep the installed id.
     const media = installed.filter((m) => m.kind !== 'text').map((m) => { const c = MEDIA_MODELS.find((x) => x.id === m.catalogId); return c ? { ...c, id: m.id, catalogId: c.id, name: m.name } : null; }).filter(Boolean);
     const mine = media.some((m) => MEDIA_ROLES[j.roles[0]].pick(m)) ? composeMedia(job, hw, calib, media, text) : null;
     // The prompt writer only needs a small model: reuse one you have, else a small download.
-    const best = composeMedia(job, hw, calib, live(MEDIA_MODELS), text.length ? text : live(TEXT_MODELS).filter((m) => m.sizeGB <= 3.5));
+    // Recommended downloads stay with the standard models; uncensored ones are your own choice (or the Liquid Edition's).
+    const best = composeMedia(job, hw, calib, live(MEDIA_MODELS).filter((m) => j.uncensored || !m.uncensored), text.length ? text : live(TEXT_MODELS).filter((m) => m.sizeGB <= 3.5));
     const haveCat = (id) => (media.find((m) => m.catalogId === id) || text.find((m) => m.catalogId === id))?.id || null;
     best.have = Object.fromEntries(best.ids.map((id) => [id, text.some((m) => m.id === id) ? id : haveCat(id)]));
     best.missingGB = best.ids.filter((id) => !best.have[id]).reduce((t, id) => { const m = MEDIA_MODELS.find((x) => x.id === id) || TEXT_MODELS.find((x) => x.id === id); return t + m.sizeGB + (m.mmprojGB || 0); }, 0);
@@ -748,4 +869,36 @@ const SCORES = require('./scores.json');
 // Uncensored versions are scored by the model they're made from (usually a point or two lower).
 const SCORE_BASE = { 'qwen3-8b-uncensored': 'qwen3-8b', 'qwen3-14b-uncensored': 'qwen3-14b', 'qwen3-30b-a3b-uncensored': 'qwen3-30b-a3b' };
 
-module.exports = { RETIRED, SCORES, SCORE_BASE, SUCCESSORS, FEATURED, TEXT_MODELS, TEXT_CATEGORIES, MEDIA_MODELS, MEDIA_CATEGORIES, JOBS, CLOUD_BOOST, cloudPlan, accuracyLevel, requirements, smallerAlternative, draftFor, DRAFT_FAMILIES, estimateText, estimateMedia, advise, compose, gpuBandwidth, profileInstalled, matchCatalog, scoreFor, familyOf, starsFor, capabilities, upgradeAdvice };
+// ---------- the Liquid Edition ----------
+// Its core ships with the installer and is locked: these models can't be removed and the stack
+// can't be edited or deleted (you can still pick any other model or stack instead).
+const LIQUID_CORE = ['qwen3.5-2b', 'qwen3.5-4b', 'qwen3.5-9b-uncensored', 'nomic-embed-v1.5', 'bge-reranker-v2-m3', 'lustify', 'wan2.2-5b', 'wan2.2-5b-turbo'];
+const LIQUID_MEMBERS = LIQUID_CORE;
+const liquidMember = (catalogId) => Boolean(catalogId) && LIQUID_MEMBERS.includes(catalogId);
+// Quicksilver Liquid Edition Pro: the same idea for a powerful PC (a 16–24 GB graphics card and
+// 32–64 GB of memory) — bigger, smarter uncensored models in every role. Its models are a
+// download (about 70 GB on top of the Liquid Edition); the stack itself is locked like the Liquid
+// Edition's. Lustify and Wan 2.2 come from the Liquid Edition.
+const LIQUID_PRO = {
+  brain: 'qwen3-30b-a3b-uncensored',      // answers: 30B knowledge at 3B speed (mixture of experts)
+  closer: 'mistral-small-3.2-uncensored', // leads hard questions and reads photos
+  thinker: 'gpt-oss-20b-uncensored',      // maths and logic, thought through
+  muse: 'rocinante-12b',                  // stories, role-play and fresh angles
+  pictures: ['chroma-hd', 'wai-nsfw-illustrious'], // top-quality pictures; anime
+  minVramGB: 16, recVramGB: 24, minRamGB: 32, recRamGB: 64,
+};
+const LIQUID_PRO_MODELS = [LIQUID_PRO.brain, LIQUID_PRO.closer, LIQUID_PRO.thinker, LIQUID_PRO.muse, ...LIQUID_PRO.pictures];
+// Suggested add-ons: not required, not locked, never downloaded by themselves. Each fills a gap in
+// the core; once downloaded it joins the Liquid Edition's crew. (Any other uncensored model joins
+// only when ticked under Models → "Models in use": see models.inUse.)
+// minVramGB: below this the add-on is shown as not a good fit for this PC.
+const LIQUID_ADDONS = [
+  { id: 'wai-nsfw-illustrious', why: 'Anime: Lustify is a photo model, this is the most popular uncensored anime model. Anime requests use it by themselves.' },
+  { id: 'chroma-hd', why: 'The highest-quality uncensored pictures, with negative prompts.', minVramGB: 8 },
+  { id: 'cyberrealistic-sd15', why: 'Uncensored pictures on older 4 GB graphics cards and laptops, where Lustify is slow.' },
+  { id: 'rocinante-12b', why: 'Stories and role-play: vivid prose, far better than the core at fiction.' },
+  { id: 'mistral-small-3.2-uncensored', why: 'A stronger Closer that sees photos, for 16 GB+ graphics cards.', minVramGB: 16 },
+  { id: 'gpt-oss-20b-uncensored', why: 'A strong, fast reasoner for maths and logic on 12 GB+ graphics cards.', minVramGB: 12 },
+];
+
+module.exports = { LIQUID_CORE, LIQUID_MEMBERS, LIQUID_ADDONS, LIQUID_PRO, LIQUID_PRO_MODELS, liquidMember, RETIRED, SCORES, SCORE_BASE, SUCCESSORS, FEATURED, TEXT_MODELS, TEXT_CATEGORIES, MEDIA_MODELS, MEDIA_CATEGORIES, JOBS, CLOUD_BOOST, cloudPlan, accuracyLevel, requirements, smallerAlternative, draftFor, DRAFT_FAMILIES, estimateText, estimateMedia, advise, compose, gpuBandwidth, profileInstalled, matchCatalog, scoreFor, familyOf, starsFor, capabilities, upgradeAdvice };

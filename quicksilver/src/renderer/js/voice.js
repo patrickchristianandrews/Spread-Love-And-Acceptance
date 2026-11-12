@@ -54,12 +54,17 @@ function repaintSpeak() {
 window.speechSynthesis?.addEventListener?.('voiceschanged', () => {});
 
 // ---------- talking instead of typing ----------
+let voiceStarting = false; // between the click and the microphone opening: a second click is ignored
 async function toggleVoice(chat) {
   if (voiceRec) { voiceRec.stop(); return; }
-  let st;
-  try { st = await qs.call('voice:status'); } catch (err) { toast(err.message); return; }
-  if (!st.ready) { voiceSetup(st, () => toggleVoice(chatById(chat.id) || chat)); return; }
-  startListening(chat);
+  if (voiceStarting) return;
+  voiceStarting = true;
+  try {
+    let st;
+    try { st = await qs.call('voice:status'); } catch (err) { toast(err.message); return; }
+    if (!st.ready) { voiceSetup(st, () => toggleVoice(chatById(chat.id) || chat)); return; }
+    await startListening(chat);
+  } finally { voiceStarting = false; }
 }
 
 function voiceSetup(st, then) {
@@ -160,6 +165,8 @@ function insertSpoken(chat, text) {
   if (S.data.prefs.voiceHandsFree && live) { voiceSentFrom = chat.id; $('#send')?.click(); }
 }
 qs.onChat(({ ev }) => {
+  // An answer that was stopped or failed is not read aloud, now or after the next one.
+  if (voiceSentFrom && (ev.type === 'error' || (ev.type === 'done' && ev.aborted))) { voiceSentFrom = null; return; }
   if (ev.type !== 'done' || !voiceSentFrom || ev.aborted) return;
   const chat = chatById(voiceSentFrom);
   setTimeout(() => {

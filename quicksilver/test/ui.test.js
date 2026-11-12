@@ -35,7 +35,7 @@ function redPng(size = 64) {
     { id: 'sdxl-turbo', name: 'SDXL Turbo', kind: 'image', catalogId: 'sdxl-turbo', files: { model: copy('sdxl.safetensors') }, size: 7e9 },
     { id: 'wan2.1-1.3b', name: 'Wan 2.1 1.3B', kind: 'video', catalogId: 'wan2.1-1.3b', files: { diffusion: copy('wan.st'), vae: copy('vae.st'), t5xxl: copy('t5.gguf') }, size: 7e9 },
   ]));
-  // A model "downloaded by LM Studio": added automatically at start-up.
+  // A model "downloaded by LM Studio": found, but only added when the user chooses.
   const SCAN = path.join(HOME, 'lmstudio');
   fs.mkdirSync(path.join(SCAN, 'bartowski', 'Llama-3.2-3B-Instruct-GGUF'), { recursive: true });
   const lms = path.join(SCAN, 'bartowski', 'Llama-3.2-3B-Instruct-GGUF', 'Llama-3.2-3B-Instruct-Q4_K_M.gguf');
@@ -70,12 +70,17 @@ function redPng(size = 64) {
   await win.click('#wc-close');
   await win.waitForSelector('.welcome-card', { state: 'detached' });
   await win.evaluate(() => { S.data.prefs.simple = false; S.data.prefs.autoRoute = false; applyPrefs(); save(); render(); });
+  // Models from other apps are never added by themselves: nothing imported until you choose to.
+  await win.waitForTimeout(1500);
+  assert.equal(await win.evaluate(() => S.installed.filter((m) => m.source === 'imported').length), 0, 'a model found from another app is not added by itself');
+  // Turned on in Settings (as a user would): found models are added.
+  await win.evaluate(async () => { S.data.prefs.addFoundModels = true; save(); await startupModels(); });
   await win.waitForSelector('text=and added it. Ready to use', { timeout: 30000 });
   // Start something: expert assistants for one task each (the everyday Quicksilver isn't listed).
   assert.match(await win.locator('.start-note').innerText(), /assistant programmed to be an expert at one task/);
   assert.equal(await win.locator('[data-start="as-general"]').count(), 0);
   assert.ok(await win.locator('[data-start]').count() >= 10);
-  console.log('✓ home (model from another app added automatically; expert assistants explained)');
+  console.log('✓ home (models from other apps added only when you choose; expert assistants explained)');
   await shot(win, '01-home');
 
   // Stack Advisor.
@@ -100,14 +105,23 @@ function redPng(size = 64) {
   await win.waitForSelector('#pick-model option[value="stack:office-mine"]:checked', { state: 'attached', timeout: 30000 });
   // Photo & video stacks are Studio setups.
   await win.click('[data-nav="stacks"]');
-  await win.click('[data-job="create"]');
+  // The Liquid Editions at the top of Stacks: the Liquid Edition and Liquid Edition Pro, each explained.
+  await win.waitForSelector('#liquid-editions:has-text("Liquid Edition Pro"):has-text("For a powerful PC")');
+  assert.match(await win.locator('#liquid-editions').innerText(), /Qwen3 30B-A3B[\s\S]*Mistral Small 3\.2[\s\S]*(Get|Finish|Chat)/);
+  // Create's popular goals, one each: pictures, uncensored, anime, video, animate, editing, full songs.
+  for (const g of ['pictures', 'openpics', 'anime', 'video', 'animate', 'photoedit', 'songs']) await win.waitForSelector(`[data-job="${g}"]`);
+  assert.equal(await win.locator('[data-job="create"], [data-job="edit"]').count(), 0, 'the old all-in-one kits are not shown as choices');
+  await win.click('[data-job="songs"]');
+  await win.waitForSelector('[data-song-open="cloud"]', { timeout: 30000 });
+  assert.match(await win.locator('#adv-out').innerText(), /Songwriter[\s\S]*ElevenLabs Music/);
+  await win.click('[data-job="pictures"]');
   await win.waitForSelector('[data-kit="image"]', { timeout: 30000 });
   await win.click('#kit-create');
   await win.waitForSelector('#ci-model', { timeout: 30000 });
   await win.fill('#ci-prompt', 'a cat');
   await win.click('[data-improve="ci-prompt"]');
   await win.waitForFunction(() => document.querySelector('#ci-prompt').value !== 'a cat' && !document.querySelector('[data-improve="ci-prompt"]').disabled, null, { timeout: 30000 });
-  console.log('✓ stacks: types, built from installed models, Studio kit with ✨ Improve');
+  console.log('✓ stacks: types, built from installed models, Studio kit with ✨ Improve; Create goals incl. uncensored, anime, video and full songs');
   // Each stack type explains how it works, offers three strengths with accuracy levels, and
   // suggests a cloud AI with the paid use it saves.
   await win.click('[data-nav="stacks"]');
@@ -154,6 +168,17 @@ function redPng(size = 64) {
   await win.click('.sf-tabs [data-sf-tab="stacks"]');
   console.log('✓ Stacks & Fusion: separate tabs; Fusion has its builder, your fusions, one-click fusions and the ways to combine');
   assert.ok(await win.evaluate(() => STACK_RECIPES.some((r) => r.id === 'gif-maker' && r.skill === 'make-gif') && skillById('make-gif')?.media?.gif));
+  // Mobile app developer: a team fitted to this PC (a coder, a planner, a model that sees), and a
+  // second one where a cloud AI you connect leads. Each part resolves to a real catalog model.
+  const mobile = await win.evaluate(() => {
+    const local = STACK_RECIPES.find((r) => r.id === 'mobile-dev'); const cloud = STACK_RECIPES.find((r) => r.id === 'mobile-dev-cloud');
+    const plan = rxResolve(local);
+    const models = plan.parts.filter((p) => p.kind === 'model' && !p.helper);
+    return { group: [local?.group, cloud?.group, cloud?.where], known: models.every((p) => S.catalog.text.some((m) => m.id === p.id)), n: models.length, sees: models.some((p) => S.catalog.text.find((m) => m.id === p.id)?.vision), lead: Boolean(plan.lead),
+      clouds: cloud.parts.filter((p) => p.kind === 'cloud').map((p) => p.provider), first: STACK_RECIPES.filter((r) => r.group === 'code')[0].id, card: document.querySelector('[data-rx="mobile-dev"]') ? 'shown' : (typeof recipeCard === 'function' ? /Mobile app developer/.test(recipeCard(local)) : 'n/a') };
+  });
+  assert.deepEqual(mobile.group, ['code', 'code', 'hybrid']); assert.ok(mobile.known && mobile.n === 3 && mobile.sees && mobile.lead, `the mobile team is a coder, a planner and a model that sees: ${JSON.stringify(mobile)}`);
+  assert.deepEqual(mobile.clouds, ['anthropic', 'google']); assert.equal(mobile.first, 'mobile-dev', 'it is the first of the coding stacks');
   console.log(`✓ stacks for specific work: ${await win.evaluate(() => STACK_RECIPES.length)} teams incl. 3 song stacks and a GIF maker, tuned to this PC, set up as a stack and an assistant`);
 
   // Chat with the powerhouse stack, a spreadsheet attached and fact check on.
@@ -215,6 +240,40 @@ function redPng(size = 64) {
   assert.match(await win.locator('#inf-preview').innerText(), /Overall on this PC[\s\S]*\/10[\s\S]*Recommended changes/);
   // How the web and a cloud AI would improve it, in numbers.
   assert.match(await win.locator('#inf-preview .bz').innerText(), /Web search[\s\S]*9 in 10[\s\S]*cloud AI/i);
+  // 🔮 On this PC: while you build it, a forecast of how it will behave here with everything
+  // counted: this PC, where each model runs, whether they fit together, how long answers take.
+  assert.match(await win.locator('#inf-preview .fc').innerText(), /On this PC: how your custom AI will behave[\s\S]*This PC[\s\S]*Where each one runs[\s\S]*How long answers take[\s\S]*everyday reply/i);
+  // …and the APIs that would work best with this build: what each lifts, and a button to
+  // connect it (the build comes back afterwards) or, once connected, to add it.
+  assert.match(await win.locator('#inf-preview .fc').innerText(), /APIs that would work best with this build[\s\S]*(Best free|Best quality|You have it|already in it|None needed)/);
+  const buildApi = await win.evaluate(() => {
+    const local = S.installed.filter((m) => (m.kind || 'text') === 'text').map((m) => `local:${m.id}`).slice(0, 2);
+    const html = buildApiHTML(local, {});
+    const liquid = buildApiHTML(local, { liquid: true });
+    return { rows: (html.match(/api-sug-row/g) || []).length, connect: /data-api-connect-back="[a-z]+"/.test(html), lifts: /→/.test(html), liquidOnlyVenice: /Venice AI/.test(liquid) && !/Google Gemini|OpenAI|Groq/.test(liquid) };
+  });
+  assert.ok(buildApi.rows >= 1 && buildApi.connect && buildApi.lifts, `a build of local models is offered APIs with what they lift: ${JSON.stringify(buildApi)}`);
+  assert.ok(buildApi.liquidOnlyVenice, 'an uncensored-only build is only offered the uncensored service');
+  const fc = await win.evaluate(() => {
+    const real = S.est.hardware; const disk = S.disk;
+    const local = S.installed.filter((m) => (m.kind || 'text') === 'text').map((m) => `local:${m.id}`);
+    const big = [...S.catalog.text].filter((m) => !m.retired).sort((a, b) => b.sizeGB - a.sizeGB)[0];
+    const small = [...S.catalog.text].filter((m) => !m.retired && !S.installed.some((x) => x.catalogId === m.id)).sort((a, b) => a.sizeGB - b.sizeGB)[0];
+    const run = (hw, targets, opts) => { S.est.hardware = hw; const f = pcForecast(targets, opts); return f && { worst: f.worst, verdict: f.verdict.text, titles: f.lines.map((l) => l.title), text: f.lines.map((l) => l.html || l.text).join(' | ') }; };
+    S.disk = { freeBytes: 20e9 };
+    const out = {
+      tooBig: run({ ramGB: 16, vramGB: 8, vramFreeGB: 7.5, gpuName: 'Test card', cpuThreads: 8 }, [big.id], { adding: [big.id] }),
+      noCard: run({ ramGB: 16, vramGB: 0, vramFreeGB: 0, gpuName: '', cpuThreads: 8 }, [small.id], { adding: [small.id] }),
+      bigCard: run({ ramGB: 64, vramGB: 24, vramFreeGB: 23, gpuName: 'Test card', cpuThreads: 16 }, local.slice(0, 2), { members: { drafters: local.slice(0, 1), judge: local[1] || local[0], mode: 'blend' } }),
+      line: (S.est.hardware = { ramGB: 16, vramGB: 0, vramFreeGB: 0, gpuName: '', cpuThreads: 8 }, pcForecastLine(small.id)),
+    };
+    S.est.hardware = real; S.disk = disk;
+    return out;
+  });
+  assert.equal(fc.tooBig.worst, 'bad'); assert.match(fc.tooBig.verdict, /will not run on this PC as it is/); assert.match(fc.tooBig.text, /does not fit in this PC's memory[\s\S]*which is not enough: free some space first/);
+  assert.notEqual(fc.noCard.worst, 'bad'); assert.match(fc.noCard.text, /No graphics card[\s\S]*in ordinary memory, on the processor[\s\S]*will be left/); assert.ok(fc.noCard.titles.includes('While it answers') && fc.noCard.titles.includes('Disk space'));
+  assert.match(fc.bigCard.text, /on the graphics card \(the fast way\)/); assert.ok(fc.bigCard.titles.includes('How long answers take'));
+  assert.match(fc.line, /^On this PC it runs in ordinary memory, on the processor/);
   await shot(win, '13-infuse');
   // The builder suggests what to add for a task you pick.
   await win.waitForSelector('#inf-suggest .sug-now');
@@ -238,6 +297,52 @@ function redPng(size = 64) {
   await win.waitForSelector('#modal .bz-jobs');
   assert.match(await win.locator('#modal').innerText(), /Analyst Supreme: what the web[\s\S]*custom AI \(fusion\)[\s\S]*Reasoning & maths[\s\S]*Recommended for this PC/);
   await win.click('#modal [data-close]');
+  // Every built stack and custom AI says which API would add the most to it (or that one is
+  // already inside), and opens the API directory: every service by task, free ones first, each
+  // with what the free plan gives and a link.
+  assert.match(await win.locator('.card:has-text("Analyst Supreme") .api-sug').innerText(), /Suggested API for this custom AI[\s\S]*(Best free|Best quality|You have it)[\s\S]*→|Cloud AI in this custom AI|None needed/);
+  const picks = await win.evaluate(() => {
+    const local = S.installed.filter((m) => (m.kind || 'text') === 'text').map((m) => `local:${m.id}`);
+    S.stacks.push({ id: 'zz-api', name: 'zz', members: { drafters: [], judge: local[0] } }, { id: 'zz-liq', name: 'zz liquid', builtFor: 'quicksilver', members: { drafters: [], judge: local[0] } });
+    const a = stackApiPicks(S.stacks.find((x) => x.id === 'zz-api'));
+    const l = stackApiPicks(S.stacks.find((x) => x.id === 'zz-liq'));
+    const html = stackApiHTML(S.stacks.find((x) => x.id === 'zz-api'));
+    S.stacks = S.stacks.filter((x) => !/^zz-/.test(x.id));
+    return { free: a.free?.r[1] || null, freeIsFree: (a.free?.r[7] ?? 0) >= 5, best: a.best?.r[1] || null, liquid: [l.free?.r[0] || null, l.best?.r[0] || null], connect: /data-api-connect=/.test(html) };
+  });
+  assert.ok(picks.free && picks.freeIsFree && picks.connect, `a stack of local models is offered a free API to connect: ${JSON.stringify(picks)}`);
+  assert.deepEqual(picks.liquid, [null, 'venice'], 'the Liquid Edition is only offered its uncensored partner');
+  await win.click('.card:has-text("Analyst Supreme") .api-sug [data-api-dir]');
+  await win.waitForSelector('#modal #api-dir .ad-row');
+  await win.click('#modal [data-dir-task="video"]');
+  await win.waitForFunction(() => document.querySelector('#modal [data-dir-task="video"].on') && /Kling AI/.test(document.querySelector('#modal #api-dir').innerText));
+  const dir = await win.evaluate(() => { const rows = [...document.querySelectorAll('#modal #api-dir .ad-row')]; return { rows: rows.length, linked: rows.filter((r) => r.querySelector('a[href^="https://"]')).length, text: document.querySelector('#modal #api-dir').innerText }; });
+  assert.ok(dir.rows >= 3 && dir.linked === dir.rows, `every service in the directory has a link (${dir.linked} of ${dir.rows})`);
+  assert.match(dir.text, /Free to start, then paid[\s\S]*Free gets you:[\s\S]*After that:/); assert.match(dir.text, /on their site/);
+  await shot(win, '13b2-api-directory');
+  await win.click('#modal [data-close]');
+  // Trending and Featured are matched to this PC: only what runs here is listed, and a note says so.
+  await win.evaluate(() => {
+    trend = { at: Date.now(), list: [
+      { repo: 'a/Fits-4B-GGUF', likes: 5, downloads: 9, type: 'general', sizeGB: 2.4, est: { rating: 'great', label: 'Runs great', fit: 'full' } },
+      { repo: 'a/Huge-400B-GGUF', likes: 5, downloads: 9, type: 'general', sizeGB: 240, est: { rating: 'wont', label: "Won't fit", fit: 'no' } },
+      { repo: 'a/Mystery-GGUF', likes: 1, downloads: 1, type: 'general', sizeGB: null, est: null }],
+    others: { pictures: [{ repo: 'x/NotHere', likes: 3, inCatalog: false, catalogId: null }] },
+    spaces: [{ id: 'maker/voice-app', likes: 42 }] };
+    trendAll = false; modelsTab = 'trending'; go({ view: 'models' });
+  });
+  await win.waitForSelector('#tr-fit');
+  let trText = await win.locator('#main').innerText();
+  assert.match(trText, /Showing only what runs on this PC[\s\S]*2 more are trending but hidden/);
+  assert.ok(/Fits-4B/.test(trText) && !/Huge-400B/.test(trText) && !/Mystery-GGUF/.test(trText) && !/NotHere/.test(trText), 'what will not run here is not listed');
+  assert.match(trText, /Trending Spaces[\s\S]*not on yours[\s\S]*voice-app/);
+  await shot(win, '13b3-trending-this-pc');
+  await win.click('#tr-all');
+  trText = await win.locator('#main').innerText();
+  assert.ok(/Huge-400B/.test(trText) && /NotHere/.test(trText), 'the hidden ones can be shown on request');
+  await win.evaluate(() => { trendAll = false; modelsTab = 'text'; render(); });
+  assert.match(await win.locator('#feat-note').innerText(), /Featured marks the best models right now that run on this PC/);
+  assert.equal(await win.evaluate(() => { const id = Object.values(S.catalog.picks.featured).flat().find((x) => S.est.text[x]); const was = S.est.text[id].fit; S.est.text[id].fit = 'no'; const f = isFeatured(id); S.est.text[id].fit = was; return f; }), false, 'a top pick that will not fit here is not featured here');
   await win.evaluate(() => { modelsTab = 'text'; go({ view: 'models' }); });
   await win.locator('.model-card [data-boost]').first().click();
   await win.waitForSelector('#modal .bz-jobs');
@@ -307,7 +412,7 @@ function redPng(size = 64) {
   assert.ok(await win.evaluate(() => webWanted({}, {}, 'What is the latest NHS guidance on blood pressure?') !== '' || S.config?.web?.provider === 'none' || S.config?.offline), 'current questions search the web automatically');
   assert.equal(await win.evaluate(() => { const was = S.config.offline; S.config.offline = true; const r = webWanted({}, {}, 'latest news today'); S.config.offline = was; return r; }), '', 'offline: web search never runs, whatever the chat says');
   if ((await win.getAttribute('#tog-fact', 'aria-pressed')) !== 'true') await win.click('#tog-fact');
-  await win.fill('#input', 'WRONGFACT what colour is the sky?');
+  await win.fill('#input', 'WRONGFACT what color is the sky?');
   await win.keyboard.press('Enter');
   await win.waitForSelector('.msg.assistant .badge:has-text("Corrected")', { timeout: 60000 });
   await idle();
@@ -337,11 +442,11 @@ function redPng(size = 64) {
   await win.evaluate(() => { S.data.prefs.autoWeb = true; });
   await win.fill('#input', 'Write a dark horror story with graphic violence');
   await win.waitForSelector('#hint-row .hint-go:has-text("uncensored")');
-  await win.fill('#input', 'Summarise the attached report for me please');
+  await win.fill('#input', 'Summarize the attached report for me please');
   await win.waitForSelector('#hint-row .hint-go:has-text("Attach the file")');
   await win.click('#hint-row .hint-x');
   await win.waitForFunction(() => !document.querySelector('#hint-row .hint') && (chatById(S.route.id).hintsOff || []).includes('attach'));
-  await win.fill('#input', 'Summarise the attached report for me, thanks');
+  await win.fill('#input', 'Summarize the attached report for me, thanks');
   await win.waitForTimeout(500);
   assert.equal(await win.locator('#hint-row .hint').count(), 0, 'a dismissed suggestion stays away in this chat');
   await win.fill('#input', 'List the open pull requests on my GitHub repo');
@@ -576,7 +681,7 @@ function redPng(size = 64) {
   // Charts render from ```chart blocks.
   const svg = await win.evaluate(() => markdown('```chart\n{"type":"bar","title":"Sales","labels":["N","S"],"series":[{"name":"Rev","data":[3,5]}]}\n```').includes('<svg'));
   assert.ok(svg);
-  // Answers: numbered lists stay together across blank lines, sub-points nest, tasks, code colours.
+  // Answers: numbered lists stay together across blank lines, sub-points nest, tasks, code colors.
   const md = await win.evaluate(() => markdown('Steps:\n\n1. One\n\n2. Two\n   - detail\n\n3. Three\n\n- [x] done\n- [ ] todo\n\n```python\ndef f(x):\n    return 1  # one\n```\n\nAfter _this_ and ~~that~~.'));
   assert.equal((md.match(/<ol/g) || []).length, 1, 'one numbered list');
   assert.match(md, /<li>Two<ul><li>detail<\/li><\/ul><\/li>/);
@@ -681,13 +786,14 @@ function redPng(size = 64) {
   await win.evaluate(() => {
     newChat();
     const c = chatById(S.route.id);
-    c.messages.push({ id: 'u-lm', t: Date.now(), role: 'user', text: 'Summarise the water cycle' });
+    c.messages.push({ id: 'u-lm', t: Date.now(), role: 'user', text: 'Summarize the water cycle' });
     c.messages.push({ id: 'a-lm', t: Date.now(), role: 'assistant', altIndex: 0, alts: [{ text: '', target: 'local:phi-4', error: 'Not enough memory to load this model. Try a smaller model, close other apps, or lower the context size.' }] });
     save(); render();
   });
   const lmBtn = win.locator('[data-lowmem="a-lm"]:not([data-keep])');
   await lmBtn.waitFor();
-  assert.match(await lmBtn.innerText(), /next best model: (Qwen3 8B|Gemma 3 4B)/);
+  // Any smaller model of the same strength will do (several Qwen3 8B-based models tie).
+  assert.match(await lmBtn.innerText(), /next best model: (.*Qwen3 8B.*|Gemma 3 4B)/);
   await lmBtn.click();
   await win.waitForFunction(() => { const m = chatById(S.route.id).messages.find((x) => x.id === 'a-lm'); return m.alts.length === 2 && /Answer from/.test(m.alts[1].text) && !pending; }, null, { timeout: 60000 });
   assert.notEqual(await win.evaluate(() => chatById(S.route.id).messages.find((x) => x.id === 'a-lm').alts[1].target), 'local:phi-4');
@@ -715,7 +821,8 @@ function redPng(size = 64) {
   await win.waitForSelector('#vpn-box .pv-link.cut:has-text("waiting for VPN")');
   await win.waitForSelector('#vpn-box .pv-plan:has-text("Proton VPN Free")');
   await win.waitForSelector('#vpn-box .pv-plan:has-text("Your Proton account")');
-  assert.match(await win.locator('#net-toggle').innerText(), /VPN off/);
+  assert.equal((await win.locator('#net-toggle').innerText()).trim(), 'Online', 'the switch just says Online or Offline');
+  assert.match(await win.locator('#net-toggle').getAttribute('title'), /waiting for a VPN/);
   await win.locator('#vpn-box').scrollIntoViewIfNeeded();
   await shot(win, '15-privacy-vpn');
   const vpnLabel = await win.evaluate(() => sessionPrivacy('local:qwen3-8b').label);
@@ -723,17 +830,24 @@ function redPng(size = 64) {
   await win.click('#vpn-box [data-pv-mode="offline"]');
   await win.waitForSelector('#vpn-box .pv-link.cut:has-text("nothing leaves")');
   assert.equal(await win.evaluate(() => sessionPrivacy('local:qwen3-8b').label), 'Private session');
-  await win.evaluate(() => { S.vpn = { connected: true, proton: true }; S.config.offline = false; S.config.vpnOnly = true; });
-  assert.equal(await win.evaluate(() => sessionPrivacy('local:qwen3-8b').label), 'Protected session');
+  // (Set and read in one step, so the background VPN check can't change it in between.)
+  assert.equal(await win.evaluate(() => { S.vpn = { connected: true, proton: true }; S.config.offline = false; S.config.vpnOnly = true; return sessionPrivacy('local:qwen3-8b').label; }), 'Protected session');
   await win.evaluate(() => { S.config.offline = true; S.config.vpnOnly = false; S.vpn = null; });
   assert.match(await win.locator('#net-toggle').innerText(), /Offline/);
   await win.click('#vpn-box [data-pv-mode="online"]');
   await win.waitForSelector('#vpn-box [data-pv-mode="online"].on');
   assert.match(await win.locator('#net-toggle').innerText(), /Online/);
+  // Private online with no VPN connected: nothing can go out (updates, downloads, web search), so
+  // the page says why and one click goes online without a VPN.
+  await win.evaluate(() => setPrivacyMode('vpn'));
+  await win.waitForSelector('#privacy-bar[data-kind="vpn-wait"]:has-text("no VPN is connected")');
+  assert.equal(await win.locator('#privacy-bar [data-pb="x"]').count(), 0, 'it stays until it is resolved');
+  await win.click('#privacy-bar [data-pb="plain"]');
+  await win.waitForFunction(() => S.config.vpnOnly === false && S.config.offline === false);
   // Online without a VPN: the top of the page says it's not private.
   await win.click('.nav-new');
   await win.waitForSelector('#privacy-bar:has-text("not private")');
-  assert.match(await win.locator('#net-toggle').innerText(), /not private/);
+  assert.equal((await win.locator('#net-toggle').innerText()).trim(), 'Online');
   await shot(win, '18b-not-private-bar');
   await win.click('#privacy-bar [data-pb="x"]');
   await win.waitForSelector('#privacy-bar', { state: 'detached' });
@@ -880,7 +994,7 @@ function redPng(size = 64) {
   assert.match(await win.locator('.sidebar [data-nav="library"]').innerText(), /Your knowledge/);
   assert.ok(await win.evaluate(() => { const r = STACK_RECIPES[0]; return r.id === 'uncensored-top' && r.top && RX_GROUPS[0][0] === 'new' && RX_GROUPS[1][0] === 'uncensored'; }), 'the top uncensored stack comes first');
   await win.click('.nav-new');
-  console.log('✓ your knowledge: front and centre on Home and in the menu; top uncensored stack first in the ready-made stacks');
+  console.log('✓ your knowledge: front and center on Home and in the menu; top uncensored stack first in the ready-made stacks');
   // New stacks published online appear marked new, say why they're good, and are suggested.
   const fresh = await win.evaluate(async () => {
     S.catalog.picks.recipes = [{ id: 'web-test-new', name: 'Fact-checked explainer', icon: '🧪', group: 'new', mode: 'redteam', parts: [{ model: 'qwen3-8b', role: 'Explainer' }, { model: 'gemma-3-4b', role: 'Checker' }], why: 'Explains clearly, then a second model hunts for mistakes.', added: new Date().toISOString().slice(0, 10) }];
@@ -980,7 +1094,6 @@ function redPng(size = 64) {
   await win.click('#net-pill');
   await win.waitForSelector('#net-toggle.off');
   await win.waitForSelector('#net-pill.off');
-  await win.waitForSelector('.web-state.off');
   await shot(win, '14-offline');
   await win.click('#net-toggle');
   await win.waitForSelector('#net-toggle:not(.off)');
@@ -1032,7 +1145,12 @@ function redPng(size = 64) {
   assert.match(sys.liquid, /fully uncensored/); assert.doesNotMatch(sys.liquid, /no disclaimers unless something is risky/);
   assert.doesNotMatch(sys.other, /fully uncensored/);
   // Upgrades say what you gain, in plain words.
-  const gains = await win.evaluate(() => ({ think: gainsOf('qwen3-4b', 'qwen3-4b-thinking').map((g) => g.text), img: gainsOf('sdxl', 'flux-schnell').map((g) => g.text), html: modelUpdatesHTML() }));
+  // (A fixed upgrade, so the card doesn't depend on the background check having finished.)
+  const gains = await win.evaluate(() => {
+    const had = S.modelUpgrades;
+    S.modelUpgrades = [{ oldId: 'q4', oldName: 'Qwen3 4B', oldCatalogId: 'qwen3-4b', newCatalogId: 'qwen3-4b-thinking', newName: 'Qwen3 4B Thinking', why: 'thinks hard questions through', rating: 'great', speed: 'Fast', sizeGB: 2.5 }];
+    try { return { think: gainsOf('qwen3-4b', 'qwen3-4b-thinking').map((g) => g.text), img: gainsOf('sdxl', 'flux-schnell').map((g) => g.text), html: modelUpdatesHTML() }; } finally { S.modelUpgrades = had; }
+  });
   assert.ok(gains.think.includes('Sharper maths: 52% → 83%') && gains.think.some((t) => /Expanded reasoning/.test(t)), gains.think.join(' | '));
   assert.match(gains.img[0], /Improved picture generation/);
   assert.match(gains.html, /class="gain"/, 'the upgrade card lists the gains');
@@ -1046,12 +1164,18 @@ function redPng(size = 64) {
     await qs.call('stacks:save', { id: 't-up', name: 'Upgrade test', members: { drafters: ['local:phi-4', 'local:gemma-3-4b'], judge: 'local:phi-4' } });
     S.data.chats.push({ id: 'c-up', title: 'Upgrade test', target: 'local:phi-4', messages: [], assistantId: 'as-general', created: Date.now(), updated: Date.now() });
     S.modelUpgrades = [{ oldId: 'phi-4', oldName: 'Phi-4 14B', oldCatalogId: 'phi-4', newCatalogId: 'qwen3-8b', newName: 'Qwen3 8B', why: 'stronger for everyday use (6 → 8 out of 10)', rating: 'great', speed: 'Fast', sizeGB: 5 }];
+    // Only this upgrade: online stack suggestions (which differ from PC to PC) and earlier
+    // put-offs are set aside for the check.
+    const picksRecipes = S.catalog.picks?.recipes; if (S.catalog.picks) S.catalog.picks.recipes = [];
+    S.data.prefs.upgradeLater = {};
+    delete S.downloads['qwen3-8b'];
     paintUpdateBadge(); render();
     const card = document.querySelector('#model-updates')?.textContent || '';
     const dot = document.querySelector('[data-nav="models"] .nav-dot:not([hidden])')?.textContent;
     const dotWant = String(1 + shownStackUpdates().length);
     document.querySelector('[data-up-later="phi-4>qwen3-8b"]').click();
-    const laterCard = (document.querySelector('[data-up-later="phi-4>qwen3-8b"]') ? 'STILL ' : '') + (document.querySelector('#model-updates')?.textContent || '');
+    const laterBtns = document.querySelectorAll('[data-up-later="phi-4>qwen3-8b"]').length;
+    const laterCard = (document.querySelector('[data-up-later="phi-4>qwen3-8b"]') ? 'STILL ' : '') + (document.querySelector('#model-updates')?.textContent || '') + ` [buttons after: ${laterBtns}; view: ${S.route.view}; stack updates: ${stackUpdates().map((u) => upKey(u)).join(', ') || 'none'}]`;
     S.data.prefs.upgradeLater['phi-4>qwen3-8b'] = Date.now() - 1; render();
     const backCard = (document.querySelector('[data-up-later="phi-4>qwen3-8b"]') ? 'BACK ' : '') + (document.querySelector('#model-updates')?.textContent || '');
     S.data.prefs.pendingUpgrades = { 'qwen3-8b': 'phi-4' };
@@ -1060,15 +1184,28 @@ function redPng(size = 64) {
     const chat = S.data.chats.find((c) => c.id === 'c-up');
     const out = { card, dot, dotWant, laterCard, backCard, swapped, members: st.members, chat: chat.target, toast: document.querySelector('#toast')?.textContent || document.body.innerText.match(/Upgraded to[^\n]*/)?.[0] || '' };
     await qs.call('stacks:delete', 't-up');
+    // The Liquid Edition is locked: it can't be deleted or edited; other stacks can.
+    const lockErr = await qs.call('stacks:delete', 'quicksilver').then(() => '', (e) => e.message);
+    if (!/locked/i.test(lockErr)) throw new Error('the Liquid Edition should refuse to be deleted');
+    const proErr = await qs.call('stacks:delete', 'quicksilver-pro').then(() => '', (e) => e.message);
+    if (!/locked/i.test(proErr)) throw new Error('Liquid Edition Pro should refuse to be deleted');
+    const editErr = await qs.call('stacks:save', { id: 'quicksilver', name: 'Mine', members: { drafters: [] } }).then(() => '', (e) => e.message);
+    if (!/locked/i.test(editErr)) throw new Error('the Liquid Edition should refuse to be edited');
+    // Six suggested add-ons, optional: listed with a download button, none of them locked.
+    const addons = liquidAddonsHTML();
+    if (!['Rocinante', 'WAI-NSFW', 'Chroma1-HD', 'CyberRealistic', 'Mistral Small', 'gpt-oss'].every((n) => addons.includes(n))) throw new Error('the six suggested add-ons should be listed');
+    if (S.catalog.liquidAddons.some((a) => S.catalog.liquid.includes(a.id))) throw new Error('add-ons must not be locked');
+    if (S.catalog.picks) S.catalog.picks.recipes = picksRecipes;
     S.data.chats = S.data.chats.filter((c) => c.id !== 'c-up');
     for (const l of Object.values(keep)) for (const [x, t] of l) x.target = t;
-    for (const st0 of stacksBefore) await qs.call('stacks:save', st0);
+    for (const st0 of stacksBefore) if (st0.id !== 'quicksilver') await qs.call('stacks:save', st0);
     S.data.prefs.defaultTarget = before; S.modelUpgrades = []; paintUpdateBadge(); save(); await refreshModels(); render();
     return out;
   });
   assert.match(up.card, /Better models available[\s\S]*Phi-4 14B[\s\S]*Qwen3 8B/);
   assert.equal(up.dot, up.dotWant, 'the Models menu item shows the updates');
-  assert.ok(!/^STILL /.test(up.laterCard) && /put off for later/.test(up.laterCard), 'Maybe later hides it for now');
+  // Hidden for now: the card says it was put off, or (when it was the only suggestion) goes away.
+  assert.ok(!/^STILL /.test(up.laterCard) && (/put off for later/.test(up.laterCard) || /^ \[buttons after: 0;/.test(up.laterCard)), `Maybe later hides it for now (card: ${up.laterCard.slice(0, 600)})`);
   assert.match(up.backCard, /^BACK /, 'and it is suggested again later');
   assert.equal(up.swapped, true);
   assert.deepEqual(up.members.drafters, ['local:qwen3-8b', 'local:gemma-3-4b']);
@@ -1130,6 +1267,9 @@ function redPng(size = 64) {
 
   // Studio: create an image, edit it, make a video.
   await win.click('[data-nav="studio"]');
+  assert.match(await win.locator('.page-head h1').innerText(), /Gallery & tools/, 'the page is the gallery and its tools');
+  assert.equal(await win.locator('.tabs [data-stab]').first().getAttribute('data-stab'), 'gallery', 'the gallery comes first');
+  await win.click('[data-stab="create"]');
   await win.fill('#ci-prompt', 'a pastel droplet on a desk');
   await win.click('#ci-go');
   await win.waitForSelector('.gitem img', { timeout: 60000 });
@@ -1262,7 +1402,7 @@ function redPng(size = 64) {
     const chat = { target: base };
     return { base,
       code: autoPick(chat, { job: 'general' }, 'Debug this function and explain the error step by step', false).target,
-      research: autoPick(chat, { job: 'research' }, 'Compare and analyse the long-term strategy and trade-offs in depth', false).target };
+      research: autoPick(chat, { job: 'research' }, 'Compare and analyze the long-term strategy and trade-offs in depth', false).target };
   });
   if (cloudPicks) {
     assert.equal(cloudPicks.code, 'api:pds:deepseek', `coding routed to the best cloud AI (base ${cloudPicks.base})`);
@@ -1370,7 +1510,7 @@ function redPng(size = 64) {
   await shot(win, '15b-compare-by-task');
   await win.click('[data-cmp-tab="blind"]');
   await win.selectOption('#ar-pool', 'local:qwen3-8b');
-  await win.fill('#ar-q', 'Name a colour');
+  await win.fill('#ar-q', 'Name a color');
   await win.click('#ar-go');
   await win.waitForSelector('[data-vote="A"]', { timeout: 150000 });
   assert.ok(!(await win.evaluate(() => document.querySelector('.arena-grid').textContent.includes('Qwen3 8B'))), 'names are hidden until you vote');
@@ -1380,6 +1520,33 @@ function redPng(size = 64) {
   await win.waitForSelector('.arena-side.won');
   await shot(win, '16-arena-voted');
   console.log('✓ arena: blind answers, vote, leaderboard');
+  // Meme battle: two models each make a meme on a topic, names hidden; vote; its own leaderboard.
+  await win.click('[data-arena-tab="memes"]');
+  await win.waitForSelector('#mb-topic');
+  await win.fill('#mb-topic', 'Mondays');
+  await win.click('#mb-go');
+  await win.waitForSelector('[data-mvote="A"]', { timeout: 150000 });
+  const memes = await win.locator('.arena-grid').innerText();
+  assert.match(memes, /TRIES MONDAYS[\s\S]*AS PLANNED/i, 'each meme has its top and bottom lines');
+  assert.match(memes, /Name hidden until you vote/);
+  assert.equal(await win.locator('.meme').count(), 2);
+  await shot(win, '16b-meme-battle');
+  await win.click('[data-mvote="B"]');
+  await win.waitForSelector('.arena-side.won');
+  assert.match(await win.locator('.arena-board').innerText(), /1[\s\S]*0/);
+  assert.deepEqual(await win.evaluate(() => [parseMeme('Sure! ```json\n{"top":"a","bottom":"b","picture":"c"}\n```'), parseMeme('<think>hmm</think>Top: when it works\nBottom: first try')]),
+    [{ top: 'a', bottom: 'b', picture: 'c' }, { top: 'when it works', bottom: 'first try', picture: '' }]);
+  await shot(win, '16c-meme-voted');
+  await win.click('[data-cmp-tab="blind"]');
+  await win.waitForSelector('#ar-q');
+  console.log('✓ meme battle: two hidden memes on one topic, vote, its own leaderboard');
+  // Coding agents: the setup box opens from Settings and lists the models it would use.
+  await win.evaluate(() => agentsModal());
+  await win.waitForFunction(() => /OpenCode[\s\S]*Kilo Code[\s\S]*Cline[\s\S]*Aider[\s\S]*OpenHands/.test(document.querySelector('#modal')?.textContent || '') && document.querySelectorAll('#ag-model option').length > 0, null, { timeout: 15000 });
+  assert.ok(!(await win.evaluate(() => [...document.querySelectorAll('#ag-model option')].some((o) => o.value.startsWith('stack:')))), 'only single models are offered');
+  await shot(win, '16d-coding-agents');
+  await win.click('#modal [data-close]');
+  console.log('✓ coding agents: OpenCode and OpenHands setup on your models');
 
   // Voice, phone and updates settings.
   await win.click('[data-nav="settings"]');
@@ -1492,7 +1659,8 @@ function redPng(size = 64) {
   await win.click('[data-nav="newchat"]');
   // Everything is findable: the menu shows Stacks, Models, Upgrades… and the chat options are in the bar.
   for (const v of ['stacks', 'models', 'upgrades', 'assistants', 'skills', 'integrations']) assert.ok(await win.isVisible(`.nav [data-nav="${v}"]`), `${v} is in the menu`);
-  assert.ok(await win.isVisible('.web-state') && await win.isVisible('#tog-fact') && await win.isVisible('#pick-effort'), 'chat options are in the message bar');
+  assert.ok(await win.isVisible('#tog-fact') && await win.isVisible('#pick-effort'), 'chat options are in the message bar');
+  assert.equal(await win.locator('.web-state').count(), 0, 'no separate web-search label: the Online/Offline switch says it');
   // A tidy menu: no list of stacks; the Explore pages fold into one section.
   assert.equal(await win.locator('#side-stacks').count(), 0, 'stacks are not listed in the menu');
   await win.click('#nav-explore');
@@ -1509,7 +1677,7 @@ function redPng(size = 64) {
   // A photo goes to a model that can see it.
   await win.setInputFiles('#file-in', { name: 'dot.png', mimeType: 'image/png', buffer: Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==', 'base64') });
   await win.waitForSelector('.attach:has-text("dot.png")');
-  await win.fill('#input', 'What colour is this?');
+  await win.fill('#input', 'What color is this?');
   await win.keyboard.press('Enter');
   await idle();
   const picked = await win.evaluate(() => { const m = chatById(S.route.id).messages.at(-1); return m.alts[m.altIndex].target; });

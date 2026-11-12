@@ -16,9 +16,9 @@ const EXTRA_ASSISTANTS = [
   { id: 'as-career', job: 'writing', name: 'Career Coach', emoji: '💼', description: 'CVs, cover letters, interview practice and salary conversations.', temperature: 0.5,
     instructions: 'You are an experienced career coach and recruiter. Give specific, practical advice. Rewrite CVs and cover letters with strong, measurable achievements. For interview practice, ask one question at a time, then give honest feedback and a better example answer.' },
   { id: 'as-trip', job: 'general', name: 'Trip Planner', emoji: '✈️', description: 'Day-by-day itineraries, budgets and packing lists for any trip.', temperature: 0.6, web: true,
-    instructions: 'You are a well-travelled trip planner. Ask for dates, budget and interests if missing, then give a day-by-day itinerary with realistic travel times, rough costs, booking tips and a short packing list. Flag anything that needs checking closer to the date (opening hours, prices, visas).' },
+    instructions: 'You are a well-traveled trip planner. Ask for dates, budget and interests if missing, then give a day-by-day itinerary with realistic travel times, rough costs, booking tips and a short packing list. Flag anything that needs checking closer to the date (opening hours, prices, visas).' },
   { id: 'as-ideas', job: 'general', name: 'Brainstormer', emoji: '💡', description: 'Lots of fresh ideas, fast: names, gifts, plans, posts and projects.', temperature: 0.95,
-    instructions: 'You are an energetic creative partner. Give many varied ideas quickly (at least 10 unless asked otherwise), from safe to bold, grouped into themes. Then pick your top three and say why. Build on the user\'s favourites when they reply.' },
+    instructions: 'You are an energetic creative partner. Give many varied ideas quickly (at least 10 unless asked otherwise), from safe to bold, grouped into themes. Then pick your top three and say why. Build on the user\'s favorites when they reply.' },
 ];
 
 function defaultAssistants() {
@@ -59,37 +59,45 @@ function paintNet() {
   for (const b of [$('#net-toggle'), $('#net-pill')].filter(Boolean)) {
     b.classList.toggle('off', off);
     b.setAttribute('aria-checked', String(!off));
-    const vpn = !off && S.config?.vpnOnly;
-    const tunnel = vpn && S.vpn?.connected;
-    // Online without a VPN = not private: what you search and send can be seen by the sites and
-    // services you use. Marked clearly so it's never a surprise.
-    const exposed = !off && !vpn;
-    b.classList.toggle('vpn', Boolean(vpn)); b.classList.toggle('vpn-wait', Boolean(vpn && !tunnel));
-    b.classList.toggle('exposed', exposed);
-    (b.querySelector('.net-lbl') || b.querySelector('span:nth-child(2)')).textContent = off ? 'Offline' : vpn ? (tunnel ? '🛡 Private (VPN)' : '🛡 VPN off: paused') : '🌐 Online · not private';
-    b.title = off ? 'Offline: nothing leaves this PC. Click to go online.' : vpn ? (tunnel ? 'Private online: everything goes through your VPN. Click to go offline. Privacy modes are in Settings → General.' : 'Private online is on, but no VPN is connected, so nothing leaves this PC. Connect Proton VPN, or change it in Settings → General.') : 'Online, not private: web search and any cloud AI you use can see what you send, and sites see your location. Everyday chats still run on this PC. Click to go offline, or turn on Private online (Proton VPN) in Settings → General.';
+    // Just Online or Offline, as it always was. (If Private online is on in Settings and no VPN
+    // is connected, the tooltip says why nothing is going out.)
+    const vpnWait = !off && S.config?.vpnOnly && !S.vpn?.connected;
+    for (const c of ['vpn', 'vpn-wait', 'exposed']) b.classList.remove(c);
+    (b.querySelector('.net-lbl') || b.querySelector('span:nth-child(2)')).textContent = off ? 'Offline' : 'Online';
+    b.title = off ? 'Offline: nothing leaves this PC. Click to go online.' : vpnWait ? 'Online, but Private online (Settings → General) is waiting for a VPN, so nothing leaves this PC until one connects. Click to go offline.' : 'Online: web search, cloud AIs and downloads are available. Click to go offline.';
   }
   document.documentElement.classList.toggle('is-offline', off);
   document.documentElement.classList.toggle('is-exposed', !off && !S.config?.vpnOnly);
   paintPrivacyBar();
 }
-// A one-line banner at the top of the page whenever you're online without a VPN. It sits inside the
-// page (it never covers anything); ✕ hides it until Quicksilver restarts.
+// A one-line banner at the top of the page (inside the page: it never covers anything):
+//  - online without a VPN: says it isn't private; ✕ hides it until Quicksilver restarts.
+//  - "Private online" is on but no VPN is connected: nothing can reach the internet, so updates,
+//    downloads and web search all fail. This says why, and one click fixes it either way
+//    (connect the VPN, or go online without one). It can't be hidden: until it's resolved,
+//    everything that needs the internet is stopped.
 function paintPrivacyBar() {
   const main = document.getElementById('main');
   if (!main) return;
-  const show = !S.config?.offline && !S.config?.vpnOnly && !S.privacyBarHidden;
+  const off = Boolean(S.config?.offline);
+  const waiting = !off && Boolean(S.config?.vpnOnly) && S.vpn && !S.vpn.connected;
+  const kind = waiting ? 'vpn-wait' : !off && !S.config?.vpnOnly && !S.privacyBarHidden ? 'exposed' : '';
   let bar = document.getElementById('privacy-bar');
-  if (!show) { bar?.remove(); return; }
-  if (!bar || bar.parentNode !== main) {
+  if (!kind) { bar?.remove(); return; }
+  if (!bar || bar.parentNode !== main || bar.dataset.kind !== kind) {
     bar?.remove();
     bar = Object.assign(document.createElement('div'), { id: 'privacy-bar', className: 'privacy-bar' });
-    bar.innerHTML = `<span class="grow">🌐 <b>Online — not private.</b> <span class="small">Web searches and anything sent to a cloud AI can be seen by those services, and sites see your location. Chats with models on this PC stay private.</span></span><button class="btn small" data-pb="vpn">🛡 Make private (VPN)</button><button class="btn small ghost" data-pb="off">Go offline</button><button class="pb-x" data-pb="x" title="Hide until restart" aria-label="Hide">✕</button>`;
-    bar.addEventListener('click', (e) => {
+    bar.dataset.kind = kind;
+    bar.innerHTML = kind === 'vpn-wait'
+      ? `<span class="grow">🛡 <b>Private online is on, but no VPN is connected.</b> <span class="small">Until one is, nothing can reach the internet: updates, downloads, web search and cloud AIs are paused. Models on this PC keep working.</span></span>${S.vpn?.installed ? '<button class="btn small" data-pb="connect">Open Proton VPN</button>' : ''}<button class="btn small primary" data-pb="plain">Go online without a VPN</button><button class="btn small ghost" data-pb="off">Go offline</button>`
+      : `<span class="grow">🌐 <b>Online — not private.</b> <span class="small">Web searches and anything sent to a cloud AI can be seen by those services, and sites see your location. Chats with models on this PC stay private.</span></span><button class="btn small" data-pb="vpn">🛡 Make private (VPN)</button><button class="btn small ghost" data-pb="off">Go offline</button><button class="pb-x" data-pb="x" title="Hide until restart" aria-label="Hide">✕</button>`;
+    bar.addEventListener('click', async (e) => {
       const k = e.target.closest('[data-pb]')?.dataset.pb;
       if (k === 'off') toggleNet();
       else if (k === 'vpn') { setTab = 'general'; go({ view: 'settings' }); }
       else if (k === 'x') { S.privacyBarHidden = true; bar.remove(); }
+      else if (k === 'connect') { await call('vpn:open').catch(() => {}); toast('Opening Proton VPN. Press Connect there; Quicksilver notices within a few seconds.', 6000); }
+      else if (k === 'plain') { await setPrivacyMode('online'); await refreshModels().catch(() => {}); render(); }
     });
   }
   if (main.firstChild !== bar) main.prepend(bar);
@@ -180,6 +188,7 @@ async function init() {
   if (saved?.version === 3) S.data = saved;
   else S.data = { version: 3, prefs: { ...DEFAULT_PREFS, userName: saved?.settings?.userName && saved.settings.userName !== 'You' ? saved.settings.userName : '' }, assistants: [], chats: [] };
   S.data.prefs = { ...DEFAULT_PREFS, ...S.data.prefs };
+  for (const c of S.data.chats || []) { dropUnfinished(c.messages); if (!EFFORTS[c.effort]) delete c.effort; } // nothing was left running, and only real effort levels
   if (S.data.prefs.effortLevel === 'max') S.data.prefs.effortLevel = 'council'; // Deep think became Council
   if (S.data.prefs.maxTokens === 4096 && !S.data.prefs.maxTokensSet) S.data.prefs.maxTokens = 2048; // 2.16: old default
   // Keep built-in assistants up to date, but never overwrite your edits or your own assistants.
@@ -199,6 +208,7 @@ async function init() {
   paintIcons();
   $$('.sidebar [data-nav]').forEach((b) => b.addEventListener('click', () => {
     if (b.dataset.nav === 'newchat') newChat();
+    else if (b.dataset.nav === 'newcode') newCodeChat();
     else if (b.dataset.nav === 'upgrades') { go({ view: 'pc' }); setTimeout(() => document.getElementById('upgrades')?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 300); }
     else go({ view: b.dataset.nav });
   }));
@@ -212,26 +222,35 @@ async function init() {
   $('#dl-mini').addEventListener('click', () => { modelsTab = 'installed'; go({ view: 'models' }); });
   $('#modal').addEventListener('mousedown', (e) => { if (e.target.id === 'modal') closeModal(); });
   document.addEventListener('keydown', (e) => {
+    if (document.getElementById('liquid-gate')) return; // the setup screen: nothing behind it responds
     if (e.key === 'Escape' && !$('#modal').hidden) closeModal();
-    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'n') { e.preventDefault(); newChat(); }
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'n') { e.preventDefault(); if (e.shiftKey) newCodeChat(); else newChat(); }
     if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); $('#chat-search').focus(); }
   });
 
   setTimeout(() => preloadDefault(), 3000);
-  qs.onModelProgress((d) => { S.downloads[d.id] = { ...S.downloads[d.id], ...d }; paintDownloads(); });
+  qs.onModelProgress((d) => { S.downloads[d.id] = { ...S.downloads[d.id], ...d }; paintDownloads(); paintLiquidGate(); });
   qs.onModelDone(async ({ id, model }) => {
     delete S.downloads[id];
+    // A model you added "to the crew" is ticked as in use, so it really joins.
+    if (useWhenDone.has(model?.catalogId) || useWhenDone.has(id)) { useWhenDone.delete(model?.catalogId); useWhenDone.delete(id); await qs.call('models:use', model.id, true).catch(() => {}); }
     await refreshModels();
+    // One more Liquid Edition model in: re-check what's still missing (opens Quicksilver when none is).
+    if (document.getElementById('liquid-gate')) { await setUpQuicksilver(false).catch(() => {}); if (document.getElementById('liquid-gate')) return; }
     S.est = null;
-    if (!(await applyPendingUpgrades(model).catch(() => false))) toast(`${model.name} is ready.`);
-    if (!targetValid(S.data.prefs.defaultTarget) && model.kind === 'text') { S.data.prefs.defaultTarget = `local:${model.id}`; save(); }
+    const gateJustClosed = Date.now() - (S.gateClosedAt || 0) < 8000;
+    if (!(await applyPendingUpgrades(model).catch(() => false)) && !gateJustClosed) toast(`${model.name} is ready.`);
+    // An open "Suggested add-ons" window shows the finished download.
+    if (document.getElementById('addon-list')) document.getElementById('addon-list').innerHTML = liquidAddonsHTML();
+    if (!targetValid(S.data.prefs.defaultTarget) && !(S.data.prefs.defaultChosen && !S.data.prefs.defaultTarget) && model.kind === 'text') { S.data.prefs.defaultTarget = `local:${model.id}`; S.data.prefs.defaultAuto = true; save(); }
     // Load the default model in the background so the first reply is quick.
     if (model.kind === 'text') await setUpQuicksilver(false).catch(() => {}); // a new model can join Quicksilver's team
+    if (model.kind === 'text' && (S.catalog?.liquidPro && Object.values(S.catalog.liquidPro).includes(model.catalogId))) { await qs.call('quicksilver:pro').catch(() => {}); await refreshModels(); }
     if (model.kind === 'text') qs.call('models:warm', S.data.prefs.defaultTarget || `local:${model.id}`, { contextSize: S.data.prefs.contextSize, gpu: S.data.prefs.gpu }).catch(() => {});
     if (!$('#modal').hidden) return;
     render();
   });
-  qs.onModelError(({ id, message, cancelled }) => { delete S.downloads[id]; paintDownloads(); if (!cancelled) toast(message, 8000); else toast(message); if (['models', 'stacks', 'studio'].includes(S.route.view)) render(); });
+  qs.onModelError(({ id, message, cancelled }) => { delete S.downloads[id]; paintDownloads(); if (document.getElementById('addon-list')) document.getElementById('addon-list').innerHTML = liquidAddonsHTML(); if (gateItems.some((m) => m.catalogId === id)) { gateFailed[id] = message; paintLiquidGate(); } if (!cancelled) toast(message, 8000); else toast(message); if (['models', 'stacks', 'studio'].includes(S.route.view)) render(); });
 
   go({ view: 'home' });
   // People updating get the short tour once too (new people see it after the name question).
@@ -248,21 +267,162 @@ async function setUpQuicksilver(firstLook) {
   const p = S.data.prefs;
   const r = await qs.call('models:starter');
   if (r.added.length || r.stack) await refreshModels();
+  fetchHelpersQuietly();
   const before = p.defaultTarget;
-  if (r.stack && (!targetValid(p.defaultTarget) || p.defaultTarget === 'local:starter')) p.defaultTarget = r.stack;
+  // The Liquid Edition is the default once it's ready, unless you chose something else yourself.
+  // A default Quicksilver picked by itself (a model found from another app, or the first one to
+  // finish downloading) gives way to it; so does, once, a filtered model left as the default by
+  // an earlier version.
+  const leftover = r.stack && !p.liquidDefaultOnce && targetValid(p.defaultTarget) && p.defaultTarget.startsWith('local:') && !liquidOk(p.defaultTarget);
+  const choseAutomatic = p.defaultChosen && !p.defaultTarget; // "Automatic" picked in Settings
+  if (r.stack && !choseAutomatic && (!targetValid(p.defaultTarget) || p.defaultTarget === 'local:starter' || p.defaultAuto || leftover)) {
+    if (leftover) toast(`💧 The Liquid Edition is now your default (it was ${targetLabel(p.defaultTarget)}, a filtered model). Change it any time in Settings → Chat.`, 10000);
+    p.defaultTarget = r.stack; p.defaultAuto = false;
+  }
+  if (r.stack && !p.liquidDefaultOnce) { p.liquidDefaultOnce = true; save(); }
   else if (!targetValid(p.defaultTarget) && targetValid('local:starter')) p.defaultTarget = 'local:starter';
   if (p.defaultTarget !== before) save();
   if (firstLook && r.added.length) {
     toast(r.stack ? '👋 Meet Quicksilver Liquid Edition: two AI models working as one, right on your PC. It sees photos, thinks harder when a question needs it, and nothing leaves this computer. Try an idea below.'
       : '👋 Quicksilver is ready to chat, privately on your PC, and it can see photos. Try an idea below.', 10000);
   }
-  if (firstLook && r.missing.length && !S.config?.offline) {
-    for (const m of r.missing) if (!S.downloads[m.catalogId]) download(m.repo ? { repo: m.repo, quant: m.quant, catalogId: m.catalogId, name: m.name } : { catalogId: m.catalogId }, m.name).catch(() => {});
-    toast(`Finishing Quicksilver in the background (${r.missing.map((m) => m.name).join(', ')}). You can chat right away.`, 8000);
+  // The one-time tidy of the model list (see models.tidyImported) says what it did.
+  if (r.tidied?.length) {
+    await refreshModels();
+    toast(`🧹 Tidied your model list: ${r.tidied.length} ${r.tidied.length === 1 ? 'entry was' : 'entries were'} not a chat model or a second copy of one you have (${r.tidied.slice(0, 3).map((x) => x.name).join(', ')}${r.tidied.length > 3 ? '…' : ''}). No file was deleted.`, 12000);
   }
-  if (r.stack && !before?.startsWith('stack:quicksilver') && p.defaultTarget === r.stack && !firstLook) toast('💧 Quicksilver Liquid Edition is fully ready: your models now work together as one.', 8000);
+  // Quicksilver doesn't open until the whole Liquid Edition is installed: anything not copied in
+  // from the models folder downloads straight away behind the setup screen.
+  liquidGate(r);
+  if (r.stack && !before?.startsWith('stack:quicksilver') && p.defaultTarget === r.stack && !firstLook && Date.now() - (S.gateClosedAt || 0) > 8000) toast('💧 Quicksilver Liquid Edition is fully ready: your models now work together as one.', 8000);
   if (['home', 'chat'].includes(S.route.view) && (r.added.length || p.defaultTarget !== before)) render();
   return r;
+}
+
+// ---------- Liquid Edition setup screen ----------
+// Shown over everything while any Liquid Edition model is missing (installed from the setup file
+// alone, or a download that was interrupted). Downloads start at once and resume where they
+// stopped; when the last one is in, the screen goes away and Quicksilver opens.
+let gateItems = [];
+const useWhenDone = new Set();
+document.addEventListener('click', (e) => { const b = e.target.closest?.('[data-use-when-done]'); if (b) useWhenDone.add(b.dataset.useWhenDone); }, true);
+const gateFailed = {};
+const gateTries = {}; // how many times each model's download has failed (picks the next copy to try)
+let gateNote = ''; // something to tell you on the setup screen itself (toasts are behind it)
+// While the setup screen is up, the app behind it can't be reached at all: not by the Tab key,
+// not by a keyboard shortcut, not by a screen reader. Focus moves to the setup screen.
+function gateInert(on) {
+  for (const id of ['app', 'modal']) { const n = document.getElementById(id); if (n) n.inert = on; }
+  if (on) { const g = document.getElementById('liquid-gate'); if (g) { g.tabIndex = -1; g.focus({ preventScroll: true }); } }
+}
+function liquidGate(r) {
+  // What is missing is decided in one place (models.registerStarter): a plain catalog build of
+  // the Brain, or an unticked file from another app, does not count as having it.
+  gateItems = r?.missing || [];
+  let el = document.getElementById('liquid-gate');
+  if (!gateItems.length) {
+    if (el) { el.remove(); gateInert(false); S.gateClosedAt = Date.now(); toastAction('💧 Quicksilver Liquid Edition is ready: chat, pictures and video, all on your PC.', 'Suggested add-ons', () => liquidAddonsModal(), 12000); render(); }
+    return;
+  }
+  if (!el) {
+    el = document.createElement('div');
+    el.id = 'liquid-gate';
+    el.setAttribute('role', 'dialog');
+    el.setAttribute('aria-modal', 'true');
+    el.style.cssText = 'position:fixed;inset:0;z-index:10000;display:flex;align-items:center;justify-content:center;padding:16px;background:var(--bg,#0f1117);overflow:auto';
+    document.body.appendChild(el);
+    gateInert(true);
+    el.addEventListener('click', async (e) => {
+      // Messages elsewhere in the app are behind this screen, so anything that goes wrong is said here.
+      gateNote = '';
+      try {
+        if (e.target.closest('[data-gate-online]')) { S.config = await qs.call('config:set', { offline: false }); paintNet(); startGateDownloads(true); }
+        else if (e.target.closest('[data-gate-plain]')) { S.config = await qs.call('config:set', { offline: false, vpnOnly: false }); await refreshVpn().catch(() => {}); startGateDownloads(true); }
+        else if (e.target.closest('[data-gate-vpn]')) { await qs.call('vpn:open'); gateNote = 'Proton VPN is opening. Connect it there, then press "Try again".'; paintLiquidGate(); }
+        else if (e.target.closest('[data-gate-retry]')) { await refreshVpn().catch(() => {}); startGateDownloads(true); }
+      } catch (err) { gateNote = err.message || String(err); paintLiquidGate(); }
+    });
+    // "Private online" with no VPN connected blocks every download: find out, so the screen can say so.
+    if (S.config?.vpnOnly && !S.vpn) refreshVpn().then(() => paintLiquidGate()).catch(() => {});
+  }
+  startGateDownloads(false);
+}
+// Voice typing's speech model (about 60 MB) comes inside the full installer. The web installer
+// carries no models, so there it is fetched quietly alongside the Liquid Edition's models and the
+// microphone is ready as well. It never holds up the setup screen.
+let voiceFetch = null;
+// The speed helpers for pictures and video (fast 8-step pictures, the quick video decoder):
+// fetched once in the background when they did not come with the installer.
+let helpersFetch = null;
+function fetchHelpersQuietly() {
+  if (helpersFetch || S.config?.offline) return;
+  helpersFetch = qs.call('media:helpers', true).then((r) => { if (r?.got?.length) refreshSpeeds(); }).catch(() => { helpersFetch = null; });
+}
+function fetchVoiceQuietly() {
+  if (voiceFetch || S.config?.offline) return;
+  voiceFetch = qs.call('voice:status').then((st) => (st && !st.model && st.canInstall ? qs.call('voice:setup') : null)).catch(() => { voiceFetch = null; });
+}
+function startGateDownloads(retry) {
+  if (S.config?.offline) { paintLiquidGate(); return; }
+  fetchVoiceQuietly();
+  for (const m of gateItems) {
+    if (S.downloads[m.catalogId] || (gateFailed[m.catalogId] && !retry)) continue;
+    // A chat model always comes from an uncensored copy: the one the installer uses, then the
+    // other uncensored copies in turn after a failure. Never the catalog's own entry for it,
+    // which is the plain (filtered) build. Pictures, video and search models have no such copy
+    // list: they come from the catalog, which knows backup copies of each.
+    const repos = m.repo ? [m.repo, ...(m.alt || [])] : [];
+    if (gateFailed[m.catalogId]) gateTries[m.catalogId] = (gateTries[m.catalogId] || 0) + 1;
+    delete gateFailed[m.catalogId];
+    const req = repos.length ? { repo: repos[(gateTries[m.catalogId] || 0) % repos.length], quant: m.quant, catalogId: m.catalogId, name: m.name } : { catalogId: m.catalogId };
+    download(req, m.name).catch((err) => { gateFailed[m.catalogId] = err.message; paintLiquidGate(); });
+  }
+  paintLiquidGate();
+}
+// Private online is on and no VPN is connected: nothing can be downloaded until one is, or until
+// you choose to go online without it.
+const gateVpnWait = () => Boolean(S.config?.vpnOnly) && !S.config?.offline && S.vpn?.connected === false;
+function paintLiquidGate() {
+  const el = document.getElementById('liquid-gate');
+  if (!el) return;
+  const state = (m) => {
+    const d = S.downloads[m.catalogId];
+    const pct = d?.total ? Math.round((d.downloaded / d.total) * 100) : 0;
+    const what = gateFailed[m.catalogId] ? `⚠️ ${gateFailed[m.catalogId]}` : d ? (d.total ? `${gb(d.downloaded)} of ${gb(d.total)} (${pct}%)` : 'Finding files…') : S.config?.offline ? 'Waiting: offline mode is on' : gateVpnWait() ? 'Waiting: no VPN connected' : 'Starting…';
+    return { pct, what };
+  };
+  const all = gateItems.map((m) => S.downloads[m.catalogId]).filter(Boolean);
+  const tot = all.reduce((a, d) => a + (d.total || 0), 0);
+  const got = all.reduce((a, d) => a + (d.downloaded || 0), 0);
+  const soFar = tot ? `${gb(got)} of ${gb(tot)} so far.` : '';
+  const failed = Object.keys(gateFailed).length > 0;
+  const buttons = S.config?.offline ? '<button class="btn primary" data-gate-online>Turn off offline mode and download</button>'
+    : gateVpnWait() ? `<div class="notice info" style="text-align:left;margin-bottom:10px"><b>🛡 Private online is on, but no VPN is connected.</b> Until one is, nothing can be downloaded.</div>
+        <div class="row" style="gap:8px;flex-wrap:wrap"><button class="btn primary" data-gate-vpn>Open Proton VPN</button><button class="btn" data-gate-plain>Go online without a VPN</button><button class="btn ghost" data-gate-retry>Try again</button></div>`
+      : failed ? '<button class="btn primary" data-gate-retry>Try again</button>' : '';
+  // The screen is built once and only its numbers change while downloads run, so a button under
+  // your mouse or keyboard is still the same button when you press it. It is rebuilt only when
+  // the list of models, the buttons or the note change.
+  const key = JSON.stringify([gateItems.map((m) => m.catalogId), buttons, gateNote]);
+  if (el.dataset.key !== key) {
+    el.dataset.key = key;
+    el.innerHTML = `<div class="card" style="max-width:560px;width:100%;padding:24px">
+      <h2 style="margin-top:0">💧 Installing Quicksilver Liquid Edition</h2>
+      <p class="muted">Quicksilver opens as soon as its whole uncensored crew is on this PC: the Brain, the Closer, smarter search, Lustify for pictures and Wan 2.2 for video. <span data-gate-total></span> You can close Quicksilver at any time: downloads pick up where they stopped.</p>
+      <div class="stack-v" style="gap:14px;margin:16px 0">${gateItems.map((m) => `<div class="stack-v" style="gap:4px" data-gate-row="${esc(m.catalogId)}"><div class="row"><b class="grow">${esc(m.name)}</b><span class="small muted" data-gate-what></span></div><div class="bar"><i style="width:0%"></i></div></div>`).join('')}</div>
+      ${gateNote ? `<div class="notice" style="text-align:left;margin-bottom:10px" role="alert">${esc(gateNote)}</div>` : ''}
+      ${buttons}
+      <p class="small muted" style="margin-bottom:0">This is part of setup: Quicksilver downloads its models once (about 30 GB, so it can take a while), then works offline. The full installer's "Quicksilver models" folder has them all already, if you'd rather skip the download.</p></div>`;
+  }
+  el.querySelector('[data-gate-total]').textContent = soFar;
+  for (const m of gateItems) {
+    const row = [...el.querySelectorAll('[data-gate-row]')].find((r) => r.dataset.gateRow === m.catalogId);
+    if (!row) continue;
+    const st = state(m);
+    const what = row.querySelector('[data-gate-what]');
+    if (what.textContent !== st.what) what.textContent = st.what;
+    row.querySelector('.bar i').style.width = `${st.pct}%`;
+  }
 }
 
 // After the first screen: add models found on this PC, pick a default if there is none, and load
@@ -271,7 +431,10 @@ async function startupModels() {
   const p = S.data.prefs;
   // The model that comes with Quicksilver: ready on first launch, nothing to download.
   try { await setUpQuicksilver(true); } catch {}
-  if (p.autoAddFound !== false) {
+  // Pure Liquid Edition: models found from other apps (LM Studio, Ollama, Downloads…) are never
+  // added by themselves. They're offered under Models and Stacks ("Review & add"), or added
+  // automatically only if you turn that on in Settings → Chat.
+  if (p.addFoundModels === true) {
     try {
       const added = await qs.call('models:autoAdd');
       if (added.length) {
@@ -281,7 +444,7 @@ async function startupModels() {
           // The advisor's pick for everyday use, from the models you now have.
           const r = await qs.call('advisor:advise', 'general').catch(() => null);
           const id = r?.mine?.members.judge || r?.mine?.members.drafters[0] || added.find((m) => m.kind === 'text').id;
-          p.defaultTarget = `local:${id}`;
+          p.defaultTarget = `local:${id}`; p.defaultAuto = true;
           save();
         }
         await setUpQuicksilver(false).catch(() => {});

@@ -44,6 +44,7 @@ async function openModelDetails(id) {
       ${kind === 'text' ? `<div class="card md-sec"><h3>Output, accuracy and ratings</h3>${modelProfileHTML(m, kind)}<h3 style="margin-top:12px">Good at</h3>${Object.entries(JOB_LABEL).filter(([k]) => k !== 'vision' || m.vision).map(([k, l]) => `<div class="md-score"><span>${l}</span>${scoreDots(m.jobs?.[k] ?? 0)}</div>`).join('')}
         ${ability.length ? `<ul class="md-abil">${ability.map((x) => `<li>${esc(x)}</li>`).join('')}</ul>` : ''}</div>` : `<div class="card md-sec"><h3>Output, accuracy and ratings</h3>${modelProfileHTML(m, kind)}<ul class="md-abil">${[`Quality: ${m.quality}/10`, ...ability].map((x) => `<li>${esc(x)}</li>`).join('')}</ul></div>`}
     </div>
+    <div class="card md-sec" id="md-fc">${pcForecastHTML([m.id], { adding: [m.id], title: `On this PC: what to expect from ${m.name}` })}</div>
     ${kind === 'text' ? `<div class="card md-sec">${boostsHTML([m.id], { liquid: m.category === 'open' })}</div>` : ''}
     ${est.fit === 'no' ? `<div class="card md-sec md-need">
       <h3>What you can do</h3>
@@ -62,7 +63,9 @@ async function openModelDetails(id) {
   $$('[data-md-open]', box).forEach((b) => b.addEventListener('click', () => openModelDetails(b.dataset.mdOpen)));
   box.querySelector('[data-goto-upgrades]')?.addEventListener('click', (e) => { e.preventDefault(); closeModal(); go({ view: 'pc' }); });
   box.querySelector('[data-md-get-boost]')?.addEventListener('click', async (e) => { e.target.disabled = true; await download({ catalogId: e.target.dataset.mdGetBoost }, boost.name); toast(`${boost.name} is downloading. ${m.name} will use it automatically.`); });
-  box.querySelector('[data-md-get]')?.addEventListener('click', async () => { closeModal(); await download({ catalogId: m.id }, m.name); render(); });
+  box.querySelector('[data-md-get]')?.addEventListener('click', async () => { closeModal(); await download({ catalogId: m.id }, m.name); toast(`Downloading ${m.name}. ${pcForecastLine(m.id)}`, 9000); render(); });
+  // The free disk space is part of the forecast: fetched once, then the forecast is redrawn.
+  if (!S.disk) qs.call('disk:info').then((d) => { S.disk = d; const fcBox = box.querySelector('#md-fc'); if (fcBox && d) fcBox.innerHTML = pcForecastHTML([m.id], { adding: [m.id], title: `On this PC: what to expect from ${m.name}` }); }).catch(() => {});
 }
 
 // Click a model card (not its buttons) to open its details.

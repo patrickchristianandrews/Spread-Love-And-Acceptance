@@ -1,5 +1,8 @@
 // Voice typing: speech to text on this PC with whisper.cpp. Nothing you say leaves the computer.
-// The engine comes with the app (Windows); the speech model (about 60 MB) downloads once.
+// The engine comes inside the app, and the speech model (about 60 MB) in the models folder next to
+// the installer, so the microphone works offline from the first run. (From the setup file alone or
+// the web installer, the speech model downloads once, in the background, with the rest of the
+// Liquid Edition.)
 const path = require('node:path');
 const fs = require('node:fs');
 const os = require('node:os');
@@ -10,8 +13,30 @@ const engines = require('./engines');
 const MODEL = { file: 'ggml-base-q5_1.bin', url: 'https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-base-q5_1.bin', sizeMB: 57 };
 
 const bin = () => engines.resolve('whisper')?.bin || null;
-const modelPath = () => process.env.QS_WHISPER_MODEL || path.join(store.dir('voice'), MODEL.file);
+const big = (f) => { try { return fs.statSync(f).size > 1e6; } catch { return false; } };
+// The speech model that came inside the installer (resources/starter), if it did.
+function shipped() {
+  const dirs = [process.env.QS_STARTER_DIR, process.resourcesPath && path.join(process.resourcesPath, 'starter'), path.join(__dirname, '..', '..', 'starter')].filter(Boolean);
+  return dirs.map((d) => path.join(d, MODEL.file)).find(big) || null;
+}
+// A copy you downloaded wins; else the one that came with the app; else where a download will go.
+function modelPath() {
+  if (process.env.QS_WHISPER_MODEL) return process.env.QS_WHISPER_MODEL;
+  const own = path.join(store.dir('voice'), MODEL.file);
+  return big(own) ? own : shipped() || own;
+}
 const hasModel = () => { try { return fs.statSync(modelPath()).size > 1e6 || Boolean(process.env.QS_WHISPER_MODEL); } catch { return false; } };
+
+// The speech model that came with the installer is copied into your data folder once, so an
+// update (which replaces the app's own folder) never loses it.
+async function keepShipped() {
+  if (process.env.QS_WHISPER_MODEL) return false;
+  const own = path.join(store.dir('voice'), MODEL.file);
+  const from = shipped();
+  if (big(own) || !from) return false;
+  const tmp = `${own}.copy`;
+  try { await fs.promises.copyFile(from, tmp); fs.renameSync(tmp, own); return true; } catch { try { fs.rmSync(tmp, { force: true }); } catch {} return false; }
+}
 
 let setting = null;
 function status() {
@@ -64,4 +89,4 @@ async function transcribe(bytes, { language = 'auto', ext = 'webm' } = {}) {
   } finally { fs.rmSync(dir, { recursive: true, force: true }); }
 }
 
-module.exports = { status, setup, transcribe, MODEL };
+module.exports = { keepShipped, status, setup, transcribe, MODEL };

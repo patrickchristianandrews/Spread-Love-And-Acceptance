@@ -71,7 +71,7 @@ function readBody(req, limit = 24 * 1024 * 1024) {
   });
 }
 
-function authorised(req) {
+function authorized(req) {
   const ip = req.socket.remoteAddress || '';
   const f = fails.get(ip);
   if (f && f.until > Date.now()) return false;
@@ -125,7 +125,7 @@ function handler(req, res) {
     }
     if (url === '/manifest.json') return send(res, 200, { name: 'Quicksilver', short_name: 'Quicksilver', display: 'standalone', background_color: '#0b1020', theme_color: '#0b1020', start_url: '/' });
     if (!url.startsWith('/api/')) return send(res, 404, { error: 'Not found' });
-    if (!authorised(req)) return send(res, 401, { error: 'This link has expired. Scan the QR code on your PC again (Settings → Phone).' });
+    if (!authorized(req)) return send(res, 401, { error: 'This link has expired. Scan the QR code on your PC again (Settings → Phone).' });
     if (req.method === 'GET' && url === '/api/info') {
       const d = appData();
       return send(res, 200, {

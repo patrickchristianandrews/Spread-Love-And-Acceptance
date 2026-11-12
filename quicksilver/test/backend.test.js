@@ -86,7 +86,7 @@ async function collect(gen) {
     assert.doesNotMatch(other.text, /\[steps\]/, 'models that think on their own are left alone');
     const fix = await collect(complete.run('local:test-bundled', { messages: [{ role: 'user', content: 'Calculate 17 × 23 and explain why' }], maxTokens: 200, contextSize: 4096, level: 'thorough', stepByStep: false }));
     assert.doesNotMatch(fix.text, /\[steps\]/, 'a correction pass skips the reasoning step');
-    const long = await collect(complete.run('local:test-bundled', { messages: [{ role: 'user', content: `[Image 1: ${'a red square on a white background. '.repeat(20)}]\nWhat colour is it?` }], maxTokens: 200, contextSize: 4096, level: 'thorough' }));
+    const long = await collect(complete.run('local:test-bundled', { messages: [{ role: 'user', content: `[Image 1: ${'a red square on a white background. '.repeat(20)}]\nWhat color is it?` }], maxTokens: 200, contextSize: 4096, level: 'thorough' }));
     assert.doesNotMatch(long.text, /\[steps\]/, 'a photo description does not make a simple question look hard');
     models.remove('test-bundled');
     console.log('✓ built-in model reasons step by step on hard questions');
@@ -100,7 +100,7 @@ async function collect(gen) {
   // Powerhouse stack: vision describes, two drafters, lead combines.
   complete.saveStack({ id: 'office-power', name: 'Office Powerhouse', emoji: '📊', members: { vision: 'local:gemma-3-4b', drafters: ['local:qwen3-8b', 'local:phi-4'], judge: 'local:phi-4' } });
   const live = [];
-  const r2 = await collect(complete.run('stack:office-power', { messages: [{ role: 'system', content: 'Be an analyst.' }, { role: 'user', content: [{ type: 'text', text: 'Summarise this chart' }, img] }], temperature: 0.4, maxTokens: 500, contextSize: 4096, level: 'max', onStep: (s) => live.push(s.role) }));
+  const r2 = await collect(complete.run('stack:office-power', { messages: [{ role: 'system', content: 'Be an analyst.' }, { role: 'user', content: [{ type: 'text', text: 'Summarize this chart' }, img] }], temperature: 0.4, maxTokens: 500, contextSize: 4096, level: 'max', onStep: (s) => live.push(s.role) }));
   const uniq = (steps) => [...new Map(steps.map((s) => [s.index, s])).values()];
   const roles = uniq(r2.steps).map((s) => s.role);
   assert.deepEqual(roles, ['vision', 'draft', 'draft', 'lead']);
@@ -255,7 +255,8 @@ async function collect(gen) {
   const sdModel = models.add({ id: 'sdxl-turbo', name: 'SDXL Turbo', kind: 'image', catalogId: 'sdxl-turbo', files: { model: copy('sdxl.safetensors') }, size: 7e9 });
   let progress = 0;
   const g1 = await media.generate('job1', { modelId: sdModel.id, mode: 'generate', prompt: 'a pastel droplet', width: 64, height: 64 }, { onProgress: (v) => { progress = v; } });
-  assert.ok(fs.existsSync(g1.file)); assert.equal(progress, 1);
+  // The bar moves, and stops short of 100% by itself: 100% is shown when the picture exists.
+  assert.ok(fs.existsSync(g1.file)); assert.ok(progress > 0.8 && progress < 1, `progress ${progress}`);
   const g2 = await media.generate('job2', { modelId: sdModel.id, mode: 'edit', prompt: 'make it blue', image: g1.file, strength: 0.5, width: 64, height: 64 });
   assert.ok(fs.statSync(g2.file).size > 0);
   models.add({ id: 'wan2.1-1.3b', name: 'Wan', kind: 'video', catalogId: 'wan2.1-1.3b', files: { diffusion: copy('wan.safetensors'), vae: copy('wanvae.safetensors'), t5xxl: copy('umt5.gguf') }, size: 7e9 });
@@ -292,13 +293,75 @@ async function collect(gen) {
   assert.match(streamed.join(''), /phi\.gguf/, 'an easy question to a stack is answered by its lead');
   const imgRes = await (await fetch(`${base}/images/generations`, { method: 'POST', headers: auth, body: JSON.stringify({ model: 'image:sdxl-turbo', prompt: 'a cat', size: '64x64' }) })).json();
   assert.ok(imgRes.data[0].b64_json.length > 50);
+  // Web pages: one served from this PC may call the API; another website may only with the key
+  // required (it is here), and is refused outright when no key is required. Other apps (no Origin)
+  // are unaffected.
+  const localPage = await fetch(`${base}/models`, { headers: { ...auth, Origin: 'http://localhost:3000' } });
+  assert.equal(localPage.status, 200); assert.equal(localPage.headers.get('access-control-allow-origin'), 'http://localhost:3000');
+  const siteWithKey = await fetch(`${base}/models`, { headers: { ...auth, Origin: 'https://example.com' } });
+  assert.equal(siteWithKey.status, 200, 'a website with the key is let in while a key is required');
+  store.saveConfig({ apiServer: { enabled: true, port: 18337, requireKey: false } });
+  const otherSite = await fetch(`${base}/models`, { headers: { Origin: 'https://example.com' } });
+  assert.equal(otherSite.status, 403, 'a website is refused when no key is required'); assert.equal(otherSite.headers.get('access-control-allow-origin'), null);
+  const preflight = await fetch(`${base}/chat/completions`, { method: 'OPTIONS', headers: { Origin: 'https://example.com', 'Access-Control-Request-Method': 'POST' } });
+  assert.equal(preflight.status, 403, 'and so is its preflight');
+  assert.equal((await fetch(`${base}/models`)).status, 200, 'another app on this PC (no Origin) still works without a key');
+  // Coding agents (OpenCode, OpenHands) work through tools: the model's tool request comes back
+  // to the agent in the OpenAI format, streamed and not, and the tool's result goes back in.
+  const tool = { type: 'function', function: { name: 'write_file', description: 'Write a file', parameters: { type: 'object', properties: { text: { type: 'string' } } } } };
+  const plain = { 'Content-Type': 'application/json' };
+  const toolAsk = await (await fetch(`${base}/chat/completions`, { method: 'POST', headers: plain, body: JSON.stringify({ model: 'local:qwen3-8b', tools: [tool], messages: [{ role: 'user', content: 'please use write' }] }) })).json();
+  assert.equal(toolAsk.choices[0].finish_reason, 'tool_calls');
+  assert.equal(toolAsk.choices[0].message.tool_calls[0].function.name, 'write_file');
+  assert.match(toolAsk.choices[0].message.tool_calls[0].function.arguments, /hello from the model/);
+  const sseText = await (await fetch(`${base}/chat/completions`, { method: 'POST', headers: plain, body: JSON.stringify({ model: 'local:qwen3-8b', stream: true, tools: [tool], messages: [{ role: 'user', content: 'please use write' }] }) })).text();
+  assert.match(sseText, /"tool_calls":\[\{"index":0,"id":"[^"]+","type":"function","function":\{"name":"write_file"/);
+  assert.match(sseText, /"finish_reason":"tool_calls"/);
+  const call = toolAsk.choices[0].message.tool_calls[0];
+  const after = await (await fetch(`${base}/chat/completions`, { method: 'POST', headers: plain, body: JSON.stringify({ model: 'local:qwen3-8b', tools: [tool], messages: [{ role: 'user', content: 'please use write' }, { role: 'assistant', content: null, tool_calls: [call] }, { role: 'tool', tool_call_id: call.id, content: 'saved' }] }) })).json();
+  assert.match(after.choices[0].message.content, /Tool said: saved/);
+  const teamTools = await fetch(`${base}/chat/completions`, { method: 'POST', headers: plain, body: JSON.stringify({ model: 'stack:office-power', tools: [tool], messages: [{ role: 'user', content: 'x' }] }) });
+  assert.equal(teamTools.status, 400, 'a team is not offered for tools; a single model is');
+  // OpenCode: Quicksilver adds itself to OpenCode's settings and leaves the rest alone.
+  {
+    const agents = require('../src/main/agents');
+    const home = fs.mkdtempSync(path.join(os.tmpdir(), 'qs-home-'));
+    const oldHome = process.env.HOME; const oldProfile = process.env.USERPROFILE;
+    process.env.HOME = home; process.env.USERPROFILE = home;
+    try {
+      const file = agents.opencodeFile();
+      fs.mkdirSync(path.dirname(file), { recursive: true });
+      fs.writeFileSync(file, JSON.stringify({ theme: 'tokyonight', provider: { other: { name: 'Mine' } } }));
+      store.saveConfig({ apiServer: { enabled: true, port: 18337, requireKey: true } });
+      const r = agents.setupOpencode({ model: 'local:qwen3-8b' });
+      const cfg = JSON.parse(fs.readFileSync(file, 'utf8'));
+      assert.equal(cfg.theme, 'tokyonight'); assert.equal(cfg.provider.other.name, 'Mine', 'the rest of the settings are kept');
+      assert.equal(cfg.provider.quicksilver.options.baseURL, 'http://127.0.0.1:18337/v1');
+      assert.equal(cfg.provider.quicksilver.options.apiKey, 'qs-secret', 'the access key is included when one is required');
+      assert.equal(cfg.model, 'quicksilver/local:qwen3-8b'); assert.equal(r.model, 'local:qwen3-8b');
+      assert.ok(cfg.provider.quicksilver.models['local:qwen3-8b'] && !Object.keys(cfg.provider.quicksilver.models).some((k) => k.startsWith('stack:')), 'single models only');
+      fs.writeFileSync(file, '{ not json');
+      agents.setupOpencode({});
+      assert.ok(fs.existsSync(`${file}.bak`), 'a settings file that cannot be read is kept as a copy');
+    } finally { process.env.HOME = oldHome; process.env.USERPROFILE = oldProfile; }
+  }
   apiserver.stop();
-  console.log('✓ API server: auth, models, chat (stream + not), stacks by name, images');
+  console.log('✓ API server: auth, models, chat (stream + not), stacks by name, images, tool calls for coding agents, OpenCode set up; other websites kept out');
 
   // Tools: an MCP server (official SDK, stdio) used by a local model, with approvals.
   const mcp = require('../src/main/mcp');
   const toolbox = require('../src/main/tools');
-  const srv = mcp.upsert({ name: 'Test MCP', transport: 'stdio', command: process.execPath, args: [path.join(__dirname, 'fakes', 'mcp-server.js')] });
+  const srv = mcp.upsert({ name: 'Test MCP', transport: 'stdio', command: process.execPath, args: [path.join(__dirname, 'fakes', 'mcp-server.js')], env: { SERVICE_TOKEN: 'tok-123-secret' } });
+  // A server's environment variables (often a key or token) are kept with the secrets, not in the
+  // plain settings file; the app still gets them back for editing and for starting the server.
+  assert.ok(!fs.readFileSync(store.file('config.json'), 'utf8').includes('tok-123-secret'), 'the value is not in the settings file');
+  assert.deepEqual(store.config().mcp.find((x) => x.id === srv.id).envKeys, ['SERVICE_TOKEN']);
+  assert.equal((await mcp.status()).find((x) => x.id === srv.id).env.SERVICE_TOKEN, 'tok-123-secret');
+  // Settings from an older version (values in the open) are moved the first time they are read.
+  store.saveConfig({ mcp: [...store.config().mcp, { id: 'm-old', name: 'Old', transport: 'stdio', command: 'x', args: [], env: { OLD_KEY: 'old-secret-9' }, enabled: false }] });
+  assert.equal((await mcp.status()).find((x) => x.id === 'm-old').env.OLD_KEY, 'old-secret-9');
+  assert.ok(!fs.readFileSync(store.file('config.json'), 'utf8').includes('old-secret-9'), 'moved out of the settings file');
+  mcp.remove('m-old');
   const avail = await toolbox.available();
   const echo = avail.find((t) => t.name.endsWith('_echo'));
   const note = avail.find((t) => t.name.endsWith('_save_note'));
@@ -597,9 +660,10 @@ async function collect(gen) {
   // Trending models: fetched from Hugging Face, grouped by type, rated for this PC, cached for hours.
   {
     let calls = 0;
+    let kinds = 0;
     global.fetch = async (url) => {
       if (!String(url).includes('sort=trendingScore')) return realFetch(url);
-      calls++;
+      if (String(url).includes('pipeline_tag=')) kinds++; else calls++; // the chat list, and one list for each other kind
       return new Response(JSON.stringify([
         { id: 'unsloth/Qwen3-Coder-30B-A3B-Instruct-GGUF', downloads: 90000, likes: 800, trendingScore: 120, tags: ['gguf', 'code'], createdAt: '2026-10-30T00:00:00Z' },
         { id: 'someone/Cool-VL-7B-GGUF', downloads: 5000, likes: 90, trendingScore: 80, tags: ['gguf'], pipeline_tag: 'image-text-to-text' },
@@ -607,16 +671,18 @@ async function collect(gen) {
         { id: 'someone/Tiny-Embed-GGUF', downloads: 100, likes: 1, trendingScore: 50, tags: ['gguf'] },
       ]), { status: 200, headers: { 'Content-Type': 'application/json' } });
     };
-    store.saveConfig({ trendingCache: null });
+    store.saveConfig({ trendingCache: null, trendingMore: null });
     const hw = await hardware.detect();
     const t = await models.trending({ hw });
+    assert.deepEqual(Object.keys(t.others), ['pictures', 'editing', 'video', 'animate', 'voice', 'listening', 'music', 'search'], 'what is trending in the other kinds comes too');
+    assert.ok(kinds === 8 && t.others.pictures.every((m) => m.repo && typeof m.inCatalog === 'boolean'));
     assert.equal(t.list.length, 3, 'embedding models left out');
     const [coder, vl, story] = t.list;
     assert.ok(coder.catalogId === 'qwen3-coder-30b' && coder.type === 'coding' && coder.est?.rating, 'known model matched and rated');
     assert.ok(vl.type === 'vision' && vl.sizeGB === 4.2 && vl.est, 'size guessed from the name');
     assert.equal(story.type, 'open');
     await models.trending({ hw });
-    assert.equal(calls, 1, 'cached between refreshes');
+    assert.deepEqual([calls, kinds], [1, 8], 'cached between refreshes');
     await models.trending({ hw, force: true });
     assert.equal(calls, 2, 'refresh on demand');
     assert.deepEqual(models.paramsOf('x/Qwen3-30B-A3B-GGUF'), { params: 30, active: 3 });
@@ -788,6 +854,20 @@ async function collect(gen) {
     fs.copyFileSync(TINY, path.join(sd, 'thinker.gguf'));
     r = models.registerStarter(sd);
     assert.deepEqual(r.added.map((m) => m.id), ['starter-brain', 'starter-thinker']); assert.equal(r.missing.length, 0);
+    // Lustify and Wan 2.2 next to the installer: registered as the Liquid Edition's picture and video
+    // makers; without the folder they're reported (media) so the app fetches them only where they run well.
+    const MEDIA_STARTERS = [
+      { id: 'starter-lustify', catalogId: 'lustify', name: 'Lustify (uncensored)', kind: 'image', uncensored: true, files: { model: 'lustify.safetensors', vae: 'lustify-vae.safetensors' }, pack: true, optional: true, media: true },
+      { id: 'starter-wan', catalogId: 'wan2.2-5b', name: 'Wan 2.2 5B', kind: 'video', uncensored: true, files: { diffusion: 'wan2.2-5b.gguf', vae: 'wan2.2-vae.safetensors', t5xxl: 'wan-umt5-xxl.gguf' }, pack: true, optional: true, media: true },
+    ];
+    fs.writeFileSync(path.join(sd, 'STARTER.json'), JSON.stringify({ models: MEDIA_STARTERS }));
+    r = models.registerStarter(sd);
+    assert.deepEqual(r.missing.map((m) => [m.catalogId, m.media]), [['lustify', true], ['wan2.2-5b', true]], 'Lustify and Wan 2.2 download on first run when the folder is missing');
+    for (const f of ['lustify.safetensors', 'lustify-vae.safetensors', 'wan2.2-5b.gguf', 'wan2.2-vae.safetensors', 'wan-umt5-xxl.gguf']) fs.copyFileSync(TINY, path.join(sd, f));
+    r = models.registerStarter(sd);
+    assert.deepEqual(r.added.map((m) => [m.id, m.kind]), [['starter-lustify', 'image'], ['starter-wan', 'video']], 'Lustify and Wan 2.2 come with Quicksilver');
+    assert.equal(models.list().find((m) => m.id === 'starter-wan').files.t5xxl, path.join(sd, 'wan-umt5-xxl.gguf'));
+    for (const id of ['starter-lustify', 'starter-wan']) models.remove(id);
     // Smarter search ships with Quicksilver: a bundled embedding entry registers as kind 'embed'.
     fs.copyFileSync(TINY, path.join(sd, 'embed.gguf'));
     fs.writeFileSync(path.join(sd, 'STARTER.json'), JSON.stringify({ models: [
@@ -818,8 +898,27 @@ async function collect(gen) {
     assert.ok(how.stars >= 3 && how.caps.find((c) => c.key === 'check').on);
     assert.ok(!ids.some((t) => ['local:qwen3-8b', 'local:phi-4', 'local:gemma-3-4b'].includes(t)), 'Quicksilver is uncensored: filtered models never join it');
     assert.ok(ids.includes('local:starter-brain') && ids.includes('local:starter'), 'the built-in brain and eyes');
-    // An uncensored model on this PC joins the team for hard questions.
+    // The Liquid Edition uses its own models and nothing else: another uncensored model on this PC
+    // joins the team for hard questions only once it is ticked under Models → "Models in use".
     models.add({ id: 'dolphin-test', name: 'Dolphin 3.0 8B', kind: 'text', catalogId: 'dolphin-3-llama-3.1-8b', files: { model: copy('dolphin.gguf') }, size: 4.9e9 });
+    await complete.ensureQuicksilverStack();
+    {
+      const pure = complete.stacks().find((x) => x.id === 'quicksilver');
+      assert.ok(!JSON.stringify([pure.members, pure.bench || '']).includes('dolphin-test'), 'a model you did not tick never joins the Liquid Edition');
+      assert.equal(models.inUse(models.get('dolphin-test')), false, 'not in use until ticked');
+      const c0 = complete.councilMembers('stack:quicksilver', {});
+      assert.ok(![c0.structurer, c0.critic, c0.pragmatist, c0.lead].includes('local:dolphin-test'), 'and it does not sit on the Liquid Edition\'s Council');
+      // Suggested Liquid add-ons you download in Quicksilver are in use from the start; models
+      // found in other apps and the built-in ones (members already) are not ticked by default.
+      assert.equal(models.inUse({ kind: 'text', catalogId: 'rocinante-12b' }), true);
+      assert.equal(models.inUse({ kind: 'text', catalogId: 'rocinante-12b', source: 'imported' }), false);
+      assert.equal(models.inUse({ kind: 'text', catalogId: 'rocinante-12b', use: false }), false, 'your own choice wins');
+      assert.equal(models.inUse({ kind: 'image', catalogId: 'lustify', use: true }), false, 'only chat models are ticked');
+      assert.ok(models.setUse('dolphin-test', true) && models.inUse(models.get('dolphin-test')));
+      // Registering the model again (an update or a repair) keeps the tick.
+      models.add({ ...models.get('dolphin-test'), use: undefined });
+      assert.equal(models.get('dolphin-test').use, true, 'the tick survives a re-register');
+    }
     await complete.ensureQuicksilverStack();
     const qs2 = complete.stacks().find((x) => x.id === 'quicksilver');
     const ids2 = [...qs2.members.drafters, qs2.members.judge, qs2.members.vision].filter(Boolean);
@@ -839,15 +938,16 @@ async function collect(gen) {
     assert.ok(!complete.isUncensored('local:qwen3-8b') && !complete.isUncensored('local:phi-4'), 'filtered models are not uncensored');
     const cm = complete.councilMembers('stack:quicksilver', {});
     assert.ok([cm.structurer, cm.critic, cm.pragmatist, cm.lead].every((t) => complete.isUncensored(t)), 'the Liquid Edition\'s Council is uncensored only');
-    // Your own edits are kept: no automatic rebuild.
+    // Locked: an edited Liquid Edition (from an older version) is put back to Quicksilver's own uncensored crew.
     complete.saveStack({ ...qsStack, autoManaged: false, members: { ...qsStack.members, drafters: ['local:qwen3-8b', 'local:starter-brain'] } });
     await complete.ensureQuicksilverStack();
-    assert.deepEqual(complete.stacks().find((x) => x.id === 'quicksilver').members.drafters, ['local:qwen3-8b', 'local:starter-brain']);
+    const relocked = complete.stacks().find((x) => x.id === 'quicksilver');
+    assert.ok(relocked.autoManaged && !relocked.members.drafters.includes('local:qwen3-8b'), 'a filtered model never stays in the locked Liquid Edition');
     complete.saveStack({ ...qs2 });
     assert.deepEqual(models.registerStarter(sd).added, [], 'announced only once');
     // Smart routing: simple → one answer from the brain; hard → both draft, the brain combines.
     assert.equal(complete.autoLevel({ messages: [{ role: 'user', content: 'Hi! Recommend a good sci-fi film.' }] }), 'quick');
-    assert.equal(complete.autoLevel({ messages: [{ role: 'user', content: 'Why do leaves change colour in autumn?' }] }), 'thorough');
+    assert.equal(complete.autoLevel({ messages: [{ role: 'user', content: 'Why do leaves change color in autumn?' }] }), 'thorough');
     assert.equal(complete.autoLevel({ messages: [{ role: 'user', content: 'What is 128 * 46?' }] }), 'thorough');
     const easy = await collect(complete.run('stack:quicksilver', { messages: [{ role: 'user', content: 'Hello!' }], contextSize: 2048, maxTokens: 30, level: 'thorough' }));
     assert.equal(easy.steps.length, 0, 'a simple message gets one direct answer');
@@ -866,7 +966,7 @@ async function collect(gen) {
     // A photo with only the shipped pair (the 2B that sees is a drafter, not a separate vision
     // member): the quick route must still find it to read the picture. Caught by the install test.
     complete.saveStack({ id: 'pair', name: 'Pair', members: { drafters: ['local:starter-brain', 'local:starter'], judge: 'local:starter-brain', mode: 'auto' } });
-    const pic = await collect(complete.run('stack:pair', { messages: [{ role: 'user', content: [{ type: 'text', text: 'What colour is this?' }, img] }], contextSize: 2048, maxTokens: 30, level: 'thorough' }));
+    const pic = await collect(complete.run('stack:pair', { messages: [{ role: 'user', content: [{ type: 'text', text: 'What color is this?' }, img] }], contextSize: 2048, maxTokens: 30, level: 'thorough' }));
     assert.ok(pic.steps.some((x) => x.role === 'vision') && pic.text.length > 0, 'the photo is read by the member that can see');
     complete.deleteStack('pair');
     models.remove('dolphin-test');
@@ -890,7 +990,7 @@ async function collect(gen) {
       assert.equal(l2.thinker, 'local:b35', 'it is also the Thinker');
       assert.ok(!l2.vision, 'it reads photos itself');
       assert.equal(l2.muse, 'local:starter', 'the small model is the Muse');
-      const think = await collect(complete.run('stack:quicksilver', { messages: [{ role: 'user', content: 'Why do leaves change colour in autumn?' }], contextSize: 2048, maxTokens: 60, level: 'thorough' }));
+      const think = await collect(complete.run('stack:quicksilver', { messages: [{ role: 'user', content: 'Why do leaves change color in autumn?' }], contextSize: 2048, maxTokens: 60, level: 'thorough' }));
       assert.ok(think.status.some((t) => /Thinking it through/.test(t)) && think.text.length > 0, 'a question that needs working out switches its thinking on');
       const easy2 = await collect(complete.run('stack:quicksilver', { messages: [{ role: 'user', content: 'Hello!' }], contextSize: 2048, maxTokens: 30, level: 'thorough' }));
       assert.ok(!easy2.status.some((t) => /Thinking/.test(t)) && easy2.text.length > 0, 'an easy one is answered straight away');
@@ -935,12 +1035,35 @@ async function collect(gen) {
     big(path.join(lms, 'big', 'Model-00002-of-00002.gguf')); // second part of a split model: skipped
     fs.copyFileSync(TINY, path.join(lms, 'tiny.gguf')); // too small to be a real model: skipped
     const oll = path.join(scan, 'ollama');
-    big(path.join(oll, 'blobs', 'sha256-feed'));
+    // A GGUF file with a header of its own (so it is a different file, not a copy of the one above).
+    const gguf = (p, arch, name, size = 60e6) => {
+      const u32 = (n) => { const b = Buffer.alloc(4); b.writeUInt32LE(n); return b; };
+      const u64 = (n) => { const b = Buffer.alloc(8); b.writeBigUInt64LE(BigInt(n)); return b; };
+      const str = (t) => { const b = Buffer.from(t); return Buffer.concat([u64(b.length), b]); };
+      const kv = (k, v) => Buffer.concat([str(k), u32(8), str(v)]);
+      fs.mkdirSync(path.dirname(p), { recursive: true });
+      fs.writeFileSync(p, Buffer.concat([Buffer.from('GGUF'), u32(3), u64(0), u64(2), kv('general.architecture', arch), kv('general.name', name)]));
+      fs.truncateSync(p, size);
+      return p;
+    };
+    gguf(path.join(oll, 'blobs', 'sha256-feed'), 'qwen3', 'Qwen3 8B');
+    // Never offered as chat models: a second copy of the same file, a video model and its text
+    // encoder (GGUF files too), a search model, and the models folder that ships next to the installer.
+    fs.copyFileSync(llamaFile, path.join(lms, 'copy-of-llama.gguf'));
+    gguf(path.join(lms, 'city96', 'Wan2.2-TI2V-5B-Q4_K_M.gguf'), 'wan', 'Wan 2.2 5B');
+    gguf(path.join(lms, 'city96', 'umt5-xxl-encoder-Q4_K_M.gguf'), 't5encoder', 'UMT5 XXL');
+    gguf(path.join(lms, 'nomic', 'nomic-embed-text-v1.5.Q8_0.gguf'), 'nomic-bert', 'nomic embed');
+    const sneaky = gguf(path.join(lms, 'someone', 'model-q4.gguf'), 'flux', 'Mystery'); // the name says nothing; its header does
+    gguf(path.join(lms, 'Quicksilver models', 'qwen3.5-9b.gguf'), 'qwen35', 'Qwen3.5 9B');
+    assert.equal((await llama.readGguf(sneaky)).chat, false, 'a picture model is not a chat model');
+    assert.equal((await llama.readGguf(llamaFile)).chat, true);
+    assert.ok(!models.chatFile('C:/x/umt5-xxl.gguf') && !models.chatFile('C:/x/wan2.2-5b-turbo.gguf') && !models.chatFile('C:/x/bge-reranker-v2-m3.gguf') && models.chatFile('C:/x/Qwen3.5-9B-abliterated.Q4_K_M.gguf') && models.chatFile('C:/x/Swan2-12B.gguf'));
     fs.mkdirSync(path.join(oll, 'manifests/registry.ollama.ai/library/qwen3'), { recursive: true });
     fs.writeFileSync(path.join(oll, 'manifests/registry.ollama.ai/library/qwen3/8b'), JSON.stringify({ layers: [{ mediaType: 'application/vnd.ollama.image.model', digest: 'sha256:feed', size: 5.2e9 }] }));
     process.env.QS_SCAN_DIRS = [lms, oll].join(path.delimiter);
-    const found = models.findOnPC();
-    assert.deepEqual(found.map((f) => f.name).sort(), ['Llama 3.2 3B Instruct', 'qwen3:8b']);
+    assert.ok(models.findOnPC().some((f) => f.path === sneaky), 'by name alone the mystery file still looks like a model');
+    const found = await models.findChat(llama.readGguf);
+    assert.deepEqual(found.map((f) => f.name).sort(), ['Llama 3.2 3B Instruct', 'qwen3:8b'], 'only real chat models, each once');
     assert.ok(found.find((f) => f.app === 'Ollama').path.endsWith('sha256-feed'));
     assert.ok(found.find((f) => f.name.startsWith('Llama')).vision, 'vision add-on paired');
     const added = await models.addFound(found, llama.readGguf);
@@ -948,21 +1071,45 @@ async function collect(gen) {
     const q = added.find((m) => m.from === 'Ollama');
     assert.equal(q.catalogId, 'qwen3-8b'); assert.equal(q.name, 'Qwen3 8B');
     assert.equal(added.find((m) => m.from !== 'Ollama').catalogId, 'llama-3.2-3b');
-    assert.equal(models.findOnPC().length, 0, 'added models are not offered again');
+    assert.equal((await models.findChat(llama.readGguf)).length, 0, 'added models are not offered again');
+    assert.ok(added.every((m) => !models.inUse(models.get(m.id))), 'a model from another app is only used when you choose it: never ticked by itself');
+    await assert.rejects(models.importFile(sneaky, llama.readGguf), /not a chat model/, 'importing a picture model by hand says what it is');
+    // One-time clean-up of what an older version added by itself: files that are not chat models,
+    // the installer's own models folder and second copies come off the list; real ones, and one
+    // that a stack of yours uses, stay. No file is deleted.
+    {
+      const wan = path.join(lms, 'city96', 'Wan2.2-TI2V-5B-Q4_K_M.gguf');
+      const pack = path.join(lms, 'Quicksilver models', 'qwen3.5-9b.gguf');
+      const own = path.join(dir, 'own-9b.gguf'); fs.copyFileSync(pack, own);
+      const twin = path.join(lms, 'twin', 'Qwen3.5-9B-Q4.gguf'); fs.mkdirSync(path.dirname(twin), { recursive: true }); fs.copyFileSync(pack, twin);
+      models.add({ id: 'own-9b', name: 'Qwen3.5 9B', kind: 'text', files: { model: own }, size: 60e6, source: 'bundled' });
+      const imp = (id, file, name) => models.add({ id, name, kind: 'text', files: { model: file }, size: 60e6, source: 'imported', from: 'Downloads' });
+      imp('imp-wan', wan, 'wan2.2 5b'); imp('imp-mystery', sneaky, 'Mystery'); imp('imp-pack', pack, 'Qwen3.5 9B'); imp('imp-twin', twin, 'Qwen3.5 9B'); imp('imp-kept', path.join(lms, 'copy-of-llama.gguf'), 'Llama copy');
+      const gone = await models.tidyImported(llama.readGguf, (id) => id === 'imp-kept');
+      assert.deepEqual(gone.map((g) => `${g.id}:${g.why}`).sort(), ['imp-mystery:not-chat', 'imp-pack:pack', 'imp-twin:copy', 'imp-wan:not-chat']);
+      const left = models.list().map((m) => m.id);
+      assert.ok(left.includes('imp-kept') && left.includes(added.find((m) => m.from !== 'Ollama').id) && !left.includes('imp-wan'), 'real models and one a stack uses stay');
+      assert.ok([wan, sneaky, pack, twin].every((f) => fs.existsSync(f)), 'no file is deleted');
+      assert.ok(!(await models.findChat(llama.readGguf)).some((f) => [wan, sneaky, pack, twin].includes(f.path)), 'and they are not offered again');
+      models.remove('imp-kept'); models.remove('own-9b'); fs.rmSync(own, { force: true });
+      store.saveConfig({ starterRemoved: [] });
+    }
     models.remove(q.id);
     assert.ok(fs.existsSync(path.join(oll, 'blobs', 'sha256-feed')), 'removing never deletes another app\'s file');
     for (const m of added) models.remove(m.id);
     delete process.env.QS_SCAN_DIRS;
     fs.rmSync(scan, { recursive: true, force: true });
-    console.log('✓ finds models from LM Studio and Ollama and adds them in place');
+    console.log('✓ finds chat models from LM Studio and Ollama and adds them in place; never picture, video or search files, the installer\'s own folder, or second copies');
   }
 
-  // Catalog: goals, recognising your models, and the advisor (yours vs best for this PC).
-  assert.deepEqual(Object.keys(catalog.JOBS), ['general', 'fast', 'reasoning', 'office', 'research', 'writing', 'vision', 'open', 'coding', 'create', 'edit']);
+  // Catalog: goals, recognizing your models, and the advisor (yours vs best for this PC).
+  assert.deepEqual(Object.keys(catalog.JOBS), ['general', 'fast', 'reasoning', 'office', 'research', 'writing', 'vision', 'open', 'coding', 'pictures', 'openpics', 'anime', 'video', 'animate', 'photoedit', 'songs', 'create', 'edit']);
+  assert.equal(catalog.advise('openpics', { ramGB: 32, vramGB: 12, gpu: 'x', gpuVendor: 'nvidia', cores: 12 }, { installed: [] }).best.members.openimage, 'lustify', 'uncensored pictures: Lustify');
+  assert.equal(catalog.advise('songs', { ramGB: 16, vramGB: 0, cores: 8 }, { installed: [] }).recipe, 'song-complete', 'full songs: the Songwriter stack');
   assert.equal(catalog.matchCatalog('Meta-Llama-3.1-8B-Instruct-Q4_K_M.gguf')?.id, 'llama-3.1-8b');
   assert.equal(catalog.matchCatalog('phi4:latest')?.id, 'phi-4');
   assert.equal(catalog.matchCatalog('Phi-4-mini-instruct-Q4_K_M')?.id, 'phi-4-mini');
-  assert.equal(catalog.matchCatalog('Qwen2.5-7B-Instruct')?.id, 'qwen2.5-7b', 'the 1.0 models are recognised again');
+  assert.equal(catalog.matchCatalog('Qwen2.5-7B-Instruct')?.id, 'qwen2.5-7b', 'the 1.0 models are recognized again');
   assert.equal(catalog.matchCatalog('Yi-1.5-9B-Chat'), null, 'no false match');
   {
     // Three ways to run a stack, accuracy levels, and the cloud AI that would improve it.
@@ -1108,7 +1255,7 @@ async function collect(gen) {
     fs.writeFileSync(path.join(sdir, 'big.gguf'), 'x'.repeat(1000));
     fs.writeFileSync(path.join(sdir, 'STARTER.json'), JSON.stringify({ models: [{ id: 'brain', catalogId: 'qwen3-4b', name: 'Brain', files: { model: 'big.gguf' }, pack: true }] }));
     models.add({ id: 'brain', name: 'Brain', kind: 'text', catalogId: 'qwen3-4b', files: { model: path.join(sdir, 'big.gguf') }, size: 1000, source: 'bundled' });
-    assert.equal(models.keepPackModels(sdir), 1);
+    assert.equal(await models.keepPackModels(sdir), 1);
     const kept = models.get('brain').files.model;
     assert.ok(!kept.startsWith(sdir) && fs.existsSync(kept) && !fs.existsSync(path.join(sdir, 'big.gguf')));
     assert.equal(models.registerStarter(sdir).missing.length, 0, 'not downloaded again after the update');
@@ -1191,7 +1338,10 @@ async function collect(gen) {
     const data = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'data', 'models.json'), 'utf8'));
     const ok = remote.clean(data);
     assert.ok(ok && Object.keys(ok.successors).length >= 5, 'the published picks file is valid');
-    for (const [a, b] of Object.entries(ok.successors)) assert.ok(catalog.TEXT_MODELS.some((m) => m.id === a) && catalog.TEXT_MODELS.some((m) => m.id === b), `successor ${a} → ${b} names real models`);
+    // (A newer model may be one the file itself adds: the daily catalog search writes those.)
+    const inFile = (id) => catalog.TEXT_MODELS.some((m) => m.id === id) || ok.models.some((m) => m.id === id);
+    for (const [a, b] of Object.entries(ok.successors)) assert.ok(inFile(a) && inFile(b), `successor ${a} → ${b} names real models`);
+    assert.ok(ok.models.length <= 400 && ok.models.every((m) => m.repo && m.sizeGB > 0 && m.jobs), 'every model the file adds is complete');
     for (const l of Object.values(ok.featured)) for (const id of l) assert.ok(catalog.TEXT_MODELS.some((m) => m.id === id), `featured ${id} is in the catalog`);
     assert.equal(remote.clean({ version: 2 }), null, 'unknown versions are ignored');
     const bad = remote.clean({ version: 1, models: [{ id: 'x', repo: 'nope' }, { id: 'test-new-9b', name: '<b>New 9B</b>', maker: 'Test', category: 'general', repo: 'test/New-9B-GGUF', quant: 'q4_k_m', sizeGB: 5.5, jobs: { general: 9, coding: 8 }, evil: 'x' }], successors: { 'qwen3-8b': 'test-new-9b', 'bad id!': 'x' } });
@@ -1253,7 +1403,7 @@ async function collect(gen) {
     assert.equal(vpn.blocked(), false, 'allowed once Proton VPN is connected');
     store.saveConfig({ vpnOnly: false });
     os.networkInterfaces = realIf;
-    console.log('✓ private network: blocked until a VPN is connected, Proton VPN recognised');
+    console.log('✓ private network: blocked until a VPN is connected, Proton VPN recognized');
   }
 
   // Uncensored Qwen3 models: in the catalog, featured, sped up by the built-in 2B, and fetched from a
@@ -1336,7 +1486,7 @@ async function collect(gen) {
     assert.ok(hits[0].rerank != null && hits.every((h, i) => i === 0 || h.rerank <= hits[i - 1].rerank), 'ordered by the reranker');
     models.remove(rerank.RERANK.id);
     knowledge.deleteCollection(kc.id);
-    // A stronger uncensored Closer is in the catalogue and joins the Liquid Edition's open models.
+    // A stronger uncensored Closer is in the catalog and joins the Liquid Edition's open models.
     const c9 = catalog.TEXT_MODELS.find((m) => m.id === 'qwen3.5-9b-uncensored');
     assert.ok(c9 && c9.category === 'open' && c9.vision && /abliterated/i.test(c9.repo));
     console.log('✓ sharper search: the reranker puts the passage that answers the question first; Qwen3.5 9B Closer listed');

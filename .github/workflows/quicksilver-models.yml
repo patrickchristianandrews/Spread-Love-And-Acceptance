@@ -1,0 +1,42 @@
+# Keeps Quicksilver's model catalog current by itself.
+# Every day this looks on Hugging Face for new open-licence chat models in the format
+# Quicksilver runs, adds the ones that are not in the catalog yet, points older models at the
+# newer version that replaces them, and drops automatic entries that are gone or no longer used.
+# The result is quicksilver/data/models.json on main, which every Quicksilver reads once a day.
+# Nothing is downloaded to anyone's PC by this: it changes what the app lists and recommends.
+name: Quicksilver model catalog
+
+on:
+  schedule:
+    - cron: '17 5 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: quicksilver-models
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Find new models and retire old ones
+        working-directory: quicksilver
+        run: node scripts/discover-models.js
+      - name: Save the catalog if it changed
+        run: |
+          if git diff --quiet -- quicksilver/data/models.json; then echo "No change."; exit 0; fi
+          git config user.name "quicksilver-catalog"
+          git config user.email "quicksilver-catalog@users.noreply.github.com"
+          git add quicksilver/data/models.json
+          git commit -m "Quicksilver catalog: new models found on $(date -u +%F)"
+          git push origin HEAD:main

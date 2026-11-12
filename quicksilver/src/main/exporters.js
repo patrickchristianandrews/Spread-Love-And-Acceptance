@@ -61,11 +61,17 @@ async function toDocx(markdown, file, { title } = {}) {
   const run = (r) => new d.TextRun({ text: r.text, bold: r.bold, italics: r.italics, superScript: r.superScript, font: r.code ? 'Consolas' : undefined });
   const HEAD = [d.HeadingLevel.HEADING_1, d.HeadingLevel.HEADING_2, d.HeadingLevel.HEADING_3, d.HeadingLevel.HEADING_4, d.HeadingLevel.HEADING_5, d.HeadingLevel.HEADING_6];
   if (title && !/^#\s/.test(markdown.trim())) kids.push(new d.Paragraph({ text: title, heading: d.HeadingLevel.TITLE }));
+  // Each numbered list is its own sequence (starting at 1): a new one begins after anything that
+  // is not a list item.
+  let listNo = 0;
+  let inList = false;
   for (const b of blocks(markdown)) {
+    if (b.type === 'oli' && !inList) listNo++;
+    inList = b.type === 'oli' || (inList && b.type === 'li');
     if (b.type === 'h') kids.push(new d.Paragraph({ children: runs(b.text).map(run), heading: b.level === 1 && !kids.length ? d.HeadingLevel.TITLE : HEAD[b.level - 1] }));
     else if (b.type === 'p') kids.push(new d.Paragraph({ children: runs(b.text).map(run), spacing: { after: 160 } }));
     else if (b.type === 'li') kids.push(new d.Paragraph({ children: runs(b.text).map(run), bullet: { level: b.level } }));
-    else if (b.type === 'oli') kids.push(new d.Paragraph({ children: runs(b.text).map(run), numbering: { reference: 'num', level: b.level } }));
+    else if (b.type === 'oli') kids.push(new d.Paragraph({ children: runs(b.text).map(run), numbering: { reference: 'num', level: b.level, instance: listNo } }));
     else if (b.type === 'quote') kids.push(new d.Paragraph({ children: runs(b.text).map((r) => run({ ...r, italics: true })), indent: { left: 720 } }));
     else if (b.type === 'code' || b.type === 'chart') for (const l of b.text.split('\n')) kids.push(new d.Paragraph({ children: [new d.TextRun({ text: l || ' ', font: 'Consolas', size: 19 })], shading: { fill: 'F3EFFD', type: d.ShadingType.CLEAR, color: 'auto' } }));
     else if (b.type === 'table') {
@@ -156,18 +162,28 @@ async function toPptx(markdown, file, { title } = {}) {
 
 async function toPdf(html, file, { title } = {}) {
   const { BrowserWindow } = require('electron');
-  const w = new BrowserWindow({ show: false, webPreferences: { sandbox: true, javascript: false } });
-  const page = `<!doctype html><html><head><meta charset="utf-8"><title>${title || 'Document'}</title><style>
+  const w = new BrowserWindow({ show: false, webPreferences: { sandbox: true, javascript: false, partition: `pdf-export-${Date.now()}` } });
+  const plain = (t) => String(t || '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const page = `<!doctype html><html><head><meta charset="utf-8"><title>${plain(title) || 'Document'}</title><style>
     body{font:12pt/1.55 "Segoe UI",system-ui,sans-serif;color:#16122a;margin:0;padding:0}
     h1{font-size:22pt;color:#351c96}h2{font-size:16pt;color:#351c96;margin-top:18pt}h3{font-size:13pt}
     table{border-collapse:collapse;width:100%;margin:8pt 0}th,td{border:1px solid #c6b8ff;padding:4pt 6pt;text-align:left}th{background:#e6dfff}
     pre{background:#f3effd;padding:8pt;border-radius:6pt;white-space:pre-wrap;font:9.5pt Consolas,monospace}code{font-family:Consolas,monospace}
     blockquote{border-left:3pt solid #a99fd6;margin:0;padding-left:10pt;color:#3d3858}.table-tools,.copy,.bar-top{display:none}
-    .cite{font-size:8pt;vertical-align:super;color:#351c96}svg{max-width:100%}</style></head><body>${title ? `<h1>${title}</h1>` : ''}${html}</body></html>`;
-  await w.loadURL(`data:text/html;charset=utf-8,${encodeURIComponent(page)}`);
-  const pdf = await w.webContents.printToPDF({ pageSize: 'A4', printBackground: true, margins: { top: 0.6, bottom: 0.6, left: 0.6, right: 0.6 } });
-  w.destroy();
-  fs.writeFileSync(file, pdf);
+    .cite{font-size:8pt;vertical-align:super;color:#351c96}svg{max-width:100%}</style></head><body>${title ? `<h1>${plain(title)}</h1>` : ''}${html}</body></html>`;
+  // Loaded from a temporary file (a long answer with pictures is too big for an address), with
+  // every network request refused, and the hidden window always closed afterwards.
+  const tmp = require('node:path').join(require('node:os').tmpdir(), `quicksilver-pdf-${Date.now().toString(36)}${Math.random().toString(36).slice(2, 8)}.html`);
+  try {
+    fs.writeFileSync(tmp, page);
+    w.webContents.session.webRequest.onBeforeRequest((d, cb) => cb({ cancel: !/^(file|data|blob|about|devtools):/.test(d.url) }));
+    await w.loadFile(tmp);
+    const pdf = await w.webContents.printToPDF({ pageSize: 'A4', printBackground: true, margins: { top: 0.6, bottom: 0.6, left: 0.6, right: 0.6 } });
+    fs.writeFileSync(file, pdf);
+  } finally {
+    try { w.destroy(); } catch {}
+    try { fs.rmSync(tmp, { force: true }); } catch {}
+  }
 }
 
 module.exports = { toDocx, toPptx, toPdf, blocks };

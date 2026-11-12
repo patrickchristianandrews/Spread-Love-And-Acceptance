@@ -38,9 +38,17 @@ qs.onApp?.((d) => {
     chat = { id, assistantId: S.data.assistants.some((a) => a.id === c.assistantId) ? c.assistantId : 'as-general', title: c.title || 'From your phone', created: now(), updated: now(), target: '', library: null, web: null, messages: [], fromPhone: true };
     S.data.chats.push(chat);
   }
-  chat.messages = c.messages.map((m) => (m.role === 'assistant'
+  // Only what is new from the phone is added (the whole list used to replace the chat each
+  // time, which lost anything said in it on the PC). A phone chat that was cleared starts over.
+  const toMsg = (m) => (m.role === 'assistant'
     ? { id: uid(), role: 'assistant', alts: [{ text: m.text, target: c.target }], altIndex: 0 }
-    : { id: uid(), role: 'user', text: m.text + (m.image ? '\n(photo sent from the phone)' : ''), attachments: [] }));
+    : { id: uid(), role: 'user', text: m.text + (m.image ? '\n(photo sent from the phone)' : ''), attachments: [] });
+  // (A chat saved before this was counted: everything in it came from the phone.)
+  const had = Number.isFinite(chat.phoneCount) ? chat.phoneCount : Math.min(chat.messages.length, c.messages.length);
+  const untouched = chat.messages.length === had; // nothing was added on the PC: it simply mirrors the phone
+  if (untouched || c.messages.length < had) chat.messages = c.messages.map(toMsg);
+  else chat.messages.push(...c.messages.slice(had).map(toMsg));
+  chat.phoneCount = c.messages.length;
   chat.updated = now();
   save();
   if (S.route.view === 'chat' && S.route.id === id && !pending) render(); else renderChatList();

@@ -1,4 +1,4 @@
-// Create → Cloud: hosted photo, video and music models, rated out of 10 with their prices, next to
+// Gallery & tools → Cloud: hosted photo, video and music models, rated out of 10 with their prices, next to
 // what this PC makes on its own. Pollinations is free with no key; fal.ai (Nano Banana, Veo, Kling,
 // full-song music), Replicate and Stability AI use the key saved under Models → Connect an API.
 'use strict';
@@ -6,7 +6,7 @@
 let cloudKind = 'image';
 let cloudModels = null; // { service: { name, free, noKey, models: { kind: [[id, name, rating, price, best]] } } }
 const CLOUD_KINDS = { image: ['🖼️', 'Photo'], edit: ['🪄', 'Edit a photo'], video: ['🎬', 'Video'], animate: ['📸', 'Photo to video'], music: ['🎵', 'Full songs'] };
-const LYRICS_SYS = 'Write complete, original song lyrics for the user\'s idea: [Intro], two [Verse] sections, a [Chorus] that repeats, a [Bridge] and an [Outro], each section labelled in square brackets. Natural, singable lines that rhyme where it sounds good. Reply with the lyrics only.';
+const LYRICS_SYS = 'Write complete, original song lyrics for the user\'s idea: [Intro], two [Verse] sections, a [Chorus] that repeats, a [Bridge] and an [Outro], each section labeled in square brackets. Natural, singable lines that rhyme where it sounds good. Reply with the lyrics only.';
 // The connection for a service ('pollinations' needs none), or null if it isn't connected yet.
 const serviceConn = (svc) => (svc === 'pollinations' ? { id: 'pollinations', name: 'Pollinations' } : (S.providers || []).find((p) => p.preset === svc && p.hasKey) || null);
 // Every model for this kind across services: free ones first, then the best rated.
@@ -44,7 +44,7 @@ function cloudStudioHTML() {
     <div class="tabs cc-kinds">${Object.entries(CLOUD_KINDS).map(([k, [ic, l]]) => `<button class="tab ${cloudKind === k ? 'active' : ''}" data-cs-kind="${k}">${ic} ${l}</button>`).join('')}</div>
     <div class="cs-models">${list.map((o) => `<label class="cs-model ${o.key === pick ? 'now' : ''} ${o.conn ? '' : 'off'}"><input type="radio" name="cs-model" value="${esc(o.key)}" ${o.key === pick ? 'checked' : ''} ${o.conn ? '' : 'disabled'}><span class="grow"><b>${esc(o.name)}</b> ${o.free ? '<span class="badge b-mint">Free</span>' : ''}<span class="small muted">${esc(o.best)} · ${esc(o.price)}${o.conn ? '' : ` · <a href="#" data-cs-connect="${o.svc}">connect ${esc(o.svcName)}</a>`}</span></span>${tenStarsHTML(o.rating)}</label>`).join('')}
       ${cloudModels.replicate && cloudKind !== 'edit' ? `<div class="cs-model ${serviceConn('replicate') ? '' : 'off'}"><span class="grow"><b>Any Replicate model</b><span class="small muted">Type its name (owner/name) from replicate.com, for example a video or music model</span></span><input id="cs-rep" placeholder="owner/name" style="max-width:220px" value="${esc(S.data.prefs[`cloud_rep_${cloudKind}`] || '')}" ${serviceConn('replicate') ? '' : 'disabled'}></div>` : ''}
-      <div class="cs-model local"><span class="grow"><b>💻 On this PC</b><span class="small muted">${loc ? `${esc(loc.who)} · free, private` : 'No model for this yet (see the other Create tabs)'}</span></span>${loc ? tenStarsHTML(Math.round(loc.v * 2) / 2) : '<span class="muted small">–</span>'}</div></div>
+      <div class="cs-model local"><span class="grow"><b>💻 On this PC</b><span class="small muted">${loc ? `${esc(loc.who)} · free, private` : 'No model for this yet (see the other tabs here)'}</span></span>${loc ? tenStarsHTML(Math.round(loc.v * 2) / 2) : '<span class="muted small">–</span>'}</div></div>
     <div class="grid2" style="margin-top:12px;align-items:start"><div class="stack-v">
       <div class="field"><label for="cs-prompt">${cloudKind === 'music' ? 'Describe the song (style, mood, instruments, tempo)' : cloudKind === 'edit' ? 'What to change' : 'Describe it'}</label><textarea id="cs-prompt" rows="4" placeholder="${cloudKind === 'music' ? 'Upbeat indie pop, female vocals, bright guitars, 120 bpm' : cloudKind === 'edit' ? 'Make it golden hour and remove the people in the background' : 'A red fox in fresh snow at sunrise, soft light, close-up'}">${esc(S.data.prefs.lastPrompt || '')}</textarea>${cloudKind === 'music' ? '' : improveBtn('cs-prompt', cloudKind === 'edit' ? 'edit' : ['video', 'animate'].includes(cloudKind) ? 'video' : 'image')}</div>
       ${needsPhoto ? `<div class="field"><label for="cs-photo">Photo</label><select id="cs-photo">${pics.length ? pics.map((g) => `<option value="${g.id}">${esc((g.prompt || g.title || 'Photo').slice(0, 60))}</option>`).join('') : '<option value="">Upload or create a photo first</option>'}</select></div>` : ''}

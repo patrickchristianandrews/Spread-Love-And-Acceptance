@@ -131,7 +131,7 @@ function studyPanelHTML(a) {
   const weak = weakTopics(a.exam, 3);
   return `<div class="study">
     <div class="study-secs">${Object.entries(e.sections).map(([k, sec]) => { const v = by[k]; const pct = v?.n ? Math.round((v.r / v.n) * 100) : null; return `<button class="study-sec" data-study="${esc(k)}" title="${esc(sec.name)}: ${esc(sec.areas.join('; '))}"><b>${esc(k)}</b><span class="small muted">${esc(sec.name.replace(/ \(discipline\)/, ''))}</span><span class="study-bar"><i style="width:${pct ?? 0}%"></i></span><span class="small">${pct == null ? 'Not started' : `${pct}% · ${v.n} answered`}</span></button>`; }).join('')}</div>
-    <div class="row study-go">${weak.length ? `<button class="btn small primary" data-study-weak>Practise my weak spots (${esc(weak.map((w) => w.topic).join(', '))})</button>` : ''}<button class="btn small" data-study-plan>Make my study plan</button>${a.exam === 'CPA' ? '<button class="btn small" data-study-sim>Task-based simulation</button>' : ''}</div>
+    <div class="row study-go">${weak.length ? `<button class="btn small primary" data-study-weak>Practice my weak spots (${esc(weak.map((w) => w.topic).join(', '))})</button>` : ''}<button class="btn small" data-study-plan>Make my study plan</button>${a.exam === 'CPA' ? '<button class="btn small" data-study-sim>Task-based simulation</button>' : ''}</div>
     <p class="small muted">Follows the ${esc(e.org)}. Check the official outline for your exam date. Add your own course books or notes to the Library and they'll be used and cited.</p>
   </div>`;
 }

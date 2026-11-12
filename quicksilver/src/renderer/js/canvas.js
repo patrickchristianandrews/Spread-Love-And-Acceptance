@@ -11,7 +11,7 @@ const DOC_ACTIONS = [
   ['formal', 'More formal', 'Rewrite in a professional, formal tone suitable for work.'],
   ['friendly', 'Friendlier', 'Rewrite in a warm, friendly, conversational tone.'],
   ['fix', 'Fix spelling & grammar', 'Correct spelling, grammar and punctuation only. Change nothing else.'],
-  ['bullets', 'As bullet points', 'Turn it into clear, well-organised bullet points.'],
+  ['bullets', 'As bullet points', 'Turn it into clear, well-organized bullet points.'],
 ];
 let docBusy = null; // { chatId, requestId }
 

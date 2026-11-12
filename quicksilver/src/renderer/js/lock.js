@@ -29,7 +29,7 @@ function relock() { unlockedUntilClose = false; }
 // Is this model or team an uncensored one? (Same test the Unfiltered advisor uses.)
 function isUncensoredTarget(target) {
   if (!target) return false;
-  if (target === 'stack:quicksilver') return false; // the built-in team follows the family-safe rules instead
+  if (target === 'stack:quicksilver' || target === 'stack:quicksilver-pro') return false; // the built-in team follows the family-safe rules instead
   const members = target.startsWith('stack:') ? membersOf(target) : [target];
   const st = target.startsWith('stack:') && S.stacks.find((x) => `stack:${x.id}` === target);
   if (st && (st.builtFor === 'open' || /unfiltered|uncensored/i.test(st.name || ''))) return true;
@@ -37,7 +37,7 @@ function isUncensoredTarget(target) {
     const inst = S.installed.find((m) => `local:${m.id}` === t);
     if (!inst || inst.source === 'bundled') return false; // the built-in model follows the family-safe rules instead
     const c = S.catalog?.text?.find((x) => x.id === inst.catalogId);
-    return c?.category === 'open' || /dolphin|hermes|abliterat|uncensor|unfiltered|lexi|rocinante|nsfw/i.test(`${inst.name} ${inst.files?.model || ''}`);
+    return c?.category === 'open' || /dolphin|hermes|abliterat|uncensor|unfiltered|lexi|rocinante|nsfw/i.test(modelNameText(inst));
   });
 }
 // Locked for this target right now?

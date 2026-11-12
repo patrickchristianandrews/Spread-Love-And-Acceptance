@@ -68,7 +68,7 @@ function typicalHTML() {
   const t = targetValid(S.data.prefs.defaultTarget) ? S.data.prefs.defaultTarget : resolveTarget(null, assistantById(S.data.prefs.lastAssistant));
   const pick = (pref, cat) => (pref && S.speed?.media?.[pref.replace(/^local:/, '')] ? pref : Object.entries(S.speed?.media || {}).find(([, m]) => cat(m))?.[0]);
   const media = (pref, cat) => { const id = pick(pref, cat); return id ? S.speed.media[id.replace(/^local:/, '')] : null; };
-  const pic = media(S.data.prefs.imageModel, (m) => m.category === 'image');
+  const pic = media(S.data.prefs.imageModel, (m) => m.category === 'image' || m.category === 'open');
   const vid = media(S.data.prefs.videoModel, (m) => m.kind === 'video');
   const edit = media(S.data.prefs.editModel, (m) => m.category === 'edit') || pic;
   const items = [
@@ -81,7 +81,7 @@ function typicalHTML() {
     ['', 'Photo edit', edit?.sec ?? null, edit?.stars ?? null, !edit],
     ['', 'Video clip', vid?.sec ?? null, vid?.stars ?? null, !vid],
   ];
-  return `<div class="typical"><span class="lbl">Typical on this PC</span>${items.map(([ic, name, sec, stars, missing]) => `<span class="typ" title="${missing ? 'Get a model for this in Teams or Create' : 'Estimated time and expected quality on this PC'}">${ic} ${name} ${missing ? '<span class="muted">· get a model</span>' : `<span class="muted">⏱ ${etaLabel(sec)}${stars != null ? ` · ${starText(stars)}` : ''}</span>`}</span>`).join('')}</div>`;
+  return `<div class="typical"><span class="lbl">Typical on this PC</span>${items.map(([ic, name, sec, stars, missing]) => `<span class="typ" title="${missing ? 'Get a model for this in Stacks & Fusion or Models' : 'Estimated time and expected quality on this PC'}">${ic} ${name} ${missing ? '<span class="muted">· get a model</span>' : `<span class="muted">⏱ ${etaLabel(sec)}${stars != null ? ` · ${starText(stars)}` : ''}</span>`}</span>`).join('')}</div>`;
 }
 
 function bindBestSetup() {
@@ -211,6 +211,11 @@ function fusionRatings(members) {
   else if (slow.length) runs = { cls: 'warn', icon: '⚠', text: `Runs, but slowly: ${slow.map(name).join(', ')} is slow on this PC.` };
   else if (roomGB && memGB > roomGB) runs = { cls: 'warn', icon: '⚠', text: `Runs, but its models (${memGB.toFixed(1)} GB) don't all fit in memory at once, so they take turns and hard answers wait longer.` };
   else runs = { cls: 'ok', icon: '✓', text: 'Runs well on this PC.' };
+  // The forecast counts more (the graphics card, what else is loaded, taking turns): where it
+  // sees a wait this short verdict would miss, the verdict says so too, so the two never disagree.
+  const fc = typeof pcForecast === 'function' ? pcForecast(t.all, { members }) : null;
+  if (fc && runs.cls === 'ok' && fc.worst === 'warn') runs = { cls: 'warn', icon: '⚠', text: `Runs, but with waits: ${fc.reasons.slice(0, 2).join('; ')}.` };
+  if (fc && runs.cls !== 'bad' && fc.worst === 'bad') runs = { cls: 'bad', icon: '✕', text: `Won't run on this PC as it is: ${fc.reasons[0]}.` };
   if (clouds.length) runs.text += ' Its cloud AI needs the internet.';
   // Power: how capable it is on hard work (its strongest member, plus teamwork).
   const power = half(Math.max(t.stars('general'), t.stars('reasoning')));

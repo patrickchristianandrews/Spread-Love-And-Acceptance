@@ -5,10 +5,30 @@ const store = require('./store');
 
 const { PRESETS } = require('./mcp-catalog');
 
-const servers = () => store.config().mcp || [];
+// A server's environment variables often hold a key or token for the service it talks to, so
+// their values are kept with Quicksilver's other secrets (encrypted by Windows), never in the
+// plain settings file. The settings file keeps only the variable names.
+const envOf = (s) => {
+  let saved = {};
+  try { saved = JSON.parse(store.getSecret(`mcp-env:${s.id}`) || '{}'); } catch {}
+  return { ...Object.fromEntries((s.envKeys || []).map((k) => [k, ''])), ...saved };
+};
+function servers() {
+  const list = store.config().mcp || [];
+  // Settings written by an older version had the values in the open: move them once.
+  const old = list.filter((s) => s.env && Object.keys(s.env).length);
+  if (old.length) {
+    for (const s of old) { store.setSecret(`mcp-env:${s.id}`, JSON.stringify(s.env)); s.envKeys = Object.keys(s.env); delete s.env; }
+    store.saveConfig({ mcp: list });
+  }
+  return list.map((s) => ({ ...s, env: envOf(s) }));
+}
 const live = new Map(); // id -> { client, tools, error }
 
-function saveServers(list) { store.saveConfig({ mcp: list }); }
+function saveServers(list) {
+  store.saveConfig({ mcp: list.map((s) => { const { env, ...rest } = s; return { ...rest, envKeys: Object.keys(env || {}) }; }) });
+  for (const s of list) store.setSecret(`mcp-env:${s.id}`, s.env && Object.keys(s.env).length ? JSON.stringify(s.env) : '');
+}
 
 function upsert(s, token) {
   const list = servers();
@@ -26,6 +46,7 @@ function remove(id) {
   disconnect(id);
   saveServers(servers().filter((s) => s.id !== id));
   store.setSecret(`mcp:${id}`, '');
+  store.setSecret(`mcp-env:${id}`, '');
 }
 
 function disconnect(id) {
@@ -51,9 +72,26 @@ async function connect(s) {
     const token = s.auth ? store.getSecret(`mcp:${s.id}`) : '';
     transport = new StreamableHTTPClientTransport(new URL(s.url), { requestInit: { headers: token ? { Authorization: `Bearer ${token}` } : {} } });
   }
-  const timeout = new Promise((_, j) => setTimeout(() => j(new Error('The server did not respond within 60 seconds.')), 60000));
-  await Promise.race([client.connect(transport), timeout]);
-  const { tools } = await client.listTools();
+  // What the server prints is read as it comes (a pipe nobody reads fills up, and the server then
+  // stops mid-answer); the last of it is kept to say why a start failed.
+  let said = '';
+  let draining = false;
+  const drain = () => { if (draining || !transport.stderr) return; draining = true; transport.stderr.on('data', (b) => { said = (said + b).slice(-4000); }); };
+  drain();
+  // A server that stops or crashes is forgotten, so the next use starts it again.
+  client.onclose = () => { if (live.get(s.id)?.client === client) live.delete(s.id); };
+  let timer;
+  const timeout = new Promise((_, j) => { timer = setTimeout(() => j(new Error('The server did not respond within 60 seconds.')), 60000); });
+  let tools;
+  try {
+    await Promise.race([client.connect(transport), timeout]);
+    drain();
+    ({ tools } = await Promise.race([client.listTools(), timeout]));
+  } catch (err) {
+    try { await client.close(); } catch { /* it never started */ } // nothing is left running after a failed start
+    const last = said.trim().split('\n').filter(Boolean).pop();
+    throw new Error(`${err.message}${last ? ` The server said: ${last.slice(0, 300)}` : ''}`);
+  } finally { clearTimeout(timer); }
   const entry = { client, tools, error: '' };
   live.set(s.id, entry);
   return entry;

@@ -1,8 +1,8 @@
 // Tests the INSTALLED app, the way a new user would use it: the real installer's output, the
 // real engine and the models that come with Quicksilver. Run on Windows after a silent install.
-//   node test/installed.test.js <path to Quicksilver.exe> <full|fallback> [screenshot folder]
+//   node test/installed.test.js <path to Quicksilver.exe> <full|fallback|web> [screenshot folder]
 //   full:     installed with the "Quicksilver models" folder next to the setup file
-//   fallback: installed from the setup file alone (the main model downloads on first run)
+//   fallback: installed from the setup file alone (the setup screen downloads the Liquid Edition first)
 const { _electron: electron } = require('playwright');
 const path = require('node:path');
 const fs = require('node:fs');
@@ -12,7 +12,7 @@ const assert = require('node:assert');
 
 const [exe, mode = 'full', shots] = process.argv.slice(2);
 const HOME = fs.mkdtempSync(path.join(os.tmpdir(), 'qs-installed-'));
-const LONG = 6 * 60 * 1000; // real models on a CI processor: allow plenty of time
+const LONG = 12 * 60 * 1000; // answers on a build machine's processor (no graphics card) can take several minutes
 
 // A plain red 64×64 PNG, built by hand.
 function redPng(size = 64) {
@@ -35,7 +35,7 @@ function redPng(size = 64) {
   win.on('console', (m) => { if (m.type() === 'error' && !/Failed to load resource/.test(m.text())) errors.push(m.text()); });
   const shot = async (name) => { if (shots) { fs.mkdirSync(shots, { recursive: true }); await win.screenshot({ path: path.join(shots, `${mode}-${name}.png`) }); } };
   const state = () => win.evaluate(() => ({
-    installed: S.installed.map((m) => ({ id: m.id, name: m.name, source: m.source, catalogId: m.catalogId })),
+    installed: S.installed.map((m) => ({ id: m.id, name: m.name, kind: m.kind, source: m.source, catalogId: m.catalogId })),
     stacks: S.stacks.map((s) => ({ id: s.id, members: s.members })),
     def: S.data.prefs.defaultTarget,
     downloads: Object.values(S.downloads).map((d) => ({ id: d.id, done: d.downloaded, total: d.total })),
@@ -60,24 +60,67 @@ function redPng(size = 64) {
 
   // 1. First launch: the bundled models are registered and Quicksilver is ready.
   await win.waitForSelector('text=Forms to fit your work.', { timeout: 60000 });
+  let s;
+  if (mode === 'web') {
+    // The web installer has no models at all: the setup screen covers the app and downloads the
+    // whole Liquid Edition, the small 2B model and search included.
+    await win.waitForSelector('#liquid-gate', { timeout: 60000 }).catch(() => { throw new Error('the web installer should open on the Liquid Edition setup screen'); });
+    const want = ['qwen3.5-2b', 'qwen3.5-4b', 'qwen3.5-9b-uncensored', 'nomic-embed-v1.5', 'bge-reranker-v2-m3', 'lustify', 'wan2.2-5b', 'wan2.2-5b-turbo'];
+    await win.waitForFunction((ids) => ids.every((id) => S.downloads[id] || S.installed.some((m) => m.catalogId === id)), want, { timeout: 120000 })
+      .catch(async () => { throw new Error(`every Liquid Edition model should start downloading (downloading: ${(await state()).downloads.map((d) => d.id).join(', ') || 'none'})`); });
+    await shot('01-web-setup');
+    s = await state();
+    assert.equal(s.installed.filter((m) => m.source === 'bundled').length, 0, 'no models come with the web installer');
+    ok(`web installer: setup screen up, downloading ${s.downloads.map((d) => d.id).join(', ')}`);
+    assert.deepEqual(errors, [], 'no errors in the app');
+    await app.close().catch(() => {});
+    console.log(`\nINSTALLED APP WORKS (${mode})`);
+    process.exit(0);
+  }
   await win.waitForFunction(() => S.installed.some((m) => m.id === 'starter'), null, { timeout: 60000 });
-  let s = await state();
+  s = await state();
   assert.ok(s.installed.find((m) => m.id === 'starter' && m.source === 'bundled'), 'Qwen3.5 2B registered from the installer');
   if (mode === 'full') {
     assert.ok(s.installed.find((m) => m.id === 'starter-brain' && m.source === 'bundled'), 'Qwen3.5 4B copied in by the installer and registered');
     await win.waitForFunction(() => S.stacks.some((x) => x.id === 'quicksilver') && S.data.prefs.defaultTarget === 'stack:quicksilver', null, { timeout: 60000 });
     s = await state();
     ok(`first launch: ${s.installed.map((m) => m.name).join(' + ')}; default ${s.def}; team ${JSON.stringify(s.stacks.find((x) => x.id === 'quicksilver').members)}`);
+    // Everything a skill needs is on the PC from the first run: the picture and video makers,
+    // search, and voice typing (its engine and speech model), with nothing left to download.
+    for (const id of ['lustify', 'wan2.2-5b', 'wan2.2-5b-turbo', 'nomic-embed-v1.5', 'bge-reranker-v2-m3']) assert.ok(s.installed.find((m) => m.catalogId === id), `${id} is installed with the Liquid Edition`);
+    const voice = await win.evaluate(() => qs.call('voice:status'));
+    assert.ok(voice.engine, 'the voice-typing engine (whisper.cpp) came inside the installer');
+    assert.ok(voice.model && voice.ready, 'the speech model came with the installer: voice typing works offline from the first run');
+    const kit = await win.evaluate(() => ({ pic: pickMediaModel('image', { liquid: true, prompt: 'a lighthouse' })?.inst?.catalogId, edit: pickMediaModel('edit', { liquid: true, prompt: 'make it night' })?.inst?.catalogId, vid: pickMediaModel('video', { liquid: true })?.inst?.catalogId, anim: pickMediaModel('animate', { liquid: true })?.inst?.catalogId }));
+    assert.deepEqual([kit.pic, kit.edit, /^wan2\.2-5b/.test(kit.vid), /^wan2\.2-5b/.test(kit.anim)], ['lustify', 'lustify', true, true], `pictures and photo edits by Lustify, videos and animated photos by Wan 2.2 (got ${JSON.stringify(kit)})`);
+    ok('everything skills need is installed: pictures, photo edits, video, animation, search and voice typing');
+    // The big models have left the app's folder (which an update or reinstall replaces) for a
+    // folder that is kept; the small one stays inside the app, where every installer puts it.
+    // (Every file of each model: a chat model and its vision add-on, a video model's three parts.)
+    const where = await win.evaluate(() => Object.fromEntries(S.installed.filter((m) => m.source === 'bundled').map((m) => [m.id, Object.values(m.files || {})])));
+    const inApp = (f) => /resources[\\/]starter[\\/]/i.test(f || '');
+    console.log(`  kept: Brain at ${where['starter-brain']?.[0]}; Lustify at ${where['starter-lustify']?.[0]}; Wan 2.2 at ${where['starter-wan']?.[0]}`);
+    for (const id of ['starter-brain', 'starter-closer', 'starter-lustify', 'starter-wan', 'starter-wan-turbo', 'starter-rerank']) {
+      assert.ok(where[id]?.length, `${id} is installed`);
+      for (const f of where[id]) assert.ok(!inApp(f) && fs.existsSync(f), `${id}: ${f} was moved out of the app's folder and is still there`);
+    }
+    assert.ok(where.starter?.length && where.starter.every(inApp), 'the small model stays inside the app');
+    ok('the big models are kept outside the app\'s folder, so an update or reinstall does not remove them');
   } else {
-    // The default is chosen just after the model list loads: wait for it rather than racing it.
-    await win.waitForFunction(() => S.data.prefs.defaultTarget === 'local:starter', null, { timeout: 30000 })
-      .catch(async () => { throw new Error(`the small model should answer until the main one arrives (default: ${(await state()).def || 'none'})`); });
-    // The download starts once the app has looked the model up online (a second or so later).
-    await win.waitForFunction(() => Boolean(S.downloads['qwen3.5-4b']) || S.installed.some((m) => m.catalogId === 'qwen3.5-4b'), null, { timeout: 60000 })
-      .catch(() => { throw new Error('the main model should start downloading in the background'); });
+    // Without the models folder Quicksilver doesn't open until the whole Liquid Edition is in: the
+    // setup screen covers the app and every missing model starts downloading at once.
+    await win.waitForSelector('#liquid-gate', { timeout: 60000 })
+      .catch(() => { throw new Error('the Liquid Edition setup screen should cover the app until every model is installed'); });
+    const want = ['qwen3.5-4b', 'qwen3.5-9b-uncensored', 'lustify', 'wan2.2-5b', 'wan2.2-5b-turbo'];
+    await win.waitForFunction((ids) => ids.every((id) => S.downloads[id] || S.installed.some((m) => m.catalogId === id)), want, { timeout: 120000 })
+      .catch(async () => { throw new Error(`every Liquid Edition model should start downloading (downloading: ${(await state()).downloads.map((d) => d.id).join(', ') || 'none'})`); });
+    await shot('01-setup');
     s = await state();
-    console.log(`  downloading: ${JSON.stringify(s.downloads)}`);
-    ok('first launch without the models folder: the small model is ready; the main model is downloading');
+    ok(`first launch without the models folder: setup screen up, downloading ${s.downloads.map((d) => d.id).join(', ')}`);
+    assert.deepEqual(errors, [], 'no errors in the app');
+    await app.close();
+    console.log(`\nINSTALLED APP WORKS (${mode})`);
+    return;
   }
   await win.waitForSelector('.best-setup', { timeout: 60000 });
   await shot('01-home');
@@ -88,14 +131,6 @@ function redPng(size = 64) {
   assert.match(r.a, /paris/i, 'a simple question is answered correctly');
   ok(`simple question answered${r.steps.length ? ` (steps: ${r.steps.join(', ')})` : ' directly'}`);
   await shot('02-simple');
-
-  if (mode === 'fallback') {
-    // The main model finishes downloading in the background, then Quicksilver is complete.
-    await win.waitForFunction(() => S.installed.some((m) => m.catalogId === 'qwen3.5-4b'), null, { timeout: 15 * 60 * 1000, polling: 2000 });
-    await win.waitForFunction(() => S.data.prefs.defaultTarget === 'stack:quicksilver', null, { timeout: 120000 });
-    s = await state();
-    ok(`background download finished: ${s.installed.map((m) => m.name).join(' + ')}; default ${s.def}`);
-  }
 
   r = await ask('What is 17 × 23? Work it out step by step.', null, 'stack:quicksilver');
   // The answer is 391: as the last number, or stated in the closing lines (a model may add a check
@@ -116,7 +151,7 @@ function redPng(size = 64) {
   await shot('03-hard');
 
   if (mode === 'full') {
-    r = await ask('What colour is this picture? Answer with one word.', { name: 'red.png', mimeType: 'image/png', buffer: redPng() });
+    r = await ask('What color is this picture? Answer with one word.', { name: 'red.png', mimeType: 'image/png', buffer: redPng() });
     console.log(`  photo answer: ${r.a.replace(/\s+/g, ' ').slice(0, 120)}; steps: ${r.steps.join(' → ') || '(none)'}`);
     assert.match(r.a, /red/i, 'the photo is read correctly');
     ok('photo question: read by the vision model, answered correctly');

@@ -10,23 +10,33 @@ const MEM_MAX = 300;
 const memList = () => (S.data.memory ||= []);
 const memOn = () => S.data.prefs.memory !== false;
 const memLearn = () => S.data.prefs.memoryLearn !== false;
-const memWords = (t) => new Set(String(t || '').toLowerCase().match(/[a-z0-9]{3,}/g) || []);
+// The words of a memory, with plain endings taken off ("works", "worked", "working" → "work").
+const memStem = (w) => { const s = w.replace(/(ing|ed|es|s)$/, ''); return s.length >= 3 ? s : w; };
+const memWords = (t) => new Set((String(t || '').toLowerCase().match(/[a-z0-9]{3,}/g) || []).map(memStem));
 const MEM_STOP = new Set(['the', 'and', 'that', 'this', 'with', 'for', 'you', 'are', 'was', 'have', 'has', 'user', 'users', 'they', 'their', 'from', 'about', 'what', 'when', 'like', 'just', 'your', 'can', 'not', 'but', 'all', 'any', 'how', 'who', 'its']);
 
-function memSimilar(a, b) {
+// How much of what a says is also said by b (0 to 1). It has a direction: "I am a nurse" is fully
+// covered by a long memory that mentions the job, but that memory is not covered by those words.
+function memCovers(a, b) {
   const x = [...memWords(a)].filter((w) => !MEM_STOP.has(w));
   const y = memWords(b);
   if (!x.length || !y.size) return 0;
-  return x.filter((w) => y.has(w)).length / Math.min(x.length, [...y].filter((w) => !MEM_STOP.has(w)).length || 1);
+  return x.filter((w) => y.has(w)).length / x.length;
 }
+// The same fact said twice: each mostly covers the other.
+const memSimilar = (a, b) => Math.min(memCovers(a, b), memCovers(b, a));
 
 function addMemory(text, source = 'chat') {
   const t = String(text || '').replace(/\s+/g, ' ').trim().replace(/^that\s+/i, '').slice(0, 400);
   if (t.length < 3) return null;
   const list = memList();
-  // A newer version of the same fact replaces the old one ("I work at X" → "I work at Y").
-  const old = list.find((m) => memSimilar(t, m.text) >= 0.75);
+  // A newer or fuller version of the same fact replaces the old one. A short one that an
+  // existing memory already says in full changes nothing (it used to overwrite the longer
+  // memory, losing everything else that memory held).
+  const old = list.find((m) => memSimilar(t, m.text) >= 0.75 || memCovers(m.text, t) >= 0.9);
   if (old) { old.text = t; old.updated = now(); save(); return old; }
+  const known = list.find((m) => memCovers(t, m.text) >= 0.9);
+  if (known) return known;
   const m = { id: uid(), text: t, created: now(), updated: now(), source };
   list.push(m);
   if (list.length > MEM_MAX) list.splice(0, list.length - MEM_MAX);
@@ -35,7 +45,9 @@ function addMemory(text, source = 'chat') {
 }
 function forgetMatching(text) {
   const list = memList();
-  const hits = list.filter((m) => memSimilar(text, m.text) >= 0.5);
+  // A memory is forgotten when it says what you named: more than half of your words are in it
+  // (one shared everyday word, like "work", is not enough).
+  const hits = list.filter((m) => memCovers(text, m.text) > 0.5);
   S.data.memory = list.filter((m) => !hits.includes(m));
   if (hits.length) save();
   return hits;
@@ -100,7 +112,7 @@ async function learnFrom(chat, userText) {
     const saved = [];
     for (const f of Array.isArray(arr) ? arr.slice(0, 4) : []) {
       if (typeof f !== 'string' || f.length < 8 || f.length > 240 || /password|card number|account number|\bpin\b/i.test(f)) continue;
-      if (memList().some((m) => memSimilar(f, m.text) >= 0.9)) continue;
+      if (memList().some((m) => memCovers(f, m.text) >= 0.9)) continue; // already known in full
       const m = addMemory(f, 'learned');
       if (m) saved.push(m.text);
     }

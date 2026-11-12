@@ -58,6 +58,9 @@ function ffmpegPath() {
 function runFfmpeg(args, { onProgress, durationSec, signal } = {}) {
   return new Promise((resolve, reject) => {
     const proc = spawn(ffmpegPath(), ['-hide_banner', '-y', ...args], { windowsHide: true });
+    children.add(proc);
+    proc.on('exit', () => children.delete(proc));
+    proc.on('error', () => children.delete(proc));
     let log = '';
     signal?.addEventListener('abort', () => proc.kill());
     proc.stderr.on('data', (d) => {
@@ -99,7 +102,7 @@ async function editVideo(input, ops, { onProgress, signal } = {}) {
   const outLen = ((end - start) || info.duration) / speed;
   if (ops.fadeIn) vf.push(`fade=t=in:st=0:d=${Number(ops.fadeIn)}`);
   if (ops.fadeOut && outLen) vf.push(`fade=t=out:st=${Math.max(0, outLen - Number(ops.fadeOut))}:d=${Number(ops.fadeOut)}`);
-  const format = ops.format || 'mp4';
+  const format = ['mp4', 'webm', 'gif', 'mov', 'mp3', 'wav'].includes(ops.format) ? ops.format : 'mp4';
   const out = path.join(mediaDir(), `${uniq()}.${format}`);
   const args = [];
   if (start) args.push('-ss', String(start));
@@ -145,45 +148,189 @@ async function videoFrames(input, count = 8) {
 let helpCache = null;
 async function sdHelp(bin) {
   if (helpCache?.bin === bin) return helpCache.text;
-  const text = await new Promise((resolve) => execFile(bin, ['--help'], { windowsHide: true, timeout: 20000 }, (_e, o, er) => resolve(`${o || ''}${er || ''}`)));
-  helpCache = { bin, text };
+  const text = await new Promise((resolve) => execFile(bin, ['--help'], { windowsHide: true, timeout: 30000 }, (_e, o, er) => resolve(`${o || ''}${er || ''}`)));
+  // Only a real answer is remembered: if the engine was slow to start once (a virus scan of a new
+  // file, say), every option would otherwise look unsupported for the rest of the session.
+  if (text.length > 200) helpCache = { bin, text };
   return text;
 }
 
 const running = new Map(); // jobId -> proc
+// Picture, video and ffmpeg jobs in progress: all stopped when Quicksilver closes, so nothing keeps
+// the graphics card busy with no window.
+const children = new Set();
+function stopAll() {
+  for (const t of waiting.values()) t.cancelled = true;
+  for (const p of [...running.values(), ...children]) { try { p.kill(); } catch {} }
+  running.clear(); children.clear();
+}
+
+// ---------- one picture or video at a time ----------
+// Two jobs at once fight over the graphics card's memory and usually both fail near the end, so
+// jobs wait their turn (from Create, from a chat, or both).
+let tail = Promise.resolve();
+let activeJobs = 0;
+const waiting = new Map(); // jobId -> { cancelled }
+const stopped = new Set(); // jobs you pressed Stop on: never tried again
+const cleanId = (id) => String(id || '').replace(/[^a-z0-9_-]/gi, '').slice(0, 64) || `job${Date.now().toString(36)}`;
 
 // req = { modelId, mode: 'generate'|'edit'|'animate', prompt, negative, width, height, steps, cfg, seed, strength, image (path), mask (path), frames, fps }
-async function generate(jobId, req, { onProgress, onStatus } = {}) {
-  const hw = await hardware.detect();
-  const engine = engines.resolve('sd', hw);
-  if (!engine) throw new Error('The image engine is missing. Download one in Settings → Engines.');
-  const installed = models.get(req.modelId);
-  const spec = catalog.MEDIA_MODELS.find((m) => m.id === (installed?.catalogId || req.modelId));
-  if (!installed || !spec) throw new Error('Download this model in Models → Images & video first.');
-  const f = installed.files;
-  const help = await sdHelp(engine.bin);
-  const has = (flag) => help.includes(flag);
+async function generate(jobId, req, cb = {}) {
+  jobId = cleanId(jobId);
+  const ticket = { cancelled: false };
+  waiting.set(jobId, ticket);
+  if (activeJobs > 0 || waiting.size > 1) cb.onStatus?.('Waiting for the one before it to finish…');
+  const prev = tail;
+  let release;
+  tail = new Promise((r) => { release = r; });
+  await prev;
+  waiting.delete(jobId);
+  activeJobs++;
+  try {
+    if (ticket.cancelled || stopped.has(jobId)) throw new Error('Stopped.');
+    return await generateNow(jobId, req, cb);
+  } finally { activeJobs--; stopped.delete(jobId); release(); hardware.detect({ fresh: true }).catch(() => {}); }
+}
+function stop(jobId) {
+  jobId = cleanId(jobId);
+  stopped.add(jobId);
+  const t = waiting.get(jobId);
+  if (t) t.cancelled = true;
+  try { running.get(jobId)?.kill(); } catch {}
+  if (!t && !running.has(jobId)) stopped.delete(jobId); // nothing to stop: don't remember it
+}
+
+// ---------- speed helpers ----------
+// Two small files that make the Liquid Edition's pictures and video much quicker. Both were tried
+// on the real engine before being used (the build's "proofs" run):
+//   lightning: SDXL-Lightning, 8 steps (ByteDance, OpenRAIL++). Lustify paints a picture in 8
+//              steps instead of 30, and each step costs half as much: about a seventh of the work.
+//   taeWan:    Wan 2.2's small decoder (TAEHV). Turning a finished clip into frames with the full
+//              decoder is the slowest, most memory-hungry step, where a job could fail at the
+//              very end; the small one does it in a fraction of the time and memory.
+// They ship in the models folder next to the installer and are copied into your data folder.
+// Without them (the setup file alone, the web installer, an update) they are fetched once in
+// the background, and until then everything works the ordinary, slower way.
+const HELPERS = {
+  lightning: { file: 'sdxl_lightning_8step_lora.safetensors', url: 'https://huggingface.co/ByteDance/SDXL-Lightning/resolve/main/sdxl_lightning_8step_lora.safetensors', min: 300e6, for: (id) => id === 'lustify' },
+  taeWan: { file: 'taew2_2.safetensors', url: 'https://huggingface.co/lightx2v/Autoencoders/resolve/main/taew2_2.safetensors', min: 5e6, for: (id) => /^wan2\.2-5b/.test(id || '') },
+};
+const helperDir = () => path.join(store.dir('models'), 'helpers');
+const bigEnough = (f, min) => { try { return fs.statSync(f).size >= min; } catch { return false; } };
+const helperShipped = (h) => [process.env.QS_STARTER_DIR, process.resourcesPath && path.join(process.resourcesPath, 'starter'), path.join(__dirname, '..', '..', 'starter'), path.join(__dirname, '..', '..', 'pack')]
+  .filter(Boolean).map((d) => path.join(d, h.file)).find((f) => bigEnough(f, h.min)) || null;
+// Where a helper is, if it is here: your own copy first, else the one that came with the app.
+function helperPath(key) {
+  if (process.env.QS_NO_HELPERS) return null;
+  const h = HELPERS[key];
+  const own = path.join(helperDir(), h.file);
+  return bigEnough(own, h.min) ? own : helperShipped(h);
+}
+const helpers = () => Object.fromEntries(Object.keys(HELPERS).map((k) => [k, helperPath(k)]));
+// The ones that came with the installer are copied into the data folder once, so an update
+// (which replaces the app's own folder) never loses them.
+async function keepHelpers() {
+  let kept = 0;
+  for (const h of Object.values(HELPERS)) {
+    const own = path.join(helperDir(), h.file);
+    const from = helperShipped(h);
+    if (bigEnough(own, h.min) || !from) continue;
+    try { fs.mkdirSync(helperDir(), { recursive: true }); await fs.promises.copyFile(from, `${own}.copy`); fs.renameSync(`${own}.copy`, own); kept++; } catch { try { fs.rmSync(`${own}.copy`, { force: true }); } catch {} }
+  }
+  return kept;
+}
+// Fetches the helpers that are missing, for the models that are installed. Quiet: a failure
+// only means things stay as they were, and it is tried again next time.
+let fetchingHelpers = null;
+function fetchHelpers() {
+  if (fetchingHelpers) return fetchingHelpers;
+  fetchingHelpers = (async () => {
+    // Never when you are offline, or when "only with a VPN" is on and there is none.
+    try { if (store.config().offline || require('./vpn').blocked()) return { got: [], have: helpers() }; } catch { /* no setting: go on */ }
+    const have = models.list().map((m) => m.catalogId);
+    const got = [];
+    for (const [key, h] of Object.entries(HELPERS)) {
+      if (helperPath(key) || !have.some(h.for)) continue;
+      const own = path.join(helperDir(), h.file);
+      try {
+        fs.mkdirSync(helperDir(), { recursive: true });
+        await engines.downloadTo(h.url, `${own}.part`);
+        if (!bigEnough(`${own}.part`, h.min)) throw new Error('incomplete');
+        fs.renameSync(`${own}.part`, own); got.push(key);
+      } catch { try { fs.rmSync(`${own}.part`, { force: true }); } catch {} }
+    }
+    return { got, have: helpers() };
+  })();
+  return fetchingHelpers.finally(() => { fetchingHelpers = null; });
+}
+// ⚡ Fast pictures: used by itself where a picture would otherwise take long on this PC (no
+// graphics card, or a small one), and whenever asked for. Never when you set the steps or the
+// guidance yourself, and not for edits (those start from your photo, which was not tried).
+function fastPicture(spec, hw, req = {}, help = helpers(), has = () => true) {
+  if (!help.lightning || !HELPERS.lightning.for(spec.id) || req.image || req.mask || !has('--lora-model-dir')) return false;
+  if (req.fast != null) return Boolean(req.fast);
+  if (req.steps != null || req.cfg != null) return false;
+  return (catalog.estimateMedia(spec, hw).sec || 0) > 40;
+}
+
+// The engine's command line for one job. Worked out separately so it can be checked without a
+// graphics card. `safe` is the second try after a failure: everything that saves graphics memory.
+function sdArgs(req, { spec, files: f, hw, has, safe = false, out, help = helpers() }) {
   const d = spec.defaults;
   const isVideo = spec.kind === 'video';
-  const tmpOut = path.join(store.dir('tmp'), `${jobId}.${isVideo ? (has('.webm') ? 'webm' : 'avi') : 'png'}`);
+  const vram = hw.vramGB || 0;
+  const est = catalog.estimateMedia(spec, hw);
+  const notes = [];
   const args = [];
   if (isVideo) args.push('-M', 'vid_gen');
-  if (spec.recipe === 'sd') { args.push('-m', f.model); if (f.vae) args.push('--vae', f.vae); }
-  else {
+  // (req.plain: the second try after a failure uses neither helper, only the long-proven way.)
+  const fast = !isVideo && !req.plain && fastPicture(spec, hw, req, help, has);
+  // The quick decoder for Wan 2.2 clips made from a description, on cards under 16 GB and on a
+  // second, low-memory try (a clip that starts from a photo keeps the full one, which reads it).
+  const tae = isVideo && !req.plain && help.taeWan && HELPERS.taeWan.for(spec.id) && !req.image && has('--tae') && (safe || vram < 16);
+  if (spec.recipe === 'sd') {
+    args.push('-m', f.model); if (f.vae) args.push('--vae', f.vae);
+    if (fast) { args.push('--lora-model-dir', path.dirname(help.lightning), '--sampling-method', 'euler'); if (has('--scheduler')) args.push('--scheduler', 'sgm_uniform'); notes.push('fast mode, 8 steps'); }
+  } else {
     args.push('--diffusion-model', f.diffusion);
-    if (f.vae) args.push('--vae', f.vae);
+    if (tae) args.push('--tae', help.taeWan); else if (f.vae) args.push('--vae', f.vae);
     if (f.clip_l) args.push('--clip_l', f.clip_l);
     if (f.t5xxl) args.push('--t5xxl', f.t5xxl);
     if (f.llm) args.push(has('--llm') ? '--llm' : '--qwen2vl', f.llm);
     args.push('--sampling-method', 'euler');
   }
-  args.push('-p', req.prompt || '');
-  if (req.negative && spec.recipe !== 'flux' && spec.recipe !== 'kontext') args.push('-n', req.negative);
-  args.push('-W', String(req.width || d.width), '-H', String(req.height || d.height));
-  args.push('--steps', String(req.steps || d.steps), '--cfg-scale', String(req.cfg ?? d.cfg));
+  // Some community models (the Pony family) need their quality tags at the start of every prompt.
+  const prompt = spec.promptPrefix && !String(req.prompt || '').toLowerCase().startsWith(spec.promptPrefix.split(',')[0]) ? `${spec.promptPrefix}${req.prompt || ''}` : (req.prompt || '');
+  args.push('-p', fast ? `${prompt}<lora:${path.basename(help.lightning).replace(/\.[^.]+$/, '')}:1>` : prompt);
+  // Chroma: the attention mask off gives cleaner pictures (stable-diffusion.cpp's advice).
+  if (spec.recipe === 'chroma') { if (has('--model-args')) args.push('--model-args', 'chroma_use_dit_mask=false'); else if (has('--chroma-disable-dit-mask')) args.push('--chroma-disable-dit-mask'); }
+  if (spec.recipe === 'qwen-image' && has('--flow-shift')) args.push('--flow-shift', '3');
+  if (req.negative && spec.recipe !== 'flux' && spec.recipe !== 'kontext' && !fast) args.push('-n', req.negative); // fast mode has no guidance, so nothing to steer away from
+
+  // Size. A job fails at the very end (when the result is decoded) if it is too big for the
+  // card, after all the waiting. So a clip is made at 480p on cards under 16 GB, and the second
+  // try always uses the small sizes.
+  let width = Number(req.width) || d.width;
+  let height = Number(req.height) || d.height;
+  let frames = Number(req.frames) || d.frames;
+  if (isVideo) {
+    if ((safe || vram < 16) && width * height > 832 * 480 * 1.15) {
+      [width, height] = width > height ? [832, 480] : width < height ? [480, 832] : [640, 640];
+      notes.push(`at ${width}×${height}, which fits this graphics card`);
+    }
+    const most = safe ? 33 : vram && vram < 12 ? 49 : 81;
+    if (frames > most) { frames = most; notes.push(`${Math.round(most / (req.fps || d.fps || 16))} seconds long`); }
+  } else if (safe && width * height > 1024 * 1024 * 1.05) {
+    const k = Math.sqrt((1024 * 1024) / (width * height));
+    width = Math.max(256, Math.round((width * k) / 64) * 64); height = Math.max(256, Math.round((height * k) / 64) * 64);
+    notes.push(`at ${width}×${height}`);
+  }
+  args.push('-W', String(width), '-H', String(height));
+  if (fast) args.push('--steps', '8', '--cfg-scale', '1');
+  else args.push('--steps', String(req.steps || d.steps), '--cfg-scale', String(req.cfg ?? d.cfg));
   args.push('-s', String(Number.isFinite(Number(req.seed)) && req.seed !== '' ? Number(req.seed) : -1));
   if (isVideo) {
-    args.push('--video-frames', String(req.frames || d.frames));
+    args.push('--video-frames', String(frames));
     if (has('--fps')) args.push('--fps', String(req.fps || d.fps));
     if (has('--flow-shift')) args.push('--flow-shift', '3.0');
   }
@@ -192,54 +339,181 @@ async function generate(jobId, req, { onProgress, onStatus } = {}) {
     else { args.push('-i', req.image); if (!isVideo) args.push('--strength', String(req.strength ?? 0.6)); }
   }
   if (req.mask) args.push('--mask', req.mask);
-  // Save graphics memory on smaller cards.
-  const est = catalog.estimateMedia(spec, hw);
-  if (est.fit !== 'gpu') { if (has('--offload-to-cpu')) args.push('--offload-to-cpu'); if (has('--vae-tiling')) args.push('--vae-tiling'); }
-  if (has('--diffusion-fa')) args.push('--diffusion-fa');
-  args.push('-o', tmpOut);
 
-  onStatus?.(`Starting ${spec.name}…`);
-  const started = Date.now();
-  await new Promise((resolve, reject) => {
+  // Graphics memory. The model's weights wait in ordinary memory and go to the card as they are
+  // needed (no slower, the engine's own advice for cards the model only just fits), the result
+  // is decoded in tiles, and the engine is told to keep within what is free right now.
+  const tight = est.fit !== 'gpu' || vram < (spec.vramGB || 0) + 3;
+  const offload = safe || isVideo || tight;
+  if (offload && has('--offload-to-cpu')) args.push('--offload-to-cpu');
+  if (!tae && (safe || isVideo || tight || vram <= 12) && has('--vae-tiling')) args.push('--vae-tiling');
+  if (!tae && isVideo && (safe || vram < 16) && has('--temporal-tiling')) args.push('--temporal-tiling');
+  if (offload && vram && has('--max-vram')) args.push('--max-vram', '-1');
+  if (has('--diffusion-fa')) args.push('--diffusion-fa');
+  args.push('-o', out);
+  return { args, width, height, frames, notes, fast, tae: Boolean(tae) };
+}
+
+// Is a finished picture just one flat color (what a failed run can produce)? Counts how many
+// different byte values its pixel data has.
+function looksBlank(file) {
+  try {
+    const b = fs.readFileSync(file);
+    if (b.length < 8 || b.toString('latin1', 1, 4) !== 'PNG') return false;
+    let pos = 8; const idat = [];
+    while (pos + 12 <= b.length) {
+      const len = b.readUInt32BE(pos);
+      if (b.toString('ascii', pos + 4, pos + 8) === 'IDAT') idat.push(b.subarray(pos + 8, pos + 8 + len));
+      pos += 12 + len;
+    }
+    const raw = require('node:zlib').inflateSync(Buffer.concat(idat));
+    const seen = new Set();
+    for (let k = 0; k < raw.length; k += 53) { seen.add(raw[k]); if (seen.size > 12) return false; }
+    return true;
+  } catch { return false; }
+}
+
+const MEMORY_RX = /out of (device |host )?memory|outofdevicememory|outofhostmemory|memory allocation|failed to allocate|alloc(ation)? (of|failed)|cuda error: out|not enough memory|bad_alloc|insufficient memory/i;
+const wait = (ms) => new Promise((r) => setTimeout(r, ms));
+
+// Frees graphics memory for the job when a loaded chat model holds what it needs.
+async function makeRoom(spec, hw, onStatus, everything = false) {
+  if (!hw.vramGB) return hw;
+  const llama = require('./llama');
+  const held = llama.gpuHeld();
+  if (!held) return hw;
+  const free = hw.vramFreeLive ? hw.vramFreeGB : hw.vramGB - held;
+  const need = Math.min(hw.vramGB, (spec.vramGB || spec.sizeGB || 6) + 1);
+  if (!everything && free >= need) return hw;
+  if (!llama.releaseGpu()) return hw;
+  onStatus?.('Making room on the graphics card (your chat model loads again when you next chat)…');
+  await wait(1200);
+  return hardware.detect({ fresh: true });
+}
+
+// One run of the engine. Resolves with the file it made; rejects with an error that says whether
+// it was stopped, ran out of memory, and what the engine last said.
+function runEngine(jobId, { engine, args, out, isVideo, onProgress, onStatus }) {
+  return new Promise((resolve, reject) => {
     const proc = spawn(engine.bin, args, { windowsHide: true, cwd: path.dirname(engine.bin) });
     running.set(jobId, proc);
     let log = '';
+    let stage = 'load';
+    let shown = 0;
+    const up = (v) => { if (v > shown) { shown = v; onProgress?.(v); } };
+    const word = isVideo ? 'video' : 'picture';
+    // An engine that says nothing for a very long time has hung (one step of a video on a slow
+    // PC can take many minutes, so the wait is generous).
+    let quiet = null;
+    const alive = () => { clearTimeout(quiet); quiet = setTimeout(() => { log += '\n[Quicksilver] no output for 45 minutes: stopped'; try { proc.kill(); } catch {} }, 45 * 60 * 1000); quiet.unref?.(); };
+    alive();
     const onData = (buf) => {
+      alive();
       const s = buf.toString();
-      log = (log + s).slice(-8000);
+      log = (log + s).slice(-12000);
+      if (/decod/i.test(s) && stage !== 'decode') { stage = 'decode'; up(0.87); onStatus?.(`Finishing: turning it into a ${word}…`); }
       const m = [...s.matchAll(/(\d+)\/(\d+)\s*-\s*[\d.]+\s*(?:s\/it|it\/s)/g)].pop();
-      if (m) onProgress?.(Number(m[1]) / Number(m[2]));
-      if (/loading|load model/i.test(s)) onStatus?.('Loading the model…');
-      else if (/sampling|denois/i.test(s)) onStatus?.(isVideo ? 'Creating the video…' : 'Creating the image…');
-      else if (/decod/i.test(s)) onStatus?.('Finishing…');
+      if (m && Number(m[2]) > 0) {
+        const frac = Math.min(1, Number(m[1]) / Number(m[2]));
+        if (stage === 'decode') up(0.87 + frac * 0.1);
+        else {
+          if (stage !== 'sample') { stage = 'sample'; onStatus?.(isVideo ? 'Creating the video…' : 'Creating the picture…'); }
+          up(0.05 + frac * 0.8);
+          // The steps are done, but the result still has to be decoded and saved.
+          if (frac >= 1) onStatus?.(`Finishing: turning it into a ${word}…`);
+        }
+      } else if (stage === 'load' && /loading|load model|loaded/i.test(s)) { onStatus?.('Loading the model…'); up(0.03); }
     };
     proc.stdout.on('data', onData);
     proc.stderr.on('data', onData);
-    proc.on('error', reject);
+    const fail = (why, code) => {
+      const e = new Error(why);
+      e.stopped = stopped.has(jobId);
+      e.memory = MEMORY_RX.test(log);
+      e.log = log; e.code = code;
+      reject(e);
+    };
+    proc.on('error', (err) => { clearTimeout(quiet); running.delete(jobId); fail(`The image engine could not start: ${err.message}`, -1); });
     proc.on('exit', (code) => {
+      clearTimeout(quiet);
       running.delete(jobId);
-      if (code === 0 && fs.existsSync(tmpOut)) return resolve();
-      if (proc.killed) return reject(new Error('Stopped.'));
+      // The file it made: the name asked for, or (video) the same name in another container.
+      const base = out.replace(/\.[^.]+$/, '');
+      const made = [out, ...['webm', 'avi', 'mp4', 'mkv', 'png'].map((x) => `${base}.${x}`)].find((x) => { try { return fs.statSync(x).size > 0; } catch { return false; } });
+      if (code === 0 && made) return resolve(made);
       const lines = log.split('\n').map((l) => l.trim()).filter(Boolean);
-      const err = [...lines].reverse().find((l) => /error|failed|out of memory|unsupported|invalid/i.test(l)) || lines.slice(-2).join(' ');
-      reject(new Error(/memory/i.test(err) ? 'Not enough graphics memory. Try a smaller size, fewer frames, or a lighter model.' : err || 'The image engine stopped unexpectedly.'));
+      const said = [...lines].reverse().find((l) => /error|failed|out of memory|unsupported|invalid|cannot|could not/i.test(l)) || lines.slice(-2).join(' ');
+      fail(said || (code === 0 ? 'the engine finished but made no file' : `the engine stopped (code ${code})`), code);
     });
   });
-  const seconds = (Date.now() - started) / 1000;
-  const meta = { prompt: req.prompt, model: spec.name, modelId: spec.id, seed: req.seed, seconds, mode: req.mode, width: req.width || d.width, height: req.height || d.height };
-  if (isVideo) {
-    // Convert to an MP4 that plays everywhere.
-    const out = path.join(mediaDir(), `${jobId}.mp4`);
-    onStatus?.('Saving the video…');
-    await runFfmpeg(['-i', tmpOut, '-c:v', 'libx264', '-pix_fmt', 'yuv420p', '-crf', '18', '-movflags', '+faststart', out]);
-    fs.rmSync(tmpOut, { force: true });
-    return addToGallery({ kind: 'video', file: out, ...meta });
-  }
-  const out = path.join(mediaDir(), `${jobId}.png`);
-  fs.renameSync(tmpOut, out);
-  return addToGallery({ kind: 'image', file: out, ...meta });
 }
 
-function stop(jobId) { running.get(jobId)?.kill(); }
+async function generateNow(jobId, req, { onProgress, onStatus } = {}) {
+  let hw = await hardware.detect({ fresh: true });
+  const engine = engines.resolve('sd', hw);
+  if (!engine) throw new Error('The image engine is missing. Download one in Settings → Engines.');
+  const installed = models.get(req.modelId);
+  const spec = catalog.MEDIA_MODELS.find((m) => m.id === (installed?.catalogId || req.modelId));
+  if (!installed || !spec) throw new Error('Download this model in Models → Images & video first.');
+  if (req.image && !fs.existsSync(req.image)) throw new Error('The photo to start from is no longer there.');
+  const help = await sdHelp(engine.bin);
+  const has = (flag) => help.includes(flag);
+  const isVideo = spec.kind === 'video';
+  const word = isVideo ? 'video' : 'picture';
+  const out = path.join(store.dir('tmp'), `${jobId}.${isVideo ? (has('.webm') ? 'webm' : 'avi') : 'png'}`);
+  const started = Date.now();
+  let made = null;
+  let used = null;
+  let last = null;
+  for (const safe of [false, true]) {
+    if (stopped.has(jobId)) throw new Error('Stopped.');
+    if (safe) {
+      // Second and last try: nothing else on the card, the smallest sizes, every memory saving on.
+      onStatus?.(`${last.memory ? 'There was not enough graphics memory' : last.blank ? `The ${word} came out blank` : 'That did not finish'}. Trying once more with low-memory settings…`);
+      hw = await makeRoom(spec, await hardware.detect({ fresh: true }), null, true);
+    } else hw = await makeRoom(spec, hw, onStatus);
+    for (const x of ['webm', 'avi', 'mp4', 'mkv', 'png']) fs.rmSync(out.replace(/\.[^.]+$/, `.${x}`), { force: true });
+    // A try that used a speed helper and failed is repeated without it.
+    used = sdArgs(safe && (used?.fast || used?.tae) ? { ...req, plain: true } : req, { spec, files: installed.files, hw, has, safe, out });
+    // (On the second try every message says so, and the bar starts again.)
+    const say = safe ? (t) => onStatus?.(`Second try, low-memory settings: ${t}`) : onStatus;
+    say?.(`Starting ${spec.name}${used.notes.length ? ` (${used.notes.join(', ')})` : ''}…`);
+    if (safe) onProgress?.(0.01);
+    try {
+      made = await runEngine(jobId, { engine, args: used.args, out, isVideo, onProgress, onStatus: say });
+      if (!isVideo && looksBlank(made)) { const e = new Error(`the ${word} came out as one flat color`); e.blank = true; e.log = ''; throw e; }
+      break;
+    } catch (err) {
+      made = null;
+      // What the engine said, kept for "Save diagnostics".
+      try { fs.writeFileSync(path.join(store.dir('logs'), 'create-last-failure.log'), `${new Date().toISOString()} ${spec.name} ${safe ? '(low-memory try)' : ''}\n${engine.bin} ${used.args.map((a) => (/\s/.test(a) ? JSON.stringify(a) : a)).join(' ')}\n\n${err.log || err.message}\n`); } catch {}
+      if (err.stopped || stopped.has(jobId)) throw new Error('Stopped.');
+      last = err;
+    }
+  }
+  if (!made) {
+    if (last.memory) throw new Error(`Not enough graphics memory for ${spec.name}, even with the chat model closed and the low-memory settings. Try a smaller shape${isVideo ? ' or a shorter clip' : ''}, or a lighter model.`);
+    if (last.blank) throw new Error(`${spec.name} made a blank ${word} twice on this PC. Try a different shape or another ${word} model.`);
+    throw new Error(`${spec.name} stopped before the ${word} was finished: ${String(last.message).slice(0, 300)}`);
+  }
+  const d = spec.defaults;
+  const seconds = (Date.now() - started) / 1000;
+  const meta = { prompt: req.prompt, model: spec.name, modelId: spec.id, seed: req.seed, seconds, mode: req.mode, width: used.width || d.width, height: used.height || d.height };
+  if (isVideo) {
+    // Convert to an MP4 that plays everywhere.
+    const file = path.join(mediaDir(), `${jobId}.mp4`);
+    onStatus?.('Saving the video…');
+    onProgress?.(0.97);
+    try { await runFfmpeg(['-i', made, '-c:v', 'libx264', '-pix_fmt', 'yuv420p', '-vf', 'pad=ceil(iw/2)*2:ceil(ih/2)*2', '-crf', '18', '-movflags', '+faststart', file]); } catch (err) {
+      throw new Error(`The video was made but could not be saved as an MP4: ${String(err.message).slice(0, 200)}`);
+    }
+    fs.rmSync(made, { force: true });
+    return addToGallery({ kind: 'video', file, ...meta });
+  }
+  const file = path.join(mediaDir(), `${jobId}.png`);
+  try { fs.renameSync(made, file); } catch { fs.copyFileSync(made, file); fs.rmSync(made, { force: true }); }
+  return addToGallery({ kind: 'image', file, ...meta });
+}
 
-module.exports = { runFfmpeg, videoFrames, gallery, addToGallery, removeFromGallery, saveDataUrl, saveBuffer, editVideo, extractFrame, probe, generate, stop, ffmpegPath, mediaDir };
+
+module.exports = { runFfmpeg, videoFrames, gallery, addToGallery, removeFromGallery, saveDataUrl, saveBuffer, editVideo, extractFrame, probe, generate, stop, stopAll, sdArgs, looksBlank, ffmpegPath, mediaDir, HELPERS, helpers, helperPath, keepHelpers, fetchHelpers, fastPicture };

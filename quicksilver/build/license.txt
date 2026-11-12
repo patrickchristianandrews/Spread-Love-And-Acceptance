@@ -14,15 +14,32 @@ YOUR PRIVACY
 
 WHAT GETS INSTALLED
 - The Quicksilver app, for your Windows account only (no administrator rights needed).
-- Two open-source AI engines it uses to run models: llama.cpp (MIT licence) and
-  stable-diffusion.cpp (MIT licence), plus FFmpeg for video editing (LGPL/GPL).
-- Downloaded models are saved in your user folder (%APPDATA%\Quicksilver) and can be
-  removed at any time from Models, or by uninstalling.
+- Three open-source AI engines it uses to run models: llama.cpp (chat, MIT license),
+  stable-diffusion.cpp (pictures and video, MIT license) and whisper.cpp (voice typing,
+  MIT license), plus FFmpeg for video editing (LGPL/GPL).
+- Quicksilver Liquid Edition, when the "Quicksilver models" folder is next to this
+  installer (otherwise it downloads the first time Quicksilver opens, about 30 GB):
+  Qwen3.5 2B, 4B and 9B (Alibaba Cloud, Apache 2.0; the uncensored versions are by
+  huihui-ai, converted by mradermacher), Lustify (a community Stable Diffusion XL model,
+  CreativeML Open RAIL++-M), Wan 2.2 5B and its Turbo version (Alibaba, Apache 2.0),
+  Nomic Embed and the BGE reranker (search, Apache 2.0) and Whisper base (OpenAI, MIT).
+  Each model's license (its full text, or a link to it) is in MODEL-LICENCES.txt, in the
+  models folder and in the folder Quicksilver is installed in (resources\starter).
+- Your chats, settings and models are saved in your user folder (%APPDATA%\Quicksilver),
+  so updates and reinstalls keep them. If you install Quicksilver on another drive, its
+  big models are kept on that drive, in a "Quicksilver kept models" folder beside the
+  app's own. Models can be removed at any time under Models (the Liquid Edition's own
+  models stay while Quicksilver is installed). When you uninstall, Quicksilver asks
+  whether to remove your chats and models too.
 
 AI MODELS
-Each AI model you download has its own licence, set by its creator (for example Meta,
+The Liquid Edition's chat, picture and video models are uncensored: they have no built-in
+content filter. You are responsible for what you make with them and for following the law
+where you live. A parental-lock PIN (Settings > General) puts them behind a code.
+
+Each AI model you download has its own license, set by its creator (for example Meta,
 Google, Alibaba, Microsoft, Mistral AI, OpenAI or Black Forest Labs). Quicksilver shows
-where every model comes from; please follow each model's licence terms.
+where every model comes from; please follow each model's license terms.
 
 AI can make mistakes. Check important information, especially medical, legal and
 financial answers. The fact-check feature helps, but it is not a substitute for a

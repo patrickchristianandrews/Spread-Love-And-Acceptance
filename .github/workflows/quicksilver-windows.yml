@@ -5,7 +5,8 @@
 #              installer (the build is done when this job is).
 #  3. testers: five tester sessions on the installed app with the real models (informational, in
 #              its own job so it never holds up the installer).
-# Runs on every push that changes quicksilver/, and on demand from the Actions tab.
+# Runs on demand from the Actions tab, and when a quicksilver-v* tag is pushed (branch pushes
+# don't start it: each run builds and stores a ~31 GB package).
 # Pushing a tag like quicksilver-v2.0.0 also publishes the installer as a GitHub release.
 name: Quicksilver Windows installer
 
@@ -20,10 +21,19 @@ on:
         type: choice
         options: [a, b, all, none]
         default: a
+      mode:
+        description: 'full: build and test the installers. proofs: only try pictures and video on the real engines and record what comes out (no installer)'
+        type: choice
+        options: [full, proofs]
+        default: full
+      publish:
+        description: 'Publish this build as the release quicksilver-v<version in package.json> when every check has passed (the same as pushing that tag)'
+        type: boolean
+        default: false
 
 # A newer run on the same branch or tag replaces one still running, so only the latest is built.
 concurrency:
-  group: quicksilver-${{ github.ref }}
+  group: quicksilver-${{ github.ref }}-${{ inputs.mode || 'full' }}
   cancel-in-progress: true
 
 permissions:
@@ -32,7 +42,71 @@ permissions:
   pull-requests: read
 
 jobs:
+  # Experiments on the real picture and video engines (no graphics card on these machines, so
+  # small sizes and few steps): each try records how long it took and a thumbnail of the result,
+  # printed at the end of the log. Nothing here can fail a release; it runs only when asked for.
+  proofs:
+    if: ${{ github.event_name == 'workflow_dispatch' && inputs.mode == 'proofs' }}
+    runs-on: windows-latest
+    timeout-minutes: 150
+    defaults:
+      run:
+        working-directory: quicksilver
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: quicksilver
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: quicksilver/package-lock.json
+      - name: Install
+        run: npm ci
+        env:
+          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: '1'
+      - name: Download the engines
+        run: node scripts/fetch-engines.js --platform win32
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Download the Liquid Edition's models
+        run: node scripts/fetch-starter.js
+      - name: Download the add-ons being tried
+        run: |
+          mkdir -p extras
+          curl -sSL --retry 3 -o extras/sdxl_lightning_8step_lora.safetensors https://huggingface.co/ByteDance/SDXL-Lightning/resolve/main/sdxl_lightning_8step_lora.safetensors
+          curl -sSL --retry 3 -o extras/sdxl_lightning_4step_lora.safetensors https://huggingface.co/ByteDance/SDXL-Lightning/resolve/main/sdxl_lightning_4step_lora.safetensors
+          curl -sSL --retry 3 -o extras/lcm_lora_sdxl.safetensors https://huggingface.co/latent-consistency/lcm-lora-sdxl/resolve/main/pytorch_lora_weights.safetensors
+          curl -sSL --retry 3 -o extras/taew2_2.safetensors https://huggingface.co/lightx2v/Autoencoders/resolve/main/taew2_2.safetensors
+          ls -la extras pack
+      - name: What the engine can do
+        run: node scripts/try-media.js --help-lines
+      - name: Lustify as it is now (12 steps, small)
+        run: node scripts/try-media.js lustify-plain 20 -- -m pack/lustify.safetensors --vae pack/lustify-vae.safetensors -p "photo of a red apple on a wooden table, soft daylight" -n "blurry" -W 512 -H 512 --steps 12 --cfg-scale 4.5 -s 7
+      - name: Lustify with the Lightning 8-step speed-up
+        run: node scripts/try-media.js lustify-lightning8 20 -- -m pack/lustify.safetensors --vae pack/lustify-vae.safetensors --lora-model-dir extras -p "photo of a red apple on a wooden table, soft daylight<lora:sdxl_lightning_8step_lora:1>" -W 512 -H 512 --steps 8 --cfg-scale 1 --sampling-method euler --scheduler sgm_uniform -s 7
+      - name: Lustify with the Lightning 4-step speed-up
+        run: node scripts/try-media.js lustify-lightning4 15 -- -m pack/lustify.safetensors --vae pack/lustify-vae.safetensors --lora-model-dir extras -p "photo of a red apple on a wooden table, soft daylight<lora:sdxl_lightning_4step_lora:1>" -W 512 -H 512 --steps 4 --cfg-scale 1 --sampling-method euler --scheduler sgm_uniform -s 7
+      - name: Lustify with the LCM speed-up (6 steps)
+        run: node scripts/try-media.js lustify-lcm6 15 -- -m pack/lustify.safetensors --vae pack/lustify-vae.safetensors --lora-model-dir extras -p "photo of a red apple on a wooden table, soft daylight<lora:lcm_lora_sdxl:1>" -W 512 -H 512 --steps 6 --cfg-scale 1 --sampling-method lcm -s 7
+      - name: Wan 2.2 Turbo, a tiny clip, with the small decoder
+        run: node scripts/try-media.js wan-turbo-tae 30 -- -M vid_gen --diffusion-model pack/wan2.2-5b-turbo.gguf --tae extras/taew2_2.safetensors --t5xxl pack/wan-umt5-xxl.gguf -p "a red ball rolling across green grass" --cfg-scale 1 --sampling-method euler --steps 4 -W 320 -H 192 --video-frames 9 --flow-shift 3.0 --offload-to-cpu -s 7
+      - name: Wan 2.2 Turbo, a tiny clip, with the full decoder
+        run: node scripts/try-media.js wan-turbo-vae 30 -- -M vid_gen --diffusion-model pack/wan2.2-5b-turbo.gguf --vae pack/wan2.2-vae.safetensors --t5xxl pack/wan-umt5-xxl.gguf -p "a red ball rolling across green grass" --cfg-scale 1 --sampling-method euler --steps 4 -W 320 -H 192 --video-frames 9 --flow-shift 3.0 --offload-to-cpu --vae-tiling -s 7
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: Quicksilver-proofs
+          path: quicksilver/proofs/
+          if-no-files-found: ignore
+          retention-days: 14
+      - name: Results (thumbnails are the long lines)
+        if: always()
+        run: cat proofs/results.txt || true
+
   tests:
+    if: ${{ github.event_name != 'workflow_dispatch' || inputs.mode != 'proofs' }}
     runs-on: ubuntu-latest
     timeout-minutes: 30
     defaults:
@@ -52,18 +126,21 @@ jobs:
         timeout-minutes: 20
         run: |
           for i in 1 2 3; do timeout 240 sudo apt-get update -qq && timeout 240 sudo apt-get install -y -qq ffmpeg xvfb && break; echo "apt attempt $i stalled or failed; retrying"; sleep 5; done
+          command -v xvfb-run >/dev/null && command -v ffmpeg >/dev/null || { echo "::error::ffmpeg and xvfb could not be installed"; exit 1; }
           for i in 1 2 3; do timeout 300 npm ci && exit 0; echo "npm ci attempt $i stalled or failed; retrying"; sleep 5; done; exit 1
         env:
           PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: '1'
       - name: Back-end tests
-        run: node test/backend.test.js
+        run: node test/backend.test.js && node test/media-catalog.test.js && node test/loading.test.js && node test/skills-auto.test.js && node test/pro.test.js && node test/liquid-own.test.js && node test/create.test.js && node test/fixes.test.js && node scripts/api-directory.js --check
       - name: End-to-end tests
-        run: xvfb-run -a node test/ui.test.js
+        run: xvfb-run -a node test/ui.test.js && xvfb-run -a node test/liquid-picture.test.js && xvfb-run -a node test/in-use.test.js && xvfb-run -a node test/gate.test.js && xvfb-run -a node test/chat-make.test.js
 
   windows:
     needs: tests
     runs-on: windows-latest
-    timeout-minutes: 90
+    # The models folder is about 30 GB (the Liquid Edition: chat, Lustify, Wan 2.2): downloading, copying
+    # it in during the install test and uploading it all take time.
+    timeout-minutes: 240
     defaults:
       run:
         working-directory: quicksilver
@@ -82,6 +159,14 @@ jobs:
         run: npm ci
         env:
           PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: '1'
+
+      # A release's tag is the version the updater compares with the installed app's own version:
+      # they must be the same, or installed copies update for ever (or never).
+      - name: Check the tag matches the app's version
+        if: startsWith(github.ref, 'refs/tags/quicksilver-v')
+        run: |
+          V=$(node -p "require('./package.json').version")
+          [ "$GITHUB_REF_NAME" = "quicksilver-v$V" ] || { echo "::error::tag $GITHUB_REF_NAME does not match package.json version $V"; exit 1; }
 
       - name: Download the engines (llama.cpp, stable-diffusion.cpp, whisper.cpp)
         run: node scripts/fetch-engines.js --platform win32
@@ -137,6 +222,27 @@ jobs:
           echo "engine: $SD ($(cat engine/sd/VERSION.txt))"
           "$SD" --help | head -5
 
+      # Build machines have no graphics card, so this is one small picture on the processor. It
+      # shows the model file loads, the engine takes every option Quicksilver passes, and a real
+      # image comes out. Informational: a slow or memory-starved runner must not block a release.
+      - name: Prove Lustify paints a real picture (real engine, on the processor)
+        continue-on-error: true
+        timeout-minutes: 30
+        run: |
+          mkdir -p install-shots
+          node scripts/prove-picture.js pack install-shots/lustify-proof.png || echo "::warning::Lustify did not produce a picture on the build machine (see the log above). Pictures are still unproven on real hardware."
+
+      # The Liquid Edition ships complete: voice typing's engine goes inside the installer and its
+      # speech model in the models folder, so the microphone works offline from the first run.
+      - name: Check voice typing ships complete (engine and speech model)
+        shell: pwsh
+        run: |
+          $w = Get-ChildItem -Recurse engine\whisper -Filter whisper-cli.exe -ErrorAction SilentlyContinue | Select-Object -First 1
+          if (!$w) { Write-Host '::error::The voice-typing engine (whisper.cpp) was not downloaded, so the installer would ship without it.'; exit 1 }
+          $m = Get-Item pack\ggml-base-q5_1.bin -ErrorAction SilentlyContinue
+          if (!$m -or $m.Length -lt 30MB) { Write-Host '::error::The speech model for voice typing is missing from the models folder.'; exit 1 }
+          Write-Host "voice typing: $($w.FullName) + speech model $([math]::Round($m.Length / 1MB)) MB"
+
       - name: Prove voice typing works (real whisper.cpp, real speech from Windows)
         continue-on-error: true
         shell: pwsh
@@ -146,8 +252,7 @@ jobs:
           Add-Type -AssemblyName System.Speech
           $s = New-Object System.Speech.Synthesis.SpeechSynthesizer
           $s.SetOutputToWaveFile("$PWD\speech.wav"); $s.Speak('The quick brown fox jumps over the lazy dog.'); $s.Dispose()
-          curl.exe -sSL -o whisper.bin https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-base-q5_1.bin
-          $env:QS_WHISPER_BIN = $w.FullName; $env:QS_WHISPER_MODEL = "$PWD\whisper.bin"; $env:QUICKSILVER_HOME = "$PWD\voice-home"
+          $env:QS_WHISPER_BIN = $w.FullName; $env:QS_WHISPER_MODEL = "$PWD\pack\ggml-base-q5_1.bin"; $env:QUICKSILVER_HOME = "$PWD\voice-home"
           node -e "require('./src/main/whisper').transcribe(require('fs').readFileSync('speech.wav'), { ext: 'wav' }).then((t) => { console.log('heard:', t); if (!/fox/i.test(t)) { console.log('::warning::voice typing heard the wrong words'); process.exit(1); } console.log('voice typing: works'); }).catch((e) => { console.log('::warning::voice typing failed: ' + e.message); process.exit(1); })"
 
       # Signing removes Windows' "unknown publisher" warning. It turns on by itself once either
@@ -172,9 +277,11 @@ jobs:
           for f in dist/*.exe; do s=$(stat -c %s "$f"); echo "$f: $((s / 1048576)) MB"; [ "$s" -lt 2100000000 ] || { echo "::error::$f is too big for a Windows installer"; exit 1; }; done
           # Quicksilver's full model ships next to the installer, which copies it in.
           mkdir -p "dist/Quicksilver models"
-          cp pack/* "dist/Quicksilver models/"
+          # Moved, not copied: the folder is ~30 GB and the runner's disk is shared with the install test.
+          mv pack/* "dist/Quicksilver models/"
+          df -h . /c 2>/dev/null || true
           VERSION=$(node -p "require('./package.json').version")
-          printf 'Installing Quicksilver\r\n\r\n1. Unzip everything into one folder.\r\n2. Run Quicksilver-Setup-%s.exe. Keep the "Quicksilver models" folder next to it:\r\n   the installer copies the full Quicksilver Liquid Edition from there,\r\n   so it works offline right away.\r\n\r\nIf you only have the setup file, that is fine too: Quicksilver starts with its small model\r\nand downloads the rest in the background the first time it runs.\r\n' "$VERSION" > "dist/READ ME FIRST.txt"
+          printf 'Installing Quicksilver\r\n\r\n1. Unzip everything into one folder.\r\n2. Run Quicksilver-Setup-%s.exe. Keep the "Quicksilver models" folder next to it:\r\n   the installer copies the full Quicksilver Liquid Edition from there,\r\n   including the Qwen3.5 9B Closer, Lustify (pictures) and Wan 2.2 (video),\r\n   so it works offline right away.\r\n\r\nIf you only have the setup file, that is fine too: Quicksilver starts with its small model\r\nand downloads the rest of the Liquid Edition straight away, the first time it opens.\r\n' "$VERSION" > "dist/READ ME FIRST.txt"
         env:
           CSC_IDENTITY_AUTO_DISCOVERY: 'false'
           CSC_LINK: ${{ secrets.WIN_CSC_LINK }}
@@ -195,6 +302,7 @@ jobs:
             quicksilver/dist/Quicksilver models/
             quicksilver/dist/READ ME FIRST.txt
           if-no-files-found: error
+          retention-days: 90
           # The installer and models are already compressed; zipping them again only costs time.
           compression-level: 0
 
@@ -202,26 +310,39 @@ jobs:
       # come with Quicksilver, real questions. A failure here fails the build.
       - name: Install with the models folder and use it like a new user
         shell: pwsh
-        timeout-minutes: 30
+        timeout-minutes: 60
         run: |
           $setup = Get-ChildItem dist\Quicksilver-Setup-*.exe | Select-Object -First 1
-          Start-Process -Wait -FilePath $setup.FullName -ArgumentList '/S','/D=C:\QS'
-          if (!(Test-Path 'C:\QS\Quicksilver.exe')) { throw 'Quicksilver.exe was not installed' }
-          if (!(Test-Path 'C:\QS\resources\engine\llama\llama-server.exe')) { throw 'the text engine is missing' }
-          foreach ($f in 'STARTER.json','model.gguf','mmproj.gguf','embed.gguf','qwen3.5-4b.gguf','qwen3.5-4b-mmproj.gguf') { if (!(Test-Path "C:\QS\resources\starter\$f")) { throw "missing resources\starter\$f" } }
-          Get-ChildItem C:\QS\resources\starter | ForEach-Object { '{0,-34} {1,8:N0} MB' -f $_.Name, ($_.Length / 1MB) }
+          Get-ChildItem 'dist\Quicksilver models' | ForEach-Object { 'in the models folder: {0,-30} {1,8:N0} MB' -f $_.Name, ($_.Length / 1MB) }
+          Get-PSDrive C, D -ErrorAction SilentlyContinue | ForEach-Object { 'free on {0}: {1:N0} GB before installing' -f $_.Name, ($_.Free / 1GB) }
+          # Installed on D: — the runner's C: drive has under 30 GB free, less than the Liquid
+          # Edition's about 30 GB of models (Windows then copies none of them).
+          Start-Process -Wait -FilePath $setup.FullName -ArgumentList '/S','/D=D:\QS'
+          Get-PSDrive C, D -ErrorAction SilentlyContinue | ForEach-Object { 'free on {0}: {1:N0} GB after installing' -f $_.Name, ($_.Free / 1GB) }
+          if (!(Test-Path 'D:\QS\Quicksilver.exe')) { throw 'Quicksilver.exe was not installed' }
+          if (!(Test-Path 'D:\QS\resources\engine\llama\llama-server.exe')) { throw 'the text engine is missing' }
+          foreach ($f in 'STARTER.json','model.gguf','mmproj.gguf','embed.gguf','qwen3.5-4b.gguf','qwen3.5-4b-mmproj.gguf','qwen3.5-9b.gguf','qwen3.5-9b-mmproj.gguf','rerank.gguf') { if (!(Test-Path "D:\QS\resources\starter\$f")) { throw "missing resources\starter\$f" } }
+          Get-ChildItem D:\QS\resources\starter | ForEach-Object { '{0,-34} {1,8:N0} MB' -f $_.Name, ($_.Length / 1MB) }
+          foreach ($f in 'lustify.safetensors','lustify-vae.safetensors','wan2.2-5b.gguf','wan2.2-5b-turbo.gguf','wan2.2-vae.safetensors','wan-umt5-xxl.gguf') { if (!(Test-Path "D:\QS\resources\starter\$f")) { throw "missing resources\starter\$f (the Liquid Edition's pictures and video)" } }
           Write-Host '✓ installed, and the installer copied the Quicksilver model in'
-          node test/installed.test.js C:\QS\Quicksilver.exe full install-shots
+          node test/installed.test.js D:\QS\Quicksilver.exe full install-shots
           if ($LASTEXITCODE -ne 0) { throw 'the installed app test failed' }
 
       - name: Install from the setup file alone, then uninstall
         shell: pwsh
         timeout-minutes: 40
         run: |
+          # Clean slate: the first install's app and engines can still be running, and its copy
+          # still installed. A silent installer then waits forever for Quicksilver to close.
+          Get-Process Quicksilver, llama-server, sd-cli, sd, whisper-cli -ErrorAction SilentlyContinue | Stop-Process -Force -ErrorAction SilentlyContinue
+          $old = Get-ChildItem 'D:\QS\Uninstall*.exe' -ErrorAction SilentlyContinue | Select-Object -First 1
+          if ($old) { $u = Start-Process -FilePath $old.FullName -ArgumentList '/S' -PassThru; if (!$u.WaitForExit(600000)) { $u.Kill(); throw 'uninstalling the first copy took over 10 minutes' } }
+          Start-Sleep 5
           New-Item -ItemType Directory -Force C:\lonely | Out-Null
           $setup = Get-ChildItem dist\Quicksilver-Setup-*.exe | Select-Object -First 1
           Copy-Item $setup.FullName C:\lonely\
-          Start-Process -Wait -FilePath (Join-Path C:\lonely $setup.Name) -ArgumentList '/S','/D=C:\QS2'
+          $p = Start-Process -FilePath (Join-Path C:\lonely $setup.Name) -ArgumentList '/S','/D=C:\QS2' -PassThru
+          if (!$p.WaitForExit(600000)) { $p.Kill(); Get-Process | Where-Object { $_.Path -like '*QS*' } | Format-Table Name, Path; throw 'the installer did not finish within 10 minutes' }
           if (!(Test-Path 'C:\QS2\Quicksilver.exe')) { throw 'Quicksilver.exe was not installed' }
           if (Test-Path 'C:\QS2\resources\starter\qwen3.5-4b.gguf') { throw 'without the folder, the main model should not be installed' }
           node test/installed.test.js C:\QS2\Quicksilver.exe fallback install-shots
@@ -231,6 +352,48 @@ jobs:
           for ($i = 0; $i -lt 90 -and (Test-Path 'C:\QS2\Quicksilver.exe'); $i++) { Start-Sleep 1 }
           if (Test-Path 'C:\QS2\Quicksilver.exe') { throw 'uninstalling left the app behind' }
           Write-Host '✓ uninstalled cleanly'
+
+      # The in-app update, rehearsed: install the last released version, then run this installer
+      # over it exactly as the app's updater does (--updated /S). Checks the new version is in
+      # place and that the user's data folder was left alone. Informational for now: it depends
+      # on a download from the previous release.
+      - name: Rehearse updating from the last release
+        continue-on-error: true
+        shell: pwsh
+        timeout-minutes: 25
+        run: |
+          $ver = node -p "require('./package.json').version"
+          $rel = Invoke-RestMethod -Headers @{ Authorization = "Bearer $env:GH_TOKEN" } "https://api.github.com/repos/$env:GITHUB_REPOSITORY/releases?per_page=20"
+          $prev = $rel | Where-Object { $_.tag_name -like 'quicksilver-v*' -and -not $_.prerelease -and $_.tag_name -ne "quicksilver-v$ver" } | Select-Object -First 1
+          if (!$prev) { Write-Host '::warning::no earlier release to update from'; exit 0 }
+          $asset = $prev.assets | Where-Object { $_.name -match '^Quicksilver-Setup-[\d.]+\.exe$' } | Select-Object -First 1
+          if (!$asset) { Write-Host "::warning::$($prev.tag_name) has no installer attached"; exit 0 }
+          Write-Host "updating from $($prev.tag_name) ($($asset.name), $([math]::Round($asset.size / 1MB)) MB) to $ver"
+          Get-Process Quicksilver, llama-server, sd-cli, sd, whisper-cli -ErrorAction SilentlyContinue | Stop-Process -Force -ErrorAction SilentlyContinue
+          New-Item -ItemType Directory -Force C:\upd | Out-Null
+          curl.exe -sSL --retry 3 -o C:\upd\old-setup.exe $asset.browser_download_url
+          $p = Start-Process -FilePath C:\upd\old-setup.exe -ArgumentList '/S','/D=C:\QSU' -PassThru
+          if (!$p.WaitForExit(600000)) { $p.Kill(); throw 'the previous version did not install within 10 minutes' }
+          if (!(Test-Path 'C:\QSU\Quicksilver.exe')) { throw 'the previous version was not installed' }
+          $data = Join-Path $env:APPDATA 'Quicksilver'
+          New-Item -ItemType Directory -Force $data | Out-Null
+          Set-Content -Path (Join-Path $data 'update-rehearsal.txt') -Value 'kept'
+          $setup = Get-ChildItem dist\Quicksilver-Setup-*.exe | Select-Object -First 1
+          Copy-Item $setup.FullName C:\upd\new-setup.exe
+          $p = Start-Process -FilePath C:\upd\new-setup.exe -ArgumentList '--updated','/S' -PassThru
+          if (!$p.WaitForExit(600000)) { $p.Kill(); throw 'the update did not finish within 10 minutes' }
+          Start-Sleep 5
+          Get-Process Quicksilver, llama-server -ErrorAction SilentlyContinue | Stop-Process -Force -ErrorAction SilentlyContinue
+          if (!(Test-Path 'C:\QSU\Quicksilver.exe')) { throw 'after the update Quicksilver.exe is missing' }
+          $now = (Get-Item 'C:\QSU\Quicksilver.exe').VersionInfo.ProductVersion
+          if ($now -notlike "$ver*") { throw "after the update the installed version is $now, not $ver" }
+          if (!(Test-Path (Join-Path $data 'update-rehearsal.txt'))) { throw 'the update removed the data folder' }
+          Write-Host "✓ updated in place from $($prev.tag_name) to $now; the data folder was kept"
+          $un = Get-ChildItem 'C:\QSU\Uninstall*.exe' | Select-Object -First 1
+          if ($un) { $u = Start-Process -FilePath $un.FullName -ArgumentList '/S' -PassThru; $u.WaitForExit(300000) | Out-Null }
+          Remove-Item -Recurse -Force C:\upd -ErrorAction SilentlyContinue
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - uses: actions/upload-artifact@v4
         if: always()
@@ -243,19 +406,132 @@ jobs:
       - name: Fingerprint the installer
         run: for f in dist/Quicksilver-Setup-*.exe; do (cd dist && sha256sum "$(basename "$f")" > "$(basename "$f").sha256" && cat "$(basename "$f").sha256"); done
 
-      # The full offline Liquid Edition (installer + the "Quicksilver models" folder with the 4B Brain)
-      # is ~5 GB — larger than GitHub's 2 GB-per-file limit for release downloads — so it is not
+      # The full offline Liquid Edition (installer + the "Quicksilver models" folder) is about 31 GB,
+      # far larger than GitHub's 2 GB-per-file limit for release downloads, so it is not
       # attached here. It is uploaded as the Quicksilver-Windows-installer build artifact above, which
       # has no such limit (a GitHub sign-in is needed to download it).
+      - name: Read the app's version
+        id: ver
+        run: echo "v=$(node -p "require('./package.json').version")" >> "$GITHUB_OUTPUT"
+
+      - name: Write the release notes (with a link to this build run)
+        if: startsWith(github.ref, 'refs/tags/quicksilver-v') || inputs.publish
+        run: |
+          { printf 'Build run for this release (the full offline package, **Quicksilver-Windows-installer**, is under Artifacts there for 90 days): https://github.com/%s/actions/runs/%s\n\n' "$GITHUB_REPOSITORY" "$GITHUB_RUN_ID"; cat RELEASE_NOTES.md; } > release-body.md
+
+      # The web installer, once its own job has installed and tested it (that job is much shorter
+      # than this one). If it failed, the release goes out without it rather than with an untested file.
+      - name: Fetch the tested web installer
+        if: startsWith(github.ref, 'refs/tags/quicksilver-v') || inputs.publish
+        continue-on-error: true
+        uses: actions/download-artifact@v4
+        with:
+          name: Quicksilver-web-installer-tested
+          path: quicksilver/web-installer
+
       - name: Publish release
-        if: startsWith(github.ref, 'refs/tags/quicksilver-v')
+        if: startsWith(github.ref, 'refs/tags/quicksilver-v') || inputs.publish
         uses: softprops/action-gh-release@v2
         with:
-          name: Quicksilver ${{ github.ref_name }}
-          body_path: quicksilver/RELEASE_NOTES.md
+          # From a tag: that tag. From a manual build asked to publish: the tag for this version,
+          # created on the very commit that was just built and tested.
+          tag_name: ${{ startsWith(github.ref, 'refs/tags/') && github.ref_name || format('quicksilver-v{0}', steps.ver.outputs.v) }}
+          target_commitish: ${{ github.sha }}
+          name: Quicksilver ${{ steps.ver.outputs.v }}
+          body_path: quicksilver/release-body.md
           files: |
             quicksilver/dist/*.exe
             quicksilver/dist/*.exe.sha256
+            quicksilver/web-installer/*.exe
+
+  # The web installer: no models inside or next to it (a small download). On first launch
+  # Quicksilver's setup screen downloads the whole Liquid Edition (about 30 GB) before it opens.
+  web:
+    needs: tests
+    runs-on: windows-latest
+    timeout-minutes: 90
+    defaults:
+      run:
+        working-directory: quicksilver
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: quicksilver
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: quicksilver/package-lock.json
+      - name: Install
+        run: npm ci
+        env:
+          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: '1'
+      - name: Download the engines (llama.cpp, stable-diffusion.cpp, whisper.cpp)
+        run: node scripts/fetch-engines.js --platform win32
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: List the Liquid Edition's models (no model files in this installer)
+        run: QS_WEB_INSTALLER=1 node scripts/fetch-starter.js
+      - name: Build the web installer
+        run: |
+          ARGS=(--win --publish never '-c.win.artifactName=Quicksilver-Web-Setup-${version}.${ext}')
+          if [ -n "$AZURE_CLIENT_ID" ]; then
+            ARGS+=("-c.win.azureSignOptions.publisherName=$AZURE_SIGN_PUBLISHER" "-c.win.azureSignOptions.endpoint=$AZURE_SIGN_ENDPOINT" "-c.win.azureSignOptions.codeSigningAccountName=$AZURE_SIGN_ACCOUNT" "-c.win.azureSignOptions.certificateProfileName=$AZURE_SIGN_PROFILE")
+          elif [ -z "$CSC_LINK" ]; then
+            unset CSC_LINK CSC_KEY_PASSWORD
+          fi
+          npx electron-builder "${ARGS[@]}"
+          for f in dist/*.exe; do s=$(stat -c %s "$f"); echo "$f: $((s / 1048576)) MB"; done
+          VERSION=$(node -p "require('./package.json').version")
+          printf 'Quicksilver web installer\r\n\r\nRun Quicksilver-Web-Setup-%s.exe. When Quicksilver first opens it downloads the\r\nLiquid Edition (chat, search, Lustify for pictures, Wan 2.2 for video: about 30 GB) and\r\nopens when the download is done. Keep 40 GB free on the drive you install to.\r\nIf the download stops, close and reopen Quicksilver: it picks up where it stopped.\r\n' "$VERSION" > "dist/READ ME FIRST.txt"
+        env:
+          CSC_IDENTITY_AUTO_DISCOVERY: 'false'
+          CSC_LINK: ${{ secrets.WIN_CSC_LINK }}
+          CSC_KEY_PASSWORD: ${{ secrets.WIN_CSC_KEY_PASSWORD }}
+          AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+          AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+          AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+          AZURE_SIGN_ENDPOINT: ${{ secrets.AZURE_SIGN_ENDPOINT }}
+          AZURE_SIGN_ACCOUNT: ${{ secrets.AZURE_SIGN_ACCOUNT }}
+          AZURE_SIGN_PROFILE: ${{ secrets.AZURE_SIGN_PROFILE }}
+          AZURE_SIGN_PUBLISHER: ${{ secrets.AZURE_SIGN_PUBLISHER }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Quicksilver-Windows-web-installer
+          path: |
+            quicksilver/dist/*.exe
+            quicksilver/dist/READ ME FIRST.txt
+          if-no-files-found: error
+          retention-days: 90
+      - name: Install it and check the setup screen downloads the Liquid Edition
+        shell: pwsh
+        timeout-minutes: 30
+        run: |
+          $setup = Get-ChildItem dist\Quicksilver-Web-Setup-*.exe | Select-Object -First 1
+          $p = Start-Process -FilePath $setup.FullName -ArgumentList '/S','/D=D:\QSW' -PassThru
+          if (!$p.WaitForExit(600000)) { $p.Kill(); throw 'the web installer did not finish within 10 minutes' }
+          if (!(Test-Path 'D:\QSW\Quicksilver.exe')) { throw 'Quicksilver.exe was not installed' }
+          $models = Get-ChildItem D:\QSW\resources\starter -Include *.gguf, *.safetensors -Recurse -ErrorAction SilentlyContinue
+          if ($models) { throw "the web installer should contain no models (found: $($models.Name -join ', '))" }
+          node test/installed.test.js D:\QSW\Quicksilver.exe web install-shots-web
+          if ($LASTEXITCODE -ne 0) { throw 'the installed app test failed' }
+          Get-Process Quicksilver, llama-server -ErrorAction SilentlyContinue | Stop-Process -Force -ErrorAction SilentlyContinue
+      # Handed to the release only after it installed and showed its setup screen: the main job
+      # picks this copy up when it publishes. (Its name does not match the pattern the in-app
+      # updater looks for, so updates never pick it by mistake.)
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Quicksilver-web-installer-tested
+          path: quicksilver/dist/Quicksilver-Web-Setup-*.exe
+          if-no-files-found: error
+          retention-days: 5
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: Quicksilver-web-install-test-screenshots
+          path: quicksilver/install-shots-web/
+          if-no-files-found: ignore
 
   # Five tester sessions on the installed app with the real models: every answer, its speed and a
   # screenshot are recorded for review. Informational: in its own job, after the installer is built
@@ -291,8 +567,8 @@ jobs:
         shell: pwsh
         run: |
           $setup = Get-ChildItem dist\Quicksilver-Setup-*.exe | Select-Object -First 1
-          Start-Process -Wait -FilePath $setup.FullName -ArgumentList '/S','/D=C:\QS'
-          if (!(Test-Path 'C:\QS\Quicksilver.exe')) { throw 'Quicksilver.exe was not installed' }
+          Start-Process -Wait -FilePath $setup.FullName -ArgumentList '/S','/D=D:\QS'
+          if (!(Test-Path 'D:\QS\Quicksilver.exe')) { throw 'Quicksilver.exe was not installed' }
       - name: Tester sessions (five people, real models)
         timeout-minutes: 110
         shell: pwsh
@@ -302,7 +578,7 @@ jobs:
           QS_TESTER_GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           QS_TESTER_GH_REPO: ${{ github.repository }}
           QS_TESTER_GROUP: ${{ inputs.testers || 'a' }}
-        run: node test/testers.js C:\QS\Quicksilver.exe tester-sessions
+        run: node test/testers.js D:\QS\Quicksilver.exe tester-sessions
       - uses: actions/upload-artifact@v4
         if: always()
         with:

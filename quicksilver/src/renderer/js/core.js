@@ -172,14 +172,16 @@ const targetValid = (t) => Boolean(t) && S.targets.some((x) => x.target === t);
 // The Liquid Edition is completely uncensored: only uncensored models answer, check or stand in
 // for it (the same rule as complete.js isUncensored).
 const UNCENSORED_RX = /abliterat|uncensor|unfiltered|dolphin|hermes|lexi|rocinante/i;
+// A model's name and file name (never its folder: a Windows user called Alexis has "lexi" in every path).
+const modelNameText = (m) => `${m?.name || ''} ${String(m?.files?.model || '').split(/[\\/]/).pop()} ${m?.repo || ''}`;
 function liquidOk(t) {
   if (!t) return false;
-  if (t === 'stack:quicksilver') return true;
+  if (t === 'stack:quicksilver' || t === 'stack:quicksilver-pro') return true;
   if (t.startsWith('local:')) {
     const m = S.installed.find((x) => `local:${x.id}` === t);
     if (!m) return false;
     const c = S.catalog?.text?.find((x) => x.id === m.catalogId);
-    return m.source === 'bundled' || c?.category === 'open' || UNCENSORED_RX.test(`${m.name} ${m.files?.model || ''}`);
+    return m.source === 'bundled' || c?.category === 'open' || UNCENSORED_RX.test(modelNameText(m));
   }
   if (t.startsWith('api:')) {
     const [, pid, ...rest] = t.split(':');
@@ -187,8 +189,32 @@ function liquidOk(t) {
   }
   return false;
 }
-const isLiquid = (t) => t === 'stack:quicksilver';
+const isLiquid = (t) => t === 'stack:quicksilver' || t === 'stack:quicksilver-pro';
+const isLiquidStack = (s) => Boolean(s) && (s.builtFor === 'quicksilver' || s.builtFor === 'quicksilver-pro');
+// A model that's part of the Liquid Edition can't be removed (imported files from other apps can).
+// (A chat model must be the uncensored build: the plain catalog build of the same model is not
+// the Liquid Edition's, so that one can be removed. The same test as models.liquidOwn.)
+const liquidLocked = (m) => Boolean(m) && m.source !== 'imported' && (m.source === 'bundled' || ((S.catalog?.liquid || []).includes(m.catalogId) && ((m.kind || 'text') !== 'text' || liquidOk(`local:${m.id}`))));
+const LOCK_BADGE = '<span class="badge b-lav" title="Part of Quicksilver Liquid Edition: it stays installed. Choose any other model or stack whenever you like.">🔒 Liquid Edition</span>';
 const targetLabel = (t) => S.targets.find((x) => x.target === t)?.label || 'No model chosen';
+// Every model a target runs by itself: the model, or all the members of its stack or fusion.
+function teamTargets(target) {
+  if (!String(target || '').startsWith('stack:')) return target ? [target] : [];
+  const st = S.stacks.find((x) => `stack:${x.id}` === target);
+  const m = st?.members || {};
+  return [m.vision, ...(m.drafters || []), m.judge, m.muse, m.thinker, st?.bench].filter(Boolean);
+}
+// May this model on the PC take part in a chat that uses `base`, without being asked for? Only
+// the chat's own models (a stack or fusion uses its members and nothing else), plus the models
+// ticked under Models → "Models in use". With a single model, Quicksilver's own built-in models
+// may still step in (to read a photo it can't see, say); with a stack or fusion, not even those.
+function mayUse(t, base) {
+  if (!String(t).startsWith('local:')) return true;
+  if (t === base || teamTargets(base).includes(t)) return true;
+  const m = S.installed.find((x) => `local:${x.id}` === t);
+  if (!m) return false;
+  return Boolean(m.inUse) || (liquidLocked(m) && !String(base || '').startsWith('stack:'));
+}
 
 // Model choice order: the chat's own, the assistant's, the default, then anything installed.
 function resolveTarget(chat, assistant) {
@@ -397,12 +423,14 @@ document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeMenus
 
 const CHART_COLORS = ['#7b5cff', '#4f8fe0', '#3fbf86', '#e8834a', '#d6467a', '#d9b22b', '#2fb9c6', '#8a6d3b'];
 const chartStore = {};
+// A short, stable name for a piece of text (the same text always gets the same name).
+function textKey(text) { let h = 5381; let g = 52711; const t = String(text); for (let i = 0; i < t.length; i++) { const c = t.charCodeAt(i); h = (h * 33) ^ c; g = (g * 33) ^ c; } return (h >>> 0).toString(36) + (g >>> 0).toString(36) + t.length.toString(36); }
 
 function chartHTML(json) {
   let spec;
   try { spec = JSON.parse(json); } catch { return ''; }
   if (!Array.isArray(spec.labels) || !Array.isArray(spec.series) || !spec.series.length) return '';
-  const id = `c${uid()}`;
+  const id = `c${textKey(json)}`; // named after its contents, so a redraw does not keep another copy
   chartStore[id] = spec;
   const W = 640; const H = 340; const P = { l: 56, r: 16, t: 40, b: 56 };
   const t = esc(spec.title || '');
@@ -416,7 +444,7 @@ function chartHTML(json) {
     data.forEach((v, i) => {
       const a2 = ang + (Math.max(0, v) / total) * Math.PI * 2;
       const large = a2 - ang > Math.PI ? 1 : 0;
-      body += `<path d="M${cx},${cy} L${cx + rr * Math.cos(ang)},${cy + rr * Math.sin(ang)} A${rr},${rr} 0 ${large} 1 ${cx + rr * Math.cos(a2)},${cy + rr * Math.sin(a2)} Z" fill="${CHART_COLORS[i % 8]}" stroke="#fff" stroke-width="2"><title>${esc(spec.labels[i])}: ${v}</title></path>`;
+      body += `<path d="M${cx},${cy} L${cx + rr * Math.cos(ang)},${cy + rr * Math.sin(ang)} A${rr},${rr} 0 ${large} 1 ${cx + rr * Math.cos(a2)},${cy + rr * Math.sin(a2)} Z" fill="${CHART_COLORS[i % 8]}" stroke="#fff" stroke-width="2"><title>${esc(spec.labels[i])}: ${esc(String(v))}</title></path>`;
       ang = a2;
     });
     if (type === 'doughnut') body += `<circle cx="${cx}" cy="${cy}" r="${rr * 0.55}" fill="#fff"/>`;
@@ -433,13 +461,13 @@ function chartHTML(json) {
     spec.labels.forEach((l, i) => { body += `<text x="${x0 + step * (i + 0.5)}" y="${y1 + 18}" font-size="11" text-anchor="middle" fill="#3d3858">${esc(String(l).slice(0, 14))}</text>`; });
     if (type === 'bar') {
       const bw = (step * 0.8) / spec.series.length;
-      spec.series.forEach((s, si) => s.data.forEach((v, i) => { const yy = y(Math.max(0, v)); const h = Math.abs(y(v) - y(0)); body += `<rect x="${x0 + step * i + step * 0.1 + bw * si}" y="${yy}" width="${bw - 2}" height="${Math.max(1, h)}" rx="3" fill="${CHART_COLORS[si % 8]}"><title>${esc(s.name)} · ${esc(spec.labels[i])}: ${v}</title></rect>`; }));
+      spec.series.forEach((s, si) => s.data.forEach((v, i) => { const yy = y(Math.max(0, v)); const h = Math.abs(y(v) - y(0)); body += `<rect x="${x0 + step * i + step * 0.1 + bw * si}" y="${yy}" width="${bw - 2}" height="${Math.max(1, h)}" rx="3" fill="${CHART_COLORS[si % 8]}"><title>${esc(s.name)} · ${esc(spec.labels[i])}: ${esc(String(v))}</title></rect>`; }));
     } else {
       spec.series.forEach((s, si) => {
         const pts = s.data.map((v, i) => `${x0 + step * (i + 0.5)},${y(Number(v))}`).join(' ');
         if (type === 'area') body += `<polygon points="${x0 + step * 0.5},${y(0)} ${pts} ${x0 + step * (n - 0.5)},${y(0)}" fill="${CHART_COLORS[si % 8]}" opacity=".25"/>`;
         body += `<polyline points="${pts}" fill="none" stroke="${CHART_COLORS[si % 8]}" stroke-width="3" stroke-linejoin="round"/>`;
-        s.data.forEach((v, i) => { body += `<circle cx="${x0 + step * (i + 0.5)}" cy="${y(Number(v))}" r="4" fill="${CHART_COLORS[si % 8]}"><title>${esc(s.name)} · ${esc(spec.labels[i])}: ${v}</title></circle>`; });
+        s.data.forEach((v, i) => { body += `<circle cx="${x0 + step * (i + 0.5)}" cy="${y(Number(v))}" r="4" fill="${CHART_COLORS[si % 8]}"><title>${esc(s.name)} · ${esc(spec.labels[i])}: ${esc(String(v))}</title></circle>`; });
       });
     }
     if (spec.series.length > 1) body += spec.series.map((s, si) => `<rect x="${x0 + si * 130}" y="${H - 22}" width="12" height="12" rx="3" fill="${CHART_COLORS[si % 8]}"/><text x="${x0 + si * 130 + 18}" y="${H - 12}" font-size="12" fill="#16122a">${esc(s.name)}</text>`).join('');

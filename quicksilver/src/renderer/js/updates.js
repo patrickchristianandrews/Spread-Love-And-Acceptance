@@ -24,7 +24,11 @@ function maybeLater(key) {
   p.upgradeLater[key] = Date.now() + LATER_DAYS * 24 * 60 * 60 * 1000;
   save();
 }
-const isFeatured = (id) => Object.values(S.catalog?.picks?.featured || {}).some((l) => l.includes(id));
+// Featured = one of the best models right now AND it runs on this PC. A pick that will not fit
+// here is not featured here: it would only be a download that cannot be used.
+const fitsThisPC = (id) => (S.est?.text?.[id] || S.est?.media?.[id])?.fit !== 'no';
+const isFeatured = (id) => Object.values(S.catalog?.picks?.featured || {}).some((l) => l.includes(id)) && fitsThisPC(id);
+const featuredHidden = () => [...new Set(Object.values(S.catalog?.picks?.featured || {}).flat())].filter((id) => [...(S.catalog?.text || []), ...(S.catalog?.media || [])].some((m) => m.id === id && !m.retired) && !fitsThisPC(id)).length;
 // Off unless you switch it on: model downloads can be several GB, so by default you're told and choose.
 const autoUpdates = () => S.data.prefs.autoInstallModels === true;
 
@@ -169,7 +173,7 @@ async function applyPendingUpgrades(model) {
   S.modelUpgrades = (S.modelUpgrades || []).filter((u) => u.newCatalogId !== model.catalogId);
   paintUpdateBadge();
   const old = S.installed.find((x) => x.id === oldId);
-  if (old) {
+  if (old && !liquidLocked(old)) {
     toastAction(`✨ Upgraded to ${model.name}: your stacks and chats use it now. Remove ${old.name} to free ${gb(old.size)}?`, 'Remove old', async () => {
       await qs.call('models:remove', old.id).catch(() => {}); await refreshModels(); render(); toast(`${old.name} removed.`);
     }, 12000);
@@ -217,7 +221,7 @@ function builtinModelHTML() {
   if (!brain) return '';
   const est = S.est?.text?.[brain.id];
   const have = S.installed.some((m) => m.source === 'bundled' || m.catalogId === brain.id);
-  const open = S.installed.some((m) => m.source === 'bundled' && /uncensored|abliterat/i.test(`${m.name} ${m.files?.model || ''}`));
+  const open = S.installed.some((m) => m.source === 'bundled' && /uncensored|abliterat/i.test(modelNameText(m)));
   const qst = (S.stacks || []).find((x) => x.id === 'quicksilver');
   const team = qst ? [...new Set([qst.members.judge, ...(qst.members.drafters || []), qst.members.vision].filter(Boolean))].map((t) => S.installed.find((m) => `local:${m.id}` === t)?.name).filter(Boolean) : [];
   const can = [
@@ -263,15 +267,18 @@ function dolphinOfferHTML(qst) {
   const slow = est && !['great', 'good'].includes(est.rating);
   return `<div class="pair-card"><div class="grow"><b>🐬 Add Dolphin to the crew</b>
       <div class="small muted">Dolphin 3.0 8B is uncensored and about as strong as the Brain, but from a different family, so on hard questions it adds a second view and they catch each other's mistakes. Everyday messages stay with the fast Brain. ${d.sizeGB} GB download.${slow ? ' On this PC it runs slowly, so hard answers will take noticeably longer.' : ''}</div></div>
-    ${S.downloads[DOLPHIN] ? downloadBox(DOLPHIN) : `<button class="btn small ${slow ? '' : 'primary'}" data-get="${DOLPHIN}">Add Dolphin</button>`}</div>`;
+    ${S.downloads[DOLPHIN] ? downloadBox(DOLPHIN) : `<button class="btn small ${slow ? '' : 'primary'}" data-get="${DOLPHIN}" data-use-when-done="${DOLPHIN}">Add Dolphin</button>`}</div>`;
 }
 // The Liquid Edition is completely uncensored, so its cloud partner must be too: Venice. Filtered
 // cloud AIs (Cerebras, Groq, Mistral…) still work in your other chats, never for the Liquid Edition.
 function cloudPartnerHTML() {
   const unc = (S.providers || []).filter((p) => p.preset === 'venice' && (p.hasKey || p.noKey));
-  if (unc.length) return `<p class="small muted" style="margin:6px 0">☁️ Paired with ${unc.map((p) => esc(p.name)).join(' + ')}: with "use my cloud AI for hard questions" on, hard ones can go to its uncensored model. Filtered cloud AIs are never used for the Liquid Edition.</p>`;
+  if (unc.length) return `<div class="pair-card"><div class="grow"><b>☁️ Paired with ${unc.map((p) => esc(p.name)).join(' + ')}</b>
+      <div class="small muted">With "use my cloud AI for hard questions" on${S.data.prefs.cloudHard ? '' : ' (it is off: Settings → Features)'}, hard ones go to its uncensored model; everything else stays on your PC. Filtered cloud AIs are never used for the Liquid Edition.</div>
+      ${veniceLiquidHTML()}</div></div>`;
   return `<div class="pair-card"><div class="grow"><b>☁️ Uncensored cloud partner: Venice AI</b>
-      <div class="small muted">The Liquid Edition is completely uncensored, so it only hands hard questions to an uncensored cloud AI. Venice runs uncensored models and says it doesn't store your prompts; it has a small free allowance, then Pro or credits. Filtered cloud AIs like Cerebras or Groq still work in your other chats, never for the Liquid Edition.</div></div>
+      <div class="small muted">The Liquid Edition is completely uncensored, so it only hands hard questions to an uncensored cloud AI. Venice runs uncensored models and says it doesn't store your prompts; it has a small free allowance, then Pro or credits. Filtered cloud AIs like Cerebras or Groq still work in your other chats, never for the Liquid Edition.</div>
+      ${veniceLiquidHTML()}</div>
     <div class="row" style="gap:6px;flex-wrap:wrap"><button class="btn small primary" data-pair="venice">Connect Venice</button></div></div>`;
 }
 document.addEventListener('click', async (e) => {
@@ -299,7 +306,7 @@ function qsRolesHTML(qst) {
   ].filter(Boolean);
   if (!roles.length) return '';
   return `<div class="qs-roles">${roles.map(([i, r, n, d]) => `<div class="qs-role"><span class="qs-role-ic">${i}</span><span><b>${esc(r)}</b> <span class="small">${esc(n)}</span><span class="small muted">${esc(d)}</span></span></div>`).join('')}</div>
-    <p class="small muted" style="margin:4px 0 6px">Liquid Edition's own uncensored crew. It rebuilds itself as you add models: a stronger, still-fast uncensored model joins as the Closer automatically.</p>`;
+    <p class="small muted" style="margin:4px 0 6px">Liquid Edition's own uncensored crew. It answers with its own models and nothing else on this PC. Suggested add-ons you download join it; any other uncensored model joins when you tick it under Models → Models in use.</p>`;
 }
 function bindBuiltinModel() {
   $('#builtin-chat')?.addEventListener('click', () => {

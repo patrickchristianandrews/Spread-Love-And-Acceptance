@@ -17,7 +17,9 @@ function nextBestTarget(target, freeGB = Infinity) {
   const biggest = Math.max(0, ...failed.map(sizeGBOf));
   const skip = new Set(failed.map((m) => m.id));
   const list = S.installed.filter((m) => m.kind === 'text' && !skip.has(m.id) && (!isLiquid(target) || liquidOk(`local:${m.id}`)) && sizeGBOf(m) > 0 && sizeGBOf(m) < (biggest || Infinity) * 0.8 && sizeGBOf(m) * 1.15 < freeGB)
-    .sort((a, b) => scoreOf(b) - scoreOf(a) || sizeGBOf(b) - sizeGBOf(a));
+    // (An offer you accept with a click, so any installed model may be named; among equals, one
+    // of the chat's own models or one ticked as in use comes first.)
+    .sort((a, b) => scoreOf(b) - scoreOf(a) || mayUse(`local:${b.id}`, target) - mayUse(`local:${a.id}`, target) || sizeGBOf(b) - sizeGBOf(a));
   const m = list[0] || (Number.isFinite(freeGB) ? null : S.installed.find((x) => x.source === 'bundled' && !skip.has(x.id)));
   return m ? `local:${m.id}` : null;
 }

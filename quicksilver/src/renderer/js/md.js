@@ -1,6 +1,6 @@
 // Markdown for answers: headings, paragraphs, numbered and bulleted lists (kept together across
 // blank lines, nested by indent, numbered from where they start), task lists, quotes, tables,
-// code with syntax colours, charts, links and inline styles. Text is escaped first, so models
+// code with syntax colors, charts, links and inline styles. Text is escaped first, so models
 // can't inject HTML.
 'use strict';
 
@@ -24,7 +24,9 @@ function tableHtml(lines) {
   const head = cells(lines[0]);
   const align = cells(lines[1]).map((c) => (/^:-+:$/.test(c) ? 'center' : /-+:$/.test(c) ? 'right' : ''));
   const rows = lines.slice(2).map(cells);
-  const id = `t${uid()}`;
+  // Named after its contents: an answer is redrawn many times a second while it is written,
+  // and each redraw used to keep another copy of every table for the life of the app.
+  const id = `t${textKey(lines.join('\n'))}`;
   tableHtml.store[id] = [head, ...rows].map((r) => r.map((c) => c.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/\*\*/g, '')));
   const al = (i) => (align[i] ? ` style="text-align:${align[i]}"` : '');
   return `<div class="table-wrap"><div class="table-tools"><button class="tool" data-table="${id}" data-fmt="copy" title="Copy the table">Copy</button><button class="tool" data-table="${id}" data-fmt="csv" title="Save as a CSV file">CSV</button><button class="tool" data-table="${id}" data-fmt="xlsx" title="Save as an Excel workbook">Excel</button></div>
@@ -32,7 +34,7 @@ function tableHtml(lines) {
 }
 tableHtml.store = {};
 
-// ---------- syntax colours (light, dependency-free) ----------
+// ---------- syntax colors (light, dependency-free) ----------
 
 const HL_KEYWORDS = new Set(('if else elif for while do return function def class import from export default const let var new try catch except finally '
   + 'throw raise async await yield in of not and or is None True False null true false undefined this self super public private protected static '
