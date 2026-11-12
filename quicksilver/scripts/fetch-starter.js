@@ -160,7 +160,18 @@ async function get(repo, f, dest) {
     await get('ggerganov/whisper.cpp', { path: 'ggml-base-q5_1.bin', size: 0 }, voice);
     if (fs.statSync(voice).size < 30e6) throw new Error(`The speech model for voice typing is incomplete (${fs.statSync(voice).size} bytes).`);
     console.log('  ✓ speech model for voice typing');
+    // The speed helpers for pictures and video (see src/main/media.js): fast 8-step pictures for
+    // Lustify (SDXL-Lightning, 394 MB) and the quick decoder for Wan 2.2 clips (23 MB).
+    for (const h of Object.values(require('../src/main/media').HELPERS)) {
+      const dest = path.join(ROOT, 'pack', h.file);
+      const [, repo, file] = h.url.match(/huggingface\.co\/([^/]+\/[^/]+)\/resolve\/main\/(.+)$/);
+      await get(repo, { path: file, size: 0 }, dest);
+      if (fs.statSync(dest).size < h.min) throw new Error(`${h.file} is incomplete (${fs.statSync(dest).size} bytes).`);
+    }
+    console.log('  ✓ speed helpers for pictures and video');
   }
+  licences.push('==== SDXL-Lightning 8-step (ByteDance): the fast picture mode ====\n\nCreativeML Open RAIL++-M License: https://huggingface.co/ByteDance/SDXL-Lightning/blob/main/LICENSE.md\n');
+  licences.push('==== TAEHV for Wan 2.2 (Ollin Boer Bohan; file from lightx2v/Autoencoders): the quick video decoder ====\n\nMIT License: https://github.com/madebyollin/taehv/blob/main/LICENSE\n');
   licences.push('==== Whisper base (OpenAI), converted for whisper.cpp by Georgi Gerganov ====\n\nMIT License: https://github.com/openai/whisper/blob/main/LICENSE\n');
   fs.writeFileSync(path.join(ROOT, 'starter', 'STARTER.json'), JSON.stringify({ models: entries }, null, 2));
   fs.writeFileSync(path.join(ROOT, 'starter', 'MODEL-LICENCES.txt'), licences.join('\n\n'));

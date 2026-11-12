@@ -215,7 +215,9 @@ handle('speed:map', async () => {
   }
   for (const m of models.list().filter((x) => x.kind !== 'text')) {
     const c = catalog.MEDIA_MODELS.find((x) => x.id === m.catalogId);
-    if (c) out.media[m.id] = { sec: catalog.estimateMedia(c, hw, calib.media).sec, kind: c.kind, category: c.category, stars: Math.round(c.quality || 5) / 2, frames: c.defaults?.frames || null };
+    // Where fast pictures are used by themselves, the time shown is the fast one (about a fifth).
+    const fast = c && c.kind === 'image' && media.fastPicture(c, hw);
+    if (c) out.media[m.id] = { sec: catalog.estimateMedia(c, hw, calib.media).sec * (fast ? 0.2 : 1), fast: Boolean(fast), canFast: Boolean(c.kind === 'image' && media.fastPicture(c, hw, { fast: true })), kind: c.kind, category: c.category, stars: Math.round(c.quality || 5) / 2, frames: c.defaults?.frames || null };
   }
   return out;
 });
@@ -332,6 +334,7 @@ handle('models:starter', async () => {
     try { tidied = await models.tidyImported(llama.readGguf, mine); store.saveConfig({ importTidy: 1 }); } catch { /* tried again next start */ }
   }
   whisper.keepShipped().catch(() => {}); // voice typing's speech model: kept across updates
+  media.keepHelpers().catch(() => {}); // the speed helpers for pictures and video: kept too
   const starterDir = process.env.QS_STARTER_DIR || (app.isPackaged ? path.join(process.resourcesPath, 'starter') : path.join(__dirname, '..', '..', 'starter'));
   const r = models.registerStarter(starterDir);
   // The big models the installer copied in leave the app's folder for your data folder straight
@@ -695,6 +698,9 @@ async function diagnostics() {
   try { lines.push('## Create: last failure', fs.readFileSync(path.join(store.dir('logs'), 'create-last-failure.log'), 'utf8').slice(-6000)); } catch { lines.push('## Create: last failure', 'none'); }
   return lines.join('\n');
 }
+// The speed helpers for the Liquid Edition's pictures and video: which are here, and (when
+// asked) fetching the missing ones in the background.
+handle('media:helpers', (fetch) => (fetch ? media.fetchHelpers() : { got: [], have: media.helpers() }));
 handle('disk:info', () => {
   try {
     const s = fs.statfsSync(store.dir('models'));

@@ -3,7 +3,7 @@
 const { execFileSync } = require('child_process');
 const args = process.argv.slice(2);
 const arg = (f) => { const i = args.indexOf(f); return i >= 0 ? args[i + 1] : null; };
-if (args.includes('--help')) { console.log('usage: sd [options]\n -M, --mode [img_gen|vid_gen]\n --llm\n --fps\n --flow-shift\n --offload-to-cpu\n --vae-tiling\n --temporal-tiling\n --max-vram\n --diffusion-fa\n --video-frames\n' + ' '.repeat(220)); process.exit(0); }
+if (args.includes('--help')) { console.log('usage: sd [options]\n -M, --mode [img_gen|vid_gen]\n --llm\n --fps\n --flow-shift\n --offload-to-cpu\n --vae-tiling\n --temporal-tiling\n --max-vram\n --diffusion-fa\n --video-frames\n --tae\n --lora-model-dir\n --scheduler\n' + ' '.repeat(220)); process.exit(0); }
 // For tests of what Quicksilver does when the engine misbehaves:
 //   QS_SD_LOG=<file>        every run appends "start <ms> <args>" and "end <ms>" (to see runs don't overlap)
 //   QS_SD_FAIL_ONCE=<file>  the first run fails like a card out of memory, after its steps; later runs work

@@ -46,5 +46,17 @@ function pngVariety(file) {
   if (size < 20 * 1024 || variety < 40) throw new Error('The picture is blank or nearly blank.');
   if (process.argv[3]) fs.copyFileSync(item.file, process.argv[3]);
   console.log('✓ Lustify painted a real picture with the real engine');
+  // ⚡ Fast mode, through the app's own code: the same picture in 8 steps with the helper file
+  // that ships in the models folder. Recorded, not required: the build goes on without it.
+  try {
+    if (!media.helpers().lightning) throw new Error('the 8-step helper file is not in the models folder');
+    const t1 = Date.now();
+    const fast = await media.generate('prove-fast', { modelId: 'starter-lustify', prompt: 'a red apple on a wooden table, soft daylight, photo', width: 512, height: 512, seed: 7, fast: true },
+      { onStatus: (s) => { if (s !== last) { last = s; console.log(`  ${s} (${Math.round((Date.now() - t1) / 1000)} s)`); } } });
+    const v = pngVariety(fast.file);
+    if (fs.statSync(fast.file).size < 20 * 1024 || v < 40) throw new Error('the fast picture is blank or nearly blank');
+    if (process.argv[3]) fs.copyFileSync(fast.file, process.argv[3].replace(/\.png$/, '-fast.png'));
+    console.log(`✓ fast mode painted a real picture too: ${(fs.statSync(fast.file).size / 1024).toFixed(0)} KB · ${v} different pixel values · ${Math.round((Date.now() - t1) / 1000)} s (the plain one took ${Math.round((t1 - t0) / 1000)} s for 4 steps)`);
+  } catch (err) { console.log(`::warning::Fast mode did not make a picture on the build machine: ${err.message}`); }
   process.exit(0);
 })().catch((err) => { console.error(`✗ ${err.message}`); process.exit(1); });

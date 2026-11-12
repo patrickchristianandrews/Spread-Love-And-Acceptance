@@ -266,6 +266,7 @@ async function setUpQuicksilver(firstLook) {
   const p = S.data.prefs;
   const r = await qs.call('models:starter');
   if (r.added.length || r.stack) await refreshModels();
+  fetchHelpersQuietly();
   const before = p.defaultTarget;
   // The Liquid Edition is the default once it's ready, unless you chose something else yourself.
   // A default Quicksilver picked by itself (a model found from another app, or the first one to
@@ -349,6 +350,13 @@ function liquidGate(r) {
 // carries no models, so there it is fetched quietly alongside the Liquid Edition's models and the
 // microphone is ready as well. It never holds up the setup screen.
 let voiceFetch = null;
+// The speed helpers for pictures and video (fast 8-step pictures, the quick video decoder):
+// fetched once in the background when they did not come with the installer.
+let helpersFetch = null;
+function fetchHelpersQuietly() {
+  if (helpersFetch || S.config?.offline) return;
+  helpersFetch = qs.call('media:helpers', true).then((r) => { if (r?.got?.length) refreshSpeeds(); }).catch(() => { helpersFetch = null; });
+}
 function fetchVoiceQuietly() {
   if (voiceFetch || S.config?.offline) return;
   voiceFetch = qs.call('voice:status').then((st) => (st && !st.model && st.canInstall ? qs.call('voice:setup') : null)).catch(() => { voiceFetch = null; });

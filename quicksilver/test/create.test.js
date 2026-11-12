@@ -48,6 +48,38 @@ const collect = async (gen) => { let text = ''; for await (const ev of gen) if (
     assert.ok(pic8.args.includes('--vae-tiling'), 'a picture on an 8 GB card is decoded in tiles');
     const pic24 = media.sdArgs({ prompt: 'a fox', width: 1024, height: 1024 }, { spec: lustify, files: pf, hw: { vramGB: 24, ramGB: 64 }, has, out: 'o.png' });
     assert.ok(!pic24.args.includes('--offload-to-cpu') && !pic24.args.includes('--vae-tiling'), 'a big card runs it straight');
+    // ⚡ Speed helpers (both proved on the real engine by the build's proofs run). With the 8-step
+    // file here, Lustify paints in fast mode where a picture would otherwise take long: with no
+    // graphics card, or whenever asked. Not on a quick card by itself, never for an edit, never
+    // when you set the steps yourself, and never on the second try after a failure.
+    const help = { lightning: '/h/sdxl_lightning_8step_lora.safetensors', taeWan: '/h/taew2_2.safetensors' };
+    const has2 = (f) => has(f) || ['--tae', '--lora-model-dir', '--scheduler'].includes(f);
+    const val = (a, flag) => a.args[a.args.indexOf(flag) + 1];
+    const slow = media.sdArgs({ prompt: 'a fox', negative: 'blurry' }, { spec: lustify, files: pf, hw: { vramGB: 0, ramGB: 16 }, has: has2, out: 'o.png', help });
+    assert.ok(slow.fast, 'no graphics card: fast mode by itself');
+    assert.deepEqual([val(slow, '--steps'), val(slow, '--cfg-scale'), val(slow, '--sampling-method'), val(slow, '--scheduler'), val(slow, '--lora-model-dir'), val(slow, '-p')], ['8', '1', 'euler', 'sgm_uniform', '/h', 'a fox<lora:sdxl_lightning_8step_lora:1>']);
+    assert.ok(!slow.args.includes('-n') && /fast mode/.test(slow.notes.join()), 'fast mode has no "avoid" list, and says it is on');
+    const quick = media.sdArgs({ prompt: 'a fox' }, { spec: lustify, files: pf, hw: { vramGB: 24, ramGB: 64 }, has: has2, out: 'o.png', help });
+    assert.ok(!quick.fast && val(quick, '--steps') === String(lustify.defaults.steps), 'a quick card paints at full quality by itself');
+    assert.ok(media.sdArgs({ prompt: 'a fox', fast: true }, { spec: lustify, files: pf, hw: { vramGB: 24, ramGB: 64 }, has: has2, out: 'o.png', help }).fast, '…and in fast mode when asked');
+    for (const [why, req, opts] of [['an edit', { prompt: 'x', image: 'p.png' }, {}], ['your own steps', { prompt: 'x', steps: 20 }, {}], ['the second try', { prompt: 'x', plain: true }, {}], ['no helper file', { prompt: 'x' }, { help: {} }], ['an engine without the option', { prompt: 'x' }, { has }]]) {
+      assert.ok(!media.sdArgs(req, { spec: lustify, files: pf, hw: { vramGB: 0, ramGB: 16 }, has: has2, out: 'o.png', help, ...opts }).fast, `no fast mode for ${why}`);
+    }
+    // The quick decoder for Wan 2.2: for a clip made from a description on a card under 16 GB.
+    const tae8 = media.sdArgs({ prompt: 'waves' }, { spec: wan, files, hw: { vramGB: 8, ramGB: 32 }, has: has2, out: 'o.webm', help });
+    assert.ok(tae8.tae && val(tae8, '--tae') === '/h/taew2_2.safetensors' && !tae8.args.includes('--vae') && !tae8.args.includes('--vae-tiling') && !tae8.args.includes('--temporal-tiling'), 'the quick decoder takes the place of the full one and its tiling');
+    assert.ok(!media.sdArgs({ prompt: 'waves' }, { spec: wan, files, hw: { vramGB: 24, ramGB: 64 }, has: has2, out: 'o.webm', help }).tae, 'a 24 GB card keeps the full decoder');
+    const fromPhoto = media.sdArgs({ prompt: 'waves', image: 'p.png' }, { spec: wan, files, hw: { vramGB: 8, ramGB: 32 }, has: has2, out: 'o.webm', help });
+    assert.ok(!fromPhoto.tae && fromPhoto.args.includes('--vae'), 'a clip that starts from a photo keeps the full decoder (it reads the photo)');
+    assert.ok(!media.sdArgs({ prompt: 'waves', plain: true }, { spec: wan, files, hw: { vramGB: 8, ramGB: 32 }, has: has2, safe: true, out: 'o.webm', help }).tae, 'the second try after a failure uses the full decoder');
+    assert.ok(!media.sdArgs({ prompt: 'waves' }, { spec: wan, files, hw: { vramGB: 8, ramGB: 32 }, has, out: 'o.webm', help }).tae, 'an engine without the option keeps the full decoder');
+    // Without the files nothing changes; with them in the data folder they are found.
+    assert.deepEqual(media.helpers(), { lightning: null, taeWan: null });
+    const hdir = path.join(HOME, 'models', 'helpers'); fs.mkdirSync(hdir, { recursive: true });
+    fs.writeFileSync(path.join(hdir, 'taew2_2.safetensors'), Buffer.alloc(6e6));
+    fs.writeFileSync(path.join(hdir, 'sdxl_lightning_8step_lora.safetensors'), Buffer.alloc(1000)); // a cut-off download is not used
+    assert.deepEqual([Boolean(media.helpers().taeWan), media.helpers().lightning], [true, null]);
+    fs.rmSync(hdir, { recursive: true, force: true });
     const picSafe = media.sdArgs({ prompt: 'a fox', width: 1536, height: 1024 }, { spec: lustify, files: pf, hw: { vramGB: 24, ramGB: 64 }, has, safe: true, out: 'o.png' });
     assert.ok(picSafe.width * picSafe.height <= 1024 * 1024 * 1.06 && picSafe.width > picSafe.height && picSafe.args.includes('--max-vram'), 'the second try of a picture is no bigger than 1024×1024 and keeps its shape');
     const old = media.sdArgs({ prompt: 'a fox' }, { spec: lustify, files: pf, hw: { vramGB: 8, ramGB: 16 }, has: () => false, out: 'o.png' });

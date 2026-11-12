@@ -200,9 +200,82 @@ function stop(jobId) {
   if (!t && !running.has(jobId)) stopped.delete(jobId); // nothing to stop: don't remember it
 }
 
+// ---------- speed helpers ----------
+// Two small files that make the Liquid Edition's pictures and video much quicker. Both were tried
+// on the real engine before being used (the build's "proofs" run):
+//   lightning: SDXL-Lightning, 8 steps (ByteDance, OpenRAIL++). Lustify paints a picture in 8
+//              steps instead of 30, and each step costs half as much: about a seventh of the work.
+//   taeWan:    Wan 2.2's small decoder (TAEHV). Turning a finished clip into frames with the full
+//              decoder is the slowest, most memory-hungry step, where a job could fail at the
+//              very end; the small one does it in a fraction of the time and memory.
+// They ship in the models folder next to the installer and are copied into your data folder.
+// Without them (the setup file alone, the web installer, an update) they are fetched once in
+// the background, and until then everything works the ordinary, slower way.
+const HELPERS = {
+  lightning: { file: 'sdxl_lightning_8step_lora.safetensors', url: 'https://huggingface.co/ByteDance/SDXL-Lightning/resolve/main/sdxl_lightning_8step_lora.safetensors', min: 300e6, for: (id) => id === 'lustify' },
+  taeWan: { file: 'taew2_2.safetensors', url: 'https://huggingface.co/lightx2v/Autoencoders/resolve/main/taew2_2.safetensors', min: 5e6, for: (id) => /^wan2\.2-5b/.test(id || '') },
+};
+const helperDir = () => path.join(store.dir('models'), 'helpers');
+const bigEnough = (f, min) => { try { return fs.statSync(f).size >= min; } catch { return false; } };
+const helperShipped = (h) => [process.env.QS_STARTER_DIR, process.resourcesPath && path.join(process.resourcesPath, 'starter'), path.join(__dirname, '..', '..', 'starter'), path.join(__dirname, '..', '..', 'pack')]
+  .filter(Boolean).map((d) => path.join(d, h.file)).find((f) => bigEnough(f, h.min)) || null;
+// Where a helper is, if it is here: your own copy first, else the one that came with the app.
+function helperPath(key) {
+  if (process.env.QS_NO_HELPERS) return null;
+  const h = HELPERS[key];
+  const own = path.join(helperDir(), h.file);
+  return bigEnough(own, h.min) ? own : helperShipped(h);
+}
+const helpers = () => Object.fromEntries(Object.keys(HELPERS).map((k) => [k, helperPath(k)]));
+// The ones that came with the installer are copied into the data folder once, so an update
+// (which replaces the app's own folder) never loses them.
+async function keepHelpers() {
+  let kept = 0;
+  for (const h of Object.values(HELPERS)) {
+    const own = path.join(helperDir(), h.file);
+    const from = helperShipped(h);
+    if (bigEnough(own, h.min) || !from) continue;
+    try { fs.mkdirSync(helperDir(), { recursive: true }); await fs.promises.copyFile(from, `${own}.copy`); fs.renameSync(`${own}.copy`, own); kept++; } catch { try { fs.rmSync(`${own}.copy`, { force: true }); } catch {} }
+  }
+  return kept;
+}
+// Fetches the helpers that are missing, for the models that are installed. Quiet: a failure
+// only means things stay as they were, and it is tried again next time.
+let fetchingHelpers = null;
+function fetchHelpers() {
+  if (fetchingHelpers) return fetchingHelpers;
+  fetchingHelpers = (async () => {
+    // Never when you are offline, or when "only with a VPN" is on and there is none.
+    try { if (store.config().offline || require('./vpn').blocked()) return { got: [], have: helpers() }; } catch { /* no setting: go on */ }
+    const have = models.list().map((m) => m.catalogId);
+    const got = [];
+    for (const [key, h] of Object.entries(HELPERS)) {
+      if (helperPath(key) || !have.some(h.for)) continue;
+      const own = path.join(helperDir(), h.file);
+      try {
+        fs.mkdirSync(helperDir(), { recursive: true });
+        await engines.downloadTo(h.url, `${own}.part`);
+        if (!bigEnough(`${own}.part`, h.min)) throw new Error('incomplete');
+        fs.renameSync(`${own}.part`, own); got.push(key);
+      } catch { try { fs.rmSync(`${own}.part`, { force: true }); } catch {} }
+    }
+    return { got, have: helpers() };
+  })();
+  return fetchingHelpers.finally(() => { fetchingHelpers = null; });
+}
+// ⚡ Fast pictures: used by itself where a picture would otherwise take long on this PC (no
+// graphics card, or a small one), and whenever asked for. Never when you set the steps or the
+// guidance yourself, and not for edits (those start from your photo, which was not tried).
+function fastPicture(spec, hw, req = {}, help = helpers(), has = () => true) {
+  if (!help.lightning || !HELPERS.lightning.for(spec.id) || req.image || req.mask || !has('--lora-model-dir')) return false;
+  if (req.fast != null) return Boolean(req.fast);
+  if (req.steps != null || req.cfg != null) return false;
+  return (catalog.estimateMedia(spec, hw).sec || 0) > 40;
+}
+
 // The engine's command line for one job. Worked out separately so it can be checked without a
 // graphics card. `safe` is the second try after a failure: everything that saves graphics memory.
-function sdArgs(req, { spec, files: f, hw, has, safe = false, out }) {
+function sdArgs(req, { spec, files: f, hw, has, safe = false, out, help = helpers() }) {
   const d = spec.defaults;
   const isVideo = spec.kind === 'video';
   const vram = hw.vramGB || 0;
@@ -210,10 +283,17 @@ function sdArgs(req, { spec, files: f, hw, has, safe = false, out }) {
   const notes = [];
   const args = [];
   if (isVideo) args.push('-M', 'vid_gen');
-  if (spec.recipe === 'sd') { args.push('-m', f.model); if (f.vae) args.push('--vae', f.vae); }
-  else {
+  // (req.plain: the second try after a failure uses neither helper, only the long-proven way.)
+  const fast = !isVideo && !req.plain && fastPicture(spec, hw, req, help, has);
+  // The quick decoder for Wan 2.2 clips made from a description, on cards under 16 GB and on a
+  // second, low-memory try (a clip that starts from a photo keeps the full one, which reads it).
+  const tae = isVideo && !req.plain && help.taeWan && HELPERS.taeWan.for(spec.id) && !req.image && has('--tae') && (safe || vram < 16);
+  if (spec.recipe === 'sd') {
+    args.push('-m', f.model); if (f.vae) args.push('--vae', f.vae);
+    if (fast) { args.push('--lora-model-dir', path.dirname(help.lightning), '--sampling-method', 'euler'); if (has('--scheduler')) args.push('--scheduler', 'sgm_uniform'); notes.push('fast mode, 8 steps'); }
+  } else {
     args.push('--diffusion-model', f.diffusion);
-    if (f.vae) args.push('--vae', f.vae);
+    if (tae) args.push('--tae', help.taeWan); else if (f.vae) args.push('--vae', f.vae);
     if (f.clip_l) args.push('--clip_l', f.clip_l);
     if (f.t5xxl) args.push('--t5xxl', f.t5xxl);
     if (f.llm) args.push(has('--llm') ? '--llm' : '--qwen2vl', f.llm);
@@ -221,11 +301,11 @@ function sdArgs(req, { spec, files: f, hw, has, safe = false, out }) {
   }
   // Some community models (the Pony family) need their quality tags at the start of every prompt.
   const prompt = spec.promptPrefix && !String(req.prompt || '').toLowerCase().startsWith(spec.promptPrefix.split(',')[0]) ? `${spec.promptPrefix}${req.prompt || ''}` : (req.prompt || '');
-  args.push('-p', prompt);
+  args.push('-p', fast ? `${prompt}<lora:${path.basename(help.lightning).replace(/\.[^.]+$/, '')}:1>` : prompt);
   // Chroma: the attention mask off gives cleaner pictures (stable-diffusion.cpp's advice).
   if (spec.recipe === 'chroma') { if (has('--model-args')) args.push('--model-args', 'chroma_use_dit_mask=false'); else if (has('--chroma-disable-dit-mask')) args.push('--chroma-disable-dit-mask'); }
   if (spec.recipe === 'qwen-image' && has('--flow-shift')) args.push('--flow-shift', '3');
-  if (req.negative && spec.recipe !== 'flux' && spec.recipe !== 'kontext') args.push('-n', req.negative);
+  if (req.negative && spec.recipe !== 'flux' && spec.recipe !== 'kontext' && !fast) args.push('-n', req.negative); // fast mode has no guidance, so nothing to steer away from
 
   // Size. A job fails at the very end (when the result is decoded) if it is too big for the
   // card, after all the waiting. So a clip is made at 480p on cards under 16 GB, and the second
@@ -246,7 +326,8 @@ function sdArgs(req, { spec, files: f, hw, has, safe = false, out }) {
     notes.push(`at ${width}×${height}`);
   }
   args.push('-W', String(width), '-H', String(height));
-  args.push('--steps', String(req.steps || d.steps), '--cfg-scale', String(req.cfg ?? d.cfg));
+  if (fast) args.push('--steps', '8', '--cfg-scale', '1');
+  else args.push('--steps', String(req.steps || d.steps), '--cfg-scale', String(req.cfg ?? d.cfg));
   args.push('-s', String(Number.isFinite(Number(req.seed)) && req.seed !== '' ? Number(req.seed) : -1));
   if (isVideo) {
     args.push('--video-frames', String(frames));
@@ -265,12 +346,12 @@ function sdArgs(req, { spec, files: f, hw, has, safe = false, out }) {
   const tight = est.fit !== 'gpu' || vram < (spec.vramGB || 0) + 3;
   const offload = safe || isVideo || tight;
   if (offload && has('--offload-to-cpu')) args.push('--offload-to-cpu');
-  if ((safe || isVideo || tight || vram <= 12) && has('--vae-tiling')) args.push('--vae-tiling');
-  if (isVideo && (safe || vram < 16) && has('--temporal-tiling')) args.push('--temporal-tiling');
+  if (!tae && (safe || isVideo || tight || vram <= 12) && has('--vae-tiling')) args.push('--vae-tiling');
+  if (!tae && isVideo && (safe || vram < 16) && has('--temporal-tiling')) args.push('--temporal-tiling');
   if (offload && vram && has('--max-vram')) args.push('--max-vram', '-1');
   if (has('--diffusion-fa')) args.push('--diffusion-fa');
   args.push('-o', out);
-  return { args, width, height, frames, notes };
+  return { args, width, height, frames, notes, fast, tae: Boolean(tae) };
 }
 
 // Is a finished picture just one flat colour (what a failed run can produce)? Counts how many
@@ -392,7 +473,8 @@ async function generateNow(jobId, req, { onProgress, onStatus } = {}) {
       hw = await makeRoom(spec, await hardware.detect({ fresh: true }), null, true);
     } else hw = await makeRoom(spec, hw, onStatus);
     for (const x of ['webm', 'avi', 'mp4', 'mkv', 'png']) fs.rmSync(out.replace(/\.[^.]+$/, `.${x}`), { force: true });
-    used = sdArgs(req, { spec, files: installed.files, hw, has, safe, out });
+    // A try that used a speed helper and failed is repeated without it.
+    used = sdArgs(safe && (used?.fast || used?.tae) ? { ...req, plain: true } : req, { spec, files: installed.files, hw, has, safe, out });
     // (On the second try every message says so, and the bar starts again.)
     const say = safe ? (t) => onStatus?.(`Second try, low-memory settings: ${t}`) : onStatus;
     say?.(`Starting ${spec.name}${used.notes.length ? ` (${used.notes.join(', ')})` : ''}…`);
@@ -434,4 +516,4 @@ async function generateNow(jobId, req, { onProgress, onStatus } = {}) {
 }
 
 
-module.exports = { runFfmpeg, videoFrames, gallery, addToGallery, removeFromGallery, saveDataUrl, saveBuffer, editVideo, extractFrame, probe, generate, stop, stopAll, sdArgs, looksBlank, ffmpegPath, mediaDir };
+module.exports = { runFfmpeg, videoFrames, gallery, addToGallery, removeFromGallery, saveDataUrl, saveBuffer, editVideo, extractFrame, probe, generate, stop, stopAll, sdArgs, looksBlank, ffmpegPath, mediaDir, HELPERS, helpers, helperPath, keepHelpers, fetchHelpers, fastPicture };

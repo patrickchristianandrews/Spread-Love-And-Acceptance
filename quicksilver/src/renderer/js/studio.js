@@ -228,6 +228,7 @@ function createHTML() {
       <div class="field"><label for="ci-prompt" class="row">Describe the picture<span class="grow"></span>${improveBtn('ci-prompt', 'image')}</label><textarea id="ci-prompt" rows="5" placeholder="A cozy reading nook by a rainy window, warm lamp light, watercolor style">${esc(S.data.prefs.lastPrompt || '')}</textarea></div>
       <div class="field" id="ci-neg-f"><label for="ci-neg">Avoid (optional)</label><input id="ci-neg" placeholder="blurry, text, watermark"></div>
       <div class="field"><label>Shape</label><div class="row">${Object.entries(SIZES).map(([k, [l]], i) => `<label class="btn small"><input type="radio" name="ci-size" value="${k}" ${i === 0 ? 'checked' : ''}> ${l}</label>`).join('')}</div></div>
+      ${(() => { const fm = S.speed?.media?.[String((opts.find((o) => o.value === S.data.prefs.imageModel) || opts[0])?.value || '').replace(/^local:/, '')]; return Object.values(S.speed?.media || {}).some((x) => x.canFast) ? `<label class="row" id="ci-fast-f" ${fm?.canFast ? '' : 'hidden'} title="Paints in 8 steps instead of 30 with a small helper file (SDXL-Lightning). Ticked by itself on a PC where a picture would take long."><input type="checkbox" id="ci-fast" ${fm?.fast ? 'checked' : ''}> <b>⚡ Fast mode</b> <span class="small muted">about five times quicker, with slightly less fine detail</span></label>` : ''; })()}
       <details><summary class="label" style="cursor:pointer">Advanced</summary><div class="grid2" style="margin-top:10px">
         <div class="field"><label for="ci-steps">Steps</label><input id="ci-steps" type="number" min="1" max="80" placeholder="auto"></div>
         <div class="field"><label for="ci-cfg">Guidance</label><input id="ci-cfg" type="number" step="0.5" min="0" max="20" placeholder="auto"></div>
@@ -242,7 +243,12 @@ function createHTML() {
 }
 
 function bindCreate() {
-  const upd = () => { const n = Number($('#ci-count')?.value) || 1; if ($('#ci-eta')) $('#ci-eta').textContent = mediaEtaText($('#ci-model').value, 'picture', n); };
+  const upd = () => {
+    const n = Number($('#ci-count')?.value) || 1; if ($('#ci-eta')) $('#ci-eta').textContent = mediaEtaText($('#ci-model').value, 'picture', n);
+    // Fast mode is offered for the model that has it, ticked where it is used by itself.
+    const fm = S.speed?.media?.[String($('#ci-model').value).replace(/^local:/, '')];
+    if ($('#ci-fast-f')) { $('#ci-fast-f').hidden = !fm?.canFast; if (fm?.canFast) $('#ci-fast').checked = Boolean(fm.fast); }
+  };
   $('#ci-model')?.addEventListener('change', upd); $('#ci-count')?.addEventListener('change', upd); if ($('#ci-model')) upd();
   $('#ci-go')?.addEventListener('click', async () => {
     const model = $('#ci-model').value;
@@ -265,6 +271,8 @@ function bindCreate() {
     const seed = $('#ci-seed').value;
     // Read the form once: the page is redrawn while the pictures are made.
     const base = { modelId: inst.id, mode: 'generate', prompt, negative: $('#ci-neg').value, width, height, steps: Number($('#ci-steps').value) || undefined, cfg: $('#ci-cfg').value === '' ? undefined : Number($('#ci-cfg').value) };
+    // ⚡ Fast mode, where this model has it: your tick decides (it is ticked by itself on a PC where a picture takes long).
+    if ($('#ci-fast') && !$('#ci-fast-f').hidden) { base.fast = $('#ci-fast').checked; if (base.fast) { delete base.steps; delete base.cfg; } }
     const eta = mediaEta(model);
     // All of them are queued at once (they are made one after another), so each shows its place.
     const all = Array.from({ length: count }, (_, k) => startJob({ ...base, seed: seed === '' ? '' : Number(seed) + k }, 'Creating', eta));
