@@ -1,14 +1,23 @@
 ### Download
 
-There are three ways to get Quicksilver 2.20. All install the same app; they differ in how the Liquid Edition's models (about 30 GB) arrive.
+There are three ways to get Quicksilver 2.20.1. All install the same app; they differ in how the Liquid Edition's models (about 30 GB) arrive.
 
-- **Quicksilver-Setup-2.20.0.exe** (below, about 1.9 GB, with a matching `.sha256`): the installer with the small 2B model inside. The first time Quicksilver opens, its setup screen downloads the rest of the Liquid Edition before the app starts.
-- **Quicksilver-Web-Setup-2.20.0.exe** (below, about 200 MB): the web installer. No models inside at all; the setup screen downloads the whole Liquid Edition on first launch.
+- **Quicksilver-Setup-2.20.1.exe** (below, about 1.9 GB, with a matching `.sha256`): the installer with the small 2B model inside. The first time Quicksilver opens, its setup screen downloads the rest of the Liquid Edition before the app starts.
+- **Quicksilver-Web-Setup-2.20.1.exe** (below, about 200 MB): the web installer. No models inside at all; the setup screen downloads the whole Liquid Edition on first launch.
 - **Full offline package** (about 31 GB): the installer plus a "Quicksilver models" folder. Keep the two together when you run the installer and everything is copied in: nothing to download, works with no internet from the first minute. It is too large for a GitHub release file, so it is the **Quicksilver-Windows-installer** build artifact on this release's build run (linked at the top of these notes; a GitHub sign-in is needed, and GitHub keeps build artifacts for 90 days).
 
-Updating from 2.19: nothing extra to download; your chats, settings and models are kept.
+Updating from 2.19 or 2.20.0: nothing extra to download; your chats, settings and models are kept.
 
 Updating from 2.18: the Liquid Edition now includes its Closer and its picture and video makers, and Quicksilver does not open until all of them are installed. After the update the setup screen downloads what is missing (about 30 GB) before the app starts. Your chats, settings and the models you already have are kept.
+
+### New in 2.20.1
+
+- **UncensoredLLM** under Connect an API: 171 uncensored, abliterated and role-play models with one key (paid, prepaid from $10), also in the API directory.
+- **17 more uncensored models that run on your PC:** Cydonia, Dolphin Mistral 24B Venice Edition, Magnum Diamond, Magidonia, Mag Mell, UnslopNemo, NemoMix, Stheno, NeuralDaredevil, Skyfall, Amoral Gemma 3, DeepSeek R1 Qwen 32B Abliterated, Llama 3.3 70B Abliterated, Euryale, Anubis, Wayfarer, and DeepSeek V4 Pro Qwen3.5 9B Uncensored (DeepSeek-style thinking on an ordinary PC).
+- **Meme battle:** two of your models each make a meme on a topic with their names hidden; vote for the funnier one, keep a leaderboard, save memes as pictures.
+- **Coding agents on your models:** one click sets up OpenCode; settings to copy for Kilo Code, Cline, Roo Code, Continue and Aider; OpenHands through Docker. Quicksilver's local API now passes tool calls through, which these agents use to edit files and run commands.
+- **Game development:** Godot, Unreal Engine 5 and Unity stacks, a game studio stack with a cloud lead, and 13 game skills (player controller, enemy AI, inventory, saves, menus, shaders, level design, dialogue, design documents, sprites, seamless textures and icons).
+- **Fix:** "Change tone" no longer turns up for words like "cobblestone".
 
 ### New in 2.20
 
