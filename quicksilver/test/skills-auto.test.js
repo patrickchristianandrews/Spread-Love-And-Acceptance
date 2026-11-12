@@ -9,7 +9,7 @@ const assert = require('node:assert/strict');
 const ctx = { S: { data: { prefs: {}, skills: [] } }, console, views: {}, MEDIA_RULES: {}, DIRECT_OUTPUTS: new Set(), MEDIA_OUTPUTS: new Set(), SKILL_JOB: {} };
 vm.createContext(ctx);
 const load = (f) => { try { vm.runInContext(fs.readFileSync(path.join(__dirname, '..', 'src', 'renderer', 'js', f), 'utf8').replace(/^(const|let) /gm, 'var '), ctx, { filename: f }); } catch (e) { if (!/is not defined/.test(e.message)) throw e; } };
-load('skills-data.js'); load('skills-more.js'); load('skill-media.js'); load('skills.js');
+load('skills-data.js'); load('skills-more.js'); load('skills-pro.js'); load('skill-media.js'); load('skills.js');
 const img = [{ type: 'image' }];
 ctx.isCodeChat = (a) => a?.id === 'as-code';
 ctx.assistantById = (id) => ({ id });
@@ -127,6 +127,21 @@ const off = FOLLOW.map(([t, want]) => [t, ctx.mediaFollowUpKind(t), want]).filte
 assert.deepEqual(off, [], `follow-ups wrong: ${off.map(([t, got, want]) => `"${t}" → ${got} (wanted ${want})`).join('; ')}`);
 const wrong = CASES.map(([t, a, want]) => [t, ctx.autoSkillFor(t, a, null)?.id || null, want]).filter(([, got, want]) => got !== want);
 assert.deepEqual(wrong, [], `wrong: ${wrong.map(([t, got, want]) => `"${t}" → ${got} (wanted ${want})`).join('; ')}`);
+// The specialist skills: offered for their own requests, and they never take a request an
+// everyday skill already answers.
+const PRO = [
+  ['is this email a scam? "Your account is locked, click here"', 'phishing-check'], ['help me build a threat model for our login service', 'threat-model'],
+  ['I need a variance report for Q3 spending', 'budget-variance'], ['when will we run out of cash at this burn rate', 'cash-flow'],
+  ['explain this statute to me', 'read-law'], ['write a case brief for Marbury v. Madison', 'case-brief'], ['questions to ask my doctor about knee surgery', 'doctor-questions'],
+  ['what did this study find', 'read-paper'], ['is this source reliable?', 'source-check'], ['I need a risk register for the office move', 'risk-register'],
+  ['help me respond to this RFP from the city', 'procurement'], ['I have a hard conversation with my brother coming up', 'hard-talk'], ['I can\'t sleep lately', 'sleep-plan'],
+  ['summarize this article', 'summarize'], ['write an email to my landlord', 'email'], ['translate this to Spanish', 'translate'], ['write a SQL query for top customers', 'sql'],
+];
+const proOff = PRO.map(([t, want]) => [t, ctx.suggestSkill(t)?.id || null, want]).filter(([, got, want]) => got !== want);
+assert.deepEqual(proOff, [], `specialist skills wrong: ${proOff.map(([t, got, want]) => `"${t}" → ${got} (wanted ${want})`).join('; ')}`);
+assert.ok(ctx.SKILL_CATEGORIES.policy && ctx.SKILL_CATEGORIES.security && ctx.allSkills().filter((s) => ['policy', 'security'].includes(s.category)).length >= 15, 'two new groups, each with its skills');
+for (const s of ctx.allSkills()) for (const p of s.triggers || []) assert.doesNotThrow(() => new RegExp(p, 'i'), `${s.id}: ${p}`);
+console.log(`✓ specialist skills: ${ctx.allSkills().length} skills in all; each offered for its own requests, everyday ones unchanged`);
 // In a Code chat nothing is painted or filmed by itself; an app or a web page still opens in a preview.
 assert.equal(ctx.autoSkillFor('make me a picture of a fox', [], { assistantId: 'as-code' }), null);
 assert.equal(ctx.autoSkillFor('write a report on solar power in Texas', [], { assistantId: 'as-code' }), null);
