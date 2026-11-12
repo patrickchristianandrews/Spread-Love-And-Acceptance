@@ -77,10 +77,11 @@ async function prove(m) {
       const helped = await ask(`<context>\nExact results worked out by the app for this question (use these numbers as they are):\n${facts.map((f) => `- ${f}`).join('\n')}\n</context>\n\n${q}`, 1200);
       console.log(`  Q: 17 × 23, asked the way Quicksilver asks (with the app's exact sum) → ${stated(helped)}`);
       if (stated(helped) !== '391') throw new Error(`${m.name} got 17 × 23 wrong even with the app's exact sum:\n${helped}`);
-      // The model on its own, for the record. Its unaided arithmetic depends on the machine: the
-      // same file at the same settings gave 391 on one build machine and 85 on another (a
-      // processor with fewer cores rounds differently, and one different word early on changes
-      // the rest). That is why the app does the sum itself; so this is reported, not required.
+      // The model on its own, for the record. Its unaided arithmetic is not something a build can
+      // promise: at the same settings it answered 391 in one build and 85 in later ones (the
+      // engine is downloaded at its newest release for every build, and build machines differ;
+      // which of the two changed it was not established). That is why the app does the sum
+      // itself; so this is reported, not required.
       const alone = stated(await ask(q, 1200));
       console.log(`  Q: 17 × 23, unaided → ${alone}`);
       if (alone !== '391') console.log(`::warning::${m.name} got 17 × 23 wrong on its own on this build machine (${alone}). In Quicksilver the app works the sum out and hands it to the model, which this build checked above.`);
