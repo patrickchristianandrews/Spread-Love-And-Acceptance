@@ -132,6 +132,11 @@ kbd { font-size: .72rem; padding: 1px 6px; border-radius: 6px; border: 1px solid
 /* Code chat: the second way to start, quieter than New chat. */
 .nav-new.nav-code { background: transparent; color: var(--text); border: 1.5px solid var(--line-soft); box-shadow: none; padding: 8px 12px; }
 .nav-new.nav-code:hover { background: var(--soft); filter: none; }
+/* Under a message that is about the picture made before it: a small copy of that picture. */
+.from-media { display: flex; align-items: center; justify-content: flex-end; gap: 6px; margin-top: 4px; }
+.from-media img { width: 28px; height: 28px; object-fit: cover; border-radius: 6px; border: 1px solid var(--line); }
+/* The "what to make" choice on the message box: tinted when it is not Auto, so it is noticed. */
+.pill-select.make-pick.on { border-color: var(--accent-line); background: var(--accent-tint); color: var(--accent); }
 /* A Create job that failed: stays, says why, offers another try. */
 .progress-box.failed { border-color: var(--danger, #e5484d); }
 .progress-box.failed .jt { white-space: normal; }

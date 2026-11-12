@@ -2,7 +2,7 @@
 // The Music, Voice and Quick fixes tabs are in studio-more.js.
 'use strict';
 
-let studioTab = 'create';
+let studioTab = 'gallery'; // what you have made comes first; the making itself is done in a chat
 let gallery = [];
 let galleryFilter = 'all';
 const mediaJobs = {};          // jobId -> { status, progress, item, error, kind }
@@ -31,9 +31,12 @@ function studioIntro(tab) {
 }
 views.studio = {
   html() {
-    const tabs = { create: '🎨 Create image', edit: '🪄 Edit photo', video: '🎬 Create video', vedit: '✂️ Edit video', music: '🎵 Music', voice: '🎙️ Voice', cloud: '☁️ Cloud (top quality)', tools: '🧰 Quick fixes', gallery: `🖼️ Gallery (${gallery.length})` };
+    // The gallery first, then the tools that work on what is in it, then the making forms with
+    // every setting (a picture or a video is made most easily by asking for it in a chat).
+    const tabs = { gallery: `🖼️ Gallery (${gallery.length})`, edit: '🪄 Edit photo', vedit: '✂️ Edit video', tools: '🧰 Quick fixes', music: '🎵 Music', voice: '🎙️ Voice', create: '🎨 Picture, all settings', video: '🎬 Video, all settings', cloud: '☁️ Cloud (top quality)' };
     return `<div class="page">
-      <div class="page-head"><h1>Create</h1><label class="btn">⬆ Upload photo, video or sound<input type="file" id="upload" accept="image/*,video/*,audio/*" multiple hidden></label></div>
+      <div class="page-head"><h1>Gallery &amp; tools</h1><button class="btn primary" id="studio-chat" title="Open a chat set to make pictures: describe one and it is painted">🖼️ Make a picture in chat</button><label class="btn">⬆ Upload photo, video or sound<input type="file" id="upload" accept="image/*,video/*,audio/*" multiple hidden></label></div>
+      <p class="lede" style="margin-top:-6px">Pictures and videos are made by asking in any chat (or set the message box to <b>Picture</b> or <b>Video</b>). Everything you make is kept here, with tools to edit it.</p>
       <div class="tabs">${Object.entries(tabs).map(([k, l]) => `<button class="tab ${studioTab === k ? 'active' : ''}" data-stab="${k}">${l}</button>`).join('')}</div>
       ${studioIntro(studioTab)}
       ${({ create: createHTML, edit: editHTML, video: videoHTML, vedit: veditHTML, music: musicHTML, voice: voiceHTML, cloud: cloudStudioHTML, tools: fixesHTML, gallery: galleryHTML })[studioTab]()}
@@ -43,6 +46,7 @@ views.studio = {
     if (!gallery.length) refreshGallery().then(() => { if (gallery.length && S.route.view === 'studio') render(); });
     if (!S.est) refreshEstimates().then(() => S.route.view === 'studio' && render());
     $$('[data-stab]').forEach((b) => b.addEventListener('click', () => { studioTab = b.dataset.stab; render(); }));
+    $('#studio-chat')?.addEventListener('click', () => { newChat('as-general'); const c = chatById(S.route.id); if (c) { c.make = 'image'; save(); render(); } });
     $('#upload').addEventListener('change', async (e) => {
       let last = null;
       for (const f of e.target.files) last = await importFile(f);
@@ -148,7 +152,7 @@ qs.onMedia(async (ev) => {
     lastResults.unshift(ev.item.id);
     try { await refreshGallery(); } catch { /* the result is still in the gallery; it shows on the next refresh */ }
     if (S.route.view === 'studio') render();
-    else if (!j.inChat) toast(`✓ Your ${ev.item.kind === 'video' ? 'video' : 'picture'} is ready in Create.`, 6000);
+    else if (!j.inChat) toast(`✓ Your ${ev.item.kind === 'video' ? 'video' : 'picture'} is ready in Gallery & tools.`, 6000);
     j.resolve?.(ev.item);
     return;
   }
@@ -156,7 +160,7 @@ qs.onMedia(async (ev) => {
     j.error = ev.message || 'It did not finish.'; j.done = true;
     if (/^Stopped\.?$/.test(j.error) && !j.inChat) delete mediaJobs[ev.jobId]; // you stopped it: nothing to report
     if (S.route.view === 'studio') render();
-    else if (!j.inChat && mediaJobs[ev.jobId]) toast(`Create: ${j.error}`, 12000);
+    else if (!j.inChat && mediaJobs[ev.jobId]) toast(`${j.label === 'Animating' ? 'Video' : 'Picture'}: ${j.error}`, 12000);
     j.resolve?.(null);
     return;
   }
@@ -556,7 +560,7 @@ function bindVedit() {
 function galleryHTML() {
   const list = gallery.filter((g) => galleryFilter === 'all' || g.kind === galleryFilter);
   return `<div class="row" style="margin-bottom:14px">${[['all', 'All'], ['image', 'Photos'], ['video', 'Videos'], ['audio', 'Sounds']].map(([k, l]) => `<button class="btn small ${galleryFilter === k ? 'on' : ''}" data-gfilter="${k}">${l}</button>`).join('')}</div>
-    ${list.length ? `<div class="gallery">${list.map(gitemHTML).join('')}</div>` : '<div class="empty">Nothing here yet. Create or upload something.</div>'}`;
+    ${list.length ? `<div class="gallery">${list.map(gitemHTML).join('')}</div>` : '<div class="empty">Nothing here yet. Ask for a picture in a chat, or upload something.</div>'}`;
 }
 
 function bindGallery() {

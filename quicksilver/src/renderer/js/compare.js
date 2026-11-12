@@ -81,7 +81,7 @@ function typicalHTML() {
     ['', 'Photo edit', edit?.sec ?? null, edit?.stars ?? null, !edit],
     ['', 'Video clip', vid?.sec ?? null, vid?.stars ?? null, !vid],
   ];
-  return `<div class="typical"><span class="lbl">Typical on this PC</span>${items.map(([ic, name, sec, stars, missing]) => `<span class="typ" title="${missing ? 'Get a model for this in Teams or Create' : 'Estimated time and expected quality on this PC'}">${ic} ${name} ${missing ? '<span class="muted">· get a model</span>' : `<span class="muted">⏱ ${etaLabel(sec)}${stars != null ? ` · ${starText(stars)}` : ''}</span>`}</span>`).join('')}</div>`;
+  return `<div class="typical"><span class="lbl">Typical on this PC</span>${items.map(([ic, name, sec, stars, missing]) => `<span class="typ" title="${missing ? 'Get a model for this in Stacks & Fusion or Models' : 'Estimated time and expected quality on this PC'}">${ic} ${name} ${missing ? '<span class="muted">· get a model</span>' : `<span class="muted">⏱ ${etaLabel(sec)}${stars != null ? ` · ${starText(stars)}` : ''}</span>`}</span>`).join('')}</div>`;
 }
 
 function bindBestSetup() {

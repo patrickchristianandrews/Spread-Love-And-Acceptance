@@ -14,22 +14,22 @@ const rxX = (name, role, why) => ({ kind: 'missing', name, role, why });
 
 const RX_TOOLS = {
   knowledge: { name: 'Knowledge bases', what: 'Quicksilver\'s own document search', go: 'library' },
-  voices: { name: 'Windows voices', what: 'Read aloud and two-voice podcasts (Create → Voice)', go: 'studio' },
-  beats: { name: 'Beat & melody synth', what: 'Drums, bass, chords and melody as MP3 (Create → Music)', go: 'studio' },
+  voices: { name: 'Windows voices', what: 'Read aloud and two-voice podcasts (Gallery & tools → Voice)', go: 'studio' },
+  beats: { name: 'Beat & melody synth', what: 'Drums, bass, chords and melody as MP3 (Gallery & tools → Music)', go: 'studio' },
   vocals: { name: 'Vocal remover', what: 'Takes vocals out or brings them forward (2-way, not 4 stems)', go: 'studio' },
   upscale: { name: 'Upscale 4×', what: 'Sharp enlargement (not AI upscaling yet)', go: 'studio' },
   bgremove: { name: 'Remove background', what: 'Uses an AI photo-edit model (FLUX Kontext or Qwen Image Edit)', go: 'models' },
-  fps60: { name: 'Smooth to 60 fps', what: 'Motion-interpolated frames (Create → Quick fixes)', go: 'studio' },
-  videoedit: { name: 'Video editor', what: 'Trim, crop, speed, captions by hand (Create → Edit video)', go: 'studio' },
-  master: { name: 'Podcast mastering', what: 'Noise removal, compression and loudness (Create → Quick fixes)', go: 'studio' },
+  fps60: { name: 'Smooth to 60 fps', what: 'Motion-interpolated frames (Gallery & tools → Quick fixes)', go: 'studio' },
+  videoedit: { name: 'Video editor', what: 'Trim, crop, speed, captions by hand (Gallery & tools → Edit video)', go: 'studio' },
+  master: { name: 'Podcast mastering', what: 'Noise removal, compression and loudness (Gallery & tools → Quick fixes)', go: 'studio' },
   whisper: { name: 'Voice typing (Whisper)', what: 'Speech to text on this PC: the mic button in chat, or Ctrl+Space', go: 'settings' },
-  melody: { name: 'Melody writer & player', what: 'Writes a tune over chords and plays it back as an MP3 (Create → Music)', go: 'studio' },
-  loudness: { name: 'Loudness & cleanup', what: 'Streaming-ready loudness, hiss and hum removal (Create → Quick fixes)', go: 'studio' },
+  melody: { name: 'Melody writer & player', what: 'Writes a tune over chords and plays it back as an MP3 (Gallery & tools → Music)', go: 'studio' },
+  loudness: { name: 'Loudness & cleanup', what: 'Streaming-ready loudness, hiss and hum removal (Gallery & tools → Quick fixes)', go: 'studio' },
 };
 const WHISPER = (role) => rxT('whisper', role, 'Whisper Large v3 Turbo');
-// Full songs and top video now come through fal.ai (Create → Cloud); Suno and Udio still have no public API.
-const SUNO = (role) => rxC('fal', role, 'ElevenLabs Music / MiniMax Music via fal.ai (Create → Cloud)');
-const VEO = (role) => rxC('fal', role, 'Veo 3.1 / Kling 3 via fal.ai (Create → Cloud)');
+// Full songs and top video now come through fal.ai (Gallery & tools → Cloud); Suno and Udio still have no public API.
+const SUNO = (role) => rxC('fal', role, 'ElevenLabs Music / MiniMax Music via fal.ai (Gallery & tools → Cloud)');
+const VEO = (role) => rxC('fal', role, 'Veo 3.1 / Kling 3 via fal.ai (Gallery & tools → Cloud)');
 
 const RX_GROUPS = [
   ['new', '🆕 New stacks'],

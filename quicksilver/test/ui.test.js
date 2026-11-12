@@ -1176,6 +1176,9 @@ function redPng(size = 64) {
 
   // Studio: create an image, edit it, make a video.
   await win.click('[data-nav="studio"]');
+  assert.match(await win.locator('.page-head h1').innerText(), /Gallery & tools/, 'the page is the gallery and its tools');
+  assert.equal(await win.locator('.tabs [data-stab]').first().getAttribute('data-stab'), 'gallery', 'the gallery comes first');
+  await win.click('[data-stab="create"]');
   await win.fill('#ci-prompt', 'a pastel droplet on a desk');
   await win.click('#ci-go');
   await win.waitForSelector('.gitem img', { timeout: 60000 });

@@ -177,7 +177,7 @@ const BUILTIN_SKILLS = [
     hint: 'What is the post about, and for which platform?',
     instructions: 'Write social posts for the topic. Unless one platform is named, give: a LinkedIn post (hook in the first line, 120–200 words, line breaks, a question or call to action at the end), an X post (under 270 characters), and an Instagram caption (with 5–8 relevant hashtags). Keep claims accurate and the tone on-brand and human; avoid hype words.' },
   { id: 'image-prompt', name: 'Image prompt writer', icon: '🎨', category: 'creative', output: 'text', triggers: ['image prompt', 'prompt for (an )?image', 'midjourney', 'stable diffusion prompt'],
-    description: 'Detailed prompts for the Create\'s image models.',
+    description: 'Detailed prompts for picture models.',
     hint: 'Describe the picture you have in mind…',
     instructions: 'Write 3 detailed image-generation prompts for the idea, each a single paragraph: subject, composition and framing, setting, lighting, colour palette, style or medium, and mood. Make them varied (e.g. photographic, illustrated, cinematic). Then give a short "avoid" list (negative prompt). Keep each prompt under 80 words.' },
 ];

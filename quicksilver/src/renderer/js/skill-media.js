@@ -45,14 +45,45 @@ function mediaReplySkill(text) {
   if (/"(shape|avoid|count)"\s*:/.test(m[2])) return 'make-image';
   return null;
 }
-// Is a short message right after a picture about that picture ("another one", "same but at
-// night", "make her smile")? Requests to write, explain or answer something are not.
-function isMediaFollowUp(text) {
+// An instruction to change a picture: "make her smile", "add a hat", "remove the car", "change
+// the background to a beach", "turn it into a watercolour". Said about a photo you attached, or
+// about the picture just made in the chat. Requests for words (a caption, a summary, a table, a
+// web page, a shorter version) are not changes to the picture.
+const WORDS_WANTED = /\b(poem|story|essay|caption|description|summary|email|letter|recipe|list|table|spreadsheet|document|code|script|translation|joke|song|lyrics|prompt|report|post|tweet|headline|title|slogan|paragraph|sentence|section|chapter|bullets?|heading|comment|function|class|column|row|test|numbers?|totals?|sum|amounts?|prices?|costs?|receipt|invoice|bill|equation|error|bug|word|pdf|slides?|presentation|chart|graph|notes?|plan|quiz|answer|chat|web ?site|web ?page|site|app|html|css|component|concise|formal|informal|professional|polite|simpler|clearer|funnier|persuasive|casual|rewrite|rephrase|reword|proofread|grammar|spelling|tone)\b/i;
+// "Make it shorter" about an attached screenshot is about its words; right after a picture was
+// made ("make her hair shorter") it is about the picture.
+const LENGTH_WANTED = /\b(shorter|longer|briefer|wordier)\b/i;
+const ASK_LEAD = "(?:(?:please|pls|now|ok(?:ay)?|and|then|also|can you|could you|would you|will you|i want you to|i'd like you to)[, ]+)*";
+const CHANGE_RX = new RegExp(`^${ASK_LEAD}(?:make (?:it|this|that|her|him|them|us|the|my|his|their|everything|everyone)\\b|make me (?:look|appear|seem|smile|taller|thinner|slimmer|younger|older|bald|blonde?|into)\\b|turn (?:it|this|that|her|him|them|me|the|my)\\b|change (?:the|her|his|their|my|its|it|this|that)\\b|(?:remove|erase|take out|get rid of|cut out|crop out|replace|swap|recolou?r|colou?ri[sz]e|brighten|darken|lighten|blur|retouch|restyle|whiten)\\b|(?:add|put) (?:a|an|some|more|the|her|him|it|them|me|us)\\b|give (?:it|her|him|them|the \\w+) |fix (?:the )?(?:lighting|light|colou?rs?|exposure|red[- ]?eye|contrast|skin|background|shadows?|brightness|focus|blur)\\b)`, 'i');
+const ANIMATE_RX = new RegExp(`^${ASK_LEAD}(?:animate\\b|bring (?:it|this|that|her|him|them|the \\w+) to life|make (?:it|this|that|her|him|them|the \\w+) (?:move|come alive|dance|walk|wave|blink)\\b|(?:turn|make) (?:it|this|that) into a (?:short )?(?:video|clip|movie|animation)\\b|(?:now )?(?:as|into) a (?:short )?(?:video|clip|animation)\\b)`, 'i');
+const changeAsk = (text, afterPicture = false) => { const t = String(text || '').trim(); return CHANGE_RX.test(t) && !WORDS_WANTED.test(t) && (afterPicture || !LENGTH_WANTED.test(t)) && !/\?\s*$/.test(t); };
+const animateAsk = (text) => { const t = String(text || '').trim(); return ANIMATE_RX.test(t) && !/\?\s*$/.test(t) && !/\b(how (do|can|to)|explain|describe)\b/i.test(t); };
+
+// What a short message right after a picture asks for: 'repeat' ("another one", "again"),
+// 'animate' ("animate it", "make it move"), 'change' ("same but at night", "make her smile",
+// "add a hat"), or nothing (a new question, thanks, a request to write or explain something).
+function mediaFollowUpKind(text) {
   const t = String(text || '').trim();
-  if (/\b(write|explain|summar|tell|describe|what|why|how|who|when|joke|poem|story|essay|email|code|translate|list|calculate|question|thanks|thank you|nailed|love it|great|nice|perfect|awesome|spanish|french|german|english|italian|language)\w*\b/i.test(t)) return false;
+  if (animateAsk(t)) return 'animate';
+  if (/\b(write|explain|summar|tell|describe|what|why|how|who|when|joke|poem|story|essay|email|code|translate|list|calculate|question|thanks|thank you|nailed|love it|great|nice|perfect|awesome|spanish|french|german|english|italian|language)\w*\b/i.test(t)) return null;
   // "another one", "again", "one more": the words that ask for a repeat, at the start or alone.
-  if (/^(and |ok(ay)?,? |now |please )?(another( one)?|again|one more|a few more|more( like (this|that))?|redo( it)?|try again|same again|do it again|(a |another )?variation)\b/i.test(t)) return true;
-  return /\b(same (but|one|thing)|this time|make (her|him|it|them|this|that)\b|(now|but) (make|with|without|at night|in (the|a) |as a )|more like|closer|wider|zoom(ed)? (in|out))/i.test(t);
+  if (/^(and |ok(ay)?,? |now |please )?(another( one)?|again|one more|a few more|more( like (this|that))?|redo( it)?|try again|same again|do it again|(a |another )?variation)\b/i.test(t)) return 'repeat';
+  if (changeAsk(t, true)) return 'change';
+  if (WORDS_WANTED.test(t)) return null;
+  return /\b(same (but|one|thing)|this time|make (her|him|it|them|this|that)\b|(now|but) (make|with|without|at night|in (the|a) |as a )|more like|closer|wider|zoom(ed)? (in|out))/i.test(t) ? 'change' : null;
+}
+const isMediaFollowUp = (text) => Boolean(mediaFollowUpKind(text));
+// The picture a follow-up is about: the last one the chat made (never a GIF or a video).
+function lastMadePicture(alt) {
+  const it = alt?.media?.items?.length ? alt.media.items.at(-1) : null;
+  return it && it.kind === 'image' && !it.gif ? { id: it.id, url: it.url, prompt: alt.media.prompt || '', shape: alt.media.shape || 'square' } : null;
+}
+// Added to what the model reads for such a follow-up: there is no attachment, the picture is the
+// one made just before, and this is what it was made from.
+function mediaSourceNote(user, skill) {
+  const f = user?.fromMedia;
+  if (!f || !['edit', 'animate'].includes(skill?.output) || (user.attachments || []).some((x) => x.type === 'image')) return '';
+  return `\nNo photo is attached this time: the user means the picture made just before in this chat${f.prompt ? `, which was made from this description: "${String(f.prompt).slice(0, 600)}"` : ''}. ${skill.output === 'edit' ? 'Write "prompt" as that description with the requested change applied and everything else kept the same.' : 'Describe how that same picture should move.'} Do not ask for a photo.`;
 }
 // What to show in the bubble: the note, without the JSON block (also while it streams in).
 const stripMediaBlock = (text) => String(text || '').replace(/```(?:image|video|edit|beat)[\s\S]*?(```|$)/g, '').replace(/```(?:json)?\s*\n?\s*\{[^`]*"prompt"\s*:[^`]*(```|$)/g, '').trim();
@@ -130,8 +161,10 @@ async function runSkillMedia(chat, msg, alt, skill) {
   let imageId;
   if (kind === 'edit' || kind === 'animate') {
     const att = (user?.attachments || []).find((x) => x.type === 'image' && x.dataUrl);
-    if (!att) { alt.media.error = 'Attach a photo to your message (📎), then send it again.'; repaint(); return; }
-    imageId = (await call('media:saveDataUrl', att.dataUrl, { title: att.name || 'Photo' })).id;
+    if (att) imageId = (await call('media:saveDataUrl', att.dataUrl, { title: att.name || 'Photo' })).id;
+    else if (user?.fromMedia?.id) { imageId = user.fromMedia.id; if (SIZES[user.fromMedia.shape]) alt.media.shape = user.fromMedia.shape; } // the picture made just before
+    else { alt.media.error = 'Attach a photo to your message (📎), then send it again.'; repaint(); return; }
+    alt.media.sourceId = imageId; // "another one" after this works on the same photo
   }
   await makeMedia(chat, msg, alt, pick, { imageId, count: Math.min(4, Math.max(1, Number(spec.count) || skill.media?.count || 1)) }, repaint);
   // GIF maker: the clip becomes a looping GIF (the video stays one click away under Trim & edit).
@@ -240,7 +273,7 @@ async function skillMediaAction(chat, m, act, el) {
   if (act === 'm-vedit' && it) { vid = { id: it.video || it.id }; studioTab = 'vedit'; go({ view: 'studio' }); return; }
   if (act === 'm-gif' && it) {
     toast('Making a GIF…');
-    try { md.items.push(await toGif(it)); await refreshGallery().catch(() => {}); save(); paintStreaming(chat, m); toast('GIF ready: it\'s in the chat and in Create.'); } catch (err) { toast(`Couldn't make the GIF: ${err.message}`, 6000); }
+    try { md.items.push(await toGif(it)); await refreshGallery().catch(() => {}); save(); paintStreaming(chat, m); toast('GIF ready: it\'s in the chat and in your Gallery.'); } catch (err) { toast(`Couldn't make the GIF: ${err.message}`, 6000); }
     return;
   }
   if (act === 'm-again') {

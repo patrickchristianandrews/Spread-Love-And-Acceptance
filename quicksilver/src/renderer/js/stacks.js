@@ -221,13 +221,13 @@ function mineKitHTML(r) {
   if (!r.mine) return `<div class="card adv-mine"><h3>Use the models you have</h3><p class="muted" style="font-weight:600">You don't have a model that ${esc(r.roleLabels[main].toLowerCase())} yet. Use the setup on the right, or pick one under Models → Images &amp; video.</p></div>`;
   return `<div class="card hl adv-mine">
     <div class="row"><h3 class="grow">Use the models you have</h3><span class="badge b-mint">Nothing to download</span></div>
-    <p class="small muted adv-help">Choose a model for each job. Create will use these by default.</p>
+    <p class="small muted adv-help">Choose a model for each job. Chats and Gallery & tools will use these by default.</p>
     <div class="kit-rows">${r.roles.map((role) => {
       const opts = pool(role);
       return `<div class="kit-row"><span class="kit-role">${ROLE_ICON[role]} ${esc(r.roleLabels[role])}</span>
         <select data-kit="${role}" ${opts.length ? '' : 'disabled'}>${opts.length ? `<option value="">None</option>${opts.map((y) => `<option value="local:${esc(y.id)}" ${advKit[role] === `local:${y.id}` ? 'selected' : ''}>${esc(y.name)}</option>`).join('')}` : '<option>None installed</option>'}</select></div>`;
     }).join('')}</div>
-    <div class="adv-foot"><span class="grow small muted">✍️ The prompt writer powers the ✨ Improve buttons in Create.</span><button class="btn primary" id="kit-create">Use this setup</button></div>
+    <div class="adv-foot"><span class="grow small muted">✍️ The prompt writer powers the ✨ Improve buttons in Gallery &amp; tools.</span><button class="btn primary" id="kit-create">Use this setup</button></div>
   </div>`;
 }
 
@@ -306,8 +306,8 @@ function saveKit(r, kit, waiting = 0) {
   if (k.animate && !p.videoModel) p.videoModel = k.animate;
   if (k.helper) p.promptHelper = k.helper;
   save();
-  if (waiting) { toast(`Setting up ${r.label}. ${waiting} model${waiting > 1 ? 's are' : ' is'} downloading; Create is ready when ${waiting > 1 ? 'they finish' : 'it finishes'}.`, 6000); render(); return; }
-  toast(`${r.label} is set up. Create now uses these models.`);
+  if (waiting) { toast(`Setting up ${r.label}. ${waiting} model${waiting > 1 ? 's are' : ' is'} downloading; pictures and video are ready when ${waiting > 1 ? 'they finish' : 'it finishes'}.`, 6000); render(); return; }
+  toast(`${r.label} is set up. Pictures and video now use these models.`);
   studioTab = r.job === 'edit' ? 'edit' : 'create';
   go({ view: 'studio' });
 }
@@ -348,7 +348,7 @@ function yourStacksHTML() {
 function kitsHTML() {
   const kits = Object.entries(S.data.mediaKits || {}).filter(([k]) => S.catalog.jobs[k]);
   if (!kits.length) return '';
-  return `<div class="section"><h2>🎨 Create kits</h2><span class="small muted">The picture and video models Create uses. Not stacks: they make media, they don't answer chats.</span></div>
+  return `<div class="section"><h2>🎨 Picture &amp; video kits</h2><span class="small muted">The picture and video models Quicksilver uses when you ask for one. Not stacks: they make media, they don't answer chats.</span></div>
     <div class="cards">${kits.map(([k, kit]) => kitCard(k, kit)).join('')}</div>`;
 }
 
@@ -373,9 +373,9 @@ function kitCard(k, kit) {
   const j = S.catalog.jobs[k];
   const labels = { image: 'Creates pictures', video: 'Makes videos', edit: 'Edits photos', animate: 'Brings photos to life', helper: 'Writes prompts' };
   return `<div class="card">
-    <div class="row"><span class="emoji-badge">${j.icon}</span><h3 class="grow">${esc(j.label)}</h3><span class="badge b-peach">Create</span></div>
+    <div class="row"><span class="emoji-badge">${j.icon}</span><h3 class="grow">${esc(j.label)}</h3><span class="badge b-peach">Pictures &amp; video</span></div>
     <div class="stack-v" style="gap:6px;margin:12px 0">${Object.entries(kit).map(([role, t]) => `<div class="row"><span class="badge b-lav">${ROLE_ICON[role]} ${labels[role]}</span><b class="small">${esc(targetLabel(t) === 'No model chosen' ? modelName(t.replace(/^local:/, '')) : targetLabel(t))}</b>${isInstalled(t.replace(/^local:/, '')) ? '' : '<span class="badge b-pink">downloading</span>'}</div>`).join('')}</div>
-    <div class="row"><button class="btn small primary" data-kit-open="${k}">Open Create</button><button class="btn small danger" data-kit-del="${k}">Remove</button></div>
+    <div class="row"><button class="btn small primary" data-kit-open="${k}">Open Gallery &amp; tools</button><button class="btn small danger" data-kit-del="${k}">Remove</button></div>
   </div>`;
 }
 
@@ -560,10 +560,10 @@ function songsHTML(r) {
   return `<div class="adv-grid">
     <div class="card adv-mine"><h3>🎶 On this PC: free and private</h3>
       <p class="small">${esc(rx?.name || 'Songwriter')}. A stack of your models writes the lyrics, chords and melody, and the built-in synth plays a demo beat (instrumental). Nothing leaves this computer.</p>
-      <div class="row">${have ? '<span class="badge b-mint">✓ Set up</span>' : '<button class="btn small primary" data-song-setup>Set up the Songwriter stack</button>'}<button class="btn small" data-song-open="music">Open Create → Music</button></div></div>
+      <div class="row">${have ? '<span class="badge b-mint">✓ Set up</span>' : '<button class="btn small primary" data-song-setup>Set up the Songwriter stack</button>'}<button class="btn small" data-song-open="music">Open Gallery & tools → Music</button></div></div>
     <div class="card adv-best"><h3>🎤 Complete sung songs: cloud</h3>
       <p class="small">Whole songs with vocals, verses, chorus and bridge, from your lyrics: ElevenLabs Music (about $0.80 a minute), MiniMax Music 2.6 (about $0.15 a song) or Mureka v9, all on fal.ai with one key. No open model sings a full song on a PC yet.</p>
-      <div class="row"><button class="btn small primary" data-song-open="cloud">Open Create → Cloud</button></div></div>
+      <div class="row"><button class="btn small primary" data-song-open="cloud">Open Gallery & tools → Cloud</button></div></div>
   </div>`;
 }
 document.addEventListener('click', (e) => {

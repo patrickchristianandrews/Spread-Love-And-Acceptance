@@ -98,6 +98,13 @@ function autoSkillFor(text, atts = [], chat = null) {
   if (coding) return out === 'app' && askedFor(t, cand) ? pick(cand) : null;
   // Photo edits and bringing a photo to life: with the photo attached.
   if ((out === 'edit' || out === 'animate') && has('image')) return pick(cand);
+  // A photo attached and an instruction to change it ("make the sky pink", "remove the car",
+  // "add a hat") edits that photo; "animate it" or "make it move" brings it to life. A question
+  // about the photo, or a request for words about it, is answered as usual.
+  if (has('image') && !has('doc') && out !== 'tool') {
+    if (animateAsk(t)) return pick(skillById('animate-photo'));
+    if (changeAsk(t)) return pick(skillById('edit-photo'));
+  }
   // A plain request for a picture or a video comes first: "make me a picture of my memory of
   // the beach" is a picture, whatever other skill's words turn up in the description. A specific
   // picture skill (logo, poster, GIF…) when it is what is asked for; otherwise the general one.

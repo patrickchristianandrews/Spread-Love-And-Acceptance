@@ -201,7 +201,7 @@ function paletteItems() {
   const items = [
     ['New chat', 'Ctrl N', () => newChat()],
     ['New code chat', 'Ctrl ⇧ N', () => newCodeChat()],
-    ...[['home', 'Home'], ['projects', 'Projects'], ['assistants', 'Assistants'], ['skills', 'Skills'], ['library', 'Library'], ['stacks', 'Stacks & Fusion'], ['studio', 'Create'], ['integrations', 'Connectors'], ['models', 'Models'], ['arena', 'Compare models (blind test)'], ['pc', 'Your PC'], ['settings', 'Settings']].map(([v, l]) => [`Go to ${l}`, '', () => { if (v === 'arena' && typeof cmpTab !== 'undefined') cmpTab = 'blind'; go({ view: v }); }]),
+    ...[['home', 'Home'], ['projects', 'Projects'], ['assistants', 'Assistants'], ['skills', 'Skills'], ['library', 'Library'], ['stacks', 'Stacks & Fusion'], ['studio', 'Gallery & tools'], ['integrations', 'Connectors'], ['models', 'Models'], ['arena', 'Compare models (blind test)'], ['pc', 'Your PC'], ['settings', 'Settings']].map(([v, l]) => [`Go to ${l}`, '', () => { if (v === 'arena' && typeof cmpTab !== 'undefined') cmpTab = 'blind'; go({ view: v }); }]),
     ...[['memory', 'Memory'], ['voice', 'Voice'], ['phone', 'Phone'], ['web', 'Web search'], ['api', 'API server'], ['engines', 'Engines']].map(([t, l]) => [`Settings: ${l}`, '', () => { setTab = t; go({ view: 'settings' }); }]),
     ['Switch light / dark', '', () => $('#theme-btn').click()],
     [S.config?.offline ? 'Go online' : 'Go offline', '', toggleNet],

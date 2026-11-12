@@ -17,6 +17,24 @@ function newChat(assistantId, projectId) {
   go({ view: 'chat', id: chat.id });
 }
 
+// What a message makes. Auto (the default) decides from your words, like any AI assistant: ask
+// for a picture and you get one. The other choices are for when you want to be sure: Answer
+// never makes a picture or a file by itself; Picture and Video make one from every message.
+const MAKES = {
+  auto: ['✨', 'Auto', 'Auto: Quicksilver decides from your words. Ask for a picture, a video or a document and it makes one; anything else gets an answer.'],
+  text: ['💬', 'Answer', 'Answer: every message gets a written answer. Nothing is turned into a picture or a file by itself.'],
+  image: ['🖼️', 'Picture', 'Picture: every message makes a picture. Describe what you want to see (attach a photo to change that photo).'],
+  video: ['🎬', 'Video', 'Video: every message makes a short video. Describe the scene (attach a photo to bring it to life).'],
+};
+const makeOf = (chat) => (MAKES[chat?.make] ? chat.make : 'auto');
+// The skill a Picture or Video chat uses for a message (a photo attached is edited or animated).
+function madeSkill(chat, atts = []) {
+  const m = makeOf(chat);
+  const photo = atts.some((x) => x.type === 'image');
+  const id = m === 'image' ? (photo ? 'edit-photo' : 'make-image') : m === 'video' ? (photo ? 'animate-photo' : 'make-video') : null;
+  return id && skillById(id) ? id : null;
+}
+
 // A code chat: an ordinary chat with the Code chat assistant. It doesn't change which assistant
 // "New chat" opens, so New chat stays the everyday AI and Code chat stays the one for code.
 const CODE_ASSISTANT = 'as-code';
@@ -97,10 +115,11 @@ views.chat = {
           <div class="attach-row" id="att-row">${attachmentsHTML(drafts[chat.id] || [], true)}</div>
           <div id="skill-row">${skillChipHTML(chat)}</div>
           <div class="skill-pop" id="skill-pop" hidden></div>
-          <textarea id="input" rows="1" spellcheck="true" placeholder="${esc(chat.pendingSkill ? skillById(chat.pendingSkill)?.hint || 'Add details…' : isCodeChat(a) ? 'Say what to build, or paste code or an error…  Type / for skills' : `Message ${a.name}…  Type / for skills`)}" aria-label="Message"></textarea>
+          <textarea id="input" rows="1" spellcheck="true" placeholder="${esc(chat.pendingSkill ? skillById(chat.pendingSkill)?.hint || 'Add details…' : makeOf(chat) === 'image' ? 'Describe the picture…' : makeOf(chat) === 'video' ? 'Describe the video…' : isCodeChat(a) ? 'Say what to build, or paste code or an error…  Type / for skills' : `Message ${a.name}…  Type / for skills`)}" aria-label="Message"></textarea>
           <div class="composer-bar">
             <button class="icon-btn opts-btn" id="opts-btn" title="Add a file, use a skill, search the web, connect apps, and more" aria-label="Add and options">${icon('plus')}</button>
             <input type="file" id="file-in" multiple hidden accept="image/*,video/*,.pdf,.docx,.xlsx,.xlsm,.csv,.tsv,.pptx,.txt,.md,.json,.html,.htm,.xml,.js,.ts,.py,.java,.c,.cpp,.cs,.go,.rs,.rb,.php,.sql">
+            <label class="pill-select small make-pick ${makeOf(chat) !== 'auto' ? 'on' : ''}" title="What a message makes. Auto decides from your words (ask for a picture and you get one). Answer: always a written answer. Picture or Video: every message makes one."><span class="pill-emoji">${MAKES[makeOf(chat)][0]}</span><select id="pick-make" aria-label="What to make">${Object.entries(MAKES).map(([k, m]) => `<option value="${k}" ${k === makeOf(chat) ? 'selected' : ''}>${m[1]}</option>`).join('')}</select>${icon('chevron', 14)}</label>
             <button class="chip-tog improve-btn" id="improve-btn" title="Fix my prompt: rewrites what you typed so it's clear and complete (spelling too), for a better answer. You can edit it before sending." aria-label="Fix my prompt">${icon('sparkle', 16)}<span>Fix my prompt</span></button>
             <button class="icon-btn mic-btn ${voiceRec?.chatId === chat.id ? 'rec' : ''}" id="mic-btn" title="Voice typing: click and speak (Ctrl+Space)" aria-label="Voice typing">${icon('mic')}</button>
             <span class="bar-sep"></span>
@@ -271,6 +290,7 @@ function messageHTML(chat, a, m, i) {
     return `<div class="msg user${msgIn(m)}" data-msg="${m.id}">
       ${m.attachments?.length ? `<div class="attach-row" style="justify-content:flex-end">${attachmentsHTML(m.attachments, false)}</div>` : ''}
       ${m.text ? `<div class="bubble"${m.t ? ` title="${esc(msgTime(m))}"` : ''}>${esc(m.text)}</div>` : ''}
+      ${m.fromMedia?.url && !(m.attachments || []).some((x) => x.type === 'image') ? `<div class="from-media small muted" title="This message is about the picture made just before it"><img src="${esc(m.fromMedia.url)}" alt="">${skillById(m.skillId)?.output === 'animate' ? 'Bringing this picture to life' : 'Changing this picture'}</div>` : ''}
       <div class="msg-tools">${pending ? '' : tb('edit', m.id, 'edit', 'Edit and ask again') + tb('branch', m.id, 'branch', 'Branch: a new chat from this point') + tb('copy', m.id, 'copy', 'Copy') + tb('del', m.id, 'trash', 'Delete')}</div>
     </div>`;
   }
@@ -423,6 +443,7 @@ function bindChat() {
   });
   $('#tog-lib').addEventListener('click', () => { chat.library = !(chat.library ?? a.library); save(); render(); });
   $('#pick-effort').addEventListener('change', (e) => { chat.effort = e.target.value; save(); render(); if (EFFORT_WHY[e.target.value]) toast(`${EFFORTS[e.target.value]}: ${EFFORT_WHY[e.target.value]}`, 7000); });
+  $('#pick-make')?.addEventListener('change', (e) => { const v = e.target.value; if (v === 'auto') delete chat.make; else chat.make = v; save(); render(); toast(MAKES[makeOf(chat)][2], 7000); $('#input')?.focus(); });
   $('#pick-length').addEventListener('change', (e) => { chat.length = e.target.value; S.data.prefs.answerLength = e.target.value; save(); toast(LENGTHS[e.target.value].toast); });
   $('#tog-fact').addEventListener('click', () => { chat.factCheck = !factOn(chat, a); save(); render(); });
   $('#net-pill').addEventListener('click', toggleNet);
@@ -472,15 +493,36 @@ function bindChat() {
     // Just ask: a request to make something (a picture, a video, a document, an app…) uses the
     // right skill by itself. Right after a picture or video, a short follow-up about it ("another
     // one", "same but at night") continues with the same skill.
-    const prevAlt = (() => { const m = [...chat.messages].reverse().find((x) => x.role === 'assistant'); return m?.alts?.[m.altIndex]; })();
-    const prevSkill = prevAlt?.media && ['image', 'video'].includes(skillById(prevAlt.skillId)?.output) ? prevAlt.skillId : null;
+    const prevAlt = (() => { const m = chat.messages.at(-1); return m?.role === 'assistant' ? m.alts?.[m.altIndex] : null; })();
+    const prevSkill = prevAlt?.media?.items?.length && MEDIA_OUTPUTS.has(skillById(prevAlt.skillId)?.output) ? prevAlt.skillId : null;
+    const prevPic = prevSkill ? lastMadePicture(prevAlt) : null;
     // An assistant can apply a skill to every message (the Image Artist paints each request):
     // that one is never replaced by a guess. Neither is a skill you picked yourself.
-    const ownSkill = chat.pendingSkill || (skillById(a.skill) ? a.skill : null);
-    const autoSkill = ownSkill ? null : autoSkillFor(text, atts, chat);
-    const followUp = !ownSkill && !autoSkill && prevSkill && S.data.prefs.autoSkills !== false && !isCodeChat(a) && text.length < 240 && !/\?\s*$/.test(text) && isMediaFollowUp(text) ? prevSkill : null;
+    // What you set on the message box comes first: Picture and Video make one from every
+    // message, Answer never applies a skill by itself, Auto decides from your words.
+    const make = makeOf(chat);
+    const ownSkill = chat.pendingSkill || madeSkill(chat, atts) || (skillById(a.skill) ? a.skill : null);
+    const autoSkill = ownSkill || make !== 'auto' ? null : autoSkillFor(text, atts, chat);
+    // Right after a picture, a short message about it carries on from that picture, the way you
+    // would expect of any assistant: "make her smile" or "same but at night" changes that very
+    // picture, "animate it" turns it into a video, "another one" makes one more. Nothing has to
+    // be attached or picked. (In a Picture chat too; an Answer chat never does this.)
+    let followUp = null;
+    let fromMedia = null;
+    const ownOut = skillById(a.skill)?.output; // an assistant with its own skill keeps it (the Image Artist may still change its last picture)
+    const off = (id) => (chat.dismissed || []).includes(id);
+    const mayFollow = prevSkill && !atts.length && !chat.pendingSkill && make !== 'text' && make !== 'video' && (!ownOut || ownOut === 'image') && S.data.prefs.autoSkills !== false && !isCodeChat(a) && text.length < 240 && !/\?\s*$/.test(text);
+    const ask = mayFollow ? mediaFollowUpKind(text) : null;
+    if (ask === 'animate' && prevPic && make === 'auto' && !ownOut && skillById('animate-photo') && !off('animate-photo')) { followUp = 'animate-photo'; fromMedia = prevPic; }
+    else if (ask === 'change' && prevPic && skillById('edit-photo') && !off('edit-photo')) { followUp = 'edit-photo'; fromMedia = prevPic; }
+    else if (ask && make === 'auto' && !ownSkill && !autoSkill) {
+      // One more of the same. A photo edit or an animation works on the same photo again.
+      followUp = prevSkill;
+      if (['edit', 'animate'].includes(skillById(prevSkill).output)) { if (prevAlt.media.sourceId) fromMedia = { id: prevAlt.media.sourceId, prompt: '', shape: prevAlt.media.shape }; else followUp = null; }
+    }
     // skillAuto: Quicksilver chose the skill from your words (so it can be undone: "Answer normally").
-    chat.messages.push({ id: uid(), t: now(), role: 'user', text, attachments: atts, skillId: ownSkill || autoSkill?.id || followUp || undefined, ...(!ownSkill && (autoSkill || followUp) ? { skillAuto: true } : {}) });
+    const skillId = followUp || ownSkill || autoSkill?.id || undefined;
+    chat.messages.push({ id: uid(), t: now(), role: 'user', text, attachments: atts, skillId, ...(followUp || (!ownSkill && autoSkill) ? { skillAuto: true } : {}), ...(fromMedia ? { fromMedia } : {}) });
     chat.pendingSkill = null; chat.suggested = null;
     drafts[chat.id] = [];
     if (chat.title === 'New chat') chat.title = (text || atts[0]?.name || 'New chat').replace(/\s+/g, ' ').slice(0, 60);
@@ -803,7 +845,7 @@ async function generate(chat, rerollMsg, withTarget, opts = {}) {
   else if (sources.webEmpty) memNote = `${memNote ? `${memNote}\n` : ''}Answer from your own knowledge. Don't claim anything is the "latest" and don't give publication dates or links.`;
   const { strict, messages } = H;
   if (messages.at(-1).role !== 'user') messages.push({ role: 'user', content: 'Please continue.' });
-  messages[messages.length - 1] = { ...messages.at(-1), content: withContext(messages.at(-1).content, turnContext(chat, sources, strict, lastUser?.text || '', ctx, memNote, skill ? skillPrompt(skill) : '')) };
+  messages[messages.length - 1] = { ...messages.at(-1), content: withContext(messages.at(-1).content, turnContext(chat, sources, strict, lastUser?.text || '', ctx, memNote, skill ? skillPrompt(skill) + mediaSourceNote(lastUser, skill) : '')) };
   // Long chats: keep the instructions and the latest messages within the model's memory, so a
   // long conversation keeps working instead of failing once it outgrows it.
   {
@@ -952,7 +994,7 @@ qs.onChat(({ requestId, ev }) => {
           const madeBefore = chat.messages.some((m) => m !== msg && m.role === 'assistant' && (m.alts || []).some((x) => x.media?.items?.length));
           const labelled = /```(image|video)\b/i.test(alt.text);
           const wantsCode = /\b(json|code|payload|api|schema|script|function)\b/i.test(asked);
-          if (S.data.prefs.autoSkills !== false && !wantsCode && (labelled || madeBefore)) alt.skillId = kind; else alt.mediaOffer = kind;
+          if (S.data.prefs.autoSkills !== false && makeOf(chat) !== 'text' && !wantsCode && (labelled || madeBefore)) alt.skillId = kind; else alt.mediaOffer = kind;
         }
       }
       if (ev.type === 'done' && alt.text && !isMakerSkill(alt)) alt.text = humanize(alt.text); // no chatbot leftovers
@@ -1000,7 +1042,7 @@ function messageAction(chat, act, id, el) {
   else if (act === 'plain') {
     // The skill was a guess from the wording: take it off the question and answer it as written.
     const q = chat.messages[idx - 1];
-    if (q?.role === 'user') { delete q.skillId; delete q.skillAuto; q.noAuto = true; save(); generate(chat, m); }
+    if (q?.role === 'user') { delete q.skillId; delete q.skillAuto; delete q.fromMedia; q.noAuto = true; save(); generate(chat, m); }
   }
   else if (act === 'continue') { chat.messages.push({ id: uid(), role: 'user', text: 'Continue.', attachments: [] }); generate(chat, null); }
   else if (act === 'copy') { navigator.clipboard?.writeText(msgText(m)); toast('Copied.'); }
@@ -1021,7 +1063,8 @@ function messageAction(chat, act, id, el) {
   else if (act === 'edit') {
     const b = openModal(`<h2>Edit message</h2><textarea id="edit-text" rows="8">${esc(m.text)}</textarea>
       <div class="modal-actions"><button class="btn" data-close>Cancel</button><button class="btn" id="edit-save">Save</button><button class="btn primary" id="edit-resend">Save and ask again</button></div>`);
-    const reguess = () => { if (m.skillAuto) { const again = autoSkillFor(m.text, m.attachments || [], chat); if (again) m.skillId = again.id; else { delete m.skillId; delete m.skillAuto; } } };
+    // A follow-up about the picture before it keeps its meaning while it still reads as one.
+    const reguess = () => { if (!m.skillAuto) return; if (m.fromMedia && mediaFollowUpKind(m.text)) return; delete m.fromMedia; const again = autoSkillFor(m.text, m.attachments || [], chat); if (again) m.skillId = again.id; else { delete m.skillId; delete m.skillAuto; } };
     const apply = () => { m.text = b.querySelector('#edit-text').value; reguess(); chat.messages = chat.messages.slice(0, idx + 1); closeModal(); save(); };
     b.querySelector('#edit-save').onclick = () => { m.text = b.querySelector('#edit-text').value; reguess(); closeModal(); save(); render(); };
     b.querySelector('#edit-resend').onclick = () => { apply(); generate(chat, null); };

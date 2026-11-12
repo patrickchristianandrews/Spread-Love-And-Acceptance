@@ -9,7 +9,7 @@ const assert = require('node:assert/strict');
 const ctx = { S: { data: { prefs: {}, skills: [] } }, console, views: {}, MEDIA_RULES: {}, DIRECT_OUTPUTS: new Set(), MEDIA_OUTPUTS: new Set(), SKILL_JOB: {} };
 vm.createContext(ctx);
 const load = (f) => { try { vm.runInContext(fs.readFileSync(path.join(__dirname, '..', 'src', 'renderer', 'js', f), 'utf8').replace(/^(const|let) /gm, 'var '), ctx, { filename: f }); } catch (e) { if (!/is not defined/.test(e.message)) throw e; } };
-load('skills-data.js'); load('skills-more.js'); load('skills.js');
+load('skills-data.js'); load('skills-more.js'); load('skill-media.js'); load('skills.js');
 const img = [{ type: 'image' }];
 ctx.isCodeChat = (a) => a?.id === 'as-code';
 ctx.assistantById = (id) => ({ id });
@@ -101,6 +101,30 @@ const CASES = [
   ['what is 17 x 23', [], null],
   ['hello there', [], null],
 ];
+// A photo attached and an instruction to change it: the photo is edited (or brought to life).
+// A question about the photo, or a request for words about it, is answered as usual.
+const PHOTO = [
+  ['make the sky pink', 'edit-photo'], ['remove the car on the left', 'edit-photo'], ['add a hat', 'edit-photo'],
+  ['can you make her smile', 'edit-photo'], ['please change the background to a beach', 'photo-background'],
+  ['turn this into a watercolour painting', 'edit-photo'], ['make me look younger', 'edit-photo'], ['give him sunglasses', 'edit-photo'],
+  ['animate it', 'animate-photo'], ['make it move', 'animate-photo'], ['bring her to life', 'animate-photo'], ['turn this into a video', 'animate-photo'],
+  ['what is this?', null], ['describe this photo', null], ['what would this look like with a red roof?', null],
+  ['make a caption for this', null], ['turn this into a table', null], ['add up the numbers in this receipt', null],
+  ['make it shorter', null], ['turn this sketch into a website', null], ['give me 5 ideas for decorating this room', null],
+  ['remove the last paragraph', null], ['who is the author of this book', null], ['translate this sign', null],
+];
+for (const c of PHOTO) CASES.push([c[0], img, c[1]]);
+// Right after a picture: what a short message asks for.
+const FOLLOW = [
+  ['another one', 'repeat'], ['again', 'repeat'], ['one more please', 'repeat'],
+  ['make her smile', 'change'], ['same but at night', 'change'], ['add a hat', 'change'], ['remove the tree', 'change'],
+  ['now make it winter', 'change'], ['change the background to a forest', 'change'], ['make the dress red', 'change'],
+  ['animate it', 'animate'], ['make it move', 'animate'], ['turn it into a video', 'animate'], ['bring it to life', 'animate'], ['now as a video', 'animate'],
+  ['thanks, love it', null], ['what model made this', null], ['write a poem about it', null], ['make it shorter', 'change'], ['make her hair longer', 'change'], ['make it more formal', null],
+  ['how do I animate a picture in blender', null], ['tell me a joke', null], ['add a paragraph about dogs', null], ['what is the capital of France', null],
+];
+const off = FOLLOW.map(([t, want]) => [t, ctx.mediaFollowUpKind(t), want]).filter(([, got, want]) => got !== want);
+assert.deepEqual(off, [], `follow-ups wrong: ${off.map(([t, got, want]) => `"${t}" → ${got} (wanted ${want})`).join('; ')}`);
 const wrong = CASES.map(([t, a, want]) => [t, ctx.autoSkillFor(t, a, null)?.id || null, want]).filter(([, got, want]) => got !== want);
 assert.deepEqual(wrong, [], `wrong: ${wrong.map(([t, got, want]) => `"${t}" → ${got} (wanted ${want})`).join('; ')}`);
 // In a Code chat nothing is painted or filmed by itself; an app or a web page still opens in a preview.
@@ -111,4 +135,5 @@ assert.equal(ctx.autoSkillFor('Build a single-page website for a bakery', [], { 
 assert.equal(ctx.autoSkillFor('make me a picture of a fox', [], { dismissed: ['make-image'] }), null);
 ctx.S.data.prefs.autoSkills = false;
 assert.equal(ctx.autoSkillFor('make me a picture of a fox', [], null), null);
+console.log(`✓ after a picture: ${FOLLOW.filter((c) => c[1]).length} follow-ups change, repeat or animate it; ${FOLLOW.filter((c) => !c[1]).length} other messages are left alone`);
 console.log(`✓ just ask: ${CASES.filter((c) => c[2]).length} requests use the right skill by themselves, ${CASES.filter((c) => !c[2]).length} ordinary messages stay ordinary`);

@@ -145,7 +145,7 @@ function videoOutHTML() {
       ['🎬 Quality (out of 10)', [`${tenStarsHTML(rating)}<span class="small muted">sharp, with sound on most</span>`, fits ? `${tenStarsHTML(loc.rating)}<span class="small muted">${esc(loc.name)}, short clips${loc.installed ? '' : ' (download)'}</span>` : 'Needs a graphics card with about 8 GB or more', `${tenStarsHTML(rating)}<span class="small muted">for the clips you keep</span>`]],
       ['⏱️ Time per clip', ['A minute or two', fits && loc.est?.sec ? `about ${fmtSec(loc.est.sec)} per short clip here` : fits ? 'Several minutes per short clip' : "Won't run on this PC", 'Quick previews, then a minute or two']],
       ['🔒 Your prompts and photos', ['Sent to the service', 'Stay on your PC', `Only the ${keep} s you keep are made in the cloud`]],
-    ], `${sec} seconds of video a month: ${fits ? `preview ideas on your PC, then make only the best ${calcState.vkeep}% in ${label.split(' (')[0]}` : `this PC can't make video itself, so Quicksilver's AI writes the shot list and prompts, and ${label.split(' (')[0]} makes the clips`}. ${price != null && fits ? `That's about <b>${money(sec * price - keep * price)}</b> a month less than making everything in the cloud.` : price != null ? `About <b>${money(sec * price)}</b> a month in the cloud.` : 'Enter the price to see the cost.'} Cloud video apps are used on their own sites for now; bring the clips into Create → Video to trim and edit.`)}`;
+    ], `${sec} seconds of video a month: ${fits ? `preview ideas on your PC, then make only the best ${calcState.vkeep}% in ${label.split(' (')[0]}` : `this PC can't make video itself, so Quicksilver's AI writes the shot list and prompts, and ${label.split(' (')[0]} makes the clips`}. ${price != null && fits ? `That's about <b>${money(sec * price - keep * price)}</b> a month less than making everything in the cloud.` : price != null ? `About <b>${money(sec * price)}</b> a month in the cloud.` : 'Enter the price to see the cost.'} Cloud video apps are used on their own sites for now; bring the clips into Gallery & tools → Video to trim and edit.`)}`;
 }
 const svcRating = (table, k) => (table === CHAT_SERVICES ? table[k][4] : table[k][2]);
 function svcPrice(table, k) {
@@ -176,7 +176,7 @@ function musicOutHTML() {
       ['🎵 Quality (out of 10)', [`${tenStarsHTML(rating)}${note ? `<span class="small muted">${esc(note)}</span>` : ''}`, `${tenStarsHTML(SYNTH_MUSIC * 2)}<span class="small muted">built-in synth, instrumentals only</span>`, `${tenStarsHTML(rating)}<span class="small muted">for the songs you finish</span>`]],
       ['🎤 Vocals', ['Yes', 'No (instrumental)', 'Yes, on the finished songs']],
       ['✍️ Lyrics and style prompt', ['You write them', 'Quicksilver\'s AI writes them', 'Quicksilver\'s AI writes them']],
-    ], `${n} songs a month: sketch the idea and melody on your PC for free, let Quicksilver write the lyrics and the style prompt, and make the best ${calcState.mkeep}% in ${name}. ${price != null ? `That's about <b>${money(n * price - keep * price)}</b> a month less than making them all in the cloud.` : 'Enter the price to see the saving.'} Connect fal.ai once and make them in Create → Cloud.`)}`;
+    ], `${n} songs a month: sketch the idea and melody on your PC for free, let Quicksilver write the lyrics and the style prompt, and make the best ${calcState.mkeep}% in ${name}. ${price != null ? `That's about <b>${money(n * price - keep * price)}</b> a month less than making them all in the cloud.` : 'Enter the price to see the saving.'} Connect fal.ai once and make them in Gallery & tools → Cloud.`)}`;
 }
 function calcOutHTML() { return calcState.kind === 'image' ? imageOutHTML() : calcState.kind === 'video' ? videoOutHTML() : calcState.kind === 'music' ? musicOutHTML() : chatOutHTML(); }
 function calcInputsHTML() {
@@ -219,7 +219,7 @@ const FREE_PAID = [
 const WHERE = { app: ['In Quicksilver', 'b-mint'], pc: ['On this PC', 'b-sky'], site: ['On their site', 'b-lav'] };
 function freePaidHTML() {
   return `<section class="card og-sec" id="free-paid"><h3>💸 Free vs paid: what each gets you</h3>
-    <p class="small" style="margin:0 0 10px">What you can do at no cost, what paying adds, and the output quality of each out of 10. "In Quicksilver" means it works inside the app once you add the key (Models → Connect an API, Create → Cloud or Connectors).</p>
+    <p class="small" style="margin:0 0 10px">What you can do at no cost, what paying adds, and the output quality of each out of 10. "In Quicksilver" means it works inside the app once you add the key (Models → Connect an API, Gallery & tools → Cloud or Connectors).</p>
     <div class="fp-table"><div class="fp-h"><span>Job</span><span>🆓 Free</span><span>💳 Paid</span></div>
     ${FREE_PAID.map(([ic, job, f, p, adds]) => `<div class="fp-r"><span><b>${ic} ${esc(job)}</b><span class="small muted">Paying adds: ${esc(adds)}</span></span>
       <span><b>${esc(f[0])}</b><span class="small muted">${esc(f[1])}</span><span class="row" style="gap:6px">${tenStarsHTML(f[2])}<span class="badge ${WHERE[f[3]][1]}">${WHERE[f[3]][0]}</span></span></span>
