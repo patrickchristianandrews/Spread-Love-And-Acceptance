@@ -40,7 +40,7 @@ function clean(j) {
   for (const [a, b] of Object.entries(j.successors && typeof j.successors === 'object' ? j.successors : {})) if (ID.test(a) && typeof b === 'string' && ID.test(b) && a !== b) successors[a] = b;
   const featured = {}; const ladders = {};
   for (const [k, v] of Object.entries(j.featured && typeof j.featured === 'object' ? j.featured : {})) if (/^[a-z]{2,20}$/.test(k)) featured[k] = idList(v, 12);
-  for (const [k, v] of Object.entries(j.ladders && typeof j.ladders === 'object' ? j.ladders : {})) if (/^[a-z]{2,20}$/.test(k)) ladders[k] = idList(v, 20);
+  for (const [k, v] of Object.entries(j.ladders && typeof j.ladders === 'object' ? j.ladders : {})) if (/^[a-z]{2,20}$/.test(k)) ladders[k] = idList(v, 40);
   // The Liquid Edition's core: which uncensored models are its Brain, Eyes, picture maker and video maker right now.
   const liquid = {};
   if (j.liquid && typeof j.liquid === 'object') for (const k of ['brain', 'eyes', 'pictures', 'videos']) if (typeof j.liquid[k] === 'string' && ID.test(j.liquid[k])) liquid[k] = j.liquid[k];

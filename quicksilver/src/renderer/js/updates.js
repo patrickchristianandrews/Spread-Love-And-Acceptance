@@ -88,8 +88,39 @@ function quicksilverBoost() {
 const shownUpgrades = () => (S.modelUpgrades || []).filter((u) => !putOff(u));
 const shownStackUpdates = () => stackUpdates().filter((u) => !putOff(u));
 
+// "Better for your PC": for each model you use, a model from ANY family that is clearly better at
+// the same job (at least a full point out of 10), runs great or good on this PC and isn't
+// installed. Newer versions of the same model come from models:upgrades; this finds the rest.
+// Uncensored models are only replaced by uncensored ones, models that see photos by ones that do.
+// A model Quicksilver hasn't tested yet says its rating is an estimate.
+const BETTER_JOB = { coding: 'coding', vision: 'vision', reasoning: 'research' };
+function betterModels(have = S.modelUpgrades || []) {
+  if (!S.catalog?.text || !S.est?.text) return [];
+  const taken = new Set(have.map((u) => u.newCatalogId));
+  const out = [];
+  for (const inst of S.installed.filter((m) => m.kind === 'text' && m.catalogId && m.source !== 'bundled' && !(typeof liquidLocked === 'function' && liquidLocked(m)))) {
+    const old = S.catalog.text.find((x) => x.id === inst.catalogId);
+    if (!old?.jobs || have.some((u) => u.oldCatalogId === old.id)) continue;
+    const job = BETTER_JOB[old.category] || 'general';
+    const mine = old.jobs[job] || 0;
+    const open = old.category === 'open' || old.open;
+    const pick = S.catalog.text.filter((c) => !c.retired && c.id !== old.id && c.jobs && !haveModel(c.id) && !taken.has(c.id)
+      && (c.jobs[job] || 0) >= mine + 1 && ['great', 'good'].includes(S.est.text[c.id]?.rating)
+      && (!open || c.category === 'open' || c.open) && (!old.vision || c.vision) && (job !== 'coding' || c.category === 'coding'))
+      .sort((a, b) => (b.jobs[job] - a.jobs[job]) || (Boolean(a.remote) - Boolean(b.remote)) || a.sizeGB - b.sizeGB)[0];
+    if (!pick) continue;
+    taken.add(pick.id);
+    const est = S.est.text[pick.id];
+    const words = { general: 'everyday answers', coding: 'coding', vision: 'reading photos', research: 'hard questions' }[job];
+    out.push({ better: true, estimate: Boolean(pick.remote), oldId: inst.id, oldName: inst.name, oldCatalogId: old.id, newCatalogId: pick.id, newName: pick.name,
+      why: `better at ${words} (${mine} → ${pick.jobs[job]} out of 10${pick.remote ? ', an estimate: not tested by Quicksilver yet' : ''}), ${pick.sizeGB} GB`, rating: est.rating, speed: est.label, sizeGB: pick.sizeGB });
+  }
+  return out;
+}
+
 async function loadModelUpgrades() {
   try { S.modelUpgrades = await qs.call('models:upgrades'); } catch { S.modelUpgrades = []; }
+  S.modelUpgrades = [...S.modelUpgrades, ...betterModels(S.modelUpgrades)];
   paintUpdateBadge();
   return S.modelUpgrades;
 }
@@ -138,7 +169,7 @@ async function checkForUpdates({ auto = true } = {}) {
   let budget = AUTO_CAP_GB;
   const fresh = [];
   for (const u of ups) {
-    if (!['great', 'good'].includes(u.rating) || S.downloads[u.newCatalogId] || u.sizeGB > budget) continue;
+    if (u.better || !['great', 'good'].includes(u.rating) || S.downloads[u.newCatalogId] || u.sizeGB > budget) continue; // a different model is your call, never automatic
     budget -= u.sizeGB; startUpgrade(u, true); fresh.push(u.newName);
   }
   for (const s of stacks.filter((x) => !x.fresh)) {
@@ -191,8 +222,8 @@ function modelUpdatesHTML() {
   if (!ups.length && !stacks.length) {
     return `<div class="notice ok up-none" id="model-updates"><b>✓ Your models are the best picks for this PC.</b> <span class="small">Quicksilver checks online every day for newer, better models and stacks (${esc(when)}).</span> <button class="btn small ghost" id="up-check">Check now</button>${laterNote}</div>`;
   }
-  const row = (u) => { const gains = gainsOf(u.oldCatalogId, u.newCatalogId); return `<div class="up-row"><div class="grow"><b>${esc(gains[0]?.text || `A stronger ${u.oldName}`)}</b>${gainsHTML(gains.slice(1))}<div class="small muted">${esc(u.oldName)} → <b>${esc(u.newName)}</b> · ${esc(u.why)} · ${esc(u.speed)} on this PC</div></div>
-    ${S.downloads[u.newCatalogId] ? '<span class="badge b-sky">Installing…</span>' : `<button class="btn small primary" data-up-get="${esc(u.newCatalogId)}">Upgrade</button><button class="btn small ghost" data-up-later="${esc(upKey(u))}" title="Suggest it again in ${LATER_DAYS} days">Maybe later</button>`}</div>`; };
+  const row = (u) => { const gains = gainsOf(u.oldCatalogId, u.newCatalogId); return `<div class="up-row"><div class="grow"><b>${esc(gains[0]?.text || (u.better ? `Better than ${u.oldName}` : `A stronger ${u.oldName}`))}</b>${gainsHTML(gains.slice(1))}<div class="small muted">${esc(u.oldName)} → <b>${esc(u.newName)}</b> · ${esc(u.why)} · ${esc(u.speed)} on this PC</div></div>
+    ${S.downloads[u.newCatalogId] ? '<span class="badge b-sky">Installing…</span>' : `<button class="btn small primary" data-up-get="${esc(u.newCatalogId)}">${u.better ? 'Switch to it' : 'Upgrade'}</button><button class="btn small ghost" data-up-later="${esc(upKey(u))}" title="Suggest it again in ${LATER_DAYS} days">Maybe later</button>`}</div>`; };
   const srow = (s) => `<div class="up-row"><div class="grow">${esc(s.emoji || '🧩')} <b>${esc(s.name)}</b>${s.fresh ? '' : gainsHTML([...new Map(s.models.flatMap((m) => gainsOf(m.fromId, m.id)).map((g) => [g.text, g])).values()].slice(0, 4))}<div class="small muted">${s.fresh ? `🆕 New stack. ${esc(s.why)}${s.models.length ? ` Downloads: ${s.models.map((m) => esc(m.name)).join(', ')}.` : ' Uses models you already have.'}` : s.quicksilver ? `${s.core ? 'Switch to' : 'Add'} <b>${esc(s.models[0].name)}</b>${s.core ? ` (replaces ${esc(s.models[0].from)})` : ' to the team'}: ${esc(s.why)}` : `${s.models.map((m) => `${esc(m.from)} → <b>${esc(m.name)}</b>`).join(', ')}`}</div></div>
     ${s.models.some((m) => S.downloads[m.id]) ? '<span class="badge b-sky">Installing…</span>' : `<button class="btn small primary" data-up-stack="${esc(upKey(s))}">${s.fresh ? 'Set up' : s.quicksilver ? 'Add it' : 'Update stack'}</button><button class="btn small ghost" data-up-later="${esc(upKey(s))}" title="Suggest it again in ${LATER_DAYS} days">Maybe later</button>`}</div>`;
   return `<div class="card up-card" id="model-updates"><div class="row"><h3 class="grow" style="margin:0">✨ Better models available</h3><span class="small muted">${esc(when)}</span></div>

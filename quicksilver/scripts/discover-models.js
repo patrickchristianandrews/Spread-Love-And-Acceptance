@@ -129,6 +129,60 @@ function successorsFor(fresh, known) {
   return out;
 }
 
+
+// ---------- the lists stacks choose from ("ladders") ----------
+// Each stack part picks the strongest model on its list that runs smoothly on the PC. The lists
+// in the app are written by hand; here they are refreshed every day with the catalog's newer
+// models, so stacks move on too. Only trusted models join: everything built in, models added by
+// hand, and found models of the well-known families from the makers' own pages or the main
+// converters (one-off community mixes stay in the catalog, for picking by hand). A model the
+// finder dropped leaves the lists with it, because they are rebuilt from the catalog each run.
+const TRUSTED_OWNERS = new Set(['bartowski', 'unsloth', 'lmstudio-community', 'ggml-org', 'Qwen', 'google', 'microsoft', 'ibm-granite', 'mistralai', 'NousResearch', 'allenai', 'HuggingFaceTB', 'LiquidAI', 'tiiuae', 'nvidia']);
+const KNOWN_FAMILY = /^(qwen|gemma|mistral|ministral|magistral|devstral|deepseek|glm|phi|llama|granite|olmo|smollm|hermes|dolphin|ernie|kimi|nemotron|seed|minicpm|exaone|lfm|falcon|huihui)/i;
+const LADDER_JOB = { general: 'general', creative: 'general', open: 'general', coding: 'coding', reasoning: 'research', vision: 'vision' };
+const LADDER_MAX = 36;
+function handLadders() {
+  const src = fs.readFileSync(path.join(__dirname, '..', 'src', 'renderer', 'js', 'stack-recipes.js'), 'utf8');
+  const m = src.match(/const RX_LADDERS = (\{[\s\S]*?\n\});/);
+  if (!m) throw new Error('could not read the stacks\' model lists from stack-recipes.js');
+  return require('node:vm').runInNewContext(`(${m[1]})`);
+}
+function trustedFound(m) {
+  if (!m.auto) return true; // built in, or added by hand
+  const owner = m.repo.split('/')[0];
+  const name = m.repo.split('/').pop().replace(/^[A-Za-z0-9-]+_(?=[A-Za-z])/, '');
+  return TRUSTED_OWNERS.has(owner) && KNOWN_FAMILY.test(name) || (m.category === 'open' && KNOWN_FAMILY.test(name));
+}
+function laddersFor(models) {
+  const hand = handLadders();
+  const byId = new Map(models.map((m) => [m.id, m]));
+  const builtIn = new Set(catalog.TEXT_MODELS.filter((m) => !m.remote).map((m) => m.id));
+  const kindOf = (m) => (m.category === 'open' || m.open ? 'open' : m.category === 'coding' ? 'coding' : m.category === 'reasoning' ? 'reasoning' : m.category === 'vision' ? 'vision' : 'general');
+  const out = {};
+  for (const [name, list] of Object.entries(hand)) {
+    const job = LADDER_JOB[name] || 'general';
+    const members = new Set(list.filter((id) => byId.has(id)));
+    for (const m of models) {
+      if (!trustedFound(m) || !m.jobs) continue;
+      const k = kindOf(m);
+      if (name === 'creative' ? (k === 'general' && /^(gemma|mistral|ministral|magistral)/i.test(m.id)) : name === 'vision' ? (m.vision && k !== 'open' && k !== 'coding') : k === name) members.add(m.id);
+    }
+    // Strongest first. A model Quicksilver hasn't tested (its scores are estimates) counts a full
+    // point less, so a tested model of about the same strength comes first; then the bigger one.
+    const score = (id) => { const m = byId.get(id); return (m.jobs?.[job] || 0) - (builtIn.has(id) ? 0 : 1); };
+    let sorted = [...members].sort((a, b) => score(b) - score(a) || byId.get(b).sizeGB - byId.get(a).sizeGB);
+    // Too many: keep the hand-picked ones and the strongest found ones, and always some small ones, so every PC has a pick.
+    if (sorted.length > LADDER_MAX) {
+      const small = sorted.filter((id) => byId.get(id).sizeGB <= 5).slice(-6);
+      const keep = new Set([...list.filter((id) => byId.has(id)), ...small]);
+      for (const id of sorted) { if (keep.size >= LADDER_MAX) break; keep.add(id); }
+      sorted = sorted.filter((id) => keep.has(id));
+    }
+    out[name] = sorted;
+  }
+  return out;
+}
+
 (async () => {
   const data = JSON.parse(fs.readFileSync(FILE, 'utf8'));
   const byHand = (data.models || []).filter((m) => !m.auto);
@@ -151,7 +205,8 @@ function successorsFor(fresh, known) {
   const hand = Object.fromEntries(Object.entries(data.successors || {}).filter(([a]) => !(data.autoSuccessors || []).includes(a)));
   const successors = { ...Object.fromEntries(Object.entries(auto).filter(([a, b]) => !hand[a] && kept.has(b))), ...hand };
   const models = [...byHand, ...keep.map(({ _p, popularity, ...m }) => m)];
-  const next = { ...data, updated: TODAY, models, successors, autoSuccessors: Object.keys(auto).filter((a) => !hand[a] && kept.has(auto[a])) };
+  const ladders = laddersFor([...catalog.TEXT_MODELS.filter((m) => !m.remote), ...models]);
+  const next = { ...data, updated: TODAY, models, successors, ladders, autoSuccessors: Object.keys(auto).filter((a) => !hand[a] && kept.has(auto[a])) };
   // The app's own check of this file must accept every model that was added.
   const checked = remote.clean(JSON.parse(JSON.stringify(next)));
   const refused = models.filter((m) => !checked?.models.some((x) => x.id === m.id)).map((m) => m.id);
@@ -162,6 +217,7 @@ function successorsFor(fresh, known) {
   for (const m of keep) console.log(`  ${added.includes(m.id) ? '+' : ' '} ${m.id} · ${m.sizeGB} GB · ${m.category} · ${m.license} · ${m.repo}`);
   for (const id of removed) console.log(`  - ${id}`);
   for (const [a, b] of Object.entries(auto)) console.log(`  ${a} → ${b}`);
+  for (const [k, l] of Object.entries(ladders)) console.log(`  stacks' ${k} list (${l.length}): ${l.slice(0, 8).join(', ')}${l.length > 8 ? ', …' : ''}`);
   const same = JSON.stringify({ ...data, updated: 0 }) === JSON.stringify({ ...next, updated: 0 });
   if (DRY || same) { console.log(same ? 'No change.' : '(dry run: nothing written)'); return; }
   fs.writeFileSync(FILE, `${JSON.stringify(next, null, 2)}\n`);

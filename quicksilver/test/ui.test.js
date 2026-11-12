@@ -1215,6 +1215,28 @@ function redPng(size = 64) {
   await win.click('[data-tab="installed"]');
   await win.waitForSelector('#model-updates');
   console.log('✓ built-in model card, featured picks, better-model upgrade swaps into stacks and chats');
+  // Better for your PC: a clearly better model from any family, for the same job, that runs well
+  // here; uncensored stays uncensored; never installed by itself.
+  const better = await win.evaluate(() => {
+    const keep = { inst: S.installed, est: S.est.text };
+    try {
+      const textIds = S.catalog.text.filter((m) => !m.retired).map((m) => m.id);
+      S.est.text = Object.fromEntries(textIds.map((id) => [id, { rating: 'great', label: 'Runs great', fit: 'full', wordsPerSec: 30 }]));
+      const weak = S.catalog.text.filter((m) => m.category === 'general' && m.jobs?.general && m.jobs.general <= 6 && !m.remote)[0];
+      const weakOpen = S.catalog.text.filter((m) => m.category === 'open' && m.jobs?.general && m.jobs.general <= 6 && !m.remote)[0];
+      S.installed = [weak, weakOpen].filter(Boolean).map((m, i) => ({ id: `t${i}`, name: m.name, catalogId: m.id, kind: 'text', source: 'catalog' }));
+      const list = betterModels([]);
+      const cat = (id) => S.catalog.text.find((m) => m.id === id);
+      return { n: list.length, all: list.map((u) => ({ from: u.oldCatalogId, to: u.newCatalogId, gain: (cat(u.newCatalogId).jobs.general || 0) - (cat(u.oldCatalogId).jobs.general || 0), open: Boolean(cat(u.newCatalogId).category === 'open' || cat(u.newCatalogId).open), wasOpen: Boolean(cat(u.oldCatalogId).category === 'open'), better: u.better, why: u.why })) };
+    } finally { S.installed = keep.inst; S.est.text = keep.est; }
+  });
+  assert.ok(better.n >= 1, `a better model is found for a weak one: ${JSON.stringify(better)}`);
+  for (const b of better.all) {
+    assert.ok(b.better && b.gain >= 1, `at least a full point better at the same job: ${JSON.stringify(b)}`);
+    if (b.wasOpen) assert.ok(b.open, 'an uncensored model is only replaced by an uncensored one');
+    assert.match(b.why, /out of 10/);
+  }
+  console.log('✓ better for your PC: a clearly better model of any family for the same job, matched to this PC');
   await win.click('[data-tab="api"]');
   await win.waitForSelector('text=Anthropic (Claude)');
   await win.waitForSelector('#presets h3:has-text("Free to start, then paid")');
