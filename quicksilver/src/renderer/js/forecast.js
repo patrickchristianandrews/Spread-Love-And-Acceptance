@@ -51,6 +51,7 @@ function pcForecast(targets, { members = null, adding = [] } = {}) {
   const clouds = list.filter((m) => m.cloud);
   const lines = [];
   let worst = 'ok';
+  let hardSec = null; // a hard answer from this build on this PC
   const flag = (cls) => { if (cls === 'bad' || (cls === 'warn' && worst === 'ok')) worst = cls; };
   const reasons = [];
 
@@ -90,6 +91,7 @@ function pcForecast(targets, { members = null, adding = [] } = {}) {
     const one = list.find((m) => m.kind === 'text');
     const easy = stats ? stats.time(WORDS.chat) : one?.wps ? WORDS.chat / one.wps : null;
     const hard = stats ? stats.time(WORDS.hard, true) + together : one?.wps ? WORDS.hard / one.wps : null;
+    hardSec = hard;
     const parts = [];
     if (load) parts.push(`The first answer waits about ${fmtSec(load)} more while ${fits.length > 1 ? 'the models load' : 'it loads'}; after that ${fits.length > 1 ? 'they stay' : 'it stays'} loaded while you use ${fits.length > 1 ? 'them' : 'it'}.`);
     if (easy != null) parts.push(`An everyday reply: about ${fmtSec(easy)}.`);
@@ -145,7 +147,7 @@ function pcForecast(targets, { members = null, adding = [] } = {}) {
     : worst === 'warn' ? { cls: 'warn', icon: '⚠', text: `${what} will run on this PC, with waits: ${reasons.slice(0, 2).join('; ')}.` }
       : slowest && slowest.wps < 10 ? { cls: 'ok', icon: '✓', text: `${what} will run on this PC at a steady pace: about ${Math.max(1, Math.round(slowest.wps))} words a second${slowest !== list[0] || list.length > 1 ? ` from ${slowest.name}` : ''}, so longer answers take a minute or two.` }
         : { cls: 'ok', icon: '✓', text: `${what} will run well on this PC.` };
-  return { verdict, lines, worst, reasons };
+  return { verdict, lines, worst, reasons, hardSec };
 }
 
 function pcForecastHTML(targets, opts = {}) {
@@ -154,6 +156,7 @@ function pcForecastHTML(targets, opts = {}) {
   return `<div class="fc" data-fc="${f.worst}"><div class="fc-title">🔮 ${esc(opts.title || 'On this PC: what to expect')}</div>
     ${opts.noVerdict ? '' : `<div class="fz-run ${f.verdict.cls}">${f.verdict.icon} ${esc(f.verdict.text)}</div>`}
     ${f.lines.map((l) => `<div class="fc-line ${l.cls || ''}"><span class="fc-ic">${l.icon}</span><span class="grow"><b>${esc(l.title)}</b><span class="small">${l.html || esc(l.text)}</span></span></div>`).join('')}
+    ${opts.extra || ''}
     <div class="small muted">Estimates for this PC, from its measured speed and each model's size.</div></div>`;
 }
 // One line, for a note when a download starts.

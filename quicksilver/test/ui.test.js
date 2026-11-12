@@ -232,6 +232,17 @@ function redPng(size = 64) {
   // 🔮 On this PC: while you build it, a forecast of how it will behave here with everything
   // counted: this PC, where each model runs, whether they fit together, how long answers take.
   assert.match(await win.locator('#inf-preview .fc').innerText(), /On this PC: how your custom AI will behave[\s\S]*This PC[\s\S]*Where each one runs[\s\S]*How long answers take[\s\S]*everyday reply/i);
+  // …and the APIs that would work best with this build: what each lifts, and a button to
+  // connect it (the build comes back afterwards) or, once connected, to add it.
+  assert.match(await win.locator('#inf-preview .fc').innerText(), /APIs that would work best with this build[\s\S]*(Best free|Best quality|You have it|already in it|None needed)/);
+  const buildApi = await win.evaluate(() => {
+    const local = S.installed.filter((m) => (m.kind || 'text') === 'text').map((m) => `local:${m.id}`).slice(0, 2);
+    const html = buildApiHTML(local, {});
+    const liquid = buildApiHTML(local, { liquid: true });
+    return { rows: (html.match(/api-sug-row/g) || []).length, connect: /data-api-connect-back="[a-z]+"/.test(html), lifts: /→/.test(html), liquidOnlyVenice: /Venice AI/.test(liquid) && !/Google Gemini|OpenAI|Groq/.test(liquid) };
+  });
+  assert.ok(buildApi.rows >= 1 && buildApi.connect && buildApi.lifts, `a build of local models is offered APIs with what they lift: ${JSON.stringify(buildApi)}`);
+  assert.ok(buildApi.liquidOnlyVenice, 'an uncensored-only build is only offered the uncensored service');
   const fc = await win.evaluate(() => {
     const real = S.est.hardware; const disk = S.disk;
     const local = S.installed.filter((m) => (m.kind || 'text') === 'text').map((m) => `local:${m.id}`);

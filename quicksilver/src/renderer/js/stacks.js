@@ -408,7 +408,7 @@ function editStack(s) {
   const nonStack = { ...S, targets: S.targets.filter((t) => !t.stack) };
   const opts = (sel, none) => { const keep = S.targets; S.targets = nonStack.targets; const h = targetOptions(sel, { includeNone: true, noneLabel: none }); S.targets = keep; return h; };
   const visionOpts = () => `<option value="">None (or a drafter can see)</option>${S.targets.filter((t) => t.vision && !t.stack).map((t) => `<option value="${esc(t.target)}" ${t.target === v.members.vision ? 'selected' : ''}>${esc(t.label)}</option>`).join('')}`;
-  const b = openModal(`<h2>${s ? 'Edit team' : 'Build your own team'}</h2>
+  const b = openModal(`<h2>${s?.id ? 'Edit team' : 'Build your own team'}</h2>
     <p class="help">Mix any models: ones on this PC and ones from connected APIs (for example, two local drafters with Claude or GPT as the lead). Local models take turns; cloud models run at the same time.</p>
     <div class="stack-v">
       <div class="row"><div class="field" style="width:110px"><label for="st-emoji">Icon</label><select id="st-emoji">${['🧩', '🚀', '📊', '🔎', '💻', '📷', '⚖️', '🧠'].map((e) => `<option ${e === v.emoji ? 'selected' : ''}>${e}</option>`).join('')}</select></div>
@@ -423,9 +423,20 @@ function editStack(s) {
     const drafters = [0, 1, 2].map((i) => b.querySelector(`#st-d${i}`).value).filter(Boolean);
     const mem = { drafters, judge: b.querySelector('#st-lead').value || undefined, vision: b.querySelector('#st-vision').value || undefined, mode: v.members.mode };
     // What to expect on this PC with these models, redone on every change, then speed and quality.
-    b.querySelector('#st-preview').innerHTML = (drafters.length ? pcForecastHTML([...drafters, mem.judge, mem.vision], { members: mem, title: 'On this PC: how this team will behave' }) : '') + teamPreviewHTML(mem);
+    const all = [...drafters, mem.judge, mem.vision];
+    const fc = drafters.length ? pcForecast(all, { members: mem }) : null;
+    b.querySelector('#st-preview').innerHTML = (fc ? pcForecastHTML(all, { members: mem, title: 'On this PC: how this team will behave', extra: buildApiHTML(all, { addLabel: 'Use as the lead', hardSec: fc.hardSec }) }) : '') + teamPreviewHTML(mem);
+    // A suggested API you have connected becomes the lead; one you have not opens its connect
+    // box, and the team you were building comes back afterwards.
+    b.querySelectorAll('#st-preview [data-api-pick]').forEach((x) => x.addEventListener('click', () => { const lead = b.querySelector('#st-lead'); if (![...lead.options].some((o) => o.value === x.dataset.apiPick)) { toast('That cloud AI is not in the list yet.'); return; } lead.value = x.dataset.apiPick; preview(); toast(`${targetLabel(x.dataset.apiPick)} is now the lead: it writes the final answer.`); }));
+    b.querySelectorAll('#st-preview [data-api-connect-back]').forEach((x) => x.addEventListener('click', () => {
+      const draft = { ...(s || {}), name: b.querySelector('#st-name').value, emoji: b.querySelector('#st-emoji').value, members: { ...mem } };
+      connectThenReturn(x.dataset.apiConnectBack, () => editStack(draft));
+    }));
   };
-  b.querySelector('.stack-v').addEventListener('change', preview); // this window's own fields (the modal frame is shared)
+  // Redrawn when the models change, not when the name does: leaving the name box by clicking a
+  // button in the preview would otherwise replace that button mid-click, and the click was lost.
+  b.querySelector('.stack-v').addEventListener('change', (e) => { if (!['st-name', 'st-emoji'].includes(e.target?.id)) preview(); }); // this window's own fields (the modal frame is shared)
   preview();
   b.querySelector('#st-save').addEventListener('click', async () => {
     const drafters = [0, 1, 2].map((i) => b.querySelector(`#st-d${i}`).value).filter(Boolean);
@@ -457,7 +468,7 @@ function strengthOf(t) {
 function infuseModal(onCreated, existing) {
   const options = S.targets.filter((t) => !t.stack);
   if (options.length < 2) { toast('A fusion needs at least two AIs: install a model or connect a cloud AI (Models).', 6000); return; }
-  const b = openModal(`<h2>⚗️ ${existing ? `Edit ${esc(existing.name)}` : 'Build a custom AI'}</h2>
+  const b = openModal(`<h2>⚗️ ${existing?.id ? `Edit ${esc(existing.name)}` : 'Build a custom AI'}</h2>
     <p class="help">Choose 2 to 4 AIs. Mixing different makers (for example Qwen + Llama + Claude) gives the biggest boost: they make different mistakes, so they catch each other's.</p>
     <div class="stack-v">
       <div class="row" style="justify-content:space-between;flex-wrap:wrap;gap:6px"><div class="label">1. Pick the AIs to fuse (2 to 4)</div><label class="row small" style="gap:6px"><input type="checkbox" id="inf-unc"> 🔓 Uncensored only</label></div>
@@ -483,7 +494,7 @@ function infuseModal(onCreated, existing) {
     for (const t of m.drafters || []) { const cb = b.querySelector(`.infuse-opt input[value="${CSS.escape(t)}"]`); if (cb) cb.checked = true; }
     const r = b.querySelector(`input[name="im"][value="${m.mode || 'blend'}"]`); if (r) r.checked = true;
     if (m.judge) b.querySelector('#inf-lead').value = m.judge;
-    b.querySelector('#inf-name').value = existing.name;
+    b.querySelector('#inf-name').value = existing.name || '';
   }
   b.querySelector('.infuse-pick').addEventListener('change', () => {
     const n = picked().length;
@@ -501,9 +512,27 @@ function infuseModal(onCreated, existing) {
     const sees = (t) => S.targets.find((x) => x.target === t)?.vision;
     const vision = drafters.some(sees) ? undefined : S.targets.find((t) => t.vision && !t.stack)?.target;
     const mem = { drafters, judge, vision, mode: b.querySelector('input[name="im"]:checked').value };
-    el.innerHTML = fusionRatingsHTML(mem) + pcForecastHTML([...drafters, judge, vision], { members: mem, title: 'On this PC: how your custom AI will behave', noVerdict: true }) + fusionAdviceHTML(mem) + boostsHTML([...drafters, judge], { fusion: true }) + teamPreviewHTML(mem, { title: 'How your custom AI will work on this PC' });
+    const all = [...drafters, judge, vision];
+    const fc = pcForecast(all, { members: mem });
+    const apis = buildApiHTML(all, { liquid: b.querySelector('#inf-unc').checked, hardSec: fc?.hardSec });
+    el.innerHTML = fusionRatingsHTML(mem) + pcForecastHTML(all, { members: mem, title: 'On this PC: how your custom AI will behave', noVerdict: true, extra: apis }) + fusionAdviceHTML(mem) + boostsHTML([...drafters, judge], { fusion: true }) + teamPreviewHTML(mem, { title: 'How your custom AI will work on this PC' });
+    // A suggested API you have connected is ticked in the list above; one you have not opens
+    // its connect box, and this build comes back afterwards exactly as it was.
+    el.querySelectorAll('[data-api-pick]').forEach((x) => x.addEventListener('click', () => {
+      const cb = b.querySelector(`.infuse-opt input[value="${CSS.escape(x.dataset.apiPick)}"]`);
+      if (!cb) { toast('That cloud AI is not in the list yet.'); return; }
+      if (picked().length >= 4 && !cb.checked) { toast('Four is the most: untick one first.'); return; }
+      cb.checked = true; cb.dispatchEvent(new Event('change', { bubbles: true }));
+      toast(`${targetLabel(x.dataset.apiPick)} added to your custom AI.`);
+    }));
+    el.querySelectorAll('[data-api-connect-back]').forEach((x) => x.addEventListener('click', () => {
+      const draft = { ...(existing || {}), name: b.querySelector('#inf-name').value, members: { drafters, mode: mem.mode, judge: b.querySelector('#inf-lead').value || undefined } };
+      connectThenReturn(x.dataset.apiConnectBack, () => infuseModal(onCreated, draft));
+    }));
   };
-  b.querySelector('.stack-v').addEventListener('change', preview); // this window's own fields (the modal frame is shared)
+  // Redrawn when the picks change, not when the name does: leaving the name box by clicking a
+  // button in the preview would otherwise replace that button mid-click, and the click was lost.
+  b.querySelector('.stack-v').addEventListener('change', (e) => { if (e.target?.id !== 'inf-name') preview(); }); // this window's own fields (the modal frame is shared)
   preview();
   b.querySelector('#inf-go').addEventListener('click', async () => {
     const drafters = picked();

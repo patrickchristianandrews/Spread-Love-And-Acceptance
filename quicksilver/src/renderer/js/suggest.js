@@ -176,14 +176,13 @@ function apiCovers(r, task) {
   if (task === 'writing') return r[2].includes('writing') || r[2].includes('chat');
   return r[2].includes(SUGGEST_TASKS[task][3]);
 }
-function stackApiPicks(s) {
-  const targets = sugTargets(`stack:${s.id}`);
-  const liquid = isLiquidStack(s);
+const stackApiPicks = (s) => apiPicksFor(sugTargets(`stack:${s.id}`), { liquid: isLiquidStack(s), main: BUILT_FOR_TASK[s.builtFor] || null });
+// targets: the models answering (a saved team's members, or the ones picked so far in a build).
+function apiPicksFor(targets, { liquid = false, main = null } = {}) {
   const inside = targets.filter((t) => String(t).startsWith('api:'));
   const local = targets.filter((t) => !String(t).startsWith('api:'));
   const now = Object.fromEntries(Object.keys(API_JOBS).map((k) => [k, Math.round((sugNow(local, k).score || 0) * 2) / 2]));
   const rated = Object.values(now).some((v) => v > 0); // a model Quicksilver has no ratings for can't be compared
-  const main = BUILT_FOR_TASK[s.builtFor] || null;
   // The Liquid Edition only uses uncensored cloud AIs; everything else can use any chat service.
   const rows = (typeof API_RANK !== 'undefined' ? API_RANK : []).filter((r) => r[0] && r[0] !== 'translate' && r[9] === 'app' && (liquid ? r[2].includes('uncensored') : true))
     .map((r) => {
@@ -198,28 +197,66 @@ function stackApiPicks(s) {
   const best = top && (!free || top.r[6] > free.r[6]) ? top : null;
   return { targets, liquid, inside, now, rated, main, free, best, have: have && have !== free && have !== best ? have : null };
 }
+// One suggested service: its name and why, what it lifts (out of 10, now → with it), what it costs,
+// and the button that fits where it is shown (act).
+function apiPickRow([why, cls, x], p, act) {
+  const was = (l) => (l.from > 0 ? l.from : l.task === 'vision' ? 'can’t' : 'unrated');
+  const lifts = x.lifts.slice(0, 3).map((l) => `${API_JOBS[l.task]} <b>${was(l)} → ${l.to}</b>`).join(' · ');
+  const cost = why === 'Best free' ? `Free: ${x.r[4]}` : x.r[7] >= 5 ? `Free: ${x.r[4]}` : `Cost: ${x.r[5]}`;
+  const note = p.liquid && x.r[0] === 'venice' ? `The only cloud AI the Liquid Edition uses. ${veniceLiquidText().replace(/^with the Liquid Edition o/, 'O')}.` : '';
+  return `<div class="api-sug-row"><span class="grow"><span><b>${esc(x.r[1])}</b> <span class="badge ${cls}">${why}</span>${x.connected ? ' <span class="badge b-mint">✓ connected</span>' : ''}</span>${lifts ? `<span class="small">${lifts}</span>` : ''}${note ? `<span class="small">${esc(note)}</span>` : ''}<span class="small muted">${esc(x.r[3])} · ${esc(cost)}</span></span>${act(x)}</div>`;
+}
+const apiPickList = (p) => [['Best free', 'b-mint', p.free], [p.liquid ? 'Uncensored' : 'Best quality', 'b-lav', p.best], ['You have it', 'b-sky', p.have]].filter(([, , x]) => x);
+const apiDirLink = (p) => `<a href="#" class="small" data-api-dir="${p.liquid ? 'uncensored' : { vision: 'photos-in' }[p.main] || p.main || 'all'}" title="Every service in one list: by task, free or paid, what the free plan gives you, with a link to each">📒 All APIs</a>`;
+
 function stackApiHTML(s) {
   const p = stackApiPicks(s);
   const kind = isFusion(s) ? 'custom AI' : 'stack';
-  const all = p.liquid ? 'uncensored' : { vision: 'photos-in' }[p.main] || p.main || 'all';
-  const head = (t) => `<div class="api-sug-h row"><span class="grow">☁️ ${t}</span><a href="#" class="small" data-api-dir="${all}" title="Every service in one list: by task, free or paid, what the free plan gives you, with a link to each">📒 All APIs</a></div>`;
+  const head = (t) => `<div class="api-sug-h row"><span class="grow">☁️ ${t}</span>${apiDirLink(p)}</div>`;
   if (p.inside.length) return `<div class="api-sug">${head(`Cloud AI in this ${kind}`)}<div class="small muted">${esc(p.inside.map(targetLabel).join(', '))} ${p.inside.length > 1 ? 'are' : 'is'} already part of it, so no other API is needed for its answers.</div></div>`;
-  const picks = [['Best free', 'b-mint', p.free], [p.liquid ? 'Uncensored' : 'Best quality', 'b-lav', p.best], ['You have it', 'b-sky', p.have]].filter(([, , x]) => x);
+  const picks = apiPickList(p);
   if (!picks.length) return `<div class="api-sug">${head('Suggested API')}<div class="small muted">None needed: for what this ${kind} does, it already rates as high on this PC as the cloud services would.</div></div>`;
   const editable = !s.builtIn && !s.autoManaged && !p.liquid;
   const hardOn = Boolean(S.data.prefs.cloudHard);
-  const was = (l) => (l.from > 0 ? l.from : l.task === 'vision' ? 'can’t' : 'unrated');
-  const row = ([why, cls, x]) => {
-    const lifts = x.lifts.slice(0, 3).map((l) => `${API_JOBS[l.task]} <b>${was(l)} → ${l.to}</b>`).join(' · ');
-    const cost = why === 'Best free' ? `Free: ${x.r[4]}` : x.r[7] >= 5 ? `Free: ${x.r[4]}` : `Cost: ${x.r[5]}`;
-    const note = p.liquid && x.r[0] === 'venice' ? `The only cloud AI the Liquid Edition uses. ${veniceLiquidText().replace(/^with the Liquid Edition o/, 'O')}.` : '';
-    const act = !x.connected ? `<button class="btn small" data-api-connect="${esc(x.r[0])}" title="Opens the connect box for ${esc(x.r[1])}: paste its key and it is ready">Connect</button>`
-      : editable ? `<button class="btn small" data-api-lead="${esc(s.id)}" data-preset="${esc(x.r[0])}" title="${esc(x.r[1])} writes the final answer; the models on your PC draft it and your current lead becomes a drafter">Add as the lead</button>`
-        : hardOn ? '<span class="badge b-mint" title="Hard questions go to your connected cloud AI; everyday ones stay on your PC">✓ used for hard questions</span>'
-          : '<button class="btn small" data-api-hard title="Hard questions go to this cloud AI; everyday ones stay on your PC">Use for hard questions</button>';
-    return `<div class="api-sug-row"><span class="grow"><span><b>${esc(x.r[1])}</b> <span class="badge ${cls}">${why}</span>${x.connected ? ' <span class="badge b-mint">✓ connected</span>' : ''}</span>${lifts ? `<span class="small">${lifts}</span>` : ''}${note ? `<span class="small">${esc(note)}</span>` : ''}<span class="small muted">${esc(cost)}</span></span>${act}</div>`;
+  const act = (x) => (!x.connected ? `<button class="btn small" data-api-connect="${esc(x.r[0])}" title="Opens the connect box for ${esc(x.r[1])}: paste its key and it is ready">Connect</button>`
+    : editable ? `<button class="btn small" data-api-lead="${esc(s.id)}" data-preset="${esc(x.r[0])}" title="${esc(x.r[1])} writes the final answer; the models on your PC draft it and your current lead becomes a drafter">Add as the lead</button>`
+      : hardOn ? '<span class="badge b-mint" title="Hard questions go to your connected cloud AI; everyday ones stay on your PC">✓ used for hard questions</span>'
+        : '<button class="btn small" data-api-hard title="Hard questions go to this cloud AI; everyday ones stay on your PC">Use for hard questions</button>');
+  return `<div class="api-sug" title="Out of 10 for each job: what this ${kind} does on this PC now → with that service. ${p.rated ? '' : 'Quicksilver has no ratings for these models, so the gain can\'t be worked out.'}">${head(`Suggested API for this ${kind}`)}${picks.map((x) => apiPickRow(x, p, act)).join('')}</div>`;
+}
+
+// The same suggestions while you are still building: the APIs that would work best with the
+// models picked so far, on this PC. A connected one is added to the build with one click; one
+// that is not connected opens its connect box and then brings you back to the build as it was.
+// opts.hardSec: how long this build takes for a hard answer here (to say what the cloud saves).
+function buildApiHTML(targets, { liquid = false, addLabel = 'Add to this build', hardSec = null } = {}) {
+  const p = apiPicksFor((targets || []).filter(Boolean), { liquid });
+  const picks = apiPickList(p);
+  const head = `<div class="fc-line"><span class="fc-ic">☁️</span><span class="grow"><b>APIs that would work best with this build</b>`;
+  if (p.inside.length && !picks.length) return `${head}<span class="small">${esc(p.inside.map(targetLabel).join(', '))} ${p.inside.length > 1 ? 'are' : 'is'} already in it: it brings a much bigger model's knowledge, and uses none of this PC's memory.</span></span></div>`;
+  if (!picks.length) return `${head}<span class="small">None needed: for what these models do, they already rate as high on this PC as the cloud services would.</span></span></div>`;
+  const cloudSec = 1.5 + WORDS.hard / CLOUD_WPS;
+  const speed = hardSec && hardSec > cloudSec * 2 ? ` A cloud AI answers a hard question in about ${fmtSec(cloudSec)}; this build takes about ${fmtSec(hardSec)} on this PC.` : '';
+  const act = (x) => {
+    const t = x.connected ? cloudTarget(x.r[0]) : null;
+    return t ? `<button class="btn small" data-api-pick="${esc(t)}" title="Adds ${esc(targetLabel(t))} to the AIs picked above">${esc(addLabel)}</button>`
+      : `<button class="btn small" data-api-connect-back="${esc(x.r[0])}" title="Opens the connect box for ${esc(x.r[1])}; your build is kept and comes back when the box closes">Connect</button>`;
   };
-  return `<div class="api-sug" title="Out of 10 for each job: what this ${kind} does on this PC now → with that service. ${p.rated ? '' : 'Quicksilver has no ratings for these models, so the gain can\'t be worked out.'}">${head(`Suggested API for this ${kind}`)}${picks.map(row).join('')}</div>`;
+  return `${head}<span class="small">${p.inside.length ? 'A cloud AI is already in it. Others that would add to it:' : 'Out of 10 for each job: what these models do on this PC now → with that service.'}${speed} ${apiDirLink(p)}</span>
+    <div class="api-sug-list">${picks.map((x) => apiPickRow(x, p, act)).join('')}</div></span></div>`;
+}
+// "Connect" from inside a build: the connect box takes the place of the build (there is one box),
+// so the build is remembered and put back when that box closes, connected or not.
+async function connectThenReturn(preset, reopen) {
+  const presets = await loadPresets();
+  editProvider({ preset }, presets);
+  const box = $('#modal');
+  const back = new MutationObserver(() => {
+    if (!box.hidden) return;
+    back.disconnect();
+    setTimeout(async () => { await refreshProviders().catch(() => {}); if ($('#modal').hidden) reopen(); }, 400);
+  });
+  back.observe(box, { attributes: true, attributeFilter: ['hidden'] });
 }
 // The buttons on those suggestions (bound by the Stacks & Fusion page).
 function bindStackApi(root = document) {
