@@ -1,12 +1,23 @@
 ### Download
 
-There are three ways to get Quicksilver 2.19. All install the same app; they differ in how the Liquid Edition's models (about 30 GB) arrive.
+There are three ways to get Quicksilver 2.20. All install the same app; they differ in how the Liquid Edition's models (about 30 GB) arrive.
 
-- **Quicksilver-Setup-2.19.1.exe** (below, about 1.9 GB, with a matching `.sha256`): the installer with the small 2B model inside. The first time Quicksilver opens, its setup screen downloads the rest of the Liquid Edition before the app starts.
-- **Quicksilver-Web-Setup-2.19.1.exe** (below, about 200 MB): the web installer. No models inside at all; the setup screen downloads the whole Liquid Edition on first launch.
+- **Quicksilver-Setup-2.20.0.exe** (below, about 1.9 GB, with a matching `.sha256`): the installer with the small 2B model inside. The first time Quicksilver opens, its setup screen downloads the rest of the Liquid Edition before the app starts.
+- **Quicksilver-Web-Setup-2.20.0.exe** (below, about 200 MB): the web installer. No models inside at all; the setup screen downloads the whole Liquid Edition on first launch.
 - **Full offline package** (about 31 GB): the installer plus a "Quicksilver models" folder. Keep the two together when you run the installer and everything is copied in: nothing to download, works with no internet from the first minute. It is too large for a GitHub release file, so it is the **Quicksilver-Windows-installer** build artifact on this release's build run (linked at the top of these notes; a GitHub sign-in is needed, and GitHub keeps build artifacts for 90 days).
 
+Updating from 2.19: nothing extra to download; your chats, settings and models are kept.
+
 Updating from 2.18: the Liquid Edition now includes its Closer and its picture and video makers, and Quicksilver does not open until all of them are installed. After the update the setup screen downloads what is missing (about 30 GB) before the app starts. Your chats, settings and the models you already have are kept.
+
+### New in 2.20
+
+- **A much bigger model catalog:** 187 chat models (up from 69), found on Hugging Face every day. Old models are left out and newer versions replace them. The list comes inside the installer, so it is all there offline from the first start.
+- **Trending and Featured are matched to your PC:** Trending lists only models that will run on it (a note names your PC and how many were hidden, with a button to show them), and ⭐ Featured only marks models that fit.
+- **Hugging Face datasets as knowledge:** in Your knowledge, "Add a Hugging Face dataset" searches public collections of text and tables, shows each one's license and size first, then adds it so answers can cite it. After the download it stays on your PC.
+- **Trending Spaces:** links to the apps people are using on Hugging Face right now, marked online and not private.
+- **44 new specialist skills (225 in all):** two new groups, Law, policy & government and Security, privacy & audit, plus money (cash flow, reconciliation, financial statements), business (market sizing, decision memos, A/B tests), research (reading papers, source reliability, experiment protocols) and everyday life (questions for your doctor, sleep, hard conversations).
+- **American spelling** throughout the app.
 
 ## What's inside
 
