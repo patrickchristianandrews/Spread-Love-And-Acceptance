@@ -1,14 +1,19 @@
 ### Download
 
-There are three ways to get Quicksilver 2.20.1. All install the same app; they differ in how the Liquid Edition's models (about 30 GB) arrive.
+There are three ways to get Quicksilver 2.20.2. All install the same app; they differ in how the Liquid Edition's models (about 30 GB) arrive.
 
-- **Quicksilver-Setup-2.20.1.exe** (below, about 1.9 GB, with a matching `.sha256`): the installer with the small 2B model inside. The first time Quicksilver opens, its setup screen downloads the rest of the Liquid Edition before the app starts.
-- **Quicksilver-Web-Setup-2.20.1.exe** (below, about 200 MB): the web installer. No models inside at all; the setup screen downloads the whole Liquid Edition on first launch.
+- **Quicksilver-Setup-2.20.2.exe** (below, about 1.9 GB, with a matching `.sha256`): the installer with the small 2B model inside. The first time Quicksilver opens, its setup screen downloads the rest of the Liquid Edition before the app starts.
+- **Quicksilver-Web-Setup-2.20.2.exe** (below, about 200 MB): the web installer. No models inside at all; the setup screen downloads the whole Liquid Edition on first launch.
 - **Full offline package** (about 31 GB): the installer plus a "Quicksilver models" folder. Keep the two together when you run the installer and everything is copied in: nothing to download, works with no internet from the first minute. It is too large for a GitHub release file, so it is the **Quicksilver-Windows-installer** build artifact on this release's build run (linked at the top of these notes; a GitHub sign-in is needed, and GitHub keeps build artifacts for 90 days).
 
-Updating from 2.19 or 2.20.0: nothing extra to download; your chats, settings and models are kept.
+Updating from 2.19 or 2.20: nothing extra to download; your chats, settings and models are kept.
 
 Updating from 2.18: the Liquid Edition now includes its Closer and its picture and video makers, and Quicksilver does not open until all of them are installed. After the update the setup screen downloads what is missing (about 30 GB) before the app starts. Your chats, settings and the models you already have are kept.
+
+### New in 2.20.2
+
+- **Better for your PC:** for each model you use, Quicksilver now looks across the whole catalog (any maker) for one that is at least a full point better at the same job and runs well on your PC, and offers it with "Switch to it". Uncensored is only replaced by uncensored, a model that reads photos only by one that does, and an untested model's rating is marked as an estimate. Never installed by itself.
+- **Stacks keep up with new models:** the lists of models each stack chooses from are now refreshed every day from the catalog, so stacks can move to newer models from any well-known family (not only newer versions of the same model). You still get an "Update stack" notice first.
 
 ### New in 2.20.1
 
