@@ -329,6 +329,7 @@ async function search(query, { limit = 30 } = {}) {
 // ---------- trending on Hugging Face ----------
 // The GGUF models people are downloading most right now. Kept for a few hours, then refreshed.
 const TREND_TTL = 4 * 3600 * 1000;
+const TREND_KINDS = { pictures: 'text-to-image', editing: 'image-to-image', video: 'text-to-video', animate: 'image-to-video', voice: 'text-to-speech', listening: 'automatic-speech-recognition', music: 'text-to-audio', search: 'sentence-similarity' };
 function trendType(id, tags = [], pipeline = '') {
   const t = `${id} ${tags.join(' ')}`.toLowerCase();
   if (/uncensor|abliterat|dolphin|hermes|lexi|rocinante|nsfw|roleplay|rp-|unfiltered/.test(t)) return 'open';
@@ -351,6 +352,24 @@ async function trending({ force = false, hw = null } = {}) {
       .filter((m) => m.repo && !/lora|embed|rerank|whisper|tts|-mlx|onnx/i.test(m.repo));
     store.saveConfig({ trendingCache: { at: Date.now(), list } });
   }
+  // Everything else that is trending on Hugging Face, by what it makes: pictures, video, voice,
+  // music and search. Shown so you can see what is new; Quicksilver runs chat models straight
+  // from Hugging Face, and the other kinds once they are in its catalogue (each needs its own
+  // set of files and is tried on the real engine first).
+  let more = store.config().trendingMore;
+  if (force || !more || Date.now() - (more.at || 0) > TREND_TTL) {
+    const groups = {};
+    for (const [key, tag] of Object.entries(TREND_KINDS)) {
+      try {
+        const raw = await hfJSON(`${HF}/api/models?pipeline_tag=${tag}&sort=trendingScore&direction=-1&limit=10`);
+        groups[key] = raw.map((m) => ({ repo: m.id || m.modelId, likes: m.likes || 0, downloads: m.downloads || 0, created: m.createdAt, licence: ((m.tags || []).find((t) => /^license:/.test(t)) || '').replace('license:', '') })).filter((m) => m.repo);
+      } catch { groups[key] = more?.groups?.[key] || []; }
+    }
+    more = { at: Date.now(), groups };
+    store.saveConfig({ trendingMore: more });
+  }
+  const ours = new Set(catalog.MEDIA_MODELS.flatMap((c) => Object.values(c.files || {}).map((f) => String(f.repo || '').toLowerCase())));
+  const others = Object.fromEntries(Object.entries(more.groups).map(([k, l]) => [k, l.map((m) => ({ ...m, inCatalog: ours.has(m.repo.toLowerCase()) }))]));
   const at = store.config().trendingCache?.at || Date.now();
   return { at, list: list.map((m) => {
     const known = catalog.matchCatalog(m.repo.split('/').pop());
@@ -359,7 +378,7 @@ async function trending({ force = false, hw = null } = {}) {
     const sizeGB = known?.sizeGB || (params ? Math.round(params * 0.6 * 10) / 10 : null);
     const est = hw && sizeGB ? catalog.estimateText({ ...(known || {}), sizeGB, activeGB: known?.activeGB || (active ? active * 0.6 : undefined), ctx: known?.ctx || 8192 }, hw, 1) : null;
     return { ...m, type: known?.category && known.category !== 'small' && known.category !== 'large' ? known.category : trendType(m.repo, m.tags, m.pipeline), sizeGB, params, catalogId: known?.id || null, est: est && { rating: est.rating, label: est.label, fit: est.fit, wordsPerSec: est.wordsPerSec } };
-  }) };
+  }), others };
 }
 
 async function importFile(file, readGguf) {

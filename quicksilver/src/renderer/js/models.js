@@ -267,7 +267,18 @@ function trendingHTML() {
       <td>${m.sizeGB ? `~${m.sizeGB} GB` : '—'}</td>
       <td>${rate(m.est)}</td>
       <td class="small">❤ ${m.likes.toLocaleString()} · ⬇ ${m.downloads.toLocaleString()}</td>
-      <td><button class="btn small primary" data-hf="${esc(m.repo)}">Download…</button></td></tr>`).join('')}</tbody></table>` : '<div class="empty">Nothing trending in this group right now.</div>'}`;
+      <td><button class="btn small primary" data-hf="${esc(m.repo)}">Download…</button></td></tr>`).join('')}</tbody></table>` : '<div class="empty">Nothing trending in this group right now.</div>'}
+    ${trendOthersHTML()}`;
+}
+// Everything else trending on Hugging Face, by what it makes. For looking, with a link to each:
+// Quicksilver runs the ones marked "in Quicksilver"; the rest are not claimed to run here.
+const TREND_OTHER = { pictures: '🖼️ Pictures', editing: '🪄 Photo editing', video: '🎬 Video', animate: '✨ Photo to video', voice: '🎙️ Voices', listening: '👂 Speech to text', music: '🎵 Music & sound', search: '🔎 Search' };
+function trendOthersHTML() {
+  const g = trend?.others;
+  if (!g || !Object.values(g).some((l) => l.length)) return '';
+  return `<div class="section sf-new"><h2>Also trending on Hugging Face</h2><span class="small muted">Pictures, video, voice, music and search models people are picking up right now. Quicksilver runs chat models straight from Hugging Face (above); these kinds each need their own set of files, so one runs here once it is in the catalogue. The rest are listed so you can see what is new.</span></div>
+    <div class="cards" style="grid-template-columns:repeat(auto-fill,minmax(280px,1fr))">${Object.entries(TREND_OTHER).filter(([k]) => g[k]?.length).map(([k, label]) => `<div class="card"><h3 style="margin:0 0 8px">${label}</h3>
+      ${g[k].slice(0, 8).map((m, i) => `<div class="row small" style="gap:6px;margin:3px 0"><span class="muted">${i + 1}</span><a class="grow" href="https://huggingface.co/${esc(m.repo)}" title="Opens ${esc(m.repo)} on Hugging Face${m.licence ? ` · licence: ${esc(m.licence)}` : ''}">${esc(m.repo.split('/').pop())}</a>${m.inCatalog ? '<span class="badge b-mint">in Quicksilver</span>' : ''}<span class="muted">❤ ${Number(m.likes).toLocaleString()}</span></div>`).join('')}</div>`).join('')}</div>`;
 }
 function bindTrending() {
   $('#tr-refresh')?.addEventListener('click', (e) => { e.target.textContent = 'Refreshing…'; loadTrending(true); });
