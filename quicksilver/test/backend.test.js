@@ -621,9 +621,10 @@ async function collect(gen) {
   // Trending models: fetched from Hugging Face, grouped by type, rated for this PC, cached for hours.
   {
     let calls = 0;
+    let kinds = 0;
     global.fetch = async (url) => {
       if (!String(url).includes('sort=trendingScore')) return realFetch(url);
-      calls++;
+      if (String(url).includes('pipeline_tag=')) kinds++; else calls++; // the chat list, and one list for each other kind
       return new Response(JSON.stringify([
         { id: 'unsloth/Qwen3-Coder-30B-A3B-Instruct-GGUF', downloads: 90000, likes: 800, trendingScore: 120, tags: ['gguf', 'code'], createdAt: '2026-10-30T00:00:00Z' },
         { id: 'someone/Cool-VL-7B-GGUF', downloads: 5000, likes: 90, trendingScore: 80, tags: ['gguf'], pipeline_tag: 'image-text-to-text' },
@@ -631,16 +632,18 @@ async function collect(gen) {
         { id: 'someone/Tiny-Embed-GGUF', downloads: 100, likes: 1, trendingScore: 50, tags: ['gguf'] },
       ]), { status: 200, headers: { 'Content-Type': 'application/json' } });
     };
-    store.saveConfig({ trendingCache: null });
+    store.saveConfig({ trendingCache: null, trendingMore: null });
     const hw = await hardware.detect();
     const t = await models.trending({ hw });
+    assert.deepEqual(Object.keys(t.others), ['pictures', 'editing', 'video', 'animate', 'voice', 'listening', 'music', 'search'], 'what is trending in the other kinds comes too');
+    assert.ok(kinds === 8 && t.others.pictures.every((m) => m.repo && typeof m.inCatalog === 'boolean'));
     assert.equal(t.list.length, 3, 'embedding models left out');
     const [coder, vl, story] = t.list;
     assert.ok(coder.catalogId === 'qwen3-coder-30b' && coder.type === 'coding' && coder.est?.rating, 'known model matched and rated');
     assert.ok(vl.type === 'vision' && vl.sizeGB === 4.2 && vl.est, 'size guessed from the name');
     assert.equal(story.type, 'open');
     await models.trending({ hw });
-    assert.equal(calls, 1, 'cached between refreshes');
+    assert.deepEqual([calls, kinds], [1, 8], 'cached between refreshes');
     await models.trending({ hw, force: true });
     assert.equal(calls, 2, 'refresh on demand');
     assert.deepEqual(models.paramsOf('x/Qwen3-30B-A3B-GGUF'), { params: 30, active: 3 });
