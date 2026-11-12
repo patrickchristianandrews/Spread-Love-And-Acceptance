@@ -321,6 +321,28 @@ function redPng(size = 64) {
   assert.match(dir.text, /Free to start, then paid[\s\S]*Free gets you:[\s\S]*After that:/); assert.match(dir.text, /on their site/);
   await shot(win, '13b2-api-directory');
   await win.click('#modal [data-close]');
+  // Trending and Featured are matched to this PC: only what runs here is listed, and a note says so.
+  await win.evaluate(() => {
+    trend = { at: Date.now(), list: [
+      { repo: 'a/Fits-4B-GGUF', likes: 5, downloads: 9, type: 'general', sizeGB: 2.4, est: { rating: 'great', label: 'Runs great', fit: 'full' } },
+      { repo: 'a/Huge-400B-GGUF', likes: 5, downloads: 9, type: 'general', sizeGB: 240, est: { rating: 'wont', label: "Won't fit", fit: 'no' } },
+      { repo: 'a/Mystery-GGUF', likes: 1, downloads: 1, type: 'general', sizeGB: null, est: null }],
+    others: { pictures: [{ repo: 'x/NotHere', likes: 3, inCatalog: false, catalogId: null }] },
+    spaces: [{ id: 'maker/voice-app', likes: 42 }] };
+    trendAll = false; modelsTab = 'trending'; go({ view: 'models' });
+  });
+  await win.waitForSelector('#tr-fit');
+  let trText = await win.locator('#main').innerText();
+  assert.match(trText, /Showing only what runs on this PC[\s\S]*2 more are trending but hidden/);
+  assert.ok(/Fits-4B/.test(trText) && !/Huge-400B/.test(trText) && !/Mystery-GGUF/.test(trText) && !/NotHere/.test(trText), 'what will not run here is not listed');
+  assert.match(trText, /Trending Spaces[\s\S]*not on yours[\s\S]*voice-app/);
+  await shot(win, '13b3-trending-this-pc');
+  await win.click('#tr-all');
+  trText = await win.locator('#main').innerText();
+  assert.ok(/Huge-400B/.test(trText) && /NotHere/.test(trText), 'the hidden ones can be shown on request');
+  await win.evaluate(() => { trendAll = false; modelsTab = 'text'; render(); });
+  assert.match(await win.locator('#feat-note').innerText(), /Featured marks the best models right now that run on this PC/);
+  assert.equal(await win.evaluate(() => { const id = Object.values(S.catalog.picks.featured).flat().find((x) => S.est.text[x]); const was = S.est.text[id].fit; S.est.text[id].fit = 'no'; const f = isFeatured(id); S.est.text[id].fit = was; return f; }), false, 'a top pick that will not fit here is not featured here');
   await win.evaluate(() => { modelsTab = 'text'; go({ view: 'models' }); });
   await win.locator('.model-card [data-boost]').first().click();
   await win.waitForSelector('#modal .bz-jobs');

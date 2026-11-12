@@ -368,8 +368,9 @@ async function trending({ force = false, hw = null } = {}) {
     more = { at: Date.now(), groups };
     store.saveConfig({ trendingMore: more });
   }
-  const ours = new Set(catalog.MEDIA_MODELS.flatMap((c) => Object.values(c.files || {}).map((f) => String(f.repo || '').toLowerCase())));
-  const others = Object.fromEntries(Object.entries(more.groups).map(([k, l]) => [k, l.map((m) => ({ ...m, inCatalog: ours.has(m.repo.toLowerCase()) }))]));
+  // Which catalogue model a trending one is, so the page can say whether it runs on this PC.
+  const ours = new Map(catalog.MEDIA_MODELS.flatMap((c) => Object.values(c.files || {}).map((f) => [String(f.repo || '').toLowerCase(), c.id])));
+  const others = Object.fromEntries(Object.entries(more.groups).map(([k, l]) => [k, l.map((m) => ({ ...m, inCatalog: ours.has(m.repo.toLowerCase()), catalogId: ours.get(m.repo.toLowerCase()) || null }))]));
   const at = store.config().trendingCache?.at || Date.now();
   return { at, list: list.map((m) => {
     const known = catalog.matchCatalog(m.repo.split('/').pop());

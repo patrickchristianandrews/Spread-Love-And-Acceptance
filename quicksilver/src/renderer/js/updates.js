@@ -24,7 +24,11 @@ function maybeLater(key) {
   p.upgradeLater[key] = Date.now() + LATER_DAYS * 24 * 60 * 60 * 1000;
   save();
 }
-const isFeatured = (id) => Object.values(S.catalog?.picks?.featured || {}).some((l) => l.includes(id));
+// Featured = one of the best models right now AND it runs on this PC. A pick that will not fit
+// here is not featured here: it would only be a download that cannot be used.
+const fitsThisPC = (id) => (S.est?.text?.[id] || S.est?.media?.[id])?.fit !== 'no';
+const isFeatured = (id) => Object.values(S.catalog?.picks?.featured || {}).some((l) => l.includes(id)) && fitsThisPC(id);
+const featuredHidden = () => [...new Set(Object.values(S.catalog?.picks?.featured || {}).flat())].filter((id) => [...(S.catalog?.text || []), ...(S.catalog?.media || [])].some((m) => m.id === id && !m.retired) && !fitsThisPC(id)).length;
 // Off unless you switch it on: model downloads can be several GB, so by default you're told and choose.
 const autoUpdates = () => S.data.prefs.autoInstallModels === true;
 

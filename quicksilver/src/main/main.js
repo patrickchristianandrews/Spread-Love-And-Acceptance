@@ -15,6 +15,7 @@ const providers = require('./providers');
 const complete = require('./complete');
 const docs = require('./docs');
 const knowledge = require('./knowledge');
+const hfData = require('./hf-data');
 const websearch = require('./websearch');
 const media = require('./media');
 const apiserver = require('./apiserver');
@@ -310,7 +311,11 @@ handle('system:load', () => {
   cpuPrev = t;
   return { cpu, memFreeGB: os.freemem() / 1024 ** 3, memTotalGB: os.totalmem() / 1024 ** 3, engines: llama.status() };
 });
-handle('models:trending', async (force) => models.trending({ force, hw: await hardware.detect() }));
+handle('models:trending', async (force) => ({ ...(await models.trending({ force, hw: await hardware.detect() })), spaces: await hfData.trendingSpaces({ force }) }));
+// Hugging Face datasets as knowledge: search, look at what would come down, then add it.
+handle('hf:datasets', (q) => hfData.searchDatasets(q));
+handle('hf:dataset', (id) => hfData.datasetInfo(id));
+handle('kb:dataset', (collectionId, id) => hfData.addDataset(knowledge, collectionId, id, { onProgress: (p) => emit('library:progress', p) }));
 handle('models:import', async () => {
   const r = await dialog.showOpenDialog(win, { title: 'Import a GGUF model', properties: ['openFile'], filters: [{ name: 'GGUF model', extensions: ['gguf'] }] });
   if (r.canceled || !r.filePaths[0]) return null;

@@ -136,5 +136,45 @@ const exporters = require('../src/main/exporters');
     hung.destroy(); engine.close();
     console.log('✓ a local model is asked without the five-minute cut-off (a slow first word arrives), Stop still stops it, and engine errors keep their message');
   }
+  // --- Hugging Face datasets as knowledge ---
+  {
+    const hf = require('../src/main/hf-data');
+    const store = require('../src/main/store');
+    assert.equal(hf.cleanId('https://huggingface.co/datasets/owner/name/'), 'owner/name');
+    assert.throws(() => hf.cleanId('../../etc'), /owner\/name/);
+    assert.deepEqual(hf.parseCSV('q,a\n"Why, though?","Because ""yes""\nand more"\nx,y\n'), [{ q: 'Why, though?', a: 'Because "yes"\nand more' }, { q: 'x', a: 'y' }]);
+    const t = hf.rowText({ question: ' What? ', n: 3, picture: { bytes: Buffer.from('x') }, vec: Array(300).fill(0.1), answers: { text: ['a', 'b'] }, raw: new Uint8Array(4), empty: '' });
+    assert.equal(t, 'question: What?\nn: 3\nanswers text: a, b', 'pictures, sound and embeddings are left out of the text');
+    const realFetch = global.fetch; const asked = [];
+    const big = `title,body\n${Array.from({ length: 30 }, (_, i) => `Recipe ${i},"Mix flour, water and salt number ${i}."`).join('\n')}\n`;
+    global.fetch = async (url) => {
+      url = String(url); asked.push(url);
+      const json = (j) => new Response(JSON.stringify(j), { status: 200 });
+      if (url.includes('/api/datasets?')) return json([{ id: 'cook/recipes', downloads: 10, likes: 2, tags: ['license:cc0-1.0', 'size_categories:n<1K', 'modality:text'], description: 'Recipes.' }, { id: 'cam/photos', tags: ['modality:image'] }, { id: 'x/private', private: true, tags: [] }]);
+      if (url.endsWith('/api/datasets/cook/recipes')) return json({ id: 'cook/recipes', tags: ['license:cc0-1.0', 'modality:text'], cardData: { pretty_name: 'Recipes' } });
+      if (url.includes('/tree/main')) return json([{ type: 'file', path: 'README.md', size: 10 }, { type: 'file', path: 'test.jsonl', size: 40 }, { type: 'file', path: 'train.csv', size: big.length }, { type: 'file', path: 'img/a.png', size: 9 }]);
+      if (url.endsWith('/resolve/main/train.csv')) return new Response(big);
+      if (url.endsWith('/resolve/main/test.jsonl')) return new Response('{"title":"Soup","body":"Boil it."}\n');
+      return new Response('', { status: 404 });
+    };
+    try {
+      const found = await hf.searchDatasets('recipes');
+      assert.deepEqual(found.map((d) => d.id), ['cook/recipes'], 'picture-only and private datasets are not offered as knowledge');
+      assert.equal(found[0].licence, 'cc0-1.0'); assert.equal(found[0].rows, 'under 1K rows');
+      const info = await hf.datasetInfo('cook/recipes');
+      assert.deepEqual(info.files.map((f) => f.path), ['train.csv', 'test.jsonl'], 'text and table files only, the main split first');
+      const before = asked.length;
+      const c = knowledge.createCollection({ name: 'Cooking' });
+      assert.equal(asked.length, before, 'nothing is downloaded until it is added');
+      const r = await hf.addDataset(knowledge, c.id, 'cook/recipes');
+      assert.equal(r.rows, 31); assert.equal(r.cut, false); assert.equal(r.licence, 'cc0-1.0');
+      const hits = await knowledge.search('flour water salt number 17', { k: 2, collectionIds: [c.id] });
+      assert.match([...hits][0].text, /Recipe \d+/); assert.match([...hits][0].url, /huggingface\.co\/datasets\/cook\/recipes/);
+      store.saveConfig({ offline: true });
+      await assert.rejects(hf.searchDatasets('x'), /offline/);
+      store.saveConfig({ offline: false });
+    } finally { global.fetch = realFetch; }
+    console.log('✓ Hugging Face datasets: text and tables only, licence and size shown first, nothing downloaded until added, then searchable');
+  }
   process.exit(0);
 })().catch((e) => { console.error(`FAIL ${e.stack || e.message}`); process.exit(1); });

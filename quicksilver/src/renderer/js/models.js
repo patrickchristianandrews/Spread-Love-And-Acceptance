@@ -185,7 +185,7 @@ function modelProfileHTML(m, kind) {
 function modelCard(m, est, kind) {
   const inst = S.installed.some((x) => x.catalogId === m.id);
   const tags = [];
-  if (isFeatured(m.id)) tags.push('<span class="badge b-lemon" title="One of the best models right now; this list updates online">⭐ Featured</span>');
+  if (isFeatured(m.id)) tags.push('<span class="badge b-lemon" title="One of the best models right now that runs on this PC; this list updates online">⭐ Featured</span>');
   if (m.remote) tags.push('<span class="badge b-mint">🆕 New</span>');
   if (m.vision) tags.push('<span class="badge b-sky">👁 vision</span>');
   if (m.reasoning) tags.push('<span class="badge b-lav">🧠 thinks</span>');
@@ -215,7 +215,8 @@ function modelCard(m, est, kind) {
 
 function filterBar(cats) {
   return `<div class="row" style="margin-bottom:16px">${[['all', { label: 'All' }], ...Object.entries(cats)].map(([k, c]) => `<button class="btn small ${catFilter === k ? 'on' : ''}" data-cat="${k}">${esc(c.label)}</button>`).join('')}
-    <label class="row small" style="margin-left:auto;font-weight:700"><input type="checkbox" id="fits-only" ${fitsOnly ? 'checked' : ''}> Only show models that fit my PC</label></div>`;
+    <label class="row small" style="margin-left:auto;font-weight:700"><input type="checkbox" id="fits-only" ${fitsOnly ? 'checked' : ''}> Only show models that fit my PC</label></div>
+    <p class="small muted" id="feat-note" style="margin:-8px 0 14px">⭐ Featured marks the best models right now that run on this PC${featuredHidden() ? ` (${featuredHidden()} other top pick${featuredHidden() > 1 ? 's are' : ' is'} not marked because ${featuredHidden() > 1 ? 'they' : 'it'} will not fit on it)` : ''}. The picks update online.</p>`;
 }
 
 function textHTML() {
@@ -244,6 +245,13 @@ function mediaHTML() {
 
 let trend = null;      // { at, list } or { error }
 let trendType = 'all';
+let trendAll = false;  // also show what will not run on this PC
+// This PC in a few words, for the note that says what the lists are matched to.
+function pcLine() {
+  const h = S.est?.hardware;
+  if (!h) return 'this PC';
+  return [h.vramGB ? `${h.gpuName || 'graphics card'}, ${h.vramGB.toFixed(0)} GB video memory` : 'no graphics card', `${h.ramGB.toFixed(0)} GB memory`].join(', ');
+}
 const TREND_TYPES = { all: 'All', general: 'Everyday', reasoning: 'Reasoning', coding: 'Coding', vision: 'Vision', open: 'Uncensored' };
 async function loadTrending(force = false) {
   try { trend = await qs.call('models:trending', force); } catch (err) { trend = { error: err.message }; }
@@ -256,10 +264,16 @@ function trendingHTML() {
   if (!trend) { loadTrending(false); return '<div class="empty">Loading what\'s trending…</div>'; }
   if (trend.error) return `<div class="notice">Couldn't load trending models: ${esc(trend.error)} <button class="btn small" id="tr-refresh">Try again</button></div>`;
   const ago = Math.max(1, Math.round((Date.now() - trend.at) / 60000));
-  const list = trend.list.filter((m) => trendType === 'all' || m.type === trendType);
+  // Only what runs on this PC, unless you ask to see the rest. A model whose size is not known
+  // cannot be promised, so it counts as hidden too.
+  const fits = (m) => Boolean(m.est) && m.est.fit !== 'no';
+  const mine = trend.list.filter((m) => trendAll || fits(m));
+  const hidden = trend.list.length - trend.list.filter(fits).length;
+  const list = mine.filter((m) => trendType === 'all' || m.type === trendType);
   const rate = (e) => (e ? `<span class="badge rate-${e.rating}">${esc(e.label)}${e.wordsPerSec ? ` · ~${Math.round(e.wordsPerSec)} words/s` : ''}</span>` : '<span class="small muted">size unknown</span>');
   return `<div class="row" style="margin-bottom:12px;flex-wrap:wrap"><p class="muted grow" style="margin:0">The open models people are downloading most on Hugging Face right now, newest hits first. Updated ${ago < 60 ? `${ago} min` : `${Math.round(ago / 60)} h`} ago; it refreshes by itself every few hours.</p><button class="btn small" id="tr-refresh">↻ Refresh</button></div>
-    <div class="row" style="margin-bottom:14px;flex-wrap:wrap">${Object.entries(TREND_TYPES).map(([k, l]) => `<button class="btn small ${trendType === k ? 'on' : ''}" data-trtype="${k}">${l}${k === 'all' ? '' : ` · ${trend.list.filter((m) => m.type === k).length}`}</button>`).join('')}</div>
+    <div class="notice info" id="tr-fit" style="margin-bottom:12px">${trendAll ? 'Showing everything that is trending, including what will not run on this PC.' : `<b>Showing only what runs on this PC</b> (${esc(pcLine())}).${hidden ? ` ${hidden} more ${hidden > 1 ? 'are' : 'is'} trending but hidden: too big for it, or the size is not known.` : ''}`} <button class="btn small" id="tr-all">${trendAll ? 'Only what runs here' : 'Show the hidden ones too'}</button></div>
+    <div class="row" style="margin-bottom:14px;flex-wrap:wrap">${Object.entries(TREND_TYPES).map(([k, l]) => `<button class="btn small ${trendType === k ? 'on' : ''}" data-trtype="${k}">${l}${k === 'all' ? '' : ` · ${mine.filter((m) => m.type === k).length}`}</button>`).join('')}</div>
     ${list.length ? `<table class="list"><thead><tr><th>#</th><th>Model</th><th>Type</th><th>Size</th><th>On your PC</th><th>Popularity</th><th></th></tr></thead><tbody>${list.map((m, i) => `<tr>
       <td class="muted">${i + 1}</td>
       <td><b>${esc(m.repo.split('/').pop())}</b><div class="small muted">${esc(m.repo.split('/')[0])}${m.created ? ` · new ${esc(String(m.created).slice(0, 10))}` : ''}${m.catalogId ? ' · <span class="badge b-mint">in our catalog</span>' : ''}</div></td>
@@ -267,8 +281,8 @@ function trendingHTML() {
       <td>${m.sizeGB ? `~${m.sizeGB} GB` : '—'}</td>
       <td>${rate(m.est)}</td>
       <td class="small">❤ ${m.likes.toLocaleString()} · ⬇ ${m.downloads.toLocaleString()}</td>
-      <td><button class="btn small primary" data-hf="${esc(m.repo)}">Download…</button></td></tr>`).join('')}</tbody></table>` : '<div class="empty">Nothing trending in this group right now.</div>'}
-    ${trendOthersHTML()}`;
+      <td><button class="btn small primary" data-hf="${esc(m.repo)}">Download…</button></td></tr>`).join('')}</tbody></table>` : '<div class="empty">Nothing trending in this group runs on this PC right now.</div>'}
+    ${trendOthersHTML()}${trendSpacesHTML()}`;
 }
 // Everything else trending on Hugging Face, by what it makes. For looking, with a link to each:
 // Quicksilver runs the ones marked "in Quicksilver"; the rest are not claimed to run here.
@@ -276,12 +290,25 @@ const TREND_OTHER = { pictures: '🖼️ Pictures', editing: '🪄 Photo editing
 function trendOthersHTML() {
   const g = trend?.others;
   if (!g || !Object.values(g).some((l) => l.length)) return '';
-  return `<div class="section sf-new"><h2>Also trending on Hugging Face</h2><span class="small muted">Pictures, video, voice, music and search models people are picking up right now. Quicksilver runs chat models straight from Hugging Face (above); these kinds each need their own set of files, so one runs here once it is in the catalogue. The rest are listed so you can see what is new.</span></div>
-    <div class="cards" style="grid-template-columns:repeat(auto-fill,minmax(280px,1fr))">${Object.entries(TREND_OTHER).filter(([k]) => g[k]?.length).map(([k, label]) => `<div class="card"><h3 style="margin:0 0 8px">${label}</h3>
-      ${g[k].slice(0, 8).map((m, i) => `<div class="row small" style="gap:6px;margin:3px 0"><span class="muted">${i + 1}</span><a class="grow" href="https://huggingface.co/${esc(m.repo)}" title="Opens ${esc(m.repo)} on Hugging Face${m.licence ? ` · licence: ${esc(m.licence)}` : ''}">${esc(m.repo.split('/').pop())}</a>${m.inCatalog ? '<span class="badge b-mint">in Quicksilver</span>' : ''}<span class="muted">❤ ${Number(m.likes).toLocaleString()}</span></div>`).join('')}</div>`).join('')}</div>`;
+  // These kinds run here only from the catalogue, so "runs on this PC" means: in it, and it fits.
+  const fits = (m) => m.inCatalog && (!m.catalogId || S.est?.media?.[m.catalogId]?.fit !== 'no');
+  const shown = Object.entries(TREND_OTHER).map(([k, label]) => [k, label, (g[k] || []).filter((m) => trendAll || fits(m)).slice(0, 8)]).filter(([, , l]) => l.length);
+  const hidden = Object.values(g).flat().filter((m) => !fits(m)).length;
+  return `<div class="section sf-new"><h2>Also trending on Hugging Face</h2><span class="small muted">Pictures, video, voice, music and search models people are picking up right now. ${trendAll ? 'Everything is listed; only the ones marked "in Quicksilver" run here.' : `Only the ones Quicksilver can run on this PC are listed.${hidden ? ` ${hidden} more are hidden: not in Quicksilver yet, or too big for this PC.` : ''}`}</span></div>
+    ${shown.length ? `<div class="cards" style="grid-template-columns:repeat(auto-fill,minmax(280px,1fr))">${shown.map(([, label, l]) => `<div class="card"><h3 style="margin:0 0 8px">${label}</h3>
+      ${l.map((m, i) => `<div class="row small" style="gap:6px;margin:3px 0"><span class="muted">${i + 1}</span><a class="grow" href="https://huggingface.co/${esc(m.repo)}" title="Opens ${esc(m.repo)} on Hugging Face${m.licence ? ` · licence: ${esc(m.licence)}` : ''}">${esc(m.repo.split('/').pop())}</a>${m.inCatalog ? `<span class="badge b-mint">in Quicksilver</span>` : ''}<span class="muted">❤ ${Number(m.likes).toLocaleString()}</span></div>`).join('')}</div>`).join('')}</div>` : '<div class="empty">None of these that are trending right now can run on this PC yet.</div>'}`;
+}
+// Trending Spaces: small apps hosted on Hugging Face. They run on its computers, in the browser,
+// so they work whatever this PC is. Links only: what you type there goes to that app's owner.
+function trendSpacesHTML() {
+  const l = trend?.spaces || [];
+  if (!l.length) return '';
+  return `<div class="section sf-new" id="tr-spaces"><h2>🚀 Trending Spaces</h2><span class="small muted">Small apps people have put on Hugging Face. They run on Hugging Face's computers, not on yours, so they work on any PC. Each opens in your browser. They are online and not private: what you type or upload goes to whoever made the app.</span></div>
+    <div class="cards" style="grid-template-columns:repeat(auto-fill,minmax(240px,1fr))">${l.map((s) => `<div class="card" style="padding:10px 12px"><a href="https://huggingface.co/spaces/${esc(s.id)}" title="Opens this Space on Hugging Face in your browser"><b>${esc(s.id.split('/').pop())}</b> ↗</a><div class="small muted">${esc(s.id.split('/')[0])} · ❤ ${Number(s.likes).toLocaleString()} <span class="badge b-sky">online</span></div></div>`).join('')}</div>`;
 }
 function bindTrending() {
   $('#tr-refresh')?.addEventListener('click', (e) => { e.target.textContent = 'Refreshing…'; loadTrending(true); });
+  $('#tr-all')?.addEventListener('click', () => { trendAll = !trendAll; render(); });
   $$('[data-trtype]').forEach((b) => b.addEventListener('click', () => { trendType = b.dataset.trtype; render(); }));
 }
 
