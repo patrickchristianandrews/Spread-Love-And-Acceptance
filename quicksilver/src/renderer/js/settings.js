@@ -191,12 +191,13 @@ function apiSrvHTML() {
   -H "Content-Type: application/json"${a.requireKey ? ' \\\n  -H "Authorization: Bearer YOUR_KEY"' : ''} \\
   -d '{"model": "${esc(S.stacks[0]?.name || 'local:qwen3-8b')}", "messages": [{"role": "user", "content": "Hello"}], "stream": true}'</pre>
       <p class="small muted" style="font-weight:600">Also: <code>POST /v1/images/generations</code> with a local image model.</p></div>
+    <div class="card"><h3>🤖 Coding agents</h3><p class="small muted" style="font-weight:600">OpenCode and OpenHands can work on whole projects with your models through this API (tool calls included).</p><button class="btn" data-agents>Set up OpenCode or OpenHands</button></div>
   </div>`;
 }
 function bindApiSrv() {
   qs.call('apiserver:status').then((s) => { const changed = JSON.stringify(s) !== JSON.stringify(S.apiStatus); S.apiStatus = s; if (changed && setTab === 'advanced' && S.route.view === 'settings') render(); });
   $('#a-save').addEventListener('click', async () => {
-    S.config = await call('config:set', { apiServer: { enabled: $('#a-on').checked, port: Number($('#a-port').value) || 1337, requireKey: $('#a-key').checked } });
+    S.config = await call('config:set', { apiServer: { enabled: $('#a-on').checked, port: Number($('#a-port').value) || 1337, requireKey: $('#a-key').checked, docker: Boolean(S.config.apiServer.docker) } });
     S.apiStatus = await qs.call('apiserver:status'); render(); toast(S.apiStatus.running ? 'API server running.' : S.apiStatus.error || 'API server off.');
   });
   $('#a-newkey').addEventListener('click', async () => { const k = await call('apiserver:newKey'); navigator.clipboard?.writeText(k); S.config = await call('config:get'); render(); toast('New key created and copied.'); });

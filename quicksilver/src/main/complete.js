@@ -1200,4 +1200,4 @@ async function warm(target, { contextSize, gpu } = {}) {
   return true;
 }
 
-module.exports = { smoothHelper, isUncensored, councilMembers, thinkWorthy, answerNow, warm, prefill, run, targets, stacks, saveStack, deleteStack, kbModels, saveKbModel, deleteKbModel, label, exists, canSee, parse, autoLevel, ensureQuicksilverStack, ensureQuicksilverProStack, explainStack };
+module.exports = { single, smoothHelper, isUncensored, councilMembers, thinkWorthy, answerNow, warm, prefill, run, targets, stacks, saveStack, deleteStack, kbModels, saveKbModel, deleteKbModel, label, exists, canSee, parse, autoLevel, ensureQuicksilverStack, ensureQuicksilverProStack, explainStack };

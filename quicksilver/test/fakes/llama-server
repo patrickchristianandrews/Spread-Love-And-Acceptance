@@ -77,6 +77,7 @@ const server = http.createServer((req, res) => {
     else if (/JSBAD/.test(lastText) && !/rigorous|most likely|short title|keep a short memory/.test(sys)) reply = /found these problems/.test(sys) ? 'Fixed:\n```js\nfunction add(a, b) {\n  return a + b;\n}\n```' : 'Here:\n```js\nfunction add(a, b {\n  return a + b;\n}\n```';
     else if (/most likely (want to )?ask (the assistant )?next/.test(sys)) reply = JSON.stringify([`Show an example of ${(lastText.match(/Their question: ([^\n]{0,24})/) || [])[1] || 'it'}`, 'Which option suits a beginner?', 'What should I do first?']);
     else if (/You keep a short memory about a user/.test(sys)) reply = /\bmy\b/i.test(lastText) ? JSON.stringify([`The user mentioned: ${lastText.slice(0, 50)}`]) : '[]';
+    else if (/You make memes/.test(sys)) reply = JSON.stringify({ top: `${model} tries ${lastText.replace(/^Make a meme about: /, '')}`, bottom: 'and it goes exactly as planned', picture: 'a cat staring at a laptop' });
     else if (/You are a careful editor/.test(sys)) reply = `Edited by ${model}: ${(lastText.split('<<<\n')[1] || '').split('\n>>>')[0].toUpperCase().slice(0, 200)}`;
     else if (/Describe this one image/.test(lastText)) reply = `A chart showing sales rising, described by ${model}.`;
     else if (/Describe each image/.test(lastText)) reply = imgs.map((_, i) => `### Image ${i + 1}\nA chart showing sales rising, described by ${model}.`).join('\n\n');

@@ -1520,6 +1520,33 @@ function redPng(size = 64) {
   await win.waitForSelector('.arena-side.won');
   await shot(win, '16-arena-voted');
   console.log('✓ arena: blind answers, vote, leaderboard');
+  // Meme battle: two models each make a meme on a topic, names hidden; vote; its own leaderboard.
+  await win.click('[data-arena-tab="memes"]');
+  await win.waitForSelector('#mb-topic');
+  await win.fill('#mb-topic', 'Mondays');
+  await win.click('#mb-go');
+  await win.waitForSelector('[data-mvote="A"]', { timeout: 150000 });
+  const memes = await win.locator('.arena-grid').innerText();
+  assert.match(memes, /TRIES MONDAYS[\s\S]*AS PLANNED/i, 'each meme has its top and bottom lines');
+  assert.match(memes, /Name hidden until you vote/);
+  assert.equal(await win.locator('.meme').count(), 2);
+  await shot(win, '16b-meme-battle');
+  await win.click('[data-mvote="B"]');
+  await win.waitForSelector('.arena-side.won');
+  assert.match(await win.locator('.arena-board').innerText(), /1[\s\S]*0/);
+  assert.deepEqual(await win.evaluate(() => [parseMeme('Sure! ```json\n{"top":"a","bottom":"b","picture":"c"}\n```'), parseMeme('<think>hmm</think>Top: when it works\nBottom: first try')]),
+    [{ top: 'a', bottom: 'b', picture: 'c' }, { top: 'when it works', bottom: 'first try', picture: '' }]);
+  await shot(win, '16c-meme-voted');
+  await win.click('[data-cmp-tab="blind"]');
+  await win.waitForSelector('#ar-q');
+  console.log('✓ meme battle: two hidden memes on one topic, vote, its own leaderboard');
+  // Coding agents: the setup box opens from Settings and lists the models it would use.
+  await win.evaluate(() => agentsModal());
+  await win.waitForFunction(() => /OpenCode[\s\S]*OpenHands/.test(document.querySelector('#modal')?.textContent || '') && document.querySelectorAll('#ag-model option').length > 0, null, { timeout: 15000 });
+  assert.ok(!(await win.evaluate(() => [...document.querySelectorAll('#ag-model option')].some((o) => o.value.startsWith('stack:')))), 'only single models are offered');
+  await shot(win, '16d-coding-agents');
+  await win.click('#modal [data-close]');
+  console.log('✓ coding agents: OpenCode and OpenHands setup on your models');
 
   // Voice, phone and updates settings.
   await win.click('[data-nav="settings"]');

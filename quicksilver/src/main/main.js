@@ -19,6 +19,7 @@ const hfData = require('./hf-data');
 const websearch = require('./websearch');
 const media = require('./media');
 const apiserver = require('./apiserver');
+const agents = require('./agents');
 const integrations = require('./integrations');
 const mcp = require('./mcp');
 const whisper = require('./whisper');
@@ -63,6 +64,19 @@ handle('apiserver:newKey', () => {
 });
 handle('apiserver:revealKey', () => store.getSecret('apiServerKey'));
 handle('apiserver:status', () => apiserver.status());
+// Coding agents (OpenCode, OpenHands) on Quicksilver's models.
+handle('agents:status', () => agents.status());
+handle('agents:opencode', async (model) => {
+  if (!store.config().apiServer.enabled) { store.saveConfig({ apiServer: { ...store.config().apiServer, enabled: true } }); await apiserver.start(); }
+  return agents.setupOpencode({ model });
+});
+handle('agents:docker', async (on) => {
+  const cur = store.config().apiServer;
+  if (on && !store.getSecret('apiServerKey')) store.setSecret('apiServerKey', `qs-${require('node:crypto').randomBytes(18).toString('base64url')}`);
+  store.saveConfig({ apiServer: { ...cur, enabled: true, docker: Boolean(on) } });
+  await apiserver.start();
+  return agents.status();
+});
 
 // ---------- voice typing, phone access, updates ----------
 handle('voice:status', () => whisper.status());

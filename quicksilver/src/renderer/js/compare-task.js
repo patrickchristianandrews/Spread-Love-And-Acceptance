@@ -75,12 +75,13 @@ function bindCompareTask() {
 const arenaBlindView = views.arena;
 views.arena = {
   html() {
-    const tabs = `<div class="tabs" role="tablist"><button class="tab ${cmpTab === 'task' ? 'active' : ''}" data-cmp-tab="task" role="tab">📊 By task</button><button class="tab ${cmpTab === 'blind' ? 'active' : ''}" data-cmp-tab="blind" role="tab">🙈 Blind test</button></div>`;
+    const tabs = arenaTabsHTML(cmpTab);
     if (cmpTab === 'blind') return arenaBlindView.html().replace('</div>\n      <p class="lede">', `</div>${tabs}\n      <p class="lede">`);
     return `<div class="page arena"><div class="page-head"><h1>Compare models</h1><span class="small muted">Which model is best for what you do?</span></div>${tabs}${compareTaskHTML()}</div>`;
   },
   bind() {
     $$('[data-cmp-tab]').forEach((b) => b.addEventListener('click', (e) => { e.preventDefault(); cmpTab = b.dataset.cmpTab; render(); }));
+    bindArenaTabs();
     if (cmpTab === 'blind') arenaBlindView.bind(); else bindCompareTask();
   },
 };

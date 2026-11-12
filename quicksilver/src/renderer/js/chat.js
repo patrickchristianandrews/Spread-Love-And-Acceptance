@@ -212,7 +212,8 @@ function welcomeHTML(a) {
     <p class="muted" style="font-size:1.05rem;font-weight:600">${esc(a.description || '')}</p>
     ${a.exam ? studyPanelHTML(a) : ''}
     ${isCodeChat(a) && !none ? `<div class="code-starters">${CODE_STARTERS.map(([em, label], i) => `<button class="btn small" data-code-start="${i}">${em} ${esc(label)}</button>`).join('')}</div>
-      <p class="small muted" style="margin-top:12px">Paste code or an error, attach a file, or say what to build. Answers come as complete code you can copy; web pages and apps open in a preview.</p>` : ''}
+      <p class="small muted" style="margin-top:12px">Paste code or an error, attach a file, or say what to build. Answers come as complete code you can copy; web pages and apps open in a preview.</p>
+      <p class="small" style="margin-top:6px"><a href="#" data-agents title="Let OpenCode or OpenHands work on a whole project with your models">🤖 Work on a whole project with a coding agent (OpenCode, OpenHands)</a></p>` : ''}
     ${none ? `<div class="notice info" style="text-align:left;margin-top:16px"><b>Let's get you set up.</b> Quicksilver runs AI on your own PC. The <b>Setup Advisor</b> checks your computer and downloads the best free models for the job, in one click. No account or key needed.
       <div class="row" style="margin-top:10px"><button class="btn primary" data-goto="stacks">Open the Setup Advisor</button><button class="btn" data-goto="models">Browse models</button></div></div>` : ''}
     ${S.installed.some((m) => m.kind === 'text') && S.installed.filter((m) => m.kind === 'text').every((m) => m.source === 'bundled') ? '<p class="small muted grow-tip">💡 The starter models are a great start but limited on their own. Answers get sharper as you add models or build teams (<a href="#" data-goto="stacks">Teams</a> · <a href="#" data-goto="models">Models</a>).</p>' : ''}

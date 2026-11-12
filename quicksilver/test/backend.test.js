@@ -306,8 +306,47 @@ async function collect(gen) {
   const preflight = await fetch(`${base}/chat/completions`, { method: 'OPTIONS', headers: { Origin: 'https://example.com', 'Access-Control-Request-Method': 'POST' } });
   assert.equal(preflight.status, 403, 'and so is its preflight');
   assert.equal((await fetch(`${base}/models`)).status, 200, 'another app on this PC (no Origin) still works without a key');
+  // Coding agents (OpenCode, OpenHands) work through tools: the model's tool request comes back
+  // to the agent in the OpenAI format, streamed and not, and the tool's result goes back in.
+  const tool = { type: 'function', function: { name: 'write_file', description: 'Write a file', parameters: { type: 'object', properties: { text: { type: 'string' } } } } };
+  const plain = { 'Content-Type': 'application/json' };
+  const toolAsk = await (await fetch(`${base}/chat/completions`, { method: 'POST', headers: plain, body: JSON.stringify({ model: 'local:qwen3-8b', tools: [tool], messages: [{ role: 'user', content: 'please use write' }] }) })).json();
+  assert.equal(toolAsk.choices[0].finish_reason, 'tool_calls');
+  assert.equal(toolAsk.choices[0].message.tool_calls[0].function.name, 'write_file');
+  assert.match(toolAsk.choices[0].message.tool_calls[0].function.arguments, /hello from the model/);
+  const sseText = await (await fetch(`${base}/chat/completions`, { method: 'POST', headers: plain, body: JSON.stringify({ model: 'local:qwen3-8b', stream: true, tools: [tool], messages: [{ role: 'user', content: 'please use write' }] }) })).text();
+  assert.match(sseText, /"tool_calls":\[\{"index":0,"id":"[^"]+","type":"function","function":\{"name":"write_file"/);
+  assert.match(sseText, /"finish_reason":"tool_calls"/);
+  const call = toolAsk.choices[0].message.tool_calls[0];
+  const after = await (await fetch(`${base}/chat/completions`, { method: 'POST', headers: plain, body: JSON.stringify({ model: 'local:qwen3-8b', tools: [tool], messages: [{ role: 'user', content: 'please use write' }, { role: 'assistant', content: null, tool_calls: [call] }, { role: 'tool', tool_call_id: call.id, content: 'saved' }] }) })).json();
+  assert.match(after.choices[0].message.content, /Tool said: saved/);
+  const teamTools = await fetch(`${base}/chat/completions`, { method: 'POST', headers: plain, body: JSON.stringify({ model: 'stack:office-power', tools: [tool], messages: [{ role: 'user', content: 'x' }] }) });
+  assert.equal(teamTools.status, 400, 'a team is not offered for tools; a single model is');
+  // OpenCode: Quicksilver adds itself to OpenCode's settings and leaves the rest alone.
+  {
+    const agents = require('../src/main/agents');
+    const home = fs.mkdtempSync(path.join(os.tmpdir(), 'qs-home-'));
+    const oldHome = process.env.HOME; const oldProfile = process.env.USERPROFILE;
+    process.env.HOME = home; process.env.USERPROFILE = home;
+    try {
+      const file = agents.opencodeFile();
+      fs.mkdirSync(path.dirname(file), { recursive: true });
+      fs.writeFileSync(file, JSON.stringify({ theme: 'tokyonight', provider: { other: { name: 'Mine' } } }));
+      store.saveConfig({ apiServer: { enabled: true, port: 18337, requireKey: true } });
+      const r = agents.setupOpencode({ model: 'local:qwen3-8b' });
+      const cfg = JSON.parse(fs.readFileSync(file, 'utf8'));
+      assert.equal(cfg.theme, 'tokyonight'); assert.equal(cfg.provider.other.name, 'Mine', 'the rest of the settings are kept');
+      assert.equal(cfg.provider.quicksilver.options.baseURL, 'http://127.0.0.1:18337/v1');
+      assert.equal(cfg.provider.quicksilver.options.apiKey, 'qs-secret', 'the access key is included when one is required');
+      assert.equal(cfg.model, 'quicksilver/local:qwen3-8b'); assert.equal(r.model, 'local:qwen3-8b');
+      assert.ok(cfg.provider.quicksilver.models['local:qwen3-8b'] && !Object.keys(cfg.provider.quicksilver.models).some((k) => k.startsWith('stack:')), 'single models only');
+      fs.writeFileSync(file, '{ not json');
+      agents.setupOpencode({});
+      assert.ok(fs.existsSync(`${file}.bak`), 'a settings file that cannot be read is kept as a copy');
+    } finally { process.env.HOME = oldHome; process.env.USERPROFILE = oldProfile; }
+  }
   apiserver.stop();
-  console.log('✓ API server: auth, models, chat (stream + not), stacks by name, images; other websites kept out');
+  console.log('✓ API server: auth, models, chat (stream + not), stacks by name, images, tool calls for coding agents, OpenCode set up; other websites kept out');
 
   // Tools: an MCP server (official SDK, stdio) used by a local model, with approvals.
   const mcp = require('../src/main/mcp');

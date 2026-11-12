@@ -72,7 +72,7 @@ function sugApis(task, liquid) {
   const use = SUGGEST_TASKS[task][3];
   const media = !SUGGEST_TASKS[task][2];
   // Uncensored: Venice for words and pictures; video and music services have their own content rules.
-  const list = (typeof API_RANK !== 'undefined' ? API_RANK : []).filter((r) => (liquid && (!media || task === 'photo') ? r[2].includes('uncensored') : r[2].includes(use) || (use === 'photos-in' && r[2].includes('chat') && r[6] >= 9)));
+  const list = (typeof API_RANK !== 'undefined' ? API_RANK : []).filter((r) => (liquid && (!media || task === 'photo') ? r[0] === 'venice' : r[2].includes(use) || (use === 'photos-in' && r[2].includes('chat') && r[6] >= 9)));
   const byFree = [...list].sort((a, b) => b[7] - a[7] || b[6] - a[6])[0];
   const byValue = [...list].sort((a, b) => rankValue(b) - rankValue(a))[0];
   const byQuality = [...list].sort((a, b) => b[6] - a[6] || rankValue(b) - rankValue(a))[0];
@@ -183,8 +183,8 @@ function apiPicksFor(targets, { liquid = false, main = null } = {}) {
   const local = targets.filter((t) => !String(t).startsWith('api:'));
   const now = Object.fromEntries(Object.keys(API_JOBS).map((k) => [k, Math.round((sugNow(local, k).score || 0) * 2) / 2]));
   const rated = Object.values(now).some((v) => v > 0); // a model Quicksilver has no ratings for can't be compared
-  // The Liquid Edition only uses uncensored cloud AIs; everything else can use any chat service.
-  const rows = (typeof API_RANK !== 'undefined' ? API_RANK : []).filter((r) => r[0] && r[0] !== 'translate' && r[9] === 'app' && (liquid ? r[2].includes('uncensored') : true))
+  // The Liquid Edition uses one cloud AI, Venice (uncensored and private); everything else can use any chat service.
+  const rows = (typeof API_RANK !== 'undefined' ? API_RANK : []).filter((r) => r[0] && r[0] !== 'translate' && r[9] === 'app' && (liquid ? r[0] === 'venice' : true))
     .map((r) => {
       const lifts = Object.keys(API_JOBS).filter((k) => apiCovers(r, k) && r[6] - now[k] >= 1)
         .map((k) => ({ task: k, from: now[k], to: r[6], gain: (r[6] - now[k]) * (k === main ? 2 : 1) })).sort((a, b) => b.gain - a.gain);
