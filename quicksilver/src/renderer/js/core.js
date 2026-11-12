@@ -35,12 +35,16 @@ function ago(t) {
 
 // A small message at the bottom. It always has an ✕ to dismiss it, and it pauses its countdown while
 // the pointer is over it, so nothing disappears before it's been read.
+// A message with a button (Undo, Remove old…) is never pushed aside by a plain one: the plain
+// message waits until the one with the button closes, so the button can't vanish under you.
+const toastWaiting = [];
 function showToast(inner, ms, onAction) {
   const t = $('#toast');
+  if (!onAction && !t.hidden && t.querySelector('.toast-act')) { toastWaiting.push([inner, ms]); if (toastWaiting.length > 3) toastWaiting.shift(); return; }
   t.innerHTML = `${inner}<button class="toast-x" aria-label="Dismiss" title="Dismiss">✕</button>`;
   t.hidden = false;
   t.classList.remove('toast-in'); void t.offsetWidth; t.classList.add('toast-in');
-  const close = () => { t.classList.remove('toast-in'); t.hidden = true; clearTimeout(toast._t); };
+  const close = () => { t.classList.remove('toast-in'); t.hidden = true; clearTimeout(toast._t); const next = toastWaiting.shift(); if (next) setTimeout(() => showToast(...next), 150); };
   let left = ms; let since = Date.now();
   const arm = () => { clearTimeout(toast._t); since = Date.now(); toast._t = setTimeout(close, left); };
   t.onmouseenter = () => { clearTimeout(toast._t); left -= Date.now() - since; };

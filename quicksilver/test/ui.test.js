@@ -1023,7 +1023,11 @@ function redPng(size = 64) {
   await win.click('.chat-row:has-text("Delete me please") .chat-del');
   await win.waitForFunction(() => !chatById('del-me'));
   assert.equal(await win.locator('.chat-row:has-text("Delete me please")').count(), 0, 'gone from the list');
+  // A plain message arriving now (a background notice) waits: the Undo button stays.
+  await win.evaluate(() => toast('A background notice'));
+  assert.match(await win.locator('#toast').innerText(), /Undo/, 'a plain message does not push the Undo aside');
   await win.click('#toast .toast-act');
+  await win.waitForFunction(() => /A background notice/.test(document.querySelector('#toast')?.textContent || ''), null, { timeout: 5000 });
   await win.waitForFunction(() => Boolean(chatById('del-me')));
   await win.waitForSelector('.chat-row:has-text("Delete me please")');
   // ...and from the ⋯ menu.
