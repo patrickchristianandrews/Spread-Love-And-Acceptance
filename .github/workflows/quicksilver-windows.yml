@@ -26,6 +26,10 @@ on:
         type: choice
         options: [full, proofs]
         default: full
+      publish:
+        description: 'Publish this build as the release quicksilver-v<version in package.json> when every check has passed (the same as pushing that tag)'
+        type: boolean
+        default: false
 
 # A newer run on the same branch or tag replaces one still running, so only the latest is built.
 concurrency:
@@ -406,15 +410,19 @@ jobs:
       # far larger than GitHub's 2 GB-per-file limit for release downloads, so it is not
       # attached here. It is uploaded as the Quicksilver-Windows-installer build artifact above, which
       # has no such limit (a GitHub sign-in is needed to download it).
+      - name: Read the app's version
+        id: ver
+        run: echo "v=$(node -p "require('./package.json').version")" >> "$GITHUB_OUTPUT"
+
       - name: Write the release notes (with a link to this build run)
-        if: startsWith(github.ref, 'refs/tags/quicksilver-v')
+        if: startsWith(github.ref, 'refs/tags/quicksilver-v') || inputs.publish
         run: |
           { printf 'Build run for this release (the full offline package, **Quicksilver-Windows-installer**, is under Artifacts there for 90 days): https://github.com/%s/actions/runs/%s\n\n' "$GITHUB_REPOSITORY" "$GITHUB_RUN_ID"; cat RELEASE_NOTES.md; } > release-body.md
 
       # The web installer, once its own job has installed and tested it (that job is much shorter
       # than this one). If it failed, the release goes out without it rather than with an untested file.
       - name: Fetch the tested web installer
-        if: startsWith(github.ref, 'refs/tags/quicksilver-v')
+        if: startsWith(github.ref, 'refs/tags/quicksilver-v') || inputs.publish
         continue-on-error: true
         uses: actions/download-artifact@v4
         with:
@@ -422,10 +430,14 @@ jobs:
           path: quicksilver/web-installer
 
       - name: Publish release
-        if: startsWith(github.ref, 'refs/tags/quicksilver-v')
+        if: startsWith(github.ref, 'refs/tags/quicksilver-v') || inputs.publish
         uses: softprops/action-gh-release@v2
         with:
-          name: Quicksilver ${{ github.ref_name }}
+          # From a tag: that tag. From a manual build asked to publish: the tag for this version,
+          # created on the very commit that was just built and tested.
+          tag_name: ${{ startsWith(github.ref, 'refs/tags/') && github.ref_name || format('quicksilver-v{0}', steps.ver.outputs.v) }}
+          target_commitish: ${{ github.sha }}
+          name: Quicksilver ${{ steps.ver.outputs.v }}
           body_path: quicksilver/release-body.md
           files: |
             quicksilver/dist/*.exe
