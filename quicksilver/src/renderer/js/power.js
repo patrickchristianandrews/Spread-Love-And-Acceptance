@@ -27,11 +27,21 @@ function tryOtherMenu(chat, m, anchor) {
   menu.addEventListener('click', (e) => { const t = e.target.closest('[data-t]')?.dataset.t; closeMenus(); if (t) generate(chat, m, t); });
 }
 
+// A double-check or follow-up suggestions that were still being made when the app closed, or
+// when a chat was branched, would otherwise spin for ever: they are dropped, and can be run again.
+function dropUnfinished(messages) {
+  for (const m of messages || []) for (const alt of m.alts || []) {
+    if (alt.check?.running) delete alt.check;
+    delete alt.fuPending; delete alt.status; delete alt.eta;
+  }
+  return messages;
+}
+
 // ---------- branch ----------
 function branchChat(chat, msgId) {
   const i = chat.messages.findIndex((m) => m.id === msgId);
   if (i < 0) return;
-  const copy = JSON.parse(JSON.stringify(chat.messages.slice(0, i + 1))).map((m) => ({ ...m, id: uid() }));
+  const copy = dropUnfinished(JSON.parse(JSON.stringify(chat.messages.slice(0, i + 1))).map((m) => ({ ...m, id: uid() })));
   const b = { ...JSON.parse(JSON.stringify(chat)), id: uid(), title: `↳ ${chat.title}`.slice(0, 70), created: now(), updated: now(), messages: copy, pinned: false, renamed: chat.renamed, doc: undefined, branchOf: chat.id };
   S.data.chats.push(b);
   save();
@@ -44,12 +54,12 @@ function chatSettings(chat) {
   const a = assistantById(chat.assistantId);
   const p = S.data.prefs;
   const temp = chat.temperature ?? a.temperature ?? p.temperature;
-  const max = chat.maxTokens ?? a.maxTokens ?? p.maxTokens;
+  const max = maxOf(chat, a);
   const b = openModal(`<h2>Settings for this chat</h2>
     <div class="stack-v">
       <div class="field"><label for="cs-sys">Extra instructions</label><span class="help">Added to ${esc(a.name)}'s own instructions, for this chat only. For example: "Answer in Spanish", "You are reviewing my novel's chapter 3", "Be blunt".</span><textarea id="cs-sys" rows="4">${esc(chat.system || '')}</textarea></div>
       <div class="field"><label for="cs-temp">Creativity: <span id="cs-temp-v">${Number(temp).toFixed(2)}</span></label><span class="help">Low: focused and consistent (facts, code). High: varied and surprising (ideas, stories).</span><input id="cs-temp" type="range" min="0" max="1.5" step="0.05" value="${temp}"></div>
-      <div class="field"><label for="cs-max">Longest answer</label><select id="cs-max">${[[512, 'Short (about 400 words)'], [1024, 'Medium (about 750 words)'], [2048, 'Long (about 1,500 words)'], [4096, 'Very long (about 3,000 words)'], [8192, 'Book chapter (about 6,000 words)'], [16384, 'As long as it takes (about 12,000 words)']].map(([v, l]) => `<option value="${v}" ${Number(max) === v ? 'selected' : ''}>${l}</option>`).join('')}</select></div>
+      <div class="field"><label for="cs-max">Longest answer</label><select id="cs-max">${((list) => (list.some(([v]) => v === Number(max)) ? list : [...list, [Number(max), `${Number(max).toLocaleString()} tokens (set now)`]].sort((x, y) => x[0] - y[0])))([[512, 'Short (about 400 words)'], [1024, 'Medium (about 750 words)'], [2048, 'Long (about 1,500 words)'], [4096, 'Very long (about 3,000 words)'], [8192, 'Book chapter (about 6,000 words)'], [16384, 'As long as it takes (about 12,000 words)']]).map(([v, l]) => `<option value="${v}" ${Number(max) === v ? 'selected' : ''}>${l}</option>`).join('')}</select></div>
     </div>
     <div class="modal-actions"><button class="btn" id="cs-reset" style="margin-right:auto">Use the assistant's settings</button><button class="btn" data-close>Cancel</button><button class="btn primary" id="cs-ok">Save</button></div>`);
   b.querySelector('#cs-temp').oninput = (e) => { b.querySelector('#cs-temp-v').textContent = Number(e.target.value).toFixed(2); };
@@ -58,7 +68,7 @@ function chatSettings(chat) {
     const t = Number(b.querySelector('#cs-temp').value);
     chat.temperature = Math.abs(t - (a.temperature ?? p.temperature)) < 0.001 ? undefined : t;
     const mx = Number(b.querySelector('#cs-max').value);
-    chat.maxTokens = mx === Number(a.maxTokens ?? p.maxTokens) ? undefined : mx;
+    chat.maxTokens = mx === maxOf({}, a) ? undefined : mx;
     save(); closeModal(); render(); toast('Saved for this chat.');
   };
   b.querySelector('#cs-reset').onclick = () => { delete chat.system; delete chat.temperature; delete chat.maxTokens; save(); closeModal(); render(); toast('This chat follows the assistant\'s settings again.'); };
@@ -86,7 +96,7 @@ function chatTokens(chat) {
 }
 function contextMeterHTML(chat, a) {
   if (!chat.messages.length) return '';
-  const ctx = Number(a.contextSize || S.data.prefs.contextSize) || 16384;
+  const ctx = ctxOf(a);
   const used = chatTokens(chat);
   const pct = Math.min(100, Math.round((used / ctx) * 100));
   const k = (n) => (n >= 1000 ? `${(n / 1000).toFixed(n >= 10000 ? 0 : 1)}K` : String(n));

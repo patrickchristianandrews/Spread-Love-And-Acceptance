@@ -54,10 +54,34 @@ function thinkSplitter() {
   };
 }
 
+// A request to an engine on this PC (llama-server, or Ollama / LM Studio on localhost). Node's
+// fetch gives up after five minutes without a byte, and a big model on the processor can take
+// longer than that to read a long prompt before its first word: the answer was cut off with
+// "fetch failed" (and the wait was taken for a graphics-card fault). The plain http client has
+// no such limit. Stop still ends it at once.
+const isLocal = (url) => /^http:\/\/(127\.0\.0\.1|localhost|\[::1\])(:\d+)?(\/|$)/i.test(url);
+function localFetch(url, { method = 'GET', headers = {}, body, signal } = {}) {
+  return new Promise((resolve, reject) => {
+    const stopped = () => { const e = new Error('This operation was aborted'); e.name = 'AbortError'; return e; };
+    if (signal?.aborted) { reject(stopped()); return; }
+    const req = require('node:http').request(url, { method, headers: { ...headers, ...(body != null ? { 'Content-Length': Buffer.byteLength(body) } : {}) } }, (res) => {
+      const text = async () => { const parts = []; for await (const c of res) parts.push(c); return Buffer.concat(parts).toString('utf8'); };
+      resolve({ ok: res.statusCode >= 200 && res.statusCode < 300, status: res.statusCode, statusText: res.statusMessage || '', body: res, text });
+    });
+    const onAbort = () => req.destroy(stopped());
+    signal?.addEventListener('abort', onAbort, { once: true });
+    req.on('close', () => signal?.removeEventListener('abort', onAbort));
+    req.on('error', reject);
+    req.setTimeout(0); // however long the model needs
+    if (body != null) req.write(body);
+    req.end();
+  });
+}
+
 // Streams a chat. Yields {type:'text'|'reasoning', text} and finally {type:'stats', ...}.
 async function* streamChat({ baseUrl, apiKey, body, signal, headers = {} }) {
   const url = `${baseUrl.replace(/\/+$/, '')}/chat/completions`;
-  const res = await fetch(url, {
+  const res = await (isLocal(url) ? localFetch : fetch)(url, {
     method: 'POST',
     signal,
     headers: { 'Content-Type': 'application/json', ...(apiKey ? { Authorization: `Bearer ${apiKey}` } : {}), ...headers },
@@ -105,4 +129,4 @@ async function listModels({ baseUrl, apiKey, headers = {} }) {
   return (j.data || j.models || []).map((m) => m.id || m.name).filter(Boolean).sort();
 }
 
-module.exports = { streamChat, listModels, sse, errorText, thinkSplitter };
+module.exports = { streamChat, listModels, sse, errorText, thinkSplitter, localFetch, isLocal };

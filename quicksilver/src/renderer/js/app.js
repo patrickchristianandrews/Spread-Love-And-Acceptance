@@ -188,6 +188,7 @@ async function init() {
   if (saved?.version === 3) S.data = saved;
   else S.data = { version: 3, prefs: { ...DEFAULT_PREFS, userName: saved?.settings?.userName && saved.settings.userName !== 'You' ? saved.settings.userName : '' }, assistants: [], chats: [] };
   S.data.prefs = { ...DEFAULT_PREFS, ...S.data.prefs };
+  for (const c of S.data.chats || []) { dropUnfinished(c.messages); if (!EFFORTS[c.effort]) delete c.effort; } // nothing was left running, and only real effort levels
   if (S.data.prefs.effortLevel === 'max') S.data.prefs.effortLevel = 'council'; // Deep think became Council
   if (S.data.prefs.maxTokens === 4096 && !S.data.prefs.maxTokensSet) S.data.prefs.maxTokens = 2048; // 2.16: old default
   // Keep built-in assistants up to date, but never overwrite your edits or your own assistants.

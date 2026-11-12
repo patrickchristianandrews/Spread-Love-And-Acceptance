@@ -136,6 +136,9 @@ function chatSetHTML() {
 function bindChatSet() {
   $('#c-temp').addEventListener('input', (e) => { $('#c-temp-v').textContent = e.target.value; });
   $('#c-save').addEventListener('click', () => {
+    const was = { ctx: P().contextSize, max: P().maxTokens };
+    // (A length or memory you change here is yours: it then also applies to the built-in assistants.)
+    setTimeout(() => { if (P().contextSize !== was.ctx) P().contextSizeMine = true; if (P().maxTokens !== was.max) P().maxTokensMine = true; save(); }, 0);
     Object.assign(P(), {
       defaultTarget: $('#c-default').value, defaultAuto: false, defaultChosen: true, autoSkills: $('#c-autoskill').checked, addFoundModels: $('#c-auto').checked, preloadDefault: $('#c-preload').checked, effortLevel: $('#c-effort').value, factCheck: $('#c-fact').checked, factChecker: $('#c-checker').value,
       temperature: Number($('#c-temp').value), contextSize: Number($('#c-ctx').value), maxTokens: Math.max(256, Number($('#c-max').value) || 2048), maxTokensSet: true,

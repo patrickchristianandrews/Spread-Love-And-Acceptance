@@ -75,6 +75,24 @@ document.addEventListener('click', (e) => {
 const EFFORTS = { quick: '⚡ Fast', balanced: '⚖️ Balanced', thorough: '✨ Smart', council: '⚔️ Deep (3 AIs)' };
 const EFFORT_WHY = { quick: 'One model, fastest — for quick questions and drafts', balanced: 'One model, then a quick self-check', thorough: 'Recommended: fast on everyday messages, the whole team only on hard ones', council: 'Three AIs (a Structurer, a Critic and a Pragmatist) work it out, then one combined answer — slower, for big or important questions' };
 const effortOf = (chat, a) => chat.effort || a.effort || S.data.prefs.effortLevel || 'thorough';
+// "Conversation memory" and "Longest answer" in Settings. A value you set there wins over the
+// number a built-in assistant carries from the catalogue (it used to be ignored for every one of
+// them); an assistant you made keeps its own; a chat's own setting comes before both.
+const prefMine = (k) => Boolean(S.data.prefs[`${k}Mine`]); // set when you change it in Settings (an untouched default changes nothing)
+const ctxOf = (a) => Number((a?.builtIn && prefMine('contextSize') ? S.data.prefs.contextSize : a?.contextSize) || S.data.prefs.contextSize) || 16384;
+const maxOf = (chat, a) => Number(chat?.maxTokens || (a?.builtIn && prefMine('maxTokens') ? S.data.prefs.maxTokens : a?.maxTokens) || S.data.prefs.maxTokens) || 2048;
+// Stop pressed before the request has left this window (while memories or sources are being
+// looked up): there is nothing to stop on the other side yet, so the answer is taken back here.
+function cancelUnsent() {
+  if (!pending || pending.sent) return;
+  const chat = chatById(pending.chatId);
+  const msg = chat?.messages.find((m) => m.id === pending.msgId);
+  pending = null;
+  const alt = msg?.alts[msg.altIndex];
+  if (alt && !alt.text) { msg.alts.splice(msg.altIndex, 1); if (!msg.alts.length) chat.messages = chat.messages.filter((m) => m !== msg); else msg.altIndex = msg.alts.length - 1; }
+  else if (alt) { delete alt.status; delete alt.eta; }
+  save(); render();
+}
 
 const msgText = (m) => (m.role === 'assistant' ? m.alts[m.altIndex]?.text || '' : m.text || '');
 
@@ -482,7 +500,7 @@ function bindChat() {
 
   function sendOrStop() {
     if (pending && pending.chatId !== chat.id) { const other = chatById(pending.chatId); toast(`One answer at a time: "${other?.title || 'another chat'}" is still answering. It will finish in a moment, or stop it in its tab.`, 6000); return; }
-    if (pending) { qs.abortChat(pending.requestId); return; }
+    if (pending) { if (pending.sent) qs.abortChat(pending.requestId); else cancelUnsent(); return; }
     const text = input.value.trim();
     const atts = drafts[chat.id] || [];
     if (!text && !atts.length) {
@@ -580,7 +598,8 @@ async function addFiles(chat, files) {
   for (const f of files) {
     try {
       if (f.type.startsWith('image/')) {
-        drafts[chat.id].push({ type: 'image', name: f.name || 'pasted image', dataUrl: await shrinkImage(await readDataUrl(f)), path: qs.pathForFile(f) || undefined });
+        const picture = { type: 'image', name: f.name || 'pasted image', dataUrl: await shrinkImage(await readDataUrl(f)), path: qs.pathForFile(f) || undefined };
+        (drafts[chat.id] ||= []).push(picture); // (looked up after the wait: sending in between starts a new list)
       } else if (f.type.startsWith('video/') || /\.(mp4|mov|webm|mkv|m4v)$/i.test(f.name)) {
         toast(`Reading frames from ${f.name}…`);
         const url = URL.createObjectURL(f);
@@ -736,7 +755,7 @@ function chatHistory(chat, a, upTo, skill = null) {
   // answer and enough memory to keep the current version in view.
   const lastAsk = [...chat.messages.slice(0, upTo)].reverse().find((m) => m.role === 'user')?.text || '';
   const appWork = skill?.output === 'app' || (isCodeChat(a) && /\b(web ?site|web ?page|single-page|landing page|html page|web app|app|game|dashboard)\b/i.test(lastAsk) && /\b(build|make|create|write|code|design)\b/i.test(lastAsk)) || chat.messages.slice(0, upTo).some((m) => m.role === 'assistant' && /```html\s*\n[\s\S]*?(<!doctype html|<html[\s>])/i.test(msgText(m)));
-  const ctx = Math.max(Number(a.contextSize || p.contextSize) || 16384, appWork ? 32768 : 0);
+  const ctx = Math.max(ctxOf(a), appWork ? 32768 : 0);
   const docBudget = Math.max(4000, Math.floor((ctx * 3 * 0.6) / Math.max(1, chat.messages.slice(0, upTo).reduce((n, m) => n + (m.attachments || []).filter((x) => x.type === 'doc').length, 0))));
   const strict = Boolean(a.strict && (chat.library ?? a.library));
   const messages = [{ role: 'system', content: systemPrompt(a, strict, chat) }];
@@ -805,6 +824,7 @@ async function generate(chat, rerollMsg, withTarget, opts = {}) {
   const p = S.data.prefs;
   const lastUser = [...chat.messages.slice(0, upTo)].reverse().find((m) => m.role === 'user');
   if (!chat.private) await prepareMemory(lastUser?.text || '').catch(() => {});
+  if (pending?.requestId !== requestId) return; // stopped while getting ready
   const skill = lastUser?.skillId ? skillById(lastUser.skillId) : null;
   if (skill) { alt.skillId = skill.id; alt.forceFact = Boolean(skill.tools?.factCheck); }
   // Tools that work straight on your files (and reading aloud) don't need a text model.
@@ -812,10 +832,11 @@ async function generate(chat, rerollMsg, withTarget, opts = {}) {
   const force = skill?.tools || {};
   if ((chat.library ?? a.library) || webWanted(chat, a, lastUser?.text || '', force) || force.knowledge) { alt.status = 'Searching sources…'; paintStreaming(chat, msg); }
   // Load the model at the same time as the search runs, instead of one after the other.
-  if (!target.startsWith('api:')) qs.call('models:warm', target, { contextSize: Number(a.contextSize || p.contextSize) || 16384, gpu: p.gpu }).catch(() => {});
+  if (!target.startsWith('api:')) qs.call('models:warm', target, { contextSize: ctxOf(a), gpu: p.gpu }).catch(() => {});
   // Small background jobs (suggestions, titles, memory notes) step aside for the new question.
   stopBackgroundJobs();
   const sources = await gatherSources(chat, a, lastUser?.text || skill?.name || '', force);
+  if (pending?.requestId !== requestId) return; // stopped while searching
   alt.sources = sources.map(({ title, url, path }) => ({ title, url, path }));
   if (sources.webEmpty) alt.webEmpty = true;
   if (sources.autoWeb && !sources.webEmpty) alt.autoWeb = true;
@@ -865,10 +886,11 @@ async function generate(chat, rerollMsg, withTarget, opts = {}) {
   }
   if (pending?.requestId !== requestId) return; // stopped while searching
   alt.status = 'Thinking…';
+  pending.sent = true; // from here Stop is a message to the engine
   qs.sendChat({
     requestId, target, messages,
     temperature: Number(chat.temperature ?? a.temperature ?? p.temperature),
-    maxTokens: ((n) => (lengthOf(chat) === 'short' && !appWork ? Math.min(n, LENGTHS.short.tokens) : lengthOf(chat) === 'long' ? Math.max(n, LENGTHS.long.tokens) : target === 'stack:quicksilver' && !appWork && !skill && a.job !== 'coding' ? Math.min(n, 1200) : n))(Math.max(appWork && chat.maxTokens == null ? 8192 : 0, Math.round(Number(chat.maxTokens || a.maxTokens || p.maxTokens) * (effortOf(chat, a) === 'max' && chat.maxTokens == null ? 1.5 : 1)))),
+    maxTokens: ((n) => (lengthOf(chat) === 'short' && !appWork ? Math.min(n, LENGTHS.short.tokens) : lengthOf(chat) === 'long' ? Math.max(n, LENGTHS.long.tokens) : target === 'stack:quicksilver' && !appWork && !skill && a.job !== 'coding' && chat.maxTokens == null ? Math.min(n, 1200) : n))(Math.max(appWork && chat.maxTokens == null ? 8192 : 0, Math.round(maxOf(chat, a) * (effortOf(chat, a) === 'max' && chat.maxTokens == null ? 1.5 : 1)))),
     contextSize: ctx,
     // Writing a picture prompt or a beat pattern is quick work: one model, no debate.
     level: skill && HIDE_BLOCK.has(skill.output) ? 'quick' : effortOf(chat, a) === 'council' ? 'thorough' : effortOf(chat, a),
@@ -953,7 +975,7 @@ qs.onChat(({ requestId, ev }) => {
   if (!pending || pending.requestId !== requestId) return;
   const chat = chatById(pending.chatId);
   const msg = chat?.messages.find((m) => m.id === pending.msgId);
-  if (!msg) return;
+  if (!msg) { if (ev.type === 'done' || ev.type === 'error') { pending = null; render(); } return; } // its chat was deleted: nothing is left waiting
   const alt = msg.alts[msg.altIndex];
   switch (ev.type) {
     case 'text': if (!alt.text && alt.t0 && alt.ttft == null) alt.ttft = Date.now() - alt.t0; alt.text += ev.text; alt.status = ''; break;
@@ -1085,7 +1107,7 @@ function chatWithAttachment(att, text, assistantId) {
 
 const checks = new Map(); // requestId -> { chatId, msgId, alt }
 const stackOf = (target) => S.stacks.find((x) => `stack:${x.id}` === target);
-const factOn = (chat, a) => effortOf(chat, a) === 'max' || Boolean(chat.factCheck ?? a.factCheck ?? S.data.prefs.factCheck) || Boolean(stackOf(resolveTarget(chat, a))?.members.cloudCheck && !S.config?.offline);
+const factOn = (chat, a) => effortOf(chat, a) === 'max' || Boolean(chat.factCheck ?? (a.factCheck || S.data.prefs.factCheck)) || Boolean(stackOf(resolveTarget(chat, a))?.members.cloudCheck && !S.config?.offline);
 const checkRunning = (m) => [...checks.values()].some((c) => c.msgId === m.id);
 
 function membersOf(target) {
@@ -1330,10 +1352,10 @@ qs.onChat(({ requestId, ev }) => {
 const warmed = new Set();
 function warmUp(chat, a) {
   const target = resolveTarget(chat, a);
-  const key = `${target}|${a.contextSize || S.data.prefs.contextSize}`;
+  const key = `${target}|${ctxOf(a)}`;
   if (!target || warmed.has(key) || target.startsWith('api:')) return;
   warmed.add(key);
-  qs.call('models:warm', target, { contextSize: Number(a.contextSize || S.data.prefs.contextSize) || 16384, gpu: S.data.prefs.gpu }).catch(() => warmed.delete(key));
+  qs.call('models:warm', target, { contextSize: ctxOf(a), gpu: S.data.prefs.gpu }).catch(() => warmed.delete(key));
 }
 
 // ---------- skills in chat ----------

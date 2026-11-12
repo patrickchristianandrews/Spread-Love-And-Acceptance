@@ -908,7 +908,7 @@ async function* council(target, req) {
     const messages = [...msgs.slice(0, -1), { role: 'system', content: role.prompt }, msgs[msgs.length - 1]];
     try {
       s.text = await collect(who, { ...req, stepByStep: false, messages, level: role.key === 'critic' ? req.level : 'quick', maxTokens: 450, temperature: role.key === 'pragmatist' ? 0.6 : 0.4 }, (t) => { s.text = t; req.onStep?.(s); });
-    } catch (err) { s.error = String(err?.message || err); }
+    } catch (err) { if (req.signal?.aborted) throw err; s.error = String(err?.message || err); } // Stop stops the whole council, not one member
     s.done = true; s.ms = Date.now() - t0;
     yield { type: 'step', step: s };
     if (s.text) notes.push(`<note role="${role.label}">\n${s.text.slice(0, 2500)}\n</note>`);

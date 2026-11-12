@@ -423,12 +423,14 @@ document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeMenus
 
 const CHART_COLORS = ['#7b5cff', '#4f8fe0', '#3fbf86', '#e8834a', '#d6467a', '#d9b22b', '#2fb9c6', '#8a6d3b'];
 const chartStore = {};
+// A short, stable name for a piece of text (the same text always gets the same name).
+function textKey(text) { let h = 5381; let g = 52711; const t = String(text); for (let i = 0; i < t.length; i++) { const c = t.charCodeAt(i); h = (h * 33) ^ c; g = (g * 33) ^ c; } return (h >>> 0).toString(36) + (g >>> 0).toString(36) + t.length.toString(36); }
 
 function chartHTML(json) {
   let spec;
   try { spec = JSON.parse(json); } catch { return ''; }
   if (!Array.isArray(spec.labels) || !Array.isArray(spec.series) || !spec.series.length) return '';
-  const id = `c${uid()}`;
+  const id = `c${textKey(json)}`; // named after its contents, so a redraw does not keep another copy
   chartStore[id] = spec;
   const W = 640; const H = 340; const P = { l: 56, r: 16, t: 40, b: 56 };
   const t = esc(spec.title || '');

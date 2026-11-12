@@ -100,5 +100,41 @@ const exporters = require('../src/main/exporters');
     assert.equal(ctx.S.data.memory.filter((m) => /Mia and Leo/.test(m.text)).length, 1, 'a fuller version of a memory replaces it');
     console.log('✓ memory: a short memory no longer overwrites a longer one; "forget" only removes what matches');
   }
+  // ---- an engine on this PC is asked without the five-minute limit, and Stop still stops it ----
+  {
+    const oai = require('../src/main/oai');
+    assert.ok(oai.isLocal('http://127.0.0.1:8080/v1/chat/completions') && oai.isLocal('http://localhost:11434/v1/x') && !oai.isLocal('https://api.openai.com/v1/x') && !oai.isLocal('http://127.0.0.1.evil.com/x'));
+    let hung = null;
+    const engine = http.createServer((req, res) => {
+      if (req.url === '/v1/chat/completions') {
+        let body = ''; req.on('data', (c) => { body += c; }); req.on('end', () => {
+          const want = JSON.parse(body);
+          if (want.messages[0].content === 'hang') { hung = res; return; } // reads the prompt for ever
+          res.writeHead(200, { 'Content-Type': 'text/event-stream' });
+          setTimeout(() => { // the first word comes late
+            res.write(`data: ${JSON.stringify({ choices: [{ delta: { content: 'Hello' } }] })}\n\n`);
+            res.write(`data: ${JSON.stringify({ choices: [{ delta: { content: ' there' }, finish_reason: 'stop' }] })}\n\ndata: [DONE]\n\n`);
+            res.end();
+          }, 1200);
+        });
+      } else { res.writeHead(500, { 'Content-Type': 'application/json' }); res.end(JSON.stringify({ error: { message: 'CUDA error: out of memory' } })); }
+    });
+    await new Promise((r) => engine.listen(0, '127.0.0.1', r));
+    const base = `http://127.0.0.1:${engine.address().port}/v1`;
+    let text = ''; let stats = null;
+    for await (const ev of oai.streamChat({ baseUrl: base, body: { messages: [{ role: 'user', content: 'hi' }] } })) { if (ev.type === 'text') text += ev.text; if (ev.type === 'stats') stats = ev; }
+    assert.equal(text, 'Hello there'); assert.equal(stats.finish, 'stop');
+    // Stop while the engine is still reading: the request ends at once, as an abort.
+    const ctl = new AbortController();
+    const t0 = Date.now();
+    setTimeout(() => ctl.abort(), 300);
+    await assert.rejects((async () => { for await (const ev of oai.streamChat({ baseUrl: base, signal: ctl.signal, body: { messages: [{ role: 'user', content: 'hang' }] } })) void ev; })(), (e) => e.name === 'AbortError');
+    assert.ok(Date.now() - t0 < 3000 && hung, 'Stop ends a request the engine has not started answering');
+    // An error from the engine keeps its message (it is how a graphics-card fault is recognised).
+    const bad = await oai.localFetch(`http://127.0.0.1:${engine.address().port}/nope`, { method: 'POST', body: '{}' });
+    assert.equal(bad.ok, false); assert.match(await oai.errorText(bad), /CUDA error/);
+    hung.destroy(); engine.close();
+    console.log('✓ a local model is asked without the five-minute cut-off (a slow first word arrives), Stop still stops it, and engine errors keep their message');
+  }
   process.exit(0);
 })().catch((e) => { console.error(`FAIL ${e.stack || e.message}`); process.exit(1); });

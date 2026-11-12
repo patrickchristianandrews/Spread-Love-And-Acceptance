@@ -316,7 +316,7 @@ async function ensureNow(model, { contextSize = 8192, limit, gpu = 'auto', onSta
   const budget = Math.max(hw.vramGB, 0) + hw.ramGB * 0.7 - 2;
   const used = () => [...servers.values()].reduce((t, s) => t + s.sizeGB, 0);
   while (servers.size && used() + sizeGB > budget) {
-    const oldest = [...servers.entries()].filter(([, s]) => !isBusy(s)).sort((a, b) => a[1].lastUsed - b[1].lastUsed)[0];
+    const oldest = [...servers.entries()].filter(([, s]) => !isBusy(s) && !s.loading).sort((a, b) => a[1].lastUsed - b[1].lastUsed)[0]; // (one still loading is being waited for: not idle)
     if (!oldest) break; // everything loaded is answering: load alongside rather than cut an answer off
     stop(oldest[0]);
   }
@@ -332,6 +332,9 @@ async function ensureNow(model, { contextSize = 8192, limit, gpu = 'auto', onSta
   let useDraft = Boolean(model.draft && fs.existsSync(model.draft));
   if (info.experts > 1 && ngl > 0 && ngl < 999) await checkCpuMoe(engine.bin);
   let mine = null; // the server this call started
+  // Stopped on purpose while it was loading ("Stop all models", removed, replaced): that is not
+  // a failed start, so nothing is retried and nothing is learned about the model from it.
+  const halted = () => { const e = new Error(`${model.name || 'The model'} was stopped while it was loading. Send the message again.`); e.code = 'stopped'; return e; };
   const stopMine = () => { if (!mine) return; if (servers.get(key) === mine) stop(key); else { mine.stopped = true; try { mine.proc.kill(); } catch {} } mine = null; };
   const start = async (layers) => {
     const port = await freePort();
@@ -371,8 +374,9 @@ async function ensureNow(model, { contextSize = 8192, limit, gpu = 'auto', onSta
     proc.on('error', (e) => { s.exited = true; s.log.push(String(e)); });
     servers.set(key, s);
     mine = s;
+    s.loading = true;
     s.ready = waitReady(s, 600000);
-    await s.ready;
+    try { await s.ready; } finally { s.loading = false; }
     return s;
   };
   const t0 = Date.now();
@@ -383,18 +387,21 @@ async function ensureNow(model, { contextSize = 8192, limit, gpu = 'auto', onSta
       try {
         return await start(ngl);
       } catch (err) {
+        if (mine?.stopped) throw halted();
         if (!useDraft || err?.code === 'damaged') throw err;
         // The draft model didn't work with this one: run without it from now on.
         stopMine(); useDraft = false; noDraft.add(model.file);
         return await start(ngl);
       }
     } catch (err) {
+      if (err?.code === 'stopped' || mine?.stopped) throw halted();
       if (!kvq || err?.code === 'damaged') throw err;
       // This engine or device couldn't use the 8-bit cache: remember that, and use a normal one.
       stopMine(); kvq = false; kvPlain.add(model.file);
       return await start(ngl);
     }
   } catch (err) {
+    if (err?.code === 'stopped' || mine?.stopped) { mine = null; throw halted(); }
     stopMine();
     if (ngl > 0 && err?.code !== 'damaged') {
       // Didn't fit on the graphics card: try again on the processor.
@@ -426,7 +433,22 @@ function friendly(err) {
 
 // Models that failed on the graphics card this session run on the processor from then on.
 const cpuOnly = new Set();
-const GPU_FAILURE = /decode|eval|vk::|vulkan|device lost|ErrorDeviceLost|CUDA error|ggml_backend|out of memory|failed to allocate|HTTP 5\d\d|Internal Server Error|socket hang up|fetch failed|ECONNRESET|terminated/i;
+const GPU_FAILURE = /decode|eval|vk::|vulkan|device lost|ErrorDeviceLost|CUDA error|ggml_backend|out of memory|failed to allocate|HTTP 5\d\d|Internal Server Error/i;
+// A connection that dropped says nothing by itself: it is a graphics-card fault only when the
+// engine has died (a long wait for the first word used to be taken for one).
+const CONN_LOST = /socket hang up|fetch failed|ECONNRESET|ECONNREFUSED|EPIPE|terminated|\baborted\b/i;
+// Stop is honoured while a model is still loading: the wait ends at once, and the model goes
+// on loading in the background, ready for the next message.
+function untilStopped(promise, signal) {
+  if (!signal) return promise;
+  return new Promise((resolve, reject) => {
+    const stopped = () => { const e = new Error('This operation was aborted'); e.name = 'AbortError'; return e; };
+    if (signal.aborted) { promise.catch(() => {}); reject(stopped()); return; }
+    const onAbort = () => reject(stopped());
+    signal.addEventListener('abort', onAbort, { once: true });
+    promise.then(resolve, reject).finally(() => signal.removeEventListener('abort', onAbort));
+  });
+}
 
 // Streams a chat from a local model. messages are OpenAI-format (images as image_url parts).
 // If the graphics card fails before any text arrives, the model restarts on the processor
@@ -439,7 +461,7 @@ async function* chat(model, opts) {
   let produced = false;
   let srv = null;
   try {
-    const s = await ensure(model, { contextSize: contextFor(messages, maxTokens, contextSize || 16384), limit: contextSize || 16384, gpu: useGpu, onStatus });
+    const s = await untilStopped(ensure(model, { contextSize: contextFor(messages, maxTokens, contextSize || 16384), limit: contextSize || 16384, gpu: useGpu, onStatus }), signal);
     srv = s;
     s.busy = (s.busy || 0) + 1;
     s.lastUsed = Date.now();
@@ -466,7 +488,14 @@ async function* chat(model, opts) {
     // A model that was stopped on purpose (Stop model, removed, engine changed) didn't fail on the
     // graphics card: say what happened, and don't move it to the processor.
     if (srv?.stopped && !signal?.aborted && !produced) throw new Error(`${model.name || 'The model'} was stopped before it answered. Send the message again.`);
-    if (signal?.aborted || produced || useGpu === 0 || !GPU_FAILURE.test(String(err?.message || err))) throw err;
+    const said = String(err?.message || err);
+    let gpuFault = GPU_FAILURE.test(said);
+    if (!gpuFault && srv && CONN_LOST.test(said) && !signal?.aborted && !produced) {
+      // The engine's end is noticed a moment after its connection drops: give it that moment.
+      for (let i = 0; i < 12 && !srv.exited; i++) await new Promise((r) => setTimeout(r, 150));
+      gpuFault = Boolean(srv.exited);
+    }
+    if (signal?.aborted || produced || useGpu === 0 || !gpuFault) throw err;
     if (srv) { srv.busy = Math.max(0, (srv.busy || 1) - 1); srv = null; }
     cpuOnly.add(model.file);
     for (const [k, srv] of [...servers.entries()]) if (srv.file === model.file) stop(k);

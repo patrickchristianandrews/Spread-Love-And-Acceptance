@@ -128,6 +128,45 @@ const PNG = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAIAAABLbSncA
   await win.selectOption('#pick-make', 'auto');
   await win.waitForFunction(() => chatById(S.route.id).make === undefined);
 
+  // Fixes from the review of the chat path, each checked where it lives.
+  const fx = await win.evaluate(() => {
+    const out = {};
+    const P = S.data.prefs;
+    const keep = { ...P };
+    const builtIn = S.data.assistants.find((x) => x.builtIn && x.contextSize && x.maxTokens);
+    const mine = { builtIn: false, contextSize: 8192, maxTokens: 900 };
+    // "Double-check every answer" in Settings is applied (an assistant's own "off" used to hide it).
+    P.factCheck = true; out.factPref = factOn({}, { ...builtIn, factCheck: false }); out.factChatOff = factOn({ factCheck: false }, { ...builtIn, factCheck: false });
+    P.factCheck = false; out.factNone = factOn({}, { ...builtIn, factCheck: false, effort: 'quick' });
+    // Conversation memory and Longest answer: what you set in Settings wins over a built-in
+    // assistant's catalogue number; an untouched setting changes nothing; your own assistant keeps its own.
+    P.contextSize = 65536; P.maxTokens = 7000; delete P.contextSizeMine; delete P.maxTokensMine;
+    out.untouched = [ctxOf(builtIn) === builtIn.contextSize, maxOf({}, builtIn) === builtIn.maxTokens];
+    P.contextSizeMine = true; P.maxTokensMine = true;
+    out.set = [ctxOf(builtIn), maxOf({}, builtIn), ctxOf(mine), maxOf({}, mine), maxOf({ maxTokens: 512 }, builtIn)];
+    Object.assign(P, keep); for (const k of Object.keys(P)) if (!(k in keep)) delete P[k];
+    // A check or follow-ups left running when the app closed do not spin for ever.
+    const msgs = dropUnfinished([{ role: 'assistant', alts: [{ text: 'a', check: { running: true }, fuPending: true, status: 'x' }, { text: 'b', check: { text: 'ok' } }] }]);
+    out.dropped = [msgs[0].alts[0].check === undefined, msgs[0].alts[0].fuPending === undefined, msgs[0].alts[1].check?.text];
+    // A table is stored once however often its answer is redrawn.
+    const table = '| a | b |\n|---|---|\n| 1 | 2 |';
+    const n0 = Object.keys(tableHtml.store).length; markdown(table); markdown(table); markdown(table);
+    out.tables = Object.keys(tableHtml.store).length - n0;
+    out.keys = [textKey('abc') === textKey('abc'), textKey('abc') !== textKey('abd')];
+    // Stop before the request has left: the empty answer is taken back and nothing is left waiting.
+    const c = { id: 'fx-chat', assistantId: 'as-general', title: 't', created: now(), updated: now(), messages: [{ id: 'u1', role: 'user', text: 'hi', attachments: [] }, { id: 'a1', role: 'assistant', alts: [{ text: '', status: 'Searching sources…' }], altIndex: 0 }] };
+    S.data.chats.push(c);
+    pending = { requestId: 'fx-r', chatId: c.id, msgId: 'a1' };
+    cancelUnsent();
+    out.cancel = [pending === null, c.messages.length, c.messages.at(-1).role];
+    S.data.chats = S.data.chats.filter((x) => x.id !== c.id);
+    return out;
+  });
+  assert.deepEqual([fx.factPref, fx.factChatOff, fx.factNone], [true, false, false], 'the Double-check switch in Settings is applied, and a chat can still turn it off');
+  assert.deepEqual(fx.untouched, [true, true]); assert.deepEqual(fx.set, [65536, 7000, 8192, 900, 512]);
+  assert.deepEqual(fx.dropped, [true, true, 'ok']); assert.equal(fx.tables, 1); assert.deepEqual(fx.keys, [true, true]);
+  assert.deepEqual(fx.cancel, [true, 1, 'user']);
+
   // Create is the gallery and its tools: what you made comes first, and making starts in a chat.
   await win.click('[data-nav="studio"]');
   await win.waitForSelector('.gallery .gitem');
@@ -141,6 +180,7 @@ const PNG = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAIAAABLbSncA
 
   assert.deepEqual(errors, []);
   await app.close();
+  console.log('✓ chat fixes: the Double-check and length settings are applied, Stop works before a request is sent, nothing is left spinning after a restart, tables are stored once');
   console.log('✓ what a chat makes: Auto decides from your words; "make it snowy" changes the last picture and "animate it" turns it into a video; an attached photo is edited when told to change it; Picture, Video and Answer on the message box settle it; Create is the gallery and its tools');
   process.exit(0);
 })().catch((e) => { console.error(`FAIL ${e.message}`); process.exit(1); });
