@@ -202,6 +202,7 @@ function apisGuideHTML() {
     <div class="small">⭐ <b>Best model:</b> ${esc(best)}</div><div class="small">${esc(what)}</div><div class="small muted">${esc(note)}</div></div>`;
   return `<div class="og"><p class="help" style="margin-top:0">Quicksilver works without any cloud AI. These are the best ones to add, as of this version. Prices and free limits change often, so each service's card in Connect an API links to its current prices.</p>
     ${addApiHTML()}
+    ${apiDirectoryHTML(presetsCache)}
     ${apiRankHTML()}
     ${freePaidHTML()}
     ${cloudCalcHTML()}
@@ -232,6 +233,7 @@ function bindGuidePage() {
   $('#guide-connect')?.addEventListener('click', () => { modelsTab = 'api'; go({ view: 'models' }); });
   bindCloudCalc();
   bindApiRank();
+  bindApiDirectory();
 }
 // Links from elsewhere: data-guide="stacks" / "apis" / "tips" opens that tab of the guide.
 document.addEventListener('click', (e) => {

@@ -16,10 +16,11 @@ views.models = {
         <button class="btn" id="find-models">Find models on this PC</button><button class="btn" id="import-gguf">Import a .gguf file</button><button class="btn ghost" id="open-folder">Open models folder</button></div>
       <p class="lede">Free, open models run on your PC: private, offline, no account. Ratings show how each one will run on <b>your</b> hardware. Not sure? Let the <a href="#" data-goto-stacks>Setup Advisor</a> choose.</p>
       ${foundBanner()}
-      ${shownUpgrades().length || shownStackUpdates().length || modelsTab === 'installed' ? modelUpdatesHTML() : ''}
-      ${['installed', 'text'].includes(modelsTab) ? builtinModelHTML() + addonsHTML() : ''}
+      ${shownUpgrades().length || shownStackUpdates().length ? modelUpdatesHTML() : ''}
       <div class="tabs" role="tablist">${Object.entries(tabs).map(([k, l]) => `<button class="tab ${modelsTab === k ? 'active' : ''}" data-tab="${k}" role="tab">${esc(l)}</button>`).join('')}</div>
       ${({ installed: installedHTML, text: textHTML, media: mediaHTML, trending: trendingHTML, hf: hfHTML, api: apiHTML })[modelsTab]()}
+      ${['installed', 'text'].includes(modelsTab) ? `<div class="section sf-new"><h2>Built into Quicksilver</h2><span class="small muted">The Liquid Edition that comes with the app, its optional add-ons and its cloud partner.</span></div>${builtinModelHTML()}${addonsHTML()}` : ''}
+      ${!(shownUpgrades().length || shownStackUpdates().length) && modelsTab === 'installed' ? modelUpdatesHTML() : ''}
     </div>`;
   },
   bind() {
@@ -324,7 +325,7 @@ function apiHTML() {
       <div class="row"><button class="btn small" data-api-refresh="${p.id}">Refresh models</button><button class="btn small" data-api-edit="${p.id}">Edit</button><button class="btn small danger" data-api-del="${p.id}">Remove</button></div>
     </div>`).join('')}</div>` : ''}
     ${S.providers.length > 1 ? '<div class="notice info" style="margin-bottom:12px">☁️ <b>Several cloud AIs connected.</b> On Automatic, Quicksilver picks the best one for each question — a strong coder for code, a research model for research, and so on — and your 👍/👎 refine the choice over time. Pick one by hand at the top of any chat to override it.</div>' : ''}
-    <div class="section"><h2>Add a connection</h2><span class="small muted">Every cloud AI that works with Quicksilver, marked free or paid, with the best model to use. <a href="#" data-guide="apis">Which should I choose? What's a dev plan? Calculator: alone vs through Quicksilver</a></span></div>
+    <div class="section"><h2>Add a connection</h2><button class="btn small" data-api-dir="all" title="Every service in one list: by task, free or paid, what the free plan gives you, with a link to each">📒 API directory: by task, free vs paid</button><span class="small muted">Every cloud AI that works with Quicksilver, marked free or paid, with the best model to use. <a href="#" data-guide="apis">Which should I choose? What's a dev plan? Calculator: alone vs through Quicksilver</a></span></div>
     <div id="presets"></div>`;
 }
 

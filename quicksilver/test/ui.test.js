@@ -252,6 +252,30 @@ function redPng(size = 64) {
   await win.waitForSelector('#modal .bz-jobs');
   assert.match(await win.locator('#modal').innerText(), /Analyst Supreme: what the web[\s\S]*custom AI \(fusion\)[\s\S]*Reasoning & maths[\s\S]*Recommended for this PC/);
   await win.click('#modal [data-close]');
+  // Every built stack and custom AI says which API would add the most to it (or that one is
+  // already inside), and opens the API directory: every service by task, free ones first, each
+  // with what the free plan gives and a link.
+  assert.match(await win.locator('.card:has-text("Analyst Supreme") .api-sug').innerText(), /Suggested API for this custom AI[\s\S]*(Best free|Best quality|You have it)[\s\S]*→|Cloud AI in this custom AI|None needed/);
+  const picks = await win.evaluate(() => {
+    const local = S.installed.filter((m) => (m.kind || 'text') === 'text').map((m) => `local:${m.id}`);
+    S.stacks.push({ id: 'zz-api', name: 'zz', members: { drafters: [], judge: local[0] } }, { id: 'zz-liq', name: 'zz liquid', builtFor: 'quicksilver', members: { drafters: [], judge: local[0] } });
+    const a = stackApiPicks(S.stacks.find((x) => x.id === 'zz-api'));
+    const l = stackApiPicks(S.stacks.find((x) => x.id === 'zz-liq'));
+    const html = stackApiHTML(S.stacks.find((x) => x.id === 'zz-api'));
+    S.stacks = S.stacks.filter((x) => !/^zz-/.test(x.id));
+    return { free: a.free?.r[1] || null, freeIsFree: (a.free?.r[7] ?? 0) >= 5, best: a.best?.r[1] || null, liquid: [l.free?.r[0] || null, l.best?.r[0] || null], connect: /data-api-connect=/.test(html) };
+  });
+  assert.ok(picks.free && picks.freeIsFree && picks.connect, `a stack of local models is offered a free API to connect: ${JSON.stringify(picks)}`);
+  assert.deepEqual(picks.liquid, [null, 'venice'], 'the Liquid Edition is only offered its uncensored partner');
+  await win.click('.card:has-text("Analyst Supreme") .api-sug [data-api-dir]');
+  await win.waitForSelector('#modal #api-dir .ad-row');
+  await win.click('#modal [data-dir-task="video"]');
+  await win.waitForFunction(() => document.querySelector('#modal [data-dir-task="video"].on') && /Kling AI/.test(document.querySelector('#modal #api-dir').innerText));
+  const dir = await win.evaluate(() => { const rows = [...document.querySelectorAll('#modal #api-dir .ad-row')]; return { rows: rows.length, linked: rows.filter((r) => r.querySelector('a[href^="https://"]')).length, text: document.querySelector('#modal #api-dir').innerText }; });
+  assert.ok(dir.rows >= 3 && dir.linked === dir.rows, `every service in the directory has a link (${dir.linked} of ${dir.rows})`);
+  assert.match(dir.text, /Free to start, then paid[\s\S]*Free gets you:[\s\S]*After that:/); assert.match(dir.text, /on their site/);
+  await shot(win, '13b2-api-directory');
+  await win.click('#modal [data-close]');
   await win.evaluate(() => { modelsTab = 'text'; go({ view: 'models' }); });
   await win.locator('.model-card [data-boost]').first().click();
   await win.waitForSelector('#modal .bz-jobs');

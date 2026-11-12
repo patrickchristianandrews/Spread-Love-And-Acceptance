@@ -163,3 +163,76 @@ function suggestSectionHTML(scope) {
   const what = scope === 'fusion' ? 'one of your custom AIs' : scope === 'stacks' ? 'one of your stacks' : 'a stack, a fusion';
   return `<section class="card og-sec sug-sec"><h3>💡 Model suggester</h3><p class="small" style="margin:0">Pick ${what} or one of your models, then a popular task: see the best model to add (that runs well on this PC) and the best API to connect (best free, best value, best quality), with how much each would add out of 10 and its response time.</p>${sugPanelHTML({ scope })}</section>`;
 }
+
+// ---------- API suggestions for the stacks and fusions you have built ----------
+// Shown on every built stack and custom AI: the cloud service that would add the most to it.
+// Each service's rating for a job is compared with what the team already does on this PC (its
+// strongest member for that job), and the job the team was built for counts double. Up to three
+// picks: the best free one, the best whatever it costs, and one you have already connected.
+const API_JOBS = { reasoning: 'Hard reasoning', coding: 'Coding', writing: 'Writing', research: 'Research', vision: 'Reading photos', chat: 'Everyday chat' };
+const BUILT_FOR_TASK = { reasoning: 'reasoning', coding: 'coding', writing: 'writing', research: 'research', vision: 'vision', office: 'reasoning', general: 'chat', fast: 'chat', open: 'chat', power: 'reasoning' };
+function apiCovers(r, task) {
+  if (task === 'vision') return r[2].includes('photos-in') || (r[2].includes('chat') && r[6] >= 9);
+  if (task === 'writing') return r[2].includes('writing') || r[2].includes('chat');
+  return r[2].includes(SUGGEST_TASKS[task][3]);
+}
+function stackApiPicks(s) {
+  const targets = sugTargets(`stack:${s.id}`);
+  const liquid = isLiquidStack(s);
+  const inside = targets.filter((t) => String(t).startsWith('api:'));
+  const local = targets.filter((t) => !String(t).startsWith('api:'));
+  const now = Object.fromEntries(Object.keys(API_JOBS).map((k) => [k, Math.round((sugNow(local, k).score || 0) * 2) / 2]));
+  const rated = Object.values(now).some((v) => v > 0); // a model Quicksilver has no ratings for can't be compared
+  const main = BUILT_FOR_TASK[s.builtFor] || null;
+  // The Liquid Edition only uses uncensored cloud AIs; everything else can use any chat service.
+  const rows = (typeof API_RANK !== 'undefined' ? API_RANK : []).filter((r) => r[0] && r[0] !== 'translate' && r[9] === 'app' && (liquid ? r[2].includes('uncensored') : true))
+    .map((r) => {
+      const lifts = Object.keys(API_JOBS).filter((k) => apiCovers(r, k) && r[6] - now[k] >= 1)
+        .map((k) => ({ task: k, from: now[k], to: r[6], gain: (r[6] - now[k]) * (k === main ? 2 : 1) })).sort((a, b) => b.gain - a.gain);
+      return { r, lifts, total: lifts.reduce((n, x) => n + x.gain, 0), connected: hasConn(r[0]) };
+    }).filter((x) => x.lifts.length || (liquid && x.r[0] === 'venice'));
+  const free = [...rows].filter((x) => x.r[7] >= 5).sort((a, b) => b.total - a.total || b.r[7] - a.r[7])[0] || null;
+  // Best quality: the highest-rated service that is not the free pick, when it rates above it.
+  const top = [...rows].filter((x) => x !== free).sort((a, b) => b.r[6] - a.r[6] || b.total - a.total)[0] || null;
+  const have = [...rows].filter((x) => x.connected).sort((a, b) => b.total - a.total)[0] || null;
+  const best = top && (!free || top.r[6] > free.r[6]) ? top : null;
+  return { targets, liquid, inside, now, rated, main, free, best, have: have && have !== free && have !== best ? have : null };
+}
+function stackApiHTML(s) {
+  const p = stackApiPicks(s);
+  const kind = isFusion(s) ? 'custom AI' : 'stack';
+  const all = p.liquid ? 'uncensored' : { vision: 'photos-in' }[p.main] || p.main || 'all';
+  const head = (t) => `<div class="api-sug-h row"><span class="grow">☁️ ${t}</span><a href="#" class="small" data-api-dir="${all}" title="Every service in one list: by task, free or paid, what the free plan gives you, with a link to each">📒 All APIs</a></div>`;
+  if (p.inside.length) return `<div class="api-sug">${head(`Cloud AI in this ${kind}`)}<div class="small muted">${esc(p.inside.map(targetLabel).join(', '))} ${p.inside.length > 1 ? 'are' : 'is'} already part of it, so no other API is needed for its answers.</div></div>`;
+  const picks = [['Best free', 'b-mint', p.free], [p.liquid ? 'Uncensored' : 'Best quality', 'b-lav', p.best], ['You have it', 'b-sky', p.have]].filter(([, , x]) => x);
+  if (!picks.length) return `<div class="api-sug">${head('Suggested API')}<div class="small muted">None needed: for what this ${kind} does, it already rates as high on this PC as the cloud services would.</div></div>`;
+  const editable = !s.builtIn && !s.autoManaged && !p.liquid;
+  const hardOn = Boolean(S.data.prefs.cloudHard);
+  const was = (l) => (l.from > 0 ? l.from : l.task === 'vision' ? 'can’t' : 'unrated');
+  const row = ([why, cls, x]) => {
+    const lifts = x.lifts.slice(0, 3).map((l) => `${API_JOBS[l.task]} <b>${was(l)} → ${l.to}</b>`).join(' · ');
+    const cost = why === 'Best free' ? `Free: ${x.r[4]}` : x.r[7] >= 5 ? `Free: ${x.r[4]}` : `Cost: ${x.r[5]}`;
+    const note = p.liquid && x.r[0] === 'venice' ? `The only cloud AI the Liquid Edition uses. ${veniceLiquidText().replace(/^with the Liquid Edition o/, 'O')}.` : '';
+    const act = !x.connected ? `<button class="btn small" data-api-connect="${esc(x.r[0])}" title="Opens the connect box for ${esc(x.r[1])}: paste its key and it is ready">Connect</button>`
+      : editable ? `<button class="btn small" data-api-lead="${esc(s.id)}" data-preset="${esc(x.r[0])}" title="${esc(x.r[1])} writes the final answer; the models on your PC draft it and your current lead becomes a drafter">Add as the lead</button>`
+        : hardOn ? '<span class="badge b-mint" title="Hard questions go to your connected cloud AI; everyday ones stay on your PC">✓ used for hard questions</span>'
+          : '<button class="btn small" data-api-hard title="Hard questions go to this cloud AI; everyday ones stay on your PC">Use for hard questions</button>';
+    return `<div class="api-sug-row"><span class="grow"><span><b>${esc(x.r[1])}</b> <span class="badge ${cls}">${why}</span>${x.connected ? ' <span class="badge b-mint">✓ connected</span>' : ''}</span>${lifts ? `<span class="small">${lifts}</span>` : ''}${note ? `<span class="small">${esc(note)}</span>` : ''}<span class="small muted">${esc(cost)}</span></span>${act}</div>`;
+  };
+  return `<div class="api-sug" title="Out of 10 for each job: what this ${kind} does on this PC now → with that service. ${p.rated ? '' : 'Quicksilver has no ratings for these models, so the gain can\'t be worked out.'}">${head(`Suggested API for this ${kind}`)}${picks.map(row).join('')}</div>`;
+}
+// The buttons on those suggestions (bound by the Stacks & Fusion page).
+function bindStackApi(root = document) {
+  root.querySelectorAll('[data-api-connect]').forEach((b) => b.addEventListener('click', async () => { const presets = await qs.call('providers:presets'); editProvider({ preset: b.dataset.apiConnect }, presets); }));
+  root.querySelectorAll('[data-api-hard]').forEach((b) => b.addEventListener('click', () => { S.data.prefs.cloudHard = true; save(); render(); toast('On: hard questions go to your connected cloud AI, everyday ones stay on your PC. Turn it off in Settings → Features.', 7000); }));
+  root.querySelectorAll('[data-api-lead]').forEach((b) => b.addEventListener('click', async () => {
+    const s = S.stacks.find((x) => x.id === b.dataset.apiLead);
+    const t = cloudTarget(b.dataset.preset);
+    if (!s || !t) { toast('Connect that service first (Models → Connect an API).'); return; }
+    const drafters = [...new Set([...(s.members.drafters || []), s.members.judge].filter(Boolean))].filter((x) => x !== t).slice(-4);
+    await qs.call('stacks:save', { ...s, members: { ...s.members, drafters, judge: t } });
+    await refreshModels();
+    render();
+    toast(`${targetLabel(t)} now leads ${s.name}: the models on your PC draft, it writes the final answer. Change it back any time with Edit.`, 8000);
+  }));
+}

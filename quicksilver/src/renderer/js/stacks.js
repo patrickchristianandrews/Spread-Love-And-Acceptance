@@ -32,18 +32,19 @@ views.stacks = {
       ${head}
       <p class="lede"><b>A stack is a ready-made combination of AI models, picked and set up by Quicksilver for a job and fitted to this PC.</b> They answer separately, then a lead combines the best of each and fixes mistakes. Pick what you want to do and Quicksilver shows the best stack for this PC. Want to choose the AIs yourself, cloud ones included? That's <a href="#" data-sf-tab="fusion">⚗️ Fusion</a>.</p>
       ${foundBanner()}
-      ${liquidEditionsHTML()}
       ${shownUpgrades().length || shownStackUpdates().length ? modelUpdatesHTML() : ''}
+      <div class="section"><h2>Your stacks</h2><span class="small muted">The stacks on this PC, each with the API that would add the most to it. Your fusions are on the <a href="#" data-sf-tab="fusion">⚗️ Fusion</a> tab.</span></div>
+      ${yourStacksHTML()}
+      ${kitsHTML()}
+      ${liquidEditionsHTML()}
+      <div class="section sf-new"><h2>Set up another stack</h2><span class="small muted">Two steps: pick the job, then press the button.</span></div>
       <div class="section"><h2>1. What do you want to do?</h2>${hwLine()}<button class="btn small" data-goto="compare" style="margin-left:auto">Compare stacks</button></div>
       <div class="goal-group"><div class="label">Think &amp; work</div><div class="goal-grid">${jobs.filter(([, j]) => j.kind === 'text').map(goal).join('')}</div></div>
-      <div class="goal-group"><div class="label">Create: pictures, video &amp; music</div><div class="goal-grid">${jobs.filter(([, j]) => j.kind === 'media' || j.kind === 'music').map(goal).join('')}</div></div>
+      <div class="goal-group"><div class="label">Pictures, video &amp; music</div><div class="goal-grid">${jobs.filter(([, j]) => j.kind === 'media' || j.kind === 'music').map(goal).join('')}</div></div>
       <div class="section"><h2>2. Set it up</h2></div>
       <div id="adv-out">${advResult ? advisorHTML(advResult) : '<div class="empty">Checking your PC and your models…</div>'}</div>
-      <div class="section"><h2>Your stacks</h2><span class="small muted">Stacks you've set up. Your fusions are on the <a href="#" data-sf-tab="fusion">⚗️ Fusion</a> tab.</span></div>
-      ${yourStacksHTML()}
-      ${suggestSectionHTML('stacks')}
       ${recipesHTML()}
-      ${kitsHTML()}
+      ${suggestSectionHTML('stacks')}
     </div>`;
   },
   bind() {
@@ -52,6 +53,7 @@ views.stacks = {
     $$('[data-sf-tab]').forEach((b) => b.addEventListener('click', (e) => { e.preventDefault(); stacksTab = b.dataset.sfTab; render(); }));
     if (stacksTab !== 'community' && document.querySelector('.sug-sec')) bindSuggest(document.querySelector('.sug-sec'));
     $$('[data-sug-open]').forEach((b) => b.addEventListener('click', () => suggestModal(b.dataset.sugOpen)));
+    bindStackApi();
     $$('#fusion-new-main').forEach((b) => b.addEventListener('click', () => infuseModal(() => render())));
     if (stacksTab === 'community') bindCommunity();
     if (!advJob) { runAdvisor('general'); return; }
@@ -341,7 +343,7 @@ const isFusion = (s) => Boolean(s?.infused || s?.builtFor === 'power');
 let stacksTab = 'stacks';
 function yourStacksHTML() {
   const list = S.stacks.filter((s) => !isFusion(s));
-  if (!list.length) return '<p class="muted">No stacks yet. Pick what you want to do above, or set up a ready-made one below.</p>';
+  if (!list.length) return '<p class="muted">No stacks yet. Pick what you want to do below, or set up a ready-made one further down.</p>';
   return `<div class="cards">${list.map(stackCard).join('')}</div>`;
 }
 // Create kits are the picture and video models Create uses: not a stack, so they get their own section.
@@ -395,9 +397,9 @@ function stackCard(s) {
     <div class="stack-v" style="gap:6px;margin:12px 0">${rows.map(([role, t]) => `<div class="row">${ROLE[role]}<b class="small">${esc(targetLabel(t))}</b>${targetValid(t) ? '' : '<span class="badge b-pink">not installed yet</span>'}</div>`).join('')}</div>
     ${isFusion(s) ? fusionRatingsHTML(s.members, { compact: true }) : ''}
     ${timesHTML(etaFor(`stack:${s.id}`))}
-    ${boostsHTML(rows.map(([, t]) => t), { compact: true, liquid: isLiquidStack(s) })}
-    ${stackScoresHTML(rows.map(([, t]) => t))}
-    <div class="row"><button class="btn small primary" data-chat-stack="${s.id}">Chat</button>${isLiquidStack(s) ? '' : `<button class="btn small" data-edit-stack="${s.id}">Edit</button>`}${isFusion(s) ? `<button class="btn small" data-fz-rate="${s.id}">📊 Rating &amp; tips</button>` : ''}${boostBtn(`stack:${s.id}`)}${s.builtFor === 'quicksilver' ? `<button class="btn small" data-liquid-addons title="Optional models that fill gaps in the Liquid Edition">💧 Suggested add-ons${liquidAddonsLeft() ? ` · ${liquidAddonsLeft()}` : ''}</button>` : ''}<button class="btn small ghost" data-sug-open="stack:${s.id}" title="The best model to join and API to add for a task you pick">💡 What to add</button>${isFusion(s) && !s.community ? `<button class="btn small" data-publish="${s.id}">📤 Publish</button>` : ''}${isLiquidStack(s) ? '<span class="badge b-lav" title="The Liquid Edition can\'t be edited or deleted; choose another model or stack whenever you like">🔒 Locked</span>' : `<button class="btn small danger" data-del-stack="${s.id}">Delete</button>`}</div>
+    ${stackApiHTML(s)}
+    <details class="card-fold"><summary class="small muted">Test scores and what it can make</summary>${stackScoresHTML(rows.map(([, t]) => t))}${boostsHTML(rows.map(([, t]) => t), { compact: true, liquid: isLiquidStack(s) })}</details>
+    <div class="row card-acts"><button class="btn small primary" data-chat-stack="${s.id}">Chat</button>${isLiquidStack(s) ? '' : `<button class="btn small" data-edit-stack="${s.id}">Edit</button>`}${isFusion(s) ? `<button class="btn small" data-fz-rate="${s.id}">📊 Rating &amp; tips</button>` : ''}${boostBtn(`stack:${s.id}`)}${s.builtFor === 'quicksilver' ? `<button class="btn small" data-liquid-addons title="Optional models that fill gaps in the Liquid Edition">💧 Suggested add-ons${liquidAddonsLeft() ? ` · ${liquidAddonsLeft()}` : ''}</button>` : ''}<button class="btn small ghost" data-sug-open="stack:${s.id}" title="The best model to join and API to add for a task you pick">💡 What to add</button>${isFusion(s) && !s.community ? `<button class="btn small" data-publish="${s.id}">📤 Publish</button>` : ''}${isLiquidStack(s) ? '<span class="badge b-lav" title="The Liquid Edition can\'t be edited or deleted; choose another model or stack whenever you like">🔒 Locked</span>' : `<button class="btn small danger" data-del-stack="${s.id}">Delete</button>`}</div>
   </div>`;
 }
 

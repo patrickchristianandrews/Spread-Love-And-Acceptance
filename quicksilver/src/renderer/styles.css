@@ -132,6 +132,23 @@ kbd { font-size: .72rem; padding: 1px 6px; border-radius: 6px; border: 1px solid
 /* Code chat: the second way to start, quieter than New chat. */
 .nav-new.nav-code { background: transparent; color: var(--text); border: 1.5px solid var(--line-soft); box-shadow: none; padding: 8px 12px; }
 .nav-new.nav-code:hover { background: var(--soft); filter: none; }
+/* On a built stack or custom AI: the API that would add the most to it. */
+.api-sug { border: 1px solid var(--line); border-radius: 12px; padding: 9px 10px; margin: 10px 0; display: flex; flex-direction: column; gap: 6px; }
+.api-sug-h { font-weight: 700; font-size: .86rem; }
+.api-sug-row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; padding: 6px 8px; border-radius: 9px; background: var(--hover); }
+.api-sug-row .grow { display: flex; flex-direction: column; gap: 2px; min-width: 180px; }
+/* The API directory: tasks, then free / free to start / paid, one row a service. */
+.ad-task { margin: 14px 0 4px; }
+.ad-task h4 { margin: 0 0 6px; display: flex; gap: 8px; align-items: baseline; flex-wrap: wrap; }
+.ad-kind { margin: 8px 0 4px; }
+.ad-row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; padding: 8px 10px; border-radius: 10px; background: var(--hover); margin-bottom: 5px; }
+.ad-row .grow { display: flex; flex-direction: column; gap: 2px; min-width: 220px; }
+/* Details that fold away on a card, and the card's buttons wrapping tidily. */
+.card-fold { margin: 6px 0 10px; }
+.card-fold > summary { cursor: pointer; }
+.card-fold[open] > summary { margin-bottom: 8px; }
+.card-acts { flex-wrap: wrap; gap: 6px; }
+.section.sf-new { margin-top: 28px; padding-top: 18px; border-top: 1px solid var(--line); }
 /* Under a message that is about the picture made before it: a small copy of that picture. */
 .from-media { display: flex; align-items: center; justify-content: flex-end; gap: 6px; margin-top: 4px; }
 .from-media img { width: 28px; height: 28px; object-fit: cover; border-radius: 6px; border: 1px solid var(--line); }
