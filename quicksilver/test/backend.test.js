@@ -1296,7 +1296,10 @@ async function collect(gen) {
     const data = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'data', 'models.json'), 'utf8'));
     const ok = remote.clean(data);
     assert.ok(ok && Object.keys(ok.successors).length >= 5, 'the published picks file is valid');
-    for (const [a, b] of Object.entries(ok.successors)) assert.ok(catalog.TEXT_MODELS.some((m) => m.id === a) && catalog.TEXT_MODELS.some((m) => m.id === b), `successor ${a} → ${b} names real models`);
+    // (A newer model may be one the file itself adds: the daily catalogue search writes those.)
+    const real = (id) => catalog.TEXT_MODELS.some((m) => m.id === id) || ok.models.some((m) => m.id === id);
+    for (const [a, b] of Object.entries(ok.successors)) assert.ok(real(a) && real(b), `successor ${a} → ${b} names real models`);
+    assert.ok(ok.models.length <= 40 && ok.models.every((m) => m.repo && m.sizeGB > 0 && m.jobs), 'every model the file adds is complete');
     for (const l of Object.values(ok.featured)) for (const id of l) assert.ok(catalog.TEXT_MODELS.some((m) => m.id === id), `featured ${id} is in the catalog`);
     assert.equal(remote.clean({ version: 2 }), null, 'unknown versions are ignored');
     const bad = remote.clean({ version: 1, models: [{ id: 'x', repo: 'nope' }, { id: 'test-new-9b', name: '<b>New 9B</b>', maker: 'Test', category: 'general', repo: 'test/New-9B-GGUF', quant: 'q4_k_m', sizeGB: 5.5, jobs: { general: 9, coding: 8 }, evil: 'x' }], successors: { 'qwen3-8b': 'test-new-9b', 'bad id!': 'x' } });
