@@ -85,21 +85,27 @@ const ROOT = path.join(__dirname, '..');
         return real(url, o);
       };
     });
-    await win.evaluate(() => { localStorage.removeItem('safesearch.v1'); setTab = 'web'; go({ view: 'settings' }); }); // (a fresh start: nothing saved yet)
-    await win.waitForSelector('#w-safe', { state: 'attached', timeout: 8000 }).catch(async () => { throw new Error(`no switch: ${(await win.evaluate(() => document.querySelector('#main')?.innerText || '')).slice(0, 600)} / errors: ${await win.evaluate(() => String(window.__lastErr || ''))}`); });
-    assert.equal(await win.locator('#w-safe').isChecked(), true, 'on by default');
-    await win.locator('#w-safe').dispatchEvent('click');
+    // Keep opening the Web search settings until the switch shows (app start-up can re-render home
+    // over it), and capture its checked state the instant it appears so a later re-render can't
+    // detach it mid-check. Returns true/false (the switch's state) or null if it never showed.
+    const openSwitch = async () => {
+      await win.waitForFunction(() => { const el = document.querySelector('#w-safe'); if (el) { window.__wsafe = el.checked; return true; } if (typeof go === 'function' && typeof S !== 'undefined' && S.data) { setTab = 'web'; go({ view: 'settings' }); } return false; }, { timeout: 20000 }).catch(() => {});
+      return win.evaluate(() => (typeof window.__wsafe === 'boolean' ? window.__wsafe : null));
+    };
+    // Flip the switch in the same tick it's found, so a re-render can't detach it between find and click.
+    const clickSwitch = () => win.waitForFunction(() => { const el = document.querySelector('#w-safe'); if (el) { el.click(); return true; } if (typeof go === 'function' && typeof S !== 'undefined' && S.data) { setTab = 'web'; go({ view: 'settings' }); } return false; }, { timeout: 20000 });
+    await win.evaluate(() => localStorage.removeItem('safesearch.v1')); // (a fresh start: nothing saved yet)
+    assert.equal(await openSwitch(), true, 'on by default');
+    await clickSwitch();
     assert.equal(await win.evaluate(() => localStorage.getItem('safesearch.v1')), 'off');
     await win.reload();
-    await win.waitForFunction(() => typeof safeSearchValue === 'function' && S.data);
+    await win.waitForFunction(() => typeof safeSearchValue === 'function' && typeof S !== 'undefined' && S.data);
     assert.equal(await win.evaluate(() => safeSearchValue()), 'off', 'still off after a reload');
-    await win.evaluate(() => { setTab = 'web'; go({ view: 'settings' }); });
-    await win.waitForSelector('#w-safe', { state: 'attached', timeout: 15000 }).catch(async () => { throw new Error(`no switch after reload: ${(await win.evaluate(() => (location.href + ' | ' + (document.querySelector('#main')?.innerText || document.body.innerText)))).slice(0, 800)}`); });
-    assert.equal(await win.locator('#w-safe').isChecked(), false, 'and the switch shows it');
+    assert.equal(await openSwitch(), false, 'and the switch shows it');
     const sentOff = await win.evaluate(async () => { await webSearch('breast augmentation'); await webSearch('breast augmentation'); return true; }).then(() => app.evaluate(() => global.__sent.splice(0)));
     assert.ok(sentOff.filter((l) => /duckduckgo/.test(l)).length === 2 && sentOff.filter((l) => /duckduckgo/.test(l)).every((l) => /kp=-2/.test(l)), `off (and on the search again): ${sentOff}`);
     assert.ok(sentOff.some((l) => /mojeek\.com\/search\?q=breast%20augmentation&safe=0/.test(l)));
-    await win.locator('#w-safe').dispatchEvent('click');
+    await clickSwitch();
     await win.evaluate(() => webSearch('breast augmentation'));
     const sentOn = await app.evaluate(() => global.__sent.splice(0));
     assert.ok(sentOn.some((l) => /duckduckgo.*kp=1\b/.test(l)) && sentOn.some((l) => /safe=1\b/.test(l)), `on flips it: ${sentOn}`);
