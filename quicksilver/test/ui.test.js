@@ -897,7 +897,7 @@ function redPng(size = 64) {
   // Minds: characters with their own voice, opening line, example lines and memory, in plain view.
   await win.evaluate(() => go({ view: 'minds' }));
   await win.waitForSelector('[data-mind-b="gm"]');
-  assert.equal(await win.locator('.as-card').count(), 21, 'twenty-one built-in Minds');
+  assert.equal(await win.locator('.as-card').count(), 22, 'twenty-two built-in Minds');
   assert.equal(await win.evaluate(() => document.querySelector('.nav-item[data-nav="assistants"]')?.classList.contains('active')), true, 'Your Crew stays highlighted');
   await win.click('[data-mind-b="gm"][data-mind-act="how"]');
   assert.match(await win.locator('#modal-body').innerText(), /Nothing hidden[\s\S]*Game Master running a text role-playing game[\s\S]*Opening line[\s\S]*Example lines/);
@@ -916,7 +916,7 @@ function redPng(size = 64) {
   assert.doesNotMatch(shared.file, /halfling/, 'what it remembers about you stays on this PC');
   assert.deepEqual([shared.back.name, shared.back.target, shared.back.mind.source, shared.back.mind.notes.length, 'extra' in shared.back], ['The Game Master', '', 'imported', 0, false]);
   assert.match(shared.bad, /isn't a Quicksilver Mind file/);
-  console.log('✓ Minds: 21 built in (makers, code & security, investigators first), it speaks first, its voice and memory in the instructions, "remember that" stays with it, shared as a file without your memory');
+  console.log('✓ Minds: 22 built in (makers, code & security, investigators first), it speaks first, its voice and memory in the instructions, "remember that" stays with it, shared as a file without your memory');
   // No bounce: redrawing the chat you're on plays no entrance animation and keeps your place.
   const still = await win.evaluate(() => { const box = document.getElementById('messages'); render(); return { enter: Boolean(document.querySelector('#main > .enter')), same: render.key === `chat:${S.route.id}` }; });
   assert.equal(still.enter, false, 'no entrance animation when the same chat redraws'); assert.ok(still.same);
