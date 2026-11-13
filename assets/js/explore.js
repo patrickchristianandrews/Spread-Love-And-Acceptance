@@ -61,7 +61,7 @@
 
   // ---------- what each page is
   var GAME = /^\/(coin-pusher|frequency-journey(-play)?|word-bloom|quiet-words|quiet-crossword|daily-ledger-crossword|recheck-drive|bears-dojo|pause-and-play|surprise|keepsakes|quest)\.html$/;
-  var MEDIA = /^\/(frequency-buddies[a-z0-9-]*|pal-cam-tv|podcast-index|echoes-of-gold|soundscapes|calm-visualizer|wp-11-sound-toolkit)\.html$/;
+  var MEDIA = /^\/(frequency-buddies[a-z0-9-]*|pal-cam-tv|sleeping-pals-cam|podcast-index|echoes-of-gold|soundscapes|calm-visualizer|wp-11-sound-toolkit)\.html$/;
   var INFO = /^\/(about|is-this-for-you|method-and-limits|how-it-works|five-pillars|ways-in|on-this-device|contents|whats-new|install|research|brand|legal\/[a-z-]+)\.html$|^\/legal\//;
   function typeOf(e) {
     var p = e.p, c = e.code || '';

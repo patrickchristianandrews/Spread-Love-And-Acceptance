@@ -1330,7 +1330,10 @@
     '.pc-ov{position:fixed;inset:0;z-index:10000;display:flex;align-items:stretch;justify-content:center;background:#4A3F63;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);box-sizing:border-box;overscroll-behavior:contain}' +
     '.pc-ov[hidden]{display:none}' +
     '.pc-tr8{display:flex;align-items:center;gap:.4rem;flex:none}.pc-snd,.pc-mus{min-height:44px;padding:.35rem .75rem;border-radius:999px;border:1px solid #E6D6EE;background:#fff;color:#3C3350;font:600 .9rem Lora,Georgia,serif;cursor:pointer;white-space:nowrap}.pc-snd:focus-visible,.pc-mus:focus-visible{outline:3px solid #7C6BB0;outline-offset:2px}.pc-snd .pc-st,.pc-mus .pc-st{display:inline-block;margin-left:.15rem;padding:.08rem .5rem;border-radius:999px;font:700 .72rem/1.3 "IBM Plex Mono",ui-monospace,monospace;letter-spacing:.06em;text-transform:uppercase;background:#ECE7F1;color:#6A6275}.pc-snd[aria-pressed="true"],.pc-mus[aria-pressed="true"]{background:#EAF7EE;border-color:#3E8E5A;box-shadow:0 0 0 2px rgba(62,142,90,.18)}.pc-snd[aria-pressed="true"] .pc-st,.pc-mus[aria-pressed="true"] .pc-st{background:#2F7A4B;color:#fff}.pc-snd[aria-pressed="false"],.pc-mus[aria-pressed="false"]{background:#F7F5F9;border-style:dashed;border-color:#B9B0C4;color:#6A6275}@media (max-width:420px){.pc-snd .pc-lbl,.pc-mus .pc-lbl{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}}' +
-    '.pc-tvl{flex:none;margin:0;text-align:center;font-size:.88rem}.pc-tvl a{color:#5B4A86}.pc-ov.is-tv .pc-tvl{display:none}' +
+    '.pc-tvl{flex:none;margin:0;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:.35rem .9rem;text-align:center;font-size:.88rem}.pc-tvl a{color:#5B4A86;display:inline-flex;align-items:center;min-height:44px}.pc-ov.is-tv .pc-tvl,.pc-ov.is-tv .pc-cmsg{display:none}' +
+    '.pc-cast,.pc-cstop{min-height:44px;padding:.35rem .95rem;border-radius:999px;border:1px solid #E6D6EE;background:#fff;color:#3C3350;font:600 .92rem Lora,Georgia,serif;cursor:pointer}.pc-cstop[hidden]{display:none}' +
+    '.pc-cast:focus-visible,.pc-cstop:focus-visible{outline:3px solid #B39BE0;outline-offset:2px}' +
+    '.pc-cmsg{flex:none;margin:0;text-align:center;font-size:.85rem;line-height:1.4;color:#5B4A86}.pc-cmsg:empty{display:none}.pc-cmsg a{color:#5B4A86}' +
     '.pc-box{display:flex;flex-direction:column;width:100%;max-width:1000px;height:100%;background:#FFFBF4;color:#3C3350;box-sizing:border-box;padding:.6rem .7rem .7rem;gap:.5rem;overflow:hidden;font-family:Lora,Georgia,serif}' +
     '@media (max-width:759px){.pc-box{justify-content:center}}' +
     '@media (min-width:760px){.pc-ov{align-items:center;padding:1.2rem}.pc-box{height:min(100%,860px);border-radius:26px;box-shadow:0 24px 70px rgba(30,20,50,.4);padding:.9rem 1.1rem 1rem}}' +
@@ -1426,7 +1429,8 @@
         '<div class="pc-btns"><button type="button" class="pc-b is-main pc-next">Next!</button><button type="button" class="pc-b is-sur pc-sur">Surprise me</button><button type="button" class="pc-b pc-pause" aria-pressed="false">Pause</button></div>' +
         '<div class="pc-trs"><button type="button" class="pc-tr" data-trick="0">Tidbit, do a trick!</button><button type="button" class="pc-tr" data-trick="1">Sugarfoot, do a trick!</button></div>' +
         '<details class="pc-tally pc-facts"><summary>Pal facts <span class="pc-fnote">three new ones each visit</span></summary><div class="pc-fgrid"><div><h3>Tidbit</h3><ul class="pc-fl"></ul></div><div><h3>Sugarfoot</h3><ul class="pc-fl"></ul></div></div></details>' +
-        '<p class="pc-tvl"><a href="/pal-cam-tv.html">📺 Watch on your TV: Cast to a Chromecast, or full screen all day →</a></p>' +
+        '<p class="pc-tvl"><button type="button" class="pc-cast">📺 Cast to your TV</button><button type="button" class="pc-cstop" hidden>Stop casting</button><a href="/pal-cam-tv.html">Full screen all day →</a></p>' +
+        '<p class="pc-cmsg" role="status" aria-live="polite"></p>' +
         '<p class="pc-sr pc-live" aria-live="polite"></p>' +
       '</div>';
     document.body.appendChild(ov);
@@ -1437,6 +1441,8 @@
     wxEl = ov.querySelector('.pc-wx'); wxEl.addEventListener('click', function () { if (!WX) wxStart(true); else { try { localStorage.removeItem(wxKey); } catch (e) {} WX = null; ambient = []; wxShow(); } }); wxStart(false);
     badge = ov.querySelector('.pc-badge'); tallyN = ov.querySelector('.pc-n'); tallyTot = ov.querySelector('.pc-tot'); chips = ov.querySelector('.pc-chips'); btnPause = ov.querySelector('.pc-pause');
     ov.querySelector('.pc-x').addEventListener('click', close);
+    ov.querySelector('.pc-cast').addEventListener('click', castPress);
+    ov.querySelector('.pc-cstop').addEventListener('click', function () { try { PCAST.ctx.endCurrentSession(true); } catch (e) {} });
     ov.querySelector('.pc-mus').addEventListener('click', function () { primeSound(); var go = function () { if (MUS()) { MUS().toggle(); if (setting) MUS().scene(setting.id, hour); } syncMusBtn(); ambSync(); }; if (MUS()) go(); else if (musP) musP.then(go); });
     ov.querySelector('.pc-snd').addEventListener('click', function () { quietHold = false; primeSound(); if (SND()) SND().toggle(); else { try { localStorage.setItem('tol-pc-sound', soundOn() ? 'off' : 'on'); } catch (e) {} } ambSync(); syncSndBtn(); hideNote(false); });
     ov.querySelector('.pc-snote-ok').addEventListener('click', function () { hideNote(true); });
@@ -1466,6 +1472,67 @@
     }, true);
     window.addEventListener('keyup', function (e) { if (isOpen) e.stopPropagation(); }, true);
     document.addEventListener('focusin', function (e) { if (isOpen && !ov.contains(e.target)) { var x = ov.querySelector('.pc-x'); if (x) x.focus(); } });
+  }
+  // ---------------------------------------------------------------- Cast to your TV, right from the cam
+  // The TV runs the live Pal Cam TV (the same Google Cast app as pal-cam-tv.html, whose TV side is that page with
+  // ?receiver=1). Google's Cast library loads only when this button is pressed. Once the TV joins, it is told "day"
+  // on the pal cam's own channel (so a TV showing the Sleeping Pals Cam switches over). Chrome on a computer or an
+  // Android phone; elsewhere it says what works instead.
+  var PALCAM_APP = '26DCEDE9', PALCAM_NS = 'urn:x-cast:com.spreadloveandacceptance.palcam', PCAST = { st: 'idle', ctx: null, want: false, w: [] };
+  function castSay(t, connected, more) {
+    var m = ov && ov.querySelector('.pc-cmsg'), sb = ov && ov.querySelector('.pc-cstop'); if (!m) return;
+    m.textContent = t || '';
+    if (more) { m.appendChild(document.createTextNode(' ')); var a = document.createElement('a'); a.href = '/pal-cam-tv.html'; a.textContent = 'More ways to watch on a TV'; m.appendChild(a); }
+    if (sb && connected != null) sb.hidden = !connected;
+  }
+  function castTv(ses) { try { return ses.getCastDevice().friendlyName; } catch (e) { return 'your TV'; } }
+  function castDay(ses) {
+    if (!ses) return;
+    try { var p = ses.sendMessage(PALCAM_NS, { mode: 'day' }); if (p && p.catch) p.catch(function () {}); } catch (e) {}
+    castSay('Playing on ' + castTv(ses) + '. You can close this, and the TV keeps going.', true);
+  }
+  function castSdk(cb) {
+    if (PCAST.st === 'ready') { cb(true); return; } if (PCAST.st === 'failed') { cb(false); return; }
+    PCAST.w.push(cb); if (PCAST.st === 'loading') return; PCAST.st = 'loading';
+    var done = function (ok) { if (PCAST.st !== 'loading') return; PCAST.st = ok ? 'ready' : 'failed'; clearTimeout(PCAST.t); var w = PCAST.w; PCAST.w = []; w.forEach(function (f) { try { f(ok); } catch (e) {} }); };
+    var init = function (ok) {
+      if (!ok || !window.cast || !cast.framework || !window.chrome || !chrome.cast) { done(false); return; }
+      try {
+        var c = PCAST.ctx = cast.framework.CastContext.getInstance();
+        c.setOptions({ receiverApplicationId: PALCAM_APP, autoJoinPolicy: chrome.cast.AutoJoinPolicy.ORIGIN_SCOPED });
+        c.addEventListener(cast.framework.CastContextEventType.SESSION_STATE_CHANGED, function (ev) {
+          var SS = cast.framework.SessionState;
+          if (PCAST.want && (ev.sessionState === SS.SESSION_STARTED || ev.sessionState === SS.SESSION_RESUMED)) castDay(ev.session || c.getCurrentSession());
+          if (ev.sessionState === SS.SESSION_ENDED && PCAST.want) { PCAST.want = false; castSay('Stopped casting.', false); }
+        });
+        done(true);
+      } catch (e) { done(false); }
+    };
+    PCAST.t = setTimeout(function () { done(false); }, 9000);
+    if (window.cast && cast.framework && window.chrome && chrome.cast) { init(true); return; } // another part of the page loaded it already
+    var prev = window.__onGCastApiAvailable;
+    window.__onGCastApiAvailable = function (ok) { if (typeof prev === 'function') try { prev(ok); } catch (e) {} init(ok); };
+    try { var sc = document.createElement('script'); sc.src = 'https://www.gstatic.com/cv/js/sender/v1/cast_sender.js?loadCastFramework=1'; sc.async = true; sc.onerror = function () { done(false); }; document.head.appendChild(sc); } catch (e) { done(false); }
+  }
+  function castPress() {
+    var ua = navigator.userAgent || '', ios = /iPhone|iPad|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    var chromeOK = !!window.chrome && /(Chrome|Chromium)\/\d/.test(ua) && !ios && !window.WebKitPlaybackTargetAvailabilityEvent;
+    if (!chromeOK) {
+      castSay(ios ? 'On an iPhone or iPad: open Control Center, tap Screen Mirroring and pick your TV. The cam shows on the TV.' : 'Casting from here needs Chrome on a computer or an Android phone, on the same Wi-Fi as a Chromecast or Google TV.', null, true);
+      return;
+    }
+    var t0 = Date.now(); if (PCAST.st !== 'ready') castSay('Looking for your TV…');
+    castSdk(function (ok) {
+      if (!ok) { castSay('Casting couldn’t start in this browser. Try again in a minute.', null, true); return; }
+      var c = PCAST.ctx; PCAST.want = true;
+      var ses = c.getCurrentSession(); if (ses) { castDay(ses); return; }
+      if (Date.now() - t0 > 4500) { castSay('Ready. Press Cast to your TV again and pick your TV.'); return; } // the browser only opens the TV list right after a tap
+      try {
+        if (c.getCastState() === cast.framework.CastState.NO_DEVICES_AVAILABLE) castSay('No Chromecast or Google TV found yet. Check that the TV is on the same Wi-Fi.', null, true);
+        var p = c.requestSession();
+        if (p && p.then) p.then(function (e) { if (e) castSay(e === 'cancel' ? 'No TV was picked. Press Cast to your TV to try again.' : 'The TV didn’t answer. Try again in a minute.', false); }, function (e) { castSay(e === 'cancel' ? 'No TV was picked. Press Cast to your TV to try again.' : 'No TV answered. Check that it is on the same Wi-Fi.', false, e !== 'cancel'); });
+      } catch (e) { castSay('The TV didn’t answer. Try again in a minute.', false); }
+    });
   }
   function renderFacts() {
     if (!factLists) return;

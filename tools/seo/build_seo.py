@@ -666,7 +666,7 @@ CRUMB_PARENTS = [
     (r'^learn/index-in-depth', 'Philosophy for everyday life', 'learn/index.html'),
     (r'^(workpapers/|wp-\d|prog-01-in)', 'Which part of the program to use', 'program.html'),
     (r'^(coin-pusher|night-garden|bears-dojo|word-bloom|quiet-crossword|quiet-words|daily-ledger|frequency-journey|calm-visualizer|keepsakes)', 'Calm games', 'pause-and-play.html'),
-    (r'^frequency-buddies-', 'Frequency Buddies', 'frequency-buddies.html'),
+    (r'^(frequency-buddies-|pal-cam-tv|sleeping-pals-cam)', 'Frequency Buddies', 'frequency-buddies.html'),
 ]
 
 

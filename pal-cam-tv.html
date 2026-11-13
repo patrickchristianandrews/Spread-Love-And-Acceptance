@@ -128,7 +128,7 @@
 <meta name="twitter:description" content="Leave two cartoon pups playing and napping on your TV all day, with calm music and light that follows the time of day. Free, no sign-up, ready to cast.">
 <meta name="twitter:image" content="https://spreadloveandacceptance.com/assets/img/og-image.png">
 <meta name="twitter:image:alt" content="Two friends sharing one heart, with two happy pups: Spread Love &amp; Acceptance">
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@id":"https://spreadloveandacceptance.com/pal-cam-tv.html#page","name":"Pal Cam TV: A Cozy Cartoon Puppy Cam for Your TV","headline":"Pal Cam TV: A Cozy Cartoon Puppy Cam for Your TV","description":"Leave two cartoon pups playing and napping on your TV all day, with calm music and light that follows the time of day. Free, no sign-up, ready to cast.","url":"https://spreadloveandacceptance.com/pal-cam-tv.html","inLanguage":"en-US","isAccessibleForFree":true,"keywords":"self-help, relationships, kindness, love, appreciation, acceptance, connection, communication, calm, peace, harmony, reconciliation, emotional wellbeing, self-discovery, fairness at home, mental load, invisible work, free self-help tools, calm games, relaxing word games, crossword, word search, cozy games, no timers, Tidbit and Sugarfoot","publisher":{"@type":"Organization","@id":"https://spreadloveandacceptance.com/#org","name":"Spread Love & Acceptance","url":"https://spreadloveandacceptance.com/","logo":{"@type":"ImageObject","url":"https://spreadloveandacceptance.com/assets/img/logo-stacked.png"}},"isPartOf":{"@type":"WebSite","@id":"https://spreadloveandacceptance.com/#website","name":"Spread Love & Acceptance","url":"https://spreadloveandacceptance.com/"},"datePublished":"2026-09-29","dateModified":"2026-10-31","image":"https://spreadloveandacceptance.com/assets/img/og-image.png","primaryImageOfPage":{"@type":"ImageObject","url":"https://spreadloveandacceptance.com/assets/img/og-image.png"},"@type":"WebApplication","applicationCategory":"LifestyleApplication","operatingSystem":"Any (web browser)","browserRequirements":"Requires JavaScript","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Spread Love & Acceptance","item":"https://spreadloveandacceptance.com/"},{"@type":"ListItem","position":2,"name":"Pal Cam TV: A Cozy Cartoon Puppy Cam for Your TV","item":"https://spreadloveandacceptance.com/pal-cam-tv.html"}]}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@id":"https://spreadloveandacceptance.com/pal-cam-tv.html#page","name":"Pal Cam TV: A Cozy Cartoon Puppy Cam for Your TV","headline":"Pal Cam TV: A Cozy Cartoon Puppy Cam for Your TV","description":"Leave two cartoon pups playing and napping on your TV all day, with calm music and light that follows the time of day. Free, no sign-up, ready to cast.","url":"https://spreadloveandacceptance.com/pal-cam-tv.html","inLanguage":"en-US","isAccessibleForFree":true,"keywords":"self-help, relationships, kindness, love, appreciation, acceptance, connection, communication, calm, peace, harmony, reconciliation, emotional wellbeing, self-discovery, fairness at home, mental load, invisible work, free self-help tools, calm games, relaxing word games, crossword, word search, cozy games, no timers, Tidbit and Sugarfoot","publisher":{"@type":"Organization","@id":"https://spreadloveandacceptance.com/#org","name":"Spread Love & Acceptance","url":"https://spreadloveandacceptance.com/","logo":{"@type":"ImageObject","url":"https://spreadloveandacceptance.com/assets/img/logo-stacked.png"}},"isPartOf":{"@type":"WebSite","@id":"https://spreadloveandacceptance.com/#website","name":"Spread Love & Acceptance","url":"https://spreadloveandacceptance.com/"},"datePublished":"2026-09-29","dateModified":"2026-10-31","image":"https://spreadloveandacceptance.com/assets/img/og-image.png","primaryImageOfPage":{"@type":"ImageObject","url":"https://spreadloveandacceptance.com/assets/img/og-image.png"},"@type":"WebApplication","applicationCategory":"LifestyleApplication","operatingSystem":"Any (web browser)","browserRequirements":"Requires JavaScript","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Spread Love & Acceptance","item":"https://spreadloveandacceptance.com/"},{"@type":"ListItem","position":2,"name":"Frequency Buddies","item":"https://spreadloveandacceptance.com/frequency-buddies.html"},{"@type":"ListItem","position":3,"name":"Pal Cam TV: A Cozy Cartoon Puppy Cam for Your TV","item":"https://spreadloveandacceptance.com/pal-cam-tv.html"}]}]}</script>
 <!-- seo:end -->
 </head>
 <body>
@@ -157,6 +157,7 @@
     <li>For all-day use, plug the device in and turn off its sleep and screen saver too.</li>
   </ul>
   <p><a href="/sleeping-pals-cam.html">🌙 Going to bed? Try the Sleeping Pals Cam</a></p>
+  <p><a href="/frequency-buddies.html">More Frequency Buddies: the episodes, the live channel and the music videos</a></p>
   <p><a href="/">Back to the site</a></p>
 </main>
 <div class="tv-hint" id="tv-hint" aria-live="polite"></div>
@@ -186,9 +187,10 @@
   if (receiver) {
     window.__pcLite = true; // a TV stick has a small processor: lighter drawing, same live cam
     window.addEventListener('error', function (ev) { showErr(ev.error || ev.message); });
+    // on the TV the start page never shows: a dark screen until the cam (daytime or sleeping) appears
     var st0 = document.getElementById('tv-start');
-    Array.prototype.forEach.call(st0.querySelectorAll('button, ul, p, details'), function (n) { n.hidden = true; n.style.display = 'none'; });
-    st0.appendChild(Object.assign(document.createElement('p'), { textContent: 'Tuning in to Tidbit and Sugarfoot…' }));
+    st0.style.visibility = 'hidden';
+    document.documentElement.style.background = document.body.style.background = '#0D0B16';
   }
   var start = document.getElementById('tv-start'), go = document.getElementById('tv-go'), hint = document.getElementById('tv-hint');
   var on = false, timer = 0, lock = null, capsOff = false, quietT = 0, hintT = 0, soundSaid = false;
@@ -386,7 +388,11 @@
           : st === cast.framework.CastState.NO_DEVICES_AVAILABLE ? 'Looking for your Chromecast on this Wi-Fi…' : 'Ready. Tap Cast to your TV and pick your Chromecast.';
         if (castTest) castState.textContent += ' [test: app ' + CAST_APP_ID + ', state ' + st + ']';
       }
-      ctx.addEventListener(cast.framework.CastContextEventType.CAST_STATE_CHANGED, sync); sync();
+      var stopCast = document.createElement('button'); stopCast.type = 'button'; stopCast.className = 'tv-resend'; stopCast.hidden = true; stopCast.textContent = 'Stop casting';
+      stopCast.addEventListener('click', function () { wantDay = false; try { ctx.endCurrentSession(true); } catch (e) {} });
+      castState.parentNode.insertBefore(stopCast, castState.nextSibling);
+      ctx.addEventListener(cast.framework.CastContextEventType.CAST_STATE_CHANGED, function () { stopCast.hidden = ctx.getCastState() !== cast.framework.CastState.CONNECTED; });
+      ctx.addEventListener(cast.framework.CastContextEventType.CAST_STATE_CHANGED, sync); sync(); stopCast.hidden = ctx.getCastState() !== cast.framework.CastState.CONNECTED;
       // only a press of the button changes what the TV shows: opening this page never switches a TV away from the sleeping cam
       ctx.addEventListener(cast.framework.CastContextEventType.SESSION_STATE_CHANGED, function (ev) {
         var SS = cast.framework.SessionState;
