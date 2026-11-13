@@ -86,7 +86,7 @@ function runArenaSide(r, i) {
   s.started = Date.now();
   const requestId = uid();
   const p = S.data.prefs;
-  const sys = `You are a helpful assistant. ${humanOn() ? HUMAN_STYLE : ANSWER_STYLE} (Background only: today's date is ${new Date().toLocaleDateString()}.)`;
+  const sys = `You are a helpful assistant. ${humanOn() ? humanStyleText() : ANSWER_STYLE}${styleLines() ? ` ${styleLines()}` : ''} (Background only: today's date is ${new Date().toLocaleDateString()}.)`;
   oneShots.set(requestId, {
     text: '',
     onText: (t) => { s.text = t; paintArenaSide(r, i); },

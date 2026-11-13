@@ -1712,6 +1712,25 @@ function redPng(size = 64) {
   await win.waitForTimeout(500);
   await shot(win, '17-phone');
   await win.uncheck('#ph-on');
+  // Settings → Writing style: six choices, reaching every chat's instructions.
+  await win.click('[data-set-tab="style"]');
+  await win.waitForSelector('[data-style="styleBase"]');
+  assert.deepEqual(await win.locator('.style-row b').allInnerTexts(), ['Base style and tone', 'Warmth', 'Enthusiasm', 'Emoji', 'Visual answers', 'Headers and lists']);
+  await win.selectOption('[data-style="styleBase"]', 'candid');
+  await win.selectOption('[data-style="styleEmoji"]', 'more');
+  const sys2 = await win.evaluate(() => systemPrompt(assistantById('as-general'), false, {}));
+  assert.match(sys2, /Tone: candid and direct/); assert.match(sys2, /Use emoji freely/); assert.ok(!/No emoji unless the user uses them/.test(sys2), 'and Quicksilver\'s own no-emoji rule steps aside');
+  await win.selectOption('[data-style="styleBase"]', ''); await win.selectOption('[data-style="styleEmoji"]', '');
+  assert.ok(!/Tone:/.test(await win.evaluate(() => systemPrompt(assistantById('as-general'), false, {}))), 'Default adds nothing');
+  // Settings → Permissions: default on; Full access only after a warning.
+  await win.click('[data-set-tab="permissions"]');
+  await win.waitForSelector('#perm-full', { state: 'attached' });
+  assert.equal(await win.locator('#perm-default').isChecked(), true);
+  await win.locator('#perm-full').dispatchEvent('click');
+  await win.waitForSelector('#modal :text("Turn on Full access?")');
+  await win.click('#modal [data-no]');
+  assert.equal(await win.evaluate(() => Boolean(S.config.fullAccess)), false, 'cancelled: still default');
+  await shot(win, '17c-settings-permissions');
   // Settings → API connections: every connected cloud AI and how Quicksilver uses them.
   await win.click('[data-set-tab="apis"]');
   await win.waitForSelector('#set-cloud-all');

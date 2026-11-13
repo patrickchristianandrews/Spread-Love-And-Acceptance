@@ -92,7 +92,8 @@ function inside(p, roots) { const r = path.resolve(p); return roots.some((root) 
 module.exports = ({ cfg }) => {
   const C = (id) => cfg()[id] || {};
   const roots = () => { const extra = String(C('pcfiles').folders || '').split(/[;\n]/).map((s) => s.trim()).filter(Boolean); return [...homeDirs(), ...extra]; };
-  const allowed = (p) => { if (!p) throw new Error('Give a file or folder path.'); const full = path.resolve(p.replace(/^~(?=$|[\\/])/, os.homedir())); if (!inside(full, roots())) throw new Error(`Only files in ${roots().join(', ')} can be used (add more folders under Connectors → Files on this PC).`); return full; };
+  const fullAccess = () => { try { return Boolean(require('./store').config().fullAccess); } catch { return false; } };
+  const allowed = (p) => { if (!p) throw new Error('Give a file or folder path.'); const full = path.resolve(p.replace(/^~(?=$|[\\/])/, os.homedir())); if (!fullAccess() && !inside(full, roots())) throw new Error(`Only files in ${roots().join(', ')} can be used (add more folders under Connectors → Files on this PC, or turn on Full access in Settings → Permissions).`); return full; };
 
   const CONNECTORS = {
     webtools: { name: 'Web search & page reader', icon: '🔎', group: 'Everyday', defaultOn: true, noToken: true, builtIn: true,
@@ -122,7 +123,7 @@ module.exports = ({ cfg }) => {
       when: /\b(public holidays?|bank holidays?|national holidays?|day off|is .{1,20} a holiday|long weekend)\b/i,
       blurb: 'Public holidays for 100+ countries, any year (Nager.Date). Free, no account.', fields: [] },
     pcfiles: { name: 'Files on this PC', icon: '🗂️', group: 'Files & storage', defaultOn: true, noToken: true, builtIn: true,
-      when: /\b(my (files?|documents?|downloads|desktop|folders?|pdfs?|spreadsheets?|notes)|in (my )?(documents|downloads|desktop)|find (the|a|my) file|on my (pc|computer)|(open|read|list) (the )?(file|folder))\b|[a-z]:\\|~\//i,
+      when: /\b(run (the |this |a )?(command|script)|in (the )?(terminal|powershell|command prompt)|my (files?|documents?|downloads|desktop|folders?|pdfs?|spreadsheets?|notes)|in (my )?(documents|downloads|desktop)|find (the|a|my) file|on my (pc|computer)|(open|read|list) (the )?(file|folder))\b|[a-z]:\\|~\//i,
       blurb: 'Find, list and read files in your Documents, Desktop and Downloads (and any folders you add); saving a file always asks you first. Nothing leaves this PC.',
       fields: [{ key: 'folders', label: 'More folders (optional)', placeholder: 'D:\\Projects; E:\\Photos', help: 'Separate with ; — Documents, Desktop and Downloads are always included.' }] },
     webimages: { name: 'Pictures from the web', icon: '🖼️', group: 'Everyday', defaultOn: true, noToken: true, builtIn: true,
@@ -266,6 +267,16 @@ module.exports = ({ cfg }) => {
           if (/\.(pdf|docx|pptx|xlsx)$/i.test(f)) { const t = await require('./docs').extract(f); return String(t?.text ?? t ?? '').slice(0, 14000); }
           const st = fs.statSync(f); if (st.size > 2 * 1024 * 1024) throw new Error('That file is over 2 MB; open a smaller one.');
           return fs.readFileSync(f, 'utf8').slice(0, 14000);
+        } },
+      { name: 'run_command', description: 'Run a command on this PC (PowerShell on Windows, the shell elsewhere) and return its output. Only available with Full access (Settings → Permissions).', write: true, parameters: { type: 'object', properties: { command: { type: 'string' }, folder: { type: 'string', description: 'Folder to run it in (optional)' } }, required: ['command'] },
+        summary: (a) => `Run: ${String(a.command || '').slice(0, 160)}`,
+        run: async ({ command, folder }) => {
+          if (!fullAccess()) throw new Error('Running commands needs Full access (Settings → Permissions).');
+          const { spawnSync } = require('node:child_process');
+          const win = process.platform === 'win32';
+          const r = spawnSync(win ? 'powershell.exe' : '/bin/sh', win ? ['-NoProfile', '-NonInteractive', '-Command', String(command)] : ['-c', String(command)], { cwd: folder ? allowed(folder) : os.homedir(), encoding: 'utf8', timeout: 120000, maxBuffer: 4 * 1024 * 1024, windowsHide: true });
+          if (r.error) throw new Error(r.error.message);
+          return `exit code ${r.status}\n${String(r.stdout || '').slice(-8000)}${r.stderr ? `\n[errors]\n${String(r.stderr).slice(-3000)}` : ''}`;
         } },
       { name: 'files_save', description: 'Save text to a file on this PC (asks the user first). Will not overwrite unless overwrite is true.', write: true, parameters: { type: 'object', properties: { path: { type: 'string' }, text: { type: 'string' }, overwrite: { type: 'boolean' } }, required: ['path', 'text'] },
         summary: (a) => `Save ${String(a.text || '').length} characters to ${a.path}`,

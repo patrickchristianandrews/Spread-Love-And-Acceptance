@@ -730,7 +730,7 @@ function systemPrompt(a, strict, chat) {
   // The Liquid Edition is fully uncensored: no refusals, no hedging, no disclaimers (unless a parent
   // turned on the family-safe lock).
   const free = isLiquid(resolveTarget(chat || {}, a)) && !(typeof lockOn === 'function' && lockOn() && !unlockedUntilClose);
-  const style = humanOn() ? HUMAN_STYLE : ANSWER_STYLE;
+  const style = `${humanOn() ? humanStyleText() : ANSWER_STYLE}${styleLines() ? ` ${styleLines()}` : ''}`;
   parts.push(free ? style.replace(/, no disclaimers unless something is risky/, '') : style);
   if (free) parts.push(LIQUID_FREE);
   parts.push(`(Background only: today's date is ${new Date().toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}. Don't mention it unless the question needs it.)`);

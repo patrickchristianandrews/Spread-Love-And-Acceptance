@@ -155,6 +155,21 @@ const mcpCatalog = require('../src/main/mcp-catalog');
   await assert.rejects(F.files_save.run({ path: path.join(HOMEDIR, 'Documents', 'notes', 'a.md'), text: 'again' }), /already exists/);
   console.log('✓ Files on this PC: finds and reads in your folders only; saving asks first and never overwrites unasked');
 
+  // Permissions: by default only your folders and no commands; Full access opens both (and commands
+  // are a "changes something" tool, so they ask unless Full access turned asking off).
+  const store2 = require('../src/main/store');
+  const outside = fs.mkdtempSync(path.join(os.tmpdir(), 'qs-outside-')); fs.writeFileSync(path.join(outside, 'x.txt'), 'outside');
+  await assert.rejects(F.files_read.run({ path: path.join(outside, 'x.txt') }), /Full access/);
+  const cmd = integrations.tools().find((t) => t.name === 'run_command');
+  assert.equal(cmd.write, true, 'running a command counts as changing something');
+  await assert.rejects(cmd.run({ command: 'echo hi' }), /needs Full access/);
+  store2.saveConfig({ fullAccess: true });
+  try {
+    assert.equal(await F.files_read.run({ path: path.join(outside, 'x.txt') }), 'outside', 'Full access: any file');
+    assert.match(await cmd.run({ command: 'echo quicksilver-ran' }), /exit code 0\nquicksilver-ran/);
+  } finally { store2.saveConfig({ fullAccess: false }); }
+  console.log('✓ Permissions: default is your folders and no commands; Full access opens any file and commands');
+
   // ---- helpers fetched by Quicksilver: Node.js and uv, checked against their fingerprints ----
   const crypto = require('node:crypto');
   const dist = fs.mkdtempSync(path.join(os.tmpdir(), 'qs-dist-'));

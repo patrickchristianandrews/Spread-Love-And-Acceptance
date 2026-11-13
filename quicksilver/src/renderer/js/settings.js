@@ -25,19 +25,54 @@ views.settings = {
   html() {
     // Phone, API server and Engines are rarely needed, so they share one Advanced tab.
     if (ADV_PARTS.some(([k]) => k === setTab)) { advFocus = setTab; setTab = 'advanced'; }
-    const tabs = { general: 'General', apis: '☁️ API connections', features: 'Features', guide: 'Guide & tips', chat: 'Chat & accuracy', memory: 'Memory', voice: 'Voice', web: 'Web search', accounts: 'Accounts', advanced: 'Advanced', about: "What's inside" };
+    const tabs = { general: 'General', apis: '☁️ API connections', style: '✍️ Writing style', permissions: '🔐 Permissions', features: 'Features', guide: 'Guide & tips', chat: 'Chat & accuracy', memory: 'Memory', voice: 'Voice', web: 'Web search', accounts: 'Accounts', advanced: 'Advanced', about: "What's inside" };
     const adv = new Set(['web', 'accounts', 'advanced']);
     return `<div class="page"><div class="page-head"><h1>Settings</h1></div>
       <div class="tabs">${Object.entries(tabs).filter(([k]) => !simpleOn() || !adv.has(k) || setTab === k).map(([k, l]) => `<button class="tab ${setTab === k ? 'active' : ''}" data-set-tab="${k}">${l}</button>`).join('')}</div>
-      <div style="max-width:860px">${({ general: generalHTML, apis: apisSetHTML, guide: guidePageHTML, chat: chatSetHTML, memory: memSetHTML, voice: voiceSetHTML, web: webHTML, accounts: accountsHTML, advanced: advancedHTML, features: featuresHTML, about: aboutHTML })[setTab]()}</div></div>`;
+      <div style="max-width:860px">${({ general: generalHTML, apis: apisSetHTML, style: styleSetHTML, permissions: permSetHTML, guide: guidePageHTML, chat: chatSetHTML, memory: memSetHTML, voice: voiceSetHTML, web: webHTML, accounts: accountsHTML, advanced: advancedHTML, features: featuresHTML, about: aboutHTML })[setTab]()}</div></div>`;
   },
   bind() {
     $$('[data-set-tab]').forEach((b) => b.addEventListener('click', () => { setTab = b.dataset.setTab; render(); }));
-    ({ general: bindGeneral, apis: bindApisSet, guide: bindGuidePage, chat: bindChatSet, memory: bindMemSet, voice: bindVoiceSet, web: bindWeb, accounts: bindAccounts, advanced: bindAdvanced, features: bindFeatures, about: bindAbout })[setTab]();
+    ({ general: bindGeneral, apis: bindApisSet, style: bindStyleSet, permissions: bindPermSet, guide: bindGuidePage, chat: bindChatSet, memory: bindMemSet, voice: bindVoiceSet, web: bindWeb, accounts: bindAccounts, advanced: bindAdvanced, features: bindFeatures, about: bindAbout })[setTab]();
   },
 };
 
 const P = () => S.data.prefs;
+
+// ---------- Writing style ----------
+function styleSetHTML() {
+  return `<div class="stack-v"><p class="lede" style="margin:0">How answers are written, in every chat. Default keeps Quicksilver's own style: natural paragraphs, like a knowledgeable friend.</p>
+    <div class="card set-card style-list">${Object.entries(STYLE_OPTIONS).map(([k, o]) => `<div class="row style-row"><b class="grow">${esc(o.label)}</b><select data-style="${k}">${o.options.map(([v, l]) => `<option value="${v}" ${styleOf(k) === v ? 'selected' : ''}>${esc(l)}</option>`).join('')}</select></div>`).join('')}</div>
+    <p class="small muted">Takes effect from the next answer. Crew members keep their own instructions on top of this.</p></div>`;
+}
+function bindStyleSet() {
+  $$('[data-style]').forEach((sel) => sel.addEventListener('change', () => { P()[sel.dataset.style] = sel.value; save(); toast(`${STYLE_OPTIONS[sel.dataset.style].label}: ${sel.selectedOptions[0].textContent}.`); }));
+}
+
+// ---------- Permissions ----------
+// Default: plug-ins read files in your folders (Documents, Desktop, Downloads and the ones you add)
+// and ask before saving or changing anything. Full access: any file on this PC, commands, and no
+// asking. Off unless you turn it on, with a warning first.
+function permSetHTML() {
+  const full = Boolean(S.config?.fullAccess);
+  return `<div class="stack-v">
+    <div class="card set-card perm-list">
+      <div class="row perm-row"><div class="grow"><b>Default permissions</b><div class="help">Quicksilver's AI can read files in your Documents, Desktop and Downloads (and folders you add under Connectors → Files on this PC), and asks you before it saves, sends or changes anything.</div></div><label class="switch"><input type="checkbox" id="perm-default" ${full ? '' : 'checked'}><span></span></label></div>
+      <div class="row perm-row"><div class="grow"><b>Full access</b><div class="help">The AI can read and edit any file on this PC and run commands, with internet access, <b>without asking you</b>. This greatly increases the risk of lost files, leaked data or unexpected changes. Only turn it on for a model you trust, and turn it off when you're done.</div></div><label class="switch"><input type="checkbox" id="perm-full" ${full ? 'checked' : ''}><span></span></label></div>
+    </div>
+    ${full ? '<div class="notice" style="border-color:var(--danger)">⚠️ Full access is on: tools run without asking. Turn it off above when you no longer need it.</div>' : ''}</div>`;
+}
+function bindPermSet() {
+  const set = async (full) => {
+    if (full && !(await confirmBox('Turn on Full access?\\n\\nThe AI will be able to edit or delete any file on this PC and run commands with internet access, without asking you first. Anything a model gets wrong happens for real.', { yes: 'Turn on Full access', danger: true }))) { render(); return; }
+    S.config = await call('config:set', { fullAccess: full });
+    await qs.call('tools:auto', full).catch(() => {});
+    toast(full ? 'Full access on: tools run without asking.' : 'Default permissions: the AI asks before changing anything.');
+    render();
+  };
+  $('#perm-full')?.addEventListener('change', (e) => set(e.target.checked));
+  $('#perm-default')?.addEventListener('change', (e) => set(!e.target.checked));
+}
 
 // ---------- API connections: every cloud AI and service you connected, and how Quicksilver uses them ----------
 function apisSetHTML() {
