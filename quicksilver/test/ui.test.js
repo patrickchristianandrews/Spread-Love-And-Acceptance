@@ -885,14 +885,15 @@ function redPng(size = 64) {
   }
   assert.match(direct.sys, /Rules for every answer: the first words are the answer itself/);
   console.log(`✓ direct answers: rules in the system prompt; filler removed with human writing on and off\n    "${direct.off}"`);
-  // Click the download bar: which models are downloading, each with its own progress.
-  await win.evaluate(() => { S.downloads['fake-a'] = { id: 'fake-a', name: 'Lustify', downloaded: 2e9, total: 7e9 }; S.downloads['fake-b'] = { id: 'fake-b', name: 'Wan 2.2 5B', downloaded: 1e9, total: 10e9 }; paintDownloads(); });
+  // Click the download bar: which models are downloading, each with its own progress. (Any real
+  // downloads in progress are set aside for this check and put back after, so the count is exact.)
+  const savedDl = await win.evaluate(() => { const s = JSON.stringify(S.downloads); S.downloads = { 'fake-a': { id: 'fake-a', name: 'Lustify', downloaded: 2e9, total: 7e9 }, 'fake-b': { id: 'fake-b', name: 'Wan 2.2 5B', downloaded: 1e9, total: 10e9 } }; paintDownloads(); return s; });
   await win.click('#dl-mini');
   const dlText = await win.locator('#modal-body').innerText();
   assert.match(dlText, /Downloading 2 models[\s\S]*Lustify[\s\S]*\(29%\)[\s\S]*Wan 2\.2 5B[\s\S]*\(10%\)/, dlText);
   await win.evaluate(() => { S.downloads['fake-a'].downloaded = 7e9; delete S.downloads['fake-b']; paintDownloads(); });
   assert.doesNotMatch(await win.locator('#dl-list').innerText(), /Wan 2\.2/, 'a finished download leaves the list');
-  await win.evaluate(() => { delete S.downloads['fake-a']; paintDownloads(); closeModal(); });
+  await win.evaluate((s) => { S.downloads = JSON.parse(s); paintDownloads(); closeModal(); }, savedDl);
   console.log('✓ download bar: clicking it lists each model downloading, with its own progress, kept up to date');
   // Minds: characters with their own voice, opening line, example lines and memory, in plain view.
   await win.evaluate(() => go({ view: 'minds' }));
