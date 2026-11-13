@@ -300,18 +300,31 @@ function dolphinOfferHTML(qst) {
       <div class="small muted">Dolphin 3.0 8B is uncensored and about as strong as the Brain, but from a different family, so on hard questions it adds a second view and they catch each other's mistakes. Everyday messages stay with the fast Brain. ${d.sizeGB} GB download.${slow ? ' On this PC it runs slowly, so hard answers will take noticeably longer.' : ''}</div></div>
     ${S.downloads[DOLPHIN] ? downloadBox(DOLPHIN) : `<button class="btn small ${slow ? '' : 'primary'}" data-get="${DOLPHIN}" data-use-when-done="${DOLPHIN}">Add Dolphin</button>`}</div>`;
 }
-// The Liquid Edition is completely uncensored, so its cloud partner must be too: Venice. Filtered
-// cloud AIs (Cerebras, Groq, Mistral…) still work in your other chats, never for the Liquid Edition.
+// The Liquid Edition's cloud helper for hard questions: any cloud AI you connect (an uncensored
+// one is used first when you have both). Venice is the suggestion, because it is uncensored and
+// says it doesn't store prompts; a filtered service may refuse some uncensored requests.
+// The switch and the connect buttons are right here.
 function cloudPartnerHTML() {
-  const unc = (S.providers || []).filter((p) => p.preset === 'venice' && (p.hasKey || p.noKey));
-  if (unc.length) return `<div class="pair-card"><div class="grow"><b>☁️ Paired with ${unc.map((p) => esc(p.name)).join(' + ')}</b>
-      <div class="small muted">With "use my cloud AI for hard questions" on${S.data.prefs.cloudHard ? '' : ' (it is off: Settings → Features)'}, hard ones go to its uncensored model; everything else stays on your PC. Filtered cloud AIs are never used for the Liquid Edition.</div>
-      ${veniceLiquidHTML()}</div></div>`;
-  return `<div class="pair-card"><div class="grow"><b>☁️ Uncensored cloud partner: Venice AI</b>
-      <div class="small muted">The Liquid Edition is completely uncensored, so it only hands hard questions to an uncensored cloud AI. Venice runs uncensored models and says it doesn't store your prompts; it has a small free allowance, then Pro or credits. Filtered cloud AIs like Cerebras or Groq still work in your other chats, never for the Liquid Edition.</div>
-      ${veniceLiquidHTML()}</div>
-    <div class="row" style="gap:6px;flex-wrap:wrap"><button class="btn small primary" data-pair="venice">Connect Venice</button></div></div>`;
+  const conn = (S.providers || []).filter((p) => (p.hasKey || p.noKey) && !p.media && p.preset !== 'ollama' && p.preset !== 'lmstudio');
+  const venice = conn.find((p) => p.preset === 'venice');
+  const on = Boolean(S.data.prefs.cloudHard);
+  const names = conn.map((p) => esc(p.name)).join(', ');
+  const toggle = `<label class="row small" style="gap:6px;margin:8px 0 4px"><input type="checkbox" id="pair-hard" ${on ? 'checked' : ''} ${conn.length ? '' : 'disabled'}> <b>Send hard questions to my cloud AI</b>${conn.length ? '' : ' <span class="muted">(connect one first)</span>'}</label>`;
+  const buttons = `<div class="row" style="gap:6px;flex-wrap:wrap;margin-top:6px">${venice ? '' : '<button class="btn small primary" data-pair="venice" title="Uncensored, and says it does not store your prompts">Connect Venice (suggested)</button>'}<button class="btn small" data-goto-api title="Any cloud AI: Gemini, Claude, ChatGPT, Groq, OpenRouter, UncensoredLLM and more">${conn.length ? 'Connect another API' : 'Connect any API'}</button><button class="btn small ghost" data-api-dir="uncensored">📒 Compare APIs</button></div>`;
+  return `<div class="pair-card"><div class="grow"><b>☁️ ${conn.length ? `Cloud helper: ${names}` : 'Add a cloud AI for hard questions'}</b>
+      <div class="small muted">${on ? 'On: hard' : 'When this is on, hard'} questions go to ${conn.length ? (venice ? `${esc(venice.name)} (uncensored)${conn.length > 1 ? ', or your other connected AIs' : ''}` : 'your connected cloud AI') : 'a cloud AI you connect'}; everything else stays on your PC. Any API works.${venice ? '' : ' <b>Venice is suggested</b>: it is uncensored and says it doesn\'t store your prompts. A filtered service (ChatGPT, Gemini, Claude…) may refuse some uncensored requests; then the answer comes from your PC.'}</div>
+      ${toggle}${veniceLiquidHTML()}${buttons}</div></div>`;
 }
+document.addEventListener('change', (e) => {
+  if (e.target.id !== 'pair-hard') return;
+  S.data.prefs.cloudHard = e.target.checked; save();
+  toast(e.target.checked ? 'On: hard questions go to your cloud AI; everything else stays on your PC.' : 'Off: every answer comes from your PC.');
+  render();
+});
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('[data-goto-api]')) return;
+  modelsTab = 'api'; go({ view: 'models' });
+});
 document.addEventListener('click', async (e) => {
   const b = e.target.closest('[data-pair]');
   if (!b) return;

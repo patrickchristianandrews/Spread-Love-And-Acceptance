@@ -56,7 +56,8 @@ function autoPick(chat, a, text, hasImage) {
   // Your own cloud AI for the hardest questions, if you switched that on (it uses your credits).
   // When several cloud AIs are connected, use the one that's best for this kind of question.
   if (S.data.prefs.cloudHard && !S.config?.offline && !hasImage && looksHard(text || '')) {
-    const cloud = bestApiTarget(job, (t) => !liquidOk(base) || liquidOk(t));
+    // The Liquid Edition may use any cloud AI you connected; an uncensored one (Venice…) comes first.
+    const cloud = (liquidOk(base) && bestApiTarget(job, (t) => liquidOk(t))) || bestApiTarget(job);
     if (cloud) return { target: cloud, why: `Picked automatically: ${apiServiceName(cloud)}, your best connected cloud AI ${AUTO_WHY[job] || 'for this question'}, for a hard question.` };
   }
   const T = S.speed?.targets;

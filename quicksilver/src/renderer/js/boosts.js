@@ -34,12 +34,15 @@ function boostBase(targets) {
   return best;
 }
 // The strongest cloud AI you could add: a connected one, or else a free one worth connecting.
-function boostCloud({ uncensoredOnly = false } = {}) {
-  const pool = connectedClouds().filter((p) => !uncensoredOnly || p.preset === 'venice');
+// preferVenice: the Liquid Edition uses an uncensored service first when one is connected (any works).
+function boostCloud({ uncensoredOnly = false, preferVenice = false } = {}) {
+  const all = connectedClouds();
+  const pool = all.filter((p) => !uncensoredOnly || p.preset === 'venice');
+  if (preferVenice && all.some((p) => p.preset === 'venice')) { const v = all.find((p) => p.preset === 'venice'); return { connected: true, name: v.name, science: cloudScoresFor('venice')?.science ?? null }; }
   const scored = pool.map((p) => ({ p, sc: cloudScoresFor(p.preset) })).filter((x) => x.sc?.science != null).sort((a, b) => b.sc.science - a.sc.science)[0];
   if (scored) return { connected: true, name: scored.p.name, science: scored.sc.science };
   if (pool.length) return { connected: true, name: pool[0].name, science: null };
-  if (uncensoredOnly) return { connected: false, name: 'Venice (uncensored)', science: null };
+  if (uncensoredOnly || preferVenice) return { connected: false, name: 'Venice (uncensored, suggested)', science: null };
   const free = cloudScoresFor('google');
   return { connected: false, name: 'Google Gemini (free tier)', science: free?.science ?? null };
 }
@@ -59,7 +62,7 @@ function jobOf(targets, key) {
 const r10 = (v) => (v == null ? null : Math.max(0, Math.min(10, Math.round(v * 2) / 2)));
 function boostJobs(targets, { liquid = false } = {}) {
   const sci = boostBase(targets);
-  const cloud = boostCloud({ uncensoredOnly: liquid });
+  const cloud = boostCloud({ preferVenice: liquid });
   const ccode = connectedClouds().map((p) => cloudScoresFor(p.preset)?.coding).filter((x) => x != null).sort((a, b) => b - a)[0];
   const cloudText = cloud.science != null ? cloud.science / 10 : liquid ? 7 : 9;
   const sees = (targets || []).some((t) => String(t).startsWith('api:') || targetModel(t)?.vision);
@@ -200,11 +203,11 @@ function veniceLiquidText() {
 }
 
 // targets: what answers (local:/api: targets or catalog ids). opts.liquid: the Liquid Edition
-// (uses only uncensored cloud AIs). opts.compact: one short line for cards.
+// (any cloud AI; an uncensored one first). opts.compact: one short line for cards.
 function boostsHTML(targets, { liquid = false, compact = false, fusion = false } = {}) {
   const base = boostBase(targets);
   const hasCloudInside = (targets || []).some((t) => String(t).startsWith('api:'));
-  const cloud = boostCloud({ uncensoredOnly: liquid });
+  const cloud = boostCloud({ preferVenice: liquid });
   const webOn = S.data.prefs.autoWeb !== false && !S.config?.offline;
   const cloudOn = Boolean(S.data.prefs.cloudHard) && cloud.connected;
   const lift = base != null && cloud.science != null && cloud.science > base ? cloud.science : null;
@@ -265,7 +268,7 @@ function boostToastText(target) {
     if (targets.some((t) => t.startsWith('api:'))) return '';
   }
   const base = boostBase(targets);
-  const cloud = boostCloud({ uncensoredOnly: liquid });
+  const cloud = boostCloud({ preferVenice: liquid });
   const lift = base != null && cloud.science != null && cloud.science > base ? `${base}% → ${cloud.science}% on hard science questions with ${cloud.name.split(' (')[0]}` : '';
   return `Tip: web search makes facts and recent events about 9 in 10 right (vs about 4 in 10 alone)${lift ? `; a cloud AI for hard questions: ${lift}` : ''}.`;
 }

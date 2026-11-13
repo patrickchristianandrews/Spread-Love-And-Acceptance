@@ -250,10 +250,13 @@ function redPng(size = 64) {
     const local = S.installed.filter((m) => (m.kind || 'text') === 'text').map((m) => `local:${m.id}`).slice(0, 2);
     const html = buildApiHTML(local, {});
     const liquid = buildApiHTML(local, { liquid: true });
-    return { rows: (html.match(/api-sug-row/g) || []).length, connect: /data-api-connect-back="[a-z]+"/.test(html), lifts: /→/.test(html), liquidOnlyVenice: /Venice AI/.test(liquid) && !/Google Gemini|OpenAI|Groq/.test(liquid) };
+    return { rows: (html.match(/api-sug-row/g) || []).length, connect: /data-api-connect-back="[a-z]+"/.test(html), lifts: /→/.test(html), liquidVenice: /Venice AI/.test(liquid), liquidAny: /Google Gemini|OpenAI|Groq|Cerebras|OpenRouter|Anthropic|DeepSeek|UncensoredLLM/.test(liquid) };
   });
   assert.ok(buildApi.rows >= 1 && buildApi.connect && buildApi.lifts, `a build of local models is offered APIs with what they lift: ${JSON.stringify(buildApi)}`);
-  assert.ok(buildApi.liquidOnlyVenice, 'an uncensored-only build is only offered the uncensored service');
+  assert.ok(buildApi.liquidVenice && buildApi.liquidAny, `the Liquid Edition is offered any API, with Venice always suggested: ${JSON.stringify(buildApi)}`);
+  // The Liquid Edition's cloud card: the switch and the connect buttons are right there, and any API is welcome.
+  const pair = await win.evaluate(() => cloudPartnerHTML());
+  assert.match(pair, /id="pair-hard"/); assert.match(pair, /Any API works/); assert.match(pair, /data-goto-api/);
   const fc = await win.evaluate(() => {
     const real = S.est.hardware; const disk = S.disk;
     const local = S.installed.filter((m) => (m.kind || 'text') === 'text').map((m) => `local:${m.id}`);
@@ -308,10 +311,10 @@ function redPng(size = 64) {
     const l = stackApiPicks(S.stacks.find((x) => x.id === 'zz-liq'));
     const html = stackApiHTML(S.stacks.find((x) => x.id === 'zz-api'));
     S.stacks = S.stacks.filter((x) => !/^zz-/.test(x.id));
-    return { free: a.free?.r[1] || null, freeIsFree: (a.free?.r[7] ?? 0) >= 5, best: a.best?.r[1] || null, liquid: [l.free?.r[0] || null, l.best?.r[0] || null], connect: /data-api-connect=/.test(html) };
+    return { free: a.free?.r[1] || null, freeIsFree: (a.free?.r[7] ?? 0) >= 5, best: a.best?.r[1] || null, liquid: [l.free?.r[0], l.best?.r[0], l.have?.r[0], l.venice?.r[0]].filter(Boolean), connect: /data-api-connect=/.test(html) };
   });
   assert.ok(picks.free && picks.freeIsFree && picks.connect, `a stack of local models is offered a free API to connect: ${JSON.stringify(picks)}`);
-  assert.deepEqual(picks.liquid, [null, 'venice'], 'the Liquid Edition is only offered its uncensored partner');
+  assert.ok(picks.liquid.includes('venice') && picks.liquid.length >= 2, `the Liquid Edition is offered any API, with Venice always among them: ${JSON.stringify(picks.liquid)}`);
   await win.click('.card:has-text("Analyst Supreme") .api-sug [data-api-dir]');
   await win.waitForSelector('#modal #api-dir .ad-row');
   await win.click('#modal [data-dir-task="video"]');

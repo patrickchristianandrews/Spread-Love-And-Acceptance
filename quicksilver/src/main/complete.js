@@ -887,7 +887,9 @@ function councilMembers(target, req) {
   const thinkers = local.filter((t) => { const m = models.get(parse(t).id); const c = catalog.TEXT_MODELS.find((x) => x.id === m?.catalogId); return c?.reasoning; });
   const critic = [...thinkers, ...byGeneral].find((t) => t !== structurer) || structurer;
   let pragmatist = [...byGeneral].reverse().find((t) => t !== structurer && t !== critic) || byGeneral.find((t) => t !== structurer) || structurer;
-  const cloud = store.config().offline ? null : targets().find((t) => t.target.startsWith('api:') && exists(t.target) && (!liquid || isUncensored(t.target)))?.target;
+  // Any connected cloud AI can sit on the Council, the Liquid Edition's too; an uncensored one first.
+  const apis = store.config().offline ? [] : targets().filter((t) => t.target.startsWith('api:') && exists(t.target)).map((t) => t.target);
+  const cloud = (liquid && apis.find((t) => isUncensored(t))) || apis[0] || null;
   if (req.councilCloud && cloud) pragmatist = cloud;
   return { structurer, critic, pragmatist, lead: structurer && score(critic) > score(structurer) + 1 ? critic : structurer };
 }
