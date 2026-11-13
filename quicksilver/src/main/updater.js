@@ -33,22 +33,30 @@ async function check() {
     const res = await fetch(API(), { headers: { Accept: 'application/vnd.github+json', 'User-Agent': 'Quicksilver' } });
     if (!res.ok) throw new Error(`Couldn't check for updates (HTTP ${res.status}).`);
     const list = await res.json();
-    const want = process.platform === 'win32' || process.env.QS_UPDATE_URL ? /Quicksilver-Setup-[\d.]+\.exe$/i : null;
+    // Updates download the app only: the web installer (about 200 MB, no models inside) rather
+    // than the full installer (about 1.9 GB, which carries the small model). Your models are kept
+    // outside the app's folder, so they stay; if the new version's Liquid Edition has a model you
+    // don't have yet, its setup screen downloads just that one. The full installer is only used
+    // when a release has no web installer.
+    const win = process.platform === 'win32' || process.env.QS_UPDATE_URL;
+    const wants = win ? [/^Quicksilver-Web-Setup-[\d.]+\.exe$/i, /^Quicksilver-Setup-[\d.]+\.exe$/i] : [];
     let best = null;
     for (const r of list) {
       if (r.draft || r.prerelease || !/^quicksilver-v\d/.test(r.tag_name || '')) continue;
       const version = r.tag_name.replace(/^quicksilver-v/, '');
-      const asset = want && (r.assets || []).find((a) => want.test(a.name));
+      const asset = wants.map((re) => (r.assets || []).find((a) => re.test(a.name))).find(Boolean);
       if (!asset || cmp(version, current()) <= 0) continue;
       if (!best || cmp(version, best.version) > 0) {
         const sum = (r.assets || []).find((a) => a.name === `${asset.name}.sha256`);
-        best = { version, notes: String(r.body || '').slice(0, 60000), url: asset.browser_download_url, size: asset.size, name: asset.name, sumUrl: sum?.browser_download_url || '', published: r.published_at };
+        // GitHub's own SHA-256 of the file when the release has no .sha256 next to it.
+        const digest = /^sha256:([0-9a-f]{64})$/i.exec(asset.digest || '')?.[1] || '';
+        best = { version, notes: String(r.body || '').slice(0, 60000), url: asset.browser_download_url, size: asset.size, name: asset.name, sumUrl: sum?.browser_download_url || '', digest, web: /Web-Setup/i.test(asset.name), published: r.published_at };
       }
     }
     state.available = best;
     state.checkedAt = Date.now();
     // Already downloaded earlier (before a restart)? Then it's ready to install.
-    if (best) { const f = path.join(store.dir('updates'), best.name); try { if (fs.statSync(f).size === best.size) state.downloaded = { version: best.version, file: f }; } catch {} }
+    if (best) { const f = path.join(store.dir('updates'), best.name); try { if (fs.statSync(f).size === best.size) state.downloaded = { version: best.version, file: f, web: best.web }; } catch {} }
     if (state.downloaded && (!best || state.downloaded.version !== best.version)) state.downloaded = null;
   } catch (err) { state.error = err.message; } finally { state.checking = false; changed(); }
   return publicState();
@@ -69,17 +77,20 @@ function download() {
     let last = 0;
     await require('./engines').downloadTo(u.url, tmp, (d, t) => { state.progress = { downloaded: d, total: t || u.size }; if (Date.now() - last > 400) { last = Date.now(); changed(); } });
     if (u.size && fs.statSync(tmp).size !== u.size) { fs.rmSync(tmp, { force: true }); throw new Error('The update download was incomplete. It will try again later.'); }
-    if (u.sumUrl) {
-      const sumRes = await fetch(u.sumUrl, { headers: { 'User-Agent': 'Quicksilver' } });
-      if (!sumRes.ok) { fs.rmSync(tmp, { force: true }); throw new Error('The update\'s fingerprint couldn\'t be downloaded. It will try again later.'); }
-      const want = (await sumRes.text()).trim().split(/\s+/)[0].toLowerCase();
+    if (u.sumUrl || u.digest) {
+      let want = u.digest.toLowerCase();
+      if (u.sumUrl) {
+        const sumRes = await fetch(u.sumUrl, { headers: { 'User-Agent': 'Quicksilver' } });
+        if (!sumRes.ok) { fs.rmSync(tmp, { force: true }); throw new Error('The update\'s fingerprint couldn\'t be downloaded. It will try again later.'); }
+        want = (await sumRes.text()).trim().split(/\s+/)[0].toLowerCase();
+      }
       if (!/^[0-9a-f]{64}$/.test(want)) { fs.rmSync(tmp, { force: true }); throw new Error('The update\'s fingerprint couldn\'t be read. It will try again later.'); }
-      // Hashed as a stream: the installer is about 2 GB, too big to read into memory in one go.
+      // Hashed as a stream: an installer can be about 2 GB, too big to read into memory in one go.
       const got = await new Promise((resolve, reject) => { const h = crypto.createHash('sha256'); fs.createReadStream(tmp).on('data', (d) => h.update(d)).on('end', () => resolve(h.digest('hex'))).on('error', reject); });
       if (want !== got) { fs.rmSync(tmp, { force: true }); throw new Error('The update didn\'t match its published fingerprint, so it was deleted.'); }
     }
     fs.renameSync(tmp, file);
-    state.downloaded = { version: u.version, file };
+    state.downloaded = { version: u.version, file, web: u.web };
     state.progress = null;
     changed();
     return publicState();
@@ -96,7 +107,8 @@ async function install({ starterDir } = {}) {
   require('./llama').stopAll();
   await new Promise((r) => setTimeout(r, 1200));
   const models = require('./models');
-  try { await models.keepPackModels(starterDir); } catch {}
+  // The app-only update has no small model inside, so that one is kept outside the app's folder too.
+  try { await models.keepPackModels(starterDir, { builtIn: Boolean(d.web) }); } catch {}
   // Installing replaces the app's folder. Models that could not be moved out of it first (the
   // app is on another drive and the drive with your data has no room, or no permission) would go
   // with it and have to be downloaded again, so the update waits and says what to do.

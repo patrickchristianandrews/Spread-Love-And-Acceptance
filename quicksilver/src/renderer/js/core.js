@@ -309,7 +309,11 @@ function paintDownloads() {
     const done = list.reduce((a, d) => a + (d.downloaded || 0), 0);
     const pct = tot ? Math.round((done / tot) * 100) : 0;
     mini.innerHTML = `⬇ Downloading ${list.length === 1 ? esc(list[0].name) : `${list.length} models`}… ${pct}%<div class="bar" style="margin-top:6px"><i style="width:${pct}%"></i></div>`;
+    mini.title = `Click to see what's downloading: ${list.map((d) => d.name || d.id).join(', ')}`;
   }
+  // The list opened from the bar: rebuilt when a download starts or finishes, numbers updated below.
+  const box = document.getElementById('dl-list');
+  if (box && box.dataset.key !== list.map((d) => d.id).join('|')) box.outerHTML = downloadsListHTML();
   for (const d of list) {
     $$(`[data-dl="${CSS.escape(d.id)}"]`).forEach((el) => {
       const pct = d.total ? Math.round((d.downloaded / d.total) * 100) : 0;
@@ -317,6 +321,18 @@ function paintDownloads() {
       el.querySelector('.dl-text').textContent = d.total ? `${gb(d.downloaded)} of ${gb(d.total)} (${pct}%)` : 'Finding files…';
     });
   }
+}
+
+// Click the download bar: every model downloading, each with its own progress and Pause.
+function downloadsListHTML() {
+  const list = Object.values(S.downloads);
+  return `<div id="dl-list" data-key="${esc(list.map((d) => d.id).join('|'))}" class="stack-v" style="gap:14px">${list.length ? list.map((d) => `<div class="stack-v" style="gap:4px"><b>${esc(d.name || d.id)}</b>${downloadBox(d.id)}</div>`).join('') : '<div class="small muted">Nothing is downloading now: everything finished.</div>'}</div>`;
+}
+function downloadsModal() {
+  const n = Object.keys(S.downloads).length;
+  openModal(`<h2>⬇ Downloading ${n === 1 ? '1 model' : `${n} models`}</h2>${downloadsListHTML()}
+    <div class="modal-actions"><button class="btn" data-dl-models>Open Models</button><button class="btn primary" data-close>Close</button></div>`);
+  $('[data-dl-models]')?.addEventListener('click', () => { closeModal(); modelsTab = 'installed'; go({ view: 'models' }); });
 }
 
 function downloadBox(id) {

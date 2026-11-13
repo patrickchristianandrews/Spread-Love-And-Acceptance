@@ -1297,6 +1297,49 @@ async function collect(gen) {
     console.log('✓ updates: newer release found, fingerprint checked, big models kept across updates');
   }
 
+  // App-only updates: a release with both installers updates with the web installer (no models
+  // inside), checked against GitHub's own fingerprint; the small built-in model is kept outside
+  // the app's folder first, so the new version finds it and downloads nothing.
+  {
+    const crypto = require('node:crypto');
+    const http = require('node:http');
+    const web = Buffer.from('small app-only installer '.repeat(300));
+    const srv = http.createServer((req, res) => {
+      const base = `http://127.0.0.1:${srv.address().port}`;
+      if (req.url === '/releases') return res.end(JSON.stringify([{ tag_name: 'quicksilver-v9.2.0', draft: false, prerelease: false, assets: [
+        { name: 'Quicksilver-Setup-9.2.0.exe', size: 1900000000, browser_download_url: `${base}/full.exe` },
+        { name: 'Quicksilver-Setup-9.2.0.exe.sha256', size: 95, browser_download_url: `${base}/full.sha256` },
+        { name: 'Quicksilver-Web-Setup-9.2.0.exe', size: web.length, browser_download_url: `${base}/web.exe`, digest: `sha256:${crypto.createHash('sha256').update(web).digest('hex')}` },
+      ] }]));
+      if (req.url === '/web.exe') { res.writeHead(200, { 'Content-Length': web.length }); return res.end(web); }
+      res.writeHead(404); res.end();
+    });
+    await new Promise((r) => srv.listen(0, '127.0.0.1', r));
+    process.env.QS_UPDATE_URL = `http://127.0.0.1:${srv.address().port}/releases`;
+    process.env.QS_VERSION = '9.0.0';
+    const updater = require('../src/main/updater');
+    const st = await updater.check();
+    assert.deepEqual([st.available.name, st.available.web, st.available.size], ['Quicksilver-Web-Setup-9.2.0.exe', true, web.length], 'the app-only installer, not the 1.9 GB one');
+    const d = await updater.download();
+    assert.equal(d.downloaded.version, '9.2.0');
+    srv.close();
+    // The small model inside the old installer is kept, and the web installer's list (where it is
+    // a download) finds it there.
+    const sdir = path.join(HOME, 'starter-app2');
+    fs.mkdirSync(sdir, { recursive: true });
+    fs.writeFileSync(path.join(sdir, 'small.gguf'), 'y'.repeat(800));
+    fs.writeFileSync(path.join(sdir, 'STARTER.json'), JSON.stringify({ models: [{ id: 'muse', catalogId: 'qwen3.5-2b', name: 'Muse', files: { model: 'small.gguf' } }] }));
+    models.add({ id: 'muse', name: 'Muse', kind: 'text', catalogId: 'qwen3.5-2b', files: { model: path.join(sdir, 'small.gguf') }, size: 800, source: 'bundled' });
+    assert.equal(await models.keepPackModels(sdir), 0, 'a normal update leaves the small model (the full installer brings it again)');
+    assert.equal(await models.keepPackModels(sdir, { builtIn: true }), 1);
+    fs.rmSync(sdir, { recursive: true }); fs.mkdirSync(sdir); // the installer replaces the app's folder
+    fs.writeFileSync(path.join(sdir, 'STARTER.json'), JSON.stringify({ models: [{ id: 'muse', catalogId: 'qwen3.5-2b', name: 'Muse', files: { model: 'small.gguf' }, pack: true, repo: 'x/y' }] }));
+    assert.equal(models.registerStarter(sdir).missing.length, 0, 'nothing to download after an app-only update');
+    assert.ok(fs.existsSync(models.get('muse').files.model));
+    models.remove('muse');
+    console.log('✓ updates: app only (the web installer, ~200 MB, GitHub fingerprint checked); the small model is kept, nothing downloaded again');
+  }
+
   // Importing chats from ChatGPT (a tree with an edited branch, as a .zip) and Claude (.json).
   {
     const importer = require('../src/main/importer');

@@ -429,6 +429,12 @@ jobs:
           name: Quicksilver-web-installer-tested
           path: quicksilver/web-installer
 
+      # Its fingerprint too: in-app updates download the web installer (the app only, no models).
+      - name: Fingerprint the web installer
+        if: startsWith(github.ref, 'refs/tags/quicksilver-v') || inputs.publish
+        continue-on-error: true
+        run: for f in web-installer/Quicksilver-Web-Setup-*.exe; do [ -f "$f" ] || continue; (cd web-installer && sha256sum "$(basename "$f")" > "$(basename "$f").sha256" && cat "$(basename "$f").sha256"); done
+
       - name: Publish release
         if: startsWith(github.ref, 'refs/tags/quicksilver-v') || inputs.publish
         uses: softprops/action-gh-release@v2
@@ -443,6 +449,7 @@ jobs:
             quicksilver/dist/*.exe
             quicksilver/dist/*.exe.sha256
             quicksilver/web-installer/*.exe
+            quicksilver/web-installer/*.exe.sha256
 
   # The web installer: no models inside or next to it (a small download). On first launch
   # Quicksilver's setup screen downloads the whole Liquid Edition (about 30 GB) before it opens.
@@ -518,8 +525,8 @@ jobs:
           if ($LASTEXITCODE -ne 0) { throw 'the installed app test failed' }
           Get-Process Quicksilver, llama-server -ErrorAction SilentlyContinue | Stop-Process -Force -ErrorAction SilentlyContinue
       # Handed to the release only after it installed and showed its setup screen: the main job
-      # picks this copy up when it publishes. (Its name does not match the pattern the in-app
-      # updater looks for, so updates never pick it by mistake.)
+      # picks this copy up when it publishes. In-app updates use it (the app only, about 200 MB):
+      # models are kept outside the app's folder, and the setup screen fetches any new one.
       - uses: actions/upload-artifact@v4
         with:
           name: Quicksilver-web-installer-tested

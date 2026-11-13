@@ -486,7 +486,7 @@ function packLeft(dir) {
 // (see keepDirs for where they go; never a slow 30 GB copy behind your back). Before an in-app
 // update it runs in full: if no move is possible it copies to the data folder, but only when
 // that drive has room (the updater refuses to go on while models are still in the app's folder).
-async function keepPackModels(dir, { renameOnly = false } = {}) {
+async function keepPackModels(dir, { renameOnly = false, builtIn = false } = {}) {
   const metaFile = dir && path.join(dir, 'STARTER.json');
   if (!metaFile || !fs.existsSync(metaFile)) return 0;
   const meta = JSON.parse(fs.readFileSync(metaFile, 'utf8'));
@@ -494,7 +494,7 @@ async function keepPackModels(dir, { renameOnly = false } = {}) {
   const freeIn = (d) => { try { const st = fs.statfsSync(d); return st.bavail * st.bsize; } catch { return Infinity; } };
   let moved = 0;
   for (const e of meta.models || []) {
-    if (!e.pack) continue;
+    if (!e.pack && !builtIn) continue; // builtIn: the small model inside the installer too (app-only updates)
     for (const f of Object.values(e.files)) {
       const from = path.join(dir, f);
       let to = path.join(dirs[0], path.basename(f));

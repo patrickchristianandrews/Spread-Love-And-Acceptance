@@ -223,7 +223,7 @@ async function init() {
   $('#net-toggle').addEventListener('click', toggleNet);
   $('#collapse').addEventListener('click', () => { S.data.prefs.sidebarCollapsed = !S.data.prefs.sidebarCollapsed; applyPrefs(); save(); });
   $('#chat-search').addEventListener('input', renderChatList);
-  $('#dl-mini').addEventListener('click', () => { modelsTab = 'installed'; go({ view: 'models' }); });
+  $('#dl-mini').addEventListener('click', () => downloadsModal());
   $('#modal').addEventListener('mousedown', (e) => { if (e.target.id === 'modal') closeModal(); });
   document.addEventListener('keydown', (e) => {
     if (document.getElementById('liquid-gate')) return; // the setup screen: nothing behind it responds

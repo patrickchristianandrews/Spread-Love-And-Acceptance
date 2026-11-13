@@ -885,6 +885,15 @@ function redPng(size = 64) {
   }
   assert.match(direct.sys, /Rules for every answer: the first words are the answer itself/);
   console.log(`✓ direct answers: rules in the system prompt; filler removed with human writing on and off\n    "${direct.off}"`);
+  // Click the download bar: which models are downloading, each with its own progress.
+  await win.evaluate(() => { S.downloads['fake-a'] = { id: 'fake-a', name: 'Lustify', downloaded: 2e9, total: 7e9 }; S.downloads['fake-b'] = { id: 'fake-b', name: 'Wan 2.2 5B', downloaded: 1e9, total: 10e9 }; paintDownloads(); });
+  await win.click('#dl-mini');
+  const dlText = await win.locator('#modal-body').innerText();
+  assert.match(dlText, /Downloading 2 models[\s\S]*Lustify[\s\S]*\(29%\)[\s\S]*Wan 2\.2 5B[\s\S]*\(10%\)/, dlText);
+  await win.evaluate(() => { S.downloads['fake-a'].downloaded = 7e9; delete S.downloads['fake-b']; paintDownloads(); });
+  assert.doesNotMatch(await win.locator('#dl-list').innerText(), /Wan 2\.2/, 'a finished download leaves the list');
+  await win.evaluate(() => { delete S.downloads['fake-a']; paintDownloads(); closeModal(); });
+  console.log('✓ download bar: clicking it lists each model downloading, with its own progress, kept up to date');
   // No bounce: redrawing the chat you're on plays no entrance animation and keeps your place.
   const still = await win.evaluate(() => { const box = document.getElementById('messages'); render(); return { enter: Boolean(document.querySelector('#main > .enter')), same: render.key === `chat:${S.route.id}` }; });
   assert.equal(still.enter, false, 'no entrance animation when the same chat redraws'); assert.ok(still.same);
