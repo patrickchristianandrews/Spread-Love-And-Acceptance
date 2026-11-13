@@ -5,6 +5,7 @@
 // model when you have one, and the meme can be saved as a PNG.
 'use strict';
 
+let memeTab = 'battle'; // 'battle' | 'gif'
 let memeRound = null; // { topic, paint, sides: [{ target, raw, meme, img, done, error, ms }], voted, painting }
 const memeData = () => (S.data.memes ||= { ratings: {}, games: [] });
 const MEME_TOPICS = ['Mondays', 'my code works and I don\'t know why', 'cats knocking things off tables', 'group chats at 2 a.m.', 'trying to eat healthy', 'the printer', 'one more episode', 'self-checkout machines',
@@ -31,6 +32,7 @@ const memePicker = () => (typeof pickMediaModel === 'function' ? pickMediaModel(
 
 views.memes = {
   html() {
+    if (memeTab === 'gif') return gifMakerHTML();
     const r = memeRound;
     const pool = arenaTargets();
     const pic = memePicker();
@@ -42,6 +44,7 @@ views.memes = {
       <div class="arena-ask"><div class="row"><input id="mb-topic" class="grow" placeholder="Topic, e.g. Mondays, my cat, the office printer" value="${esc(r?.topic || '')}"><button class="btn" id="mb-dice" title="A random topic">🎲 Surprise me</button></div>
         <div class="row" style="flex-wrap:wrap"><label class="small muted" for="mb-pool">Contestants</label><select id="mb-pool"><option value="all">Any two, at random</option>${pool.map((t) => `<option value="${esc(t.target)}" ${S.data.prefs.memeFixed === t.target ? 'selected' : ''}>${esc(targetLabel(t.target))} vs anyone</option>`).join('')}</select>
           <label class="row small" title="${pic ? `Painted by ${esc(pic.api ? pic.label : pic.inst.name)}; takes a little while per meme` : 'Get a picture model (Models → Images & video) or connect a picture API to paint them'}"><input type="checkbox" id="mb-paint" ${pic && S.data.prefs.memePaint !== false ? 'checked' : ''} ${pic ? '' : 'disabled'}> Paint the pictures${pic ? '' : ' (needs a picture model)'}</label>
+          <label class="row small" title="${gifVideoPick('', true) ? 'Both memes are brought to life as looping GIFs, captions and all, before you vote' : 'Needs a video model that animates photos (Wan 2.2 comes with the Liquid Edition)'}"><input type="checkbox" id="mb-gifs" ${gifVideoPick('', true) && pic ? '' : 'disabled'} ${S.data.prefs.memeGifs && gifVideoPick('', true) && pic ? 'checked' : ''}> 🌀 GIF battle</label>
           <span class="grow"></span><button class="btn primary" id="mb-go" ${r && !memeFinished(r) ? 'disabled' : ''}>😂 ${r ? 'New battle' : 'Start the battle'}</button></div></div>`}
       ${r ? memeRoundHTML(r) : ''}
       ${memeBoardHTML()}
@@ -50,6 +53,9 @@ views.memes = {
   bind() {
     $$('[data-goto]').forEach((b) => b.addEventListener('click', () => go({ view: b.dataset.goto })));
     bindArenaTabs();
+    if (memeTab === 'gif') { bindGifMaker(); return; }
+    $$('[data-mgif]').forEach((b) => b.addEventListener('click', () => memeToGif(Number(b.dataset.mgif))));
+    $('#mb-gifs')?.addEventListener('change', (e) => { S.data.prefs.memeGifs = e.target.checked; save(); });
     $('#mb-go')?.addEventListener('click', startMemeBattle);
     $('#mb-topic')?.addEventListener('keydown', (e) => { if (e.key === 'Enter') startMemeBattle(); });
     $('#mb-dice')?.addEventListener('click', () => { $('#mb-topic').value = MEME_TOPICS[Math.floor(Math.random() * MEME_TOPICS.length)]; });
@@ -61,7 +67,7 @@ views.memes = {
   },
 };
 
-const memeFinished = (r) => r.sides.every((s) => s.done) && !r.painting;
+const memeFinished = (r) => r.sides.every((s) => s.done) && !r.painting && !r.animating;
 
 function memeCardHTML(s, i) {
   if (s.error) return `<div class="meme meme-empty"><span class="muted">${esc(s.error)}</span></div>`;
@@ -75,10 +81,14 @@ function memeRoundHTML(r) {
     const L = 'AB'[i];
     const won = r.voted && (r.voted === L ? 'won' : r.voted === 'tie' ? 'tie' : r.voted === 'bad' ? 'bad' : 'lost');
     return `<div class="card arena-side ${won || ''}"><div class="row arena-h"><span class="arena-l">${L}</span>${r.voted ? `<b class="grow">${esc(targetLabel(s.target))}</b>${won === 'won' ? '<span class="badge b-mint">Funnier</span>' : ''}` : '<span class="grow muted small">Name hidden until you vote</span>'}${s.meme ? `<button class="btn small ghost" data-msave="${i}" title="Save this meme as a PNG picture">⬇ Save</button>` : ''}</div>
-      ${memeCardHTML(s, i)}${s.meme?.picture && s.img?.url ? `<span class="small muted">Picture: ${esc(s.meme.picture)}</span>` : ''}</div>`;
+      ${memeCardHTML(s, i)}${s.meme?.picture && s.img?.url ? `<span class="small muted">Picture: ${esc(s.meme.picture)}</span>` : ''}
+      ${s.img?.id && s.meme && !s.gif && !r.gifs ? `<button class="btn small" data-mgif="${i}" ${s.gifBusy ? 'disabled' : ''}>🌀 ${s.gifBusy ? esc(s.gifBusy) : 'Make it a GIF'}</button>` : ''}
+      ${s.gifBusy && r.gifs ? `<span class="status-line small">${esc(s.gifBusy)}</span>` : ''}
+      ${s.gif ? `<div class="meme-gif"><img src="${esc(s.gif.url)}" alt="GIF"><span class="small muted">🌀 GIF saved to your Gallery${s.gif.captionsSkipped ? ' (without captions: this FFmpeg can\'t write text)' : ''}</span></div>` : ''}
+      ${s.gifError ? `<div class="small" style="color:var(--danger)">${esc(s.gifError)}</div>` : ''}</div>`;
   }).join('')}</div>
   ${done && !r.voted && r.sides.some((s) => s.meme) ? '<div class="arena-vote"><span class="small muted">Which meme is funnier?</span><button class="btn" data-mvote="A">A</button><button class="btn" data-mvote="tie">Both funny</button><button class="btn" data-mvote="B">B</button><button class="btn ghost" data-mvote="bad">Neither</button></div>' : ''}
-  ${!done ? `<p class="small muted" style="text-align:center">${r.painting ? 'Painting the pictures, one at a time…' : 'They write one after the other, so each gets this PC\'s full power.'}</p>` : ''}`;
+  ${!done ? `<p class="small muted" style="text-align:center">${r.animating ? 'Bringing both memes to life as GIFs, one at a time…' : r.painting ? 'Painting the pictures, one at a time…' : 'They write one after the other, so each gets this PC\'s full power.'}</p>` : ''}`;
 }
 function memeBoardHTML() {
   const d = memeData();
@@ -109,7 +119,8 @@ function startMemeBattle() {
   const rival = shuffle(pool.filter((t) => t !== first && svc(t) !== svc(first)))[0] || shuffle(all.filter((t) => t !== first && svc(t) !== svc(first)))[0];
   if (!rival) { toast('A battle needs two different models: download another model or connect a second cloud AI.'); return; }
   const pair = shuffle([first, rival]);
-  memeRound = { topic, paint: Boolean(memePicker()) && S.data.prefs.memePaint !== false, sides: pair.map((target) => ({ target, raw: '', meme: null, done: false })), voted: null };
+  const gifs = Boolean(S.data.prefs.memeGifs && memePicker() && gifVideoPick('', true));
+  memeRound = { topic, gifs, paint: Boolean(memePicker()) && (gifs || S.data.prefs.memePaint !== false), sides: pair.map((target) => ({ target, raw: '', meme: null, done: false })), voted: null };
   render();
   runMemeSide(memeRound, 0);
 }
@@ -153,6 +164,11 @@ async function paintMemes(r) {
     s.painting = false;
   }
   r.painting = false;
+  if (r.gifs && memeRound === r) {
+    r.animating = true;
+    for (let i = 0; i < r.sides.length; i++) if (memeRound === r && r.sides[i].img?.id && r.sides[i].meme) await memeToGif(i);
+    r.animating = false;
+  }
   if (S.route.view === 'memes') render();
 }
 
@@ -224,12 +240,95 @@ function memeWrap(g, text, max) {
   return out;
 }
 
+// ---------- GIF maker ----------
+// Describe it, and a looping GIF is made on this PC (a short clip from your video model, turned
+// into a GIF). In a battle, a meme can become a GIF (captions and all), and a GIF battle does that
+// to both memes before you vote.
+const GIF_IDEAS = ['a cat giving a thumbs up', 'a dog doing a happy dance', 'a coffee cup steaming, cozy', 'fireworks over a city at night', 'a cartoon rocket taking off', 'a little robot waving hello', 'raindrops on a window', 'a hamster running on a wheel'];
+let gifJob = null; // { prompt, status, jobs, items, error, done }
+const gifVideoPick = (prompt, animate) => (typeof pickMediaModel === 'function' ? pickMediaModel(animate ? 'animate' : 'video', { liquid: isLiquid(resolveTarget(null, null)), prompt }) : null);
+function gifOutHTML() {
+  const j = gifJob;
+  if (!j) return '<div id="gm-out"></div>';
+  const p = j.jobs?.[0] && mediaJobs[j.jobs[0]];
+  return `<div id="gm-out">${!j.done ? `<div class="card"><span class="status-line">${esc(j.status || (p ? `${p.status || 'Making the clip…'}${p.progress ? ` ${Math.round(p.progress * 100)}%` : ''}` : 'Starting…'))}</span></div>` : ''}
+    ${j.error ? `<div class="notice">${esc(j.error)}</div>` : ''}
+    ${j.items?.some((x) => x.gif) ? `<div class="meme-gif big">${j.items.filter((x) => x.gif).map((x) => `<img src="${esc(x.url)}" alt="GIF">`).join('')}<span class="small muted">🌀 Saved to your Gallery.</span></div>` : ''}</div>`;
+}
+function gifMakerHTML() {
+  const pick = gifVideoPick('');
+  const est = pick?.inst && S.est?.media?.[pick.inst.catalogId]?.sec;
+  return `<div class="page arena">
+    <div class="page-head"><h1>GIF maker</h1><span class="small muted">Looping GIFs: reactions, memes, stickers and animated logos</span></div>
+    ${arenaTabsHTML('gif')}
+    <p class="lede">Describe what the GIF should show and it's made on this PC: a short clip from your video model, turned into a looping GIF. In Meme battle, <b>🌀 GIF battle</b> turns both memes into GIFs before you vote, and <b>🌀 Make it a GIF</b> brings any meme to life.</p>
+    ${!pick ? '<div class="notice info">GIFs are made with a video model (Wan 2.2 comes with the Liquid Edition). <button class="btn small primary" data-goto="models">Get a video model</button></div>' : `
+    <div class="arena-ask"><div class="row"><input id="gm-prompt" class="grow" placeholder="e.g. a cat giving a thumbs up" value="${esc(gifJob?.prompt || '')}"><button class="btn" id="gm-dice" title="An idea">🎲</button>
+      <button class="btn primary" id="gm-go" ${gifJob && !gifJob.done ? 'disabled' : ''}>🌀 Make the GIF</button></div>
+      <div class="small muted">Made with ${esc(pick.api ? pick.label : pick.inst.name)}${est ? `, about ${fmtSec(est)} on this PC` : ''}. One simple action works best.</div></div>`}
+    ${gifOutHTML()}
+  </div>`;
+}
+function bindGifMaker() {
+  $('#gm-dice')?.addEventListener('click', () => { $('#gm-prompt').value = GIF_IDEAS[Math.floor(Math.random() * GIF_IDEAS.length)]; });
+  const start = () => { const v = $('#gm-prompt')?.value.trim(); if (v) makeGif(v); };
+  $('#gm-go')?.addEventListener('click', start);
+  $('#gm-prompt')?.addEventListener('keydown', (e) => { if (e.key === 'Enter') start(); });
+}
+function paintGif() {
+  if (S.route.view !== 'memes' || memeTab !== 'gif') return;
+  const o = document.getElementById('gm-out');
+  if (o) o.outerHTML = gifOutHTML();
+  const b = document.getElementById('gm-go'); if (b) b.disabled = Boolean(gifJob && !gifJob.done);
+}
+async function makeGif(prompt) {
+  const pick = gifVideoPick(prompt);
+  if (!pick || (gifJob && !gifJob.done)) return;
+  const md = { kind: 'video', prompt: `${prompt}. One simple action that loops seamlessly (it ends where it starts), big clear subject, simple background, still camera, about 3 seconds.`, items: [], jobs: [], shape: 'square' };
+  gifJob = { prompt, items: [], jobs: md.jobs, status: 'Starting…' };
+  const tick = setInterval(paintGif, 700);
+  paintGif();
+  try {
+    await makeMedia({ id: 'gif', messages: [] }, {}, { media: md }, pick, { count: 1 }, () => { gifJob.status = md.status; });
+    if (md.error) throw new Error(md.error);
+    gifJob.status = 'Turning it into a GIF…'; paintGif();
+    await gifify(md, () => {}, 0);
+    if (md.error) throw new Error(md.error);
+    gifJob.items = md.items;
+  } catch (err) { gifJob.error = err.message; }
+  clearInterval(tick);
+  gifJob.done = true; delete gifJob.status;
+  paintGif();
+}
+// A meme from a battle, brought to life: its picture animated, then a GIF with its captions.
+async function memeToGif(i) {
+  const round = memeRound;
+  const s = round?.sides?.[i];
+  if (!s?.img?.id || s.gifBusy) return;
+  const pick = gifVideoPick(s.meme.picture || round.topic, true);
+  const repaint = () => { if (S.route.view === 'memes' && memeTab === 'battle') render(); };
+  if (!pick) { s.gifError = 'Bringing a picture to life needs a video model that animates photos (Wan 2.2 comes with the Liquid Edition).'; repaint(); return; }
+  s.gifBusy = 'Animating the picture…'; delete s.gifError; repaint();
+  try {
+    const md = { kind: 'animate', prompt: `${s.meme.picture || round.topic}. Gentle, funny motion that loops, still camera.`, items: [], jobs: [], shape: 'square' };
+    await makeMedia({ id: 'meme', messages: [] }, {}, { media: md }, pick, { imageId: s.img.id, count: 1 }, () => {});
+    const clip = md.items.find((x) => x.kind === 'video');
+    if (!clip) throw new Error(md.error || 'The picture could not be animated.');
+    s.gifBusy = 'Making the GIF…'; repaint();
+    const g = await call('media:editVideo', clip.id, { format: 'gif', end: 6, captions: { top: s.meme.top, bottom: s.meme.bottom }, title: `Meme GIF: ${round.topic}` }, uid());
+    s.gif = { id: g.id, url: g.url, captionsSkipped: Boolean(g.captionsSkipped) };
+    await refreshGallery().catch(() => {});
+  } catch (err) { s.gifError = err.message; }
+  delete s.gifBusy;
+  repaint();
+}
+
 // The Compare models tabs (by task, blind test) and Meme battle, one row on both pages.
 function arenaTabsHTML(on) {
   const t = (k, label, attr) => `<button class="tab ${on === k ? 'active' : ''}" ${attr} role="tab">${label}</button>`;
-  return `<div class="tabs" role="tablist">${t('task', '📊 By task', 'data-cmp-tab="task"')}${t('blind', '🙈 Blind test', 'data-cmp-tab="blind"')}${t('memes', '😂 Meme battle', 'data-arena-tab="memes"')}</div>`;
+  return `<div class="tabs" role="tablist">${t('task', '📊 By task', 'data-cmp-tab="task"')}${t('blind', '🙈 Blind test', 'data-cmp-tab="blind"')}${t('memes', '😂 Meme battle', 'data-arena-tab="memes"')}${t('gif', '🌀 GIF maker', 'data-arena-tab="gif"')}</div>`;
 }
 function bindArenaTabs() {
-  $$('[data-arena-tab]').forEach((b) => b.addEventListener('click', (e) => { e.preventDefault(); go({ view: 'memes' }); }));
+  $$('[data-arena-tab]').forEach((b) => b.addEventListener('click', (e) => { e.preventDefault(); memeTab = b.dataset.arenaTab === 'gif' ? 'gif' : 'battle'; if (S.route.view === 'memes') render(); else go({ view: 'memes' }); }));
   if (S.route.view === 'memes') $$('[data-cmp-tab]').forEach((b) => b.addEventListener('click', (e) => { e.preventDefault(); cmpTab = b.dataset.cmpTab; go({ view: 'arena' }); }));
 }

@@ -1599,9 +1599,18 @@ function redPng(size = 64) {
   assert.deepEqual(await win.evaluate(() => [parseMeme('Sure! ```json\n{"top":"a","bottom":"b","picture":"c"}\n```'), parseMeme('<think>hmm</think>Top: when it works\nBottom: first try')]),
     [{ top: 'a', bottom: 'b', picture: 'c' }, { top: 'when it works', bottom: 'first try', picture: '' }]);
   await shot(win, '16c-meme-voted');
+  // The GIF maker sits beside Meme battle, and a battle can be a GIF battle.
+  assert.equal(await win.locator('#mb-gifs').count(), 1, 'a GIF battle switch in the battle form');
+  await win.click('[data-arena-tab="gif"]');
+  await win.waitForSelector('h1:has-text("GIF maker")');
+  assert.match(await win.locator('#main').innerText(), /Describe what the GIF should show[\s\S]*(Make the GIF|Get a video model)/);
+  assert.equal(await win.locator('.tab.active').innerText(), '🌀 GIF maker');
+  await shot(win, '16d-gif-maker');
+  await win.click('[data-arena-tab="memes"]');
+  await win.waitForSelector('#mb-topic');
   await win.click('[data-cmp-tab="blind"]');
   await win.waitForSelector('#ar-q');
-  console.log('✓ meme battle: two hidden memes on one topic, vote, its own leaderboard');
+  console.log('✓ meme battle: two hidden memes on one topic, vote, its own leaderboard; GIF maker beside it and a GIF battle switch');
   // A battle picks models on this PC, never two from one cloud service; an empty account is explained.
   await win.evaluate(() => go({ view: 'memes' }));
   await win.waitForSelector('#mb-topic');

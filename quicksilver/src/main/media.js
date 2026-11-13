@@ -55,6 +55,12 @@ function ffmpegPath() {
   return 'ffmpeg';
 }
 
+// Can this FFmpeg write text onto video (it needs a font library built in)? Checked once.
+let drawtextOk;
+function hasDrawtext() {
+  if (drawtextOk === undefined) { try { drawtextOk = /\bdrawtext\b/.test(require('node:child_process').execFileSync(ffmpegPath(), ['-hide_banner', '-filters'], { encoding: 'utf8', windowsHide: true, timeout: 15000 })); } catch { drawtextOk = false; } }
+  return drawtextOk;
+}
 function runFfmpeg(args, { onProgress, durationSec, signal } = {}) {
   return new Promise((resolve, reject) => {
     const proc = spawn(ffmpegPath(), ['-hide_banner', '-y', ...args], { windowsHide: true });
@@ -84,7 +90,7 @@ function probe(file) {
   });
 }
 
-// ops = { start, end, crop: 'square'|'vertical'|'horizontal', height, speed, mute, reverse, brightness, contrast, saturation, fadeIn, fadeOut, format: 'mp4'|'webm'|'gif' }
+// ops = { start, end, crop: 'square'|'vertical'|'horizontal', height, speed, mute, reverse, brightness, contrast, saturation, fadeIn, fadeOut, format: 'mp4'|'webm'|'gif', captions: { top, bottom }, title }
 async function editVideo(input, ops, { onProgress, signal } = {}) {
   const info = await probe(input);
   const start = Math.max(0, Number(ops.start) || 0);
@@ -102,6 +108,23 @@ async function editVideo(input, ops, { onProgress, signal } = {}) {
   const outLen = ((end - start) || info.duration) / speed;
   if (ops.fadeIn) vf.push(`fade=t=in:st=0:d=${Number(ops.fadeIn)}`);
   if (ops.fadeOut && outLen) vf.push(`fade=t=out:st=${Math.max(0, outLen - Number(ops.fadeOut))}:d=${Number(ops.fadeOut)}`);
+  // Meme captions burned in (top and bottom, white with a black outline), when a bold font is here.
+  const capFiles = [];
+  if (ops.captions && (ops.captions.top || ops.captions.bottom) && hasDrawtext()) {
+    const font = ['C:\\Windows\\Fonts\\impact.ttf', 'C:\\Windows\\Fonts\\arialbd.ttf', '/System/Library/Fonts/Supplemental/Impact.ttf', '/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf', '/usr/share/fonts/dejavu/DejaVuSans-Bold.ttf']
+      .find((f) => { try { return fs.statSync(f).isFile(); } catch { return false; } });
+    const esc = (f) => f.replace(/\\/g, '/').replace(/:/g, '\\:').replace(/'/g, "\\'");
+    const wrap = (t) => { const out = []; let line = ''; for (const w of String(t).toUpperCase().split(/\s+/).filter(Boolean)) { if ((`${line} ${w}`).trim().length > 22 && line) { out.push(line); line = w; } else line = `${line} ${w}`.trim(); } if (line) out.push(line); return out.slice(0, 3).join('\n'); };
+    if (font) {
+      for (const [key, y] of [['top', 'h*0.04'], ['bottom', 'h-text_h-h*0.05']]) {
+        const text = wrap(ops.captions[key] || '');
+        if (!text) continue;
+        const tf = path.join(require('./store').dir('tmp'), `cap-${uniq()}.txt`);
+        fs.writeFileSync(tf, text); capFiles.push(tf);
+        vf.push(`drawtext=fontfile='${esc(font)}':textfile='${esc(tf)}':fontcolor=white:borderw=4:bordercolor=black:fontsize=h/10:line_spacing=4:x=(w-text_w)/2:y=${y}`);
+      }
+    }
+  }
   const format = ['mp4', 'webm', 'gif', 'mov', 'mp3', 'wav'].includes(ops.format) ? ops.format : 'mp4';
   const out = path.join(mediaDir(), `${uniq()}.${format}`);
   const args = [];
@@ -118,8 +141,9 @@ async function editVideo(input, ops, { onProgress, signal } = {}) {
     else args.push('-c:v', 'libx264', '-preset', 'medium', '-crf', '20', '-pix_fmt', 'yuv420p', '-movflags', '+faststart', ...(ops.mute || !info.audio ? [] : ['-c:a', 'aac', '-b:a', '160k']));
   }
   args.push(out);
-  await runFfmpeg(args, { onProgress, durationSec: outLen, signal });
-  return addToGallery({ kind: format === 'gif' ? 'image' : 'video', file: out, title: `Edited ${path.basename(input)}`, parent: input });
+  try { await runFfmpeg(args, { onProgress, durationSec: outLen, signal }); } finally { for (const f of capFiles) fs.rmSync(f, { force: true }); }
+  const item = addToGallery({ kind: format === 'gif' ? 'image' : 'video', file: out, title: ops.title || `Edited ${path.basename(input)}`, parent: input });
+  return ops.captions && !capFiles.length ? { ...item, captionsSkipped: true } : item;
 }
 
 async function extractFrame(input, atSec) {

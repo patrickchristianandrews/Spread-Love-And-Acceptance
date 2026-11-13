@@ -1612,3 +1612,9 @@ code.sel { user-select: all; background: var(--soft); padding: 1px 6px; border-r
 .pcc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 10px; }
 .pcc-grid .k { font-size: .75rem; text-transform: uppercase; letter-spacing: .04em; opacity: .7; font-weight: 700; }
 .pcc-grid .v { font-size: 1.15rem; font-weight: 800; }
+
+/* GIF maker, GIF battle and meme GIFs */
+.meme-gif { display: flex; flex-direction: column; gap: 4px; margin-top: 8px; }
+.meme-gif img { max-width: 100%; border-radius: 12px; }
+.meme-gif.big { align-items: flex-start; margin-top: 14px; }
+.meme-gif.big img { max-width: min(480px, 100%); }
