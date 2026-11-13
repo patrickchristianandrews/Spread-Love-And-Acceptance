@@ -41,7 +41,15 @@ const APP_Q = [
 const appFor = (ids) => { const list = [].concat(ids); return hintConnectors?.find((x) => list.includes(x.id) && x.enabled) || hintConnectors?.find((x) => x.id === list[0]); };
 
 let hintConnectors = null; // connector list, read once per session (and after visiting Connectors)
-async function loadHintConnectors() { try { hintConnectors = await qs.call('int:list'); } catch { hintConnectors = []; } }
+async function loadHintConnectors() {
+  try { hintConnectors = await qs.call('int:list'); } catch { hintConnectors = []; }
+  // The Liquid Edition's free extras (MCP plug-ins) that are on, with the messages each is for.
+  try {
+    const [list, presets] = await Promise.all([qs.call('mcp:list'), qs.call('mcp:presets')]);
+    hintMcp = list.filter((s) => s.enabled && s.preset && presets[s.preset]?.when).map((s) => ({ id: `mcp:${s.id}`, name: s.name, re: presets[s.preset].when }));
+  } catch { hintMcp = []; }
+}
+let hintMcp = [];
 
 // Models and teams that follow instructions with few refusals (published community fine-tunes).
 function openTargets() {
@@ -142,9 +150,13 @@ function applyHint(chat, h) {
 }
 
 // Connected apps are used for a message that mentions them, without switching anything on.
+const whenCache = new Map();
+const whenRe = (c) => { if (!whenCache.has(c.id)) { try { whenCache.set(c.id, new RegExp(c.when, c.whenFlags || 'i')); } catch { whenCache.set(c.id, /$^/); } } return whenCache.get(c.id); };
 function autoTools(chat, a, text) {
   if (chat.tools === false || S.data.prefs.autoTools === false || !text || !hintConnectors) return false;
-  return APP_Q.some(([re, ids]) => re.test(text) && hintConnectors.some((c) => [].concat(ids).includes(c.id) && c.enabled && (c.noToken || c.hasToken)));
+  if (APP_Q.some(([re, ids]) => re.test(text) && hintConnectors.some((c) => [].concat(ids).includes(c.id) && c.enabled && (c.noToken || c.hasToken)))) return true;
+  // A built-in plug-in that this message needs (each says which messages it is for).
+  return hintConnectors.some((c) => c.builtIn && c.enabled && c.when && whenRe(c).test(text)) || hintMcp.some((m) => m.re instanceof RegExp && m.re.test(text));
 }
 
 function bindHints(chat, a) {

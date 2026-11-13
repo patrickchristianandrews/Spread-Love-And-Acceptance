@@ -980,7 +980,7 @@ async function* run(target, req) {
   }
   if (req.council && !hasImages(req.messages)) { yield* council(target, req); return; }
   if (req.useTools) {
-    const list = await toolbox.available();
+    const list = await toolbox.available(lastUserText(req.messages));
     if (list.length) req = { ...req, toolList: list };
   }
   const t = parse(target);

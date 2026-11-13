@@ -652,12 +652,17 @@ function tierCardHTML(tier) {
           : `<button class="btn small ${fit.level === 'no' ? '' : 'primary'}" data-get-tier="${tier}">${!missing.length ? `Turn on ${T.name}` : `${ready ? 'Finish' : 'Get'} ${T.name} · ${missingGB.toFixed(0)} GB`}</button>${ready ? `<button class="btn small" data-chat-stack="${T.id}">Chat</button>` : ''}`}</div>
       </div>`;
 }
-// The plug-ins every Liquid Edition comes with (the built-in Build & ship set, on by default).
-const LIQUID_PLUGINS = ['apptest', 'designsystem', 'securityaudit', 'codedocs'];
+// The plug-ins every Liquid Edition comes with: the built-in ones (on by default, nothing to
+// install) and its free extras (started only when a message needs them).
 function liquidPluginsHTML() {
-  const list = (hintConnectors || []).filter((c) => LIQUID_PLUGINS.includes(c.id));
-  if (!list.length) { if (!hintConnectors) loadHintConnectors().then(() => { const el = document.getElementById('liquid-plugins'); if (el) el.outerHTML = liquidPluginsHTML(); }); return '<div id="liquid-plugins"></div>'; }
-  return `<div id="liquid-plugins" class="small" style="margin:6px 0 8px"><b>🔌 Plug-ins built in:</b> ${list.map((c) => `<span class="badge ${c.enabled ? 'b-mint' : ''}" title="${esc(c.blurb)}">${c.icon} ${esc(c.name.replace(/ \(Context7\)$/, ''))}${c.enabled ? '' : ' (off)'}</span>`).join(' ')} <a href="#" data-goto-int>Connectors</a><div class="muted">Just ask: "test my app at localhost:3000", "check my project for security holes", "match the design of stripe.com".</div></div>`;
+  if (!hintConnectors) { loadHintConnectors().then(() => { const el = document.getElementById('liquid-plugins'); if (el) el.outerHTML = liquidPluginsHTML(); }); return '<div id="liquid-plugins"></div>'; }
+  const list = hintConnectors.filter((c) => c.builtIn);
+  if (!list.length) return '<div id="liquid-plugins"></div>';
+  const on = list.filter((c) => c.enabled);
+  const chip = (c) => `<span class="badge ${c.enabled ? 'b-mint' : ''}" title="${esc(c.blurb)}">${c.icon} ${esc(c.name.replace(/ \(Context7\)$/, ''))}${c.enabled ? '' : ' (off)'}</span>`;
+  return `<details id="liquid-plugins" class="small" style="margin:6px 0 8px"><summary><b>🔌 ${on.length + hintMcp.length} plug-ins built in</b> <span class="muted">· used by themselves when a message needs one</span></summary>
+    <div style="margin-top:6px;display:flex;flex-wrap:wrap;gap:4px">${list.map(chip).join(' ')}${hintMcp.map((m) => `<span class="badge b-sky" title="Free extra: started only when a message needs it">➕ ${esc(m.name)}</span>`).join(' ')}</div>
+    <div class="muted" style="margin-top:6px">Just ask: "test my app at localhost:3000", "check my project for security holes", "match the design of stripe.com", "what's 18% of 2,340", "bitcoin price", "find papers on sleep and memory", "how far is Leeds from York", "summarize this YouTube video…". <a href="#" data-goto-int>Manage in Connectors</a></div></details>`;
 }
 function liquidEditionsHTML() {
   if (!S.catalog?.liquidPro) return '';

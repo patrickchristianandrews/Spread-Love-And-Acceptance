@@ -33,7 +33,7 @@ function saveServers(list) {
 function upsert(s, token) {
   const list = servers();
   const id = s.id || `m${Date.now().toString(36)}`;
-  const entry = { id, name: s.name || 'MCP server', transport: s.transport === 'stdio' ? 'stdio' : 'http', command: s.command || '', args: s.args || [], env: s.env || {}, url: s.url || '', auth: Boolean(s.auth || token), enabled: s.enabled !== false };
+  const entry = { id, name: s.name || 'MCP server', transport: s.transport === 'stdio' ? 'stdio' : 'http', command: s.command || '', args: s.args || [], env: s.env || {}, url: s.url || '', auth: Boolean(s.auth || token), enabled: s.enabled !== false, ...(s.preset ? { preset: s.preset } : {}) };
   const i = list.findIndex((x) => x.id === id);
   if (i >= 0) list[i] = entry; else list.push(entry);
   saveServers(list);
@@ -63,10 +63,12 @@ async function connect(s) {
   let transport;
   if (s.transport === 'stdio') {
     const { StdioClientTransport } = require('@modelcontextprotocol/sdk/client/stdio.js');
-    let command = s.command;
+    // npx / uvx come from this PC, or are fetched by Quicksilver the first time (see runtimes.js).
+    const r = await require('./runtimes').resolveCommand(s.command, { ...process.env, ...s.env });
+    let { command } = r;
     // Windows needs the .cmd shims for npm-installed launchers.
     if (process.platform === 'win32' && /^(npx|npm|pnpm|yarn)$/i.test(command)) command = `${command}.cmd`;
-    transport = new StdioClientTransport({ command, args: s.args, env: { ...process.env, ...s.env }, stderr: 'pipe' });
+    transport = new StdioClientTransport({ command, args: s.args, env: r.env, stderr: 'pipe' });
   } else {
     const { StreamableHTTPClientTransport } = require('@modelcontextprotocol/sdk/client/streamableHttp.js');
     const token = s.auth ? store.getSecret(`mcp:${s.id}`) : '';
@@ -100,9 +102,12 @@ async function connect(s) {
 const safeName = (s) => s.replace(/[^a-zA-Z0-9_-]/g, '_');
 
 // Tools from every enabled server (connecting on first use). Failures are reported, not thrown.
-async function tools() {
+// With the message's text, a server added from the Liquid Edition's free extras (a preset that says
+// which messages it is for) is only started when the message needs it.
+const needed = (s, text) => text === undefined || !s.preset || !PRESETS[s.preset]?.when || PRESETS[s.preset].when.test(String(text));
+async function tools(text) {
   const out = [];
-  await Promise.all(servers().filter((s) => s.enabled).map(async (s) => {
+  await Promise.all(servers().filter((s) => s.enabled && needed(s, text)).map(async (s) => {
     try {
       const { tools: list } = await connect(s);
       for (const t of list) {
@@ -142,4 +147,21 @@ async function testServer(id) {
   return list.map((t) => t.name);
 }
 
-module.exports = { PRESETS, servers, upsert, remove, tools, status, testServer, disconnectAll };
+// Adds the Liquid Edition's free extras once (each removed one stays removed). Returns how many were added.
+function addLiquidPack() {
+  const { LIQUID_PACK } = require('./mcp-catalog');
+  const done = new Set(store.config().liquidPackDone || []);
+  const have = servers();
+  let n = 0;
+  for (const id of LIQUID_PACK) {
+    if (done.has(id)) continue;
+    const p = PRESETS[id];
+    const same = have.some((s) => s.preset === id || (p.url && s.url === p.url) || (p.command && s.command === p.command && JSON.stringify(s.args) === JSON.stringify(p.args)));
+    if (!same) { upsert({ id: `liq-${id}`, preset: id, name: p.name, transport: p.transport, command: p.command, args: p.args, env: p.env || {}, url: p.url, enabled: true }); n++; }
+    done.add(id);
+  }
+  store.saveConfig({ liquidPackDone: [...done] });
+  return n;
+}
+
+module.exports = { PRESETS, servers, upsert, remove, tools, status, testServer, disconnectAll, addLiquidPack };

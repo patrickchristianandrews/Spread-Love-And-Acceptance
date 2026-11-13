@@ -490,7 +490,8 @@ async function collect(gen) {
     assert.ok(/gmail\.readonly/.test(scopes) && /calendar\.events/.test(scopes) && /youtube\.readonly/.test(scopes) && /forms/.test(scopes), 'one sign-in asks for every service');
     assert.equal(new URL(authUrl).searchParams.get('code_challenge_method'), 'S256');
     const on = integrations.list().filter((c) => c.group === 'Google' && c.enabled).map((c) => c.id);
-    assert.deepEqual(on.sort(), ['gadsense', 'ganalytics', 'gcalendar', 'gcontacts', 'gdrive', 'gforms', 'gmail', 'google', 'gsearchconsole', 'gtagmanager', 'gtasks', 'youtube']);
+    // (PageSpeed needs no sign-in: it is a built-in plug-in, on by default.)
+    assert.deepEqual(on.sort(), ['gadsense', 'ganalytics', 'gcalendar', 'gcontacts', 'gdrive', 'gforms', 'gmail', 'google', 'gsearchconsole', 'gtagmanager', 'gtasks', 'pagespeed', 'youtube']);
     assert.equal(integrations.list().find((c) => c.id === 'gmail').values.client, 'cid.apps.googleusercontent.com', 'the client ID is reused');
     const gt = integrations.tools();
     assert.match(await gt.find((t) => t.name === 'gmail_search').run({ query: 'lunch' }), /\[m1\].*Anna.*Lunch/);
@@ -635,8 +636,10 @@ async function collect(gen) {
     assert.equal(await T.automation_trigger.run({ message: 'Hi' }), 'Sent to the automation.');
     assert.ok(calls.some((c) => c.startsWith('POST https://hooks.example/abc')));
     for (const id of ['weather', 'wikipedia', 'calendar', 'rss', 'notes', 'todoist', 'webhook']) integrations.disable(id);
-    // Only the built-in Build & ship plug-ins (on by default) are left.
-    assert.deepEqual(integrations.tools().map((t) => t.sourceId).filter((v, i, a) => a.indexOf(v) === i).sort(), ['apptest', 'codedocs', 'designsystem', 'securityaudit']);
+    // Only the built-in plug-ins (on by default) are left, and the ones switched off are gone.
+    const left = integrations.tools().map((t) => t.sourceId);
+    assert.ok(left.length && left.every((id) => integrations.isBuiltIn(id)), `only built-in plug-ins left: ${[...new Set(left)]}`);
+    assert.ok(!left.some((id) => ['weather', 'wikipedia', 'calendar', 'rss', 'notes', 'todoist', 'webhook'].includes(id)), 'the ones switched off are gone');
     assert.ok(integrations.list().length >= 20, 'twenty connectors');
     global.fetch = realFetch;
     console.log('✓ connectors: weather, Wikipedia, calendar, news feeds, notes folder, Todoist, automation webhook');

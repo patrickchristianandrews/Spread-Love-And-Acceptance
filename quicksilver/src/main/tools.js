@@ -5,8 +5,11 @@ const store = require('./store');
 const integrations = require('./integrations');
 const mcp = require('./mcp');
 
-async function available() {
-  const list = [...integrations.tools(), ...require('./customapi').tools(), ...(await mcp.tools())];
+// With the message's text, a built-in plug-in's tools are only included when the message needs
+// them (see integrations.relevant); without it, everything that's on.
+async function available(text) {
+  const need = text === undefined ? null : integrations.relevant(text);
+  const list = [...integrations.tools().filter((t) => !need || !integrations.isBuiltIn(t.sourceId) || need.has(t.sourceId)), ...require('./customapi').tools(), ...(await mcp.tools(text))];
   const seen = new Set();
   return list.filter((t) => (seen.has(t.name) ? false : seen.add(t.name)));
 }

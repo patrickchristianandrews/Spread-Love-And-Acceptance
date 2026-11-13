@@ -42,7 +42,7 @@ const secret = (id) => store.getSecret(`int:${id}`);
 function list() {
   const c = cfg();
   return Object.entries(CONNECTORS).map(([id, def]) => ({
-    id, ...def, enabled: isOn(id, c), values: Object.fromEntries(def.fields.filter((f) => !f.secret).map((f) => [f.key, c[id]?.[f.key] || (def.google && f.key === 'client' ? google.clientOf(id).id || '' : '')])),
+    id, ...def, when: def.when ? def.when.source : undefined, whenFlags: def.when ? def.when.flags : undefined, enabled: isOn(id, c), values: Object.fromEntries(def.fields.filter((f) => !f.secret).map((f) => [f.key, c[id]?.[f.key] || (def.google && f.key === 'client' ? google.clientOf(id).id || '' : '')])),
     hasToken: def.google ? google.hasClient(id) : def.oauth ? Boolean(c[id]?.client) : store.hasSecret(`int:${id}`), signInNeeded: Boolean(def.oauth), account: c[id]?.account || '', noToken: Boolean(def.noToken), group: def.group || 'Other',
   }));
 }
@@ -257,11 +257,39 @@ Object.assign(TOOLS, popular.TOOLS);
 const dev = require('./integrations-dev')({ cfg });
 Object.assign(CONNECTORS, dev.CONNECTORS);
 Object.assign(TOOLS, dev.TOOLS);
+const everyday = require('./integrations-everyday')({ cfg });
+Object.assign(CONNECTORS, everyday.CONNECTORS);
+Object.assign(TOOLS, everyday.TOOLS);
+// Free connectors that need nothing set up are built in too: on by default, in every Liquid Edition.
+const BUILT_IN_WHEN = {
+  weather: /\b(weather|forecast|temperature (in|outside|today|tomorrow)|will it (rain|snow)|rain(ing)?|snow(ing)?|sunny|humidity|wind speed)\b/i,
+  translate: /\b(translat\w*|in (spanish|french|german|italian|portuguese|japanese|chinese|mandarin|korean|arabic|russian|hindi|dutch|polish|turkish|swedish|greek|hebrew|vietnamese|thai|indonesian)|how do (you|i) say)\b/i,
+  wikipedia: /\b(wikipedia|who (was|is) [A-Z]|history of|biography|when (was|did) .{1,40} (born|die|founded|invented|built))\b/,
+  pagespeed: /\b(page ?speed|core web vitals|lighthouse|how fast (is|does) (my|the|this) (site|page|website))\b/i,
+};
+for (const [id, when] of Object.entries(BUILT_IN_WHEN)) if (CONNECTORS[id]) Object.assign(CONNECTORS[id], { when, defaultOn: true, builtIn: true });
+const DEV_WHEN = {
+  apptest: /\blocalhost:\d+|\b(test|check|qa|try out|click through)\b[^.?!\n]{0,40}\b(my|the|this|our)\s+(web ?app|app|site|website|page|signup|sign-up|checkout|flows?)\b|\bbroken links?\b/i,
+  designsystem: /\bdesign system\b|\b(match\w*|cop(y|ies|ying)|clon\w*|extract\w*|borrow\w*|use|get|steal)\b[^.?!\n]{0,30}\b(design|look|style|colou?rs?|fonts?|branding|theme)\b[^.?!\n]{0,20}\b(of|from|like)\b/i,
+  securityaudit: /\bvibesec\b|\b(security|secure|vulnerab\w*|pen ?test\w*|hackable|exploitable|security holes?)\b[^.?!\n]{0,40}\b(app|code|project|repo|site|website|folder|api|before (i|we) ship)\b|\b(audit|check)\b[^.?!\n]{0,20}\bsecurity\b|\b(is|are)\s+(my|our|the|this)\s+[^.?!\n]{0,30}\b(secure|hackable|safe from (hackers|attacks?))\b/i,
+  codedocs: /\bcontext7\b|\b(latest|current|up[- ]to[- ]date|newest)\s+(\w+\s+){0,2}(docs?|documentation|api|syntax|version of)\b|\b(docs?|documentation)\s+(for|of)\s+\S+|\b(next\.?js|react|supabase|tailwind|prisma|vue|svelte|astro|express|fastapi|django|stripe|langchain)\b[^.?!\n]{0,40}\b(how (do|to)|api|example|code)\b/i,
+};
+for (const [id, when] of Object.entries(DEV_WHEN)) if (CONNECTORS[id]) CONNECTORS[id].when = when;
+
+// The built-in plug-ins a message needs. A built-in plug-in's tools are only handed to the model
+// when its message matches (a long list of tools slows small models and confuses them); anything
+// you connected yourself is always offered.
+function relevant(text) {
+  const t = String(text || '');
+  return new Set(Object.entries(CONNECTORS).filter(([, d]) => d.builtIn && d.when && d.when.test(t)).map(([id]) => id));
+}
+const isBuiltIn = (id) => Boolean(CONNECTORS[id]?.builtIn);
 
 async function test(id) {
   if (google.isGoogle(id)) return google.test(id);
   if (popular.CONNECTORS[id]) return popular.test(id);
   if (dev.CONNECTORS[id]) return dev.test(id);
+  if (everyday.CONNECTORS[id]) return everyday.test(id);
   // A personal token knows its user; a GitHub App or Actions token doesn't, but can list its repos.
   if (id === 'github') {
     try { return (await gh('/user')).login; } catch (err) {
@@ -302,4 +330,4 @@ async function cloudUpload(dest, file) {
   return dest === 'gdrive' ? google.upload(name, buf, mime) : popular.upload(dest, name, buf);
 }
 
-module.exports = { CONNECTORS, list, save, disable, test, tools, githubRepoFiles, clip, cloudTargets, cloudUpload };
+module.exports = { CONNECTORS, list, save, disable, test, tools, githubRepoFiles, clip, cloudTargets, cloudUpload , relevant, isBuiltIn };

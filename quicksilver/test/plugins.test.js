@@ -9,6 +9,10 @@ const http = require('node:http');
 const assert = require('node:assert/strict');
 
 process.env.QUICKSILVER_HOME = fs.mkdtempSync(path.join(os.tmpdir(), 'qs-plugins-'));
+// A home folder of its own, for "Files on this PC".
+const HOMEDIR = fs.mkdtempSync(path.join(os.tmpdir(), 'qs-home-'));
+for (const d of ['Documents', 'Desktop', 'Downloads']) fs.mkdirSync(path.join(HOMEDIR, d));
+process.env.HOME = HOMEDIR; process.env.USERPROFILE = HOMEDIR;
 const integrations = require('../src/main/integrations');
 const dev = require('../src/main/integrations-dev');
 const mcpCatalog = require('../src/main/mcp-catalog');
@@ -83,5 +87,117 @@ const mcpCatalog = require('../src/main/mcp-catalog');
     assert.ok(P[id] && P[id].name && P[id].note && (P[id].url !== undefined || P[id].command), `${id} is in the catalog`);
   }
   console.log(`✓ ${Object.keys(P).length} ready-made plug-ins under Connectors (Playwright, Supabase and Context7 among them)`);
+
+  // ---- everyday & research plug-ins: built in, on, and only offered when a message needs them ----
+  const everyday = require('../src/main/integrations-everyday');
+  const tools = require('../src/main/tools');
+  const builtIn = integrations.list().filter((c) => c.builtIn);
+  assert.ok(builtIn.length >= 18 && builtIn.every((c) => c.enabled && c.noToken && c.when), `${builtIn.length} built-in plug-ins, all on, each saying when it is needed`);
+  const want = { 'what is 15% of 2,340?': 'calc', 'convert 5 miles to km': 'calc', 'what time is it in Tokyo': 'worldtime', 'bitcoin price today': 'money', 'find papers on retrieval augmented generation': 'research',
+    'how far is Leeds from London': 'maps', 'define serendipity': 'words', 'public holidays in Germany 2027': 'holidays', 'find my invoice pdf in my downloads': 'pcfiles', 'take a screenshot of stripe.com on a phone': 'webshot',
+    'summarize https://example.com/post': 'webtools', 'will it rain in Paris tomorrow': 'weather', 'translate hello into Spanish': 'translate', 'test my app at localhost:3000': 'apptest', 'is my supabase app secure?': 'securityaudit' };
+  for (const [t, id] of Object.entries(want)) assert.ok(integrations.relevant(t).has(id), `"${t}" → ${id} (got ${[...integrations.relevant(t)]})`);
+  assert.equal(integrations.relevant('write me a poem about cats').size, 0, 'an ordinary message needs no plug-in');
+  const offered = async (t) => (await tools.available(t)).map((x) => x.name);
+  assert.deepEqual(await offered('write me a poem about cats'), [], 'so no tools are handed to the model');
+  assert.deepEqual((await offered('convert 5 miles to km')).sort(), ['calculate', 'convert_units'], 'only the calculator for a conversion');
+  assert.ok((await tools.available()).length >= 30, 'without a message: everything that is on (Connectors page)');
+  console.log(`✓ ${builtIn.length} built-in plug-ins, on by default; each is offered to the model only when the message needs it`);
+
+  // Calculator: exact, and never runs code.
+  assert.equal(everyday.calculate('(12.5 * 4) / 3'), '(12.5 * 4) / 3 = 16.6666666666667');
+  assert.equal(everyday.calculate('2^10 + sqrt(16) - 5!'), '2^10 + sqrt(16) - 5! = 908');
+  assert.equal(everyday.calculate('15% * 2,340'), '15% * 2340 = 351');
+  assert.equal(everyday.calculate('2(3+4)'), '2(3+4) = 14');
+  assert.throws(() => everyday.calculate('process.exit(1)'), /only work out numbers|Unknown word/);
+  assert.throws(() => everyday.calculate('1/0'), /not a finite number/);
+  assert.equal(everyday.convertUnits(5, 'miles', 'km'), '5 miles = 8.04672 km (length)');
+  assert.equal(everyday.convertUnits(100, 'F', 'C'), '100 F = 37.7778 C');
+  assert.equal(everyday.convertUnits(1, 'gib', 'mb'), '1 gib = 1073.7418 mb (data)');
+  assert.throws(() => everyday.convertUnits(1, 'kg', 'km'), /Can't convert kg to km/);
+  console.log('✓ Calculator & units: exact sums (powers, roots, factorials, percentages, implied multiplication), no code ever run; conversions incl. temperature');
+
+  // Online plug-ins, against stand-in services.
+  const realFetch = global.fetch;
+  const routes = [
+    [/api\.frankfurter\.app\/latest\?amount=100&from=USD&to=EUR/, { amount: 100, base: 'USD', date: '2026-11-13', rates: { EUR: 86.12 } }],
+    [/api\.coingecko\.com.*ids=bitcoin/, { bitcoin: { usd: 98000, usd_24h_change: 1.234, usd_market_cap: 1.9e12 } }],
+    [/export\.arxiv\.org/, '<feed><entry><id>http://arxiv.org/abs/2401.00001</id><published>2024-01-01T00:00:00Z</published><title>Retrieval  Augmented\n Generation</title><summary>We study RAG.</summary><author><name>Ada Lovelace</name></author></entry></feed>'],
+    [/api\.dictionaryapi\.dev\/api\/v2\/entries\/en\/serendipity/, [{ word: 'serendipity', phonetic: '/ˌsɛɹənˈdɪpɪti/', meanings: [{ partOfSpeech: 'noun', definitions: [{ definition: 'A happy accident.' }], synonyms: ['chance', 'luck'] }] }]],
+    [/date\.nager\.at\/api\/v3\/PublicHolidays\/2027\/DE/, [{ date: '2027-10-03', localName: 'Tag der Deutschen Einheit', name: 'German Unity Day', global: true }]],
+    [/stooq\.com.*s=aapl\.us/, 'Symbol,Date,Time,Open,High,Low,Close,Volume\nAAPL.US,2026-11-12,22:00:00,230,235,229,234.5,51000000\n'],
+  ];
+  global.fetch = async (url) => {
+    const hit = routes.find(([re]) => re.test(String(url)));
+    if (!hit) return new Response('nope', { status: 404 });
+    return typeof hit[1] === 'string' ? new Response(hit[1], { status: 200 }) : new Response(JSON.stringify(hit[1]), { status: 200, headers: { 'Content-Type': 'application/json' } });
+  };
+  try {
+    const T = Object.fromEntries(integrations.tools().map((t) => [t.name, t]));
+    assert.match(await T.currency_convert.run({ amount: 100, from: 'usd', to: 'eur' }), /100 USD on 2026-11-13: 86\.12 EUR/);
+    assert.match(await T.crypto_price.run({ coins: 'btc' }), /bitcoin: 98000 USD \(1\.23% in 24 h, market cap 1,900,000,000,000\)/);
+    assert.match(await T.stock_quote.run({ ticker: 'AAPL' }), /AAPL 2026-11-12 .*close 234\.5/);
+    assert.match(await T.arxiv_search.run({ query: 'rag' }), /\[1\] Retrieval Augmented Generation \(2024-01-01\)\nAda Lovelace\nhttp:\/\/arxiv\.org\/abs\/2401\.00001/);
+    assert.match(await T.define_word.run({ word: 'serendipity' }), /\(noun\) A happy accident\.[\s\S]*synonyms: chance, luck/);
+    assert.match(await T.public_holidays.run({ country: 'de', year: 2027 }), /2027-10-03 Tag der Deutschen Einheit \(German Unity Day\)/);
+  } finally { global.fetch = realFetch; }
+  console.log('✓ Money, research, dictionary and holidays plug-ins read their services correctly');
+
+  // Files on this PC: only Documents, Desktop, Downloads (and folders you add); saving asks first.
+  fs.writeFileSync(path.join(HOMEDIR, 'Downloads', 'Invoice-March.txt'), 'Total due: $420');
+  const F = Object.fromEntries(integrations.tools().map((t) => [t.name, t]));
+  assert.match(await F.files_find.run({ name: 'invoice' }), /Downloads[\\/]Invoice-March\.txt/);
+  assert.equal(await F.files_read.run({ path: path.join(HOMEDIR, 'Downloads', 'Invoice-March.txt') }), 'Total due: $420');
+  await assert.rejects(F.files_read.run({ path: '/etc/passwd' }), /Only files in/);
+  await assert.rejects(F.files_read.run({ path: path.join(HOMEDIR, 'Documents', '..', '..', 'etc') }), /Only files in/);
+  assert.equal(F.files_save.write, true, 'saving a file asks first');
+  assert.match(await F.files_save.run({ path: path.join(HOMEDIR, 'Documents', 'notes', 'a.md'), text: 'hi' }), /Saved/);
+  await assert.rejects(F.files_save.run({ path: path.join(HOMEDIR, 'Documents', 'notes', 'a.md'), text: 'again' }), /already exists/);
+  console.log('✓ Files on this PC: finds and reads in your folders only; saving asks first and never overwrites unasked');
+
+  // ---- helpers fetched by Quicksilver: Node.js and uv, checked against their fingerprints ----
+  const crypto = require('node:crypto');
+  const dist = fs.mkdtempSync(path.join(os.tmpdir(), 'qs-dist-'));
+  const mk = (dir, files, archive) => { const d = path.join(dist, 'src', dir); for (const [f, body] of Object.entries(files)) { fs.mkdirSync(path.dirname(path.join(d, f)), { recursive: true }); fs.writeFileSync(path.join(d, f), body, { mode: 0o755 }); } require('node:child_process').execFileSync('tar', ['-czf', path.join(dist, archive), '-C', path.join(dist, 'src'), dir]); return crypto.createHash('sha256').update(fs.readFileSync(path.join(dist, archive))).digest('hex'); };
+  const arch = process.arch === 'arm64' ? 'arm64' : 'x64';
+  const nodeFile = `node-v22.99.0-linux-${arch}.tar.gz`;
+  const nodeSha = mk(`node-v22.99.0-linux-${arch}`, { 'bin/npx': '#!/bin/sh\necho npx-from-quicksilver "$@"\n', 'bin/node': '#!/bin/sh\n' }, nodeFile);
+  fs.writeFileSync(path.join(dist, 'SHASUMS256.txt'), `${'0'.repeat(64)}  node-v22.99.0-win-x64.zip\n${nodeSha}  ${nodeFile}\n`);
+  const uvFile = `uv-${arch === 'arm64' ? 'aarch64' : 'x86_64'}-unknown-linux-gnu.tar.gz`;
+  mk('uv-dir', { uvx: '#!/bin/sh\necho uvx\n', uv: '#!/bin/sh\n' }, uvFile);
+  fs.writeFileSync(path.join(dist, `${uvFile}.sha256`), `${'f'.repeat(64)}  ${uvFile}\n`); // a wrong fingerprint
+  const srv = http.createServer((req, res) => { const f = path.join(dist, decodeURIComponent(req.url.split('?')[0]).replace(/^\/(node|uv)\//, '')); if (!fs.existsSync(f) || fs.statSync(f).isDirectory()) { res.writeHead(404); return res.end(); } res.writeHead(200); fs.createReadStream(f).pipe(res); });
+  await new Promise((r) => srv.listen(0, '127.0.0.1', r));
+  process.env.QS_RUNTIME_FORCE = '1';
+  process.env.QS_NODE_DIST = `http://127.0.0.1:${srv.address().port}/node`;
+  process.env.QS_UV_DIST = `http://127.0.0.1:${srv.address().port}/uv`;
+  const runtimes = require('../src/main/runtimes');
+  try {
+    const said = [];
+    const r = await runtimes.resolveCommand('npx', { PATH: '/usr/bin' }, (t) => said.push(t));
+    assert.match(r.command, /runtimes[\\/]node[\\/].*bin[\\/]npx$/);
+    assert.ok(r.env.PATH.startsWith(path.dirname(r.command)) && r.env.PATH.endsWith('/usr/bin'), 'npx finds node beside it');
+    assert.match(require('node:child_process').execFileSync(r.command, ['-y', 'x'], { env: r.env }).toString(), /npx-from-quicksilver -y x/);
+    assert.ok(said.some((t) => /Getting Node\.js/.test(t)));
+    const again = []; await runtimes.resolveCommand('npx', {}, (t) => again.push(t));
+    assert.equal(again.length, 0, 'fetched once, then kept');
+    await assert.rejects(runtimes.resolveCommand('uvx'), /did not match its published fingerprint/);
+    assert.ok(!fs.existsSync(path.join(process.env.QUICKSILVER_HOME, 'engines', 'runtimes', 'uv')), 'a download that fails its check is thrown away');
+    assert.deepEqual(await runtimes.resolveCommand('python', { A: 1 }), { command: 'python', env: { A: 1 } }, 'other commands are left alone');
+  } finally { srv.close(); delete process.env.QS_RUNTIME_FORCE; }
+  console.log('✓ Plug-in helpers: Node.js fetched the first time a plug-in needs it, checked against its fingerprint and kept; a mismatch is refused');
+
+  // ---- the Liquid Edition's free extras ----
+  const mcp = require('../src/main/mcp');
+  assert.equal(mcp.addLiquidPack(), mcpCatalog.LIQUID_PACK.length, 'added once');
+  assert.equal(mcp.addLiquidPack(), 0, 'never twice');
+  const extras = (await mcp.status()).filter((x) => x.preset);
+  assert.ok(extras.length >= 9 && extras.every((x) => x.enabled), `${extras.length} free extras on`);
+  mcp.remove(extras.find((x) => x.preset === 'semgrep').id);
+  assert.equal(mcp.addLiquidPack(), 0, 'one you removed stays removed');
+  const started = Date.now();
+  assert.deepEqual(await mcp.tools('write me a poem'), [], 'an ordinary message starts none of them');
+  assert.ok(Date.now() - started < 1000 && (await mcp.status()).every((x) => !x.error && !x.connected), 'nothing was even started');
+  console.log(`✓ Liquid Edition free extras: ${extras.length} added once (Playwright, Excel, Word, PowerPoint, YouTube transcripts…), removed stays removed, started only when a message needs one`);
   process.exit(0);
 })().catch((e) => { console.error('FAIL', e); process.exit(1); });

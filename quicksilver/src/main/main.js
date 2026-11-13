@@ -360,7 +360,12 @@ handle('models:starter', async () => {
   // away (an instant move on the same drive; see keepPackModels). Installing a newer version over
   // this one, by any route, replaces the app's folder: this way it never takes 30 GB of models with it.
   if (app.isPackaged || process.env.QS_KEEP_PACK) { try { await models.keepPackModels(starterDir, { renameOnly: true }); } catch { /* they stay where they are */ } }
-  return complete.ensureQuicksilverStack().then((stack) => ({ ...r, stack, tidied, retired: complete.takeRetired() }));
+  return complete.ensureQuicksilverStack().then((stack) => {
+    // The Liquid Edition comes with its free extra plug-ins (added once; each only runs when needed).
+    let plugins = 0;
+    if (stack) { try { plugins = mcp.addLiquidPack(); } catch {} }
+    return { ...r, stack, tidied, retired: complete.takeRetired(), plugins };
+  });
 });
 handle('quicksilver:rebuild', () => complete.ensureQuicksilverStack());
 handle('models:autoAdd', async () => { const found = await models.findChat(llama.readGguf); return found.length ? models.addFound(found, llama.readGguf) : []; });
@@ -473,6 +478,7 @@ handle('capi:save', (api, key) => customapi.save(api, key));
 handle('capi:remove', (id) => customapi.remove(id));
 handle('capi:test', (id) => customapi.test(id));
 handle('mcp:list', () => mcp.status());
+handle('mcp:liquidPack', () => mcp.addLiquidPack());
 handle('mcp:save', (s, token) => mcp.upsert(s, token));
 handle('mcp:remove', (id) => mcp.remove(id));
 handle('mcp:test', (id) => mcp.testServer(id));
