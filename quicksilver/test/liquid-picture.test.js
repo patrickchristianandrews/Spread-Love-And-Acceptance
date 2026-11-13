@@ -116,7 +116,10 @@ const TINY = path.join(__dirname, 'fixtures', 'tiny.gguf');
     const ev = assistantById('as-general');
     return { line, name: ev.name, crewNames: S.data.assistants.map((x) => x.name) };
   });
-  assert.ok(crew.line.length && crew.line.every((t) => t === 'Quicksilver Liquid Edition'), `answers are headed by the stack: ${crew.line}`);
+  // (Headed by what answered: the stack, or the one model Automatic picked for a message.)
+  const answered = await win.evaluate(() => S.data.chats.flatMap((c) => c.messages).filter((m) => m.role === 'assistant').map((m) => m.alts[m.altIndex]?.target).filter(Boolean).map((t) => (t.startsWith('stack:') ? S.stacks.find((x) => `stack:${x.id}` === t)?.name : S.targets.find((x) => x.target === t)?.name)).filter(Boolean));
+  assert.ok(crew.line.length && crew.line.every((t) => t !== 'Quicksilver' && t !== 'Everyday Helper' && answered.includes(t)), `answers are headed by the stack or model that answered: ${crew.line} / ${answered}`);
+  assert.ok(crew.line.includes('Quicksilver Liquid Edition'), 'the Liquid Edition heads its answers');
   assert.equal(crew.name, 'Everyday Helper');
   assert.ok(!crew.crewNames.includes('Quicksilver'), 'no crew member is called Quicksilver');
   // Connect a cloud AI on a slow PC: it's used (for every message), with this PC as the backup,
