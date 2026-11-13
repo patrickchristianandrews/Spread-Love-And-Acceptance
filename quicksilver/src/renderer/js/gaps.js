@@ -6,6 +6,9 @@
 
 const CANT = "(?:can'?t|cannot|can not|am unable to|'m unable to|unable to|am not able to|'m not able to|don'?t have (?:the )?(?:ability|access|tools?|capability) to|do not have (?:the )?(?:ability|access|tools?) to|have no (?:way|ability) to|lack the ability to)";
 const GAPS = [
+  // Made-up links: example.com and the like are placeholders, so the model invented the "results".
+  { id: 'fake', re: /https?:\/\/(?:www\.)?(?:example\.(?:com|org|net)|placeholder\.\w+|yourwebsite\.\w+|website\.com|link\.com|url\.com)(?:[\/\s)\]]|$)/i,
+    label: '🔎 Search the web for real results', why: '⚠️ Those links are made up (example.com is a placeholder): this model can\'t see the web by itself.' },
   { id: 'web', re: new RegExp(`${CANT} (?:browse|access|search|check|look (?:up|at)|visit|open)\\b[^.]{0,40}\\b(?:internet|web|online|websites?|links?|urls?|real[- ]time|live|current|latest)|my (?:knowledge|training)(?: data)? (?:cut-?off|only goes|ends)|as of my (?:last|knowledge)|i don'?t have (?:real[- ]time|live|internet|current) (?:access|data|information)`, 'i'),
     label: '🔎 Search the web and answer again', why: 'It needed the web.' },
   { id: 'files', re: new RegExp(`${CANT} (?:access|read|open|see|look at|find|browse)\\b[^.]{0,25}\\b(?:your |the |local )?(?:files?|documents?|computer|pc|folders?|desktop|hard drive|downloads)`, 'i'),
@@ -51,6 +54,7 @@ document.addEventListener('click', async (e) => {
   if (pending) { toast('Wait for the answer to finish first.'); return; }
   const again = () => { alt.gapDone = true; save(); generate(chat, m); };
   switch (b.dataset.gap) {
+    case 'fake':
     case 'web':
       if (S.config?.offline) { toast('Go online first (the switch at the bottom of the sidebar).'); return; }
       chat.web = true; chat.tools = true; again(); toast('Searching the web for this one.'); break;

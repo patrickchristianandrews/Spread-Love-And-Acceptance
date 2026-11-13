@@ -1624,9 +1624,9 @@ function redPng(size = 64) {
   const gaps = await win.evaluate(() => [
     "I'm sorry, but I can't browse the internet, so I don't know today's price.", 'I cannot access your files on your computer.', "I can't see images, but if you describe it…",
     "I don't have access to your email inbox.", 'As a language model I cannot run code.', "I can't generate images directly.", "I can't remember previous conversations.",
-    'I am unable to do that: it is beyond my capabilities.', 'Paris is the capital of France.',
+    'I am unable to do that: it is beyond my capabilities.', 'Paris is the capital of France.', 'Here are some picks: https://example.com/pic1 and https://example.com/pic2',
   ].map((t) => gapOf(t)?.id || null));
-  assert.deepEqual(gaps, ['web', 'files', 'vision', 'apps', 'run', 'make', 'memory', 'any', null]);
+  assert.deepEqual(gaps, ['web', 'files', 'vision', 'apps', 'run', 'make', 'memory', 'any', null, 'fake'], 'made-up example.com links are called out');
   console.log('✓ when the AI says it can\'t do something: the fix is suggested (web search, files, a model that sees, an app, Full access, a picture model, memory, or a plug-in search)');
 
   // Automations: a schedule, made from an idea, run now into its own chat.
