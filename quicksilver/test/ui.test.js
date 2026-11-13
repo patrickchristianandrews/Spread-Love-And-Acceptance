@@ -77,7 +77,7 @@ function redPng(size = 64) {
   await win.evaluate(async () => { S.data.prefs.addFoundModels = true; save(); await startupModels(); });
   await win.waitForSelector('text=and added it. Ready to use', { timeout: 30000 });
   // Start something: expert assistants for one task each (the everyday Quicksilver isn't listed).
-  assert.match(await win.locator('.start-note').innerText(), /a helper set up to be an expert at one task/);
+  assert.match(await win.locator('.start-note').innerText(), /a crew member set up to be an expert at one task/);
   assert.equal(await win.locator('[data-start="as-general"]').count(), 0);
   assert.ok(await win.locator('[data-start]').count() >= 10);
   console.log('✓ home (models from other apps added only when you choose; expert assistants explained)');
@@ -1601,13 +1601,13 @@ function redPng(size = 64) {
   await shot(win, '16d-coding-agents');
   await win.click('#modal [data-close]');
   console.log('✓ coding agents: OpenCode and OpenHands setup on your models');
-  // "Helpers" (not "Assistants"), with a Debate helper near the top.
+  // "Your Crew" (not "Assistants"), with a Debate crew member near the top.
   await win.evaluate(() => go({ view: 'assistants' }));
   await win.waitForSelector('[data-chat-with="as-debate"]');
-  assert.match(await win.locator('.page-head h1').innerText(), /^Helpers$/);
-  assert.match(await win.locator('[data-nav="assistants"]').first().innerText(), /Helpers/);
+  assert.match(await win.locator('.page-head h1').innerText(), /^Your Crew$/);
+  assert.match(await win.locator('[data-nav="assistants"]').first().innerText(), /Your Crew/);
   assert.match(await win.evaluate(() => assistantById('as-debate')?.instructions || ''), /opposite to the user/);
-  console.log('✓ helpers: the menu and page say Helpers, and a Debate helper is ready');
+  console.log('✓ your crew: the menu and page say Your Crew, and a Debate crew member is ready');
   // The "That answer took a while" tip sits near the top and never covers the message box.
   const tip = await win.evaluate(async () => {
     newChat(); await new Promise((r) => setTimeout(r, 300));

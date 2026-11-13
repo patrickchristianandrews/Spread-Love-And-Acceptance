@@ -137,11 +137,11 @@ views.home = {
         ${tile('🔌', 'API server', api?.running ? 'On' : 'Off', api?.running ? `127.0.0.1:${api.port}` : 'let other apps use your models', 'settings')}
       </div>
       <div class="section"><h2>Start something</h2></div>
-      <p class="small muted start-note">Each of these is a <b>helper set up to be an expert at one task</b>: it has its own expert instructions, settings tuned for that work (how creative, how long, how much it reads), the add-ons it needs (web search, your knowledge, double-checking, a skill on every message), and it asks for the model best rated for that kind of work. Pick the one that matches what you want to do; you can switch at the top of any chat.</p>
+      <p class="small muted start-note">Each of these is a <b>crew member set up to be an expert at one task</b>: it has its own expert instructions, settings tuned for that work (how creative, how long, how much it reads), the add-ons it needs (web search, your knowledge, double-checking, a skill on every message), and it asks for the model best rated for that kind of work. Pick the one that matches what you want to do; you can switch at the top of any chat.</p>
       <div class="cards" style="grid-template-columns:repeat(auto-fill,minmax(250px,1fr))">
         ${S.data.assistants.filter((a) => a.id !== 'as-general').map((a) => `<button class="card" data-start="${a.id}" style="text-align:left"><div class="row"><span class="emoji-badge">${esc(a.emoji)}</span><h3 class="grow">${esc(a.name)}</h3></div><p class="small muted" style="font-weight:600;margin:8px 0 0">${esc(a.description)}</p></button>`).join('')}
         <button class="card" data-goto="studio" style="text-align:left"><div class="row"><span class="emoji-badge">🎨</span><h3>Create an image or video</h3></div><p class="small muted" style="font-weight:600;margin:8px 0 0">Generate, edit with AI, trim and convert.</p></button>
-        <button class="card" data-goto="library" style="text-align:left"><div class="row"><span class="emoji-badge">📚</span><h3>Connect your knowledge</h3></div><p class="small muted" style="font-weight:600;margin:8px 0 0">Files, websites and PubMed, isolated per helper and cited.</p></button>
+        <button class="card" data-goto="library" style="text-align:left"><div class="row"><span class="emoji-badge">📚</span><h3>Connect your knowledge</h3></div><p class="small muted" style="font-weight:600;margin:8px 0 0">Files, websites and PubMed, isolated per crew member and cited.</p></button>
       </div>
     </div>`;
   },

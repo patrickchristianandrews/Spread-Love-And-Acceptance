@@ -35,11 +35,11 @@ views.assistants = {
     const list = S.data.assistants.filter((a) => (asGroup === 'all' || groupOf(a) === asGroup) && (!q || `${a.name} ${a.description || ''}`.toLowerCase().includes(q)));
     const groups = ASSISTANT_GROUPS.filter((g) => S.data.assistants.some((a) => groupOf(a) === g));
     return `<div class="page">
-      <div class="page-head"><h1>Helpers</h1><button class="btn primary" id="new-assistant">＋ Build your own helper</button></div>
-      <p class="lede"><b>${S.data.assistants.length} ready-made helpers</b>, each set up for one kind of work: its own instructions, the best model or team for it, and the knowledge, web search, tools and skills it needs. Some make things on every message, like the Image Artist or the Beat Maker. Pick one when you start a chat, or switch at the top of any chat. <a href="#" id="as-new-link">Build your own</a> in a minute, from scratch, from a template, or by describing it.</p>
-      <div class="row" style="margin-bottom:16px;flex-wrap:wrap"><input id="as-q" type="search" placeholder="Search helpers" value="${esc(asQuery)}" style="max-width:280px">
+      <div class="page-head"><h1>Your Crew</h1><button class="btn primary" id="new-assistant">＋ Add a crew member</button></div>
+      <p class="lede"><b>${S.data.assistants.length} ready-made crew members</b>, each set up for one kind of work: its own instructions, the best model or team for it, and the knowledge, web search, tools and skills it needs. Some make things on every message, like the Image Artist or the Beat Maker. Pick one when you start a chat, or switch at the top of any chat. <a href="#" id="as-new-link">Build your own</a> in a minute, from scratch, from a template, or by describing it.</p>
+      <div class="row" style="margin-bottom:16px;flex-wrap:wrap"><input id="as-q" type="search" placeholder="Search your crew" value="${esc(asQuery)}" style="max-width:280px">
         <button class="btn small ${asGroup === 'all' ? 'on' : ''}" data-asgroup="all">All</button>${groups.map((g) => `<button class="btn small ${asGroup === g ? 'on' : ''}" data-asgroup="${esc(g)}">${esc(g)}</button>`).join('')}</div>
-      ${groups.map((g) => { const items = list.filter((a) => groupOf(a) === g); return items.length ? `<h3 class="int-group">${esc(g)} · ${items.length}</h3><div class="cards">${items.map(assistantCard).join('')}</div>` : ''; }).join('') || '<div class="empty">No helpers match.</div>'}
+      ${groups.map((g) => { const items = list.filter((a) => groupOf(a) === g); return items.length ? `<h3 class="int-group">${esc(g)} · ${items.length}</h3><div class="cards">${items.map(assistantCard).join('')}</div>` : ''; }).join('') || '<div class="empty">No one in your crew matches.</div>'}
     </div>`;
   },
   bind() {
@@ -57,7 +57,7 @@ views.assistants = {
       S.data.assistants.push(copy); save(); editAssistant(copy);
     }));
     $$('[data-del]').forEach((b) => b.addEventListener('click', async () => {
-      if (!(await confirmBox('Delete this helper? Its chats stay, using the default helper.'))) return;
+      if (!(await confirmBox('Remove this crew member? Their chats stay, with your default crew member.'))) return;
       S.data.assistants = S.data.assistants.filter((x) => x.id !== b.dataset.del); save(); render();
     }));
   },
@@ -65,7 +65,7 @@ views.assistants = {
 
 // Step one of building: start blank, from a template, or describe it and let AI write it.
 function assistantBuilder() {
-  const b = openModal(`<h2>Build your own helper</h2>
+  const b = openModal(`<h2>Add your own crew member</h2>
     <div class="stack-v">
       <div class="card" style="padding:14px">
         <div class="field"><label for="ab-desc">✨ Describe what you want, and AI sets it up</label><textarea id="ab-desc" rows="3" placeholder="An assistant that helps me run my bakery: answers customer emails, plans weekly specials and keeps costs low"></textarea></div>
@@ -79,7 +79,7 @@ function assistantBuilder() {
   $$('[data-tpl]', b).forEach((x) => x.addEventListener('click', () => editAssistant(null, { ...ASSISTANT_TEMPLATES[Number(x.dataset.tpl)] })));
   b.querySelector('#ab-ai').addEventListener('click', async (e) => {
     const idea = b.querySelector('#ab-desc').value.trim();
-    if (!idea) { toast('Describe the helper first.'); return; }
+    if (!idea) { toast('Describe your crew member first.'); return; }
     const helper = promptHelper();
     if (!helper) { toast('Install a text model first, or start from a template.'); return; }
     e.target.disabled = true; e.target.textContent = '✨ Setting it up…';
@@ -97,7 +97,7 @@ async function editAssistant(a, preset = null) {
   if (!kb.collections.length) await refreshKb().catch(() => {});
   const v = a || { name: '', emoji: '💡', description: '', instructions: '', target: '', library: false, web: false, factCheck: false, temperature: 0.5, skill: '', effort: '', ...(preset || {}) };
   const skillOpts = `<option value="">None (a normal chat)</option>${Object.entries(SKILL_CATEGORIES).map(([k, c]) => { const items = allSkills().filter((s) => s.category === k); return items.length ? `<optgroup label="${esc(c.label)}">${items.map((s) => `<option value="${esc(s.id)}" ${v.skill === s.id ? 'selected' : ''}>${esc(s.icon)} ${esc(s.name)}</option>`).join('')}</optgroup>` : ''; }).join('')}`;
-  const b = openModal(`<h2>${a ? `Edit ${esc(a.name)}` : 'Create a helper'}</h2>
+  const b = openModal(`<h2>${a ? `Edit ${esc(a.name)}` : 'Add a crew member'}</h2>
     ${a?.builtIn ? '<p class="help" style="margin-top:-6px">This is a built-in assistant. Your changes are kept; use Duplicate on its card to keep the original too.</p>' : ''}
     <div class="stack-v">
       <div class="row">

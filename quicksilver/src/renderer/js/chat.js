@@ -116,7 +116,7 @@ views.chat = {
       ${tabsHTML(chat)}
       <header class="chat-top">
         <div class="pickers">
-          <label class="pill-select" title="Helper"><span class="pill-emoji">${esc(a.emoji)}</span><select id="pick-assistant" aria-label="Helper">${S.data.assistants.map((x) => `<option value="${x.id}" ${x.id === a.id ? 'selected' : ''}>${esc(x.name)}</option>`).join('')}</select>${icon('chevron', 16)}</label>
+          <label class="pill-select" title="Crew member"><span class="pill-emoji">${esc(a.emoji)}</span><select id="pick-assistant" aria-label="Crew member">${S.data.assistants.map((x) => `<option value="${x.id}" ${x.id === a.id ? 'selected' : ''}>${esc(x.name)}</option>`).join('')}</select>${icon('chevron', 16)}</label>
           <label class="pill-select" title="Model or team">${icon(target.startsWith('stack:') ? 'layers' : 'cpu', 16)}<select id="pick-model" aria-label="Model or team">${!a.target && S.data.prefs.autoRoute !== false && S.targets.length > 1 ? `<option value="__auto" ${autoOn(chat, a) ? 'selected' : ''}>✨ Automatic</option>` : ''}${S.targets.length ? targetOptions(autoOn(chat, a) ? '' : target) : '<option value="">No models yet</option>'}<option value="__infuse">⚗️ Build a custom AI…</option><option value="__get">＋ Get more models…</option></select>${icon('chevron', 16)}</label>
           <button class="net-pill ${S.config?.offline ? 'off' : ''}" id="net-pill" role="switch" aria-checked="${!S.config?.offline}" title="${S.config?.offline ? 'Offline: nothing leaves this PC, so web search is off. Click to go online.' : 'Online: web search is on for questions that need it, and cloud AIs and downloads are available. Click to go offline.'}"><span class="net-dot"></span><span>${S.config?.offline ? 'Offline' : 'Online'}</span><span class="net-sw"><i></i></span></button>
         </div>
@@ -1371,7 +1371,7 @@ function skillChipHTML(chat) {
   const s = chat.pendingSkill && skillById(chat.pendingSkill);
   if (s) return `<div class="row" style="margin-bottom:2px"><span class="badge b-peach" style="font-size:.9rem;padding:4px 10px">⚡ ${esc(s.icon)} ${esc(s.name)} <button class="tool" data-skill-clear title="Stop using this skill" style="padding:0 4px">✕</button></span><span class="small muted">${esc(s.description)}</span></div>`;
   const own = skillById(assistantById(chat.assistantId)?.skill);
-  if (own) return `<div class="row" style="margin-bottom:2px"><span class="badge b-peach" style="font-size:.85rem;padding:3px 9px" title="This helper uses it on every message">⚡ ${esc(own.icon)} ${esc(own.name)}</span><span class="small muted">${esc(own.description)}</span></div>`;
+  if (own) return `<div class="row" style="margin-bottom:2px"><span class="badge b-peach" style="font-size:.85rem;padding:3px 9px" title="This crew member uses it on every message">⚡ ${esc(own.icon)} ${esc(own.name)}</span><span class="small muted">${esc(own.description)}</span></div>`;
   const sug = chat.suggested && !(chat.dismissed || []).includes(chat.suggested) && skillById(chat.suggested);
   if (sug) return `<div class="row" style="margin-bottom:2px"><span class="small muted">Suggested skill:</span><button class="btn small" data-skill-use="${esc(sug.id)}">⚡ ${esc(sug.icon)} ${esc(sug.name)}</button><button class="tool" data-skill-dismiss="${esc(sug.id)}">No thanks</button></div>`;
   return '';
