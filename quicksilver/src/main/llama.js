@@ -146,6 +146,14 @@ function releaseGpu() {
   for (const [k, s] of [...servers.entries()]) if ((s.vramGB || 0) > 0 && !isBusy(s)) { stop(k); n++; }
   return n;
 }
+// The same for ordinary memory (a PC without a graphics card keeps its models there): every loaded
+// model that is not answering right now is unloaded. Returns how many were, and how much they held.
+function releaseIdle() {
+  let n = 0; let gb = 0;
+  for (const [k, s] of [...servers.entries()]) if (!isBusy(s) && !s.exited) { gb += s.sizeGB || 0; stop(k); n++; }
+  return { n, gb };
+}
+const ramHeld = () => [...servers.values()].reduce((t, s) => t + (s.exited ? 0 : s.sizeGB || 0), 0);
 // Stops one model (every copy of it that's running), giving its memory back to the PC.
 function stopFile(file) { let n = 0; for (const [k, s] of [...servers.entries()]) if (s.file === file) { stop(k); n++; } return n; }
 
@@ -526,4 +534,4 @@ const isLoaded = (file) => [...servers.values()].some((s) => s.file === file && 
 
 // The last lines each running engine printed (for "Save diagnostics").
 const logTails = () => [...servers.values()].map((s) => ({ file: require('node:path').basename(s.file), lines: s.log.join('').split('\n').slice(-40).join('\n') }));
-module.exports = { gpuLayers, countedVram, gpuHeld, releaseGpu, roomyContext, idleMs, readGguf, ensure, prefill, chat, stop, stopAll, stopFile, status, isLoaded, contextFor, prefetch, logTails };
+module.exports = { releaseIdle, ramHeld, gpuLayers, countedVram, gpuHeld, releaseGpu, roomyContext, idleMs, readGguf, ensure, prefill, chat, stop, stopAll, stopFile, status, isLoaded, contextFor, prefetch, logTails };

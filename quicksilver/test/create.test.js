@@ -179,6 +179,30 @@ const collect = async (gen) => { let text = ''; for await (const ev of gen) if (
     console.log('✓ a loaded chat model hands the graphics card to the picture, then loads again when you chat');
   }
 
+  // ---- a PC without a graphics card: the chat models give ordinary memory back to the picture ----
+  {
+    const hardware = require('../src/main/hardware');
+    const os = require('node:os');
+    const realDetect = hardware.detect; const realFree = os.freemem;
+    const base = await realDetect();
+    hardware.detect = async () => ({ ...base, vramGB: 0, vramFreeGB: 0, gpus: [] });
+    try {
+      await collect(complete.run('local:chat', { messages: [{ role: 'user', content: 'hello' }], maxTokens: 20, contextSize: 2048 }));
+      assert.ok(llama.ramHeld() > 0, 'the chat model is loaded in memory');
+      os.freemem = () => 1 * 1024 ** 3; // 1 GB free: too little for the picture model beside it
+      const said = [];
+      const item = await media.generate('r1', { modelId: 'lustify', prompt: 'a fox', width: 256, height: 256, steps: 2 }, { onStatus: (t) => said.push(t) });
+      assert.ok(fs.existsSync(item.file));
+      assert.equal(llama.ramHeld(), 0, 'the idle chat model was unloaded to make room in memory');
+      assert.ok(said.some((t) => /Making room in memory/.test(t)), 'and it says so');
+      os.freemem = () => 64 * 1024 ** 3; // plenty free: nothing is unloaded
+      await collect(complete.run('local:chat', { messages: [{ role: 'user', content: 'hello again' }], maxTokens: 20, contextSize: 2048 }));
+      await media.generate('r2', { modelId: 'lustify', prompt: 'a fox', width: 256, height: 256, steps: 2 });
+      assert.ok(llama.ramHeld() > 0, 'with room to spare the chat model stays loaded');
+    } finally { hardware.detect = realDetect; os.freemem = realFree; llama.stopAll(); }
+    console.log('✓ no graphics card: idle chat models give memory back to the picture model when it is short');
+  }
+
   // ---- video: made, converted to MP4, at a size that fits ----
   {
     const said = [];

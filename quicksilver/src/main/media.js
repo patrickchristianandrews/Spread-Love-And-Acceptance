@@ -379,7 +379,24 @@ const MEMORY_RX = /out of (device |host )?memory|outofdevicememory|outofhostmemo
 const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 
 // Frees graphics memory for the job when a loaded chat model holds what it needs.
+// Room in ordinary memory, for a PC without a graphics card (or a model that spills into memory):
+// a picture model needs about its own size plus a couple of gigabytes to work in. When there isn't
+// that much free, the chat models that aren't answering are unloaded first (they load again when
+// you next chat); on the second try, always.
+async function makeRamRoom(spec, onStatus, everything) {
+  const llama = require('./llama');
+  if (!llama.ramHeld()) return;
+  const needGB = (spec.sizeGB || 6) + 2.5;
+  const freeGB = require('node:os').freemem() / 1024 ** 3;
+  if (!everything && freeGB >= needGB) return;
+  const { n } = llama.releaseIdle();
+  if (!n) return;
+  onStatus?.('Making room in memory for the picture model (your chat model loads again when you next chat)…');
+  await wait(1500);
+}
+
 async function makeRoom(spec, hw, onStatus, everything = false) {
+  if (!hw.vramGB || (catalog.estimateMedia(spec, hw).fit || '') !== 'gpu') await makeRamRoom(spec, onStatus, everything);
   if (!hw.vramGB) return hw;
   const llama = require('./llama');
   const held = llama.gpuHeld();
@@ -494,6 +511,7 @@ async function generateNow(jobId, req, { onProgress, onStatus } = {}) {
     }
   }
   if (!made) {
+    if (last.memory && !hw.vramGB) throw new Error(`Not enough memory for ${spec.name} on this PC, even with the chat models closed and the low-memory settings. Close other big programs, try a smaller shape${isVideo ? ' or a shorter clip' : ''}, or a lighter picture model.`);
     if (last.memory) throw new Error(`Not enough graphics memory for ${spec.name}, even with the chat model closed and the low-memory settings. Try a smaller shape${isVideo ? ' or a shorter clip' : ''}, or a lighter model.`);
     if (last.blank) throw new Error(`${spec.name} made a blank ${word} twice on this PC. Try a different shape or another ${word} model.`);
     throw new Error(`${spec.name} stopped before the ${word} was finished: ${String(last.message).slice(0, 300)}`);
