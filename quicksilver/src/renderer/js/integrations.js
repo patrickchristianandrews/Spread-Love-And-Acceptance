@@ -91,7 +91,7 @@ views.integrations = {
   },
 };
 
-const INT_GROUPS = ['Everyday', 'Google', 'Microsoft', 'Files & storage', 'Sales & support', 'Commerce & payments', 'Marketing', 'Design', 'Websites', 'Music & media', 'Notes & knowledge', 'Tasks & projects', 'Messaging & automation', 'Developer', 'Home', 'Other'];
+const INT_GROUPS = ['Build & ship', 'Everyday', 'Google', 'Microsoft', 'Files & storage', 'Sales & support', 'Commerce & payments', 'Marketing', 'Design', 'Websites', 'Music & media', 'Notes & knowledge', 'Tasks & projects', 'Messaging & automation', 'Developer', 'Home', 'Other'];
 
 function editConnector(c) {
   const b = openModal(`<h2>${c.icon} ${c.enabled ? 'Settings' : 'Connect'}: ${esc(c.name)}</h2>

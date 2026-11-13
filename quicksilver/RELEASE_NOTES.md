@@ -10,6 +10,15 @@ Updating from 2.19 or 2.20: nothing extra to download; your chats, settings and 
 
 Updating from 2.18: the Liquid Edition now includes its Closer and its picture and video makers, and Quicksilver does not open until all of them are installed. After the update the setup screen downloads what is missing (about 30 GB) before the app starts. Your chats, settings and the models you already have are kept.
 
+### Coming next
+
+- **Build & ship plug-ins, built into every Liquid Edition** (on by default, nothing to install; switch any off under Connectors → Build & ship). Just ask:
+  - **App tester** ("test my app at localhost:3000"): opens your app or site in a hidden browser, follows its links and reports JavaScript errors, failed requests, broken links and images, slow pages, layouts that spill off a phone screen and missing labels. It never clicks anything that could change data.
+  - **Security audit** ("check my project for security holes before I ship"): looks through a project folder the way an attacker would: leaked keys, Supabase's service_role key in the browser, tables without row-level security, API routes with no login check, SQL and command injection, XSS, open CORS, weak password hashing, Firebase rules. Worst first, with how to fix each. Runs on your PC; nothing is uploaded.
+  - **Design extractor** ("match the design of stripe.com"): reads a site's colors, fonts, type and spacing scales, corners, shadows, breakpoints and CSS variables as a DESIGN.md, so what the AI builds matches it.
+  - **Up-to-date code docs** (Context7): current documentation for thousands of libraries, so code uses today's versions. Online only; only the library name and topic are sent.
+- **19 more ready-made plug-ins** under Connectors: Semgrep, Sentry, Firebase, Prisma, Neon, Heroku, Docker and Puppeteer (Build & ship); Windows control and phone control (Android and iPhone); DuckDuckGo, arXiv and YouTube transcripts (Research); Word and PowerPoint (Office); CoinGecko and Alpha Vantage (Money); Ableton Live and Godot (Creative). 59 in all, alongside Playwright, Supabase and Context7.
+
 ### New in 2.20.6
 
 - **Liquid Edition Max, for a fast PC** (10–16 GB graphics card, 24–32 GB memory), between the Liquid Edition and Pro: Qwen3.5 9B (the Brain, reads photos and thinks), Qwen3 30B-A3B (the Closer: 30B knowledge at close to 3B speed), gpt-oss 20B (the Thinker) and Gemma 3 12B (the Muse), with Chroma1-HD and WAI-NSFW Illustrious for pictures. In Stacks, under The Liquid Editions; only installed if you choose it.

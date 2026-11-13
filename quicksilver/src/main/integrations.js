@@ -35,19 +35,21 @@ const CONNECTORS = {
 // ---------- config ----------
 
 function cfg() { return store.config().integrations || {}; }
+// On or off: what you chose, else the connector's default (the built-in Build & ship plug-ins are on).
+const isOn = (id, c = cfg()) => (typeof c[id]?.enabled === 'boolean' ? c[id].enabled : Boolean(CONNECTORS[id]?.defaultOn));
 const secret = (id) => store.getSecret(`int:${id}`);
 
 function list() {
   const c = cfg();
   return Object.entries(CONNECTORS).map(([id, def]) => ({
-    id, ...def, enabled: Boolean(c[id]?.enabled), values: Object.fromEntries(def.fields.filter((f) => !f.secret).map((f) => [f.key, c[id]?.[f.key] || (def.google && f.key === 'client' ? google.clientOf(id).id || '' : '')])),
+    id, ...def, enabled: isOn(id, c), values: Object.fromEntries(def.fields.filter((f) => !f.secret).map((f) => [f.key, c[id]?.[f.key] || (def.google && f.key === 'client' ? google.clientOf(id).id || '' : '')])),
     hasToken: def.google ? google.hasClient(id) : def.oauth ? Boolean(c[id]?.client) : store.hasSecret(`int:${id}`), signInNeeded: Boolean(def.oauth), account: c[id]?.account || '', noToken: Boolean(def.noToken), group: def.group || 'Other',
   }));
 }
 
 async function save(id, values, token) {
   if (!CONNECTORS[id]) throw new Error('Unknown integration.');
-  const was = Boolean(cfg()[id]?.enabled);
+  const was = isOn(id);
   const oldToken = token && store.hasSecret(`int:${id}`) ? store.getSecret(`int:${id}`) : '';
   if (token) store.setSecret(`int:${id}`, token.trim());
   const c = cfg();
@@ -71,6 +73,7 @@ function disable(id) {
   popular.forget(id);
   const c = cfg();
   delete c[id];
+  if (CONNECTORS[id]?.defaultOn) c[id] = { enabled: false }; // a plug-in that is on by default stays off once you switch it off
   store.saveConfig({ integrations: c });
   store.setSecret(`int:${id}`, '');
 }
@@ -251,10 +254,14 @@ Object.assign(TOOLS, google.TOOLS);
 const popular = require('./integrations-popular')({ http, clip, secret, cfg });
 Object.assign(CONNECTORS, popular.CONNECTORS);
 Object.assign(TOOLS, popular.TOOLS);
+const dev = require('./integrations-dev')({ cfg });
+Object.assign(CONNECTORS, dev.CONNECTORS);
+Object.assign(TOOLS, dev.TOOLS);
 
 async function test(id) {
   if (google.isGoogle(id)) return google.test(id);
   if (popular.CONNECTORS[id]) return popular.test(id);
+  if (dev.CONNECTORS[id]) return dev.test(id);
   // A personal token knows its user; a GitHub App or Actions token doesn't, but can list its repos.
   if (id === 'github') {
     try { return (await gh('/user')).login; } catch (err) {
@@ -273,7 +280,7 @@ async function test(id) {
 // Tools from every enabled connector.
 function tools() {
   const c = cfg();
-  return Object.entries(TOOLS).filter(([id]) => c[id]?.enabled && (CONNECTORS[id].noToken || (google.isGoogle(id) ? google.ready(id) : popular.isOAuth(id) ? popular.ready(id) : store.hasSecret(`int:${id}`)))).flatMap(([id, list]) => list.map((t) => ({ ...t, source: CONNECTORS[id].name, sourceId: id })));
+  return Object.entries(TOOLS).filter(([id]) => isOn(id, c) && (CONNECTORS[id].noToken || (google.isGoogle(id) ? google.ready(id) : popular.isOAuth(id) ? popular.ready(id) : store.hasSecret(`int:${id}`)))).flatMap(([id, list]) => list.map((t) => ({ ...t, source: CONNECTORS[id].name, sourceId: id })));
 }
 
 // ---------- send files Quicksilver made to your cloud storage ----------

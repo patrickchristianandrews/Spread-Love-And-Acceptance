@@ -346,6 +346,7 @@ function redPng(size = 64) {
   assert.ok(/Huge-400B/.test(trText) && /NotHere/.test(trText), 'the hidden ones can be shown on request');
   await win.evaluate(() => { trendAll = false; modelsTab = 'text'; render(); });
   assert.match(await win.locator('#feat-note').innerText(), /Featured marks the best models right now that run on this PC/);
+  await win.waitForFunction(() => S.est?.text, null, { timeout: 30000 }); // the PC estimate is re-read after a download finishes
   assert.equal(await win.evaluate(() => { const id = Object.values(S.catalog.picks.featured).flat().find((x) => S.est.text[x]); const was = S.est.text[id].fit; S.est.text[id].fit = 'no'; const f = isFeatured(id); S.est.text[id].fit = was; return f; }), false, 'a top pick that will not fit here is not featured here');
   await win.evaluate(() => { modelsTab = 'text'; go({ view: 'models' }); });
   await win.locator('.model-card [data-boost]').first().click();

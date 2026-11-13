@@ -29,6 +29,11 @@ const APP_Q = [
   [/\badsense\b/i, 'gadsense'], [/\bpage ?speed\b|\bcore web vitals\b|\bhow fast (is|does) (my|the) (site|page)\b/i, 'pagespeed'],
   [/\boutlook\b|\bonedrive\b|\bmicrosoft to ?do\b|\bmicrosoft 365\b/i, 'microsoft'], [/\bdropbox\b/i, 'dropbox'],
   [/\bspotify\b|\b(new )?(music|songs?|artists?|bands?) (like|similar|recommend|suggest)|\brecommend (me )?(some )?(music|songs|artists)\b|\bmy playlists?\b/i, 'spotify'],
+  // Build & ship (built in, on by default): test an app, match a site's design, check security, current docs.
+  [/\blocalhost:\d+|\b(test|check|qa|try out|click through)\b[^.?!\n]{0,40}\b(my|the|this|our)\s+(web ?app|app|site|website|page|signup|sign-up|checkout|flows?)\b/i, 'apptest'],
+  [/\bdesign system\b|\b(match\w*|cop(y|ies|ying)|clon\w*|extract\w*|borrow\w*|use|get|steal)\b[^.?!\n]{0,30}\b(design|look|style|colou?rs?|fonts?|branding|theme)\b[^.?!\n]{0,20}\b(of|from|like)\b/i, 'designsystem'],
+  [/\bvibesec\b|\b(security|secure|vulnerab\w*|pen ?test\w*|hackable|exploitable|security holes?)\b[^.?!\n]{0,40}\b(app|code|project|repo|site|website|folder|api|before (i|we) ship)\b|\b(audit|check)\b[^.?!\n]{0,20}\bsecurity\b|\b(is|are)\s+(my|our|the|this)\s+[^.?!\n]{0,30}\b(secure|hackable|safe from (hackers|attacks?))\b/i, 'securityaudit'],
+  [/\bcontext7\b|\b(latest|current|up[- ]to[- ]date|newest)\s+(\w+\s+){0,2}(docs?|documentation|api|syntax|version of)\b|\b(docs?|documentation)\s+(for|of)\s+(next\.?js|react|supabase|tailwind|prisma|vue|svelte|astro|express|fastapi|django|stripe|langchain|\w+\.js)\b/i, 'codedocs'],
   [/\bhubspot\b/i, 'hubspot'], [/\bpipedrive\b/i, 'pipedrive'], [/\bzendesk\b|\bsupport tickets?\b/i, 'zendesk'], [/\bstripe\b/i, 'stripe'], [/\bshopify\b|\bmy (store|shop) orders\b/i, 'shopify'],
   [/\bmailchimp\b/i, 'mailchimp'], [/\bclickup\b/i, 'clickup'], [/\bmonday(\.com)? board\b|\bmonday\.com\b/i, 'monday'], [/\bcalendly\b/i, 'calendly'], [/\bfigma\b/i, 'figma'], [/\bwordpress\b|\bmy blog\b/i, 'wordpress'],
 ];

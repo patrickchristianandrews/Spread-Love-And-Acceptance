@@ -652,6 +652,13 @@ function tierCardHTML(tier) {
           : `<button class="btn small ${fit.level === 'no' ? '' : 'primary'}" data-get-tier="${tier}">${!missing.length ? `Turn on ${T.name}` : `${ready ? 'Finish' : 'Get'} ${T.name} · ${missingGB.toFixed(0)} GB`}</button>${ready ? `<button class="btn small" data-chat-stack="${T.id}">Chat</button>` : ''}`}</div>
       </div>`;
 }
+// The plug-ins every Liquid Edition comes with (the built-in Build & ship set, on by default).
+const LIQUID_PLUGINS = ['apptest', 'designsystem', 'securityaudit', 'codedocs'];
+function liquidPluginsHTML() {
+  const list = (hintConnectors || []).filter((c) => LIQUID_PLUGINS.includes(c.id));
+  if (!list.length) { if (!hintConnectors) loadHintConnectors().then(() => { const el = document.getElementById('liquid-plugins'); if (el) el.outerHTML = liquidPluginsHTML(); }); return '<div id="liquid-plugins"></div>'; }
+  return `<div id="liquid-plugins" class="small" style="margin:6px 0 8px"><b>🔌 Plug-ins built in:</b> ${list.map((c) => `<span class="badge ${c.enabled ? 'b-mint' : ''}" title="${esc(c.blurb)}">${c.icon} ${esc(c.name.replace(/ \(Context7\)$/, ''))}${c.enabled ? '' : ' (off)'}</span>`).join(' ')} <a href="#" data-goto-int>Connectors</a><div class="muted">Just ask: "test my app at localhost:3000", "check my project for security holes", "match the design of stripe.com".</div></div>`;
+}
 function liquidEditionsHTML() {
   if (!S.catalog?.liquidPro) return '';
   const liquidReady = S.stacks.some((s) => s.id === 'quicksilver');
@@ -660,6 +667,7 @@ function liquidEditionsHTML() {
       <div class="card">
         <div class="row"><span class="emoji-badge">💧</span><h3 class="grow">Liquid Edition</h3><span class="badge b-mint">For any PC</span></div>
         <p class="desc">Comes with Quicksilver. Qwen3.5 4B answers and sees photos, Qwen3.5 9B leads hard questions, Qwen3.5 2B adds fresh angles; Lustify makes pictures and Wan 2.2 makes video. Runs on laptops and everyday PCs; best with an 8 GB graphics card.</p>
+        ${liquidPluginsHTML()}
         <div class="row">${liquidReady ? '<button class="btn small primary" data-chat-stack="quicksilver">Chat</button><span class="badge b-lav">🔒 Locked</span>' : '<span class="badge b-lemon">Setting up…</span>'}</div>
       </div>
       ${S.catalog.liquidMax ? tierCardHTML('max') : ''}
@@ -681,4 +689,11 @@ document.addEventListener('click', async (e) => {
   await refreshModels();
   toast(missing.length ? `Downloading ${T.name}. It appears under Built in as soon as its Brain and Closer are in.` : `${T.emoji} ${T.name} is ready.`, 8000);
   render();
+});
+document.addEventListener('click', (e) => {
+  const a = e.target.closest('[data-goto-int]');
+  if (!a) return;
+  e.preventDefault();
+  hintConnectors = null; // re-read after a visit (a plug-in may be switched off there)
+  go({ view: 'integrations' });
 });

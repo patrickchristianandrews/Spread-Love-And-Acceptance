@@ -59,6 +59,39 @@ const PRESETS = {
   figma: { group: 'Creative & media', name: 'Figma (desktop app)', transport: 'http', url: 'http://127.0.0.1:3845/mcp', note: 'Read designs, components and variables from the Figma desktop app. Turn on the MCP server in Figma\'s preferences first.' },
   elevenlabs: { group: 'Creative & media', name: 'ElevenLabs voices', transport: 'stdio', command: 'uvx', args: ['elevenlabs-mcp'], env: { ELEVENLABS_API_KEY: '<your ElevenLabs key>' }, note: 'Lifelike speech, voice changing and sound effects. Free monthly credits. Needs uv.' },
 
+  // ---------- Build & ship ----------
+  // (Quicksilver's own App tester, Design extractor, Security audit and Code docs are built in:
+  // Connectors → Build & ship. These add the services an app is built on.)
+  semgrep: { group: 'Build & ship', name: 'Semgrep (security scanner)', transport: 'stdio', command: 'uvx', args: ['semgrep-mcp'], note: 'Scans code for security bugs with thousands of open rules (OWASP Top 10, secrets, injection), deeper than a checklist. Free. Needs uv.' },
+  sentry: { group: 'Build & ship', name: 'Sentry (errors in production)', transport: 'stdio', command: 'npx', args: ['-y', '@sentry/mcp-server@latest'], env: { SENTRY_ACCESS_TOKEN: '<your Sentry user auth token>' }, note: 'Read the crashes and errors your users hit, with stack traces, so the AI can fix the real cause. Token: sentry.io → Settings → Auth Tokens. Needs Node.js.' },
+  firebase: { group: 'Build & ship', name: 'Firebase', transport: 'stdio', command: 'npx', args: ['-y', 'firebase-tools@latest', 'mcp'], note: 'Manage Firebase projects, Firestore, Auth users, security rules and hosting. Sign in once with "npx firebase-tools login". Needs Node.js.' },
+  prisma: { group: 'Build & ship', name: 'Prisma (database schema)', transport: 'stdio', command: 'npx', args: ['-y', 'prisma', 'mcp'], note: 'Check migration status, create and run migrations, and open Prisma Studio for the project in this folder. Needs Node.js.' },
+  neon: { group: 'Build & ship', name: 'Neon Postgres', transport: 'stdio', command: 'npx', args: ['-y', '@neondatabase/mcp-server-neon', 'start', '<your Neon API key>'], note: 'Create and query serverless Postgres databases and branches. Free plan. Key: console.neon.tech → Account → API keys. Needs Node.js.' },
+  heroku: { group: 'Build & ship', name: 'Heroku', transport: 'stdio', command: 'npx', args: ['-y', '@heroku/mcp-server'], env: { HEROKU_API_KEY: '<your Heroku API key>' }, note: 'Deploy and manage Heroku apps, add-ons, logs and scaling. Needs Node.js.' },
+  docker: { group: 'Build & ship', name: 'Docker (MCP Toolkit)', transport: 'stdio', command: 'docker', args: ['mcp', 'gateway', 'run'], note: 'Every server you enable in Docker Desktop\'s MCP Toolkit, each in its own container. Needs Docker Desktop with the MCP Toolkit turned on.' },
+  puppeteer: { group: 'Build & ship', name: 'Puppeteer (browser automation)', transport: 'stdio', command: 'npx', args: ['-y', '@modelcontextprotocol/server-puppeteer'], note: 'Drive a real Chrome: click, type, fill forms and take screenshots, to test sign-up and checkout flows step by step. Needs Node.js.' },
+
+  // ---------- Your PC & phone ----------
+  windows: { group: 'Your PC & phone', name: 'Windows control', transport: 'stdio', command: 'uvx', args: ['windows-mcp'], note: 'Lets the AI use Windows apps for you: open programs, click, type, read the screen, manage windows. Asks before each action. Needs uv.' },
+  mobile: { group: 'Your PC & phone', name: 'Phone control (Android and iPhone)', transport: 'stdio', command: 'npx', args: ['-y', '@mobilenext/mobile-mcp@latest'], note: 'Test and use apps on an Android phone or emulator, or an iPhone simulator: tap, type, swipe and read the screen. Needs Node.js and the Android or Xcode tools.' },
+
+  // ---------- Research & learning ----------
+  duckduckgo: { group: 'Research & learning', name: 'DuckDuckGo search', transport: 'stdio', command: 'uvx', args: ['duckduckgo-mcp-server'], note: 'Private web search and page reading. Free, no key, no account. Needs uv.' },
+  arxiv: { group: 'Research & learning', name: 'arXiv papers', transport: 'stdio', command: 'uvx', args: ['arxiv-mcp-server'], note: 'Search, download and read research papers from arXiv. Free. Needs uv.' },
+  ytranscript: { group: 'Research & learning', name: 'YouTube transcripts', transport: 'stdio', command: 'npx', args: ['-y', '@kimtaeyoon83/mcp-server-youtube-transcript'], note: 'Reads the transcript of a YouTube video, so you can ask for a summary, notes or quotes. Free, no key. Needs Node.js.' },
+
+  // ---------- Office ----------
+  word: { group: 'Office', name: 'Word documents', transport: 'stdio', command: 'uvx', args: ['--from', 'office-word-mcp-server', 'word_mcp_server'], note: 'Create and edit .docx files: headings, tables, images, styles, comments and find-and-replace. Free. Needs uv.' },
+  powerpoint: { group: 'Office', name: 'PowerPoint decks', transport: 'stdio', command: 'uvx', args: ['--from', 'office-powerpoint-mcp-server', 'ppt_mcp_server'], note: 'Create and edit .pptx presentations: slides, layouts, charts, tables and images. Free. Needs uv.' },
+
+  // ---------- Money ----------
+  coingecko: { group: 'Money', name: 'CoinGecko (crypto prices)', transport: 'http', url: 'https://mcp.api.coingecko.com/mcp', note: 'Live and historical prices, market caps and trends for 15,000+ coins. Free public server, no key.' },
+  alphavantage: { group: 'Money', name: 'Alpha Vantage (stocks and forex)', transport: 'http', url: 'https://mcp.alphavantage.co/mcp?apikey=<your Alpha Vantage key>', note: 'Stock quotes, company fundamentals, forex, economic indicators and technical analysis. Free key at alphavantage.co.' },
+
+  // ---------- More creative tools ----------
+  ableton: { group: 'Creative & media', name: 'Ableton Live (music)', transport: 'stdio', command: 'uvx', args: ['ableton-mcp'], note: 'Make music in Ableton Live from chat: tracks, MIDI clips, instruments and effects, playback. Needs Ableton Live with the AbletonMCP remote script, and uv.' },
+  godot: { group: 'Creative & media', name: 'Godot (game engine)', transport: 'stdio', command: 'npx', args: ['-y', '@coding-solo/godot-mcp'], env: { GODOT_PATH: '<path to your Godot executable>' }, note: 'Run Godot projects, read debug output, create scenes and add nodes, for the game-development stacks. Needs Godot and Node.js.' },
+
   // ---------- Home ----------
   homeassistantmcp: { group: 'Home', name: 'Home Assistant (official server)', transport: 'http', url: 'http://homeassistant.local:8123/api/mcp', auth: true, authHelp: 'A Home Assistant long-lived access token. Add the "Model Context Protocol Server" integration in Home Assistant first.', note: 'Control every device you expose to Assist.' },
 

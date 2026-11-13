@@ -635,7 +635,8 @@ async function collect(gen) {
     assert.equal(await T.automation_trigger.run({ message: 'Hi' }), 'Sent to the automation.');
     assert.ok(calls.some((c) => c.startsWith('POST https://hooks.example/abc')));
     for (const id of ['weather', 'wikipedia', 'calendar', 'rss', 'notes', 'todoist', 'webhook']) integrations.disable(id);
-    assert.equal(integrations.tools().length, 0);
+    // Only the built-in Build & ship plug-ins (on by default) are left.
+    assert.deepEqual(integrations.tools().map((t) => t.sourceId).filter((v, i, a) => a.indexOf(v) === i).sort(), ['apptest', 'codedocs', 'designsystem', 'securityaudit']);
     assert.ok(integrations.list().length >= 20, 'twenty connectors');
     global.fetch = realFetch;
     console.log('✓ connectors: weather, Wikipedia, calendar, news feeds, notes folder, Todoist, automation webhook');
