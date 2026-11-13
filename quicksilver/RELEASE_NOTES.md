@@ -1,9 +1,9 @@
 ### Download
 
-There are three ways to get Quicksilver 2.20.7. All install the same app; they differ in how the Liquid Edition's models (about 30 GB) arrive.
+There are three ways to get Quicksilver 2.20.8. All install the same app; they differ in how the Liquid Edition's models (about 30 GB) arrive.
 
-- **Quicksilver-Setup-2.20.7.exe** (below, about 1.9 GB, with a matching `.sha256`): the installer with the small 2B model inside. The first time Quicksilver opens, its setup screen downloads the rest of the Liquid Edition before the app starts.
-- **Quicksilver-Web-Setup-2.20.7.exe** (below, about 200 MB): the web installer. No models inside at all; the setup screen downloads the whole Liquid Edition on first launch.
+- **Quicksilver-Setup-2.20.8.exe** (below, about 1.9 GB, with a matching `.sha256`): the installer with the small 2B model inside. The first time Quicksilver opens, its setup screen downloads the rest of the Liquid Edition before the app starts.
+- **Quicksilver-Web-Setup-2.20.8.exe** (below, about 200 MB): the web installer. No models inside at all; the setup screen downloads the whole Liquid Edition on first launch.
 - **Full offline package** (about 31 GB): the installer plus a "Quicksilver models" folder. Keep the two together when you run the installer and everything is copied in: nothing to download, works with no internet from the first minute. It is too large for a GitHub release file, so it is the **Quicksilver-Windows-installer** build artifact on this release's build run (linked at the top of these notes; a GitHub sign-in is needed, and GitHub keeps build artifacts for 90 days).
 
 Updating from 2.19 or 2.20: nothing extra to download; your chats, settings and models are kept.
@@ -15,6 +15,21 @@ Updating from 2.18: the Liquid Edition now includes its Closer and its picture a
 - **Automations** (Explore → Automations): things Quicksilver does by itself on a schedule (every day, weekdays, once a week, every hour, every few minutes, or when it starts), with web search, plug-ins and your connected apps. Start from an idea (morning briefing, crypto and stock check, research digest, tech news, a website check, a price-drop watch, a weekly plan) or write your own. Each run goes to its own chat with a desktop notification; a run missed while Quicksilver was closed runs once when it opens.
 - **When the AI says it can't do something,** a button under the answer offers the fix: search the web, let it read your files, ask a model that sees pictures, connect the app, Full access to run commands, a picture or video model, Memory, or a search of the plug-in directory for the task.
 - **Meme battle always has pictures:** when a meme's picture can't be painted on this PC, Venice (or another picture service you connected) paints it; a meme format whose template picture can't be downloaded gets a painted picture instead; and if no picture can be made it says how to get one, instead of showing words alone.
+
+### New in 2.20.8
+
+- **Minds** (Your Crew → Minds): characters and experiences with a voice of their own — a 1940s private eye, a game master who runs a text adventure with dice, a brutal editor, a startup co-founder, a Socratic tutor, and more (22 built in). Each has its personality, an opening line it says first, example lines that set its voice, and its own memory: "remember that…" in its chat stays with that Mind. They run on any model or stack, on your PC or in the cloud. **How it works** shows every instruction behind a Mind — nothing hidden — and you can change any of it. **Create a Mind** from scratch or from a one-line idea (AI writes it), **share** one as a file, and **open** one a friend sent you.
+  - **Makers:** Image Maker, Pixel Surgeon (photo retouching) and Prompt Builder.
+  - **Code & security:** Reverse Engineer and Security Helper, for your own code and authorized, defensive work.
+  - **Investigators** (public information only, never finding private people): Fact Checker, Website Investigator, Company Researcher and Image Detective.
+  - Plus characters, games, coaches, thinkers, and a frank Sex Therapist for adults.
+- **Updates download the app only, not your models.** An update now fetches the small web installer (about 200 MB) instead of the full 1.9 GB one. Your models are kept outside the app's folder, so they stay put; if a new version's Liquid Edition adds a model, only that one downloads. (From the update after this one — 2.20.8 itself still installs the full way, since your current version doesn't know about the smaller one yet.)
+- **Click the download bar to see what's downloading:** each model listed with its own progress and a Pause button.
+- **Safe search** (Settings → Web search): one switch, on by default, that goes into every web search the app makes — the AI's searches included — not just a switch on screen. Picture search always keeps safe search on.
+- **Direct answers:** every answer starts with the answer itself — no "Certainly", no "As an AI", no "I hope this helps", no hedging. The usual chatbot filler is removed even with the human-writing style turned off.
+- **Check your connections** (Settings → API connections): a button that sends a tiny request to each connected cloud AI and shows pass or fail, with how long it took. Your connected cloud AI also gets a quick warm-up when Quicksilver opens, so the first question isn't slow.
+- **Documented provider settings used in full:** Venice's uncensored switches, and for Google Gemini the adjustable safety filters set to off. If a service rejects one of these, the request is sent again without it and says which service was the reason, instead of failing.
+- **Fix:** connected models that reject a "temperature" setting (some newer Claude models) no longer error.
 
 ### New in 2.20.7
 
