@@ -718,11 +718,10 @@
       { href: '/pal-cam-tv.html', title: 'Pal Cam TV', note: 'The pups live, all day, full screen or cast to your TV' },
       { href: '/sleeping-pals-cam.html', title: 'Sleeping Pals Cam', note: 'Tidbit and Sugarfoot asleep, to fall asleep to, or cast to your TV' },
       { sub: 'Music and sounds', id: 'music', area: 'media',
-        desc: 'Calm music and slow colors, soft background sounds, and your keepsakes from the calm games.',
-        short: 'Calm music, soft sounds and your garden.' },
+        desc: 'Calm music and slow colors, and your keepsakes from the calm games.',
+        short: 'Calm music, slow colors and your garden.' },
       { href: '/soundscapes.html#brain-breakers', title: 'Brain Breakers', note: 'Four instrumental pieces, with a music visualizer' },
       { href: '/calm-visualizer.html', title: 'Drift: calm visualizer', note: 'Slow colors and tones matched to how you feel' },
-      { href: '/soundscapes.html#background', title: 'Brain Breakers: calm background music', note: 'Brown noise, a low hum and a soft flutter' },
       { href: '/echoes-of-gold.html', title: 'Echoes of Gold', note: 'The companion album' },
       { href: '/keepsakes.html', title: 'My garden', note: 'Your keepsakes from the calm games' }
     ]},
