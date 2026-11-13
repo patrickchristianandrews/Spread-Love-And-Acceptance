@@ -123,6 +123,19 @@ async function collect(gen) {
   const r3 = await collect(complete.run('stack:bal', { messages: [{ role: 'user', content: 'Plan my week' }], maxTokens: 200, contextSize: 4096 }));
   assert.equal(uniq(r3.steps).map((s) => s.role).join(','), 'draft,lead');
   console.log('✓ balanced stack; running servers:', llama.status().length);
+  // Background jobs (titles, follow-ups, memory notes) never load a model: they use one that is
+  // already loaded, or are skipped, so the chat model is never pushed out and reloaded.
+  {
+    llama.stopAll();
+    await assert.rejects(collect(complete.run('local:qwen3-8b', { messages: [{ role: 'user', content: 'Write a short title' }], maxTokens: 20, contextSize: 4096, background: true })), /skipped/);
+    assert.equal(llama.status().length, 0, 'nothing was loaded for a background job');
+    await collect(complete.run('local:qwen3-8b', { messages: [{ role: 'user', content: 'Hello' }], maxTokens: 20, contextSize: 4096 }));
+    const before = llama.status().map((x) => x.file).sort();
+    const bg = await collect(complete.run('stack:office-power', { messages: [{ role: 'user', content: 'Write a short title' }], maxTokens: 20, contextSize: 4096, background: true }));
+    assert.ok(bg.text, 'it answered with the model already loaded');
+    assert.deepEqual(llama.status().map((x) => x.file).sort(), before, 'and loaded nothing else');
+    console.log('✓ background jobs use a model that is already loaded and never load one');
+  }
 
   // Efficient stacks: an easy question goes to the strongest member alone; when drafts agree the
   // combining step is skipped; one server per model, sized to the conversation.

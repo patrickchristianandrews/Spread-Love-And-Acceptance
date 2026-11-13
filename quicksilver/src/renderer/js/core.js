@@ -265,7 +265,7 @@ function askAI(target, system, user, { temperature = 0.7, maxTokens = 400, level
   return new Promise((resolve, reject) => {
     const done = (fn) => (x) => { bgJobs.delete(requestId); fn(x); };
     oneShots.set(requestId, { text: '', resolve: done(resolve), reject: done(reject), onText });
-    qs.sendChat({ requestId, target, messages: [{ role: 'system', content: system }, { role: 'user', content: user }], temperature, maxTokens, contextSize, gpu: S.data.prefs.gpu, effort: 'quick', ...(level ? { level } : {}) });
+    qs.sendChat({ requestId, target, messages: [{ role: 'system', content: system }, { role: 'user', content: user }], temperature, maxTokens, contextSize, gpu: S.data.prefs.gpu, effort: 'quick', ...(level ? { level } : {}), ...(background ? { background: true } : {}) });
   });
 }
 

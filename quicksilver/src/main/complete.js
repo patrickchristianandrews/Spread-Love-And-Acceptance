@@ -942,7 +942,28 @@ async function* council(target, req) {
   yield { type: 'step', step: s };
 }
 
+// Background jobs (chat titles, follow-up suggestions, memory notes) never load a model: loading
+// one can push the chat model out of memory (on a PC without a graphics card most of all), and
+// then the next message has to load it again. They use a chat model that is already loaded (the
+// one asked for when it is, else any loaded one; a cloud AI only when that was asked for), and
+// are skipped when none is loaded.
+function backgroundTarget(target) {
+  const t = parse(target);
+  if (t.kind === 'api') return target;
+  const loaded = models.list().filter((m) => m.kind === 'text' && m.files?.model && llama.isLoaded(m.files.model));
+  if (t.kind === 'local' && loaded.some((m) => m.id === t.id)) return target;
+  // A stack or a model that isn't loaded: one of the stack's own models that is, else any loaded one.
+  const own = t.kind === 'stack' ? teamOf(target).filter((x) => parse(x).kind === 'local').map((x) => parse(x).id) : [];
+  const pick = loaded.find((m) => own.includes(m.id)) || loaded.sort((a, b) => (a.size || 0) - (b.size || 0))[0];
+  return pick ? `local:${pick.id}` : null;
+}
+
 async function* run(target, req) {
+  if (req.background) {
+    const bg = backgroundTarget(target);
+    if (!bg) throw new Error('skipped: no model is loaded, and a background job never loads one');
+    target = bg; req = { ...req, level: 'quick' };
+  }
   if (req.council && !hasImages(req.messages)) { yield* council(target, req); return; }
   if (req.useTools) {
     const list = await toolbox.available();
