@@ -246,6 +246,7 @@ async function init() {
     // Load the default model in the background so the first reply is quick.
     if (model.kind === 'text') await setUpQuicksilver(false).catch(() => {}); // a new model can join Quicksilver's team
     if (model.kind === 'text' && (S.catalog?.liquidPro && Object.values(S.catalog.liquidPro).includes(model.catalogId))) { await qs.call('quicksilver:pro').catch(() => {}); await refreshModels(); }
+    if (model.kind === 'text' && (S.catalog?.liquidMax && Object.values(S.catalog.liquidMax).includes(model.catalogId))) { await qs.call('quicksilver:max').catch(() => {}); await refreshModels(); }
     if (model.kind === 'text') qs.call('models:warm', S.data.prefs.defaultTarget || `local:${model.id}`, { contextSize: S.data.prefs.contextSize, gpu: S.data.prefs.gpu }).catch(() => {});
     if (!$('#modal').hidden) return;
     render();
@@ -285,6 +286,11 @@ async function setUpQuicksilver(firstLook) {
   if (firstLook && r.added.length) {
     toast(r.stack ? '👋 Meet Quicksilver Liquid Edition: two AI models working as one, right on your PC. It sees photos, thinks harder when a question needs it, and nothing leaves this computer. Try an idea below.'
       : '👋 Quicksilver is ready to chat, privately on your PC, and it can see photos. Try an idea below.', 10000);
+  }
+  // A corrected Liquid Edition took models off: they're switched off until you switch them on again.
+  if (r.retired?.length) {
+    await refreshModels();
+    toastAction(`💧 The Liquid Edition now uses only its current models (abliterated). Taken off it and switched off: ${r.retired.slice(0, 4).join(', ')}${r.retired.length > 4 ? '…' : ''}. Nothing was deleted; switch one on again under Models → Models in use.`, 'Show me', () => { modelsTab = 'installed'; go({ view: 'models' }); }, 15000);
   }
   // The one-time tidy of the model list (see models.tidyImported) says what it did.
   if (r.tidied?.length) {

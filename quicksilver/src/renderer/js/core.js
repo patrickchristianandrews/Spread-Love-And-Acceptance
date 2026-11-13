@@ -177,12 +177,14 @@ const chatById = (id) => S.data.chats.find((c) => c.id === id);
 const targetValid = (t) => Boolean(t) && S.targets.some((x) => x.target === t && !x.empty);
 // The Liquid Edition is completely uncensored: only uncensored models answer, check or stand in
 // for it (the same rule as complete.js isUncensored).
+// The Liquid Editions: the Liquid Edition, Max (a fast PC) and Pro (a powerful PC).
+const LIQUID_IDS = ['quicksilver', 'quicksilver-max', 'quicksilver-pro'];
 const UNCENSORED_RX = /abliterat|uncensor|unfiltered|dolphin|hermes|lexi|rocinante/i;
 // A model's name and file name (never its folder: a Windows user called Alexis has "lexi" in every path).
 const modelNameText = (m) => `${m?.name || ''} ${String(m?.files?.model || '').split(/[\\/]/).pop()} ${m?.repo || ''}`;
 function liquidOk(t) {
   if (!t) return false;
-  if (t === 'stack:quicksilver' || t === 'stack:quicksilver-pro') return true;
+  if (isLiquid(t)) return true;
   if (t.startsWith('local:')) {
     const m = S.installed.find((x) => `local:${x.id}` === t);
     if (!m) return false;
@@ -196,8 +198,8 @@ function liquidOk(t) {
   }
   return false;
 }
-const isLiquid = (t) => t === 'stack:quicksilver' || t === 'stack:quicksilver-pro';
-const isLiquidStack = (s) => Boolean(s) && (s.builtFor === 'quicksilver' || s.builtFor === 'quicksilver-pro');
+const isLiquid = (t) => LIQUID_IDS.some((id) => t === `stack:${id}`);
+const isLiquidStack = (s) => Boolean(s) && LIQUID_IDS.includes(s.builtFor);
 // A model that's part of the Liquid Edition can't be removed (imported files from other apps can).
 // (A chat model must be the uncensored build: the plain catalog build of the same model is not
 // the Liquid Edition's, so that one can be removed. The same test as models.liquidOwn.)

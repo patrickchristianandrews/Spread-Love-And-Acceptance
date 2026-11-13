@@ -107,6 +107,7 @@ function redPng(size = 64) {
   await win.click('[data-nav="stacks"]');
   // The Liquid Editions at the top of Stacks: the Liquid Edition and Liquid Edition Pro, each explained.
   await win.waitForSelector('#liquid-editions:has-text("Liquid Edition Pro"):has-text("For a powerful PC")');
+  await win.waitForSelector('#liquid-editions [data-tier-card="max"]:has-text("Liquid Edition Max"):has-text("For a fast PC")');
   assert.match(await win.locator('#liquid-editions').innerText(), /Qwen3 30B-A3B[\s\S]*Mistral Small 3\.2[\s\S]*(Get|Finish|Chat)/);
   // Create's popular goals, one each: pictures, uncensored, anime, video, animate, editing, full songs.
   for (const g of ['pictures', 'openpics', 'anime', 'video', 'animate', 'photoedit', 'songs']) await win.waitForSelector(`[data-job="${g}"]`);

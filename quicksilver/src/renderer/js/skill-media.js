@@ -94,7 +94,8 @@ const stripMediaBlock = (text) => String(text || '').replace(/```(?:image|video|
 const LIQUID_PICTURES = 'lustify';
 const LIQUID_VIDEO = 'wan2.2-5b';
 const ANIME_RX = /\b(anime|manga|hentai|cartoon|toon|chibi|waifu|furry|illustrat\w*|cel[- ]shad\w*|drawn|drawing|comic)\b/i;
-function chatIsPro(chat) { return Boolean(chat) && resolveTarget(chat, assistantById(chat.assistantId)) === 'stack:quicksilver-pro'; }
+// Liquid Edition Max or Pro: pictures from Chroma1-HD first when it's here.
+function chatIsPro(chat) { return Boolean(chat) && ['stack:quicksilver-pro', 'stack:quicksilver-max'].includes(resolveTarget(chat, assistantById(chat.assistantId))); }
 function chatIsLiquid(chat) {
   if (!chat) return false;
   const t = resolveTarget(chat, assistantById(chat.assistantId));
