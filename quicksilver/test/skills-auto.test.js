@@ -9,7 +9,7 @@ const assert = require('node:assert/strict');
 const ctx = { S: { data: { prefs: {}, skills: [] } }, console, views: {}, MEDIA_RULES: {}, DIRECT_OUTPUTS: new Set(), MEDIA_OUTPUTS: new Set(), SKILL_JOB: {} };
 vm.createContext(ctx);
 const load = (f) => { try { vm.runInContext(fs.readFileSync(path.join(__dirname, '..', 'src', 'renderer', 'js', f), 'utf8').replace(/^(const|let) /gm, 'var '), ctx, { filename: f }); } catch (e) { if (!/is not defined/.test(e.message)) throw e; } };
-load('skills-data.js'); load('skills-more.js'); load('skills-pro.js'); load('skills-games.js'); load('skill-media.js'); load('skills.js');
+load('skills-data.js'); load('skills-more.js'); load('skills-pro.js'); load('skills-games.js'); load('skills-business.js'); load('skill-media.js'); load('skills.js');
 const img = [{ type: 'image' }];
 ctx.isCodeChat = (a) => a?.id === 'as-code';
 ctx.assistantById = (id) => ({ id });
@@ -138,6 +138,9 @@ const PRO = [
   ['write a player controller for my Godot platformer', 'game-player'], ['I need enemy AI that patrols and chases in Unity', 'game-enemy'], ['unreal crash when the level loads, here is the log', 'game-fix'],
   ['make a seamless texture of mossy cobblestone', 'make-texture'], ['a branching dialogue for the blacksmith', 'game-dialogue'], ['write a game design document for my roguelike', 'game-design-doc'],
   ['make a shot list for this scene', 'film-shotlist'], ['write a short film script about a lighthouse keeper', 'film-script'], ['I need a character bible so my characters stay the same', 'film-characters'], ['plan a trailer for my film', 'film-trailer'],
+  ['plan account outreach to these target accounts', 'account-outreach'], ['make an account profile for Acme Corp', 'account-profile'], ['estimate the billable hours for a website redesign', 'billable-hours'],
+  ['make a mood board for my coffee brand', 'brand-inspiration'], ['what are people saying about Notion', 'brand-reputation'], ['competitive intelligence on Linear and Jira this quarter', 'competitive-intel'],
+  ['graphify my repo', 'graphify'], ['check my PHP app for web shells', 'php2shell-check'], ['help me reverse engineer my own minified bundle', 'reverse-engineer'],
   ['summarize this article', 'summarize'], ['write an email to my landlord', 'email'], ['translate this to Spanish', 'translate'], ['write a SQL query for top customers', 'sql'],
 ];
 const proOff = PRO.map(([t, want]) => [t, ctx.suggestSkill(t)?.id || null, want]).filter(([, got, want]) => got !== want);

@@ -273,7 +273,7 @@ BUILTIN_SKILLS.push(
   sk('sales-emails', 'Sales emails', '🤝', 'marketing', 'text', 'Short outreach and follow-up emails that get replies.',
     'What you sell and to whom…',
     'Write a 4-email sequence: a personalized first email under 120 words, two follow-ups with new value each time, and a polite break-up email. Include subject lines and suggested days between emails.',
-    ['cold email', 'sales email', 'outreach', 'follow.up email']),
+    ['cold email', 'sales email', '(?<!account )outreach', 'follow.up email']),
   sk('personas', 'Customer personas', '👥', 'marketing', 'text', 'Know exactly who you\'re talking to.',
     'Your product and who buys it…',
     'Create 3 customer personas: name and snapshot, goals, frustrations, where they spend time, what makes them buy, objections, and the message that wins them.',

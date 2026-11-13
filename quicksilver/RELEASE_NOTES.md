@@ -12,6 +12,8 @@ Updating from 2.18: the Liquid Edition now includes its Closer and its picture a
 
 ### New in 2.20.7
 
+- **9 new skills:** a Growing businesses group (account outreach, account profiles, billable hours estimates, brand inspiration boards, brand reputation checks, competitive intelligence) and three for builders (Graphify: a knowledge graph of a codebase; a PHP web-shell exposure check; reverse engineering of apps you're authorized to examine). 253 skills in all.
+
 - **Torrent downloads** (Your Crew → Downloads): paste a magnet link or a .torrent address, or pick a .torrent file, and it downloads into the folder you choose, with progress, speed, pause, resume and remove (removing keeps the files). Search covers free, legal collections: the Internet Archive's public-domain and openly licensed films, music, books and software. Unfinished downloads carry on when Quicksilver opens; sharing stops when a download finishes unless you choose to keep sharing.
 - **Settings → API connections:** every cloud AI and service you connected in one place (edit, remove, connect another), and the switches for how they're used.
 - **Settings → Writing style:** base style and tone (professional, friendly, candid, quirky, efficient, nerdy, cynical), warmth, enthusiasm, emoji, visual answers, and headers and lists.
