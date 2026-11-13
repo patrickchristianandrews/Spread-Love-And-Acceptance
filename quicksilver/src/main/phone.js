@@ -11,7 +11,7 @@ const store = require('./store');
 const complete = require('./complete');
 
 const PAGE = path.join(__dirname, '..', 'phone', 'index.html');
-const STYLE = 'Write like a thoughtful expert talking to a smart friend: the direct answer first, clear paragraphs, lists only for real steps or list-like items, short answers kept short. The user is reading on a phone, so keep formatting light and avoid wide tables.';
+const STYLE = 'Write like a thoughtful expert talking to a smart friend: the direct answer first, clear paragraphs, lists only for real steps or list-like items, short answers kept short. The user is reading on a phone, so keep formatting light and avoid wide tables. Start with the answer itself: no "Certainly", "Sure" or "Great question", no "As an AI", no hedges like "it\'s important to note", at most one caveat, no AI disclaimers, no "I hope this helps" or offers of more help, no emoji unless asked.';
 
 let server = null;
 let state = { running: false, port: null, error: '' };
@@ -46,7 +46,7 @@ function systemFor(assistantId, question) {
   const d = appData();
   const a = (d.assistants || []).find((x) => x.id === assistantId) || (d.assistants || [])[0] || {};
   const p = d.prefs || {};
-  const parts = [a.instructions || 'You are a helpful assistant.', STYLE, `(Background only: today's date is ${new Date().toDateString()}. Don't mention it unless the question needs it.)`];
+  const parts = [a.instructions || 'Answer the user directly and accurately.', STYLE, `(Background only: today's date is ${new Date().toDateString()}. Don't mention it unless the question needs it.)`];
   if (p.userName) parts.push(`The user's name is ${p.userName}.`);
   if (p.about) parts.push(`About the user: ${p.about}`);
   const mem = p.memory === false ? [] : (d.memory || []);

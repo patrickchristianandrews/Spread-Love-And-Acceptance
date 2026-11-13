@@ -871,6 +871,20 @@ function redPng(size = 64) {
   assert.equal(hum[0], 'Paris is the capital, and the largest city.\n\n```js\nconst a = 1; // x — y\n```');
   assert.match(hum[1], /knowledgeable friend talking/); assert.match(hum[1], /No em dashes/);
   console.log('✓ human writing: conversational style asked for, chatbot leftovers tidied, code untouched');
+  // Direct answers: the rules are in every system prompt, and filler is taken out of the answer even
+  // with human writing off (openers, "As an AI", hedges, "I'm not sure, but", sign-offs, offers).
+  const direct = await win.evaluate(() => {
+    const raw = 'Sure — As an AI, I don\'t have feelings, but here goes. It\'s important to note that a lumen measures light output. Generally speaking, more lumens means brighter.\n\nI hope this helps!\nWould you like me to compare bulbs?';
+    const on = humanize(raw); S.data.prefs.humanWriting = false;
+    const off = humanize(raw); const sys = systemPrompt(assistantById('as-general'), false, chatById(S.route.id));
+    S.data.prefs.humanWriting = true; return { on, off, sys };
+  });
+  for (const t of [direct.on, direct.off]) {
+    assert.doesNotMatch(t, /^(Sure|Certainly)|As an AI|feelings|important to note|Generally speaking|hope this helps|Would you like/i, t);
+    assert.match(t, /^A lumen measures light output\. More lumens means brighter\.$/, t);
+  }
+  assert.match(direct.sys, /Rules for every answer: the first words are the answer itself/);
+  console.log(`✓ direct answers: rules in the system prompt; filler removed with human writing on and off\n    "${direct.off}"`);
   // No bounce: redrawing the chat you're on plays no entrance animation and keeps your place.
   const still = await win.evaluate(() => { const box = document.getElementById('messages'); render(); return { enter: Boolean(document.querySelector('#main > .enter')), same: render.key === `chat:${S.route.id}` }; });
   assert.equal(still.enter, false, 'no entrance animation when the same chat redraws'); assert.ok(still.same);
