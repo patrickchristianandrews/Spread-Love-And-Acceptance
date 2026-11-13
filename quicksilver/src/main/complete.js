@@ -978,6 +978,24 @@ async function* run(target, req) {
     if (!bg) throw new Error('skipped: no model is loaded, and a background job never loads one');
     target = bg; req = { ...req, level: 'quick' };
   }
+  // A cloud AI picked for you with this PC as the backup (Cloud AI for everything / hard questions):
+  // if it fails before writing anything (no credit, no connection, a refusal of the key), this PC answers.
+  if (req.fallback && parse(target).kind === 'api' && req.fallback !== target && exists(req.fallback)) {
+    const backup = req.fallback;
+    const inner = { ...req }; delete inner.fallback;
+    let wrote = false;
+    try {
+      for await (const ev of run(target, inner)) { if (ev.type === 'text' && ev.text) wrote = true; yield ev; }
+      return;
+    } catch (err) {
+      if (wrote || req.signal?.aborted) throw err;
+      const why = String(err?.message || err).replace(/^Error:\s*/, '').slice(0, 140);
+      yield { type: 'status', text: `${label(target)} didn't answer (${why}), so this PC is answering instead…` };
+      req.onCloudFail?.(target, why);
+      yield* run(backup, inner);
+      return;
+    }
+  }
   if (req.council && !hasImages(req.messages)) { yield* council(target, req); return; }
   if (req.useTools) {
     const list = await toolbox.available(lastUserText(req.messages));

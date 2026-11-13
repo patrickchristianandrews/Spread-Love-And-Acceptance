@@ -10,6 +10,12 @@ Updating from 2.19 or 2.20: nothing extra to download; your chats, settings and 
 
 Updating from 2.18: the Liquid Edition now includes its Closer and its picture and video makers, and Quicksilver does not open until all of them are installed. After the update the setup screen downloads what is missing (about 30 GB) before the app starts. Your chats, settings and the models you already have are kept.
 
+### Coming next
+
+- **Your connected cloud AI is really used now.** Before, connecting Venice (or any cloud AI) did nothing until you found and switched on "Cloud AI for hard questions". Now connecting one switches it on, and on a slower PC (where an everyday answer takes more than about 25 seconds) the new **Cloud AI for everything** too, so every message goes to it. Quicksilver says what it did, with one click to keep answers on your PC, and never changes it again once you've chosen (Settings). The Liquid Edition uses an uncensored one such as Venice first.
+- **Your PC is the backup:** if the cloud AI can't answer (no credit, no connection, a refused key), this PC answers instead and says why.
+- **GIF maker and GIF battle**, next to Meme battle (the sidebar now says Memes & GIFs): describe a GIF and it's made on your PC; a GIF battle turns both memes into GIFs, captions and all, before you vote; and any meme can be made into a GIF.
+
 ### New in 2.20.7
 
 - **Build & ship plug-ins, built into every Liquid Edition** (on by default, nothing to install; switch any off under Connectors → Build & ship). Just ask:

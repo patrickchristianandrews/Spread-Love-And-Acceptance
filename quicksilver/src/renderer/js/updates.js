@@ -317,7 +317,7 @@ function cloudPartnerHTML() {
 }
 document.addEventListener('change', (e) => {
   if (e.target.id !== 'pair-hard') return;
-  S.data.prefs.cloudHard = e.target.checked; save();
+  S.data.prefs.cloudHard = e.target.checked; S.data.prefs.cloudChosen = true; save();
   toast(e.target.checked ? 'On: hard questions go to your cloud AI; everything else stays on your PC.' : 'Off: every answer comes from your PC.');
   render();
 });

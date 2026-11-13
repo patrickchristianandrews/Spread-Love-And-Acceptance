@@ -119,6 +119,33 @@ const TINY = path.join(__dirname, 'fixtures', 'tiny.gguf');
   assert.ok(crew.line.length && crew.line.every((t) => t === 'Quicksilver Liquid Edition'), `answers are headed by the stack: ${crew.line}`);
   assert.equal(crew.name, 'Everyday Helper');
   assert.ok(!crew.crewNames.includes('Quicksilver'), 'no crew member is called Quicksilver');
+  // Connect a cloud AI on a slow PC: it's used (for every message), with this PC as the backup,
+  // and one click keeps answers on this PC; once you've chosen, it never changes by itself.
+  const cl = await win.evaluate(async () => {
+    const realEta = etaFor; const realToast = toastAction; let said = null; const p = S.data.prefs; const was = { h: p.cloudHard, a: p.cloudAll, c: p.cloudChosen };
+    const t = { target: 'api:vtest2:venice-uncensored', label: 'venice-uncensored', name: 'venice-uncensored', group: 'Venice' };
+    S.providers.push({ id: 'vtest2', preset: 'venice', name: 'Venice' }); S.targets.push(t);
+    etaFor = (target, words) => (String(target).startsWith('api:') ? 5 : 60); // this PC: a minute an answer
+    toastAction = (msg, label, fn) => { said = { msg, label, fn }; };
+    try {
+      delete p.cloudChosen; p.cloudHard = false; p.cloudAll = false;
+      cloudAutoOn();
+      const on = { hard: p.cloudHard, all: p.cloudAll, toast: said ? `${said.msg} ${said.label}` : '' };
+      const chat = { id: 'c-cloud', messages: [], assistantId: 'as-general' };
+      const pick = autoPick(chat, assistantById('as-general'), 'hello there', false);
+      said?.fn();
+      const off = { hard: p.cloudHard, all: p.cloudAll, chosen: p.cloudChosen };
+      cloudAutoOn();
+      const after = { hard: p.cloudHard, all: p.cloudAll };
+      return { on, pick, off, after };
+    } finally { etaFor = realEta; toastAction = realToast; S.providers = S.providers.filter((x) => x.id !== 'vtest2'); S.targets = S.targets.filter((x) => x !== t); Object.assign(p, { cloudHard: was.h, cloudAll: was.a }); if (was.c === undefined) delete p.cloudChosen; else p.cloudChosen = was.c; }
+  });
+  assert.deepEqual([cl.on.hard, cl.on.all], [true, true], `connecting a cloud AI on a slow PC turns it on for everything: ${JSON.stringify(cl)}`);
+  assert.match(cl.on.toast, /Venice[^,]* is connected, so it now answers your messages[\s\S]*Keep answers on this PC/, JSON.stringify(cl));
+  assert.equal(cl.pick.target, 'api:vtest2:venice-uncensored', 'an everyday message goes to Venice');
+  assert.equal(cl.pick.fallback, 'stack:quicksilver', 'with the Liquid Edition as the backup');
+  assert.deepEqual([cl.off.hard, cl.off.all, cl.off.chosen], [false, false, true], 'one click keeps answers on this PC');
+  assert.deepEqual([cl.after.hard, cl.after.all], [false, false], 'and that choice sticks');
   // With Venice connected, a picture this PC can't make (out of memory) is made by Venice instead,
   // says so, and Venice goes first for the rest of the session.
   const fb = await win.evaluate(async () => {
@@ -165,6 +192,6 @@ const TINY = path.join(__dirname, 'fixtures', 'tiny.gguf');
   assert.match(venice.rec, /less Venice use than Venice alone/); assert.match(venice.pics, /Lustify on your PC/);
   assert.deepEqual(errors, []);
   await app.close();
-  console.log('✓ Liquid Edition chat: just asking makes a picture with Lustify; follow-ups continue; ordinary messages get ordinary answers; every kind of skill has its maker in the Liquid Edition; Code chat opens a chat set up for programming; Venice suggestions say what the pairing saves, speeds up and how good it is; a failed picture stays on screen and says why; with Venice connected, a picture this PC can\'t make is made by Venice instead');
+  console.log('✓ Liquid Edition chat: just asking makes a picture with Lustify; follow-ups continue; ordinary messages get ordinary answers; every kind of skill has its maker in the Liquid Edition; Code chat opens a chat set up for programming; Venice suggestions say what the pairing saves, speeds up and how good it is; a failed picture stays on screen and says why; with Venice connected, a picture this PC can\'t make is made by Venice instead; a connected cloud AI is used (for everything on a slow PC) with this PC as the backup');
   process.exit(0);
 })().catch((e) => { console.error(`FAIL ${e.message}`); process.exit(1); });

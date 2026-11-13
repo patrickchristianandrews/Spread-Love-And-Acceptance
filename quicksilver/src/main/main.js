@@ -462,7 +462,7 @@ ipcMain.on('chat:send', async (_e, p) => {
     const cfg = store.config();
     for await (const ev of complete.run(p.target, {
       messages: p.messages, temperature: p.temperature, maxTokens: p.maxTokens, contextSize: p.contextSize, gpu: p.gpu,
-      effort: p.effort, level: p.level, signal: controller.signal, useTools: Boolean(p.tools), council: Boolean(p.council), councilCloud: Boolean(p.councilCloud), noMuse: Boolean(p.noMuse), ...(p.noSteps ? { stepByStep: false } : {}),
+      effort: p.effort, level: p.level, signal: controller.signal, useTools: Boolean(p.tools), ...(p.fallback ? { fallback: String(p.fallback) } : {}), council: Boolean(p.council), councilCloud: Boolean(p.councilCloud), noMuse: Boolean(p.noMuse), ...(p.noSteps ? { stepByStep: false } : {}),
       approve: (q) => askApproval(p.requestId, q, controller.signal), requestId: p.requestId,
       onStatus: (text) => send({ type: 'status', text }),
       onStep: (step) => send({ type: 'step', step: { ...step } }),

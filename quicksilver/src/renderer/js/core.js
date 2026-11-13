@@ -129,7 +129,7 @@ async function refreshModels() {
   S.upgrades = null;
   await refreshSpeeds();
 }
-async function refreshProviders() { S.providers = await qs.call('providers:list'); S.targets = await qs.call('targets:list'); refreshSpeeds(); }
+async function refreshProviders() { S.providers = await qs.call('providers:list'); S.targets = await qs.call('targets:list'); refreshSpeeds().then(() => { if (typeof cloudAutoOn === 'function') cloudAutoOn(); }); }
 
 // ---------- how long things take on this PC ----------
 // Typical answer lengths (words) for each kind of job.

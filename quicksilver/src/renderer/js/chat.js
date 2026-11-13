@@ -789,11 +789,12 @@ function chatHistory(chat, a, upTo, skill = null) {
 async function generate(chat, rerollMsg, withTarget, opts = {}) {
   const a = assistantById(chat.assistantId);
   let autoWhy = '';
+  let fallback = '';
   let target = withTarget || resolveTarget(chat, a);
   if (!withTarget && autoOn(chat, a) && effortOf(chat, a) !== 'max') {
     const q = [...chat.messages.slice(0, rerollMsg ? chat.messages.indexOf(rerollMsg) : chat.messages.length)].reverse().find((m) => m.role === 'user');
     const pick = autoPick(chat, a, q?.text || '', (q?.attachments || []).some((x) => x.type === 'image' || x.type === 'video'));
-    if (pick.target) { target = pick.target; autoWhy = pick.why || ''; }
+    if (pick.target) { target = pick.target; autoWhy = pick.why || ''; fallback = pick.fallback || ''; }
   }
   if (!target) { needModel(chat); return; }
   // Parental lock: uncensored models/teams need the PIN first.
@@ -908,7 +909,7 @@ async function generate(chat, rerollMsg, withTarget, opts = {}) {
   alt.status = 'Thinking…';
   pending.sent = true; // from here Stop is a message to the engine
   qs.sendChat({
-    requestId, target, messages,
+    requestId, target, messages, ...(fallback ? { fallback } : {}),
     temperature: Number(chat.temperature ?? a.temperature ?? p.temperature),
     maxTokens: ((n) => (lengthOf(chat) === 'short' && !appWork ? Math.min(n, LENGTHS.short.tokens) : lengthOf(chat) === 'long' ? Math.max(n, LENGTHS.long.tokens) : target === 'stack:quicksilver' && !appWork && !skill && a.job !== 'coding' && chat.maxTokens == null ? Math.min(n, 1200) : n))(Math.max(appWork && chat.maxTokens == null ? 8192 : 0, Math.round(maxOf(chat, a) * (effortOf(chat, a) === 'max' && chat.maxTokens == null ? 1.5 : 1)))),
     contextSize: ctx,

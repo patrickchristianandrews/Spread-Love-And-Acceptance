@@ -3,7 +3,7 @@
 
 const DEFAULT_PREFS = {
   userName: '', about: '', textSize: 'normal', defaultTarget: '', temperature: 0.6, contextSize: 16384, maxTokens: 2048,
-  gpu: 'auto', effort: 'medium', effortLevel: 'thorough', simple: true, autoRoute: true, autoWeb: true, autoFix: true, cloudHard: false, theme: 'dark', factCheck: false, factChecker: '', lastAssistant: 'as-general', sourcesPerAnswer: 8,
+  gpu: 'auto', effort: 'medium', effortLevel: 'thorough', simple: true, autoRoute: true, autoWeb: true, autoFix: true, cloudHard: false, cloudAll: false, theme: 'dark', factCheck: false, factChecker: '', lastAssistant: 'as-general', sourcesPerAnswer: 8,
 };
 
 // More ready-made assistants for everyday uses. Each borrows the settings of the team type that

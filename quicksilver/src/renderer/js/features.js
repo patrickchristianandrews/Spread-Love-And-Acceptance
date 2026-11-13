@@ -11,6 +11,7 @@ const FEATURES = [
   ['checkUnsure', false, '🔢', 'Double-check uncertain numbers', 'When the model seems unsure of a number, a second model quietly checks just that number (only when Double-check every answer is off).', 'Catches shaky figures without checking the whole answer.', 'Nothing is double-checked automatically; you can still check any answer from its menu.', 'Accuracy'],
   ['autoWeb', true, '🌐', 'Automatic web search', 'Searches the web first for questions about current things (news, prices, today\'s facts).', 'Up-to-date answers with sources.', 'Nothing goes online while Quicksilver is offline: web search follows the Online/Offline switch at the top of the chat. Answers about recent events may be out of date.', 'Online'],
   ['cloudHard', false, '☁️', 'Cloud AI for hard questions', 'Sends hard questions to your connected cloud AI, the Liquid Edition\'s too (an uncensored one such as Venice is used first).', 'A much bigger model on the hardest questions.', 'Everything stays on this PC: more private, works offline, no cloud costs.', 'Online'],
+  ['cloudAll', false, '☁️', 'Cloud AI for everything', 'Every message goes to your connected cloud AI (the Liquid Edition uses an uncensored one such as Venice first); this PC answers when you are offline or the cloud doesn\'t.', 'Fast, strong answers even on a slow PC.', 'Everyday answers come from this PC: private and free.', 'Speed'],
   ['autoTools', true, '🔌', 'Use connected apps automatically', 'When you mention a connected app ("my Gmail", "my calendar"), the AI can use it in that chat.', 'Just ask; it looks things up in your apps.', 'Apps are only used when you turn on Tools in a chat: more control, one more click.', 'Online'],
   ['memory', true, '🧠', 'Memory', 'Remembers facts about you across chats and uses the ones that matter.', 'Answers that fit you without repeating yourself.', 'Nothing is remembered between chats; each one starts fresh (what\'s saved stays until you clear it in Memory).', 'Personal'],
   ['memoryLearn', true, '👂', 'Notice things to remember', 'Picks up lasting facts on its own (your job, your tools), as well as when you say "remember…".', 'Memory fills itself in.', 'Only what you ask it to remember is kept, and a little background work is saved.', 'Personal'],
@@ -30,6 +31,7 @@ const FEATURE_PC = {
   checkUnsure: [['Shaky numbers get a quick second opinion', 'Much cheaper than checking the whole answer'], ['A second model runs on some answers (a few seconds)']],
   autoWeb: [['Up-to-date answers about news, prices and today\'s facts', 'Sources you can click'], ['Questions about current things are sent to a search engine']],
   cloudHard: [['A much bigger model on the hardest questions'], ['Hard questions leave your PC', 'May cost money or use up a free plan\'s daily limit', 'Needs internet']],
+  cloudAll: [['Fast answers from a big model, however slow this PC is', 'This PC still answers offline or if the cloud fails'], ['Your messages leave your PC', 'May cost money or use up a free plan\'s daily limit', 'Needs internet']],
   autoTools: [['Just ask: it looks things up in your connected apps'], ['The AI can read connected apps whenever you mention them']],
   memory: [['Answers fit you without repeating yourself', 'Remembers your preferences, projects and people'], ['What you share is kept on this PC until you clear it']],
   memoryLearn: [['Memory fills itself in as you chat'], ['It may keep something you\'d rather it didn\'t (you can delete any memory)', 'A little background work after chats']],
@@ -72,7 +74,7 @@ function featuresHTML() {
     ${groups.map((g) => `<section class="card og-sec"><h3>${esc(g)}</h3>${FEATURES.filter((f) => f[7] === g).map(([key, , icon, name, what, on, off]) => {
       const isOn = featureOn(key);
       const pc = featurePC(key);
-      return `<div class="feat ${isOn ? 'on' : 'off'}"><label class="feat-top"><input type="checkbox" data-feature="${key}" ${isOn ? 'checked' : ''} ${key === 'cloudHard' && !S.providers?.length ? 'disabled title="Connect a cloud AI first"' : ''}><span class="grow"><b>${icon} ${esc(name)}</b> <span class="feat-state">${isOn ? 'On' : 'Off'}</span><span class="small muted feat-what">${esc(what)}</span></span></label>
+      return `<div class="feat ${isOn ? 'on' : 'off'}"><label class="feat-top"><input type="checkbox" data-feature="${key}" ${isOn ? 'checked' : ''} ${(key === 'cloudHard' || key === 'cloudAll') && !S.providers?.length ? 'disabled title="Connect a cloud AI first"' : ''}><span class="grow"><b>${icon} ${esc(name)}</b> <span class="feat-state">${isOn ? 'On' : 'Off'}</span><span class="small muted feat-what">${esc(what)}</span></span></label>
         <div class="feat-ab"><div class="${isOn ? 'now' : ''}"><span class="small"><b>With it on:</b> ${esc(on)}</span>${pcListHTML(pc.onPro, pc.onCon)}</div><div class="${isOn ? '' : 'now'}"><span class="small"><b>With it off:</b> ${esc(off)}</span>${pcListHTML(pc.offPro, pc.offCon)}</div></div></div>`;
     }).join('')}</section>`).join('')}`;
 }
@@ -85,6 +87,7 @@ function bindFeatures() {
     if (!(await featureConfirm(key, want))) return;
     e.target.checked = want;
     S.data.prefs[key] = want;
+    if (key === 'cloudHard' || key === 'cloudAll') S.data.prefs.cloudChosen = true; // your choice: never changed by itself again
     save(); render();
     toast(`${f[3]} ${e.target.checked ? 'on' : 'off'}: ${e.target.checked ? f[5] : f[6]}`, 7000);
   }));

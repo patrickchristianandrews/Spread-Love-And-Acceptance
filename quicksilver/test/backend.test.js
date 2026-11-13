@@ -1614,6 +1614,21 @@ async function collect(gen) {
     console.log('✓ stacks: inner steps skip the reasoning pass, no self-review, honest status');
   }
 
+  // A cloud AI picked for you with this PC as the backup: when it can't answer (no credit, no
+  // connection), this PC answers instead and says so; when it answers, this PC isn't used.
+  {
+    const down = providers.upsert({ preset: 'custom', name: 'Down Cloud', baseUrl: 'http://127.0.0.1:9/v1', models: ['big-model'] }, 'sk-x');
+    const failed = [];
+    models.add({ id: 'backup-pc', name: 'Backup on this PC', kind: 'text', files: { model: copy('backup.gguf') }, size: 2e9 });
+    const r = await collect(complete.run(`api:${down.id}:big-model`, { messages: [{ role: 'user', content: 'Hello cloud' }], maxTokens: 60, contextSize: 2048, fallback: 'local:backup-pc', onCloudFail: (t, why) => failed.push([t, why]) }));
+    assert.match(r.text, /Answer from/, `this PC answered: ${r.text}`);
+    assert.ok(r.status.some((t) => /Down Cloud.*didn't answer.*this PC is answering instead/.test(t)), `and says why: ${r.status}`);
+    assert.equal(failed.length, 1);
+    await assert.rejects(collect(complete.run(`api:${down.id}:big-model`, { messages: [{ role: 'user', content: 'Hello cloud' }], maxTokens: 60, contextSize: 2048 })), 'without a backup the error is shown as before');
+    providers.remove(down.id); models.remove('backup-pc');
+    console.log('✓ cloud AI with this PC as backup: a cloud that cannot answer hands over to this PC, and says so');
+  }
+
   console.log('\nBACKEND TESTS PASSED');
   process.exit(0);
 })().catch((e) => { console.error('FAIL', e); llama.stopAll(); process.exit(1); });

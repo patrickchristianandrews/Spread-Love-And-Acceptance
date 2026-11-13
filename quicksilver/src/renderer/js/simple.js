@@ -50,15 +50,45 @@ function learnSignal(job, target, kind, w = 1) {
   rec[kind] = (rec[kind] || 0) + w;
 }
 
+// You connected a cloud AI: use it. Until you choose yourself (Settings), connecting one turns on
+// "Cloud AI for hard questions", and on a slow PC (an everyday answer takes more than ~25 seconds
+// here) "Cloud AI for everything" too. This PC still answers offline or when the cloud can't.
+// Says what it did, with one click to keep answers on this PC.
+function cloudAutoOn() {
+  const p = S.data?.prefs;
+  if (!p || p.cloudChosen || S.config?.offline || !S.speed) return;
+  const base = resolveTarget(null, null);
+  if (!base || base.startsWith('api:')) return;
+  const cloud = (liquidOk(base) && bestApiTarget('general', (t) => liquidOk(t))) || bestApiTarget('general');
+  if (!cloud) return;
+  const secs = etaFor(base, WORDS.chat);
+  const slow = secs != null && secs > 25;
+  p.cloudHard = true;
+  if (slow) p.cloudAll = true;
+  p.cloudChosen = 'auto';
+  save();
+  const name = apiServiceName(cloud);
+  toastAction(slow
+    ? `☁️ ${name} is connected, so it now answers your messages: this PC takes about ${fmtSec(secs)} an answer. This PC still answers when you're offline or ${name} can't.`
+    : `☁️ ${name} is connected, so it now takes your hard questions; everyday ones stay on this PC.`,
+  'Keep answers on this PC', () => { p.cloudHard = false; p.cloudAll = false; p.cloudChosen = true; save(); toast('Answers stay on this PC. Change it any time in Settings (Cloud AI for hard questions / for everything).', 8000); }, 16000);
+}
+
 function autoPick(chat, a, text, hasImage) {
   const base = resolveTarget(chat, a);
   const job = jobOfQuestion(text || '', a);
   // Your own cloud AI for the hardest questions, if you switched that on (it uses your credits).
   // When several cloud AIs are connected, use the one that's best for this kind of question.
+  // With "Cloud AI for everything", every message (a photo too, when that cloud AI can see).
+  const cloudFor = (photo) => { const ok = (t) => !photo || S.speed?.targets?.[t]?.vision || S.targets.find((x) => x.target === t)?.vision; return (liquidOk(base) && bestApiTarget(job, (t) => liquidOk(t) && ok(t))) || bestApiTarget(job, ok); };
+  if (S.data.prefs.cloudAll && !S.config?.offline) {
+    const cloud = cloudFor(hasImage);
+    if (cloud && cloud !== base) return { target: cloud, fallback: base?.startsWith('api:') ? '' : base, why: `Cloud AI for everything: ${apiServiceName(cloud)}, your best connected cloud AI ${AUTO_WHY[job] || 'for this question'}. This PC answers if it can't.` };
+  }
   if (S.data.prefs.cloudHard && !S.config?.offline && !hasImage && looksHard(text || '')) {
     // The Liquid Edition may use any cloud AI you connected; an uncensored one (Venice…) comes first.
-    const cloud = (liquidOk(base) && bestApiTarget(job, (t) => liquidOk(t))) || bestApiTarget(job);
-    if (cloud) return { target: cloud, why: `Picked automatically: ${apiServiceName(cloud)}, your best connected cloud AI ${AUTO_WHY[job] || 'for this question'}, for a hard question.` };
+    const cloud = cloudFor(false);
+    if (cloud) return { target: cloud, fallback: base?.startsWith('api:') ? '' : base, why: `Picked automatically: ${apiServiceName(cloud)}, your best connected cloud AI ${AUTO_WHY[job] || 'for this question'}, for a hard question.` };
   }
   const T = S.speed?.targets;
   if (!T || !base) return { target: base };
