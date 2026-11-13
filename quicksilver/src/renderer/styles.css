@@ -1601,3 +1601,14 @@ code.sel { user-select: all; background: var(--soft); padding: 1px 6px; border-r
 
 /* Update notes: the whole "What's new" readable in its own scroll area. */
 #upd-notes .upd-notes { max-height: 420px; overflow-y: auto; padding-right: 6px; margin-top: 6px; }
+
+/* Buying a new computer: desktop and laptop with prices, and the computer calculator. */
+.tier-buy { display: grid; gap: 6px; margin: 8px 0; padding: 8px 10px; border-radius: 10px; background: var(--panel-2, rgba(127,127,127,.07)); text-align: left; }
+.pc-calc { margin-top: 14px; }
+.pc-calc-form { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 10px; }
+.pc-calc-form label { display: flex; flex-direction: column; gap: 4px; font-size: .82rem; font-weight: 700; }
+.pc-calc-out { margin-top: 12px; border-top: 1px solid var(--line); padding-top: 12px; }
+.pcc-verdict { margin-bottom: 10px; }
+.pcc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 10px; }
+.pcc-grid .k { font-size: .75rem; text-transform: uppercase; letter-spacing: .04em; opacity: .7; font-weight: 700; }
+.pcc-grid .v { font-size: 1.15rem; font-weight: 800; }

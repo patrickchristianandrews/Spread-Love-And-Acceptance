@@ -386,6 +386,7 @@ function scoreFor(m, job) {
 // Rough memory bandwidth (GB/s), which is what decides how fast a model writes.
 function gpuBandwidth(hw) {
   if (!hw.vramGB) return 0;
+  if (hw.bandwidthGBs) return hw.bandwidthGBs; // a known card's real memory speed (the PC calculator)
   if (hw.unifiedMemory) return hw.ramGB >= 64 ? 400 : 200; // Apple silicon
   const v = hw.vramGB;
   return v >= 20 ? 850 : v >= 14 ? 550 : v >= 10 ? 400 : v >= 7 ? 300 : v >= 5 ? 200 : 120;
@@ -407,8 +408,8 @@ function estimateText(m, hw, calib = 1) {
   else if (vram && need <= vram + ram) {
     fit = 'split';
     const gpuShare = Math.max(0, (vram - 0.8) / m.sizeGB);
-    tps = 1 / ((readGB * gpuShare) / (0.6 * bwG) + (readGB * (1 - gpuShare)) / (0.6 * CPU_BANDWIDTH));
-  } else if (need <= ram) { fit = 'cpu'; tps = (0.6 * CPU_BANDWIDTH) / readGB; }
+    tps = 1 / ((readGB * gpuShare) / (0.6 * bwG) + (readGB * (1 - gpuShare)) / (0.6 * (hw.cpuBandwidthGBs || CPU_BANDWIDTH)));
+  } else if (need <= ram) { fit = 'cpu'; tps = (0.6 * (hw.cpuBandwidthGBs || CPU_BANDWIDTH)) / readGB; }
   else return { fit: 'no', rating: 'wont', label: `Won't fit (needs about ${Math.ceil(need)} GB)`, tps: 0, need };
   tps *= calib;
   const rating = tps >= 25 ? 'great' : tps >= 10 ? 'good' : tps >= 4 ? 'ok' : 'slow';

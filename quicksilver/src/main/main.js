@@ -152,22 +152,30 @@ handle('guide:speeds', async (tiers) => {
   const hw = await hardware.detect();
   const calib = store.config().calib?.text || 1;
   const brain = catalog.TEXT_MODELS.find((m) => m.id === 'qwen3-4b');
-  const est = (m, h, c = 1) => catalog.estimateText(m, h, c);
-  const here = est(brain, hw, calib);
-  const big = ['qwen3-30b-a3b-uncensored', 'qwen3-14b-uncensored', 'qwen3-8b-uncensored'].map((id) => catalog.TEXT_MODELS.find((m) => m.id === id)).filter(Boolean);
+  const here = catalog.estimateText(brain, hw, calib);
   const out = {};
   for (const t of tiers || []) {
     const vram = Number.isFinite(t.minVram) ? t.minVram : ({ 1: 0, 2: 8, 3: 16, 4: 24 })[t.n] ?? 0;
     const ram = Math.max(16, Number(String(t.ram || '').match(/\d+/)?.[0]) || 16);
     const h = { ramGB: ram, freeRamGB: ram * 0.7, vramGB: vram, vramFreeGB: vram ? vram - 0.5 : 0, cpuCores: vram >= 16 ? 12 : 8, gpuName: vram ? `${vram} GB graphics card` : '', backend: vram ? 'cuda' : 'cpu' };
-    const q = est(brain, h);
+    out[t.n] = pcEstimate(h, here);
+  }
+  return { here: { wps: Math.round(here.wordsPerSec || 0), answerSec: here.wordsPerSec ? Math.round(300 / here.wordsPerSec) : null, measured: Boolean(store.config().calib?.text) }, tiers: out };
+});
+// What a computer with these specs would do in Quicksilver (Your PC → the computer calculator).
+function pcEstimate(h, here) {
+  const brain = catalog.TEXT_MODELS.find((m) => m.id === 'qwen3-4b');
+  const est = (m, hh) => catalog.estimateText(m, hh, 1);
+  const big = ['qwen3-30b-a3b-uncensored', 'qwen3-14b-uncensored', 'qwen3-8b-uncensored'].map((id) => catalog.TEXT_MODELS.find((m) => m.id === id)).filter(Boolean);
+  const q = est(brain, h);
+  {
     const best = big.find((m) => ['great', 'good'].includes(est(m, h).rating));
     // The strongest setup this kind of PC could run, and what it would be able to do.
     const adv = catalog.advise('general', h, { calib: 1, installed: [] }).best;
     const profiles = adv ? adv.ids.map((id) => catalog.TEXT_MODELS.find((m) => m.id === id)).filter(Boolean) : [];
     const topImg = catalog.MEDIA_MODELS.filter((m) => m.kind === 'image' && !m.uncensored && !m.retired && catalog.estimateMedia(m, h).fit !== 'no').sort((a, b) => (b.quality || 0) - (a.quality || 0))[0];
     const topVid = catalog.MEDIA_MODELS.filter((m) => m.kind === 'video' && catalog.estimateMedia(m, h).fit !== 'no').sort((a, b) => (b.quality || 0) - (a.quality || 0))[0];
-    out[t.n] = {
+    return {
       wps: Math.round(q.wordsPerSec || 0), answerSec: q.wordsPerSec ? Math.round(300 / q.wordsPerSec) : null,
       times: here.wordsPerSec && q.wordsPerSec ? q.wordsPerSec / here.wordsPerSec : null,
       best: best ? { name: best.name, wps: Math.round(est(best, h).wordsPerSec || 0) } : null,
@@ -177,7 +185,27 @@ handle('guide:speeds', async (tiers) => {
       video: topVid ? { name: topVid.name, sec: Math.round(catalog.estimateMedia(topVid, h).sec || 0) } : null,
     };
   }
-  return { here: { wps: Math.round(here.wordsPerSec || 0), answerSec: here.wordsPerSec ? Math.round(300 / here.wordsPerSec) : null, measured: Boolean(store.config().calib?.text) }, tiers: out };
+}
+handle('guide:estimate', async (spec) => {
+  const hw = await hardware.detect();
+  const calib = store.config().calib?.text || 1;
+  const brain = catalog.TEXT_MODELS.find((m) => m.id === 'qwen3-4b');
+  const here = catalog.estimateText(brain, hw, calib);
+  const n = (v, lo, hi, d) => { const x = Number(v); return Number.isFinite(x) ? Math.min(hi, Math.max(lo, x)) : d; };
+  const vram = n(spec?.vramGB, 0, 96, 0); const ram = n(spec?.ramGB, 4, 512, 16); const laptop = Boolean(spec?.laptop);
+  // Laptop cards run at lower power: about 85% of the speed their memory alone would give.
+  const bw = spec?.bandwidthGBs ? n(spec.bandwidthGBs, 50, 4000, 0) * (laptop && !spec.bandwidthIsLaptop ? 0.85 : 1) : 0;
+  const h = { ramGB: ram, freeRamGB: ram * 0.7, vramGB: vram, vramFreeGB: vram ? vram - 0.5 : 0, cpuCores: n(spec?.cores, 2, 64, 8), gpuName: spec?.gpuName || (vram ? `${vram} GB graphics card` : ''), backend: vram ? (spec?.nvidia === false ? 'vulkan' : 'cuda') : 'cpu',
+    ...(bw ? { bandwidthGBs: bw } : {}), cpuBandwidthGBs: spec?.ddr5 === false ? 40 : laptop ? 60 : 70 };
+  const r = pcEstimate(h, here);
+  // Which Liquid Editions it runs, the chat models that run well, and room for models.
+  const fits = (P) => vram >= P.minVramGB - 0.5 && ram >= P.minRamGB - 2;
+  const editions = [{ id: 'quicksilver', name: 'Liquid Edition', ok: true }, { id: 'quicksilver-max', name: 'Liquid Edition Max', ok: fits(catalog.LIQUID_MAX) }, { id: 'quicksilver-pro', name: 'Liquid Edition Pro', ok: fits(catalog.LIQUID_PRO) }];
+  const runs = catalog.TEXT_MODELS.filter((m) => !m.retired).map((m) => ({ m, e: catalog.estimateText(m, h, 1) })).filter((x) => ['great', 'good'].includes(x.e.rating))
+    .sort((a, b) => b.m.sizeGB - a.m.sizeGB).slice(0, 6).map((x) => ({ name: x.m.name, wps: Math.round(x.e.wordsPerSec), where: x.e.fit }));
+  const disk = n(spec?.diskGB, 0, 64000, 0);
+  const needGB = 32 + (editions[2].ok ? 75 : editions[1].ok ? 50 : 0);
+  return { ...r, editions, runs, here: { wps: Math.round(here.wordsPerSec || 0) }, disk: disk ? { gb: disk, enough: disk >= needGB + 100, needGB } : null, laptop };
 });
 // Better models for what's installed (from the built-in and online model picks).
 handle('models:upgrades', async () => require('./catalog-remote').upgradesFor(models.list(), await hardware.detect(), store.config().calib?.text || 1));

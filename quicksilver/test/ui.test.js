@@ -1284,6 +1284,37 @@ function redPng(size = 64) {
   await win.click('.tier[data-tier-pick="1"]');
   await win.waitForFunction(() => /Tier 1/.test(document.querySelector('.tier-ability')?.innerText || ''));
   assert.notEqual(t4, await win.locator('.tier-ability').innerText(), 'the abilities change with the chosen computer');
+  // Picking a computer keeps the page where it was (it used to jump back to the top).
+  await win.locator('.tier[data-tier-pick="3"]').scrollIntoViewIfNeeded();
+  const topBefore = await win.evaluate(() => document.querySelector('#main .page').scrollTop);
+  assert.ok(topBefore > 100, 'scrolled down to the computers');
+  await win.click('.tier[data-tier-pick="3"]');
+  await win.waitForFunction(() => /Tier 3/.test(document.querySelector('.tier-ability')?.innerText || ''));
+  assert.ok(Math.abs(await win.evaluate(() => document.querySelector('#main .page').scrollTop) - topBefore) < 5, 'the page did not move');
+  // Each kind of computer as a desktop and a laptop, with what it costs.
+  const t3card = await win.locator('.tier[data-tier-pick="3"] .tier-buy').innerText();
+  assert.match(t3card, /Desktop ~\$[\d,]+–[\d,]+[\s\S]*Laptop ~\$[\d,]+–[\d,]+/);
+  // The computer calculator: type in a computer's specs, see what Quicksilver would do on it.
+  await win.waitForFunction(() => /words\/s/.test(document.querySelector('#pcc-out')?.innerText || ''), null, { timeout: 15000 });
+  const calc = async () => win.locator('#pcc-out').innerText();
+  const desk = await calc();
+  assert.match(desk, /Tier\s*3[\s\S]*desktop like this costs about \$[\d,]+–[\d,]+[\s\S]*words\/s[\s\S]*Liquid Editions:[\s\S]*Liquid Edition Max/i);
+  await win.selectOption('#pcc-card', 'l4060');
+  await win.waitForFunction((was) => document.querySelector('#pcc-out').innerText !== was, desk);
+  const lap = await calc();
+  assert.equal(await win.locator('#pcc-type').inputValue(), 'laptop', 'a laptop card switches the type to laptop');
+  assert.match(lap, /Tier\s*2[\s\S]*laptop like this costs about \$/i);
+  assert.match(lap, /✗ Liquid Edition Pro/);
+  await win.selectOption('#pcc-card', 'rtx5090'); await win.selectOption('#pcc-type', 'desktop'); await win.selectOption('#pcc-ram', '64');
+  await win.waitForFunction(() => /Tier\s*4/i.test(document.querySelector('#pcc-out').innerText) && /✓ Liquid Edition Pro/.test(document.querySelector('#pcc-out').innerText));
+  const big = Number((await calc()).match(/~(\d+) words\/s/)[1]); const small = Number(lap.match(/~(\d+) words\/s/)[1]);
+  assert.ok(big > small, `an RTX 5090 desktop answers faster than an RTX 4060 laptop (${big} vs ${small} words/s)`);
+  await win.selectOption('#pcc-card', 'other');
+  assert.ok(await win.locator('#pcc-vram').isVisible(), 'another card: type its memory');
+  await win.fill('#pcc-vram', '0'); await win.locator('#pcc-vram').dispatchEvent('change');
+  await win.waitForFunction(() => /Tier\s*1/i.test(document.querySelector('#pcc-out').innerText) && /Chat works on the processor/.test(document.querySelector('#pcc-out').innerText));
+  await win.locator('#pc-calc').scrollIntoViewIfNeeded();
+  await shot(win, '06d-pc-calculator');
   // Upgrades: faster (same models) vs smarter (a bigger model), with cost and cheaper alternatives.
   await win.waitForSelector('.upg-grid .upg', { timeout: 20000 });
   await win.locator('#upgrades').scrollIntoViewIfNeeded();
@@ -1294,7 +1325,7 @@ function redPng(size = 64) {
   await shot(win, '06c-upgrades');
   await win.locator('#new-pc').scrollIntoViewIfNeeded();
   await shot(win, '06b-new-pc-speeds');
-  console.log('✓ models + your PC (buying guide changes model abilities; clearer upgrades with costs)');
+  console.log('✓ models + your PC (buying guide changes model abilities without moving the page; desktop and laptop prices; the computer calculator; clearer upgrades with costs)');
 
   // Studio: create an image, edit it, make a video.
   await win.click('[data-nav="studio"]');

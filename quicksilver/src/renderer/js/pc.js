@@ -46,7 +46,13 @@ views.pc = {
     </div>`;
   },
   bind() {
-    $$('[data-tier-pick]').forEach((b) => b.addEventListener('click', () => { S.tierPick = Number(b.dataset.tierPick); render(); }));
+    // Picking a computer only changes the cards and the "could do" panel: the page stays put.
+    $$('[data-tier-pick]').forEach((b) => b.addEventListener('click', () => {
+      S.tierPick = Number(b.dataset.tierPick);
+      $$('[data-tier-pick]').forEach((x) => x.classList.toggle('picked', x === b));
+      const box = document.querySelector('.tier-ability'); if (box) box.outerHTML = tierAbilityHTML(S.tierPick, S.est?.hardware);
+    }));
+    bindPcCalc();
     $$('[data-upg-to]').forEach((b) => b.addEventListener('click', (e) => {
       e.preventDefault();
       const card = document.querySelector(`.upg[data-upg-id="${b.dataset.upgTo}"]`);
@@ -70,6 +76,13 @@ views.pc = {
 qs.onBench((text) => { const o = $('#bench-out'); if (o && benchState === 'running') o.textContent = text; });
 
 // ---------- buying a new computer: what to get for each kind of use ----------
+// For each tier: a desktop and a laptop, with rough US prices (late 2026; check current prices).
+const PC_BUY = {
+  1: { desktop: { cost: '$450–700', ex: 'Core i5 / Ryzen 5, 16 GB, 512 GB SSD (Dell, HP, Lenovo desktops)' }, laptop: { cost: '$500–800', ex: 'Any 16 GB laptop (Acer Aspire, Lenovo IdeaPad Slim 5, HP 15)' } },
+  2: { desktop: { cost: '$900–1,300', ex: 'RTX 5060 8 GB, 32 GB RAM (MSI Codex, iBUYPOWER Slate)' }, laptop: { cost: '$1,000–1,500', ex: 'RTX 5060 / 5070 Laptop 8 GB, 32 GB RAM (Lenovo LOQ, ASUS TUF A16, HP Victus)' } },
+  3: { desktop: { cost: '$1,500–2,300', ex: 'RTX 5060 Ti 16 GB or 5070 Ti 16 GB, 32–64 GB RAM (ZOTAC MEK, Skytech, CyberPowerPC)' }, laptop: { cost: '$2,600–3,600', ex: 'RTX 5080 Laptop 16 GB, 32 GB RAM (Lenovo Legion Pro 7i, ASUS ROG Strix G16, MSI Vector)' } },
+  4: { desktop: { cost: '$3,500–5,500', ex: 'RTX 5090 32 GB, 64 GB RAM (Lenovo Legion Tower 7i, HP OMEN MAX 45L, Alienware Area-51)' }, laptop: { cost: '$3,800–5,200', ex: 'RTX 5090 Laptop 24 GB, 64 GB RAM (Razer Blade 18, ASUS ROG Strix Scar 18, MSI Titan 18)' } },
+};
 const PC_TIERS_BUILTIN = [
   { n: 1, name: 'Basic', good: 'Chatting with the built-in models, writing, simple questions', gpu: 'None needed (runs on the processor)', ram: '16 GB', disk: '512 GB SSD', cpu: 'Any recent 6-core (Intel Core i5 / Ryzen 5)', ex: ['Dell Inspiron Desktop, HP Pavilion Desktop or Lenovo IdeaCentre with a Core i5 / Ryzen 5 and 16 GB RAM', 'Most current laptops with 16 GB RAM'] },
   { n: 2, name: 'Everyday, fast', good: 'Quick answers, 8B models, coding help, small stacks, voice', gpu: '8 GB: RTX 5060 / 4060', ram: '32 GB', disk: '1 TB NVMe', cpu: '6–8 core', ex: ['MSI Codex (Core i5-14400F, RTX 5060, 32 GB DDR5, 2 TB)', 'iBUYPOWER Slate (Core i7-14700F, RTX 5060, 32 GB)', 'ABS Cyclone Aqua (RTX 5060, 32 GB DDR4)'] },
@@ -130,13 +143,88 @@ function newPcGuideHTML(h) {
       <div class="row"><span class="tier-n">${t.n}</span><h3 class="grow">${esc(t.name)}</h3>${t.n === mine ? '<span class="badge b-mint">This PC</span>' : ''}</div>
       <p class="small tier-good">${esc(t.good)}</p>
       <dl class="tier-spec"><dt>Graphics card</dt><dd>${esc(t.gpu)}</dd><dt>RAM</dt><dd>${esc(t.ram)}</dd><dt>Storage</dt><dd>${esc(t.disk)}</dd><dt>Processor</dt><dd>${esc(t.cpu)}</dd></dl>
+      ${(() => { const b = t.desktop || t.laptop ? t : PC_BUY[t.n] || {}; return b.desktop || b.laptop ? `<div class="tier-buy">${b.desktop ? `<div class="small"><b>🖥️ Desktop ~${esc(b.desktop.cost)}</b><div class="muted">${esc(b.desktop.ex)}</div></div>` : ''}${b.laptop ? `<div class="small"><b>💻 Laptop ~${esc(b.laptop.cost)}</b><div class="muted">${esc(b.laptop.ex)}</div></div>` : ''}</div>` : ''; })()}
       ${tierSpeedHTML(t, t.n === mine)}
       ${t.ex?.length ? `<div class="tier-ex"><span class="small muted"><b>Examples</b></span><ul>${t.ex.map((x) => `<li>${esc(x)}</li>`).join('')}</ul></div>` : ''}
     </button>`).join('')}</div>
     ${tierAbilityHTML(S.tierPick ?? mine, h)}
+    ${pcCalcHTML()}
     <details class="card tier-tips"><summary><b>Buying tips</b></summary><ul>
       ${(pcGuide()?.tips?.length ? pcGuide().tips : PC_TIPS_BUILTIN).map((t) => `<li>${t.b ? `<b>${esc(t.b)}</b> ` : ''}${esc(t.t)}</li>`).join('')}
     </ul></details>`;
+}
+
+// ---------- the computer calculator: type in any computer's specs ----------
+// Graphics cards with their memory and memory speed (GB/s; laptop versions run at lower power).
+const PC_CARDS = [
+  ['none', 'No graphics card (built-in graphics)', 0, 0, ''],
+  ['Desktop · NVIDIA', [['rtx4060', 'RTX 4060 8 GB', 8, 272], ['rtx5060', 'RTX 5060 8 GB', 8, 448], ['rtx4060ti16', 'RTX 4060 Ti 16 GB', 16, 288], ['rtx5060ti16', 'RTX 5060 Ti 16 GB', 16, 448], ['rtx4070', 'RTX 4070 12 GB', 12, 504], ['rtx5070', 'RTX 5070 12 GB', 12, 672], ['rtx4070tis', 'RTX 4070 Ti Super 16 GB', 16, 672], ['rtx5070ti', 'RTX 5070 Ti 16 GB', 16, 896], ['rtx4080s', 'RTX 4080 Super 16 GB', 16, 736], ['rtx5080', 'RTX 5080 16 GB', 16, 960], ['rtx3090', 'RTX 3090 24 GB (used)', 24, 936], ['rtx4090', 'RTX 4090 24 GB', 24, 1008], ['rtx5090', 'RTX 5090 32 GB', 32, 1792]]],
+  ['Desktop · AMD / Intel', [['rx7600', 'Radeon RX 7600 8 GB', 8, 288], ['rx9060xt', 'Radeon RX 9060 XT 16 GB', 16, 320], ['rx7800xt', 'Radeon RX 7800 XT 16 GB', 16, 624], ['rx9070xt', 'Radeon RX 9070 XT 16 GB', 16, 640], ['rx7900xtx', 'Radeon RX 7900 XTX 24 GB', 24, 960], ['arcb580', 'Intel Arc B580 12 GB', 12, 456]]],
+  ['Laptop · NVIDIA', [['l4060', 'RTX 4060 Laptop 8 GB', 8, 256, 1], ['l5060', 'RTX 5060 Laptop 8 GB', 8, 384, 1], ['l4070', 'RTX 4070 Laptop 8 GB', 8, 256, 1], ['l5070', 'RTX 5070 Laptop 8 GB', 8, 384, 1], ['l5070ti', 'RTX 5070 Ti Laptop 12 GB', 12, 672, 1], ['l4080', 'RTX 4080 Laptop 12 GB', 12, 432, 1], ['l4090', 'RTX 4090 Laptop 16 GB', 16, 576, 1], ['l5080', 'RTX 5080 Laptop 16 GB', 16, 896, 1], ['l5090', 'RTX 5090 Laptop 24 GB', 24, 896, 1]]],
+  ['other', 'Another card (type its memory)', -1, 0, ''],
+];
+const pcCards = () => PC_CARDS.flatMap((g) => (Array.isArray(g[1]) ? g[1].map(([id, name, vram, bw, lap]) => ({ id, name, vram, bw, laptop: Boolean(lap), amd: /Radeon|Arc/.test(name) })) : [{ id: g[0], name: g[1], vram: g[2], bw: 0 }]));
+S.pcCalc = S.pcCalc || { type: 'desktop', card: 'rtx5060ti16', vram: 16, ram: 32, ddr5: true, disk: 2000 };
+function pcCalcHTML() {
+  const c = S.pcCalc;
+  const opt = (v, label, sel) => `<option value="${esc(String(v))}" ${String(sel) === String(v) ? 'selected' : ''}>${esc(label)}</option>`;
+  const cardOpts = PC_CARDS.map((g) => (Array.isArray(g[1]) ? `<optgroup label="${esc(g[0])}">${g[1].map(([id, name]) => opt(id, name, c.card)).join('')}</optgroup>` : opt(g[0], g[1], c.card))).join('');
+  return `<div class="card pc-calc" id="pc-calc"><h3 style="margin-top:0">🧮 Check any computer</h3>
+    <p class="small muted" style="margin-top:0">Type in the specs of a computer you're looking at (from a store listing) and see what Quicksilver would do on it.</p>
+    <div class="pc-calc-form">
+      <label>Type<select id="pcc-type">${opt('desktop', '🖥️ Desktop', c.type)}${opt('laptop', '💻 Laptop', c.type)}</select></label>
+      <label>Graphics card<select id="pcc-card">${cardOpts}</select></label>
+      <label id="pcc-vram-l" ${c.card === 'other' ? '' : 'hidden'}>Its memory (GB)<input id="pcc-vram" type="number" min="0" max="96" step="1" value="${esc(String(c.vram))}"></label>
+      <label>Memory (RAM)<select id="pcc-ram">${[8, 16, 24, 32, 48, 64, 96, 128].map((g) => opt(g, `${g} GB`, c.ram)).join('')}</select></label>
+      <label>Memory type<select id="pcc-ddr">${opt('5', 'DDR5 / LPDDR5', c.ddr5 ? '5' : '4')}${opt('4', 'DDR4 (older)', c.ddr5 ? '5' : '4')}</select></label>
+      <label>Storage<select id="pcc-disk">${[256, 512, 1000, 2000, 4000, 8000].map((g) => opt(g, g >= 1000 ? `${g / 1000} TB` : `${g} GB`, c.disk)).join('')}</select></label>
+    </div>
+    <div id="pcc-out" class="pc-calc-out"><div class="muted small">Working it out…</div></div></div>`;
+}
+let pcCalcSeq = 0;
+async function pcCalcRun() {
+  const c = S.pcCalc; const out = document.getElementById('pcc-out'); if (!out) return;
+  const card = pcCards().find((x) => x.id === c.card) || pcCards()[0];
+  const vram = card.id === 'other' ? Math.max(0, Number(c.vram) || 0) : card.vram;
+  const seq = ++pcCalcSeq;
+  const r = await qs.call('guide:estimate', { vramGB: vram, ramGB: c.ram, laptop: c.type === 'laptop', bandwidthGBs: card.bw || 0, bandwidthIsLaptop: card.laptop, nvidia: !card.amd, gpuName: vram ? card.name : '', ddr5: c.ddr5, diskGB: c.disk }).catch((err) => ({ error: err.message }));
+  if (seq !== pcCalcSeq || !document.getElementById('pcc-out')) return;
+  if (r.error) { out.innerHTML = `<div class="small" style="color:var(--danger)">${esc(r.error)}</div>`; return; }
+  const tier = pcTierOf({ vramGB: vram });
+  const t = pcTiers().find((x) => x.n === tier) || {};
+  const buy = (t.desktop || t.laptop ? t : PC_BUY[tier] || {})[c.type];
+  const vs = r.here?.wps && r.wps ? r.wps / r.here.wps : 0;
+  const vsText = !vs ? '' : vs >= 1.25 ? `<b>${vs >= 10 ? Math.round(vs) : vs.toFixed(1)}× faster</b> than this PC` : vs < 0.8 ? `<b>${(1 / vs).toFixed(1)}× slower</b> than this PC` : 'about the same as this PC';
+  const verdict = vram >= 16 && c.ram >= 32 ? '🚀 Excellent for local AI: big, smart models on the graphics card, pictures and video.' : vram >= 8 ? '✅ Good: fast everyday answers and pictures; the biggest models and video are slow.' : vram ? '🙂 Fine for chat; pictures are slow and video is out of reach.' : '🐢 Chat works on the processor, slowly; pictures and video are best done in the cloud.';
+  const where = { gpu: 'graphics card', split: 'card + memory', cpu: 'processor' };
+  out.innerHTML = `<div class="pcc-verdict"><b>${verdict}</b></div>
+    <div class="pcc-grid">
+      <div><div class="k">Tier</div><div class="v">${tier} · ${esc(t.name || '')}</div>${buy ? `<div class="small muted">A ${c.type} like this costs about <b>${esc(buy.cost)}</b></div>` : ''}</div>
+      <div><div class="k">Everyday answers</div><div class="v">~${r.wps} words/s</div><div class="small muted">a typical answer in ~${fmtSec(r.answerSec)}${vsText ? ` · ${vsText}` : ''}</div></div>
+      <div><div class="k">Pictures</div><div class="v">${r.image ? `~${fmtSec(r.image.sec)}` : 'Slow'}</div><div class="small muted">${r.image ? esc(r.image.name) : 'on the processor; use a cloud service'}</div></div>
+      <div><div class="k">Video</div><div class="v">${r.video ? `~${fmtSec(r.video.sec)}` : 'Not really'}</div><div class="small muted">${r.video ? `a short clip with ${esc(r.video.name)}` : 'needs a graphics card with ~12 GB+'}</div></div>
+    </div>
+    <div class="small" style="margin-top:8px"><b>Liquid Editions:</b> ${r.editions.map((e) => `<span class="badge ${e.ok ? 'b-mint' : ''}">${e.ok ? '✓' : '✗'} ${esc(e.name)}</span>`).join(' ')}</div>
+    ${r.bestSetup ? `<div class="small" style="margin-top:6px"><b>Best setup:</b> ${esc(r.bestSetup.names.join(' + '))} ${starsHTML(r.bestSetup.stars)}</div>` : ''}
+    ${r.runs.length ? `<div class="small" style="margin-top:6px"><b>Biggest chat models that run well:</b> ${r.runs.map((m) => `${esc(m.name)} <span class="muted">(~${m.wps} words/s, ${where[m.where] || m.where})</span>`).join(' · ')}</div>` : ''}
+    ${r.disk ? `<div class="small" style="margin-top:6px">${r.disk.enough ? '✓' : '⚠️'} <b>Storage:</b> ${r.disk.enough ? `room for the Liquid Edition${r.editions[2].ok ? ', Pro' : r.editions[1].ok ? ', Max' : ''} and plenty of other models` : `tight: the Liquid Edition${r.editions[2].ok ? ' and Pro' : r.editions[1].ok ? ' and Max' : ''} need about ${r.disk.needGB} GB, and picture and video models add 5–25 GB each; aim for ${r.disk.needGB > 200 ? '2 TB' : '1 TB'} or more`}</div>` : ''}
+    ${c.type === 'laptop' && vram ? '<div class="small muted" style="margin-top:6px">Laptop graphics cards run at lower power than desktop ones with the same name, so they are a little slower (already counted above).</div>' : ''}
+    <div class="small muted" style="margin-top:6px">Estimates use the same speed model as the rest of this page${S.est?.hardware ? '' : ''}; real speed varies a little with the exact parts and drivers.</div>`;
+}
+function bindPcCalc() {
+  const f = document.getElementById('pc-calc'); if (!f) return;
+  const c = S.pcCalc;
+  const read = () => {
+    c.type = $('#pcc-type').value; c.card = $('#pcc-card').value; c.ram = Number($('#pcc-ram').value); c.ddr5 = $('#pcc-ddr').value === '5'; c.disk = Number($('#pcc-disk').value);
+    const card = pcCards().find((x) => x.id === c.card);
+    if (card && card.id !== 'other') { c.vram = card.vram; if (card.laptop && c.type !== 'laptop') { c.type = 'laptop'; $('#pcc-type').value = 'laptop'; } }
+    else c.vram = Number($('#pcc-vram').value) || 0;
+    $('#pcc-vram-l').hidden = c.card !== 'other';
+    pcCalcRun();
+  };
+  f.addEventListener('change', read);
+  $('#pcc-vram')?.addEventListener('input', read);
+  pcCalcRun();
 }
 
 // ---------- low-cost upgrades: what each would change on this PC ----------

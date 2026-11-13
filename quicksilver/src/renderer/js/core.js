@@ -330,7 +330,14 @@ function render() {
   render.key = key;
   const box = same ? document.getElementById('messages') : null;
   const keep = box ? { top: box.scrollTop, bottom: box.scrollHeight - box.scrollTop - box.clientHeight < 120 } : null;
+  // Any other page stays where you were too (picking an option redraws the page), and sections you
+  // opened stay open.
+  const page = same && !box ? main.querySelector('.page') : null;
+  const pageTop = page ? page.scrollTop : 0;
+  const opened = same ? [...main.querySelectorAll('details[id][open]')].map((d) => d.id) : [];
   main.innerHTML = v.html();
+  for (const id of opened) { const d = document.getElementById(id); if (d) d.open = true; }
+  if (page) { const np = main.querySelector('.page'); if (np) np.scrollTop = pageTop; }
   if (typeof paintIcons === 'function') paintIcons(main);
   if (!same) main.firstElementChild?.classList.add('enter');
   v.bind?.();
