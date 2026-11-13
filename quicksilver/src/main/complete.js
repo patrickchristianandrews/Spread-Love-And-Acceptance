@@ -134,11 +134,17 @@ function freeTargets(exclude) {
   }
   return out;
 }
-async function* rotateFrom(list, req, firstErr) {
+// (from: the free service that just hit its limit, when there was one. Each switch, and running
+// out of free services altogether, is told to the chat, which pops up a short message.)
+async function* rotateFrom(list, req, firstErr, from = null) {
   let lastErr = firstErr;
+  let prev = from;
+  const name = (x) => { try { return providers.get(parse(x).providerId)?.name || label(x); } catch { return label(x); } };
   for (const tg of list) {
     const t = parse(tg);
     yield { type: 'status', text: `♻️ Free limit reached; switching to ${label(tg)}…` };
+    if (prev) { try { req.onRotate?.({ from: name(prev), to: name(tg) }); } catch {} }
+    prev = tg;
     let produced = false;
     try {
       for await (const ev of providers.chat(t.providerId, t.model, req)) { if (ev.type === 'text' && !produced) { produced = true; cloudUsed(req, t); } yield ev; }
@@ -148,6 +154,7 @@ async function* rotateFrom(list, req, firstErr) {
       lastErr = err;
     }
   }
+  if (lastErr) { try { req.onRotate?.({ from: prev ? name(prev) : '', to: '', allUsed: true }); } catch {} }
   if (lastErr) throw new Error(`Every free cloud AI you've connected has hit its limit for now (${String(lastErr.message || lastErr).slice(0, 120)}). Try again later, connect another free one under Models → Connect an API, or use the models on this PC.`);
   return false;
 }
@@ -166,7 +173,7 @@ async function* withFreeRotation(target, req) {
     if (produced || !free || req.noRotate || !isLimit(err)) throw err;
     const list = freeTargets(target);
     if (!list.length) throw err;
-    yield* rotateFrom(list, req, err);
+    yield* rotateFrom(list, req, err, target);
   }
 }
 async function* freeRotation(req) {

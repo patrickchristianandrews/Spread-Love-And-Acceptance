@@ -1006,6 +1006,8 @@ qs.onChat(({ requestId, ev }) => {
     case 'approve': askToolApproval(ev); break;
     case 'sources': alt.sources = [...(alt.sources || []), ...ev.sources.map(({ title, url, path }) => ({ title, url, path }))]; pending.sources = [...(pending.sources || []), ...ev.sources]; break;
     case 'council': alt.council = { agreement: ev.agreement, members: ev.members || [] }; break;
+    // Free rotation: a short message when one free cloud AI hits its limit and the next takes over.
+    case 'rotated': toast(ev.allUsed ? '♻️ Every free cloud AI you connected has hit its limit for now. Try again later, or connect another free one.' : `♻️ ${ev.from || 'A free cloud AI'} hit its free limit, so ${ev.to} took over.`, 6000); break;
     case 'cloud': { const k = `${ev.service}|${ev.model}`; alt.cloud ||= []; if (!alt.cloud.some((c) => `${c.service}|${c.model}` === k)) alt.cloud.push({ service: ev.service, model: ev.model }); break; }
     case 'stats': alt.stats = { tps: ev.tps, tokens: ev.tokens }; if (ev.minDigitP != null) alt.minDigitP = ev.minDigitP; if (ev.finish === 'length') toast('The answer hit the length limit. Press Continue for more.'); break;
     case 'error':

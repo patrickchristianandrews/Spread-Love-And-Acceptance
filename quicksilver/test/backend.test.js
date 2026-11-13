@@ -1456,17 +1456,21 @@ async function collect(gen) {
       if (String(url).includes('groq')) return new Response(JSON.stringify({ error: { message: 'Rate limit reached for requests' } }), { status: 429 });
       return new Response('data: ' + JSON.stringify({ choices: [{ delta: { content: 'Answer from Cerebras.' } }] }) + '\n\ndata: [DONE]\n\n', { status: 200, headers: { 'content-type': 'text/event-stream' } });
     };
-    const r = await collect(complete.run(`api:${a.id}:openai/gpt-oss-120b`, { messages: [{ role: 'user', content: 'Hi' }], maxTokens: 50 }));
+    const told = [];
+    const r = await collect(complete.run(`api:${a.id}:openai/gpt-oss-120b`, { messages: [{ role: 'user', content: 'Hi' }], maxTokens: 50, onRotate: (x) => told.push(x) }));
     assert.match(r.text, /Answer from Cerebras/, 'the next free cloud AI answers');
+    assert.deepEqual(told, [{ from: providers.get(a.id).name, to: providers.get(b.id).name }], 'the switch is told to the chat (it pops up a message)');
     assert.ok(r.status.some((x) => /Free limit reached; switching/.test(x)));
     assert.ok(complete.targets().some((t) => t.target === 'free:rotate'), 'a rotating free choice appears with two free AIs');
     const r2 = await collect(complete.run('free:rotate', { messages: [{ role: 'user', content: 'Hi' }], maxTokens: 50 }));
     assert.match(r2.text, /Answer from Cerebras/);
     global.fetch = async () => new Response(JSON.stringify({ error: { message: 'quota exceeded' } }), { status: 429 });
-    await assert.rejects(collect(complete.run(`api:${a.id}:openai/gpt-oss-120b`, { messages: [{ role: 'user', content: 'Hi' }], maxTokens: 50 })), /Every free cloud AI you've connected has hit its limit/);
+    const told2 = [];
+    await assert.rejects(collect(complete.run(`api:${a.id}:openai/gpt-oss-120b`, { messages: [{ role: 'user', content: 'Hi' }], maxTokens: 50, onRotate: (x) => told2.push(x) })), /Every free cloud AI you've connected has hit its limit/);
+    assert.ok(told2.some((x) => x.allUsed), 'and so is running out of free services');
     global.fetch = real;
     providers.remove(a.id); providers.remove(b.id);
-    console.log('✓ free rotation: a free cloud AI at its limit hands over to the next; a rotating choice in the menu');
+    console.log('✓ free rotation: a free cloud AI at its limit hands over to the next (with a message); a rotating choice in the menu');
   }
 
   // Smarter search: with the search model, passages are found by meaning, not only shared words.

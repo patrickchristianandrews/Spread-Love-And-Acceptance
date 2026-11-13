@@ -431,6 +431,7 @@ ipcMain.on('chat:send', async (_e, p) => {
       onStatus: (text) => send({ type: 'status', text }),
       onStep: (step) => send({ type: 'step', step: { ...step } }),
       onCloud: (c) => send({ type: 'cloud', service: String(c.service || ''), model: String(c.model || '') }),
+      onRotate: (r) => send({ type: 'rotated', from: String(r.from || ''), to: String(r.to || ''), allUsed: Boolean(r.allUsed) }),
       calib: cfg.calib,
     })) send(ev);
     send({ type: 'done', aborted: controller.signal.aborted });
