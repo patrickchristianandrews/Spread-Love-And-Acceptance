@@ -15,6 +15,7 @@ Updating from 2.18: the Liquid Edition now includes its Closer and its picture a
 - **Liquid Edition Max, for a fast PC** (10–16 GB graphics card, 24–32 GB memory), between the Liquid Edition and Pro: Qwen3.5 9B (the Brain, reads photos and thinks), Qwen3 30B-A3B (the Closer: 30B knowledge at close to 3B speed), gpt-oss 20B (the Thinker) and Gemma 3 12B (the Muse), with Chroma1-HD and WAI-NSFW Illustrious for pictures. In Stacks, under The Liquid Editions; only installed if you choose it.
 - **Every Liquid Edition chat model is abliterated** (its refusals removed from the weights), not just fine-tuned to be uncensored. Pro's Muse is now Gemma 3 12B abliterated, and the second-opinion offer is NeuralDaredevil 8B.
 - **Only the current Liquid Edition models work together there:** when a Liquid Edition is corrected, a model that was on it and no longer belongs is taken off and switched off (under Models → Models in use) until you switch it on again. A message says which ones; nothing is deleted.
+- **Fix:** a hard question to the Liquid Edition could end in an error ("System message must be at the beginning") when its thinking ran out of time, on slower PCs most of all. The instructions it adds are now placed where the Qwen3.5 models accept them.
 - **Fix:** "What's new" under Check for updates stays open while you read it (it closed again each time the download moved on), shows the whole list in its own scroll area, and is still there once the update is downloaded.
 
 ### New in 2.20.5

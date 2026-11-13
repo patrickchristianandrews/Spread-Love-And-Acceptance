@@ -1001,6 +1001,11 @@ async function collect(gen) {
     complete.answerNow('rq-skip');
     const skipped = await collect(complete.run('stack:quicksilver', { requestId: 'rq-skip', messages: [{ role: 'user', content: 'Prove that there are infinitely many primes' }], contextSize: 2048, maxTokens: 60, level: 'thorough' }));
     assert.ok(skipped.status.some((t) => /Answering now/.test(t)) && skipped.text.length > 0, 'Answer now hands over to the Brain');
+    // ...with the instruction where the model accepts it (Qwen3.5 refuses a system message that isn't first).
+    complete.answerNow('rq-skip2');
+    const skipped2 = await collect(complete.run('stack:quicksilver', { requestId: 'rq-skip2', messages: [{ role: 'system', content: 'You are Quicksilver.' }, { role: 'user', content: 'Prove that there are infinitely many primes' }], contextSize: 2048, maxTokens: 60, level: 'thorough' }));
+    assert.ok(!/System message|Jinja/i.test(skipped2.text) && /Answer from/.test(skipped2.text), `with the app's own instructions first too: ${skipped2.text.slice(0, 200)}`);
+    assert.ok(!/System message|Jinja/i.test(skipped.text) && /Answer from/.test(skipped.text), `the Brain really answers from the working: ${skipped.text.slice(0, 200)}`);
     // Liquid Edition 2: a Qwen3.5 Brain sees photos and thinks for itself, so it's also the Eyes and the
     // Thinker; the small model is the Muse. Questions that need working out switch its thinking on
     // (with a budget); everything else is answered with thinking off.
