@@ -44,7 +44,8 @@ function showToast(inner, ms, onAction) {
   t.innerHTML = `${inner}<button class="toast-x" aria-label="Dismiss" title="Dismiss">✕</button>`;
   t.hidden = false;
   t.classList.remove('toast-in'); void t.offsetWidth; t.classList.add('toast-in');
-  const close = () => { t.classList.remove('toast-in'); t.hidden = true; clearTimeout(toast._t); const next = toastWaiting.shift(); if (next) setTimeout(() => showToast(...next), 150); };
+  // (When it closes, the newest waiting message shows; older ones are out of date by then.)
+  const close = () => { t.classList.remove('toast-in'); t.hidden = true; clearTimeout(toast._t); const next = toastWaiting.pop(); toastWaiting.length = 0; if (next) setTimeout(() => showToast(...next), 150); };
   let left = ms; let since = Date.now();
   const arm = () => { clearTimeout(toast._t); since = Date.now(); toast._t = setTimeout(close, left); };
   t.onmouseenter = () => { clearTimeout(toast._t); left -= Date.now() - since; };

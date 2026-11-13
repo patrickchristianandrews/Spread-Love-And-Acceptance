@@ -1584,3 +1584,13 @@ code.sel { user-select: all; background: var(--soft); padding: 1px 6px; border-r
 .meme-t.top { top: 3%; }
 .meme-t.bottom { bottom: 3%; }
 .meme-busy { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); background: rgba(0,0,0,.6); color: #fff; padding: 6px 10px; border-radius: 8px; }
+
+/* Sortable, filterable tables */
+.tbl-sortable { cursor: pointer; user-select: none; white-space: nowrap; }
+.tbl-sortable:hover { color: var(--text); }
+.tbl-sortable::after { content: ' ↕'; opacity: .35; font-size: .8em; }
+.tbl-sortable[data-sort-dir="asc"]::after { content: ' ▲'; opacity: .9; }
+.tbl-sortable[data-sort-dir="desc"]::after { content: ' ▼'; opacity: .9; }
+.tbl-filters th { padding-top: 2px; padding-bottom: 6px; font-weight: 400; }
+.tbl-filter { width: 100%; min-width: 70px; max-width: 220px; padding: 3px 6px; font-size: .8rem; border-radius: 6px; border: 1px solid var(--line); background: var(--card); color: var(--text); }
+.tbl-count { margin: 6px 0 0; }

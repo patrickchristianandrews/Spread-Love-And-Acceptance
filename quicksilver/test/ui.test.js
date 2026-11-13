@@ -1608,6 +1608,35 @@ function redPng(size = 64) {
   assert.match(await win.locator('[data-nav="assistants"]').first().innerText(), /Your Crew/);
   assert.match(await win.evaluate(() => assistantById('as-debate')?.instructions || ''), /opposite to the user/);
   console.log('✓ your crew: the menu and page say Your Crew, and a Debate crew member is ready');
+  // Tables: click a header to sort, a menu or a search box under each header to filter.
+  const tbl = await win.evaluate(async () => {
+    const wrap = document.createElement('div'); wrap.id = 'tbl-test';
+    const data = [['Qwen3 8B', 'Everyday', '5.0 GB', '1,200'], ['Gemma 3 12B', 'Vision', '7.3 GB', '980'], ['Devstral', 'Coding', '14 GB', '2,050'], ['Phi-4', 'Everyday', '8.9 GB', '300'], ['Qwen3 Coder', 'Coding', '18 GB', '15']];
+    wrap.innerHTML = `<table class="list"><thead><tr><th>Model</th><th>Type</th><th>Size</th><th>Likes</th><th></th></tr></thead><tbody>${data.map((r) => `<tr>${r.map((c) => `<td>${c}</td>`).join('')}<td><button>Get</button></td></tr>`).join('')}</tbody></table>`;
+    document.querySelector('#main').appendChild(wrap);
+    await new Promise((r) => setTimeout(r, 100));
+    const t = wrap.querySelector('table');
+    const vis = () => [...t.tBodies[0].rows].filter((r) => !r.hidden).map((r) => r.cells[0].textContent);
+    const typeMenu = t.querySelector('.tbl-filter[data-col="1"]');
+    const out = { enhanced: t.dataset.tools === '1', typeIsMenu: typeMenu?.tagName === 'SELECT', actionHasNoFilter: !t.querySelector('.tbl-filter[data-col="4"]') };
+    typeMenu.value = 'Coding'; typeMenu.dispatchEvent(new Event('change'));
+    out.coding = vis();
+    out.count = wrap.querySelector('.tbl-count')?.textContent || '';
+    wrap.querySelector('.tbl-count a').click();
+    out.all = vis().length;
+    t.tHead.rows[0].cells[3].click();
+    out.byLikes = vis();
+    t.tHead.rows[0].cells[3].click();
+    out.byLikesDown = vis()[0];
+    wrap.remove();
+    return out;
+  });
+  assert.ok(tbl.enhanced && tbl.typeIsMenu && tbl.actionHasNoFilter, `filters added: ${JSON.stringify(tbl)}`);
+  assert.deepEqual(tbl.coding, ['Devstral', 'Qwen3 Coder']); assert.match(tbl.count, /Showing 2 of 5/);
+  assert.equal(tbl.all, 5);
+  assert.deepEqual(tbl.byLikes, ['Qwen3 Coder', 'Phi-4', 'Gemma 3 12B', 'Qwen3 8B', 'Devstral'], 'numbers sort as numbers (1,200 above 980)');
+  assert.equal(tbl.byLikesDown, 'Devstral', 'a second click reverses');
+  console.log('✓ tables: sort by any column header, filter with a menu or a search box under it');
   // The "That answer took a while" tip sits near the top and never covers the message box.
   const tip = await win.evaluate(async () => {
     newChat(); await new Promise((r) => setTimeout(r, 300));
