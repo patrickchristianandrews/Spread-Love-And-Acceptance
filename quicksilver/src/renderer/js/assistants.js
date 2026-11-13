@@ -32,12 +32,13 @@ function assistantCard(a) {
 views.assistants = {
   html() {
     const q = asQuery.toLowerCase();
-    const list = S.data.assistants.filter((a) => (asGroup === 'all' || groupOf(a) === asGroup) && (!q || `${a.name} ${a.description || ''}`.toLowerCase().includes(q)));
-    const groups = ASSISTANT_GROUPS.filter((g) => S.data.assistants.some((a) => groupOf(a) === g));
+    const crew = S.data.assistants.filter((a) => !a.mind); // Minds have their own tab
+    const list = crew.filter((a) => (asGroup === 'all' || groupOf(a) === asGroup) && (!q || `${a.name} ${a.description || ''}`.toLowerCase().includes(q)));
+    const groups = ASSISTANT_GROUPS.filter((g) => crew.some((a) => groupOf(a) === g));
     return `<div class="page">
       <div class="page-head"><h1>Your Crew</h1><button class="btn primary" id="new-assistant">＋ Add a crew member</button></div>
       ${typeof crewTabsHTML === 'function' ? crewTabsHTML('crew') : ''}
-      <p class="lede"><b>${S.data.assistants.length} ready-made crew members</b>, each set up for one kind of work: its own instructions, the best model or team for it, and the knowledge, web search, tools and skills it needs. Some make things on every message, like the Image Artist or the Beat Maker. Pick one when you start a chat, or switch at the top of any chat. <a href="#" id="as-new-link">Build your own</a> in a minute, from scratch, from a template, or by describing it.</p>
+      <p class="lede"><b>${crew.length} ready-made crew members</b>, each set up for one kind of work: its own instructions, the best model or team for it, and the knowledge, web search, tools and skills it needs. Some make things on every message, like the Image Artist or the Beat Maker. Pick one when you start a chat, or switch at the top of any chat. <a href="#" id="as-new-link">Build your own</a> in a minute, from scratch, from a template, or by describing it.</p>
       <div class="row" style="margin-bottom:16px;flex-wrap:wrap"><input id="as-q" type="search" placeholder="Search your crew" value="${esc(asQuery)}" style="max-width:280px">
         <button class="btn small ${asGroup === 'all' ? 'on' : ''}" data-asgroup="all">All</button>${groups.map((g) => `<button class="btn small ${asGroup === g ? 'on' : ''}" data-asgroup="${esc(g)}">${esc(g)}</button>`).join('')}</div>
       ${groups.map((g) => { const items = list.filter((a) => groupOf(a) === g); return items.length ? `<h3 class="int-group">${esc(g)} · ${items.length}</h3><div class="cards">${items.map(assistantCard).join('')}</div>` : ''; }).join('') || '<div class="empty">No one in your crew matches.</div>'}

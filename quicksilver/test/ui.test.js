@@ -894,6 +894,29 @@ function redPng(size = 64) {
   assert.doesNotMatch(await win.locator('#dl-list').innerText(), /Wan 2\.2/, 'a finished download leaves the list');
   await win.evaluate(() => { delete S.downloads['fake-a']; paintDownloads(); closeModal(); });
   console.log('✓ download bar: clicking it lists each model downloading, with its own progress, kept up to date');
+  // Minds: characters with their own voice, opening line, example lines and memory, in plain view.
+  await win.evaluate(() => go({ view: 'minds' }));
+  await win.waitForSelector('[data-mind-b="gm"]');
+  assert.equal(await win.locator('.as-card').count(), 17, 'seventeen built-in Minds');
+  assert.equal(await win.evaluate(() => document.querySelector('.nav-item[data-nav="assistants"]')?.classList.contains('active')), true, 'Your Crew stays highlighted');
+  await win.click('[data-mind-b="gm"][data-mind-act="how"]');
+  assert.match(await win.locator('#modal-body').innerText(), /Nothing hidden[\s\S]*Game Master running a text role-playing game[\s\S]*Opening line[\s\S]*Example lines/);
+  await win.evaluate(() => closeModal());
+  await win.click('[data-mind-b="gm"][data-mind-act="chat"]');
+  const mindChat = await win.evaluate(() => { const c = chatById(S.route.id); const a = assistantById(c.assistantId); return { first: c.messages[0]?.alts?.[0]?.text, sys: systemPrompt(a, false, c), inCrew: views.assistants.html().includes('The Game Master') }; });
+  assert.match(mindChat.first, /Welcome, traveler/, 'it speaks first');
+  assert.match(mindChat.sys, /Stay in character as The Game Master[\s\S]*How you talk[\s\S]*captain's cabin/);
+  assert.equal(mindChat.inCrew, false, 'Minds have their own tab, not mixed into crew members');
+  const remembered = await win.evaluate(() => { const c = chatById(S.route.id); const r = memoryCommand(c, 'Remember that my character is a halfling rogue called Pip'); const a = assistantById(c.assistantId); return { r, notes: a.mind.notes, sys: systemPrompt(a, false, c), global: memList().some((m) => /halfling/.test(m.text)) }; });
+  assert.deepEqual(remembered.notes, ['my character is a halfling rogue called Pip']);
+  assert.match(remembered.sys, /What you remember from earlier conversations with this user[\s\S]*halfling rogue called Pip/);
+  assert.equal(remembered.global, false, 'kept by the Mind, not the app-wide memory');
+  // Shared as a file and opened again: no memory travels in the file, and nothing unknown gets in.
+  const shared = await win.evaluate(() => { const a = assistantById(chatById(S.route.id).assistantId); const f = mindFile(a); const back = readMindFile(JSON.stringify({ ...f, target: 'local:not-here', extra: 'x' })); let bad = ''; try { readMindFile('{"name":"x"}'); } catch (e) { bad = e.message; } return { file: JSON.stringify(f), back, bad }; });
+  assert.doesNotMatch(shared.file, /halfling/, 'what it remembers about you stays on this PC');
+  assert.deepEqual([shared.back.name, shared.back.target, shared.back.mind.source, shared.back.mind.notes.length, 'extra' in shared.back], ['The Game Master', '', 'imported', 0, false]);
+  assert.match(shared.bad, /isn't a Quicksilver Mind file/);
+  console.log('✓ Minds: 17 built in (makers and investigators first), it speaks first, its voice and memory in the instructions, "remember that" stays with it, shared as a file without your memory');
   // No bounce: redrawing the chat you're on plays no entrance animation and keeps your place.
   const still = await win.evaluate(() => { const box = document.getElementById('messages'); render(); return { enter: Boolean(document.querySelector('#main > .enter')), same: render.key === `chat:${S.route.id}` }; });
   assert.equal(still.enter, false, 'no entrance animation when the same chat redraws'); assert.ok(still.same);

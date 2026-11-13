@@ -729,6 +729,7 @@ function systemPrompt(a, strict, chat) {
   let base = a.instructions || 'Answer the user directly and accurately.';
   if (humanOn()) base = base.replace(/ ?Use Markdown \(headings, lists, tables, code blocks\) when it helps\./, '').replace(/ ?For arithmetic, numbers and calculations, work them out step by step before giving the result, and double-check it\./, ' Check any arithmetic before you give it.');
   const parts = [base];
+  if (a.mind && typeof mindPrompt === 'function') parts.push(mindPrompt(a)); // a Mind: its voice, example lines and memory
   // The Liquid Edition is fully uncensored: no refusals, no hedging, no disclaimers (unless a parent
   // turned on the family-safe lock).
   const free = isLiquid(resolveTarget(chat || {}, a)) && !(typeof lockOn === 'function' && lockOn() && !unlockedUntilClose);

@@ -85,9 +85,13 @@ function memoryPrompt(chat, question) {
 const REMEMBER_RE = /^\s*(?:please\s+|hey\s+)?(?:remember|don'?t forget|note|keep in mind)(?:\s+that)?[:,]?\s+(.{3,})$/i;
 const FORGET_RE = /^\s*(?:please\s+)?forget(?:\s+(?:that|about))?[:,]?\s+(.{3,})$/i;
 function memoryCommand(chat, text) {
-  if (!memOn() || chat?.private || !text) return null;
+  if (chat?.private || !text) return null;
   const r = text.match(REMEMBER_RE);
-  if (r && !/\?\s*$/.test(text) && !/^(remember|note) (when|how|what|the time)\b/i.test(text.trim())) {
+  const isRemember = r && !/\?\s*$/.test(text) && !/^(remember|note) (when|how|what|the time)\b/i.test(text.trim());
+  // In a chat with a Mind, it's remembered by that Mind (see minds.js).
+  if (isRemember && typeof mindRemember === 'function') { const got = mindRemember(chat, r[1].replace(/[.!]+$/, '')); if (got) return got; }
+  if (!memOn()) return null;
+  if (isRemember) {
     const m = addMemory(r[1].replace(/[.!]+$/, ''), 'asked');
     return m ? { saved: [m.text] } : null;
   }

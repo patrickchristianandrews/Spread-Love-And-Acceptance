@@ -8,10 +8,10 @@ let tTimer = null;
 const fmtBytes = (n) => (n >= 1e9 ? `${(n / 1e9).toFixed(2)} GB` : n >= 1e6 ? `${(n / 1e6).toFixed(1)} MB` : n >= 1e3 ? `${Math.round(n / 1e3)} KB` : `${n || 0} B`);
 
 function crewTabsHTML(on) {
-  return `<div class="tabs" role="tablist"><button class="tab ${on === 'crew' ? 'active' : ''}" data-crew-tab="crew">🧑‍🤝‍🧑 Crew members</button><button class="tab ${on === 'downloads' ? 'active' : ''}" data-crew-tab="downloads">📥 Downloads</button></div>`;
+  return `<div class="tabs" role="tablist"><button class="tab ${on === 'crew' ? 'active' : ''}" data-crew-tab="crew">🧑‍🤝‍🧑 Crew members</button><button class="tab ${on === 'minds' ? 'active' : ''}" data-crew-tab="minds">🧠 Minds</button><button class="tab ${on === 'downloads' ? 'active' : ''}" data-crew-tab="downloads">📥 Downloads</button></div>`;
 }
 function bindCrewTabs() {
-  $$('[data-crew-tab]').forEach((b) => b.addEventListener('click', () => go({ view: b.dataset.crewTab === 'downloads' ? 'torrents' : 'assistants' })));
+  $$('[data-crew-tab]').forEach((b) => b.addEventListener('click', () => go({ view: ({ downloads: 'torrents', minds: 'minds' })[b.dataset.crewTab] || 'assistants' })));
 }
 
 function torrentRowHTML(t) {
