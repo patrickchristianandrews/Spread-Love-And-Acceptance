@@ -363,6 +363,7 @@ function messageHTML(chat, a, m, i) {
     ${cloudUsedHTML(alt)}
     ${refusalHTML(chat, m, alt, streaming)}
     ${gapHTML(chat, m, alt, streaming)}
+    ${qsDev && alt.webSafe ? `<div class="small muted dev-debug">🛠 ${esc(alt.webSafe)}</div>` : ''}
     ${checkHTML(m, alt) || alt.sources?.length ? `<div class="answer-foot">${checkHTML(m, alt)}` : ''}
     ${alt.sources?.length ? `<div class="sources"><span class="src-label" title="${alt.autoWeb ? 'This question is about something current, so the web was searched automatically.' : 'Where this answer comes from'}">${alt.autoWeb ? '🌐 ' : ''}${alt.autoLib ? '📚 ' : ''}Sources</span>${alt.sources.map((s, k) => `<${s.url ? `a href="${esc(s.url)}"` : 'span'} class="src-chip" title="${esc(s.title || s.url || '')}"><span class="cite">${k + 1}</span>${esc(s.url ? domainOf(s.url) : s.title)}</${s.url ? 'a' : 'span'}>`).join('')}</div>` : ''}
     ${checkHTML(m, alt) || alt.sources?.length ? '</div>' : ''}
@@ -707,7 +708,7 @@ async function gatherSources(chat, a, query, force = {}) {
   if (web) {
     const before = out.length;
     if (web === 'auto') out.autoWeb = true;
-    try { for (const r of await qs.call('web:search', query)) out.push({ title: r.title, url: r.url, text: r.text || r.snippet }); } catch (err) { toast(`Web search: ${err.message}`, 6000); }
+    try { const ws = await webSearch(query); for (const r of ws.results) out.push({ title: r.title, url: r.url, text: r.text || r.snippet }); out.webMeta = ws.meta; for (const w of ws.meta?.warnings || []) toast(`Web search: ${w}`, 9000); } catch (err) { toast(`Web search: ${err.message}`, 6000); }
     if (out.length === before) out.webEmpty = true; // searched, found nothing: the answer must say so
   }
   return out;
@@ -862,6 +863,7 @@ async function generate(chat, rerollMsg, withTarget, opts = {}) {
   if (pending?.requestId !== requestId) return; // stopped while searching
   alt.sources = sources.map(({ title, url, path }) => ({ title, url, path }));
   if (sources.webEmpty) alt.webEmpty = true;
+  if (sources.webMeta) alt.webSafe = (sources.webMeta.params || []).join(' · ');
   if (sources.autoWeb && !sources.webEmpty) alt.autoWeb = true;
   if (sources.autoLib) alt.autoLib = true;
   pending.sources = sources;
@@ -911,7 +913,7 @@ async function generate(chat, rerollMsg, withTarget, opts = {}) {
   alt.status = 'Thinking…';
   pending.sent = true; // from here Stop is a message to the engine
   qs.sendChat({
-    requestId, target, messages, ...(fallback ? { fallback } : {}),
+    requestId, target, messages, ...(fallback ? { fallback } : {}), safeSearch: safeSearchValue(),
     temperature: Number(chat.temperature ?? a.temperature ?? p.temperature),
     maxTokens: ((n) => (lengthOf(chat) === 'short' && !appWork ? Math.min(n, LENGTHS.short.tokens) : lengthOf(chat) === 'long' ? Math.max(n, LENGTHS.long.tokens) : target === 'stack:quicksilver' && !appWork && !skill && a.job !== 'coding' && chat.maxTokens == null ? Math.min(n, 1200) : n))(Math.max(appWork && chat.maxTokens == null ? 8192 : 0, Math.round(maxOf(chat, a) * (effortOf(chat, a) === 'max' && chat.maxTokens == null ? 1.5 : 1)))),
     contextSize: ctx,

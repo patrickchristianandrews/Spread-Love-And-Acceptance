@@ -232,6 +232,8 @@ function webHTML() {
     <div class="field" data-w="brave"><label for="w-brave">Brave Search key</label><span class="help">${S.config.secrets['web:brave'] ? 'A key is saved.' : 'Get one at <a href="https://api-dashboard.search.brave.com">api-dashboard.search.brave.com</a>.'}</span><input id="w-brave" type="password" placeholder="Paste key"></div>
     <div class="field" data-w="tavily"><label for="w-tavily">Tavily key</label><span class="help">${S.config.secrets['web:tavily'] ? 'A key is saved.' : 'Get one at <a href="https://app.tavily.com">app.tavily.com</a>.'}</span><input id="w-tavily" type="password" placeholder="Paste key"></div>
     <div class="field" data-w="searxng"><label for="w-sx">SearXNG address</label><input id="w-sx" value="${esc(w.searxngUrl)}" placeholder="http://localhost:8888"></div>
+    <div class="row perm-row"><div class="grow"><b>Safe search</b><div class="help">Asks the search service to filter adult results, using its own setting (Brave safesearch, DuckDuckGo kp, SearXNG safesearch, Tavily safe_search, Mojeek safe). Off sends the service's "off" value. Pictures from the web in chat always keep safe search on.</div></div><label class="switch"><input type="checkbox" id="w-safe" ${safeSearchValue() === 'on' ? 'checked' : ''}><span></span></label></div>
+    <div class="small muted" id="w-safe-debug"></div>
     <div class="row"><button class="btn primary" id="w-save">Save</button><button class="btn" id="w-test">Test a search</button></div>
   </div>`;
 }
@@ -245,7 +247,8 @@ function bindWeb() {
     S.config = await call('config:set', { web: { provider: $('#w-prov').value, searxngUrl: $('#w-sx').value.trim() } });
   };
   $('#w-save').addEventListener('click', async () => { await saveWeb(); toast('Saved.'); render(); });
-  $('#w-test').addEventListener('click', async () => { await saveWeb(); const r = await call('web:search', 'latest news about renewable energy'); toast(`Found ${r.length} results. First: ${r[0]?.title || 'none'}`, 6000); });
+  $('#w-safe').addEventListener('change', (e) => { setSafeSearch(e.target.checked); toast(`Safe search ${e.target.checked ? 'on' : 'off'} for web search.`); });
+  $('#w-test').addEventListener('click', async () => { await saveWeb(); const ws = await webSearch('latest news about renewable energy').catch((err) => { toast(err.message, 8000); throw err; }); const r = ws.results; if (qsDev) $('#w-safe-debug').textContent = `${(ws.meta?.params || []).join(' · ')}${ws.meta?.warnings?.length ? ` · ⚠️ ${ws.meta.warnings.join(' ')}` : ''}`; toast(`Found ${r.length} results. First: ${r[0]?.title || 'none'}`, 6000); });
 }
 
 function apiSrvHTML() {

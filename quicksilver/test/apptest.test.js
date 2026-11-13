@@ -74,6 +74,36 @@ const ROOT = path.join(__dirname, '..');
     const started = await app.evaluate(async (_e, mod) => { try { await process.mainModule.require(mod).engine(); return 'ok'; } catch (err) { return String(err.message); } }, path.join(ROOT, 'src', 'main', 'torrents.js'));
     assert.equal(started, 'ok', `the torrent engine starts inside the app: ${started}`);
     console.log('✓ Your Crew → Downloads: the torrent page, with the engine running inside the app');
+    // Safe search: the Settings switch, kept across a reload, sent with every web search the app
+    // makes (the chat's search and a search again), straight into the request that leaves the app.
+    await app.evaluate(() => {
+      global.__sent = [];
+      const real = global.fetch;
+      global.fetch = async (url, o = {}) => {
+        const u = String(url);
+        if (/duckduckgo|mojeek|wikipedia\.org\/w\/api/.test(u)) { global.__sent.push(`${u} ${o.body || ''}`); return new Response(/wikipedia/.test(u) ? '{"query":{"search":[]}}' : '<a class="result__a" href="https://example.org/a">A</a>', { status: 200, headers: { 'content-type': 'text/html' } }); }
+        return real(url, o);
+      };
+    });
+    await win.evaluate(() => { localStorage.removeItem('safesearch.v1'); setTab = 'web'; go({ view: 'settings' }); }); // (a fresh start: nothing saved yet)
+    await win.waitForSelector('#w-safe', { state: 'attached', timeout: 8000 }).catch(async () => { throw new Error(`no switch: ${(await win.evaluate(() => document.querySelector('#main')?.innerText || '')).slice(0, 600)} / errors: ${await win.evaluate(() => String(window.__lastErr || ''))}`); });
+    assert.equal(await win.locator('#w-safe').isChecked(), true, 'on by default');
+    await win.locator('#w-safe').dispatchEvent('click');
+    assert.equal(await win.evaluate(() => localStorage.getItem('safesearch.v1')), 'off');
+    await win.reload();
+    await win.waitForFunction(() => typeof safeSearchValue === 'function' && S.data);
+    assert.equal(await win.evaluate(() => safeSearchValue()), 'off', 'still off after a reload');
+    await win.evaluate(() => { setTab = 'web'; go({ view: 'settings' }); });
+    await win.waitForSelector('#w-safe', { state: 'attached', timeout: 15000 }).catch(async () => { throw new Error(`no switch after reload: ${(await win.evaluate(() => (location.href + ' | ' + (document.querySelector('#main')?.innerText || document.body.innerText)))).slice(0, 800)}`); });
+    assert.equal(await win.locator('#w-safe').isChecked(), false, 'and the switch shows it');
+    const sentOff = await win.evaluate(async () => { await webSearch('breast augmentation'); await webSearch('breast augmentation'); return true; }).then(() => app.evaluate(() => global.__sent.splice(0)));
+    assert.ok(sentOff.filter((l) => /duckduckgo/.test(l)).length === 2 && sentOff.filter((l) => /duckduckgo/.test(l)).every((l) => /kp=-2/.test(l)), `off (and on the search again): ${sentOff}`);
+    assert.ok(sentOff.some((l) => /mojeek\.com\/search\?q=breast%20augmentation&safe=0/.test(l)));
+    await win.locator('#w-safe').dispatchEvent('click');
+    await win.evaluate(() => webSearch('breast augmentation'));
+    const sentOn = await app.evaluate(() => global.__sent.splice(0));
+    assert.ok(sentOn.some((l) => /duckduckgo.*kp=1\b/.test(l)) && sentOn.some((l) => /safe=1\b/.test(l)), `on flips it: ${sentOn}`);
+    console.log(`✓ safe search in the app: on by default, kept across a reload, sent with every search (search again too), flipped by the switch\n    sent: ${sentOff.find((l) => /duckduckgo/.test(l))}`);
     // The plug-ins on the Liquid Edition card.
     await win.evaluate(() => { document.querySelector('#wc-close')?.click(); go({ view: 'stacks' }); });
     await win.waitForSelector('#liquid-plugins:has-text("App tester"):has-text("Security audit"):has-text("Design extractor")', { timeout: 30000 });

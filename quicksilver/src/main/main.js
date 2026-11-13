@@ -81,6 +81,7 @@ handle('agents:docker', async (on) => {
 // ---------- voice typing, phone access, updates ----------
 handle('voice:status', () => whisper.status());
 handle('app:version', () => app.getVersion());
+handle('app:dev', () => !app.isPackaged || Boolean(process.env.QS_DEV));
 handle('voice:setup', () => whisper.setup((p) => emit('app:event', { kind: 'voice:progress', ...p })));
 handle('voice:transcribe', (bytes, opts) => whisper.transcribe(bytes, opts));
 handle('phone:info', () => phone.info());
@@ -462,7 +463,7 @@ ipcMain.on('chat:send', async (_e, p) => {
     const cfg = store.config();
     for await (const ev of complete.run(p.target, {
       messages: p.messages, temperature: p.temperature, maxTokens: p.maxTokens, contextSize: p.contextSize, gpu: p.gpu,
-      effort: p.effort, level: p.level, signal: controller.signal, useTools: Boolean(p.tools), ...(p.fallback ? { fallback: String(p.fallback) } : {}), council: Boolean(p.council), councilCloud: Boolean(p.councilCloud), noMuse: Boolean(p.noMuse), ...(p.noSteps ? { stepByStep: false } : {}),
+      effort: p.effort, level: p.level, signal: controller.signal, useTools: Boolean(p.tools), ...(p.fallback ? { fallback: String(p.fallback) } : {}), ...(p.safeSearch ? { safeSearch: String(p.safeSearch) } : {}), council: Boolean(p.council), councilCloud: Boolean(p.councilCloud), noMuse: Boolean(p.noMuse), ...(p.noSteps ? { stepByStep: false } : {}),
       approve: (q) => askApproval(p.requestId, q, controller.signal), requestId: p.requestId,
       onStatus: (text) => send({ type: 'status', text }),
       onStep: (step) => send({ type: 'step', step: { ...step } }),
@@ -565,7 +566,9 @@ handle('kb:add', async (collectionId, kind) => {
 });
 handle('kb:website', (collectionId, url, maxPages) => knowledge.addWebsite(collectionId, url, { maxPages, onProgress: (p) => emit('library:progress', p) }));
 handle('kb:search', async (q, k, ids) => { const r = await knowledge.search(q, { k, collectionIds: ids }); return { results: [...r], failures: r.failures || [] }; });
-handle('web:search', (q) => websearch.search(q));
+// Web search: the Safe search setting comes with every request (validated in websearch.js) and the
+// resolved parameters come back with the results.
+handle('web:search', async (q, opts = {}) => { const r = await websearch.search(q, { safe: opts?.safeSearch }); return { results: [...r], meta: r.meta }; });
 handle('kb:peek', (q) => knowledge.peek(q));
 // Paste text straight into a knowledge base (notes, a policy, an email).
 handle('kb:addText', (collectionId, name, text) => knowledge.addTexts(collectionId, [{ name: String(name || 'Note').slice(0, 120), text: String(text || '') }]));

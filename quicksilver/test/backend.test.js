@@ -777,13 +777,13 @@ async function collect(gen) {
       return new Response('<p>page</p>', { status: 200, headers: { 'content-type': 'text/html' } });
     };
     store.saveConfig({ web: { provider: 'free' } });
-    let r = await websearch.search('capital of France');
+    let r = await websearch.search('capital of France', { safe: 'on' });
     // Meta-search: DuckDuckGo and Mojeek are asked at once and merged (each engine's top result first).
     assert.deepEqual(r.map((x) => x.url), ['https://en.wikipedia.org/wiki/Paris', 'https://example.com/paris', 'https://example.org/france'], 'results decoded, ads skipped, attribute order ignored, engines merged');
     assert.equal(r[0].title, 'Paris - Wikipedia'); assert.match(r[0].snippet, /capital of France/); assert.match(r[0].text, /largest city/);
     assert.match(r[2].snippet, /French Republic/);
     ddgDown = true;
-    r = await websearch.search('capital of France');
+    r = await websearch.search('capital of France', { safe: 'on' });
     assert.equal(r[0].url, 'https://example.com/paris', 'falls back to Mojeek');
     // Both engines blocked (as on some networks): Wikipedia's search API still answers.
     global.fetch = async (url) => {
@@ -793,7 +793,7 @@ async function collect(gen) {
       if (u.includes('en.wikipedia.org/w/api.php')) return new Response(JSON.stringify({ query: { search: [{ title: 'Blood pressure', snippet: 'Normal <span class="searchmatch">blood</span> pressure' }] } }), { status: 200, headers: { 'content-type': 'application/json' } });
       return new Response('<html><body><p>Blood pressure is the pressure of circulating blood.</p></body></html>', { status: 200, headers: { 'content-type': 'text/html' } });
     };
-    r = await websearch.search('normal blood pressure');
+    r = await websearch.search('normal blood pressure', { safe: 'on' });
     assert.equal(r[0].url, 'https://en.wikipedia.org/wiki/Blood_pressure', 'falls back to Wikipedia');
     assert.equal(r[0].snippet, 'Normal blood pressure'); assert.match(r[0].text, /circulating blood/);
     global.fetch = real;

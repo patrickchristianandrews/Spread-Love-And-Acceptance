@@ -139,7 +139,7 @@ module.exports = ({ cfg }) => {
   const TOOLS = {
     webtools: [
       { name: 'web_search', description: 'Search the web. Returns titles, links and the matching passages of the top pages.', parameters: { type: 'object', properties: { query: { type: 'string' } }, required: ['query'] },
-        run: async ({ query }) => { if (isOffline()) throw new Error('Quicksilver is offline.'); const r = await require('./websearch').search(String(query || ''), { pages: 3 }); return r.map((x, i) => `[${i + 1}] ${x.title}\n${x.url}\n${(x.text || x.snippet || '').slice(0, 1200)}`).join('\n\n') || 'No results.'; } },
+        run: async ({ query }, ctx = {}) => { if (isOffline()) throw new Error('Quicksilver is offline.'); const r = await require('./websearch').search(String(query || ''), { pages: 3, safe: ctx.safeSearch || 'on' }); return r.map((x, i) => `[${i + 1}] ${x.title}\n${x.url}\n${(x.text || x.snippet || '').slice(0, 1200)}`).join('\n\n') || 'No results.'; } },
       { name: 'read_page', description: 'Read a web page as clean text (articles, docs, product pages).', parameters: { type: 'object', properties: { url: { type: 'string' }, focus: { type: 'string', description: 'Optional: what to look for on the page' } }, required: ['url'] },
         run: async ({ url, focus }) => { const u = /^https?:\/\//.test(url) ? url : `https://${url}`; const text = pageText(await getText(u)); return focus ? require('./websearch').bestPassages(text, String(focus), 6000) : text.slice(0, 12000); } },
     ],

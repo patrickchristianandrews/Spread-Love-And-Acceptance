@@ -138,6 +138,20 @@ const WORDS = { chat: 300, hard: 500, writing: 450, code: 700, research: 500, co
 // cloud: models on this PC aren't loaded ahead of time, so they don't tie up a slow PC's processor
 // and memory. (They still load if the cloud can't answer.)
 const cloudAnswers = () => Boolean(S.data?.prefs?.cloudAll) && !S.config?.offline && (S.targets || []).some((t) => String(t.target).startsWith('api:'));
+// Safe search for web search (Settings → Web search): kept in localStorage under safesearch.v1, on
+// by default, and sent with every web search the app makes (chat, the AI's web_search tool, the
+// Settings test). The search service's own parameter is set from it in websearch.js.
+const SAFE_KEY = 'safesearch.v1';
+function safeSearchValue() { try { const v = localStorage.getItem(SAFE_KEY); return v === 'off' ? 'off' : 'on'; } catch { return 'on'; } }
+function setSafeSearch(on) { try { localStorage.setItem(SAFE_KEY, on ? 'on' : 'off'); } catch {} }
+// Dev builds show the resolved parameters under answers.
+let qsDev = false; qs.call('app:dev').then((v) => { qsDev = Boolean(v); }).catch(() => {});
+async function webSearch(query) {
+  const r = await qs.call('web:search', query, { safeSearch: safeSearchValue() });
+  for (const q of r.meta?.requests || []) console.log(`[web search] ${q.engine}: ${q.request}`);
+  for (const w of r.meta?.warnings || []) console.warn(`[web search] ${w}`);
+  return r;
+}
 async function refreshSpeeds() { try { S.speed = await qs.call('speed:map'); } catch { S.speed = null; } }
 const HARD_RE = /\b(why|how does|how do|prove|calculate|compute|solve|compare|analy[sz]e|evaluate|step[- ]by[- ]step|debug|code|function|script|error|bug|plan|strategy|pros and cons|trade-?offs?|explain|summari[sz]e|review|translate)\b/i;
 const looksHard = (text) => HARD_RE.test(text || '') || (text || '').length > 500 || /```|\d+\s*[-+*/^×÷]\s*\d+/.test(text || '');

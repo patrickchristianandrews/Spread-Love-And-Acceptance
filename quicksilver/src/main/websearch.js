@@ -8,11 +8,47 @@ const { stripHtml } = require('./docs');
 const UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0 Safari/537.36';
 const decode = (s) => stripHtml(String(s || '')).replace(/\s+/g, ' ').trim();
 
+// ---------- Safe search (Settings → Web search) ----------
+// A pass-through of each search service's own documented parameter: nothing here filters results
+// by itself. The value comes with every request from the app (validated against SAFE_VALUES) and
+// getSafeSearchParam is the one place it's turned into a provider's parameter.
+const SAFE_VALUES = ['on', 'off'];
+function checkSafe(v) {
+  if (!SAFE_VALUES.includes(v)) throw new Error(`Safe search must be "on" or "off" (got ${JSON.stringify(v)}).`);
+  return v;
+}
+// The parameter each service documents, or null where it has none.
+//   Brave Search API: safesearch=off|moderate|strict   DuckDuckGo HTML: kp=-2 (off) | kp=1 (strict)
+//   SearXNG: safesearch=0|1|2                          Tavily: safe_search=false|true (JSON body)
+//   Mojeek: safe=0|1                                   Wikipedia search API: none
+function getSafeSearchParam(provider, safe) {
+  const on = checkSafe(safe) === 'on';
+  switch (provider) {
+    case 'brave': return { param: 'safesearch', value: on ? 'strict' : 'off', where: 'query' };
+    case 'duckduckgo': return { param: 'kp', value: on ? '1' : '-2', where: 'form' };
+    case 'searxng': return { param: 'safesearch', value: on ? '2' : '0', where: 'query' };
+    case 'tavily': return { param: 'safe_search', value: on, where: 'json' };
+    case 'mojeek': return { param: 'safe', value: on ? '1' : '0', where: 'query' };
+    case 'wikipedia': return null;
+    default: throw new Error(`Unknown search service: ${provider}`);
+  }
+}
+// Every outbound search request, with keys left out, for the log and the debug line.
+const redact = (u) => String(u).replace(/([?&](?:key|api_key|apikey|token)=)[^&]+/gi, '$1***');
+function logRequest(meta, engine, method, url, body) {
+  const line = `${method} ${redact(url)}${body ? ` ${typeof body === 'string' ? body : JSON.stringify({ ...body, api_key: body.api_key ? '***' : undefined })}` : ''}`;
+  meta?.requests.push({ engine, request: line });
+  console.log(`[web search] ${engine}: ${line}`);
+}
+
 // DuckDuckGo's plain HTML page: no key, no account.
-async function duckduckgo(query) {
+async function duckduckgo(query, safe = 'on', meta = null) {
+  const sp = getSafeSearchParam('duckduckgo', safe);
+  const body = `q=${encodeURIComponent(query)}&kl=wt-wt&${sp.param}=${sp.value}`;
+  logRequest(meta, 'DuckDuckGo', 'POST', 'https://html.duckduckgo.com/html/', body);
   const res = await fetch('https://html.duckduckgo.com/html/', {
     method: 'POST', headers: { 'User-Agent': UA, 'Content-Type': 'application/x-www-form-urlencoded', Accept: 'text/html' },
-    body: `q=${encodeURIComponent(query)}&kl=wt-wt`, signal: AbortSignal.timeout(15000),
+    body, signal: AbortSignal.timeout(15000),
   });
   if (!res.ok) throw new Error(`DuckDuckGo returned HTTP ${res.status}`);
   const html = await res.text();
@@ -35,8 +71,11 @@ async function duckduckgo(query) {
 }
 
 // Mojeek: an independent search engine with its own index, also no key.
-async function mojeek(query) {
-  const res = await fetch(`https://www.mojeek.com/search?q=${encodeURIComponent(query)}`, { headers: { 'User-Agent': UA, Accept: 'text/html' }, signal: AbortSignal.timeout(15000) });
+async function mojeek(query, safe = 'on', meta = null) {
+  const sp = getSafeSearchParam('mojeek', safe);
+  const url = `https://www.mojeek.com/search?q=${encodeURIComponent(query)}&${sp.param}=${sp.value}`;
+  logRequest(meta, 'Mojeek', 'GET', url);
+  const res = await fetch(url, { headers: { 'User-Agent': UA, Accept: 'text/html' }, signal: AbortSignal.timeout(15000) });
   if (!res.ok) throw new Error(`Mojeek returned HTTP ${res.status}`);
   const html = await res.text();
   const out = [];
@@ -52,7 +91,9 @@ async function mojeek(query) {
 }
 
 // Wikipedia's own search API: works even where search engines block automated requests.
-async function wikipedia(query) {
+async function wikipedia(query, safe = 'on', meta = null) {
+  getSafeSearchParam('wikipedia', safe); // (validated; Wikipedia's search has no safe-search parameter)
+  logRequest(meta, 'Wikipedia', 'GET', `https://en.wikipedia.org/w/api.php?action=query&list=search&format=json&srlimit=5&srsearch=${encodeURIComponent(query)}`);
   const res = await fetch(`https://en.wikipedia.org/w/api.php?action=query&list=search&format=json&srlimit=5&srsearch=${encodeURIComponent(query)}`, { headers: { 'User-Agent': 'Quicksilver/2 (local AI app)', Accept: 'application/json' }, signal: AbortSignal.timeout(15000) });
   if (!res.ok) throw new Error(`Wikipedia returned HTTP ${res.status}`);
   const j = await res.json();
@@ -76,33 +117,56 @@ function mergeResults(lists) {
   return [...byKey.values()].sort((a, b) => b.score - a.score).slice(0, 10);
 }
 
-async function search(query, { pages = 3 } = {}) {
+async function search(query, { pages = 3, safe } = {}) {
+  checkSafe(safe);
   const cfg = store.config().web;
+  const meta = { provider: cfg.provider, safe, params: [], requests: [], warnings: [] };
   let results = [];
   if (cfg.provider === 'free') {
     // Meta-search, like SearXNG: every free engine is asked at once and the answers are merged. A page
     // several engines rank high comes first; one engine being slow or blocked doesn't matter.
     const errors = [];
-    const runs = await Promise.allSettled([duckduckgo, mojeek, wikipedia].map((engine) => engine(query)));
+    for (const e of ['duckduckgo', 'mojeek']) { const sp = getSafeSearchParam(e, safe); meta.params.push(`${e}: ${sp.param}=${sp.value}`); }
+    meta.params.push('wikipedia: (no safe-search parameter)');
+    const runs = await Promise.allSettled([duckduckgo, mojeek, wikipedia].map((engine) => engine(query, safe, meta)));
     results = mergeResults(runs.map((r, i) => (r.status === 'fulfilled' ? { engine: ['DuckDuckGo', 'Mojeek', 'Wikipedia'][i], list: r.value } : (errors.push(String(r.reason?.message || r.reason)), null))).filter(Boolean));
     if (!results.length) throw new Error(errors.length ? `The free web search didn't respond (${errors.join('; ')}). Try again in a minute, or add a Brave or Tavily key in Settings → Web search.` : 'No web results for that.');
   } else if (cfg.provider === 'brave') {
     const key = store.getSecret('web:brave');
     if (!key) throw new Error('Add your Brave Search key in Settings → Web search.');
-    const res = await fetch(`https://api.search.brave.com/res/v1/web/search?count=8&q=${encodeURIComponent(query)}`, { headers: { Accept: 'application/json', 'X-Subscription-Token': key }, signal: AbortSignal.timeout(15000) });
+    const sp = getSafeSearchParam('brave', safe); meta.params.push(`brave: ${sp.param}=${sp.value}`);
+    const url = `https://api.search.brave.com/res/v1/web/search?count=8&q=${encodeURIComponent(query)}&${sp.param}=${sp.value}`;
+    logRequest(meta, 'Brave', 'GET', `${url} (X-Subscription-Token: ***)`);
+    const res = await fetch(url, { headers: { Accept: 'application/json', 'X-Subscription-Token': key }, signal: AbortSignal.timeout(15000) });
     if (!res.ok) throw new Error(`Brave Search returned HTTP ${res.status}.`);
     const j = await res.json();
     results = (j.web?.results || []).map((r) => ({ title: r.title, url: r.url, snippet: stripHtml(r.description || '') }));
   } else if (cfg.provider === 'tavily') {
     const key = store.getSecret('web:tavily');
     if (!key) throw new Error('Add your Tavily key in Settings → Web search.');
-    const res = await fetch('https://api.tavily.com/search', { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${key}` }, body: JSON.stringify({ query, max_results: 8, include_raw_content: false }), signal: AbortSignal.timeout(20000) });
+    const sp = getSafeSearchParam('tavily', safe); meta.params.push(`tavily: ${sp.param}=${sp.value}`);
+    const tav = async (withSafe) => {
+      const body = { query, max_results: 8, ...(withSafe ? { [sp.param]: sp.value } : {}) };
+      logRequest(meta, 'Tavily', 'POST', 'https://api.tavily.com/search (Authorization: Bearer ***)', body);
+      return fetch('https://api.tavily.com/search', { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${key}` }, body: JSON.stringify(body), signal: AbortSignal.timeout(20000) });
+    };
+    let res = await tav(true);
+    if (res.status === 400) {
+      // Tavily refuses safe_search on some plans: searched without it, and said so (not hidden).
+      const why = (await res.text().catch(() => '')).slice(0, 200);
+      meta.warnings.push(`Tavily rejected ${sp.param}=${sp.value} (HTTP 400${why ? `: ${why}` : ''}), so this search ran without it. Tavily is the blocker: its plan doesn't accept the safe-search parameter.`);
+      console.warn(`[web search] Tavily: ${meta.warnings.at(-1)}`);
+      res = await tav(false);
+    }
     if (!res.ok) throw new Error(`Tavily returned HTTP ${res.status}.`);
     const j = await res.json();
     results = (j.results || []).map((r) => ({ title: r.title, url: r.url, snippet: r.content || '' }));
   } else if (cfg.provider === 'searxng') {
     if (!cfg.searxngUrl) throw new Error('Add your SearXNG address in Settings → Web search.');
-    const res = await fetch(`${cfg.searxngUrl.replace(/\/+$/, '')}/search?format=json&q=${encodeURIComponent(query)}`, { signal: AbortSignal.timeout(15000) });
+    const sp = getSafeSearchParam('searxng', safe); meta.params.push(`searxng: ${sp.param}=${sp.value}`);
+    const url = `${cfg.searxngUrl.replace(/\/+$/, '')}/search?format=json&q=${encodeURIComponent(query)}&${sp.param}=${sp.value}`;
+    logRequest(meta, 'SearXNG', 'GET', url);
+    const res = await fetch(url, { signal: AbortSignal.timeout(15000) });
     if (!res.ok) throw new Error(`SearXNG returned HTTP ${res.status}.`);
     const j = await res.json();
     results = (j.results || []).slice(0, 8).map((r) => ({ title: r.title, url: r.url, snippet: r.content || '' }));
@@ -120,6 +184,7 @@ async function search(query, { pages = 3 } = {}) {
       r.text = bestPassages(stripHtml(await res.text()), query, 1800);
     } catch {}
   }));
+  Object.defineProperty(results, 'meta', { value: meta, enumerable: false });
   return results;
 }
 
@@ -206,4 +271,4 @@ async function images(query, { count = 8 } = {}) {
   return out.sort((a, b) => order.get(a.thumb) - order.get(b.thumb)).slice(0, count);
 }
 
-module.exports = { search, duckduckgo, mojeek, wikipedia, bestPassages, images, mergeResults, EXPLICIT };
+module.exports = { search, duckduckgo, mojeek, wikipedia, bestPassages, images, mergeResults, EXPLICIT, getSafeSearchParam, SAFE_VALUES };

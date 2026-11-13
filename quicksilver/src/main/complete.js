@@ -826,7 +826,7 @@ async function* agent(target, req) {
       try { args = JSON.parse(c.arguments || '{}'); } catch { result = { status: 'error', result: 'The tool arguments were not valid JSON. Try again with valid JSON.' }; }
       const step = { id: c.id, name: c.name, source: tool?.source || 'Tool', args, status: 'running' };
       yield { type: 'tool', call: { ...step } };
-      result ||= await toolbox.execute(tool, args, { approve: req.approve });
+      result ||= await toolbox.execute(tool, args, { approve: req.approve, ctx: { safeSearch: req.safeSearch } });
       yield { type: 'tool', call: { ...step, status: result.status, result: result.result.slice(0, 3000) } };
       messages.push({ role: 'tool', tool_call_id: c.id, content: result.result });
     }

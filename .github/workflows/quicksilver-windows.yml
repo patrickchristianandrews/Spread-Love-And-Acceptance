@@ -131,7 +131,7 @@ jobs:
         env:
           PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: '1'
       - name: Back-end tests
-        run: node test/backend.test.js && node test/media-catalog.test.js && node test/loading.test.js && node test/skills-auto.test.js && node test/pro.test.js && node test/liquid-own.test.js && node test/create.test.js && node test/fixes.test.js && node test/plugins.test.js && node test/torrents.test.js && node test/giant.test.js && node scripts/api-directory.js --check
+        run: node test/backend.test.js && node test/media-catalog.test.js && node test/loading.test.js && node test/skills-auto.test.js && node test/pro.test.js && node test/liquid-own.test.js && node test/create.test.js && node test/fixes.test.js && node test/plugins.test.js && node test/torrents.test.js && node test/giant.test.js && node test/safesearch.test.js && node scripts/api-directory.js --check
       - name: End-to-end tests
         run: xvfb-run -a node test/ui.test.js && xvfb-run -a node test/liquid-picture.test.js && xvfb-run -a node test/in-use.test.js && xvfb-run -a node test/gate.test.js && xvfb-run -a node test/chat-make.test.js && xvfb-run -a node test/apptest.test.js && xvfb-run -a node test/whatsnew.test.js
 

@@ -23,7 +23,7 @@ function allowAlways(name) { const s = allowed(); s.add(name); store.saveConfig(
 const clip = (s, n) => (s.length > n ? `${s.slice(0, n)}\n…(truncated)` : s);
 
 // Runs one tool call. Returns { status: 'done'|'error'|'denied', result }.
-async function execute(tool, args, { approve } = {}) {
+async function execute(tool, args, { approve, ctx = {} } = {}) {
   if (!tool) return { status: 'error', result: 'Unknown tool.' };
   if (tool.write && !store.config().toolAutoApprove && !allowed().has(tool.name)) {
     const answer = approve ? await approve({ tool: tool.name, source: tool.source, summary: tool.summary ? tool.summary(args) : `${tool.source}: ${tool.name}`, args }) : { ok: false };
@@ -31,7 +31,7 @@ async function execute(tool, args, { approve } = {}) {
     if (answer.always) allowAlways(tool.name);
   }
   try {
-    const out = await tool.run(args || {});
+    const out = await tool.run(args || {}, ctx);
     return { status: 'done', result: clip(String(out ?? 'Done.'), 14000) };
   } catch (err) {
     return { status: 'error', result: `Error: ${String(err.message || err).slice(0, 800)}` };
