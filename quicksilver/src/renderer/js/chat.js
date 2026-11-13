@@ -133,7 +133,7 @@ views.chat = {
           <div class="attach-row" id="att-row">${attachmentsHTML(drafts[chat.id] || [], true)}</div>
           <div id="skill-row">${skillChipHTML(chat)}</div>
           <div class="skill-pop" id="skill-pop" hidden></div>
-          <textarea id="input" rows="1" spellcheck="true" placeholder="${esc(chat.pendingSkill ? skillById(chat.pendingSkill)?.hint || 'Add details…' : makeOf(chat) === 'image' ? 'Describe the picture…' : makeOf(chat) === 'video' ? 'Describe the video…' : isCodeChat(a) ? 'Say what to build, or paste code or an error…  Type / for skills' : `Message ${a.name}…  Type / for skills`)}" aria-label="Message"></textarea>
+          <textarea id="input" rows="1" spellcheck="true" placeholder="${esc(chat.pendingSkill ? skillById(chat.pendingSkill)?.hint || 'Add details…' : makeOf(chat) === 'image' ? 'Describe the picture…' : makeOf(chat) === 'video' ? 'Describe the video…' : isCodeChat(a) ? 'Say what to build, or paste code or an error…  Type / for skills' : `${a.id === 'as-general' ? 'Ask anything…' : `Message ${a.name}…`}  Type / for skills`)}" aria-label="Message"></textarea>
           <div class="composer-bar">
             <button class="icon-btn opts-btn" id="opts-btn" title="Add a file, use a skill, search the web, connect apps, and more" aria-label="Add and options">${icon('plus')}</button>
             <input type="file" id="file-in" multiple hidden accept="image/*,video/*,.pdf,.docx,.xlsx,.xlsm,.csv,.tsv,.pptx,.txt,.md,.json,.html,.htm,.xml,.js,.ts,.py,.java,.c,.cpp,.cs,.go,.rs,.rb,.php,.sql">
@@ -201,14 +201,22 @@ function bindNameAsk() {
   $('#name-ask-skip')?.addEventListener('click', () => done(''));
 }
 
+// The everyday crew member isn't a character of its own: its chats show the model or stack that
+// answers (💧 Quicksilver Liquid Edition), not a crew member's name.
+function shownAs(a, target) {
+  if (a?.id !== 'as-general' || !target) return { name: a?.name || '', emoji: a?.emoji || '💬', own: false };
+  const st = target.startsWith('stack:') ? S.stacks?.find((x) => `stack:${x.id}` === target) : null;
+  const name = st?.name || S.targets?.find((x) => x.target === target)?.name || targetLabel(target).replace(/^\p{Extended_Pictographic}\uFE0F?\s*/u, '');
+  return { name, emoji: st?.emoji || (target.startsWith('api:') ? '☁️' : a.emoji), own: true };
+}
 function welcomeHTML(a) {
   const none = !S.targets.length;
   const name = S.data.prefs.userName;
   return `<div class="welcome">
     ${nameAskHTML()}
     ${name ? `<p class="hello">Hi ${esc(name)} 👋</p>` : ''}
-    <div class="emoji-badge" style="width:72px;height:72px;font-size:2.4rem;margin:0 auto 12px;border-radius:20px">${esc(a.emoji)}</div>
-    <h1>${esc(a.name)}</h1>
+    ${(() => { const c = chatById(S.route.id); const w = shownAs(a, a.id === 'as-general' ? resolveTarget(c, a) : ''); return `<div class="emoji-badge" style="width:72px;height:72px;font-size:2.4rem;margin:0 auto 12px;border-radius:20px">${esc(w.emoji)}</div>
+    <h1>${esc(w.name)}</h1>`; })()}
     <p class="muted" style="font-size:1.05rem;font-weight:600">${esc(a.description || '')}</p>
     ${a.exam ? studyPanelHTML(a) : ''}
     ${isCodeChat(a) && !none ? `<div class="code-starters">${CODE_STARTERS.map(([em, label], i) => `<button class="btn small" data-code-start="${i}">${em} ${esc(label)}</button>`).join('')}</div>
@@ -341,10 +349,11 @@ function messageHTML(chat, a, m, i) {
     tools.push(tb('more', m.id, 'more', 'More: another model, listen, edit as document, double-check, save as, branch, delete'));
   }
   const model = alt.target ? targetLabel(alt.target) : alt.imported ? '' : '';
+  const who = shownAs(a, alt.target);
   return `<div class="msg assistant${msgIn(m)}" data-msg="${m.id}">
-    <div class="av" aria-hidden="true">${esc(a.emoji)}</div>
+    <div class="av" aria-hidden="true">${esc(who.emoji)}</div>
     <div class="msg-main">
-    <div class="who-line"><b>${esc(a.name)}</b>${model ? `<span class="who-model"${alt.autoWhy ? ` title="${esc(alt.autoWhy)}"` : ''}>${alt.autoWhy ? '✨ ' : ''}${esc(model)}</span>` : ''}${alt.skillId && skillById(alt.skillId) ? `<span class="badge b-peach">⚡ ${esc(skillById(alt.skillId).name)}</span>${!streaming && !pending && chat.messages[i - 1]?.skillAuto ? `<button class="tool plain-btn" data-act="plain" data-id="${m.id}" title="Quicksilver used this skill by itself because of how the message was worded. Press to get an ordinary written answer instead.">↩ Answer normally</button>` : ''}` : ''}${alt.imported ? `<span class="badge">From ${esc(alt.imported)}</span>` : ''}${alt.fixed ? '<span class="badge b-mint" title="A check of the first answer found a mistake (a sum, a code error or a wrong fact); this one fixes it. The first answer is still there with ‹ ›.">✓ Corrected</span>' : ''}${alt.preAnswered ? '<span class="badge b-lemon" title="This was the most likely next question, so it was answered while you read the last answer.">⚡ Ready before you asked</span>' : ''}${alt.cached ? '<span class="badge b-lemon" title="You rated this answer before (or it passed the double-check), so it was shown instantly. Regenerate for a fresh one.">⚡ Instant</span>' : ''}${alt.unsure && alt.check?.running ? '<span class="badge" title="The model was unsure of a number in this answer, so a second model is checking it.">Checking a number…</span>' : ''}${alt.autoWeb && !alt.sources?.length ? '<span class="badge b-sky" title="This question is about something current, so the web was searched automatically. Turn it off in Settings → General.">🌐 Checked the web</span>' : ''}${alt.webEmpty ? '<span class="badge b-lemon" title="Web search was on but found nothing for this question, so this answer is from the model\'s own knowledge.">Web: nothing found</span>' : ''}${etaNow}${alt.stats?.tps && !streaming ? `<span class="who-speed" title="${esc(statsTitle(alt))}">${Math.round(alt.stats.tps * 0.75)} words/s</span>` : ''}${m.t ? `<span class="who-time">${esc(msgTime(m))}</span>` : ''}</div>
+    <div class="who-line"><b>${esc(who.name)}</b>${model && !who.own ? `<span class="who-model"${alt.autoWhy ? ` title="${esc(alt.autoWhy)}"` : ''}>${alt.autoWhy ? '✨ ' : ''}${esc(model)}</span>` : ''}${alt.skillId && skillById(alt.skillId) ? `<span class="badge b-peach">⚡ ${esc(skillById(alt.skillId).name)}</span>${!streaming && !pending && chat.messages[i - 1]?.skillAuto ? `<button class="tool plain-btn" data-act="plain" data-id="${m.id}" title="Quicksilver used this skill by itself because of how the message was worded. Press to get an ordinary written answer instead.">↩ Answer normally</button>` : ''}` : ''}${alt.imported ? `<span class="badge">From ${esc(alt.imported)}</span>` : ''}${alt.fixed ? '<span class="badge b-mint" title="A check of the first answer found a mistake (a sum, a code error or a wrong fact); this one fixes it. The first answer is still there with ‹ ›.">✓ Corrected</span>' : ''}${alt.preAnswered ? '<span class="badge b-lemon" title="This was the most likely next question, so it was answered while you read the last answer.">⚡ Ready before you asked</span>' : ''}${alt.cached ? '<span class="badge b-lemon" title="You rated this answer before (or it passed the double-check), so it was shown instantly. Regenerate for a fresh one.">⚡ Instant</span>' : ''}${alt.unsure && alt.check?.running ? '<span class="badge" title="The model was unsure of a number in this answer, so a second model is checking it.">Checking a number…</span>' : ''}${alt.autoWeb && !alt.sources?.length ? '<span class="badge b-sky" title="This question is about something current, so the web was searched automatically. Turn it off in Settings → General.">🌐 Checked the web</span>' : ''}${alt.webEmpty ? '<span class="badge b-lemon" title="Web search was on but found nothing for this question, so this answer is from the model\'s own knowledge.">Web: nothing found</span>' : ''}${etaNow}${alt.stats?.tps && !streaming ? `<span class="who-speed" title="${esc(statsTitle(alt))}">${Math.round(alt.stats.tps * 0.75)} words/s</span>` : ''}${m.t ? `<span class="who-time">${esc(msgTime(m))}</span>` : ''}</div>
     ${metaRow(councilBadgeHTML(alt) + stepsHTML(alt, streaming) + toolsHTML(alt) + memoryChipHTML(alt) + (alt.reasoning ? `<details class="think chip-d"><summary>${streaming && !alt.text ? '<span class="pulse"></span>Thinking…' : '💭 Thought it through'}</summary><div>${esc(alt.reasoning)}</div></details>` : ''))}
     <div class="bubble md ${streaming ? 'streaming' : ''} ${alt.error ? 'error' : ''}">${body}</div>
     ${downloadHTML(m, alt, streaming)}
@@ -450,7 +459,7 @@ function bindChat() {
   pop.addEventListener('click', (e) => { const b = e.target.closest('[data-pick-skill]'); if (b) pickSkill(b.dataset.pickSkill); });
   $('#skill-btn')?.addEventListener('click', () => { if (pop.hidden) { openPop(''); input.focus(); } else closePop(); });
   $('#skill-row').addEventListener('click', (e) => {
-    if (e.target.closest('[data-skill-clear]')) { chat.pendingSkill = null; save(); $('#skill-row').innerHTML = skillChipHTML(chat); input.placeholder = `Message ${a.name}… (type / for skills)`; }
+    if (e.target.closest('[data-skill-clear]')) { chat.pendingSkill = null; save(); $('#skill-row').innerHTML = skillChipHTML(chat); input.placeholder = `${a.id === 'as-general' ? 'Ask anything…' : `Message ${a.name}…`} (type / for skills)`; }
     // "No thanks": that skill is not suggested, or used by itself, again in this chat.
     const no = e.target.closest('[data-skill-dismiss]');
     if (no) { chat.dismissed = [...new Set([...(chat.dismissed || []).filter(Boolean), no.dataset.skillDismiss || chat.suggested].filter(Boolean))]; chat.suggested = null; save(); $('#skill-row').innerHTML = skillChipHTML(chat); return; }

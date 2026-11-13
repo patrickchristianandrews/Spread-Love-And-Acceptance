@@ -193,6 +193,10 @@ async function init() {
   if (S.data.prefs.maxTokens === 4096 && !S.data.prefs.maxTokensSet) S.data.prefs.maxTokens = 2048; // 2.16: old default
   // Keep built-in assistants up to date, but never overwrite your edits or your own assistants.
   for (const d of defaultAssistants()) if (!S.data.assistants.some((a) => a.id === d.id)) S.data.assistants.push(d);
+  // Quicksilver is the app and its stacks, not a crew member: the everyday one was called
+  // "Quicksilver" before 2.20.7 (renamed unless you renamed it yourself).
+  const everyday = S.data.assistants.find((a) => a.id === 'as-general');
+  if (everyday?.builtIn && everyday.name === 'Quicksilver') { const d = defaultAssistants().find((x) => x.id === 'as-general'); if (d) Object.assign(everyday, { name: d.name, emoji: d.emoji }); }
   // Retire built-in assistants for goals that no longer exist (their chats move to the main assistant).
   const retired = S.data.assistants.filter((a) => a.builtIn && !S.catalog.jobs[a.job]).map((a) => a.id);
   if (retired.length) {

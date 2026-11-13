@@ -109,6 +109,16 @@ const TINY = path.join(__dirname, 'fixtures', 'tiny.gguf');
   await win.keyboard.press('Enter');
   await win.waitForFunction(() => /Not enough graphics memory/.test([...document.querySelectorAll('.msg.assistant')].pop()?.innerText || ''), null, { timeout: 90000 })
     .catch(async () => { throw new Error(`the chat did not say why the picture failed: ${(await win.evaluate(() => [...document.querySelectorAll('.msg.assistant')].pop()?.innerText || '(none)')).slice(0, 400)}`); });
+  // Quicksilver is the app and its stacks, not a crew member: an everyday answer is headed by the
+  // stack that answered, and Your Crew has no "Quicksilver" (an old one is renamed).
+  const crew = await win.evaluate(() => {
+    const line = [...document.querySelectorAll('.msg.assistant .who-line b')].map((b) => b.textContent);
+    const ev = assistantById('as-general');
+    return { line, name: ev.name, crewNames: S.data.assistants.map((x) => x.name) };
+  });
+  assert.ok(crew.line.length && crew.line.every((t) => t === 'Quicksilver Liquid Edition'), `answers are headed by the stack: ${crew.line}`);
+  assert.equal(crew.name, 'Everyday Helper');
+  assert.ok(!crew.crewNames.includes('Quicksilver'), 'no crew member is called Quicksilver');
   // With Venice connected, a picture this PC can't make (out of memory) is made by Venice instead,
   // says so, and Venice goes first for the rest of the session.
   const fb = await win.evaluate(async () => {
