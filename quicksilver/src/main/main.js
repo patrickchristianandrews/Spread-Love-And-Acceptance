@@ -870,6 +870,13 @@ function createWindow() {
 app.whenReady().then(() => { try { require('./guide').start(); require('./catalog-remote').start(() => emit('app:event', { kind: 'catalog' })); } catch {} }).then(() => {
   // Gallery files are served to the interface by id only, never by arbitrary path.
   protocol.handle('qsmedia', (req) => {
+    // Pictures from the web, downloaded by the picture search (qsmedia://w/<file>).
+    if (new URL(req.url).host === 'w') {
+      const name = decodeURIComponent(new URL(req.url).pathname.replace(/^\//, ''));
+      const f = path.join(store.dir('tmp'), 'web-images', name);
+      if (!/^[a-f0-9]{20}\.(jpg|png|webp|gif)$/.test(name) || !fs.existsSync(f)) return new Response('Not found', { status: 404 });
+      return net.fetch(pathToFileURL(f).toString());
+    }
     const id = decodeURIComponent(new URL(req.url).pathname.replace(/^\//, ''));
     const g = media.gallery().find((x) => x.id === id);
     if (!g) return new Response('Not found', { status: 404 });

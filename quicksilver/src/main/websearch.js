@@ -59,14 +59,32 @@ async function wikipedia(query) {
   return (j.query?.search || []).map((r) => ({ title: r.title, url: `https://en.wikipedia.org/wiki/${encodeURIComponent(r.title.replace(/ /g, '_'))}`, snippet: decode(r.snippet) }));
 }
 
+// Merges several engines' result lists: the same page (http/https, www, trailing slash and tracking
+// bits ignored) is counted once, scored by how high each engine ranked it, with a bonus for each
+// extra engine that found it.
+const urlKey = (u) => { try { const x = new URL(u); [...x.searchParams.keys()].filter((k) => /^(utm_|ref$|fbclid|gclid)/.test(k)).forEach((k) => x.searchParams.delete(k)); return `${x.hostname.replace(/^www\./, '')}${x.pathname.replace(/\/+$/, '')}${x.search}`.toLowerCase(); } catch { return String(u); } };
+function mergeResults(lists) {
+  const byKey = new Map();
+  for (const { engine, list } of lists) {
+    (list || []).forEach((r, rank) => {
+      const k = urlKey(r.url);
+      const had = byKey.get(k);
+      const add = 1 / (rank + 1.5);
+      if (had) { had.score += add + 0.6; had.engines.push(engine); if ((r.snippet || '').length > (had.snippet || '').length) had.snippet = r.snippet; } else byKey.set(k, { ...r, score: add, engines: [engine] });
+    });
+  }
+  return [...byKey.values()].sort((a, b) => b.score - a.score).slice(0, 10);
+}
+
 async function search(query, { pages = 3 } = {}) {
   const cfg = store.config().web;
   let results = [];
   if (cfg.provider === 'free') {
+    // Meta-search, like SearXNG: every free engine is asked at once and the answers are merged. A page
+    // several engines rank high comes first; one engine being slow or blocked doesn't matter.
     const errors = [];
-    for (const engine of [duckduckgo, mojeek, wikipedia]) {
-      try { results = await engine(query); if (results.length) break; } catch (err) { errors.push(err.message); }
-    }
+    const runs = await Promise.allSettled([duckduckgo, mojeek, wikipedia].map((engine) => engine(query)));
+    results = mergeResults(runs.map((r, i) => (r.status === 'fulfilled' ? { engine: ['DuckDuckGo', 'Mojeek', 'Wikipedia'][i], list: r.value } : (errors.push(String(r.reason?.message || r.reason)), null))).filter(Boolean));
     if (!results.length) throw new Error(errors.length ? `The free web search didn't respond (${errors.join('; ')}). Try again in a minute, or add a Brave or Tavily key in Settings → Web search.` : 'No web results for that.');
   } else if (cfg.provider === 'brave') {
     const key = store.getSecret('web:brave');
@@ -128,4 +146,64 @@ function bestPassages(text, query, budget = 1800) {
 }
 const STOP = new Set('the and for are but not you all any can had her was one our out day get has him his how man new now old see two way who boy did its let put say she too use what when where which with this that from they will would there their about into than then them these some your have more also just like been were what does'.split(' '));
 
-module.exports = { search, duckduckgo, mojeek, wikipedia, bestPassages };
+// ---------- pictures from the web ----------
+// Safe search is always on: openly licensed pictures from Openverse (Wikimedia Commons, Flickr and
+// more; mature-flagged pictures excluded), plus your Brave Search (safesearch=strict) or SearXNG
+// (safesearch=2) when set up. Explicit searches are refused, and results whose titles are explicit
+// are dropped. Thumbnails are downloaded by Quicksilver and kept briefly on this PC, so the chat
+// shows them without the page reaching out to other sites.
+const EXPLICIT = /\b(nude|nudes|naked|nsfw|porn\w*|xxx|sex|sexy|hentai|boobs?|tits|pussy|dick|cock|penis|vagina|genitals?|topless|lingerie|erotic\w*|fetish|onlyfans|strip(per|ping)?|explicit|gore|beheading|corpse)\b/i;
+async function images(query, { count = 8 } = {}) {
+  const q = String(query || '').trim();
+  if (!q) throw new Error('Say what pictures to look for.');
+  if (EXPLICIT.test(q)) throw new Error('Picture search keeps safe search on, so it can\'t look for that.');
+  const cfg = store.config().web || {};
+  const found = [];
+  const add = (list) => { for (const x of list) if (x?.thumb && !EXPLICIT.test(`${x.title} ${x.page || ''}`) && !found.some((y) => y.thumb === x.thumb)) found.push(x); };
+  const jobs = [
+    (async () => {
+      const r = await fetch(`https://api.openverse.org/v1/images/?q=${encodeURIComponent(q)}&page_size=${Math.min(20, count * 2)}&mature=false`, { headers: { 'User-Agent': 'Quicksilver/2 (local AI app)', Accept: 'application/json' }, signal: AbortSignal.timeout(15000) });
+      if (!r.ok) throw new Error(`Openverse returned HTTP ${r.status}`);
+      const j = await r.json();
+      add((j.results || []).filter((x) => !x.mature).map((x) => ({ title: x.title || q, thumb: x.thumbnail || x.url, full: x.url, page: x.foreign_landing_url || x.url, source: x.source || x.provider || 'Openverse', license: [x.license, x.license_version].filter(Boolean).join(' ').toUpperCase(), creator: x.creator || '', width: x.width, height: x.height })));
+    })(),
+  ];
+  const key = store.getSecret('web:brave');
+  if (cfg.provider === 'brave' && key) jobs.push((async () => {
+    const r = await fetch(`https://api.search.brave.com/res/v1/images/search?safesearch=strict&count=${Math.min(20, count * 2)}&q=${encodeURIComponent(q)}`, { headers: { Accept: 'application/json', 'X-Subscription-Token': key }, signal: AbortSignal.timeout(15000) });
+    if (!r.ok) throw new Error(`Brave returned HTTP ${r.status}`);
+    const j = await r.json();
+    add((j.results || []).map((x) => ({ title: x.title || q, thumb: x.thumbnail?.src, full: x.properties?.url || x.url, page: x.url, source: x.source || 'Brave', license: '' })));
+  })());
+  if (cfg.provider === 'searxng' && cfg.searxngUrl) jobs.push((async () => {
+    const r = await fetch(`${cfg.searxngUrl.replace(/\/+$/, '')}/search?format=json&categories=images&safesearch=2&q=${encodeURIComponent(q)}`, { signal: AbortSignal.timeout(15000) });
+    if (!r.ok) throw new Error(`SearXNG returned HTTP ${r.status}`);
+    const j = await r.json();
+    add((j.results || []).map((x) => ({ title: x.title || q, thumb: x.thumbnail_src || x.img_src, full: x.img_src, page: x.url, source: x.engine || 'SearXNG', license: '' })));
+  })());
+  const settled = await Promise.allSettled(jobs);
+  if (!found.length) { const why = settled.find((x) => x.status === 'rejected')?.reason?.message; throw new Error(why ? `No pictures came back (${why}).` : 'No pictures found for that.'); }
+  // Download the thumbnails (pictures only, up to 2 MB each).
+  const fs = require('node:fs'); const path = require('node:path'); const crypto = require('node:crypto');
+  const dir = path.join(store.dir('tmp'), 'web-images'); fs.mkdirSync(dir, { recursive: true });
+  const out = [];
+  await Promise.all(found.slice(0, count + 4).map(async (x) => {
+    try {
+      if (!/^https:\/\//.test(x.thumb)) return;
+      const r = await fetch(x.thumb, { headers: { 'User-Agent': UA }, signal: AbortSignal.timeout(12000), redirect: 'follow' });
+      const type = r.headers.get('content-type') || '';
+      if (!r.ok || !/^image\/(jpeg|png|webp|gif)/.test(type)) return;
+      const buf = Buffer.from(await r.arrayBuffer());
+      if (buf.length > 2 * 1024 * 1024 || buf.length < 500) return;
+      const name = `${crypto.createHash('sha1').update(x.thumb).digest('hex').slice(0, 20)}.${type.split('/')[1].replace('jpeg', 'jpg')}`;
+      fs.writeFileSync(path.join(dir, name), buf);
+      out.push({ ...x, file: name, src: `qsmedia://w/${name}` });
+    } catch {}
+  }));
+  // Old thumbnails are cleared after a day.
+  for (const f of fs.readdirSync(dir)) { try { if (Date.now() - fs.statSync(path.join(dir, f)).mtimeMs > 864e5) fs.rmSync(path.join(dir, f), { force: true }); } catch {} }
+  const order = new Map(found.map((x, i) => [x.thumb, i]));
+  return out.sort((a, b) => order.get(a.thumb) - order.get(b.thumb)).slice(0, count);
+}
+
+module.exports = { search, duckduckgo, mojeek, wikipedia, bestPassages, images, mergeResults, EXPLICIT };

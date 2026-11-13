@@ -1625,3 +1625,9 @@ code.sel { user-select: all; background: var(--soft); padding: 1px 6px; border-r
 .meme-tpl .meme-plain { aspect-ratio: 1; display: grid; place-items: center; color: #fff; font-weight: 800; background: linear-gradient(135deg, #7c5cff, #ff6fae); }
 .meme-box { position: absolute; display: flex; align-items: center; justify-content: center; text-align: center; font-family: Impact, "Anton", "Arial Black", sans-serif; font-weight: 900; text-transform: uppercase; color: #fff; line-height: 1.05; overflow: hidden; word-break: break-word;
   text-shadow: 2px 2px 0 #000, -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 0 2px 0 #000, 2px 0 0 #000, 0 -2px 0 #000, -2px 0 0 #000; }
+
+/* Pictures from the web, under an answer */
+.web-images { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 8px; margin: 8px 0 4px; }
+.web-img { display: flex; flex-direction: column; gap: 3px; text-decoration: none; color: var(--muted, #999); }
+.web-img img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 10px; background: var(--panel-2, rgba(127,127,127,.12)); }
+.web-img:hover img { outline: 2px solid var(--accent, #6cf); }

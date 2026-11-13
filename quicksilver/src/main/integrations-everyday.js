@@ -125,6 +125,9 @@ module.exports = ({ cfg }) => {
       when: /\b(my (files?|documents?|downloads|desktop|folders?|pdfs?|spreadsheets?|notes)|in (my )?(documents|downloads|desktop)|find (the|a|my) file|on my (pc|computer)|(open|read|list) (the )?(file|folder))\b|[a-z]:\\|~\//i,
       blurb: 'Find, list and read files in your Documents, Desktop and Downloads (and any folders you add); saving a file always asks you first. Nothing leaves this PC.',
       fields: [{ key: 'folders', label: 'More folders (optional)', placeholder: 'D:\\Projects; E:\\Photos', help: 'Separate with ; — Documents, Desktop and Downloads are always included.' }] },
+    webimages: { name: 'Pictures from the web', icon: '🖼️', group: 'Everyday', defaultOn: true, noToken: true, builtIn: true,
+      when: /\b(show|find|search( for)?|look up|pull up|get|give)( me)?\b[^.?!\n]{0,30}\b(photos?|pictures?|pics|images?)\b|\b(photos?|pictures?|images?|pics)\b[^.?!\n]{0,15}\b(from|on) (the )?(web|internet|online)\b|\bwhat (does|do|did) .{1,40} look like\b/i,
+      blurb: 'Finds real pictures on the web and shows them in the chat, with where each came from and its license. Safe search is always on. Free, no account (Openverse; your Brave or SearXNG search too when set up).', fields: [] },
     webshot: { name: 'Website screenshots', icon: '📸', group: 'Build & ship', defaultOn: true, noToken: true, builtIn: true,
       when: /\b(screenshot|screen shot|capture|what does .{1,40} look like|show me (the )?(site|page|website))\b/i,
       blurb: 'Takes a picture of any web page (or an app on this PC), on a computer or phone-sized screen, and saves it.', fields: [] },
@@ -267,6 +270,16 @@ module.exports = ({ cfg }) => {
       { name: 'files_save', description: 'Save text to a file on this PC (asks the user first). Will not overwrite unless overwrite is true.', write: true, parameters: { type: 'object', properties: { path: { type: 'string' }, text: { type: 'string' }, overwrite: { type: 'boolean' } }, required: ['path', 'text'] },
         summary: (a) => `Save ${String(a.text || '').length} characters to ${a.path}`,
         run: async ({ path: p, text, overwrite }) => { const f = allowed(p); if (fs.existsSync(f) && !overwrite) throw new Error(`${f} already exists. Ask before overwriting it.`); fs.mkdirSync(path.dirname(f), { recursive: true }); fs.writeFileSync(f, String(text ?? '')); return `Saved ${f}`; } },
+    ],
+    webimages: [
+      { name: 'image_search', description: 'Find real pictures on the web (safe search on) and show them to the user in the chat. Use when the user wants to see photos or pictures of something real. Returns the pictures shown, with titles, sources and licenses; describe or compare them only if the user asks.', parameters: { type: 'object', properties: { query: { type: 'string', description: 'What to search for, e.g. snow leopard, Eiffel Tower at night' }, count: { type: 'number', description: 'How many (1-12, default 8)' } }, required: ['query'] },
+        run: async ({ query, count }) => {
+          if (isOffline()) throw new Error('Quicksilver is offline.');
+          const list = await require('./websearch').images(String(query || ''), { count: Math.max(1, Math.min(12, Number(count) || 8)) });
+          if (!list.length) return 'No pictures could be downloaded for that search.';
+          const shown = list.map(({ title, src, page, source, license, creator, width, height }) => ({ title: String(title).slice(0, 120), src, page, source, license, creator: String(creator || '').slice(0, 60), width, height }));
+          return `Showing ${shown.length} pictures from the web for "${query}" (safe search on):\n${shown.map((x, i) => `${i + 1}. ${x.title} (${x.source}${x.license ? `, ${x.license}` : ''})`).join('\n')}\n[[web-images:${JSON.stringify(shown)}]]`;
+        } },
     ],
     webshot: [
       { name: 'web_screenshot', description: 'Take a screenshot of a web page (or an app on this PC like http://localhost:3000) on a desktop or phone-sized screen, and save it as a picture.', parameters: { type: 'object', properties: { url: { type: 'string' }, device: { type: 'string', description: 'desktop (default) or phone' }, fullPage: { type: 'boolean' } }, required: ['url'] },

@@ -187,6 +187,49 @@ const mcpCatalog = require('../src/main/mcp-catalog');
   } finally { srv.close(); delete process.env.QS_RUNTIME_FORCE; }
   console.log('✓ Plug-in helpers: Node.js fetched the first time a plug-in needs it, checked against its fingerprint and kept; a mismatch is refused');
 
+  // ---- meta-search and pictures from the web ----
+  const websearch = require('../src/main/websearch');
+  const merged = websearch.mergeResults([
+    { engine: 'DuckDuckGo', list: [{ title: 'A', url: 'https://www.example.com/a/', snippet: 'short' }, { title: 'B', url: 'https://b.org/x' }] },
+    { engine: 'Mojeek', list: [{ title: 'C', url: 'https://c.net/' }, { title: 'A again', url: 'http://example.com/a?utm_source=x', snippet: 'a longer snippet' }] },
+  ]);
+  assert.equal(merged[0].url, 'https://www.example.com/a/', 'a page two engines found comes first');
+  assert.deepEqual(merged[0].engines, ['DuckDuckGo', 'Mojeek']);
+  assert.equal(merged[0].snippet, 'a longer snippet');
+  assert.equal(merged.length, 3, 'the same page is counted once');
+  console.log('✓ meta-search: every free engine asked at once; the same page counted once, pages several engines found first');
+
+  assert.ok(integrations.relevant('show me pictures of snow leopards').has('webimages'));
+  assert.ok(integrations.relevant('what does a pangolin look like').has('webimages'));
+  assert.ok(!integrations.relevant('make me a picture of a cat').has('webimages'), 'making a picture is not a web search');
+  const PNG = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==', 'base64');
+  const pngBig = Buffer.concat([PNG, Buffer.alloc(800)]);
+  const realFetch2 = global.fetch; const askedUrls = [];
+  global.fetch = async (url) => {
+    url = String(url); askedUrls.push(url);
+    if (/api\.openverse\.org/.test(url)) return new Response(JSON.stringify({ results: [
+      { title: 'Snow leopard on a rock', thumbnail: 'https://cdn.example/1.png', url: 'https://cdn.example/1-full.png', foreign_landing_url: 'https://commons.wikimedia.org/wiki/File:1', source: 'wikimedia', license: 'by-sa', license_version: '4.0', creator: 'Ann' },
+      { title: 'Snow leopard cub', thumbnail: 'https://cdn.example/2.png', url: 'https://cdn.example/2.png', foreign_landing_url: 'https://flickr.com/2', source: 'flickr', license: 'by', license_version: '2.0' },
+      { title: 'nude something', thumbnail: 'https://cdn.example/3.png', url: 'https://cdn.example/3.png', source: 'flickr', license: 'by' },
+      { title: 'flagged', thumbnail: 'https://cdn.example/4.png', url: 'https://cdn.example/4.png', mature: true, source: 'flickr', license: 'by' },
+    ] }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+    if (/cdn\.example\/\d\.png/.test(url)) return new Response(pngBig, { status: 200, headers: { 'Content-Type': 'image/png' } });
+    return new Response('no', { status: 404 });
+  };
+  try {
+    assert.ok(/mature=false/.test(await (async () => { await websearch.images('snow leopard').catch(() => {}); return askedUrls.find((u) => /openverse/.test(u)) || ''; })()), 'Openverse is asked to leave out mature pictures');
+    const pics = await websearch.images('snow leopard', { count: 8 });
+    assert.deepEqual(pics.map((x) => x.title), ['Snow leopard on a rock', 'Snow leopard cub'], 'explicit titles and mature-flagged pictures are dropped');
+    assert.match(pics[0].src, /^qsmedia:\/\/w\/[a-f0-9]{20}\.png$/);
+    assert.ok(fs.existsSync(path.join(process.env.QUICKSILVER_HOME, 'tmp', 'web-images', pics[0].file)), 'the thumbnail is kept on this PC');
+    assert.equal(pics[0].license, 'BY-SA 4.0');
+    await assert.rejects(websearch.images('nude photos'), /safe search on/);
+    const tool = integrations.tools().find((t) => t.name === 'image_search');
+    const out = await tool.run({ query: 'snow leopard' });
+    assert.match(out, /Showing 2 pictures from the web for "snow leopard" \(safe search on\)[\s\S]*\[\[web-images:\[/);
+  } finally { global.fetch = realFetch2; }
+  console.log('✓ pictures from the web: safe search always on (explicit searches refused, explicit or mature results dropped), thumbnails kept on this PC, sources and licenses shown');
+
   // ---- the Liquid Edition's free extras ----
   const mcp = require('../src/main/mcp');
   assert.equal(mcp.addLiquidPack(), mcpCatalog.LIQUID_PACK.length, 'added once');

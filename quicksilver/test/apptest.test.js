@@ -50,6 +50,21 @@ const ROOT = path.join(__dirname, '..');
     assert.ok(!/elsewhere\.invalid/.test(report), 'other sites are not visited');
     assert.equal(after, before, 'the hidden window is closed afterwards');
     console.log('✓ App tester: JavaScript errors, failed requests, missing images, broken links, phone overflow, alt text and labels, same site only, nothing left open');
+    // Pictures from the web show in the chat (served from this PC as qsmedia://w/…), under the answer.
+    const PNG = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==', 'base64');
+    const wdir = path.join(HOME, 'tmp', 'web-images'); fs.mkdirSync(wdir, { recursive: true });
+    fs.writeFileSync(path.join(wdir, 'abcdef0123456789abcd.png'), PNG);
+    const shown = await win.evaluate(async () => {
+      const alt = { text: 'Here you go.', toolCalls: [{ name: 'image_search', source: 'Pictures from the web', status: 'done', result: `Showing 1\n[[web-images:${JSON.stringify([{ title: 'A fox', src: 'qsmedia://w/abcdef0123456789abcd.png', page: 'https://example.org/fox', source: 'flickr', license: 'BY 2.0' }])}]]` }] };
+      const box = document.createElement('div'); box.innerHTML = webImagesHTML(alt, { id: 'm1' }); document.body.appendChild(box);
+      const img = box.querySelector('.web-img img');
+      await new Promise((r) => { if (img.complete) r(); else { img.onload = r; img.onerror = r; } });
+      const res = { n: box.querySelectorAll('.web-img').length, w: img.naturalWidth, text: box.innerText, describe: Boolean(box.querySelector('[data-webimg-describe]')) };
+      box.remove(); return res;
+    });
+    assert.deepEqual([shown.n, shown.w, shown.describe], [1, 1, true], `the picture shows: ${JSON.stringify(shown)}`);
+    assert.match(shown.text, /flickr · BY 2\.0[\s\S]*1 pictures from the web · safe search on/);
+    console.log('✓ pictures from the web show under the answer, from this PC, with source, license and Describe these');
     // The plug-ins on the Liquid Edition card.
     await win.evaluate(() => { document.querySelector('#wc-close')?.click(); go({ view: 'stacks' }); });
     await win.waitForSelector('#liquid-plugins:has-text("App tester"):has-text("Security audit"):has-text("Design extractor")', { timeout: 30000 });

@@ -356,6 +356,7 @@ function messageHTML(chat, a, m, i) {
     <div class="who-line"><b>${esc(who.name)}</b>${model && !who.own ? `<span class="who-model"${alt.autoWhy ? ` title="${esc(alt.autoWhy)}"` : ''}>${alt.autoWhy ? '✨ ' : ''}${esc(model)}</span>` : ''}${alt.skillId && skillById(alt.skillId) ? `<span class="badge b-peach">⚡ ${esc(skillById(alt.skillId).name)}</span>${!streaming && !pending && chat.messages[i - 1]?.skillAuto ? `<button class="tool plain-btn" data-act="plain" data-id="${m.id}" title="Quicksilver used this skill by itself because of how the message was worded. Press to get an ordinary written answer instead.">↩ Answer normally</button>` : ''}` : ''}${alt.imported ? `<span class="badge">From ${esc(alt.imported)}</span>` : ''}${alt.fixed ? '<span class="badge b-mint" title="A check of the first answer found a mistake (a sum, a code error or a wrong fact); this one fixes it. The first answer is still there with ‹ ›.">✓ Corrected</span>' : ''}${alt.preAnswered ? '<span class="badge b-lemon" title="This was the most likely next question, so it was answered while you read the last answer.">⚡ Ready before you asked</span>' : ''}${alt.cached ? '<span class="badge b-lemon" title="You rated this answer before (or it passed the double-check), so it was shown instantly. Regenerate for a fresh one.">⚡ Instant</span>' : ''}${alt.unsure && alt.check?.running ? '<span class="badge" title="The model was unsure of a number in this answer, so a second model is checking it.">Checking a number…</span>' : ''}${alt.autoWeb && !alt.sources?.length ? '<span class="badge b-sky" title="This question is about something current, so the web was searched automatically. Turn it off in Settings → General.">🌐 Checked the web</span>' : ''}${alt.webEmpty ? '<span class="badge b-lemon" title="Web search was on but found nothing for this question, so this answer is from the model\'s own knowledge.">Web: nothing found</span>' : ''}${etaNow}${alt.stats?.tps && !streaming ? `<span class="who-speed" title="${esc(statsTitle(alt))}">${Math.round(alt.stats.tps * 0.75)} words/s</span>` : ''}${m.t ? `<span class="who-time">${esc(msgTime(m))}</span>` : ''}</div>
     ${metaRow(councilBadgeHTML(alt) + stepsHTML(alt, streaming) + toolsHTML(alt) + memoryChipHTML(alt) + (alt.reasoning ? `<details class="think chip-d"><summary>${streaming && !alt.text ? '<span class="pulse"></span>Thinking…' : '💭 Thought it through'}</summary><div>${esc(alt.reasoning)}</div></details>` : ''))}
     <div class="bubble md ${streaming ? 'streaming' : ''} ${alt.error ? 'error' : ''}">${body}</div>
+    ${webImagesHTML(alt, m)}
     ${downloadHTML(m, alt, streaming)}
     ${appButtonsHTML(m, alt, streaming)}
     ${skillMediaHTML(m, alt, streaming)}
@@ -1453,13 +1454,21 @@ function saveAsMenu(chat, m, anchor) {
 
 const toolsOn = (chat, a) => Boolean(chat.tools ?? a.tools ?? false);
 
+// Pictures from the web (the image_search plug-in), shown under the answer with where each came from.
+const webImagesOf = (alt) => (alt.toolCalls || []).flatMap((t) => { const m = String(t.result || '').match(/\[\[web-images:(\[[\s\S]*\])\]\]/); if (!m) return []; try { return JSON.parse(m[1]); } catch { return []; } });
+function webImagesHTML(alt, m) {
+  const list = webImagesOf(alt).filter((x) => /^qsmedia:\/\/w\//.test(x.src || ''));
+  if (!list.length) return '';
+  return `<div class="web-images">${list.map((x) => `<a class="web-img" href="${esc(x.page || '#')}" title="${esc(`${x.title}${x.creator ? ` by ${x.creator}` : ''} · ${x.source}${x.license ? ` · ${x.license}` : ''}`)}"><img src="${esc(x.src)}" alt="${esc(x.title)}" loading="lazy"><span class="small">${esc(x.source)}${x.license ? ` · ${esc(x.license)}` : ''}</span></a>`).join('')}</div>
+    <div class="row small" style="gap:8px;margin:2px 0 6px"><span class="muted">🖼️ ${list.length} pictures from the web · safe search on · click one for its page</span><button class="btn small ghost" data-webimg-describe="${m.id}">👁 Describe these</button></div>`;
+}
 function toolsHTML(alt) {
   const list = alt.toolCalls || [];
   if (!list.length) return '';
   const icon = { running: '⏳', done: '✅', error: '⚠️', denied: '🚫' };
   return `<details class="steps"><summary>🔌 Used ${list.length} tool${list.length > 1 ? 's' : ''}: ${[...new Set(list.map((t) => t.source))].map(esc).join(', ')}</summary>
     ${list.map((t) => `<div class="step"><span>${icon[t.status] || '•'}</span><div class="grow"><b>${esc(t.source)}</b> <code>${esc(t.name)}</code> <span class="small muted">${esc(JSON.stringify(t.args || {}).slice(0, 140))}</span>
-      ${t.result ? `<details><summary class="small">Result</summary><pre>${esc(t.result)}</pre></details>` : ''}</div></div>`).join('')}
+      ${t.result ? `<details><summary class="small">Result</summary><pre>${esc(String(t.result).replace(/\n?\[\[web-images:[\s\S]*\]\]/, ''))}</pre></details>` : ''}</div></div>`).join('')}
   </details>`;
 }
 
@@ -1504,4 +1513,21 @@ document.addEventListener('click', (e) => {
   if (!b || !pending) return;
   b.disabled = true; b.textContent = 'Answering…';
   qs.call('chat:answerNow', pending.requestId).catch(() => {});
+});
+
+// "Describe these": the pictures from the web are attached to a new message for a model that sees.
+document.addEventListener('click', async (e) => {
+  const b = e.target.closest('[data-webimg-describe]');
+  if (!b || pending) return;
+  const chat = chatById(S.route.id);
+  const m = chat?.messages.find((x) => x.id === b.dataset.webimgDescribe);
+  const list = m ? webImagesOf(m.alts[m.altIndex]).slice(0, 6) : [];
+  if (!list.length) return;
+  b.disabled = true;
+  const toData = async (src) => { const blob = await (await fetch(src)).blob(); return new Promise((res) => { const r = new FileReader(); r.onload = () => res(r.result); r.readAsDataURL(blob); }); };
+  const attachments = (await Promise.all(list.map(async (x, i) => { try { return { type: 'image', name: `${i + 1}. ${x.title}`.slice(0, 80), dataUrl: await toData(x.src) }; } catch { return null; } }))).filter(Boolean);
+  if (!attachments.length) { b.disabled = false; toast('Those pictures are no longer on this PC. Search again.'); return; }
+  chat.messages.push({ id: uid(), t: now(), role: 'user', text: `Describe these ${attachments.length} pictures from the web, one by one, and say what they have in common.`, attachments });
+  save(); render();
+  generate(chat, null);
 });

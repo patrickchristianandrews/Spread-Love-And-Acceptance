@@ -778,9 +778,10 @@ async function collect(gen) {
     };
     store.saveConfig({ web: { provider: 'free' } });
     let r = await websearch.search('capital of France');
-    assert.deepEqual(r.map((x) => x.url), ['https://en.wikipedia.org/wiki/Paris', 'https://example.org/france'], 'results decoded, ads skipped, attribute order ignored');
+    // Meta-search: DuckDuckGo and Mojeek are asked at once and merged (each engine's top result first).
+    assert.deepEqual(r.map((x) => x.url), ['https://en.wikipedia.org/wiki/Paris', 'https://example.com/paris', 'https://example.org/france'], 'results decoded, ads skipped, attribute order ignored, engines merged');
     assert.equal(r[0].title, 'Paris - Wikipedia'); assert.match(r[0].snippet, /capital of France/); assert.match(r[0].text, /largest city/);
-    assert.match(r[1].snippet, /French Republic/);
+    assert.match(r[2].snippet, /French Republic/);
     ddgDown = true;
     r = await websearch.search('capital of France');
     assert.equal(r[0].url, 'https://example.com/paris', 'falls back to Mojeek');
