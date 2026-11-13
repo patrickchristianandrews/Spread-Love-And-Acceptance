@@ -362,6 +362,7 @@ function messageHTML(chat, a, m, i) {
     ${skillMediaHTML(m, alt, streaming)}
     ${cloudUsedHTML(alt)}
     ${refusalHTML(chat, m, alt, streaming)}
+    ${gapHTML(chat, m, alt, streaming)}
     ${checkHTML(m, alt) || alt.sources?.length ? `<div class="answer-foot">${checkHTML(m, alt)}` : ''}
     ${alt.sources?.length ? `<div class="sources"><span class="src-label" title="${alt.autoWeb ? 'This question is about something current, so the web was searched automatically.' : 'Where this answer comes from'}">${alt.autoWeb ? '🌐 ' : ''}${alt.autoLib ? '📚 ' : ''}Sources</span>${alt.sources.map((s, k) => `<${s.url ? `a href="${esc(s.url)}"` : 'span'} class="src-chip" title="${esc(s.title || s.url || '')}"><span class="cite">${k + 1}</span>${esc(s.url ? domainOf(s.url) : s.title)}</${s.url ? 'a' : 'span'}>`).join('')}</div>` : ''}
     ${checkHTML(m, alt) || alt.sources?.length ? '</div>' : ''}

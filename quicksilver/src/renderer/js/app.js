@@ -441,6 +441,7 @@ async function startupModels() {
   const p = S.data.prefs;
   // The model that comes with Quicksilver: ready on first launch, nothing to download.
   try { await setUpQuicksilver(true); } catch {}
+  startAutomations(); // scheduled automations run while Quicksilver is open
   // Pure Liquid Edition: models found from other apps (LM Studio, Ollama, Downloads…) are never
   // added by themselves. They're offered under Models and Stacks ("Review & add"), or added
   // automatically only if you turn that on in Settings → Chat.

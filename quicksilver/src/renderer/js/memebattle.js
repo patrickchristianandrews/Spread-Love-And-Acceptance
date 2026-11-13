@@ -105,7 +105,8 @@ function memeRoundHTML(r) {
       ${(s.img?.id || (s.tpl && MEME_TEMPLATES.find((x) => x.id === s.meme?.tplId)?.top)) && s.meme && !s.gif && !r.gifs ? `<button class="btn small" data-mgif="${i}" ${s.gifBusy ? 'disabled' : ''}>🌀 ${s.gifBusy ? esc(s.gifBusy) : 'Make it a GIF'}</button>` : ''}
       ${s.gifBusy && r.gifs ? `<span class="status-line small">${esc(s.gifBusy)}</span>` : ''}
       ${s.gif ? `<div class="meme-gif"><img src="${esc(s.gif.url)}" alt="GIF"><span class="small muted">🌀 GIF saved to your Gallery${s.gif.captionsSkipped ? ' (without captions: this FFmpeg can\'t write text)' : ''}</span></div>` : ''}
-      ${s.gifError ? `<div class="small" style="color:var(--danger)">${esc(s.gifError)}</div>` : ''}</div>`;
+      ${s.gifError ? `<div class="small" style="color:var(--danger)">${esc(s.gifError)}</div>` : ''}
+      ${s.paintError && !s.img ? '<div class="small muted">No picture could be made for this one on this PC. Connect a picture service (Venice, or free Pollinations) under Models → Connect an API, and memes get their pictures from there.</div>' : ''}</div>`;
   }).join('')}</div>
   ${done && !r.voted && r.sides.some((s) => s.meme) ? '<div class="arena-vote"><span class="small muted">Which meme is funnier?</span><button class="btn" data-mvote="A">A</button><button class="btn" data-mvote="tie">Both funny</button><button class="btn" data-mvote="B">B</button><button class="btn ghost" data-mvote="bad">Neither</button></div>' : ''}
   ${!done ? `<p class="small muted" style="text-align:center">${r.animating ? 'Bringing both memes to life as GIFs, one at a time…' : r.painting ? 'Painting the pictures, one at a time…' : 'They write one after the other, so each gets this PC\'s full power.'}</p>` : ''}`;
@@ -158,7 +159,12 @@ function runMemeSide(r, i) {
     resolve: async (t) => {
       s.raw = t || s.raw; s.meme = parseMeme(s.raw);
       if (!s.meme) s.error = 'This model did not write a meme.';
-      else if (s.meme.tplId) { const tpl = MEME_TEMPLATES.find((x) => x.id === s.meme.tplId); s.tpl = await qs.call('memes:image', tpl.id, tpl.url).catch(() => null); }
+      else if (s.meme.tplId) {
+        const tpl = MEME_TEMPLATES.find((x) => x.id === s.meme.tplId);
+        s.tpl = await qs.call('memes:image', tpl.id, tpl.url).catch(() => null);
+        // No template picture (offline, or Imgflip unreachable): the meme gets a painted picture instead.
+        if (!s.tpl) { const boxes = s.meme.boxes.filter(Boolean); s.meme = { top: boxes[0] || '', bottom: boxes.slice(1).join(' / '), picture: `a funny, expressive scene about ${r.topic}: ${boxes.join(', then ')}`, from: tpl.name }; }
+      }
       next();
     },
     reject: (err) => { s.error = err.message === 'aborted' ? 'Stopped.' : memeError(err.message); next(); },
@@ -167,25 +173,27 @@ function runMemeSide(r, i) {
 }
 // The pictures, one after the other, with the same picture model for both so it stays fair.
 async function paintMemes(r) {
-  const pick = r.paint ? memePicker() : null;
+  const pick = (r.paint || r.sides.some((s) => s.meme && !s.meme.tplId)) ? memePicker() : null;
   if (!pick) { if (S.route.view === 'memes') render(); return; }
   r.painting = true;
   for (const s of r.sides) {
     if (memeRound !== r || !s.meme?.picture || s.meme.tplId) continue;
     s.painting = true; if (S.route.view === 'memes') render();
     const prompt = `${s.meme.picture}, meme picture, clear subject, no text, no words, no letters`;
+    const viaCloud = async (p) => { const [, pid, ...rest] = p.value.split(':'); return qs.call('media:apiImage', pid, rest.join(':'), { prompt, size: '1024x1024' }); };
     try {
-      if (pick.api) {
-        const [, pid, ...rest] = pick.value.split(':');
-        s.img = await call('media:apiImage', pid, rest.join(':'), { prompt, size: '1024x1024' });
-      } else {
+      if (pick.api) s.img = await viaCloud(pick);
+      else {
         const jobId = uid();
         s.img = await new Promise((resolve) => {
           mediaJobs[jobId] = { status: 'Starting…', progress: 0, label: 'Meme picture', resolve, start: Date.now(), inChat: true };
           qs.call('media:generate', jobId, { modelId: pick.inst.id, mode: 'generate', prompt, negative: 'text, words, letters, watermark', width: 768, height: 768, seed: '' }).catch(() => resolve(null));
         });
+        // This PC couldn't paint it (out of memory, or it stopped): the cloud picture service does.
+        if (!s.img && pick.fallback) { localMediaFailed.add(pick.inst.catalogId || pick.inst.id); s.img = await viaCloud(pick.fallback).catch(() => null); }
       }
-    } catch { s.img = null; }
+    } catch { s.img = pick.fallback && !pick.api ? await viaCloud(pick.fallback).catch(() => null) : null; }
+    if (!s.img) s.paintError = true;
     s.painting = false;
   }
   r.painting = false;

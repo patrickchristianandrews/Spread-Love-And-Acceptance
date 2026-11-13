@@ -1619,6 +1619,38 @@ function redPng(size = 64) {
   await win.click('[data-cmp-tab="blind"]');
   await win.waitForSelector('#ar-q');
   console.log('✓ meme battle: two hidden memes on one topic, vote, its own leaderboard; GIF maker beside it and a GIF battle switch');
+
+  // When the AI says it can't do something, a fix is suggested.
+  const gaps = await win.evaluate(() => [
+    "I'm sorry, but I can't browse the internet, so I don't know today's price.", 'I cannot access your files on your computer.', "I can't see images, but if you describe it…",
+    "I don't have access to your email inbox.", 'As a language model I cannot run code.', "I can't generate images directly.", "I can't remember previous conversations.",
+    'I am unable to do that: it is beyond my capabilities.', 'Paris is the capital of France.',
+  ].map((t) => gapOf(t)?.id || null));
+  assert.deepEqual(gaps, ['web', 'files', 'vision', 'apps', 'run', 'make', 'memory', 'any', null]);
+  console.log('✓ when the AI says it can\'t do something: the fix is suggested (web search, files, a model that sees, an app, Full access, a picture model, memory, or a plug-in search)');
+
+  // Automations: a schedule, made from an idea, run now into its own chat.
+  const times = await win.evaluate(() => {
+    const from = new Date(2026, 10, 13, 9, 0).getTime(); // a Friday, 9:00
+    const f = (s) => new Date(nextRun(s, from)).toString().slice(0, 21);
+    return { daily: f({ kind: 'daily', time: '08:00' }), later: f({ kind: 'daily', time: '17:30' }), weekdays: f({ kind: 'weekdays', time: '08:00' }), weekly: f({ kind: 'weekly', day: 1, time: '09:00' }), hourly: f({ kind: 'hourly', minute: 15 }) };
+  });
+  assert.deepEqual(times, { daily: 'Sat Nov 14 2026 08:00', later: 'Fri Nov 13 2026 17:30', weekdays: 'Mon Nov 16 2026 08:00', weekly: 'Mon Nov 16 2026 09:00', hourly: 'Fri Nov 13 2026 09:15' });
+  await win.click('[data-nav="automations"]');
+  await win.waitForSelector('h1:has-text("Automations")');
+  await win.click('[data-auto-tpl="3"]');
+  await win.waitForSelector('#au-prompt');
+  await win.fill('#au-prompt', 'Say hello from the automation.');
+  await win.selectOption('#au-target', 'local:qwen3-8b');
+  await win.click('#au-test');
+  await win.waitForFunction(() => { const a = (S.data.automations || [])[0]; const c = a && S.data.chats.find((x) => x.id === a.chatId); const m = c?.messages.at(-1); return m?.role === 'assistant' && m.alts[m.altIndex].text && a.lastResult; }, null, { timeout: 90000 });
+  const au = await win.evaluate(() => { const a = S.data.automations[0]; const c = S.data.chats.find((x) => x.id === a.chatId); return { title: c.title, n: c.messages.length, next: a.next > Date.now(), result: a.lastResult, enabled: a.enabled }; });
+  assert.ok(au.title === '⏱ Tech news digest' && au.n === 2 && au.next && au.enabled && /Answer from/.test(au.result), `ran into its own chat: ${JSON.stringify(au)}`);
+  await win.evaluate(() => go({ view: 'automations' }));
+  await win.waitForSelector('[data-auto-run]');
+  assert.match(await win.locator('.auto-row').first().innerText(), /Tech news digest[\s\S]*Every day at 12:00[\s\S]*next[\s\S]*Last result/);
+  await shot(win, '16e-automations');
+  console.log('✓ automations: schedules (daily, weekdays, weekly, hourly), made from an idea, run into their own chat with the result shown');
   // A battle picks models on this PC, never two from one cloud service; an empty account is explained.
   await win.evaluate(() => go({ view: 'memes' }));
   await win.waitForSelector('#mb-topic');
