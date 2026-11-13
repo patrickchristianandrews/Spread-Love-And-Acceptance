@@ -65,6 +65,15 @@ const ROOT = path.join(__dirname, '..');
     assert.deepEqual([shown.n, shown.w, shown.describe], [1, 1, true], `the picture shows: ${JSON.stringify(shown)}`);
     assert.match(shown.text, /flickr · BY 2\.0[\s\S]*1 pictures from the web · safe search on/);
     console.log('✓ pictures from the web show under the answer, from this PC, with source, license and Describe these');
+    // Your Crew → Downloads: the torrent page, and the torrent engine starts inside the app.
+    await win.evaluate(() => { document.querySelector('#wc-close')?.click(); go({ view: 'assistants' }); });
+    await win.click('[data-crew-tab="downloads"]');
+    await win.waitForSelector('#t-add');
+    assert.match(await win.locator('#main').innerText(), /Save to:[\s\S]*Search free collections/);
+    assert.equal(await win.evaluate(() => document.querySelector('.nav-item[data-nav="assistants"]')?.classList.contains('active')), true, 'Your Crew stays highlighted');
+    const started = await app.evaluate(async (_e, mod) => { try { await process.mainModule.require(mod).engine(); return 'ok'; } catch (err) { return String(err.message); } }, path.join(ROOT, 'src', 'main', 'torrents.js'));
+    assert.equal(started, 'ok', `the torrent engine starts inside the app: ${started}`);
+    console.log('✓ Your Crew → Downloads: the torrent page, with the engine running inside the app');
     // The plug-ins on the Liquid Edition card.
     await win.evaluate(() => { document.querySelector('#wc-close')?.click(); go({ view: 'stacks' }); });
     await win.waitForSelector('#liquid-plugins:has-text("App tester"):has-text("Security audit"):has-text("Design extractor")', { timeout: 30000 });

@@ -12,6 +12,11 @@ Updating from 2.18: the Liquid Edition now includes its Closer and its picture a
 
 ### New in 2.20.7
 
+- **Torrent downloads** (Your Crew → Downloads): paste a magnet link or a .torrent address, or pick a .torrent file, and it downloads into the folder you choose, with progress, speed, pause, resume and remove (removing keeps the files). Search covers free, legal collections: the Internet Archive's public-domain and openly licensed films, music, books and software. Unfinished downloads carry on when Quicksilver opens; sharing stops when a download finishes unless you choose to keep sharing.
+- **Settings → API connections:** every cloud AI and service you connected in one place (edit, remove, connect another), and the switches for how they're used.
+- **Settings → Writing style:** base style and tone (professional, friendly, candid, quirky, efficient, nerdy, cynical), warmth, enthusiasm, emoji, visual answers, and headers and lists.
+- **Settings → Permissions:** by default the AI reads files in your folders and asks before changing anything; **Full access** (off unless you turn it on, with a warning) lets it reach any file and run commands without asking.
+
 - **Models reload far less, and pick up where they left off.** On a PC short of memory, a chat's model used to restart every few messages as the chat grew, and the model you were chatting with could be unloaded to make room for a helper. Now models start with room for a longer chat, the one you're chatting with is unloaded last, and a **reading cache** saves what a model has already read before it's unloaded and puts it back when it loads again, so it doesn't re-read the whole chat (the slowest part on a PC without a graphics card). With Cloud AI for everything on, nothing is pre-loaded on your PC at all.
 - **Built-in meta-search** (like SearXNG, nothing to set up): the free web search now asks DuckDuckGo, Mojeek and Wikipedia at once and merges the results, pages several engines found first.
 - **Pictures from the web in chat:** ask "show me pictures of snow leopards" or "what does a pangolin look like" and real pictures appear under the answer, with where each came from and its license (click one for its page). Safe search is always on. **👁 Describe these** sends them to a model that sees. Uses Openverse (free), and your Brave or SearXNG search when set up.

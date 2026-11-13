@@ -1642,3 +1642,6 @@ code.sel { user-select: all; background: var(--soft); padding: 1px 6px; border-r
 .switch span::before { content: ''; position: absolute; width: 18px; height: 18px; left: 3px; top: 3px; border-radius: 50%; background: #fff; transition: transform .15s; }
 .switch input:checked + span { background: var(--accent, #5aa9ff); }
 .switch input:checked + span::before { transform: translateX(18px); }
+
+/* Your Crew → Downloads */
+.torrent-row { margin-bottom: 8px; }

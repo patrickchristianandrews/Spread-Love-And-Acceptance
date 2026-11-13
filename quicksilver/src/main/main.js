@@ -802,6 +802,18 @@ handle('diag:save', async () => {
   return true;
 });
 handle('shell:open', (url) => { if (/^https?:\/\//.test(url)) shell.openExternal(url); });
+// Torrent downloads (Your Crew → Downloads).
+const torrents = require('./torrents');
+handle('torrents:list', () => torrents.list());
+handle('torrents:add', (src) => torrents.add(src));
+handle('torrents:act', (id, what) => torrents.act(String(id), String(what)));
+handle('torrents:search', (q, kind) => torrents.search(q, { kind }));
+handle('torrents:seed', (on) => { store.saveConfig({ torrents: { ...(store.config().torrents || {}), seed: Boolean(on) } }); return true; });
+handle('torrents:pickFolder', async () => { const r = await dialog.showOpenDialog(win, { title: 'Where should downloads go?', defaultPath: torrents.defaultFolder(), properties: ['openDirectory', 'createDirectory'] }); return r.canceled || !r.filePaths[0] ? null : torrents.setFolder(r.filePaths[0]); });
+handle('torrents:pickFile', async () => { const r = await dialog.showOpenDialog(win, { title: 'Pick a .torrent file', filters: [{ name: 'Torrent files', extensions: ['torrent'] }], properties: ['openFile'] }); return r.canceled ? null : r.filePaths[0] || null; });
+// Unfinished downloads carry on a little after start-up (only when there are some).
+setTimeout(() => { if ((store.config().torrents?.list || []).some((t) => !t.done && !t.paused)) torrents.resumeSaved().catch(() => {}); }, 20000).unref?.();
+handle('shell:openPath', (p) => { const f = path.resolve(String(p || '')); if (fs.existsSync(f)) return shell.openPath(f); return 'not found'; });
 // Send what Quicksilver made to your cloud storage (Google Drive, OneDrive, Dropbox).
 handle('cloud:targets', () => integrations.cloudTargets());
 handle('cloud:sendAnswer', async (dest, format, { markdown, html, title }) => {
@@ -889,5 +901,5 @@ app.whenReady().then(() => { try { require('./guide').start(); require('./catalo
   app.on('activate', () => { if (BrowserWindow.getAllWindows().length === 0) createWindow(); });
 });
 
-app.on('before-quit', () => { llama.stopAll(); media.stopAll(); apiserver.stop(); phone.stop(); mcp.disconnectAll(); });
+app.on('before-quit', () => { try { require('./torrents').stopAll(); } catch {} llama.stopAll(); media.stopAll(); apiserver.stop(); phone.stop(); mcp.disconnectAll(); });
 app.on('window-all-closed', () => { llama.stopAll(); media.stopAll(); if (process.platform !== 'darwin') app.quit(); });

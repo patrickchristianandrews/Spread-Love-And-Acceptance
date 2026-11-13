@@ -324,7 +324,7 @@ function go(r) { S.route = r; render(); }
 function render() {
   renderChatList();
   paintDownloads();
-  $$('.nav-item[data-nav]').forEach((b) => b.classList.toggle('active', b.dataset.nav === (S.route.view === 'project' ? 'projects' : S.route.view)));
+  $$('.nav-item[data-nav]').forEach((b) => b.classList.toggle('active', b.dataset.nav === (S.route.view === 'project' ? 'projects' : S.route.view === 'torrents' ? 'assistants' : S.route.view)));
   const v = views[S.route.view] || views.chat;
   const main = $('#main');
   // Redrawing the page you're already on (an answer finishing, checks or follow-ups arriving)
