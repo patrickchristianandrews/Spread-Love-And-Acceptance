@@ -49,6 +49,12 @@ const PRESETS = {
   kubernetes: { group: 'Data & cloud', name: 'Kubernetes', transport: 'stdio', command: 'npx', args: ['-y', 'mcp-server-kubernetes'], note: 'Inspect and manage clusters with your kubectl config. Needs Node.js.' },
 
   // ---------- Creative & media ----------
+  // Imagination Studio (github.com/drowzeys/Imagination-Studio-by-keys-Wasserman): a local film
+  // studio for big machines (DGX Spark, RTX Spark, 96 GB+ Macs). Its MCP server is a small Python
+  // script that talks to the running Studio at 127.0.0.1:7870: stills, clips with sound, voices,
+  // songs, edits, a whole film from a logline, and export. 46 tools.
+  imagination: { group: 'Creative & media', name: 'Imagination Studio (film studio)', transport: 'stdio', command: process.platform === 'win32' ? 'python' : 'python3', args: ['<full path to mcp/studio-mcp.py in your Imagination Studio folder>'], env: { STUDIO_URL: 'http://127.0.0.1:7870' },
+    note: 'Lets chat drive Imagination Studio: pictures, video with sound, voices, songs, editing and whole films from a one-line idea. Imagination Studio must be installed and running (it needs a very powerful machine). Needs Python 3.10 or newer.' },
   blender: { group: 'Creative & media', name: 'Blender (3D)', transport: 'stdio', command: 'uvx', args: ['blender-mcp'], note: 'Build and edit 3D scenes in Blender by describing them. Needs uv and the Blender MCP add-on.' },
   figma: { group: 'Creative & media', name: 'Figma (desktop app)', transport: 'http', url: 'http://127.0.0.1:3845/mcp', note: 'Read designs, components and variables from the Figma desktop app. Turn on the MCP server in Figma\'s preferences first.' },
   elevenlabs: { group: 'Creative & media', name: 'ElevenLabs voices', transport: 'stdio', command: 'uvx', args: ['elevenlabs-mcp'], env: { ELEVENLABS_API_KEY: '<your ElevenLabs key>' }, note: 'Lifelike speech, voice changing and sound effects. Free monthly credits. Needs uv.' },

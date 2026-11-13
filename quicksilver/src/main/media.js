@@ -305,7 +305,9 @@ function sdArgs(req, { spec, files: f, hw, has, safe = false, out, help = helper
   // Chroma: the attention mask off gives cleaner pictures (stable-diffusion.cpp's advice).
   if (spec.recipe === 'chroma') { if (has('--model-args')) args.push('--model-args', 'chroma_use_dit_mask=false'); else if (has('--chroma-disable-dit-mask')) args.push('--chroma-disable-dit-mask'); }
   if (spec.recipe === 'qwen-image' && has('--flow-shift')) args.push('--flow-shift', '3');
-  if (req.negative && spec.recipe !== 'flux' && spec.recipe !== 'kontext' && !fast) args.push('-n', req.negative); // fast mode has no guidance, so nothing to steer away from
+  // Qwen-Image 2.1 Turbo: its own 8-step schedule (stable-diffusion.cpp's docs give these sigmas).
+  if (spec.recipe === 'qwen-image-2' && !fast && has('--sigmas') && !req.steps) args.push('--sigmas', '1.0,0.978453,0.95418,0.926626,0.89508,0.845148,0.704534,0.414568,0.0');
+  if (req.negative && !['flux', 'kontext', 'flux3', 'qwen-image-2'].includes(spec.recipe) && !fast) args.push('-n', req.negative); // fast mode has no guidance, so nothing to steer away from
 
   // Size. A job fails at the very end (when the result is decoded) if it is too big for the
   // card, after all the waiting. So a clip is made at 480p on cards under 16 GB, and the second

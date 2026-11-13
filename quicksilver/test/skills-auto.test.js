@@ -137,12 +137,14 @@ const PRO = [
   ['help me respond to this RFP from the city', 'procurement'], ['I have a hard conversation with my brother coming up', 'hard-talk'], ['I can\'t sleep lately', 'sleep-plan'],
   ['write a player controller for my Godot platformer', 'game-player'], ['I need enemy AI that patrols and chases in Unity', 'game-enemy'], ['unreal crash when the level loads, here is the log', 'game-fix'],
   ['make a seamless texture of mossy cobblestone', 'make-texture'], ['a branching dialogue for the blacksmith', 'game-dialogue'], ['write a game design document for my roguelike', 'game-design-doc'],
+  ['make a shot list for this scene', 'film-shotlist'], ['write a short film script about a lighthouse keeper', 'film-script'], ['I need a character bible so my characters stay the same', 'film-characters'], ['plan a trailer for my film', 'film-trailer'],
   ['summarize this article', 'summarize'], ['write an email to my landlord', 'email'], ['translate this to Spanish', 'translate'], ['write a SQL query for top customers', 'sql'],
 ];
 const proOff = PRO.map(([t, want]) => [t, ctx.suggestSkill(t)?.id || null, want]).filter(([, got, want]) => got !== want);
 assert.deepEqual(proOff, [], `specialist skills wrong: ${proOff.map(([t, got, want]) => `"${t}" → ${got} (wanted ${want})`).join('; ')}`);
 assert.equal(ctx.autoSkillFor('make me a pixel art sprite of a knight', [], null)?.id, 'make-sprite', 'a sprite is painted by the sprite skill');
 assert.equal(ctx.autoSkillFor('make me a picture of a knight', [], null)?.id, 'make-image', 'an ordinary picture is still an ordinary picture');
+assert.equal(ctx.autoSkillFor('make a storyboard for the chase scene', [], null)?.id, 'film-storyboard', 'storyboard frames are painted by the storyboard skill');
 assert.ok(ctx.SKILL_CATEGORIES.games && ctx.allSkills().filter((s) => s.category === 'games').length >= 13, 'a Game development group');
 assert.ok(ctx.SKILL_CATEGORIES.policy && ctx.SKILL_CATEGORIES.security && ctx.allSkills().filter((s) => ['policy', 'security'].includes(s.category)).length >= 15, 'two new groups, each with its skills');
 for (const s of ctx.allSkills()) for (const p of s.triggers || []) assert.doesNotThrow(() => new RegExp(p, 'i'), `${s.id}: ${p}`);

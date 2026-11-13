@@ -199,5 +199,25 @@ const exporters = require('../src/main/exporters');
     cdn.close(); origin.close();
     console.log('✓ big downloads use plain streams: redirects followed, the token stays with Hugging Face, Stop still stops');
   }
+  // --- Newer picture models: Qwen-Image 2.1 Turbo and FLUX.3 Klein get the engine settings their docs give ---
+  {
+    const media = require('../src/main/media');
+    const catalog = require('../src/shared/catalog');
+    const all = () => true;
+    const files = { diffusion: 'd.gguf', vae: 'v.safetensors', llm: 'l.gguf' };
+    const hw = { vramGB: 12, ramGB: 32 };
+    const q = catalog.MEDIA_MODELS.find((m) => m.id === 'qwen-image-2.1-turbo');
+    const k = catalog.MEDIA_MODELS.find((m) => m.id === 'flux-3-klein');
+    assert.ok(q && k, 'both are in the catalog');
+    const qa = media.sdArgs({ prompt: 'a poster', negative: 'blurry' }, { spec: q, files, hw, has: all, help: {} }).args.join(' ');
+    assert.match(qa, /--diffusion-model d\.gguf --vae v\.safetensors --llm l\.gguf --sampling-method euler/);
+    assert.match(qa, /--sigmas 1\.0,0\.978453,0\.95418,0\.926626,0\.89508,0\.845148,0\.704534,0\.414568,0\.0/);
+    assert.match(qa, /--steps 8 --cfg-scale 1/); assert.doesNotMatch(qa, / -n blurry/, 'no negative prompt at guidance 1');
+    const ka = media.sdArgs({ prompt: 'a cat', negative: 'blurry' }, { spec: k, files, hw, has: all, help: {} }).args.join(' ');
+    assert.match(ka, /--llm l\.gguf/); assert.match(ka, /--steps 16 --cfg-scale 1/); assert.doesNotMatch(ka, /--sigmas|-n blurry/);
+    const ke = media.sdArgs({ prompt: 'make it night', image: 'in.png' }, { spec: k, files, hw, has: all, help: {} }).args.join(' ');
+    assert.match(ke, /-r in\.png/, 'FLUX.3 Klein edits a photo from a description');
+    console.log('✓ Qwen-Image 2.1 Turbo (8-step schedule) and FLUX.3 Klein (16 steps, photo edits) get the settings their docs give');
+  }
   process.exit(0);
 })().catch((e) => { console.error(`FAIL ${e.stack || e.message}`); process.exit(1); });
