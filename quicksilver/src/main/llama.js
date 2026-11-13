@@ -146,6 +146,14 @@ function releaseGpu() {
   for (const [k, s] of [...servers.entries()]) if ((s.vramGB || 0) > 0 && !isBusy(s)) { stop(k); n++; }
   return n;
 }
+// The same for ordinary memory (a PC without a graphics card keeps its models there): every loaded
+// model that is not answering right now is unloaded. Returns how many were, and how much they held.
+function releaseIdle() {
+  let n = 0; let gb = 0;
+  for (const [k, s] of [...servers.entries()]) if (!isBusy(s) && !s.exited) { gb += s.sizeGB || 0; stop(k); n++; }
+  return { n, gb };
+}
+const ramHeld = () => [...servers.values()].reduce((t, s) => t + (s.exited ? 0 : s.sizeGB || 0), 0);
 // Stops one model (every copy of it that's running), giving its memory back to the PC.
 function stopFile(file) { let n = 0; for (const [k, s] of [...servers.entries()]) if (s.file === file) { stop(k); n++; } return n; }
 
@@ -450,11 +458,36 @@ function untilStopped(promise, signal) {
   });
 }
 
+// Some chat templates (Qwen3.5's among them) refuse a system message anywhere but first. Quicksilver
+// often adds a short instruction just before the latest message (the working to answer from, a
+// role, tool results); here every such instruction goes at the start of the next user message,
+// right where it applies (marked <instructions>), and the system messages at the start become one.
+const textOf = (c) => (typeof c === 'string' ? c : Array.isArray(c) ? c.filter((p) => p.type === 'text').map((p) => p.text).join('\n') : String(c ?? ''));
+function tidyRoles(messages) {
+  if (!messages.some((m, i) => m.role === 'system' && i > 0)) return messages;
+  const lead = []; let i = 0;
+  while (i < messages.length && messages[i].role === 'system') lead.push(textOf(messages[i++].content));
+  const out = []; let notes = [];
+  for (; i < messages.length; i++) {
+    const m = messages[i];
+    if (m.role === 'system') { notes.push(textOf(m.content)); continue; }
+    if (notes.length && m.role === 'user') {
+      const note = `<instructions>\n${notes.join('\n\n')}\n</instructions>`; notes = [];
+      out.push({ ...m, content: Array.isArray(m.content) ? [{ type: 'text', text: note }, ...m.content] : `${note}\n\n${textOf(m.content)}` });
+      continue;
+    }
+    out.push(m);
+  }
+  if (notes.length) out.push({ role: 'user', content: `<instructions>\n${notes.join('\n\n')}\n</instructions>` });
+  return lead.length ? [{ role: 'system', content: lead.join('\n\n') }, ...out] : out;
+}
+
 // Streams a chat from a local model. messages are OpenAI-format (images as image_url parts).
 // If the graphics card fails before any text arrives, the model restarts on the processor
 // and the request is retried once.
 async function* chat(model, opts) {
-  const { messages, temperature, maxTokens, contextSize, gpu, signal, onStatus, level, tools, noThink } = opts;
+  const { temperature, maxTokens, contextSize, gpu, signal, onStatus, level, tools, noThink } = opts;
+  const messages = tidyRoles(opts.messages);
   const hasImages = messages.some((m) => Array.isArray(m.content) && m.content.some((p) => p.type === 'image_url'));
   if (hasImages && !model.mmproj) throw new Error(`${model.name} can't see images. Use a vision model or a stack with a vision member.`);
   const useGpu = cpuOnly.has(model.file) ? 0 : gpu;
@@ -508,7 +541,8 @@ async function* chat(model, opts) {
 
 // Reads the conversation into the model's memory without answering (one token), so the real
 // question only has to read the new message. Only for a model that's already loaded or loading.
-async function prefill(model, messages, { contextSize = 16384, gpu = 'auto' } = {}) {
+async function prefill(model, rawMessages, { contextSize = 16384, gpu = 'auto' } = {}) {
+  const messages = tidyRoles(rawMessages); // the same text the answer will read, so it can reuse it
   const useGpu = cpuOnly.has(model.file) ? 0 : gpu;
   const s = await ensure(model, { contextSize: contextFor(messages, 4096, contextSize), limit: contextSize, gpu: useGpu });
   s.lastUsed = Date.now();
@@ -526,4 +560,4 @@ const isLoaded = (file) => [...servers.values()].some((s) => s.file === file && 
 
 // The last lines each running engine printed (for "Save diagnostics").
 const logTails = () => [...servers.values()].map((s) => ({ file: require('node:path').basename(s.file), lines: s.log.join('').split('\n').slice(-40).join('\n') }));
-module.exports = { gpuLayers, countedVram, gpuHeld, releaseGpu, roomyContext, idleMs, readGguf, ensure, prefill, chat, stop, stopAll, stopFile, status, isLoaded, contextFor, prefetch, logTails };
+module.exports = { tidyRoles, releaseIdle, ramHeld, gpuLayers, countedVram, gpuHeld, releaseGpu, roomyContext, idleMs, readGguf, ensure, prefill, chat, stop, stopAll, stopFile, status, isLoaded, contextFor, prefetch, logTails };

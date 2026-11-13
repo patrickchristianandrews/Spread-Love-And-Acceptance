@@ -77,7 +77,7 @@ function redPng(size = 64) {
   await win.evaluate(async () => { S.data.prefs.addFoundModels = true; save(); await startupModels(); });
   await win.waitForSelector('text=and added it. Ready to use', { timeout: 30000 });
   // Start something: expert assistants for one task each (the everyday Quicksilver isn't listed).
-  assert.match(await win.locator('.start-note').innerText(), /assistant programmed to be an expert at one task/);
+  assert.match(await win.locator('.start-note').innerText(), /a crew member set up to be an expert at one task/);
   assert.equal(await win.locator('[data-start="as-general"]').count(), 0);
   assert.ok(await win.locator('[data-start]').count() >= 10);
   console.log('✓ home (models from other apps added only when you choose; expert assistants explained)');
@@ -107,6 +107,7 @@ function redPng(size = 64) {
   await win.click('[data-nav="stacks"]');
   // The Liquid Editions at the top of Stacks: the Liquid Edition and Liquid Edition Pro, each explained.
   await win.waitForSelector('#liquid-editions:has-text("Liquid Edition Pro"):has-text("For a powerful PC")');
+  await win.waitForSelector('#liquid-editions [data-tier-card="max"]:has-text("Liquid Edition Max"):has-text("For a fast PC")');
   assert.match(await win.locator('#liquid-editions').innerText(), /Qwen3 30B-A3B[\s\S]*Mistral Small 3\.2[\s\S]*(Get|Finish|Chat)/);
   // Create's popular goals, one each: pictures, uncensored, anime, video, animate, editing, full songs.
   for (const g of ['pictures', 'openpics', 'anime', 'video', 'animate', 'photoedit', 'songs']) await win.waitForSelector(`[data-job="${g}"]`);
@@ -250,10 +251,13 @@ function redPng(size = 64) {
     const local = S.installed.filter((m) => (m.kind || 'text') === 'text').map((m) => `local:${m.id}`).slice(0, 2);
     const html = buildApiHTML(local, {});
     const liquid = buildApiHTML(local, { liquid: true });
-    return { rows: (html.match(/api-sug-row/g) || []).length, connect: /data-api-connect-back="[a-z]+"/.test(html), lifts: /→/.test(html), liquidOnlyVenice: /Venice AI/.test(liquid) && !/Google Gemini|OpenAI|Groq/.test(liquid) };
+    return { rows: (html.match(/api-sug-row/g) || []).length, connect: /data-api-connect-back="[a-z]+"/.test(html), lifts: /→/.test(html), liquidVenice: /Venice AI/.test(liquid), liquidAny: /Google Gemini|OpenAI|Groq|Cerebras|OpenRouter|Anthropic|DeepSeek|UncensoredLLM/.test(liquid) };
   });
   assert.ok(buildApi.rows >= 1 && buildApi.connect && buildApi.lifts, `a build of local models is offered APIs with what they lift: ${JSON.stringify(buildApi)}`);
-  assert.ok(buildApi.liquidOnlyVenice, 'an uncensored-only build is only offered the uncensored service');
+  assert.ok(buildApi.liquidVenice && buildApi.liquidAny, `the Liquid Edition is offered any API, with Venice always suggested: ${JSON.stringify(buildApi)}`);
+  // The Liquid Edition's cloud card: the switch and the connect buttons are right there, and any API is welcome.
+  const pair = await win.evaluate(() => cloudPartnerHTML());
+  assert.match(pair, /id="pair-hard"/); assert.match(pair, /Any API works/); assert.match(pair, /data-goto-api/);
   const fc = await win.evaluate(() => {
     const real = S.est.hardware; const disk = S.disk;
     const local = S.installed.filter((m) => (m.kind || 'text') === 'text').map((m) => `local:${m.id}`);
@@ -308,10 +312,10 @@ function redPng(size = 64) {
     const l = stackApiPicks(S.stacks.find((x) => x.id === 'zz-liq'));
     const html = stackApiHTML(S.stacks.find((x) => x.id === 'zz-api'));
     S.stacks = S.stacks.filter((x) => !/^zz-/.test(x.id));
-    return { free: a.free?.r[1] || null, freeIsFree: (a.free?.r[7] ?? 0) >= 5, best: a.best?.r[1] || null, liquid: [l.free?.r[0] || null, l.best?.r[0] || null], connect: /data-api-connect=/.test(html) };
+    return { free: a.free?.r[1] || null, freeIsFree: (a.free?.r[7] ?? 0) >= 5, best: a.best?.r[1] || null, liquid: [l.free?.r[0], l.best?.r[0], l.have?.r[0], l.venice?.r[0]].filter(Boolean), connect: /data-api-connect=/.test(html) };
   });
   assert.ok(picks.free && picks.freeIsFree && picks.connect, `a stack of local models is offered a free API to connect: ${JSON.stringify(picks)}`);
-  assert.deepEqual(picks.liquid, [null, 'venice'], 'the Liquid Edition is only offered its uncensored partner');
+  assert.ok(picks.liquid.includes('venice') && picks.liquid.length >= 2, `the Liquid Edition is offered any API, with Venice always among them: ${JSON.stringify(picks.liquid)}`);
   await win.click('.card:has-text("Analyst Supreme") .api-sug [data-api-dir]');
   await win.waitForSelector('#modal #api-dir .ad-row');
   await win.click('#modal [data-dir-task="video"]');
@@ -1023,7 +1027,11 @@ function redPng(size = 64) {
   await win.click('.chat-row:has-text("Delete me please") .chat-del');
   await win.waitForFunction(() => !chatById('del-me'));
   assert.equal(await win.locator('.chat-row:has-text("Delete me please")').count(), 0, 'gone from the list');
+  // A plain message arriving now (a background notice) waits: the Undo button stays.
+  await win.evaluate(() => toast('A background notice'));
+  assert.match(await win.locator('#toast').innerText(), /Undo/, 'a plain message does not push the Undo aside');
   await win.click('#toast .toast-act');
+  await win.waitForFunction(() => /A background notice/.test(document.querySelector('#toast')?.textContent || ''), null, { timeout: 5000 });
   await win.waitForFunction(() => Boolean(chatById('del-me')));
   await win.waitForSelector('.chat-row:has-text("Delete me please")');
   // ...and from the ⋯ menu.
@@ -1119,7 +1127,7 @@ function redPng(size = 64) {
   await win.click('#modal [data-close]');
   // The built-in model and what it can do; featured picks; better models swap in when installed.
   await win.waitForSelector('#builtin-model:has-text("Built in: Quicksilver Liquid Edition")');
-  assert.match(await win.evaluate(() => dolphinOfferHTML({ members: { drafters: ['local:starter-brain'], vision: 'local:starter' } })), /Add Dolphin/, 'a crew of one is offered Dolphin as a second opinion');
+  assert.match(await win.evaluate(() => dolphinOfferHTML({ members: { drafters: ['local:starter-brain'], vision: 'local:starter' } })), /Add NeuralDaredevil/, 'a crew of one is offered an abliterated second opinion (NeuralDaredevil, from the Llama family)');
   assert.equal(await win.evaluate(() => dolphinOfferHTML({ members: { drafters: ['local:a', 'local:b'] } })), '', 'not offered once the crew has a second model');
   assert.match(await win.evaluate(() => qsRolesHTML({ members: { drafters: ['local:starter-brain'], vision: 'local:starter' }, bench: 'local:starter-dolphin' })), /On the Council/, 'a slow PC shows Dolphin on the Council');
   // Tested scores and create ratings on models, stacks and cloud AIs.
@@ -1193,7 +1201,7 @@ function redPng(size = 64) {
     if (!/locked/i.test(editErr)) throw new Error('the Liquid Edition should refuse to be edited');
     // Six suggested add-ons, optional: listed with a download button, none of them locked.
     const addons = liquidAddonsHTML();
-    if (!['Rocinante', 'WAI-NSFW', 'Chroma1-HD', 'CyberRealistic', 'Mistral Small', 'gpt-oss'].every((n) => addons.includes(n))) throw new Error('the six suggested add-ons should be listed');
+    if (!['Gemma 3 12B', 'WAI-NSFW', 'Chroma1-HD', 'CyberRealistic', 'Mistral Small', 'gpt-oss'].every((n) => addons.includes(n))) throw new Error('the six suggested add-ons should be listed');
     if (S.catalog.liquidAddons.some((a) => S.catalog.liquid.includes(a.id))) throw new Error('add-ons must not be locked');
     if (S.catalog.picks) S.catalog.picks.recipes = picksRecipes;
     S.data.chats = S.data.chats.filter((c) => c.id !== 'c-up');
@@ -1215,6 +1223,28 @@ function redPng(size = 64) {
   await win.click('[data-tab="installed"]');
   await win.waitForSelector('#model-updates');
   console.log('✓ built-in model card, featured picks, better-model upgrade swaps into stacks and chats');
+  // Better for your PC: a clearly better model from any family, for the same job, that runs well
+  // here; uncensored stays uncensored; never installed by itself.
+  const better = await win.evaluate(() => {
+    const keep = { inst: S.installed, est: S.est.text };
+    try {
+      const textIds = S.catalog.text.filter((m) => !m.retired).map((m) => m.id);
+      S.est.text = Object.fromEntries(textIds.map((id) => [id, { rating: 'great', label: 'Runs great', fit: 'full', wordsPerSec: 30 }]));
+      const weak = S.catalog.text.filter((m) => m.category === 'general' && m.jobs?.general && m.jobs.general <= 6 && !m.remote)[0];
+      const weakOpen = S.catalog.text.filter((m) => m.category === 'open' && m.jobs?.general && m.jobs.general <= 6 && !m.remote)[0];
+      S.installed = [weak, weakOpen].filter(Boolean).map((m, i) => ({ id: `t${i}`, name: m.name, catalogId: m.id, kind: 'text', source: 'catalog' }));
+      const list = betterModels([]);
+      const cat = (id) => S.catalog.text.find((m) => m.id === id);
+      return { n: list.length, all: list.map((u) => ({ from: u.oldCatalogId, to: u.newCatalogId, gain: (cat(u.newCatalogId).jobs.general || 0) - (cat(u.oldCatalogId).jobs.general || 0), open: Boolean(cat(u.newCatalogId).category === 'open' || cat(u.newCatalogId).open), wasOpen: Boolean(cat(u.oldCatalogId).category === 'open'), better: u.better, why: u.why })) };
+    } finally { S.installed = keep.inst; S.est.text = keep.est; }
+  });
+  assert.ok(better.n >= 1, `a better model is found for a weak one: ${JSON.stringify(better)}`);
+  for (const b of better.all) {
+    assert.ok(b.better && b.gain >= 1, `at least a full point better at the same job: ${JSON.stringify(b)}`);
+    if (b.wasOpen) assert.ok(b.open, 'an uncensored model is only replaced by an uncensored one');
+    assert.match(b.why, /out of 10/);
+  }
+  console.log('✓ better for your PC: a clearly better model of any family for the same job, matched to this PC');
   await win.click('[data-tab="api"]');
   await win.waitForSelector('text=Anthropic (Claude)');
   await win.waitForSelector('#presets h3:has-text("Free to start, then paid")');
@@ -1540,6 +1570,31 @@ function redPng(size = 64) {
   await win.click('[data-cmp-tab="blind"]');
   await win.waitForSelector('#ar-q');
   console.log('✓ meme battle: two hidden memes on one topic, vote, its own leaderboard');
+  // A battle picks models on this PC, never two from one cloud service; an empty account is explained.
+  await win.evaluate(() => go({ view: 'memes' }));
+  await win.waitForSelector('#mb-topic');
+  const mb2 = await win.evaluate(() => {
+    const keep = S.targets;
+    S.targets = [...keep.filter((t) => !t.target.startsWith('api:')), { target: 'api:v1:venice-uncensored', label: 'venice-uncensored', group: 'Venice' }, { target: 'api:v1:other', label: 'other', group: 'Venice' }];
+    const pairs = [];
+    try {
+      for (let i = 0; i < 12; i++) { $('#mb-topic').value = 'cats'; startMemeBattle(); pairs.push(memeRound.sides.map((x) => x.target)); memeRound = null; oneShots.clear?.(); }
+    } finally { S.targets = keep; render(); }
+    return { pairs, err: memeError('Venice AI (private, uncensored): {"error":"Insufficient USD or Diem balance to complete request."}') };
+  });
+  assert.ok(mb2.pairs.every(([a, b]) => !a.startsWith('api:') && !b.startsWith('api:')), `"Any two" uses models on this PC: ${JSON.stringify(mb2.pairs)}`);
+  assert.match(mb2.err, /^Venice AI \(private, uncensored\) is out of credits/);
+  // A stack with none of its models installed is never picked to answer.
+  const emptyStack = await win.evaluate(async () => {
+    await qs.call('stacks:save', { id: 't-empty', name: 'Coding Balanced test', members: { drafters: ['local:not-installed-a'], judge: 'local:not-installed-b' } });
+    S.targets = await qs.call('targets:list');
+    const row = S.targets.find((t) => t.target === 'stack:t-empty');
+    const chosen = resolveTarget({ target: 'stack:t-empty' }, {});
+    await qs.call('stacks:delete', 't-empty'); S.targets = await qs.call('targets:list');
+    return { listed: Boolean(row), empty: row?.empty, label: row?.label, valid: targetValid('stack:t-empty'), chosen };
+  });
+  assert.ok(emptyStack.listed && emptyStack.empty && /not set up/.test(emptyStack.label), `listed as not set up: ${JSON.stringify(emptyStack)}`);
+  assert.ok(!emptyStack.valid && emptyStack.chosen && emptyStack.chosen !== 'stack:t-empty', 'a chat set to it answers with a model you have');
   // Coding agents: the setup box opens from Settings and lists the models it would use.
   await win.evaluate(() => agentsModal());
   await win.waitForFunction(() => /OpenCode[\s\S]*Kilo Code[\s\S]*Cline[\s\S]*Aider[\s\S]*OpenHands/.test(document.querySelector('#modal')?.textContent || '') && document.querySelectorAll('#ag-model option').length > 0, null, { timeout: 15000 });
@@ -1547,6 +1602,59 @@ function redPng(size = 64) {
   await shot(win, '16d-coding-agents');
   await win.click('#modal [data-close]');
   console.log('✓ coding agents: OpenCode and OpenHands setup on your models');
+  // "Your Crew" (not "Assistants"), with a Debate crew member near the top.
+  await win.evaluate(() => go({ view: 'assistants' }));
+  await win.waitForSelector('[data-chat-with="as-debate"]');
+  assert.match(await win.locator('.page-head h1').innerText(), /^Your Crew$/);
+  assert.match(await win.locator('[data-nav="assistants"]').first().innerText(), /Your Crew/);
+  assert.match(await win.evaluate(() => assistantById('as-debate')?.instructions || ''), /opposite to the user/);
+  console.log('✓ your crew: the menu and page say Your Crew, and a Debate crew member is ready');
+  // Tables: click a header to sort, a menu or a search box under each header to filter.
+  const tbl = await win.evaluate(async () => {
+    const wrap = document.createElement('div'); wrap.id = 'tbl-test';
+    const data = [['Qwen3 8B', 'Everyday', '5.0 GB', '1,200'], ['Gemma 3 12B', 'Vision', '7.3 GB', '980'], ['Devstral', 'Coding', '14 GB', '2,050'], ['Phi-4', 'Everyday', '8.9 GB', '300'], ['Qwen3 Coder', 'Coding', '18 GB', '15']];
+    wrap.innerHTML = `<table class="list"><thead><tr><th>Model</th><th>Type</th><th>Size</th><th>Likes</th><th></th></tr></thead><tbody>${data.map((r) => `<tr>${r.map((c) => `<td>${c}</td>`).join('')}<td><button>Get</button></td></tr>`).join('')}</tbody></table>`;
+    document.querySelector('#main').appendChild(wrap);
+    await new Promise((r) => setTimeout(r, 100));
+    const t = wrap.querySelector('table');
+    const vis = () => [...t.tBodies[0].rows].filter((r) => !r.hidden).map((r) => r.cells[0].textContent);
+    const typeMenu = t.querySelector('.tbl-filter[data-col="1"]');
+    const out = { enhanced: t.dataset.tools === '1', typeIsMenu: typeMenu?.tagName === 'SELECT', actionHasNoFilter: !t.querySelector('.tbl-filter[data-col="4"]') };
+    typeMenu.value = 'Coding'; typeMenu.dispatchEvent(new Event('change'));
+    out.coding = vis();
+    out.count = wrap.querySelector('.tbl-count')?.textContent || '';
+    wrap.querySelector('.tbl-count a').click();
+    out.all = vis().length;
+    t.tHead.rows[0].cells[3].click();
+    out.byLikes = vis();
+    t.tHead.rows[0].cells[3].click();
+    out.byLikesDown = vis()[0];
+    wrap.remove();
+    return out;
+  });
+  assert.ok(tbl.enhanced && tbl.typeIsMenu && tbl.actionHasNoFilter, `filters added: ${JSON.stringify(tbl)}`);
+  assert.deepEqual(tbl.coding, ['Devstral', 'Qwen3 Coder']); assert.match(tbl.count, /Showing 2 of 5/);
+  assert.equal(tbl.all, 5);
+  assert.deepEqual(tbl.byLikes, ['Qwen3 Coder', 'Phi-4', 'Gemma 3 12B', 'Qwen3 8B', 'Devstral'], 'numbers sort as numbers (1,200 above 980)');
+  assert.equal(tbl.byLikesDown, 'Devstral', 'a second click reverses');
+  console.log('✓ tables: sort by any column header, filter with a menu or a search box under it');
+  // Free rotation counts every connected service with a free plan or allowance (Venice too), as the engine does.
+  const fr = await win.evaluate(() => { const keep = S.providers; try { S.providers = [{ preset: 'venice', name: 'Venice AI (private, uncensored)', free: 'some', hasKey: true, models: ['venice-uncensored'] }]; const one = freeRotationLine(); S.providers.push({ preset: 'groq', name: 'Groq', free: 'free', hasKey: true, models: ['m'] }); return [one, freeRotationLine()]; } finally { S.providers = keep; } });
+  assert.equal(fr[0], 'Venice AI · connect one more for rotation'); assert.equal(fr[1], '2 connected: Venice AI, Groq · on');
+  // Under an answer: the cloud service that was used, and nothing when it all ran on this PC.
+  const cl = await win.evaluate(() => [cloudUsedHTML({ cloud: [{ service: 'Venice AI', model: 'venice-uncensored' }] }), cloudUsedHTML({ media: { cloud: 'fal.ai · Veo 3.1' } }), cloudUsedHTML({})]);
+  assert.match(cl[0], /☁️ Used <b>Venice AI<\/b> <span class="muted">\(venice-uncensored\)/); assert.match(cl[1], /fal\.ai · Veo 3\.1/); assert.equal(cl[2], '');
+  // The "That answer took a while" tip sits near the top and never covers the message box.
+  const tip = await win.evaluate(async () => {
+    newChat(); await new Promise((r) => setTimeout(r, 300));
+    const box = Object.assign(document.createElement('div'), { id: 'speed-tip', className: 'speed-tip' });
+    box.innerHTML = `<b>⏳ That answer took a while.</b><p>${'Your options are already lean. '.repeat(30)}</p><div class="card">Add a free cloud AI <button class="btn">Connect</button></div>`;
+    document.body.appendChild(box);
+    const t = box.getBoundingClientRect(); const c = document.querySelector('#composer').getBoundingClientRect();
+    box.remove();
+    return { tipTop: t.top, tipBottom: t.bottom, composerTop: c.top, winH: innerHeight };
+  });
+  assert.ok(tip.tipTop < tip.winH / 3 && tip.tipBottom <= tip.composerTop, `the tip stays above the message box: ${JSON.stringify(tip)}`);
 
   // Voice, phone and updates settings.
   await win.click('[data-nav="settings"]');
@@ -1560,7 +1668,17 @@ function redPng(size = 64) {
   await win.uncheck('#ph-on');
   await win.click('[data-set-tab="general"]');
   await win.waitForSelector('#upd-box');
-  console.log('✓ settings: voice, phone (QR link), updates');
+  // "What's new" stays open (and keeps its place) while the update downloads.
+  await win.evaluate(() => { upd = { current: '1.0.0', available: { version: '9.9.9', notes: '### New in 9.9.9\n\n' + Array.from({ length: 80 }, (_, i) => `- change ${i}`).join('\n') }, progress: { downloaded: 1, total: 10 } }; repaintUpdateBox(); });
+  await win.click('#upd-notes summary');
+  await win.evaluate(() => { const b = document.querySelector('#upd-notes .upd-notes'); b.scrollTop = 200; });
+  for (let i = 2; i <= 9; i++) await win.evaluate((d) => { upd = { ...upd, progress: { downloaded: d, total: 10 } }; repaintUpdateBox(); }, i);
+  const notesKept = await win.evaluate(() => ({ open: document.querySelector('#upd-notes').open, top: document.querySelector('#upd-notes .upd-notes').scrollTop, pct: document.querySelector('#upd-status').textContent }));
+  assert.ok(notesKept.open && notesKept.top >= 150 && /90%/.test(notesKept.pct), `What's new stays open while the download moves on: ${JSON.stringify(notesKept)}`);
+  await win.evaluate(() => { upd = { ...upd, progress: null, downloaded: { version: '9.9.9' } }; repaintUpdateBox(); });
+  assert.ok(await win.evaluate(() => document.querySelector('#upd-notes')?.open), 'and still there, open, once it is downloaded');
+  await win.evaluate(() => { upd = null; });
+  console.log('✓ settings: voice, phone (QR link), updates (What\'s new stays open while it downloads)');
 
   // Power tools: another model on the same question, branching, chat settings, maths, palette, import.
   await win.click('[data-nav="newchat"]');

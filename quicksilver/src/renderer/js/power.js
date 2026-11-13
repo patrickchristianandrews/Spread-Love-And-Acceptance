@@ -61,7 +61,7 @@ function chatSettings(chat) {
       <div class="field"><label for="cs-temp">Creativity: <span id="cs-temp-v">${Number(temp).toFixed(2)}</span></label><span class="help">Low: focused and consistent (facts, code). High: varied and surprising (ideas, stories).</span><input id="cs-temp" type="range" min="0" max="1.5" step="0.05" value="${temp}"></div>
       <div class="field"><label for="cs-max">Longest answer</label><select id="cs-max">${((list) => (list.some(([v]) => v === Number(max)) ? list : [...list, [Number(max), `${Number(max).toLocaleString()} tokens (set now)`]].sort((x, y) => x[0] - y[0])))([[512, 'Short (about 400 words)'], [1024, 'Medium (about 750 words)'], [2048, 'Long (about 1,500 words)'], [4096, 'Very long (about 3,000 words)'], [8192, 'Book chapter (about 6,000 words)'], [16384, 'As long as it takes (about 12,000 words)']]).map(([v, l]) => `<option value="${v}" ${Number(max) === v ? 'selected' : ''}>${l}</option>`).join('')}</select></div>
     </div>
-    <div class="modal-actions"><button class="btn" id="cs-reset" style="margin-right:auto">Use the assistant's settings</button><button class="btn" data-close>Cancel</button><button class="btn primary" id="cs-ok">Save</button></div>`);
+    <div class="modal-actions"><button class="btn" id="cs-reset" style="margin-right:auto">Use the crew member's settings</button><button class="btn" data-close>Cancel</button><button class="btn primary" id="cs-ok">Save</button></div>`);
   b.querySelector('#cs-temp').oninput = (e) => { b.querySelector('#cs-temp-v').textContent = Number(e.target.value).toFixed(2); };
   b.querySelector('#cs-ok').onclick = () => {
     chat.system = b.querySelector('#cs-sys').value.trim() || undefined;
@@ -71,7 +71,7 @@ function chatSettings(chat) {
     chat.maxTokens = mx === maxOf({}, a) ? undefined : mx;
     save(); closeModal(); render(); toast('Saved for this chat.');
   };
-  b.querySelector('#cs-reset').onclick = () => { delete chat.system; delete chat.temperature; delete chat.maxTokens; save(); closeModal(); render(); toast('This chat follows the assistant\'s settings again.'); };
+  b.querySelector('#cs-reset').onclick = () => { delete chat.system; delete chat.temperature; delete chat.maxTokens; save(); closeModal(); render(); toast('This chat follows the crew member\'s settings again.'); };
 }
 const chatHasSettings = (chat) => Boolean(chat.system || chat.temperature != null || chat.maxTokens != null);
 
@@ -111,7 +111,7 @@ async function freshFromSummary(chat) {
   if (!target) return;
   toast('Summarizing this chat…', 30000);
   try {
-    const transcript = chat.messages.map((m) => `${m.role === 'user' ? 'User' : 'Assistant'}: ${msgText(m).slice(0, 4000)}`).join('\n\n').slice(-60000);
+    const transcript = chat.messages.map((m) => `${m.role === 'user' ? 'User' : 'Crew member'}: ${msgText(m).slice(0, 4000)}`).join('\n\n').slice(-60000);
     const sum = await askAI(target, 'Summarize this conversation so it can continue in a new chat. Keep every decision, fact, number, name, open question and the user\'s preferences; drop small talk. Use short headed sections and bullet points. Reply with the summary only.', transcript, { temperature: 0.2, maxTokens: 1200, level: 'quick', contextSize: 32768 });
     const fresh = { ...JSON.parse(JSON.stringify(chat)), id: uid(), title: `${chat.title} (continued)`.slice(0, 70), created: now(), updated: now(), messages: [], pinned: false, doc: undefined, branchOf: chat.id,
       system: `${chat.system ? `${chat.system}\n\n` : ''}This chat continues an earlier one. Summary of it so far:\n${sum}` };
@@ -160,7 +160,7 @@ document.addEventListener('click', (e) => {
 // ---------- import from ChatGPT and Claude ----------
 function importHTML() {
   return `<div class="field"><label>Bring your chats from other AIs</label>
-    <div class="card"><p class="small" style="margin:0 0 8px">Works with <b>ChatGPT</b> and <b>Claude</b> (Settings → export data: choose the .zip you get by email), <b>Gemini</b> (Google Takeout → My Activity → Gemini Apps, as JSON), <b>Grok</b> and <b>DeepSeek</b> (data export), <b>Open WebUI</b>, <b>LM Studio</b> and <b>Jan</b> chats, <b>SillyTavern</b> (.jsonl), and any chat saved as text or Markdown with "User:" / "Assistant:" turns (from Perplexity, Copilot, Le Chat…). Your chats stay on this PC.</p>
+    <div class="card"><p class="small" style="margin:0 0 8px">Works with <b>ChatGPT</b> and <b>Claude</b> (Settings → export data: choose the .zip you get by email), <b>Gemini</b> (Google Takeout → My Activity → Gemini Apps, as JSON), <b>Grok</b> and <b>DeepSeek</b> (data export), <b>Open WebUI</b>, <b>LM Studio</b> and <b>Jan</b> chats, <b>SillyTavern</b> (.jsonl), and any chat saved as text or Markdown with "User:" / "Crew member:" turns (from Perplexity, Copilot, Le Chat…). Your chats stay on this PC.</p>
     <label class="btn small">${icon('download', 15)} Choose an export or chat file<input type="file" id="imp-file" accept=".zip,.json,.jsonl,.md,.txt" multiple hidden></label> <span class="small muted" id="imp-status"></span></div></div>`;
 }
 function bindImport() {
@@ -211,7 +211,7 @@ function paletteItems() {
   const items = [
     ['New chat', 'Ctrl N', () => newChat()],
     ['New code chat', 'Ctrl ⇧ N', () => newCodeChat()],
-    ...[['home', 'Home'], ['projects', 'Projects'], ['assistants', 'Assistants'], ['skills', 'Skills'], ['library', 'Library'], ['stacks', 'Stacks & Fusion'], ['studio', 'Gallery & tools'], ['integrations', 'Connectors'], ['models', 'Models'], ['arena', 'Compare models (blind test)'], ['pc', 'Your PC'], ['settings', 'Settings']].map(([v, l]) => [`Go to ${l}`, '', () => { if (v === 'arena' && typeof cmpTab !== 'undefined') cmpTab = 'blind'; go({ view: v }); }]),
+    ...[['home', 'Home'], ['projects', 'Projects'], ['assistants', 'Your Crew'], ['skills', 'Skills'], ['library', 'Library'], ['stacks', 'Stacks & Fusion'], ['studio', 'Gallery & tools'], ['integrations', 'Connectors'], ['models', 'Models'], ['arena', 'Compare models (blind test)'], ['pc', 'Your PC'], ['settings', 'Settings']].map(([v, l]) => [`Go to ${l}`, '', () => { if (v === 'arena' && typeof cmpTab !== 'undefined') cmpTab = 'blind'; go({ view: v }); }]),
     ...[['memory', 'Memory'], ['voice', 'Voice'], ['phone', 'Phone'], ['web', 'Web search'], ['api', 'API server'], ['engines', 'Engines']].map(([t, l]) => [`Settings: ${l}`, '', () => { setTab = t; go({ view: 'settings' }); }]),
     ['Switch light / dark', '', () => $('#theme-btn').click()],
     [S.config?.offline ? 'Go online' : 'Go offline', '', toggleNet],
@@ -248,17 +248,17 @@ function fuzzy(q, s) {
 // What kind of thing each palette entry is: its group, icon and the label without the prefix.
 const PAL_KINDS = [
   [/^Go to /, 'Go to', '🧭'], [/^Settings: /, 'Settings', '⚙️'], [/^This chat: |^Turn |^Effort: |^Voice typing/, 'This chat', '💬'],
-  [/^Use model: /, 'Models', '🧠'], [/^New chat with /, 'Assistants', '🤖'], [/^Project: /, 'Projects', '📁'],
+  [/^Use model: /, 'Models', '🧠'], [/^New chat with /, 'Your Crew', '🤖'], [/^Project: /, 'Projects', '📁'],
   [/^Chat: /, 'Recent chats', '🗨️'], [/^Skill: /, 'Skills', '⚡'],
 ];
-const PAL_ORDER = ['Actions', 'Go to', 'This chat', 'Settings', 'Models', 'Assistants', 'Skills', 'Projects', 'Recent chats'];
+const PAL_ORDER = ['Actions', 'Go to', 'This chat', 'Settings', 'Models', 'Your Crew', 'Skills', 'Projects', 'Recent chats'];
 function palKind(label) {
   for (const [re, group, icon] of PAL_KINDS) if (re.test(label)) {
     let text = label.replace(re, '');
     let ic = icon;
     // Skills, assistants and projects carry their own emoji: show it as the icon.
     const m = text.match(/^(\p{Extended_Pictographic}️?|\p{Emoji_Presentation})\s*/u);
-    if (m && ['Skills', 'Assistants', 'Projects', 'Models'].includes(group)) { ic = m[1]; text = text.slice(m[0].length); }
+    if (m && ['Skills', 'Your Crew', 'Projects', 'Models'].includes(group)) { ic = m[1]; text = text.slice(m[0].length); }
     return { group, icon: ic, text: group === 'This chat' ? label.replace(/^This chat: /, '') : text };
   }
   return { group: 'Actions', icon: '✨', text: label };

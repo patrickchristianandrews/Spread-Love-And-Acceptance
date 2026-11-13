@@ -305,7 +305,9 @@ function sdArgs(req, { spec, files: f, hw, has, safe = false, out, help = helper
   // Chroma: the attention mask off gives cleaner pictures (stable-diffusion.cpp's advice).
   if (spec.recipe === 'chroma') { if (has('--model-args')) args.push('--model-args', 'chroma_use_dit_mask=false'); else if (has('--chroma-disable-dit-mask')) args.push('--chroma-disable-dit-mask'); }
   if (spec.recipe === 'qwen-image' && has('--flow-shift')) args.push('--flow-shift', '3');
-  if (req.negative && spec.recipe !== 'flux' && spec.recipe !== 'kontext' && !fast) args.push('-n', req.negative); // fast mode has no guidance, so nothing to steer away from
+  // Qwen-Image 2.1 Turbo: its own 8-step schedule (stable-diffusion.cpp's docs give these sigmas).
+  if (spec.recipe === 'qwen-image-2' && !fast && has('--sigmas') && !req.steps) args.push('--sigmas', '1.0,0.978453,0.95418,0.926626,0.89508,0.845148,0.704534,0.414568,0.0');
+  if (req.negative && !['flux', 'kontext', 'flux3', 'qwen-image-2'].includes(spec.recipe) && !fast) args.push('-n', req.negative); // fast mode has no guidance, so nothing to steer away from
 
   // Size. A job fails at the very end (when the result is decoded) if it is too big for the
   // card, after all the waiting. So a clip is made at 480p on cards under 16 GB, and the second
@@ -377,7 +379,24 @@ const MEMORY_RX = /out of (device |host )?memory|outofdevicememory|outofhostmemo
 const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 
 // Frees graphics memory for the job when a loaded chat model holds what it needs.
+// Room in ordinary memory, for a PC without a graphics card (or a model that spills into memory):
+// a picture model needs about its own size plus a couple of gigabytes to work in. When there isn't
+// that much free, the chat models that aren't answering are unloaded first (they load again when
+// you next chat); on the second try, always.
+async function makeRamRoom(spec, onStatus, everything) {
+  const llama = require('./llama');
+  if (!llama.ramHeld()) return;
+  const needGB = (spec.sizeGB || 6) + 2.5;
+  const freeGB = require('node:os').freemem() / 1024 ** 3;
+  if (!everything && freeGB >= needGB) return;
+  const { n } = llama.releaseIdle();
+  if (!n) return;
+  onStatus?.('Making room in memory for the picture model (your chat model loads again when you next chat)…');
+  await wait(1500);
+}
+
 async function makeRoom(spec, hw, onStatus, everything = false) {
+  if (!hw.vramGB || (catalog.estimateMedia(spec, hw).fit || '') !== 'gpu') await makeRamRoom(spec, onStatus, everything);
   if (!hw.vramGB) return hw;
   const llama = require('./llama');
   const held = llama.gpuHeld();
@@ -492,6 +511,7 @@ async function generateNow(jobId, req, { onProgress, onStatus } = {}) {
     }
   }
   if (!made) {
+    if (last.memory && !hw.vramGB) throw new Error(`Not enough memory for ${spec.name} on this PC, even with the chat models closed and the low-memory settings. Close other big programs, try a smaller shape${isVideo ? ' or a shorter clip' : ''}, or a lighter picture model.`);
     if (last.memory) throw new Error(`Not enough graphics memory for ${spec.name}, even with the chat model closed and the low-memory settings. Try a smaller shape${isVideo ? ' or a shorter clip' : ''}, or a lighter model.`);
     if (last.blank) throw new Error(`${spec.name} made a blank ${word} twice on this PC. Try a different shape or another ${word} model.`);
     throw new Error(`${spec.name} stopped before the ${word} was finished: ${String(last.message).slice(0, 300)}`);

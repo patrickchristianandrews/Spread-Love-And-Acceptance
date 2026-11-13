@@ -32,6 +32,26 @@ assert.ok(complete.isUncensored('stack:quicksilver-pro'), 'Pro is uncensored, li
 assert.equal(complete.targets().find((t) => t.target === 'stack:quicksilver-pro')?.group, '💧 Built in');
 console.log('✓ Liquid Edition Pro: only when the user asks for it; built from its Brain and Closer, joined by its Thinker and Muse, uncensored, built in');
 
+// Liquid Edition Max (a fast, upper-middle PC): the same rules, its own line-up, all abliterated.
+{
+  const M = catalog.LIQUID_MAX;
+  for (const id of catalog.LIQUID_MAX_MODELS) assert.ok([...catalog.TEXT_MODELS, ...catalog.MEDIA_MODELS].some((m) => m.id === id), `${id} is in the catalog`);
+  for (const id of [M.brain, M.closer, M.thinker, M.muse]) assert.match(catalog.TEXT_MODELS.find((m) => m.id === id).repo, /abliterat/i, `${id} is abliterated`);
+  assert.ok(M.minVramGB < catalog.LIQUID_PRO.minVramGB && M.minVramGB >= 8, 'Max sits between the Liquid Edition and Pro');
+  add('qwen3.5-9b-uncensored', M.brain, { mmproj: TINY }); // (the Liquid Edition's own Closer: already here on most PCs)
+  // Its Closer, Qwen3 30B-A3B, is Pro's Brain: the one copy serves both.
+  assert.equal(M.closer, catalog.LIQUID_PRO.brain);
+  assert.equal(complete.ensureQuicksilverMaxStack(), null, 'never set up by itself');
+  store.saveConfig({ liquidMaxWanted: true }); // the "Get Liquid Edition Max" button
+  assert.equal(complete.ensureQuicksilverMaxStack(), 'stack:quicksilver-max');
+  const mx = complete.stacks().find((s) => s.id === 'quicksilver-max');
+  assert.deepEqual(mx.members, { drafters: ['local:qwen3.5-9b-uncensored'], judge: 'local:pro-brain', vision: 'local:qwen3.5-9b-uncensored', thinker: 'local:pro-thinker', muse: 'local:pro-muse', mode: 'auto' }, 'photos go to the Brain, which sees; models shared with Pro are not downloaded twice');
+  assert.ok(mx.builtIn && mx.builtFor === 'quicksilver-max' && complete.isUncensored('stack:quicksilver-max'));
+  const order = complete.targets().filter((t) => t.group === '💧 Built in').map((t) => t.target);
+  assert.ok(order.indexOf('stack:quicksilver-max') < order.indexOf('stack:quicksilver-pro'), `Max is listed before Pro: ${order}`);
+  console.log('✓ Liquid Edition Max: only when asked for, its own abliterated line-up, built in between the Liquid Edition and Pro');
+}
+
 // After the web installer (or the setup file alone) the Liquid Edition's own models arrive as
 // downloads rather than inside the installer. They are still its own: the Closer joins (or waits
 // on the bench) with nothing to tick, while a model from another app stays out until it is ticked.
@@ -54,5 +74,27 @@ console.log('✓ Liquid Edition Pro: only when the user asks for it; built from 
   team = JSON.stringify([q.members, q.bench || '']);
   assert.ok(!/imp-dolphin|pro-closer|pro-thinker/.test(team), `still only what is ticked: ${team}`);
   console.log('✓ after the web installer: the downloaded Brain, Muse and Closer are the Liquid Edition\'s own; other models join only when ticked');
+
+  // A corrected Liquid Edition: a model that was on it but no longer belongs (Rocinante, a fine-tune,
+  // not abliterated) is taken off AND switched off until you switch it on again; only the current
+  // Liquid Edition models work together there.
+  complete.takeRetired();
+  models.add({ id: 'old-rocinante', name: 'Rocinante 12B', kind: 'text', catalogId: 'rocinante-12b', files: { model: TINY }, size: 1 });
+  models.setUse('old-rocinante', true);
+  q = complete.stacks().find((x) => x.id === 'quicksilver');
+  complete.saveStack({ ...q, members: { ...q.members, drafters: [...q.members.drafters, 'local:old-rocinante'] } }); // as an older version built it
+  await complete.ensureQuicksilverStack();
+  q = complete.stacks().find((x) => x.id === 'quicksilver');
+  assert.ok(!JSON.stringify([q.members, q.bench || '']).includes('old-rocinante'), 'taken off the Liquid Edition');
+  assert.equal(models.inUse(models.get('old-rocinante')), false, 'and switched off');
+  assert.deepEqual(complete.takeRetired(), ['Rocinante 12B'], 'named once for the notice');
+  assert.deepEqual(complete.takeRetired(), []);
+  models.setUse('old-rocinante', true); // the user switches it on again: usable, but it doesn't rejoin
+  await complete.ensureQuicksilverStack();
+  q = complete.stacks().find((x) => x.id === 'quicksilver');
+  assert.ok(!JSON.stringify(q.members).includes('old-rocinante') && models.inUse(models.get('old-rocinante')), 'switched on again by you, still not on the Liquid Edition');
+  // A model that only waits on the bench (memory) is never switched off.
+  for (const id of ['pro-closer', 'pro-thinker', 'pro-muse']) assert.ok(models.get(id), `${id} kept`);
+  console.log('✓ a corrected Liquid Edition switches off the models that no longer belong, says so once, and leaves them off until you switch them on');
   process.exit(0);
 })().catch((e) => { console.error('FAIL', e); process.exit(1); });

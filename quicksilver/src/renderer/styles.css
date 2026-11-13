@@ -1518,7 +1518,7 @@ code.sel { user-select: all; background: var(--soft); padding: 1px 6px; border-r
 @media (max-width: 720px) { .ta-grid { grid-template-columns: 1fr; } }
 .studio-intro { display: flex; gap: 10px; align-items: flex-start; padding: 10px 12px; margin: 0 0 12px; border-radius: 10px; background: var(--soft); border: 1px solid var(--line-soft); }
 .studio-intro .si-ic { font-size: 1.2rem; line-height: 1.4; }
-.speed-tip { position: fixed; right: 16px; bottom: 16px; z-index: 60; max-width: 360px; background: var(--bg-elev, var(--card)); border: 1px solid var(--line); border-radius: 14px; padding: 14px 14px 12px; box-shadow: 0 12px 40px rgba(0,0,0,.28); }
+.speed-tip { position: fixed; right: 16px; top: 64px; z-index: 60; max-width: 360px; max-height: calc(100vh - 320px); overflow-y: auto; background: var(--bg-elev, var(--card)); border: 1px solid var(--line); border-radius: 14px; padding: 14px 14px 12px; box-shadow: 0 12px 40px rgba(0,0,0,.28); }
 .speed-tip .st-x { position: absolute; top: 8px; right: 8px; background: transparent; border: 0; color: var(--muted); cursor: pointer; font-size: .9rem; }
 .speed-tip p { margin: 6px 0 8px; }
 .st-opts { display: grid; gap: 6px; }
@@ -1578,9 +1578,26 @@ code.sel { user-select: all; background: var(--soft); padding: 1px 6px; border-r
 .meme { position: relative; aspect-ratio: 1 / 1; border-radius: 12px; overflow: hidden; background: #111; display: grid; }
 .meme-img { grid-area: 1 / 1; width: 100%; height: 100%; object-fit: cover; }
 .meme-plain { display: flex; align-items: center; justify-content: center; padding: 22% 12%; color: rgba(255,255,255,.88); font-weight: 600; text-align: center; font-size: 15px; }
-.meme-empty { display: flex; align-items: center; justify-content: center; background: var(--panel-2, #f3f3f6); }
+.meme-empty { display: flex; align-items: center; justify-content: center; padding: 18px; text-align: center; background: var(--card); border: 1px dashed var(--line); color: var(--text); }
 .meme-t { position: absolute; left: 4%; right: 4%; text-align: center; color: #fff; font: 900 clamp(18px, 3.2vw, 34px)/1.05 Impact, "Anton", "Arial Black", sans-serif; text-transform: uppercase; letter-spacing: .5px;
   paint-order: stroke fill; -webkit-text-stroke: 1.5px #000; text-shadow: 2px 2px 0 #000, -2px 2px 0 #000, 2px -2px 0 #000, -2px -2px 0 #000; overflow-wrap: anywhere; }
 .meme-t.top { top: 3%; }
 .meme-t.bottom { bottom: 3%; }
 .meme-busy { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); background: rgba(0,0,0,.6); color: #fff; padding: 6px 10px; border-radius: 8px; }
+
+/* Sortable, filterable tables */
+.tbl-sortable { cursor: pointer; user-select: none; white-space: nowrap; }
+.tbl-sortable:hover { color: var(--text); }
+.tbl-sortable::after { content: ' ↕'; opacity: .35; font-size: .8em; }
+.tbl-sortable[data-sort-dir="asc"]::after { content: ' ▲'; opacity: .9; }
+.tbl-sortable[data-sort-dir="desc"]::after { content: ' ▼'; opacity: .9; }
+.tbl-filters th { padding-top: 2px; padding-bottom: 6px; font-weight: 400; }
+.tbl-filter { width: 100%; min-width: 70px; max-width: 220px; padding: 3px 6px; font-size: .8rem; border-radius: 6px; border: 1px solid var(--line); background: var(--card); color: var(--text); }
+.tbl-count { margin: 6px 0 0; }
+
+/* Under an answer: the cloud service that was used */
+.cloud-used { margin: 6px 0 2px; color: var(--muted); }
+.cloud-used b { color: var(--text); font-weight: 600; }
+
+/* Update notes: the whole "What's new" readable in its own scroll area. */
+#upd-notes .upd-notes { max-height: 420px; overflow-y: auto; padding-right: 6px; margin-top: 6px; }

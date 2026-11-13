@@ -98,13 +98,13 @@ function modelsInUseHTML() {
   const team = new Set(teamTargets(def));
   const defStack = S.stacks.find((x) => `stack:${x.id}` === def);
   const defName = defStack ? defStack.name : 'your default model';
-  const lp = S.catalog?.liquidPro || {};
+  const lp = (defStack && { 'quicksilver-pro': S.catalog?.liquidPro, 'quicksilver-max': S.catalog?.liquidMax }[defStack.id]) || {};
   const proText = new Set([lp.brain, lp.closer, lp.thinker, lp.muse].filter(Boolean));
   const inStacks = (t) => S.stacks.filter((s) => `stack:${s.id}` !== def && teamTargets(`stack:${s.id}`).includes(t)).map((s) => s.name);
   // The default's own models first, then ticked ones, then the rest, by name.
   // The default's own models: locked on. In the Liquid Edition those are the models that come
   // with it (Pro: its line-up); a helper that joined because you ticked it can be unticked.
-  const ownOf = (m) => team.has(`local:${m.id}`) && (!isLiquidStack(defStack) || liquidLocked(m) || (defStack.id === 'quicksilver-pro' && proText.has(m.catalogId)));
+  const ownOf = (m) => team.has(`local:${m.id}`) && (!isLiquidStack(defStack) || liquidLocked(m) || proText.has(m.catalogId));
   const single = Boolean(def) && !def.startsWith('stack:');
   const rank = (m) => (ownOf(m) ? 0 : m.inUse ? 1 : 2);
   const rows = [...list].sort((a, b) => rank(a) - rank(b) || a.name.localeCompare(b.name)).map((m) => {

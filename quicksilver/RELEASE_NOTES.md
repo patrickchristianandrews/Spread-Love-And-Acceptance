@@ -1,14 +1,50 @@
 ### Download
 
-There are three ways to get Quicksilver 2.20.1. All install the same app; they differ in how the Liquid Edition's models (about 30 GB) arrive.
+There are three ways to get Quicksilver 2.20.6. All install the same app; they differ in how the Liquid Edition's models (about 30 GB) arrive.
 
-- **Quicksilver-Setup-2.20.1.exe** (below, about 1.9 GB, with a matching `.sha256`): the installer with the small 2B model inside. The first time Quicksilver opens, its setup screen downloads the rest of the Liquid Edition before the app starts.
-- **Quicksilver-Web-Setup-2.20.1.exe** (below, about 200 MB): the web installer. No models inside at all; the setup screen downloads the whole Liquid Edition on first launch.
+- **Quicksilver-Setup-2.20.6.exe** (below, about 1.9 GB, with a matching `.sha256`): the installer with the small 2B model inside. The first time Quicksilver opens, its setup screen downloads the rest of the Liquid Edition before the app starts.
+- **Quicksilver-Web-Setup-2.20.6.exe** (below, about 200 MB): the web installer. No models inside at all; the setup screen downloads the whole Liquid Edition on first launch.
 - **Full offline package** (about 31 GB): the installer plus a "Quicksilver models" folder. Keep the two together when you run the installer and everything is copied in: nothing to download, works with no internet from the first minute. It is too large for a GitHub release file, so it is the **Quicksilver-Windows-installer** build artifact on this release's build run (linked at the top of these notes; a GitHub sign-in is needed, and GitHub keeps build artifacts for 90 days).
 
-Updating from 2.19 or 2.20.0: nothing extra to download; your chats, settings and models are kept.
+Updating from 2.19 or 2.20: nothing extra to download; your chats, settings and models are kept.
 
 Updating from 2.18: the Liquid Edition now includes its Closer and its picture and video makers, and Quicksilver does not open until all of them are installed. After the update the setup screen downloads what is missing (about 30 GB) before the app starts. Your chats, settings and the models you already have are kept.
+
+### New in 2.20.6
+
+- **Liquid Edition Max, for a fast PC** (10–16 GB graphics card, 24–32 GB memory), between the Liquid Edition and Pro: Qwen3.5 9B (the Brain, reads photos and thinks), Qwen3 30B-A3B (the Closer: 30B knowledge at close to 3B speed), gpt-oss 20B (the Thinker) and Gemma 3 12B (the Muse), with Chroma1-HD and WAI-NSFW Illustrious for pictures. In Stacks, under The Liquid Editions; only installed if you choose it.
+- **Every Liquid Edition chat model is abliterated** (its refusals removed from the weights), not just fine-tuned to be uncensored. Pro's Muse is now Gemma 3 12B abliterated, and the second-opinion offer is NeuralDaredevil 8B.
+- **Only the current Liquid Edition models work together there:** when a Liquid Edition is corrected, a model that was on it and no longer belongs is taken off and switched off (under Models → Models in use) until you switch it on again. A message says which ones; nothing is deleted.
+- **Fix:** a hard question to the Liquid Edition could end in an error ("System message must be at the beginning") when its thinking ran out of time, on slower PCs most of all. The instructions it adds are now placed where the Qwen3.5 models accept them.
+- **Fix:** "What's new" under Check for updates stays open while you read it (it closed again each time the download moved on), shows the whole list in its own scroll area, and is still there once the update is downloaded.
+
+### New in 2.20.5
+
+- **Pictures on PCs without a graphics card:** before Lustify (or any picture model) starts, the chat models that aren't answering are unloaded when memory is short, so the picture model has room. This fixes "generate failed" on such PCs. They load again on your next message.
+- **"☁️ Used …" under an answer** whenever a cloud AI answered or helped (a hard question handed off, a stack step, the Council, a picture made in the cloud).
+- **Free rotation tells you when it switches:** a short message pops up when one free cloud AI hits its limit and the next takes over, and when all of them have.
+- **The free rotation card counts every free service you connected** (Venice too), the same way the app picks them.
+
+### New in 2.20.4
+
+- **Models stop reloading after every message.** The chat title, follow-up suggestions and memory notes made after each answer now only use a model that is already loaded (or are skipped), so they never push your chat model out of memory. This mattered most on PCs without a graphics card.
+- **Sort and filter any table from its column headers:** click a heading to sort; pick from a menu or type in the box under it to filter (models, trending, leaderboards, Compare models, Your PC and more).
+- **Your Crew** (was Assistants), with a new **Debate** crew member at the top: it takes the other side and argues it fairly, scores the points, and can run a formal debate or argue both sides.
+- **The Liquid Edition can use any cloud AI** you connect for hard questions (an uncensored one such as Venice is used first). The switch and the connect buttons are right on its card, and Venice is the suggestion.
+- **Fixes:** a stack whose models aren't installed shows as "not set up" and a chat set to it answers with a model you have; Meme battle uses models on your PC by default, never two from one cloud service, and explains an empty cloud account; the "That answer took a while" tip appears at the top and no longer covers the message box.
+
+### New in 2.20.3
+
+- **Film studio:** two new stacks in Stacks → Video. One runs on your PC (a writer and director, a model that checks continuity, FLUX.3 Klein for storyboard frames, Wan 2.2 to animate them, voices, music and the video editor); the other uses a cloud video service you connect to animate shots with sound.
+- **Film skills:** short film script, character & style bible (fixed descriptions so characters look the same in every shot), shot list with picture and motion prompts, storyboard frames, a film shot and a trailer plan. "Storyboard" now makes wide film frames; the comic skill keeps comics.
+- **Imagination Studio** under Connectors → Creative & media: chat can drive it (pictures, video with sound, voices, songs, edits, whole films) on machines that run it.
+- **New picture models:** Qwen-Image 2.1 Turbo (the best text in pictures, 8 steps) and FLUX.3 Klein (fast, sharp pictures on an 8 GB card, plus photo edits). Both licenses rule out commercial use. They need the latest picture engine.
+- **Fixes:** big downloads no longer use the method that could crash the app partway through, and a background message no longer pushes the "Undo" button aside.
+
+### New in 2.20.2
+
+- **Better for your PC:** for each model you use, Quicksilver now looks across the whole catalog (any maker) for one that is at least a full point better at the same job and runs well on your PC, and offers it with "Switch to it". Uncensored is only replaced by uncensored, a model that reads photos only by one that does, and an untested model's rating is marked as an estimate. Never installed by itself.
+- **Stacks keep up with new models:** the lists of models each stack chooses from are now refreshed every day from the catalog, so stacks can move to newer models from any well-known family (not only newer versions of the same model). You still get an "Update stack" notice first.
 
 ### New in 2.20.1
 

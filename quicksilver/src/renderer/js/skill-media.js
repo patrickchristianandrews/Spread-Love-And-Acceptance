@@ -94,7 +94,8 @@ const stripMediaBlock = (text) => String(text || '').replace(/```(?:image|video|
 const LIQUID_PICTURES = 'lustify';
 const LIQUID_VIDEO = 'wan2.2-5b';
 const ANIME_RX = /\b(anime|manga|hentai|cartoon|toon|chibi|waifu|furry|illustrat\w*|cel[- ]shad\w*|drawn|drawing|comic)\b/i;
-function chatIsPro(chat) { return Boolean(chat) && resolveTarget(chat, assistantById(chat.assistantId)) === 'stack:quicksilver-pro'; }
+// Liquid Edition Max or Pro: pictures from Chroma1-HD first when it's here.
+function chatIsPro(chat) { return Boolean(chat) && ['stack:quicksilver-pro', 'stack:quicksilver-max'].includes(resolveTarget(chat, assistantById(chat.assistantId))); }
 function chatIsLiquid(chat) {
   if (!chat) return false;
   const t = resolveTarget(chat, assistantById(chat.assistantId));
@@ -158,6 +159,7 @@ async function runSkillMedia(chat, msg, alt, skill) {
   const pick = pickMediaModel(kind, { liquid, pro: chatIsPro(chat), prompt });
   if (!pick) { alt.media.need = liquidNeed(liquid, kind); repaint(); return; }
   alt.media.model = pick.api ? pick.label : pick.inst.name;
+  if (pick.api) alt.media.cloud = pick.label; // said under the answer: made in the cloud
   let imageId;
   if (kind === 'edit' || kind === 'animate') {
     const att = (user?.attachments || []).find((x) => x.type === 'image' && x.dataUrl);

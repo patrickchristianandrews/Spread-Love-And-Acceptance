@@ -606,63 +606,79 @@ document.addEventListener('click', (e) => {
 });
 
 // ---------- the Liquid Editions, at the top of Stacks ----------
-// The Liquid Edition (any PC, comes with Quicksilver) and Liquid Edition Pro (a powerful PC):
-// what each is, what it needs, whether this PC is up to it, and one button to get Pro.
-function proFit() {
-  const P = S.catalog?.liquidPro || {};
+// The Liquid Edition (any PC, comes with Quicksilver), Max (a fast upper-middle PC) and Pro (a
+// powerful PC): what each is, what it needs, whether this PC is up to it, and one button to get
+// Max or Pro (each is only installed when chosen here).
+const LIQUID_TIER_INFO = {
+  max: { id: 'quicksilver-max', name: 'Liquid Edition Max', emoji: '🚀', badge: 'For a fast PC', key: 'liquidMax',
+    pitch: 'The Liquid Edition stepped up for a fast PC: a mixture-of-experts Closer with 30B knowledge at close to 3B speed, a dedicated Thinker and Muse, and top-quality pictures. Every chat model is abliterated.' },
+  pro: { id: 'quicksilver-pro', name: 'Liquid Edition Pro', emoji: '💎', badge: 'For a powerful PC', key: 'liquidPro',
+    pitch: 'The Liquid Edition with the biggest abliterated models in every role: sharper answers, better reasoning and writing, and top-quality pictures.' },
+};
+function tierFit(tier) {
+  const T = LIQUID_TIER_INFO[tier]; const P = S.catalog?.[T.key] || {};
   const hw = S.est?.hardware || {};
   const v = hw.vramGB || 0; const r = hw.ramGB || 0;
   if (!S.est) return { level: 'unknown', text: 'Checking this PC…' };
   const spec = `this PC: ${v ? `${Math.round(v)} GB graphics card` : 'no graphics card'}, ${Math.round(r)} GB memory`;
   if (v >= P.recVramGB - 0.5 && r >= P.recRamGB - 2) return { level: 'great', text: `✓ Runs great on ${spec}.` };
-  if (v >= P.minVramGB - 0.5 && r >= P.minRamGB - 2) return { level: 'ok', text: `✓ Runs on ${spec}; a 24 GB graphics card and 64 GB memory make it faster.` };
-  return { level: 'no', text: `⚠️ Too much for ${spec}. Pro needs at least a ${P.minVramGB} GB graphics card and ${P.minRamGB} GB memory; it would be very slow here. The Liquid Edition is the one for this PC.` };
+  if (v >= P.minVramGB - 0.5 && r >= P.minRamGB - 2) return { level: 'ok', text: `✓ Runs on ${spec}; a ${P.recVramGB} GB graphics card and ${P.recRamGB} GB memory make it faster.` };
+  return { level: 'no', text: `⚠️ Too much for ${spec}. ${T.name} needs at least a ${P.minVramGB} GB graphics card and ${P.minRamGB} GB memory; it would be very slow here.${tier === 'pro' && v >= 9.5 ? ' Liquid Edition Max is the one for this PC.' : ' The Liquid Edition is the one for this PC.'}` };
+}
+function tierLineup(tier) {
+  const P = S.catalog?.[LIQUID_TIER_INFO[tier].key] || {};
+  return [...new Set([P.brain, P.closer, P.thinker, P.muse, ...(P.pictures || [])])].filter(Boolean);
+}
+const tierSpec = (id) => S.catalog.text.find((m) => m.id === id) || S.catalog.media.find((m) => m.id === id);
+function tierCardHTML(tier) {
+  const T = LIQUID_TIER_INFO[tier]; const P = S.catalog?.[T.key];
+  if (!P) return '';
+  const have = (id) => S.installed.some((m) => m.catalogId === id);
+  const rows = [['🧠 Brain', P.brain], ['🏁 Closer', P.closer], ['🧮 Thinker', P.thinker], ['🎨 Muse · stories', P.muse], ['🖼️ Pictures', P.pictures[0]], ['🎌 Anime', P.pictures[1]]];
+  const missing = tierLineup(tier).filter((id) => !have(id) && tierSpec(id));
+  const missingGB = missing.reduce((t, id) => t + (tierSpec(id).sizeGB || 0) + (tierSpec(id).mmprojGB || 0), 0);
+  const downloading = missing.filter((id) => S.downloads[id]);
+  const ready = S.stacks.some((s) => s.id === T.id);
+  const fit = tierFit(tier);
+  return `<div class="card ${fit.level === 'no' ? '' : 'hl'}" data-tier-card="${tier}">
+        <div class="row"><span class="emoji-badge">${T.emoji}</span><h3 class="grow">${T.name}</h3><span class="badge b-lav">${T.badge}</span></div>
+        <p class="desc">${T.pitch} Needs a ${P.minVramGB}–${P.recVramGB} GB graphics card and ${P.minRamGB}–${P.recRamGB} GB memory.</p>
+        <div class="stack-v" style="gap:4px;margin:8px 0">${rows.map(([role, id]) => { const c = id && tierSpec(id); return c ? `<div class="row small"><span class="grow">${role}: <b>${esc(c.name)}</b></span>${have(id) ? '<span class="badge b-mint">✓</span>' : S.downloads[id] ? '<span class="badge b-sky">⬇</span>' : `<span class="muted">${((c.sizeGB || 0) + (c.mmprojGB || 0)).toFixed(1)} GB</span>`}</div>` : ''; }).join('')}
+          <div class="row small"><span class="grow">🎬 Video: <b>Wan 2.2</b> · photoreal pictures: <b>Lustify</b></span><span class="muted">from the Liquid Edition</span></div></div>
+        <p class="small" style="margin:6px 0;${fit.level === 'no' ? 'color:var(--danger)' : ''}">${esc(fit.text)}</p>
+        ${ready ? '' : '<p class="small muted" style="margin:0 0 6px">Optional: it is only installed if you choose it here.</p>'}
+        <div class="row">${ready && !missing.length ? `<button class="btn small primary" data-chat-stack="${T.id}">Chat</button><span class="badge b-lav">🔒 Locked</span>`
+          : downloading.length ? `<span class="badge b-sky">Downloading ${downloading.length} of ${missing.length}…</span>`
+          : `<button class="btn small ${fit.level === 'no' ? '' : 'primary'}" data-get-tier="${tier}">${!missing.length ? `Turn on ${T.name}` : `${ready ? 'Finish' : 'Get'} ${T.name} · ${missingGB.toFixed(0)} GB`}</button>${ready ? `<button class="btn small" data-chat-stack="${T.id}">Chat</button>` : ''}`}</div>
+      </div>`;
 }
 function liquidEditionsHTML() {
-  const P = S.catalog?.liquidPro;
-  if (!P) return '';
-  const spec = (id) => S.catalog.text.find((m) => m.id === id) || S.catalog.media.find((m) => m.id === id);
-  const have = (id) => S.installed.some((m) => m.catalogId === id);
-  const rows = [['🧠 Brain', P.brain], ['🏁 Closer · sees photos', P.closer], ['🧮 Thinker', P.thinker], ['🎨 Muse · stories', P.muse], ['🖼️ Pictures', P.pictures[0]], ['🎌 Anime', P.pictures[1]]];
-  const missing = [...new Set([P.brain, P.closer, P.thinker, P.muse, ...P.pictures])].filter((id) => !have(id) && spec(id));
-  const missingGB = missing.reduce((t, id) => t + (spec(id).sizeGB || 0) + (spec(id).mmprojGB || 0), 0);
-  const downloading = missing.filter((id) => S.downloads[id]);
-  const ready = S.stacks.some((s) => s.id === 'quicksilver-pro');
-  const fit = proFit();
+  if (!S.catalog?.liquidPro) return '';
   const liquidReady = S.stacks.some((s) => s.id === 'quicksilver');
-  return `<div class="section"><h2>💧 The Liquid Editions</h2><span class="small muted">Quicksilver's own uncensored crews: several AI models working as one, all on this PC. Locked, so they always work the way they were built.</span></div>
+  return `<div class="section"><h2>💧 The Liquid Editions</h2><span class="small muted">Quicksilver's own uncensored crews: several abliterated AI models working as one, all on this PC. Pick the one that matches your PC. Locked, so they always work the way they were built.</span></div>
     <div class="cards" id="liquid-editions" style="margin-bottom:18px">
       <div class="card">
         <div class="row"><span class="emoji-badge">💧</span><h3 class="grow">Liquid Edition</h3><span class="badge b-mint">For any PC</span></div>
         <p class="desc">Comes with Quicksilver. Qwen3.5 4B answers and sees photos, Qwen3.5 9B leads hard questions, Qwen3.5 2B adds fresh angles; Lustify makes pictures and Wan 2.2 makes video. Runs on laptops and everyday PCs; best with an 8 GB graphics card.</p>
         <div class="row">${liquidReady ? '<button class="btn small primary" data-chat-stack="quicksilver">Chat</button><span class="badge b-lav">🔒 Locked</span>' : '<span class="badge b-lemon">Setting up…</span>'}</div>
       </div>
-      <div class="card ${fit.level === 'no' ? '' : 'hl'}">
-        <div class="row"><span class="emoji-badge">💎</span><h3 class="grow">Liquid Edition Pro</h3><span class="badge b-lav">For a powerful PC</span></div>
-        <p class="desc">The Liquid Edition with bigger, smarter uncensored models in every role: sharper answers, better reasoning and writing, and top-quality pictures. Needs a ${P.minVramGB}–${P.recVramGB} GB graphics card and ${P.minRamGB}–${P.recRamGB} GB memory.</p>
-        <div class="stack-v" style="gap:4px;margin:8px 0">${rows.map(([role, id]) => { const c = spec(id); return c ? `<div class="row small"><span class="grow">${role}: <b>${esc(c.name)}</b></span>${have(id) ? '<span class="badge b-mint">✓</span>' : S.downloads[id] ? '<span class="badge b-sky">⬇</span>' : `<span class="muted">${((c.sizeGB || 0) + (c.mmprojGB || 0)).toFixed(1)} GB</span>`}</div>` : ''; }).join('')}
-          <div class="row small"><span class="grow">🎬 Video: <b>Wan 2.2</b> · photoreal pictures: <b>Lustify</b></span><span class="muted">from the Liquid Edition</span></div></div>
-        <p class="small" style="margin:6px 0;${fit.level === 'no' ? 'color:var(--danger)' : ''}">${esc(fit.text)}</p>
-        ${ready ? '' : '<p class="small muted" style="margin:0 0 6px">Optional: it is only installed if you choose it here.</p>'}
-        <div class="row">${ready && !missing.length ? '<button class="btn small primary" data-chat-stack="quicksilver-pro">Chat</button><span class="badge b-lav">🔒 Locked</span>'
-          : downloading.length ? `<span class="badge b-sky">Downloading ${downloading.length} of ${missing.length}…</span>`
-          : `<button class="btn small ${fit.level === 'no' ? '' : 'primary'}" data-get-pro>${!missing.length ? 'Turn on Liquid Edition Pro' : `${ready ? 'Finish' : 'Get'} Liquid Edition Pro · ${missingGB.toFixed(0)} GB`}</button>${ready ? '<button class="btn small" data-chat-stack="quicksilver-pro">Chat</button>' : ''}`}</div>
-      </div>
+      ${S.catalog.liquidMax ? tierCardHTML('max') : ''}
+      ${tierCardHTML('pro')}
     </div>`;
 }
 document.addEventListener('click', async (e) => {
-  const proBtn = e.target.closest('[data-get-pro]');
-  if (!proBtn || proBtn.disabled) return;
-  proBtn.disabled = true;
-  const P = S.catalog.liquidPro;
-  const spec = (id) => S.catalog.text.find((m) => m.id === id) || S.catalog.media.find((m) => m.id === id);
-  const missing = [...new Set([P.brain, P.closer, P.thinker, P.muse, ...P.pictures])].filter((id) => !S.installed.some((m) => m.catalogId === id) && !S.downloads[id] && spec(id));
-  if (proFit().level === 'no' && !(await confirmBox(`${proFit().text}\n\nDownload Liquid Edition Pro anyway?`, { yes: 'Download anyway', danger: false }))) { proBtn.disabled = false; return; }
-  // Pro is only ever set up from this button.
-  await call('quicksilver:proGet');
-  // The Brain and Closer first (Pro is ready to chat as soon as they're in), then the rest.
-  for (const id of missing) await download({ catalogId: id }, spec(id).name).catch((err) => toast(err.message, 6000));
+  const btn = e.target.closest('[data-get-tier]');
+  if (!btn || btn.disabled) return;
+  btn.disabled = true;
+  const tier = btn.dataset.getTier; const T = LIQUID_TIER_INFO[tier];
+  const missing = tierLineup(tier).filter((id) => !S.installed.some((m) => m.catalogId === id) && !S.downloads[id] && tierSpec(id));
+  const fit = tierFit(tier);
+  if (fit.level === 'no' && !(await confirmBox(`${fit.text}\n\nDownload ${T.name} anyway?`, { yes: 'Download anyway', danger: false }))) { btn.disabled = false; return; }
+  // Max and Pro are only ever set up from these buttons.
+  await call(tier === 'max' ? 'quicksilver:maxGet' : 'quicksilver:proGet');
+  // The Brain and Closer first (it's ready to chat as soon as they're in), then the rest.
+  for (const id of missing) await download({ catalogId: id }, tierSpec(id).name).catch((err) => toast(err.message, 6000));
   await refreshModels();
-  toast(missing.length ? 'Downloading Liquid Edition Pro. It appears under Built in as soon as its Brain and Closer are in.' : '💎 Liquid Edition Pro is ready.', 8000);
+  toast(missing.length ? `Downloading ${T.name}. It appears under Built in as soon as its Brain and Closer are in.` : `${T.emoji} ${T.name} is ready.`, 8000);
   render();
 });

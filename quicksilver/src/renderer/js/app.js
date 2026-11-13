@@ -137,11 +137,11 @@ views.home = {
         ${tile('🔌', 'API server', api?.running ? 'On' : 'Off', api?.running ? `127.0.0.1:${api.port}` : 'let other apps use your models', 'settings')}
       </div>
       <div class="section"><h2>Start something</h2></div>
-      <p class="small muted start-note">Each of these is an <b>assistant programmed to be an expert at one task</b>: it has its own expert instructions, settings tuned for that work (how creative, how long, how much it reads), the add-ons it needs (web search, your knowledge, double-checking, a skill on every message), and it asks for the model best rated for that kind of work. Pick the one that matches what you want to do; you can switch at the top of any chat.</p>
+      <p class="small muted start-note">Each of these is a <b>crew member set up to be an expert at one task</b>: it has its own expert instructions, settings tuned for that work (how creative, how long, how much it reads), the add-ons it needs (web search, your knowledge, double-checking, a skill on every message), and it asks for the model best rated for that kind of work. Pick the one that matches what you want to do; you can switch at the top of any chat.</p>
       <div class="cards" style="grid-template-columns:repeat(auto-fill,minmax(250px,1fr))">
         ${S.data.assistants.filter((a) => a.id !== 'as-general').map((a) => `<button class="card" data-start="${a.id}" style="text-align:left"><div class="row"><span class="emoji-badge">${esc(a.emoji)}</span><h3 class="grow">${esc(a.name)}</h3></div><p class="small muted" style="font-weight:600;margin:8px 0 0">${esc(a.description)}</p></button>`).join('')}
         <button class="card" data-goto="studio" style="text-align:left"><div class="row"><span class="emoji-badge">🎨</span><h3>Create an image or video</h3></div><p class="small muted" style="font-weight:600;margin:8px 0 0">Generate, edit with AI, trim and convert.</p></button>
-        <button class="card" data-goto="library" style="text-align:left"><div class="row"><span class="emoji-badge">📚</span><h3>Connect your knowledge</h3></div><p class="small muted" style="font-weight:600;margin:8px 0 0">Files, websites and PubMed, isolated per assistant and cited.</p></button>
+        <button class="card" data-goto="library" style="text-align:left"><div class="row"><span class="emoji-badge">📚</span><h3>Connect your knowledge</h3></div><p class="small muted" style="font-weight:600;margin:8px 0 0">Files, websites and PubMed, isolated per crew member and cited.</p></button>
       </div>
     </div>`;
   },
@@ -246,6 +246,7 @@ async function init() {
     // Load the default model in the background so the first reply is quick.
     if (model.kind === 'text') await setUpQuicksilver(false).catch(() => {}); // a new model can join Quicksilver's team
     if (model.kind === 'text' && (S.catalog?.liquidPro && Object.values(S.catalog.liquidPro).includes(model.catalogId))) { await qs.call('quicksilver:pro').catch(() => {}); await refreshModels(); }
+    if (model.kind === 'text' && (S.catalog?.liquidMax && Object.values(S.catalog.liquidMax).includes(model.catalogId))) { await qs.call('quicksilver:max').catch(() => {}); await refreshModels(); }
     if (model.kind === 'text') qs.call('models:warm', S.data.prefs.defaultTarget || `local:${model.id}`, { contextSize: S.data.prefs.contextSize, gpu: S.data.prefs.gpu }).catch(() => {});
     if (!$('#modal').hidden) return;
     render();
@@ -285,6 +286,11 @@ async function setUpQuicksilver(firstLook) {
   if (firstLook && r.added.length) {
     toast(r.stack ? '👋 Meet Quicksilver Liquid Edition: two AI models working as one, right on your PC. It sees photos, thinks harder when a question needs it, and nothing leaves this computer. Try an idea below.'
       : '👋 Quicksilver is ready to chat, privately on your PC, and it can see photos. Try an idea below.', 10000);
+  }
+  // A corrected Liquid Edition took models off: they're switched off until you switch them on again.
+  if (r.retired?.length) {
+    await refreshModels();
+    toastAction(`💧 The Liquid Edition now uses only its current models (abliterated). Taken off it and switched off: ${r.retired.slice(0, 4).join(', ')}${r.retired.length > 4 ? '…' : ''}. Nothing was deleted; switch one on again under Models → Models in use.`, 'Show me', () => { modelsTab = 'installed'; go({ view: 'models' }); }, 15000);
   }
   // The one-time tidy of the model list (see models.tidyImported) says what it did.
   if (r.tidied?.length) {

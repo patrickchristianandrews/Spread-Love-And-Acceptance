@@ -235,6 +235,15 @@ const MEDIA_MODELS = [
   { id: 'qwen-image', quality: 9, name: 'Qwen-Image', maker: 'Alibaba', kind: 'image', category: 'image', recipe: 'qwen-image', sizeGB: 18.5, vramGB: 16, refSec: 90, defaults: { width: 1024, height: 1024, steps: 20, cfg: 2.5 },
     files: { diffusion: { repo: 'QuantStack/Qwen-Image-GGUF', match: 'Qwen_Image-Q4_K_S\\.gguf$' }, vae: { repo: 'Comfy-Org/Qwen-Image_ComfyUI', match: 'qwen_image_vae\\.safetensors$' }, llm: { repo: 'unsloth/Qwen2.5-VL-7B-Instruct-GGUF', match: 'Q4_K_M\\.gguf$' } },
     blurb: 'The best open model for posters, signs and long text in pictures, with excellent prompt following.', edit: 'img2img' },
+  // Newer picture models from November 2026 (both run in stable-diffusion.cpp; files checked on Hugging Face).
+  { id: 'qwen-image-2.1-turbo', quality: 9, name: 'Qwen-Image 2.1 Turbo', maker: 'Alibaba', kind: 'image', category: 'image', recipe: 'qwen-image-2', sizeGB: 9.9, vramGB: 10, refSec: 35, defaults: { width: 1024, height: 1024, steps: 8, cfg: 1 },
+    files: { diffusion: { repo: 'unsloth/Qwen-Image-2.1-Turbo-GGUF', match: 'qwen-image-2\\.1-turbo-Q4_K_M\\.gguf$' }, vae: { repo: 'unsloth/Qwen-Image-2.1-FP8', match: 'qwen_image_2\\.1_vae_bf16\\.safetensors$' }, llm: { repo: 'Qwen/Qwen3-VL-8B-Instruct-GGUF', match: 'Qwen3VL-8B-Instruct-Q4_K_M\\.gguf$' } },
+    blurb: 'The newest Qwen-Image in 8 steps: excellent prompt following and the best text, signs and posters in pictures. Needs the latest picture engine.',
+    license: 'Qwen Research License: not for commercial use' },
+  { id: 'flux-3-klein', quality: 8, name: 'FLUX.3 Klein', maker: 'Black Forest Labs', kind: 'image', category: 'image', recipe: 'flux3', sizeGB: 6.4, vramGB: 8, refSec: 30, defaults: { width: 1024, height: 1024, steps: 16, cfg: 1 },
+    files: { diffusion: { repo: 'leejet/flux-3-image-klein-GGUF', match: 'flux3-image-klein-Q4_K\\.gguf$' }, vae: { repo: 'Comfy-Org/flux2-dev', match: 'flux2-vae\\.safetensors$' }, llm: { repo: 'Qwen/Qwen3-VL-4B-Instruct-GGUF', match: 'Qwen3VL-4B-Instruct-Q4_K_M\\.gguf$' } },
+    blurb: 'The small, fast FLUX.3: sharp, natural pictures in 16 steps on an 8 GB card, and photo edits by describing the change. Needs the latest picture engine.',
+    edit: 'instruct', license: 'FLUX Kommunity License: not for commercial use' },
   // ---------- uncensored picture models (no content filter; the Liquid Edition's pictures) ----------
   sdxlTune('lustify', 9, 'Lustify (uncensored)', 'Lustify (community, SDXL)', 'kkkkk26/lustify_v9', 'lustify.*\\.safetensors$',
     'Uncensored, photorealistic pictures, including adult content: the model Venice uses for its uncensored pictures, free here on your own PC. The Liquid Edition\'s picture maker.',
@@ -883,11 +892,25 @@ const LIQUID_PRO = {
   brain: 'qwen3-30b-a3b-uncensored',      // answers: 30B knowledge at 3B speed (mixture of experts)
   closer: 'mistral-small-3.2-uncensored', // leads hard questions and reads photos
   thinker: 'gpt-oss-20b-uncensored',      // maths and logic, thought through
-  muse: 'rocinante-12b',                  // stories, role-play and fresh angles
+  muse: 'gemma-3-12b-uncensored',         // stories, role-play and fresh angles (Gemma 3 12B, abliterated)
   pictures: ['chroma-hd', 'wai-nsfw-illustrious'], // top-quality pictures; anime
   minVramGB: 16, recVramGB: 24, minRamGB: 32, recRamGB: 64,
 };
 const LIQUID_PRO_MODELS = [LIQUID_PRO.brain, LIQUID_PRO.closer, LIQUID_PRO.thinker, LIQUID_PRO.muse, ...LIQUID_PRO.pictures];
+// Quicksilver Liquid Edition Max: for a fast, upper-middle PC (a 10–16 GB graphics card and
+// 24–32 GB of memory), between the Liquid Edition and Pro. Every chat model is abliterated. The
+// Brain is the Liquid Edition's own Qwen3.5 9B (already here on most PCs: it sees photos and
+// thinks); the Closer is Qwen3 30B-A3B, a mixture of experts that keeps its shared parts on the
+// graphics card, so it answers with 30B knowledge at close to 3B speed. Locked like the others.
+const LIQUID_MAX = {
+  brain: 'qwen3.5-9b-uncensored',         // answers, sees photos, thinks hard questions through
+  closer: 'qwen3-30b-a3b-uncensored',     // leads hard questions: 30B knowledge at 3B speed
+  thinker: 'gpt-oss-20b-uncensored',      // maths and logic, thought through (also a mixture of experts)
+  muse: 'gemma-3-12b-uncensored',         // stories, role-play and fresh angles; also reads photos
+  pictures: ['chroma-hd', 'wai-nsfw-illustrious'], // top-quality pictures; anime
+  minVramGB: 10, recVramGB: 12, minRamGB: 24, recRamGB: 32,
+};
+const LIQUID_MAX_MODELS = [LIQUID_MAX.brain, LIQUID_MAX.closer, LIQUID_MAX.thinker, LIQUID_MAX.muse, ...LIQUID_MAX.pictures];
 // Suggested add-ons: not required, not locked, never downloaded by themselves. Each fills a gap in
 // the core; once downloaded it joins the Liquid Edition's crew. (Any other uncensored model joins
 // only when ticked under Models → "Models in use": see models.inUse.)
@@ -896,9 +919,9 @@ const LIQUID_ADDONS = [
   { id: 'wai-nsfw-illustrious', why: 'Anime: Lustify is a photo model, this is the most popular uncensored anime model. Anime requests use it by themselves.' },
   { id: 'chroma-hd', why: 'The highest-quality uncensored pictures, with negative prompts.', minVramGB: 8 },
   { id: 'cyberrealistic-sd15', why: 'Uncensored pictures on older 4 GB graphics cards and laptops, where Lustify is slow.' },
-  { id: 'rocinante-12b', why: 'Stories and role-play: vivid prose, far better than the core at fiction.' },
+  { id: 'gemma-3-12b-uncensored', why: 'Stories and role-play: Gemma 3 12B, abliterated. Vivid prose from a different family than the core, far better at fiction.' },
   { id: 'mistral-small-3.2-uncensored', why: 'A stronger Closer that sees photos, for 16 GB+ graphics cards.', minVramGB: 16 },
   { id: 'gpt-oss-20b-uncensored', why: 'A strong, fast reasoner for maths and logic on 12 GB+ graphics cards.', minVramGB: 12 },
 ];
 
-module.exports = { LIQUID_CORE, LIQUID_MEMBERS, LIQUID_ADDONS, LIQUID_PRO, LIQUID_PRO_MODELS, liquidMember, RETIRED, SCORES, SCORE_BASE, SUCCESSORS, FEATURED, TEXT_MODELS, TEXT_CATEGORIES, MEDIA_MODELS, MEDIA_CATEGORIES, JOBS, CLOUD_BOOST, cloudPlan, accuracyLevel, requirements, smallerAlternative, draftFor, DRAFT_FAMILIES, estimateText, estimateMedia, advise, compose, gpuBandwidth, profileInstalled, matchCatalog, scoreFor, familyOf, starsFor, capabilities, upgradeAdvice };
+module.exports = { LIQUID_CORE, LIQUID_MEMBERS, LIQUID_ADDONS, LIQUID_PRO, LIQUID_PRO_MODELS, LIQUID_MAX, LIQUID_MAX_MODELS, liquidMember, RETIRED, SCORES, SCORE_BASE, SUCCESSORS, FEATURED, TEXT_MODELS, TEXT_CATEGORIES, MEDIA_MODELS, MEDIA_CATEGORIES, JOBS, CLOUD_BOOST, cloudPlan, accuracyLevel, requirements, smallerAlternative, draftFor, DRAFT_FAMILIES, estimateText, estimateMedia, advise, compose, gpuBandwidth, profileInstalled, matchCatalog, scoreFor, familyOf, starsFor, capabilities, upgradeAdvice };

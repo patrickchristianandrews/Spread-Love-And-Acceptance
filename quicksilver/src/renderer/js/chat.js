@@ -116,7 +116,7 @@ views.chat = {
       ${tabsHTML(chat)}
       <header class="chat-top">
         <div class="pickers">
-          <label class="pill-select" title="Assistant"><span class="pill-emoji">${esc(a.emoji)}</span><select id="pick-assistant" aria-label="Assistant">${S.data.assistants.map((x) => `<option value="${x.id}" ${x.id === a.id ? 'selected' : ''}>${esc(x.name)}</option>`).join('')}</select>${icon('chevron', 16)}</label>
+          <label class="pill-select" title="Crew member"><span class="pill-emoji">${esc(a.emoji)}</span><select id="pick-assistant" aria-label="Crew member">${S.data.assistants.map((x) => `<option value="${x.id}" ${x.id === a.id ? 'selected' : ''}>${esc(x.name)}</option>`).join('')}</select>${icon('chevron', 16)}</label>
           <label class="pill-select" title="Model or team">${icon(target.startsWith('stack:') ? 'layers' : 'cpu', 16)}<select id="pick-model" aria-label="Model or team">${!a.target && S.data.prefs.autoRoute !== false && S.targets.length > 1 ? `<option value="__auto" ${autoOn(chat, a) ? 'selected' : ''}>✨ Automatic</option>` : ''}${S.targets.length ? targetOptions(autoOn(chat, a) ? '' : target) : '<option value="">No models yet</option>'}<option value="__infuse">⚗️ Build a custom AI…</option><option value="__get">＋ Get more models…</option></select>${icon('chevron', 16)}</label>
           <button class="net-pill ${S.config?.offline ? 'off' : ''}" id="net-pill" role="switch" aria-checked="${!S.config?.offline}" title="${S.config?.offline ? 'Offline: nothing leaves this PC, so web search is off. Click to go online.' : 'Online: web search is on for questions that need it, and cloud AIs and downloads are available. Click to go offline.'}"><span class="net-dot"></span><span>${S.config?.offline ? 'Offline' : 'Online'}</span><span class="net-sw"><i></i></span></button>
         </div>
@@ -255,6 +255,15 @@ function attachmentsHTML(list, removable) {
   }).join('');
 }
 
+// Under an answer: which cloud service answered or helped (a hard question handed to it, a step
+// of a stack, the Council, or a picture made in the cloud). Nothing is shown when it all ran on this PC.
+function cloudUsedHTML(alt) {
+  const list = [...(alt.cloud || [])];
+  if (alt.media?.cloud && !list.some((c) => c.service === alt.media.cloud)) list.push({ service: alt.media.cloud, model: '' });
+  if (!list.length) return '';
+  const names = list.map((c) => `<b>${esc(c.service)}</b>${c.model ? ` <span class="muted">(${esc(c.model)})</span>` : ''}`).join(', ');
+  return `<div class="cloud-used small" title="This answer used a cloud AI you connected: what you asked was sent to it over the internet">☁️ Used ${names}</div>`;
+}
 function stepsHTML(alt, streaming) {
   if (!alt.steps?.length) return '';
   const roleBadge = { council: '<span class="badge b-peach">⚔️ Council</span>', muse: '<span class="badge b-lemon">✨ Muse</span>', vision: '<span class="badge b-sky">👁 Sees</span>', draft: '<span class="badge b-lav">✏️ Drafts</span>', critique: '<span class="badge b-peach">⚔️ Debates</span>', tools: '<span class="badge b-lemon">🔌 Tools</span>', lead: '<span class="badge b-mint">★ Lead</span>' };
@@ -341,6 +350,7 @@ function messageHTML(chat, a, m, i) {
     ${downloadHTML(m, alt, streaming)}
     ${appButtonsHTML(m, alt, streaming)}
     ${skillMediaHTML(m, alt, streaming)}
+    ${cloudUsedHTML(alt)}
     ${refusalHTML(chat, m, alt, streaming)}
     ${checkHTML(m, alt) || alt.sources?.length ? `<div class="answer-foot">${checkHTML(m, alt)}` : ''}
     ${alt.sources?.length ? `<div class="sources"><span class="src-label" title="${alt.autoWeb ? 'This question is about something current, so the web was searched automatically.' : 'Where this answer comes from'}">${alt.autoWeb ? '🌐 ' : ''}${alt.autoLib ? '📚 ' : ''}Sources</span>${alt.sources.map((s, k) => `<${s.url ? `a href="${esc(s.url)}"` : 'span'} class="src-chip" title="${esc(s.title || s.url || '')}"><span class="cite">${k + 1}</span>${esc(s.url ? domainOf(s.url) : s.title)}</${s.url ? 'a' : 'span'}>`).join('')}</div>` : ''}
@@ -996,6 +1006,9 @@ qs.onChat(({ requestId, ev }) => {
     case 'approve': askToolApproval(ev); break;
     case 'sources': alt.sources = [...(alt.sources || []), ...ev.sources.map(({ title, url, path }) => ({ title, url, path }))]; pending.sources = [...(pending.sources || []), ...ev.sources]; break;
     case 'council': alt.council = { agreement: ev.agreement, members: ev.members || [] }; break;
+    // Free rotation: a short message when one free cloud AI hits its limit and the next takes over.
+    case 'rotated': toast(ev.allUsed ? '♻️ Every free cloud AI you connected has hit its limit for now. Try again later, or connect another free one.' : `♻️ ${ev.from || 'A free cloud AI'} hit its free limit, so ${ev.to} took over.`, 6000); break;
+    case 'cloud': { const k = `${ev.service}|${ev.model}`; alt.cloud ||= []; if (!alt.cloud.some((c) => `${c.service}|${c.model}` === k)) alt.cloud.push({ service: ev.service, model: ev.model }); break; }
     case 'stats': alt.stats = { tps: ev.tps, tokens: ev.tokens }; if (ev.minDigitP != null) alt.minDigitP = ev.minDigitP; if (ev.finish === 'length') toast('The answer hit the length limit. Press Continue for more.'); break;
     case 'error':
     case 'done': {
@@ -1371,7 +1384,7 @@ function skillChipHTML(chat) {
   const s = chat.pendingSkill && skillById(chat.pendingSkill);
   if (s) return `<div class="row" style="margin-bottom:2px"><span class="badge b-peach" style="font-size:.9rem;padding:4px 10px">⚡ ${esc(s.icon)} ${esc(s.name)} <button class="tool" data-skill-clear title="Stop using this skill" style="padding:0 4px">✕</button></span><span class="small muted">${esc(s.description)}</span></div>`;
   const own = skillById(assistantById(chat.assistantId)?.skill);
-  if (own) return `<div class="row" style="margin-bottom:2px"><span class="badge b-peach" style="font-size:.85rem;padding:3px 9px" title="This assistant uses it on every message">⚡ ${esc(own.icon)} ${esc(own.name)}</span><span class="small muted">${esc(own.description)}</span></div>`;
+  if (own) return `<div class="row" style="margin-bottom:2px"><span class="badge b-peach" style="font-size:.85rem;padding:3px 9px" title="This crew member uses it on every message">⚡ ${esc(own.icon)} ${esc(own.name)}</span><span class="small muted">${esc(own.description)}</span></div>`;
   const sug = chat.suggested && !(chat.dismissed || []).includes(chat.suggested) && skillById(chat.suggested);
   if (sug) return `<div class="row" style="margin-bottom:2px"><span class="small muted">Suggested skill:</span><button class="btn small" data-skill-use="${esc(sug.id)}">⚡ ${esc(sug.icon)} ${esc(sug.name)}</button><button class="tool" data-skill-dismiss="${esc(sug.id)}">No thanks</button></div>`;
   return '';

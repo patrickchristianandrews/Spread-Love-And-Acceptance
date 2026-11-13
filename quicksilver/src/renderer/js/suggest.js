@@ -72,7 +72,7 @@ function sugApis(task, liquid) {
   const use = SUGGEST_TASKS[task][3];
   const media = !SUGGEST_TASKS[task][2];
   // Uncensored: Venice for words and pictures; video and music services have their own content rules.
-  const list = (typeof API_RANK !== 'undefined' ? API_RANK : []).filter((r) => (liquid && (!media || task === 'photo') ? r[0] === 'venice' : r[2].includes(use) || (use === 'photos-in' && r[2].includes('chat') && r[6] >= 9)));
+  const list = (typeof API_RANK !== 'undefined' ? API_RANK : []).filter((r) => (liquid && (!media || task === 'photo') ? (r[0] === 'venice' || r[2].includes(use)) : r[2].includes(use) || (use === 'photos-in' && r[2].includes('chat') && r[6] >= 9)));
   const byFree = [...list].sort((a, b) => b[7] - a[7] || b[6] - a[6])[0];
   const byValue = [...list].sort((a, b) => rankValue(b) - rankValue(a))[0];
   const byQuality = [...list].sort((a, b) => b[6] - a[6] || rankValue(b) - rankValue(a))[0];
@@ -183,8 +183,8 @@ function apiPicksFor(targets, { liquid = false, main = null } = {}) {
   const local = targets.filter((t) => !String(t).startsWith('api:'));
   const now = Object.fromEntries(Object.keys(API_JOBS).map((k) => [k, Math.round((sugNow(local, k).score || 0) * 2) / 2]));
   const rated = Object.values(now).some((v) => v > 0); // a model Quicksilver has no ratings for can't be compared
-  // The Liquid Edition uses one cloud AI, Venice (uncensored and private); everything else can use any chat service.
-  const rows = (typeof API_RANK !== 'undefined' ? API_RANK : []).filter((r) => r[0] && r[0] !== 'translate' && r[9] === 'app' && (liquid ? r[0] === 'venice' : true))
+  // Any cloud AI can help the Liquid Edition; Venice (uncensored and private) is always suggested too.
+  const rows = (typeof API_RANK !== 'undefined' ? API_RANK : []).filter((r) => r[0] && r[0] !== 'translate' && r[9] === 'app')
     .map((r) => {
       const lifts = Object.keys(API_JOBS).filter((k) => apiCovers(r, k) && r[6] - now[k] >= 1)
         .map((k) => ({ task: k, from: now[k], to: r[6], gain: (r[6] - now[k]) * (k === main ? 2 : 1) })).sort((a, b) => b.gain - a.gain);
@@ -195,7 +195,10 @@ function apiPicksFor(targets, { liquid = false, main = null } = {}) {
   const top = [...rows].filter((x) => x !== free).sort((a, b) => b.r[6] - a.r[6] || b.total - a.total)[0] || null;
   const have = [...rows].filter((x) => x.connected).sort((a, b) => b.total - a.total)[0] || null;
   const best = top && (!free || top.r[6] > free.r[6]) ? top : null;
-  return { targets, liquid, inside, now, rated, main, free, best, have: have && have !== free && have !== best ? have : null };
+  const haveX = have && have !== free && have !== best ? have : null;
+  // The Liquid Edition: Venice (uncensored and private) is always among the suggestions.
+  const venice = liquid ? rows.find((x) => x.r[0] === 'venice') : null;
+  return { targets, liquid, inside, now, rated, main, free, best, have: haveX, venice: venice && ![free, best, haveX].includes(venice) ? venice : null };
 }
 // One suggested service: its name and why, what it lifts (out of 10, now → with it), what it costs,
 // and the button that fits where it is shown (act).
@@ -203,10 +206,10 @@ function apiPickRow([why, cls, x], p, act) {
   const was = (l) => (l.from > 0 ? l.from : l.task === 'vision' ? 'can’t' : 'unrated');
   const lifts = x.lifts.slice(0, 3).map((l) => `${API_JOBS[l.task]} <b>${was(l)} → ${l.to}</b>`).join(' · ');
   const cost = why === 'Best free' ? `Free: ${x.r[4]}` : x.r[7] >= 5 ? `Free: ${x.r[4]}` : `Cost: ${x.r[5]}`;
-  const note = p.liquid && x.r[0] === 'venice' ? `The only cloud AI the Liquid Edition uses. ${veniceLiquidText().replace(/^with the Liquid Edition o/, 'O')}.` : '';
+  const note = p.liquid && x.r[0] === 'venice' ? `Suggested for the Liquid Edition (uncensored; any cloud AI works). ${veniceLiquidText().replace(/^with the Liquid Edition o/, 'O')}.` : '';
   return `<div class="api-sug-row"><span class="grow"><span><b>${esc(x.r[1])}</b> <span class="badge ${cls}">${why}</span>${x.connected ? ' <span class="badge b-mint">✓ connected</span>' : ''}</span>${lifts ? `<span class="small">${lifts}</span>` : ''}${note ? `<span class="small">${esc(note)}</span>` : ''}<span class="small muted">${esc(x.r[3])} · ${esc(cost)}</span></span>${act(x)}</div>`;
 }
-const apiPickList = (p) => [['Best free', 'b-mint', p.free], [p.liquid ? 'Uncensored' : 'Best quality', 'b-lav', p.best], ['You have it', 'b-sky', p.have]].filter(([, , x]) => x);
+const apiPickList = (p) => [['Best free', 'b-mint', p.free], ['Best quality', 'b-lav', p.best], ['You have it', 'b-sky', p.have], ['Uncensored (suggested)', 'b-peach', p.venice]].filter(([, , x]) => x);
 const apiDirLink = (p) => `<a href="#" class="small" data-api-dir="${p.liquid ? 'uncensored' : { vision: 'photos-in' }[p.main] || p.main || 'all'}" title="Every service in one list: by task, free or paid, what the free plan gives you, with a link to each">📒 All APIs</a>`;
 
 function stackApiHTML(s) {

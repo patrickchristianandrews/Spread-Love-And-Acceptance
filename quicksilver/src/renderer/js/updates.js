@@ -78,7 +78,7 @@ function quicksilverBoost() {
   const leadInst = S.installed.find((m) => `local:${m.id}` === st.members?.judge);
   const best = Math.max(0, ...S.installed.filter((m) => m.kind === 'text' && S.est.text[m.catalogId]?.rating === 'great').map((m) => score(m.catalogId)), score(leadInst?.catalogId));
   const f = S.catalog.picks?.featured || {};
-  const pick = [...new Set([...(f.open || [])])] // Quicksilver is uncensored: only uncensored models join it
+  const pick = [...new Set([...(f.open || [])])].filter((id) => /abliterat|heretic/i.test(`${id} ${catModel(id)?.repo || ''}`)) // only abliterated models join the Liquid Edition
     .filter((id) => S.catalog.text.some((x) => x.id === id) && !haveModel(id) && S.est.text[id]?.rating === 'great' && score(id) >= best + 1)
     .sort((a, b) => score(b) - score(a))[0];
   if (!pick) return null;
@@ -88,8 +88,39 @@ function quicksilverBoost() {
 const shownUpgrades = () => (S.modelUpgrades || []).filter((u) => !putOff(u));
 const shownStackUpdates = () => stackUpdates().filter((u) => !putOff(u));
 
+// "Better for your PC": for each model you use, a model from ANY family that is clearly better at
+// the same job (at least a full point out of 10), runs great or good on this PC and isn't
+// installed. Newer versions of the same model come from models:upgrades; this finds the rest.
+// Uncensored models are only replaced by uncensored ones, models that see photos by ones that do.
+// A model Quicksilver hasn't tested yet says its rating is an estimate.
+const BETTER_JOB = { coding: 'coding', vision: 'vision', reasoning: 'research' };
+function betterModels(have = S.modelUpgrades || []) {
+  if (!S.catalog?.text || !S.est?.text) return [];
+  const taken = new Set(have.map((u) => u.newCatalogId));
+  const out = [];
+  for (const inst of S.installed.filter((m) => m.kind === 'text' && m.catalogId && m.source !== 'bundled' && !(typeof liquidLocked === 'function' && liquidLocked(m)))) {
+    const old = S.catalog.text.find((x) => x.id === inst.catalogId);
+    if (!old?.jobs || have.some((u) => u.oldCatalogId === old.id)) continue;
+    const job = BETTER_JOB[old.category] || 'general';
+    const mine = old.jobs[job] || 0;
+    const open = old.category === 'open' || old.open;
+    const pick = S.catalog.text.filter((c) => !c.retired && c.id !== old.id && c.jobs && !haveModel(c.id) && !taken.has(c.id)
+      && (c.jobs[job] || 0) >= mine + 1 && ['great', 'good'].includes(S.est.text[c.id]?.rating)
+      && (!open || c.category === 'open' || c.open) && (!old.vision || c.vision) && (job !== 'coding' || c.category === 'coding'))
+      .sort((a, b) => (b.jobs[job] - a.jobs[job]) || (Boolean(a.remote) - Boolean(b.remote)) || a.sizeGB - b.sizeGB)[0];
+    if (!pick) continue;
+    taken.add(pick.id);
+    const est = S.est.text[pick.id];
+    const words = { general: 'everyday answers', coding: 'coding', vision: 'reading photos', research: 'hard questions' }[job];
+    out.push({ better: true, estimate: Boolean(pick.remote), oldId: inst.id, oldName: inst.name, oldCatalogId: old.id, newCatalogId: pick.id, newName: pick.name,
+      why: `better at ${words} (${mine} → ${pick.jobs[job]} out of 10${pick.remote ? ', an estimate: not tested by Quicksilver yet' : ''}), ${pick.sizeGB} GB`, rating: est.rating, speed: est.label, sizeGB: pick.sizeGB });
+  }
+  return out;
+}
+
 async function loadModelUpgrades() {
   try { S.modelUpgrades = await qs.call('models:upgrades'); } catch { S.modelUpgrades = []; }
+  S.modelUpgrades = [...S.modelUpgrades, ...betterModels(S.modelUpgrades)];
   paintUpdateBadge();
   return S.modelUpgrades;
 }
@@ -138,7 +169,7 @@ async function checkForUpdates({ auto = true } = {}) {
   let budget = AUTO_CAP_GB;
   const fresh = [];
   for (const u of ups) {
-    if (!['great', 'good'].includes(u.rating) || S.downloads[u.newCatalogId] || u.sizeGB > budget) continue;
+    if (u.better || !['great', 'good'].includes(u.rating) || S.downloads[u.newCatalogId] || u.sizeGB > budget) continue; // a different model is your call, never automatic
     budget -= u.sizeGB; startUpgrade(u, true); fresh.push(u.newName);
   }
   for (const s of stacks.filter((x) => !x.fresh)) {
@@ -191,8 +222,8 @@ function modelUpdatesHTML() {
   if (!ups.length && !stacks.length) {
     return `<div class="notice ok up-none" id="model-updates"><b>✓ Your models are the best picks for this PC.</b> <span class="small">Quicksilver checks online every day for newer, better models and stacks (${esc(when)}).</span> <button class="btn small ghost" id="up-check">Check now</button>${laterNote}</div>`;
   }
-  const row = (u) => { const gains = gainsOf(u.oldCatalogId, u.newCatalogId); return `<div class="up-row"><div class="grow"><b>${esc(gains[0]?.text || `A stronger ${u.oldName}`)}</b>${gainsHTML(gains.slice(1))}<div class="small muted">${esc(u.oldName)} → <b>${esc(u.newName)}</b> · ${esc(u.why)} · ${esc(u.speed)} on this PC</div></div>
-    ${S.downloads[u.newCatalogId] ? '<span class="badge b-sky">Installing…</span>' : `<button class="btn small primary" data-up-get="${esc(u.newCatalogId)}">Upgrade</button><button class="btn small ghost" data-up-later="${esc(upKey(u))}" title="Suggest it again in ${LATER_DAYS} days">Maybe later</button>`}</div>`; };
+  const row = (u) => { const gains = gainsOf(u.oldCatalogId, u.newCatalogId); return `<div class="up-row"><div class="grow"><b>${esc(gains[0]?.text || (u.better ? `Better than ${u.oldName}` : `A stronger ${u.oldName}`))}</b>${gainsHTML(gains.slice(1))}<div class="small muted">${esc(u.oldName)} → <b>${esc(u.newName)}</b> · ${esc(u.why)} · ${esc(u.speed)} on this PC</div></div>
+    ${S.downloads[u.newCatalogId] ? '<span class="badge b-sky">Installing…</span>' : `<button class="btn small primary" data-up-get="${esc(u.newCatalogId)}">${u.better ? 'Switch to it' : 'Upgrade'}</button><button class="btn small ghost" data-up-later="${esc(upKey(u))}" title="Suggest it again in ${LATER_DAYS} days">Maybe later</button>`}</div>`; };
   const srow = (s) => `<div class="up-row"><div class="grow">${esc(s.emoji || '🧩')} <b>${esc(s.name)}</b>${s.fresh ? '' : gainsHTML([...new Map(s.models.flatMap((m) => gainsOf(m.fromId, m.id)).map((g) => [g.text, g])).values()].slice(0, 4))}<div class="small muted">${s.fresh ? `🆕 New stack. ${esc(s.why)}${s.models.length ? ` Downloads: ${s.models.map((m) => esc(m.name)).join(', ')}.` : ' Uses models you already have.'}` : s.quicksilver ? `${s.core ? 'Switch to' : 'Add'} <b>${esc(s.models[0].name)}</b>${s.core ? ` (replaces ${esc(s.models[0].from)})` : ' to the team'}: ${esc(s.why)}` : `${s.models.map((m) => `${esc(m.from)} → <b>${esc(m.name)}</b>`).join(', ')}`}</div></div>
     ${s.models.some((m) => S.downloads[m.id]) ? '<span class="badge b-sky">Installing…</span>' : `<button class="btn small primary" data-up-stack="${esc(upKey(s))}">${s.fresh ? 'Set up' : s.quicksilver ? 'Add it' : 'Update stack'}</button><button class="btn small ghost" data-up-later="${esc(upKey(s))}" title="Suggest it again in ${LATER_DAYS} days">Maybe later</button>`}</div>`;
   return `<div class="card up-card" id="model-updates"><div class="row"><h3 class="grow" style="margin:0">✨ Better models available</h3><span class="small muted">${esc(when)}</span></div>
@@ -256,7 +287,7 @@ function builtinModelHTML() {
 // Dolphin in the crew: an uncensored model from a different family (Llama-based) that's about as
 // strong as the Brain, so it adds a genuinely different view on hard questions. Everyday messages
 // stay with the fast Brain. Offered when the crew has no second model yet.
-const DOLPHIN = 'dolphin-3-llama-3.1-8b';
+const DOLPHIN = 'neuraldaredevil-8b-abliterated'; // (the second opinion: abliterated, from the Llama family)
 function dolphinOfferHTML(qst) {
   const m = qst?.members || {};
   const crew = [...(m.drafters || []), m.judge].filter(Boolean);
@@ -265,22 +296,35 @@ function dolphinOfferHTML(qst) {
   const est = S.est?.text?.[DOLPHIN];
   if (est?.rating === 'wont') return '';
   const slow = est && !['great', 'good'].includes(est.rating);
-  return `<div class="pair-card"><div class="grow"><b>🐬 Add Dolphin to the crew</b>
-      <div class="small muted">Dolphin 3.0 8B is uncensored and about as strong as the Brain, but from a different family, so on hard questions it adds a second view and they catch each other's mistakes. Everyday messages stay with the fast Brain. ${d.sizeGB} GB download.${slow ? ' On this PC it runs slowly, so hard answers will take noticeably longer.' : ''}</div></div>
-    ${S.downloads[DOLPHIN] ? downloadBox(DOLPHIN) : `<button class="btn small ${slow ? '' : 'primary'}" data-get="${DOLPHIN}" data-use-when-done="${DOLPHIN}">Add Dolphin</button>`}</div>`;
+  return `<div class="pair-card"><div class="grow"><b>😈 Add NeuralDaredevil to the crew</b>
+      <div class="small muted">NeuralDaredevil 8B is abliterated (its refusals removed from the weights) and about as strong as the Brain, but from a different family (Llama), so on hard questions it adds a second view and they catch each other's mistakes. Everyday messages stay with the fast Brain. ${d.sizeGB} GB download.${slow ? ' On this PC it runs slowly, so hard answers will take noticeably longer.' : ''}</div></div>
+    ${S.downloads[DOLPHIN] ? downloadBox(DOLPHIN) : `<button class="btn small ${slow ? '' : 'primary'}" data-get="${DOLPHIN}" data-use-when-done="${DOLPHIN}">Add NeuralDaredevil</button>`}</div>`;
 }
-// The Liquid Edition is completely uncensored, so its cloud partner must be too: Venice. Filtered
-// cloud AIs (Cerebras, Groq, Mistral…) still work in your other chats, never for the Liquid Edition.
+// The Liquid Edition's cloud helper for hard questions: any cloud AI you connect (an uncensored
+// one is used first when you have both). Venice is the suggestion, because it is uncensored and
+// says it doesn't store prompts; a filtered service may refuse some uncensored requests.
+// The switch and the connect buttons are right here.
 function cloudPartnerHTML() {
-  const unc = (S.providers || []).filter((p) => p.preset === 'venice' && (p.hasKey || p.noKey));
-  if (unc.length) return `<div class="pair-card"><div class="grow"><b>☁️ Paired with ${unc.map((p) => esc(p.name)).join(' + ')}</b>
-      <div class="small muted">With "use my cloud AI for hard questions" on${S.data.prefs.cloudHard ? '' : ' (it is off: Settings → Features)'}, hard ones go to its uncensored model; everything else stays on your PC. Filtered cloud AIs are never used for the Liquid Edition.</div>
-      ${veniceLiquidHTML()}</div></div>`;
-  return `<div class="pair-card"><div class="grow"><b>☁️ Uncensored cloud partner: Venice AI</b>
-      <div class="small muted">The Liquid Edition is completely uncensored, so it only hands hard questions to an uncensored cloud AI. Venice runs uncensored models and says it doesn't store your prompts; it has a small free allowance, then Pro or credits. Filtered cloud AIs like Cerebras or Groq still work in your other chats, never for the Liquid Edition.</div>
-      ${veniceLiquidHTML()}</div>
-    <div class="row" style="gap:6px;flex-wrap:wrap"><button class="btn small primary" data-pair="venice">Connect Venice</button></div></div>`;
+  const conn = (S.providers || []).filter((p) => (p.hasKey || p.noKey) && !p.media && p.preset !== 'ollama' && p.preset !== 'lmstudio');
+  const venice = conn.find((p) => p.preset === 'venice');
+  const on = Boolean(S.data.prefs.cloudHard);
+  const names = conn.map((p) => esc(p.name)).join(', ');
+  const toggle = `<label class="row small" style="gap:6px;margin:8px 0 4px"><input type="checkbox" id="pair-hard" ${on ? 'checked' : ''} ${conn.length ? '' : 'disabled'}> <b>Send hard questions to my cloud AI</b>${conn.length ? '' : ' <span class="muted">(connect one first)</span>'}</label>`;
+  const buttons = `<div class="row" style="gap:6px;flex-wrap:wrap;margin-top:6px">${venice ? '' : '<button class="btn small primary" data-pair="venice" title="Uncensored, and says it does not store your prompts">Connect Venice (suggested)</button>'}<button class="btn small" data-goto-api title="Any cloud AI: Gemini, Claude, ChatGPT, Groq, OpenRouter, UncensoredLLM and more">${conn.length ? 'Connect another API' : 'Connect any API'}</button><button class="btn small ghost" data-api-dir="uncensored">📒 Compare APIs</button></div>`;
+  return `<div class="pair-card"><div class="grow"><b>☁️ ${conn.length ? `Cloud helper: ${names}` : 'Add a cloud AI for hard questions'}</b>
+      <div class="small muted">${on ? 'On: hard' : 'When this is on, hard'} questions go to ${conn.length ? (venice ? `${esc(venice.name)} (uncensored)${conn.length > 1 ? ', or your other connected AIs' : ''}` : 'your connected cloud AI') : 'a cloud AI you connect'}; everything else stays on your PC. Any API works.${venice ? '' : ' <b>Venice is suggested</b>: it is uncensored and says it doesn\'t store your prompts. A filtered service (ChatGPT, Gemini, Claude…) may refuse some uncensored requests; then the answer comes from your PC.'}</div>
+      ${toggle}${veniceLiquidHTML()}${buttons}</div></div>`;
 }
+document.addEventListener('change', (e) => {
+  if (e.target.id !== 'pair-hard') return;
+  S.data.prefs.cloudHard = e.target.checked; save();
+  toast(e.target.checked ? 'On: hard questions go to your cloud AI; everything else stays on your PC.' : 'Off: every answer comes from your PC.');
+  render();
+});
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('[data-goto-api]')) return;
+  modelsTab = 'api'; go({ view: 'models' });
+});
 document.addEventListener('click', async (e) => {
   const b = e.target.closest('[data-pair]');
   if (!b) return;
@@ -332,6 +376,13 @@ qs.onApp?.(async (d) => {
   if (['models', 'stacks'].includes(S.route.view) && $('#modal').hidden) render();
 });
 
+// "Venice AI · needs one more to rotate": the connected services free rotation can use.
+function freeRotationLine() {
+  const list = (S.providers || []).filter((p) => ['free', 'some'].includes(p.free) && (p.hasKey || p.noKey) && !p.media && (p.models || []).length);
+  if (!list.length) return 'No free services connected';
+  const names = list.map((p) => p.name.replace(/\s*\(.*\)$/, '')).join(', ');
+  return list.length === 1 ? `${names} · connect one more for rotation` : `${list.length} connected: ${names} · on`;
+}
 // ---------- add-ons: what each addition does for your stack ----------
 // Shown under the main models: memory (Mem0-style), local RAG and the rest, each with what it adds
 // (accuracy, speed, privacy), whether it's on, and one button.
@@ -369,7 +420,8 @@ function addonsHTML() {
     ['📁', 'Projects', 'shared background', 'In the menu', 'Instructions and files for a piece of work that every chat in the project knows, so you don\'t repeat yourself.', 'Answers that fit your work · no extra time', ['data-addon-go="projects"', 'Open Projects']],
     ['⚡', 'Skills', 'ready-made tasks', 'Type / in the message bar', 'One-click tasks with the right settings built in: research brief, music finder, SWOT, summaries, code review and dozens more.', 'Better-shaped answers for common jobs', ['data-addon-go="skills"', 'Open Skills']],
     ['🧩', 'MCP tool servers', 'the open standard', 'Add in Connectors', 'Hundreds of extra tools from the Model Context Protocol world: files, databases, browsers, design tools and more, used by the stack when a chat needs them.', 'New abilities · asks before changing anything', ['data-addon-go="integrations"', 'Add a tool server']],
-    ['♻️', 'Free rotation', 'free cloud AIs', `${(S.providers || []).filter((p) => ['cerebras', 'groq', 'mistral', 'google', 'openrouter', 'sambanova', 'github'].includes(p.preset)).length} free services connected`, 'Connect two or more free cloud AIs and, when one hits its daily limit, the next takes over automatically.', 'Keeps the cloud free · no waiting', null],
+    // (Counted the same way the engine picks them: any connected service with a free plan or a free allowance.)
+    ['♻️', 'Free rotation', 'free cloud AIs', freeRotationLine(), 'Connect two or more free cloud AIs and, when one hits its daily limit, the next takes over automatically. A message pops up when it switches.', 'Keeps the cloud free · no waiting', ['data-goto-api', 'Connect a free AI']],
     ['🛡️', 'Private online', 'Proton VPN', typeof privacyMode === 'function' ? ({ offline: 'Fully private (offline)', vpn: 'On', online: 'Off' })[privacyMode()] : '', 'Web search and cloud AIs only through Proton VPN (a free plan is available), so sites and services can\'t see where you are.', 'Privacy ↑ · a little slower online', null],
     ['☁️', 'A cloud AI', 'optional', cloud ? 'Connected' : 'None', 'A big cloud model for the hardest questions, or as the lead of a custom AI. Everyday messages stay on this PC.', 'Accuracy ↑↑ on hard questions · needs internet', ['data-guide="apis"', 'Compare cloud AIs']],
   ];

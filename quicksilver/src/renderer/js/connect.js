@@ -56,7 +56,7 @@ qs.onApp?.((d) => {
 
 // ---------- updates ----------
 let upd = null;
-qs.onApp?.((d) => { if (d.kind === 'update') { upd = d.state; paintUpdatePill(); if (S.route.view === 'settings' && setTab === 'general') { const el = $('#upd-box'); if (el) { el.innerHTML = updateBoxInner(); bindUpdateBox(); } } } });
+qs.onApp?.((d) => { if (d.kind === 'update') { upd = d.state; paintUpdatePill(); if (S.route.view === 'settings' && setTab === 'general') repaintUpdateBox(); } });
 
 function paintUpdatePill() {
   let pill = $('#upd-pill');
@@ -81,26 +81,48 @@ async function installUpdate() {
   try { await qs.call('data:save', S.data); await qs.call('update:install'); } catch (err) { toast(err.message, 8000); }
 }
 
-function updateBoxInner() {
-  const u = upd || {};
-  const p = S.data.prefs;
-  const status = u.checking ? '<span class="status-line">Checking…</span>'
+// "What's new" stays open while you read it: download progress only repaints the status line
+// above it, and the notes are only redrawn when a different version's notes arrive.
+let updNotesOpen = false;
+const updNotes = (u) => (u.downloaded?.notes || u.available?.notes || '');
+function updStatusHTML(u) {
+  return u.checking ? '<span class="status-line">Checking…</span>'
     : u.downloaded ? `<span class="badge b-mint">Ready</span> Version ${esc(u.downloaded.version)} is downloaded. <button class="btn small primary" id="upd-install">Restart and update</button>`
     : u.progress ? `Downloading ${esc(u.available?.version || '')}: ${u.progress.total ? Math.round((u.progress.downloaded / u.progress.total) * 100) : 0}%`
     : u.available ? `<span class="badge b-lemon">New</span> Version ${esc(u.available.version)} is available. <button class="btn small primary" id="upd-get">Download</button>`
     : u.error ? `<span class="small" style="color:var(--danger)">${esc(u.error)}</span>`
     : u.checkedAt ? `You have the latest version. <span class="small muted">Checked ${ago(u.checkedAt)}.</span>` : '';
+}
+function repaintUpdateBox() {
+  const el = $('#upd-box');
+  if (!el) return;
+  const u = upd || {};
+  const notes = $('#upd-notes');
+  if (notes && notes.dataset.notes === updNotes(u)) {
+    $('#upd-status').innerHTML = updStatusHTML(u);
+    const c = $('#upd-check'); if (c) c.disabled = Boolean(u.checking);
+    $('#upd-install')?.addEventListener('click', installUpdate);
+    $('#upd-get')?.addEventListener('click', () => call('update:download').catch(() => {}));
+    return;
+  }
+  el.innerHTML = updateBoxInner(); bindUpdateBox();
+}
+function updateBoxInner() {
+  const u = upd || {};
+  const p = S.data.prefs;
   return `<div class="row"><b>Quicksilver ${esc(u.current || '')}</b><span class="grow"></span><button class="btn small primary" id="upd-check" ${u.checking ? 'disabled' : ''}>Check for updates</button></div>
-    <div class="small" style="margin-top:6px">${status}</div>
-    ${u.available?.notes && !u.downloaded ? `<details class="small" style="margin-top:6px"><summary>What's new</summary><div class="md">${markdown(u.available.notes)}</div></details>` : ''}
+    <div class="small" style="margin-top:6px" id="upd-status">${updStatusHTML(u)}</div>
+    ${updNotes(u) ? `<details class="small" id="upd-notes" style="margin-top:6px" ${updNotesOpen ? 'open' : ''}><summary>What's new</summary><div class="md upd-notes">${markdown(updNotes(u))}</div></details>` : ''}
     <label class="row" style="margin-top:10px"><input type="checkbox" id="upd-auto" ${p.autoUpdate !== false ? 'checked' : ''}> <span><b>Keep Quicksilver up to date</b> <span class="help">checks once a day and downloads new versions in the background; you choose when to restart</span></span></label>`;
 }
 function updateBoxHTML() { return `<div class="field"><label>⬆️ Quicksilver updates</label><div class="card upd-card" id="upd-box">${updateBoxInner()}</div></div>`; }
 function bindUpdateBox() {
-  if (!upd) qs.call('update:state').then((s) => { upd = s; const el = $('#upd-box'); if (el) { el.innerHTML = updateBoxInner(); bindUpdateBox(); } });
+  if (!upd) qs.call('update:state').then((s) => { upd = s; repaintUpdateBox(); });
   $('#upd-check')?.addEventListener('click', async () => { if (S.config?.offline) { toast('Go online (in the sidebar) to check for updates.'); return; } upd = await call('update:check'); if (upd.available && !upd.downloaded && S.data.prefs.autoUpdate !== false) qs.call('update:download').catch(() => {}); });
   $('#upd-get')?.addEventListener('click', () => call('update:download').catch(() => {}));
   $('#upd-install')?.addEventListener('click', installUpdate);
+  const n = $('#upd-notes');
+  if (n) { n.dataset.notes = updNotes(upd || {}); n.addEventListener('toggle', () => { updNotesOpen = n.open; }); }
   $('#upd-auto')?.addEventListener('change', (e) => { S.data.prefs.autoUpdate = e.target.checked; save(); });
 }
 

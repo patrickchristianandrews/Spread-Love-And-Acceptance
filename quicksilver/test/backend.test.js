@@ -123,6 +123,19 @@ async function collect(gen) {
   const r3 = await collect(complete.run('stack:bal', { messages: [{ role: 'user', content: 'Plan my week' }], maxTokens: 200, contextSize: 4096 }));
   assert.equal(uniq(r3.steps).map((s) => s.role).join(','), 'draft,lead');
   console.log('✓ balanced stack; running servers:', llama.status().length);
+  // Background jobs (titles, follow-ups, memory notes) never load a model: they use one that is
+  // already loaded, or are skipped, so the chat model is never pushed out and reloaded.
+  {
+    llama.stopAll();
+    await assert.rejects(collect(complete.run('local:qwen3-8b', { messages: [{ role: 'user', content: 'Write a short title' }], maxTokens: 20, contextSize: 4096, background: true })), /skipped/);
+    assert.equal(llama.status().length, 0, 'nothing was loaded for a background job');
+    await collect(complete.run('local:qwen3-8b', { messages: [{ role: 'user', content: 'Hello' }], maxTokens: 20, contextSize: 4096 }));
+    const before = llama.status().map((x) => x.file).sort();
+    const bg = await collect(complete.run('stack:office-power', { messages: [{ role: 'user', content: 'Write a short title' }], maxTokens: 20, contextSize: 4096, background: true }));
+    assert.ok(bg.text, 'it answered with the model already loaded');
+    assert.deepEqual(llama.status().map((x) => x.file).sort(), before, 'and loaded nothing else');
+    console.log('✓ background jobs use a model that is already loaded and never load one');
+  }
 
   // Efficient stacks: an easy question goes to the strongest member alone; when drafts agree the
   // combining step is skipped; one server per model, sized to the conversation.
@@ -196,7 +209,14 @@ async function collect(gen) {
   const r4 = await collect(complete.run(`api:${p.id}:test-model`, { messages: [{ role: 'user', content: 'Hi API' }], maxTokens: 50 }));
   assert.match(r4.text, /you said "Hi API"/);
   assert.ok(complete.targets().some((t) => t.target === `api:${p.id}:test-model`));
-  console.log('✓ OpenAI-compatible API provider');
+  // Which cloud service answered is reported, so the chat can say so under the answer.
+  const seen = [];
+  await collect(complete.run(`api:${p.id}:test-model`, { messages: [{ role: 'user', content: 'Hi again' }], maxTokens: 50, onCloud: (c) => seen.push(c) }));
+  assert.deepEqual(seen, [{ service: 'Test API', model: 'test-model' }], 'the cloud service and model are reported once');
+  const none = [];
+  await collect(complete.run('local:qwen3-8b', { messages: [{ role: 'user', content: 'Hi local' }], maxTokens: 50, onCloud: (c) => none.push(c) }));
+  assert.equal(none.length, 0, 'an answer from this PC reports no cloud service');
+  console.log('✓ OpenAI-compatible API provider; the cloud service used is reported');
 
   // Think-tag splitting for models that write <think> inline.
   const split = oai.thinkSplitter();
@@ -900,7 +920,7 @@ async function collect(gen) {
     assert.ok(ids.includes('local:starter-brain') && ids.includes('local:starter'), 'the built-in brain and eyes');
     // The Liquid Edition uses its own models and nothing else: another uncensored model on this PC
     // joins the team for hard questions only once it is ticked under Models → "Models in use".
-    models.add({ id: 'dolphin-test', name: 'Dolphin 3.0 8B', kind: 'text', catalogId: 'dolphin-3-llama-3.1-8b', files: { model: copy('dolphin.gguf') }, size: 4.9e9 });
+    models.add({ id: 'dolphin-test', name: 'Qwen3 8B Abliterated', kind: 'text', catalogId: 'qwen3-8b-uncensored', files: { model: copy('Huihui-Qwen3-8B-abliterated.gguf') }, size: 4.9e9 });
     await complete.ensureQuicksilverStack();
     {
       const pure = complete.stacks().find((x) => x.id === 'quicksilver');
@@ -910,9 +930,9 @@ async function collect(gen) {
       assert.ok(![c0.structurer, c0.critic, c0.pragmatist, c0.lead].includes('local:dolphin-test'), 'and it does not sit on the Liquid Edition\'s Council');
       // Suggested Liquid add-ons you download in Quicksilver are in use from the start; models
       // found in other apps and the built-in ones (members already) are not ticked by default.
-      assert.equal(models.inUse({ kind: 'text', catalogId: 'rocinante-12b' }), true);
-      assert.equal(models.inUse({ kind: 'text', catalogId: 'rocinante-12b', source: 'imported' }), false);
-      assert.equal(models.inUse({ kind: 'text', catalogId: 'rocinante-12b', use: false }), false, 'your own choice wins');
+      assert.equal(models.inUse({ kind: 'text', catalogId: 'gemma-3-12b-uncensored' }), true);
+      assert.equal(models.inUse({ kind: 'text', catalogId: 'gemma-3-12b-uncensored', source: 'imported' }), false);
+      assert.equal(models.inUse({ kind: 'text', catalogId: 'gemma-3-12b-uncensored', use: false }), false, 'your own choice wins');
       assert.equal(models.inUse({ kind: 'image', catalogId: 'lustify', use: true }), false, 'only chat models are ticked');
       assert.ok(models.setUse('dolphin-test', true) && models.inUse(models.get('dolphin-test')));
       // Registering the model again (an update or a repair) keeps the tick.
@@ -928,7 +948,7 @@ async function collect(gen) {
     // Dolphin joins hard questions only where it runs smoothly; on a slow PC it waits on the bench.
     {
       const hwNow = await hardware.detect();
-      const dol = catalog.TEXT_MODELS.find((m) => m.id === 'dolphin-3-llama-3.1-8b');
+      const dol = catalog.TEXT_MODELS.find((m) => m.id === 'qwen3-8b-uncensored');
       assert.ok(complete.smoothHelper(dol, hwNow), 'smooth on the 8 GB graphics card');
       assert.ok(!complete.smoothHelper(dol, { ...hwNow, vramGB: 0, gpus: [], ramGB: 8, freeRamGB: 6 }), 'too slow on an 8 GB laptop without a graphics card');
       assert.ok(!qs2.bench, 'nothing on the bench when it runs smoothly');
@@ -936,6 +956,10 @@ async function collect(gen) {
     // Completely uncensored: filtered models never answer, check or sit on its Council.
     assert.ok(complete.isUncensored('local:dolphin-test') && complete.isUncensored('local:starter-brain') && complete.isUncensored('stack:quicksilver'));
     assert.ok(!complete.isUncensored('local:qwen3-8b') && !complete.isUncensored('local:phi-4'), 'filtered models are not uncensored');
+    // Only abliterated builds: a model that is merely fine-tuned to be uncensored does not join.
+    models.add({ id: 'finetune-test', name: 'Rocinante 12B', kind: 'text', catalogId: 'rocinante-12b', files: { model: copy('Rocinante-12B-v1.1-Q4_K_M.gguf') }, size: 7.5e9, use: true });
+    assert.ok(!complete.isUncensored('local:finetune-test'), 'an uncensored fine-tune is not abliterated, so it is not part of the Liquid Edition');
+    models.remove('finetune-test');
     const cm = complete.councilMembers('stack:quicksilver', {});
     assert.ok([cm.structurer, cm.critic, cm.pragmatist, cm.lead].every((t) => complete.isUncensored(t)), 'the Liquid Edition\'s Council is uncensored only');
     // Locked: an edited Liquid Edition (from an older version) is put back to Quicksilver's own uncensored crew.
@@ -977,13 +1001,18 @@ async function collect(gen) {
     complete.answerNow('rq-skip');
     const skipped = await collect(complete.run('stack:quicksilver', { requestId: 'rq-skip', messages: [{ role: 'user', content: 'Prove that there are infinitely many primes' }], contextSize: 2048, maxTokens: 60, level: 'thorough' }));
     assert.ok(skipped.status.some((t) => /Answering now/.test(t)) && skipped.text.length > 0, 'Answer now hands over to the Brain');
+    // ...with the instruction where the model accepts it (Qwen3.5 refuses a system message that isn't first).
+    complete.answerNow('rq-skip2');
+    const skipped2 = await collect(complete.run('stack:quicksilver', { requestId: 'rq-skip2', messages: [{ role: 'system', content: 'You are Quicksilver.' }, { role: 'user', content: 'Prove that there are infinitely many primes' }], contextSize: 2048, maxTokens: 60, level: 'thorough' }));
+    assert.ok(!/System message|Jinja/i.test(skipped2.text) && /Answer from/.test(skipped2.text), `with the app's own instructions first too: ${skipped2.text.slice(0, 200)}`);
+    assert.ok(!/System message|Jinja/i.test(skipped.text) && /Answer from/.test(skipped.text), `the Brain really answers from the working: ${skipped.text.slice(0, 200)}`);
     // Liquid Edition 2: a Qwen3.5 Brain sees photos and thinks for itself, so it's also the Eyes and the
     // Thinker; the small model is the Muse. Questions that need working out switch its thinking on
     // (with a budget); everything else is answered with thinking off.
     {
       const nd = fs.mkdtempSync(path.join(os.tmpdir(), 'qs-l2-'));
       const cp = (n) => { const f = path.join(nd, n); fs.copyFileSync(TINY, f); return f; };
-      models.add({ id: 'b35', name: 'Qwen3.5 4B (uncensored)', kind: 'text', catalogId: 'qwen3.5-4b', files: { model: cp('b.gguf'), mmproj: cp('bp.gguf') }, size: 3.1e9 });
+      models.add({ id: 'b35', name: 'Qwen3.5 4B (uncensored)', kind: 'text', catalogId: 'qwen3.5-4b', repo: 'mradermacher/Huihui-Qwen3.5-4B-abliterated-GGUF', files: { model: cp('b.gguf'), mmproj: cp('bp.gguf') }, size: 3.1e9 });
       await complete.ensureQuicksilverStack();
       const l2 = complete.stacks().find((x) => x.id === 'quicksilver').members;
       assert.equal(l2.drafters[0], 'local:b35', 'the Qwen3.5 Brain leads');
@@ -1436,17 +1465,21 @@ async function collect(gen) {
       if (String(url).includes('groq')) return new Response(JSON.stringify({ error: { message: 'Rate limit reached for requests' } }), { status: 429 });
       return new Response('data: ' + JSON.stringify({ choices: [{ delta: { content: 'Answer from Cerebras.' } }] }) + '\n\ndata: [DONE]\n\n', { status: 200, headers: { 'content-type': 'text/event-stream' } });
     };
-    const r = await collect(complete.run(`api:${a.id}:openai/gpt-oss-120b`, { messages: [{ role: 'user', content: 'Hi' }], maxTokens: 50 }));
+    const told = [];
+    const r = await collect(complete.run(`api:${a.id}:openai/gpt-oss-120b`, { messages: [{ role: 'user', content: 'Hi' }], maxTokens: 50, onRotate: (x) => told.push(x) }));
     assert.match(r.text, /Answer from Cerebras/, 'the next free cloud AI answers');
+    assert.deepEqual(told, [{ from: providers.get(a.id).name, to: providers.get(b.id).name }], 'the switch is told to the chat (it pops up a message)');
     assert.ok(r.status.some((x) => /Free limit reached; switching/.test(x)));
     assert.ok(complete.targets().some((t) => t.target === 'free:rotate'), 'a rotating free choice appears with two free AIs');
     const r2 = await collect(complete.run('free:rotate', { messages: [{ role: 'user', content: 'Hi' }], maxTokens: 50 }));
     assert.match(r2.text, /Answer from Cerebras/);
     global.fetch = async () => new Response(JSON.stringify({ error: { message: 'quota exceeded' } }), { status: 429 });
-    await assert.rejects(collect(complete.run(`api:${a.id}:openai/gpt-oss-120b`, { messages: [{ role: 'user', content: 'Hi' }], maxTokens: 50 })), /Every free cloud AI you've connected has hit its limit/);
+    const told2 = [];
+    await assert.rejects(collect(complete.run(`api:${a.id}:openai/gpt-oss-120b`, { messages: [{ role: 'user', content: 'Hi' }], maxTokens: 50, onRotate: (x) => told2.push(x) })), /Every free cloud AI you've connected has hit its limit/);
+    assert.ok(told2.some((x) => x.allUsed), 'and so is running out of free services');
     global.fetch = real;
     providers.remove(a.id); providers.remove(b.id);
-    console.log('✓ free rotation: a free cloud AI at its limit hands over to the next; a rotating choice in the menu');
+    console.log('✓ free rotation: a free cloud AI at its limit hands over to the next (with a message); a rotating choice in the menu');
   }
 
   // Smarter search: with the search model, passages are found by meaning, not only shared words.

@@ -39,12 +39,14 @@ const server = http.createServer((req, res) => {
       return res.end(JSON.stringify({ data: input.map((t, index) => ({ index, embedding: vecOf(t) })) }));
     }
     const msgs = j.messages || [];
+    // Like the real Qwen3.5 chat template: a system message anywhere but first is refused.
+    if (msgs.some((m, i) => m.role === 'system' && i > 0)) { res.writeHead(500, { 'Content-Type': 'application/json' }); return res.end(JSON.stringify({ error: { message: 'Jinja Exception: System message must be at the beginning.' } })); }
     const imgs = msgs.flatMap((m) => (Array.isArray(m.content) ? m.content.filter((p) => p.type === 'image_url') : []));
     if (imgs.length && !vision) { res.writeHead(400, { 'Content-Type': 'application/json' }); return res.end(JSON.stringify({ error: { message: 'image input is not supported by this model' } })); }
     const last = msgs[msgs.length - 1];
     // Tool use: "use <word>" asks for the first tool whose name contains <word>; a tool result is echoed back.
     const strip = (t) => String(t || '').replace(/^<context>[\s\S]*?<\/context>\s*/, '');
-    const want = strip(typeof last?.content === 'string' ? last.content : '').match(/use (\w+)/);
+    const want = strip(typeof last?.content === 'string' ? last.content.replace(/^<instructions>\n[\s\S]*?\n<\/instructions>\s*/, '') : '').match(/use (\w+)/);
     const tool = want && last.role === 'user' && (j.tools || []).find((t) => t.function.name.includes(want[1]));
     if (tool && j.stream) {
       res.writeHead(200, { 'Content-Type': 'text/event-stream' });
@@ -59,11 +61,14 @@ const server = http.createServer((req, res) => {
       res.write(`data: ${JSON.stringify({ choices: [{ delta: { content: `Tool said: ${last.content}` } }] })}\n\n`);
       return res.end('data: [DONE]\n\n');
     }
-    const fullText = typeof last?.content === 'string' ? last.content : (last?.content || []).filter((p) => p.type === 'text').map((p) => p.text).join(' ');
+    const rawText = typeof last?.content === 'string' ? last.content : (last?.content || []).filter((p) => p.type === 'text').map((p) => p.text).join('\n\n');
+    // Instructions the app moved from a system message to the start of the user turn (llama.tidyRoles).
+    const moved = (rawText.match(/^<instructions>\n([\s\S]*?)\n<\/instructions>\s*/) || ['', ''])[1];
+    const fullText = moved ? rawText.replace(/^<instructions>\n[\s\S]*?\n<\/instructions>\s*/, '') : (typeof last?.content === 'string' ? last.content : (last?.content || []).filter((p) => p.type === 'text').map((p) => p.text).join(' '));
     const context = (fullText.match(/^<context>\n([\s\S]*?)\n<\/context>/) || [])[1] || '';
     const lastText = strip(fullText);
     let reply;
-    const sys = `${msgs.filter((m) => m.role === 'system').map((m) => (typeof m.content === 'string' ? m.content : '')).join('\n')}\n${context}`;
+    const sys = `${msgs.filter((m) => m.role === 'system').map((m) => (typeof m.content === 'string' ? m.content : '')).join('\n')}\n${moved}\n${context}`;
     const memo = sys.match(/remember about the user[^\n]*\n- ([^\n]+)/);
     const proj = sys.match(/part of the user's project "([^"]+)"/);
     const tags = `${memo ? ` [memory: ${memo[1].slice(0, 50)}]` : ''}${proj ? ` [project: ${proj[1]}]` : ''}${/open in an editor beside the chat/.test(sys) ? ' [sees the document]' : ''}${/found these problems/.test(sys) ? ' [fixed]' : ''}${/Exact results worked out by the app/.test(sys) ? ` [facts: ${(sys.match(/Exact results worked out by the app[^\n]*\n- ([^\n]+)/) || [])[1]}]` : ''}${(sys.match(/Instructions for this chat \(follow them\):\n([^\n]+)/) || [])[1] ? ` [chat: ${sys.match(/Instructions for this chat \(follow them\):\n([^\n]+)/)[1].slice(0, 30)}]` : ''}`;

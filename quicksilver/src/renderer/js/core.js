@@ -35,12 +35,17 @@ function ago(t) {
 
 // A small message at the bottom. It always has an ✕ to dismiss it, and it pauses its countdown while
 // the pointer is over it, so nothing disappears before it's been read.
+// A message with a button (Undo, Remove old…) is never pushed aside by a plain one: the plain
+// message waits until the one with the button closes, so the button can't vanish under you.
+const toastWaiting = [];
 function showToast(inner, ms, onAction) {
   const t = $('#toast');
+  if (!onAction && !t.hidden && t.querySelector('.toast-act')) { toastWaiting.push([inner, ms]); if (toastWaiting.length > 3) toastWaiting.shift(); return; }
   t.innerHTML = `${inner}<button class="toast-x" aria-label="Dismiss" title="Dismiss">✕</button>`;
   t.hidden = false;
   t.classList.remove('toast-in'); void t.offsetWidth; t.classList.add('toast-in');
-  const close = () => { t.classList.remove('toast-in'); t.hidden = true; clearTimeout(toast._t); };
+  // (When it closes, the newest waiting message shows; older ones are out of date by then.)
+  const close = () => { t.classList.remove('toast-in'); t.hidden = true; clearTimeout(toast._t); const next = toastWaiting.pop(); toastWaiting.length = 0; if (next) setTimeout(() => showToast(...next), 150); };
   let left = ms; let since = Date.now();
   const arm = () => { clearTimeout(toast._t); since = Date.now(); toast._t = setTimeout(close, left); };
   t.onmouseenter = () => { clearTimeout(toast._t); left -= Date.now() - since; };
@@ -168,20 +173,24 @@ async function refreshEstimates() { S.est = await qs.call('catalog:estimates'); 
 
 const assistantById = (id) => S.data.assistants.find((a) => a.id === id) || S.data.assistants[0];
 const chatById = (id) => S.data.chats.find((c) => c.id === id);
-const targetValid = (t) => Boolean(t) && S.targets.some((x) => x.target === t);
+// A stack whose models aren't installed is listed (as "not set up") but can't answer.
+const targetValid = (t) => Boolean(t) && S.targets.some((x) => x.target === t && !x.empty);
 // The Liquid Edition is completely uncensored: only uncensored models answer, check or stand in
 // for it (the same rule as complete.js isUncensored).
+// The Liquid Editions: the Liquid Edition, Max (a fast PC) and Pro (a powerful PC).
+const LIQUID_IDS = ['quicksilver', 'quicksilver-max', 'quicksilver-pro'];
 const UNCENSORED_RX = /abliterat|uncensor|unfiltered|dolphin|hermes|lexi|rocinante/i;
 // A model's name and file name (never its folder: a Windows user called Alexis has "lexi" in every path).
 const modelNameText = (m) => `${m?.name || ''} ${String(m?.files?.model || '').split(/[\\/]/).pop()} ${m?.repo || ''}`;
 function liquidOk(t) {
   if (!t) return false;
-  if (t === 'stack:quicksilver' || t === 'stack:quicksilver-pro') return true;
+  if (isLiquid(t)) return true;
   if (t.startsWith('local:')) {
     const m = S.installed.find((x) => `local:${x.id}` === t);
     if (!m) return false;
+    // Only abliterated builds join the Liquid Edition (the same rule as models.looksUncensored).
     const c = S.catalog?.text?.find((x) => x.id === m.catalogId);
-    return m.source === 'bundled' || c?.category === 'open' || UNCENSORED_RX.test(modelNameText(m));
+    return m.source === 'bundled' || /abliterat|heretic/i.test(`${modelNameText(m)} ${c?.repo || ''}`);
   }
   if (t.startsWith('api:')) {
     const [, pid, ...rest] = t.split(':');
@@ -189,8 +198,8 @@ function liquidOk(t) {
   }
   return false;
 }
-const isLiquid = (t) => t === 'stack:quicksilver' || t === 'stack:quicksilver-pro';
-const isLiquidStack = (s) => Boolean(s) && (s.builtFor === 'quicksilver' || s.builtFor === 'quicksilver-pro');
+const isLiquid = (t) => LIQUID_IDS.some((id) => t === `stack:${id}`);
+const isLiquidStack = (s) => Boolean(s) && LIQUID_IDS.includes(s.builtFor);
 // A model that's part of the Liquid Edition can't be removed (imported files from other apps can).
 // (A chat model must be the uncensored build: the plain catalog build of the same model is not
 // the Liquid Edition's, so that one can be removed. The same test as models.liquidOwn.)
@@ -219,7 +228,7 @@ function mayUse(t, base) {
 // Model choice order: the chat's own, the assistant's, the default, then anything installed.
 function resolveTarget(chat, assistant) {
   for (const t of [chat?.target, assistant?.target, S.data.prefs.defaultTarget]) if (targetValid(t)) return t;
-  return S.targets.find((x) => x.target.startsWith('stack:'))?.target || S.targets[0]?.target || '';
+  return S.targets.find((x) => x.target.startsWith('stack:') && !x.empty)?.target || S.targets.find((x) => !x.empty)?.target || '';
 }
 
 function targetOptions(selected, { includeNone = false, noneLabel = 'Default model' } = {}) {
@@ -260,7 +269,7 @@ function askAI(target, system, user, { temperature = 0.7, maxTokens = 400, level
   return new Promise((resolve, reject) => {
     const done = (fn) => (x) => { bgJobs.delete(requestId); fn(x); };
     oneShots.set(requestId, { text: '', resolve: done(resolve), reject: done(reject), onText });
-    qs.sendChat({ requestId, target, messages: [{ role: 'system', content: system }, { role: 'user', content: user }], temperature, maxTokens, contextSize, gpu: S.data.prefs.gpu, effort: 'quick', ...(level ? { level } : {}) });
+    qs.sendChat({ requestId, target, messages: [{ role: 'system', content: system }, { role: 'user', content: user }], temperature, maxTokens, contextSize, gpu: S.data.prefs.gpu, effort: 'quick', ...(level ? { level } : {}), ...(background ? { background: true } : {}) });
   });
 }
 

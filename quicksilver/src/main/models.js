@@ -92,14 +92,16 @@ function add(entry) {
   return entry;
 }
 
-// Is this installed chat model an uncensored one? The models that came with Quicksilver are; so
-// are the catalog's "open" models; otherwise the name, file name or repository says so.
+// May this installed chat model be part of the Liquid Edition? Only abliterated builds: models
+// whose refusal direction was removed from the weights (abliteration; "heretic" is the automated
+// tool for it), not merely fine-tuned to be uncensored. The models that came with Quicksilver are
+// abliterated; otherwise its name, file name, repository or catalog entry must say so.
 // (Never the folder: a Windows user called Alexis has "lexi" in every path.)
-const UNCENSORED_NAME = /abliterat|uncensor|unfiltered|dolphin|hermes|lexi|rocinante/i;
+const ABLITERATED_NAME = /abliterat|heretic/i;
 function looksUncensored(m) {
   if (!m) return false;
   const c = catalog.TEXT_MODELS.find((x) => x.id === m.catalogId);
-  return m.source === 'bundled' || c?.category === 'open' || UNCENSORED_NAME.test(`${m.name || ''} ${path.basename(m.files?.model || '')} ${m.repo || ''}`);
+  return m.source === 'bundled' || ABLITERATED_NAME.test(`${m.name || ''} ${path.basename(m.files?.model || '')} ${m.repo || ''} ${c?.repo || ''} ${(c?.alt || []).join(' ')}`);
 }
 // Is this copy one of the Liquid Edition's own models: the ones that came with it, or the same
 // models downloaded by its setup screen? A copy found in another app only counts once you tick it,
@@ -188,8 +190,8 @@ async function fetchFileNow(repo, file, dest, onBytes, signal, expected = 0) {
   const url = `${HF}/${repo}/resolve/main/${file.split('/').map(encodeURIComponent).join('/')}?download=true`;
   const auth = hfHeaders();
   const g = io.stallGuard(signal);
-  const res = await fetch(url, { headers: { ...auth, ...(have ? { Range: `bytes=${have}-` } : {}) }, signal: g.signal, redirect: 'follow' }).catch((e) => { g.done(); throw g.stalled() ? new Error('the connection stalled. Start it again to resume where it stopped') : e; });
-  const giveUp = (msg) => { g.done(); res.body?.cancel?.().catch(() => {}); return new Error(msg); };
+  const res = await io.httpGet(url, { headers: { ...auth, ...(have ? { Range: `bytes=${have}-` } : {}) }, signal: g.signal }).catch((e) => { g.done(); throw g.stalled() ? new Error('the connection stalled. Start it again to resume where it stopped') : e; });
+  const giveUp = (msg) => { g.done(); res.cancel(); return new Error(msg); };
   if (res.status === 401 || res.status === 403) throw giveUp('This model needs you to accept its license on huggingface.co first, then add a Hugging Face token in Settings → Accounts.');
   // The saved part no longer matches what the server has: clear it, so the next try starts clean.
   if (res.status === 416) { try { fs.unlinkSync(part); } catch {} throw giveUp('the saved part of this download was out of date and has been cleared. Start it again'); }
