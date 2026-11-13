@@ -1598,3 +1598,6 @@ code.sel { user-select: all; background: var(--soft); padding: 1px 6px; border-r
 /* Under an answer: the cloud service that was used */
 .cloud-used { margin: 6px 0 2px; color: var(--muted); }
 .cloud-used b { color: var(--text); font-weight: 600; }
+
+/* Update notes: the whole "What's new" readable in its own scroll area. */
+#upd-notes .upd-notes { max-height: 420px; overflow-y: auto; padding-right: 6px; margin-top: 6px; }

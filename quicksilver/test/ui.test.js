@@ -1668,7 +1668,17 @@ function redPng(size = 64) {
   await win.uncheck('#ph-on');
   await win.click('[data-set-tab="general"]');
   await win.waitForSelector('#upd-box');
-  console.log('✓ settings: voice, phone (QR link), updates');
+  // "What's new" stays open (and keeps its place) while the update downloads.
+  await win.evaluate(() => { upd = { current: '1.0.0', available: { version: '9.9.9', notes: '### New in 9.9.9\n\n' + Array.from({ length: 80 }, (_, i) => `- change ${i}`).join('\n') }, progress: { downloaded: 1, total: 10 } }; repaintUpdateBox(); });
+  await win.click('#upd-notes summary');
+  await win.evaluate(() => { const b = document.querySelector('#upd-notes .upd-notes'); b.scrollTop = 200; });
+  for (let i = 2; i <= 9; i++) await win.evaluate((d) => { upd = { ...upd, progress: { downloaded: d, total: 10 } }; repaintUpdateBox(); }, i);
+  const notesKept = await win.evaluate(() => ({ open: document.querySelector('#upd-notes').open, top: document.querySelector('#upd-notes .upd-notes').scrollTop, pct: document.querySelector('#upd-status').textContent }));
+  assert.ok(notesKept.open && notesKept.top >= 150 && /90%/.test(notesKept.pct), `What's new stays open while the download moves on: ${JSON.stringify(notesKept)}`);
+  await win.evaluate(() => { upd = { ...upd, progress: null, downloaded: { version: '9.9.9' } }; repaintUpdateBox(); });
+  assert.ok(await win.evaluate(() => document.querySelector('#upd-notes')?.open), 'and still there, open, once it is downloaded');
+  await win.evaluate(() => { upd = null; });
+  console.log('✓ settings: voice, phone (QR link), updates (What\'s new stays open while it downloads)');
 
   // Power tools: another model on the same question, branching, chat settings, maths, palette, import.
   await win.click('[data-nav="newchat"]');

@@ -42,7 +42,7 @@ async function check() {
       if (!asset || cmp(version, current()) <= 0) continue;
       if (!best || cmp(version, best.version) > 0) {
         const sum = (r.assets || []).find((a) => a.name === `${asset.name}.sha256`);
-        best = { version, notes: String(r.body || '').slice(0, 4000), url: asset.browser_download_url, size: asset.size, name: asset.name, sumUrl: sum?.browser_download_url || '', published: r.published_at };
+        best = { version, notes: String(r.body || '').slice(0, 60000), url: asset.browser_download_url, size: asset.size, name: asset.name, sumUrl: sum?.browser_download_url || '', published: r.published_at };
       }
     }
     state.available = best;
