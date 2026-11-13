@@ -134,6 +134,10 @@ async function refreshProviders() { S.providers = await qs.call('providers:list'
 // ---------- how long things take on this PC ----------
 // Typical answer lengths (words) for each kind of job.
 const WORDS = { chat: 300, hard: 500, writing: 450, code: 700, research: 500, complex: 600, reasoning: 500, document: 900, slides: 700, sheet: 500, chart: 300, check: 350, prompt: 80 };
+// With "Cloud AI for everything" on (and online, with a cloud AI connected), answers come from the
+// cloud: models on this PC aren't loaded ahead of time, so they don't tie up a slow PC's processor
+// and memory. (They still load if the cloud can't answer.)
+const cloudAnswers = () => Boolean(S.data?.prefs?.cloudAll) && !S.config?.offline && (S.targets || []).some((t) => String(t.target).startsWith('api:'));
 async function refreshSpeeds() { try { S.speed = await qs.call('speed:map'); } catch { S.speed = null; } }
 const HARD_RE = /\b(why|how does|how do|prove|calculate|compute|solve|compare|analy[sz]e|evaluate|step[- ]by[- ]step|debug|code|function|script|error|bug|plan|strategy|pros and cons|trade-?offs?|explain|summari[sz]e|review|translate)\b/i;
 const looksHard = (text) => HARD_RE.test(text || '') || (text || '').length > 500 || /```|\d+\s*[-+*/^×÷]\s*\d+/.test(text || '');

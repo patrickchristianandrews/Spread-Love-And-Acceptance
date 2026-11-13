@@ -413,7 +413,7 @@ async function makeRamRoom(spec, onStatus, everything) {
   const needGB = (spec.sizeGB || 6) + 2.5;
   const freeGB = require('node:os').freemem() / 1024 ** 3;
   if (!everything && freeGB >= needGB) return;
-  const { n } = llama.releaseIdle();
+  const { n } = await llama.releaseIdle();
   if (!n) return;
   onStatus?.('Making room in memory for the picture model (your chat model loads again when you next chat)…');
   await wait(1500);

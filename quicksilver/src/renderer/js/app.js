@@ -251,7 +251,7 @@ async function init() {
     if (model.kind === 'text') await setUpQuicksilver(false).catch(() => {}); // a new model can join Quicksilver's team
     if (model.kind === 'text' && (S.catalog?.liquidPro && Object.values(S.catalog.liquidPro).includes(model.catalogId))) { await qs.call('quicksilver:pro').catch(() => {}); await refreshModels(); }
     if (model.kind === 'text' && (S.catalog?.liquidMax && Object.values(S.catalog.liquidMax).includes(model.catalogId))) { await qs.call('quicksilver:max').catch(() => {}); await refreshModels(); }
-    if (model.kind === 'text') qs.call('models:warm', S.data.prefs.defaultTarget || `local:${model.id}`, { contextSize: S.data.prefs.contextSize, gpu: S.data.prefs.gpu }).catch(() => {});
+    if (model.kind === 'text' && !cloudAnswers()) qs.call('models:warm', S.data.prefs.defaultTarget || `local:${model.id}`, { contextSize: S.data.prefs.contextSize, gpu: S.data.prefs.gpu }).catch(() => {});
     if (!$('#modal').hidden) return;
     render();
   });
@@ -467,7 +467,7 @@ async function startupModels() {
   }
   if (p.preloadDefault !== false) {
     const t = resolveTarget(null, assistantById(p.lastAssistant));
-    if (t) qs.call('models:warm', t, { contextSize: p.contextSize, gpu: p.gpu }).catch(() => {});
+    if (t && !cloudAnswers()) qs.call('models:warm', t, { contextSize: p.contextSize, gpu: p.gpu }).catch(() => {});
   }
   // Measured speeds: if no answer has been timed on this PC yet, run a short speed test once the
   // app is idle, so every "~6 s" on screen is real rather than estimated.

@@ -4,6 +4,7 @@
 const { spawn, execFile } = require('node:child_process');
 const net = require('node:net');
 const fs = require('node:fs');
+const path = require('node:path');
 const engines = require('./engines');
 const hardware = require('./hardware');
 const oai = require('./oai');
@@ -123,6 +124,53 @@ function freePort() {
   });
 }
 
+// ---------- the reading cache ----------
+// Before a model is unloaded (to make room, after a while unused, or to grow its memory), what it
+// has already read (the conversation, the instructions) is saved to disk; when the same model
+// loads again it is put back, so the next answer starts without re-reading the whole chat. On a
+// PC without a graphics card re-reading is most of the wait. Uses llama.cpp's own slot save and
+// restore; engines without it just skip this.
+const cacheDir = () => { const d = path.join(require('./store').dir('tmp'), 'reading-cache'); fs.mkdirSync(d, { recursive: true }); return d; };
+const cacheName = (file, ctx) => `${require('node:crypto').createHash('sha1').update(`${file}|${ctx}`).digest('hex').slice(0, 16)}.bin`;
+const savedReading = new Map(); // model file -> { name, ctx, at }
+async function slotCall(s, pathAndQuery, body, ms) {
+  const res = await fetch(`http://127.0.0.1:${s.port}${pathAndQuery}`, { method: body ? 'POST' : 'GET', headers: body ? { 'Content-Type': 'application/json' } : {}, body: body ? JSON.stringify(body) : undefined, signal: AbortSignal.timeout(ms) });
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  return res.json().catch(() => ({}));
+}
+async function saveReading(s) {
+  if (!s?.slotCache || s.exited || s.loading) return;
+  try {
+    const slots = await slotCall(s, '/slots', null, 3000);
+    const used = (x) => Number(x?.n_past ?? x?.n_ctx_used ?? x?.next_token?.[0]?.n_past ?? x?.prompt_tokens ?? 0);
+    const best = (Array.isArray(slots) ? slots : []).filter((x) => !x.is_processing).sort((a, b) => used(b) - used(a))[0];
+    if (!best || used(best) < 64) return; // nothing worth keeping
+    const name = cacheName(s.file, s.ctx);
+    await slotCall(s, `/slots/${best.id ?? 0}?action=save`, { filename: name }, 20000);
+    savedReading.set(s.file, { name, ctx: s.ctx, at: Date.now() });
+    // Keep the newest few: each is the size of what the model had read.
+    const all = fs.readdirSync(cacheDir()).map((f) => ({ f, t: fs.statSync(path.join(cacheDir(), f)).mtimeMs })).sort((a, b) => b.t - a.t);
+    for (const old of all.slice(6)) { fs.rmSync(path.join(cacheDir(), old.f), { force: true }); for (const [k, v] of savedReading) if (v.name === old.f) savedReading.delete(k); }
+  } catch { /* an engine without slot saving, or a busy one: just unload */ }
+}
+async function restoreReading(s) {
+  const saved = savedReading.get(s.file);
+  if (!s.slotCache || !saved || !fs.existsSync(path.join(cacheDir(), saved.name))) return false;
+  try {
+    // (Saved at another size: the cache is put back into the bigger memory, it still fits.)
+    await slotCall(s, '/slots/0?action=restore', { filename: saved.name }, 60000);
+    s.restored = true;
+    return true;
+  } catch { savedReading.delete(s.file); return false; }
+}
+// Unload a model, keeping what it had read.
+async function park(key, why) {
+  const s = servers.get(key);
+  if (!s || s.parking) return;
+  s.parking = why;
+  try { await saveReading(s); } finally { if (servers.get(key) === s) stop(key); }
+}
+
 function stop(key) {
   const s = servers.get(key);
   if (!s) return;
@@ -148,9 +196,9 @@ function releaseGpu() {
 }
 // The same for ordinary memory (a PC without a graphics card keeps its models there): every loaded
 // model that is not answering right now is unloaded. Returns how many were, and how much they held.
-function releaseIdle() {
+async function releaseIdle() {
   let n = 0; let gb = 0;
-  for (const [k, s] of [...servers.entries()]) if (!isBusy(s) && !s.exited) { gb += s.sizeGB || 0; stop(k); n++; }
+  for (const [k, s] of [...servers.entries()]) if (!isBusy(s) && !s.exited) { gb += s.sizeGB || 0; await park(k, 'picture'); n++; }
   return { n, gb };
 }
 const ramHeld = () => [...servers.values()].reduce((t, s) => t + (s.exited ? 0 : s.sizeGB || 0), 0);
@@ -273,13 +321,13 @@ function idleMs() {
   const ram = hwCache?.ramGB || 0;
   return (ram >= 32 ? 120 : ram >= 16 ? 60 : 20) * 60 * 1000;
 }
-setInterval(() => { const ms = idleMs(); for (const [k, s] of [...servers.entries()]) if (!isBusy(s) && Date.now() - s.lastUsed > ms) stop(k); }, 60 * 1000).unref?.();
+setInterval(() => { const ms = idleMs(); for (const [k, s] of [...servers.entries()]) if (!isBusy(s) && !s.parking && Date.now() - s.lastUsed > ms) park(k, 'idle').catch(() => {}); }, 60 * 1000).unref?.();
 
 // Starting a model with room for a longer chat costs a little memory but saves a full reload when
 // the chat grows: with plenty of memory to spare it starts at 16K or 32K tokens (never above your
 // Conversation memory setting), instead of the smallest size that fits the first message.
 function roomyContext(asked, limit, headroomGB) {
-  const roomy = headroomGB >= 8 ? 32768 : headroomGB >= 4 ? 16384 : 0;
+  const roomy = headroomGB >= 6 ? 32768 : headroomGB >= 1.5 ? 16384 : 8192;
   return Math.max(asked, Math.min(roomy, limit || 16384));
 }
 
@@ -311,7 +359,7 @@ async function ensureNow(model, { contextSize = 8192, limit, gpu = 'auto', onSta
   }
   // Its context was too small for this conversation: restart it bigger, once it has finished
   // any answer it is writing.
-  if (existing) { await whenFree(existing); if (servers.get(key) === existing) stop(key); }
+  if (existing) { await whenFree(existing); if (servers.get(key) === existing) await park(key, 'grow'); }
   const hw = await hardware.detect();
   const engine = engines.resolve('llama', hw);
   if (!engine) throw new Error('The text engine is missing. Reinstall Quicksilver, or download an engine in Settings → Engines.');
@@ -323,10 +371,11 @@ async function ensureNow(model, { contextSize = 8192, limit, gpu = 'auto', onSta
   // Make room: stop least recently used servers until this one fits alongside the rest.
   const budget = Math.max(hw.vramGB, 0) + hw.ramGB * 0.7 - 2;
   const used = () => [...servers.values()].reduce((t, s) => t + s.sizeGB, 0);
+  const chatModel = [...servers.values()].filter((s) => s.lastChat).sort((a, b) => b.lastChat - a.lastChat)[0];
   while (servers.size && used() + sizeGB > budget) {
-    const oldest = [...servers.entries()].filter(([, s]) => !isBusy(s) && !s.loading).sort((a, b) => a[1].lastUsed - b[1].lastUsed)[0]; // (one still loading is being waited for: not idle)
+    const oldest = [...servers.entries()].filter(([, s]) => !isBusy(s) && !s.loading).sort((a, b) => (a[1] === chatModel) - (b[1] === chatModel) || a[1].lastUsed - b[1].lastUsed)[0]; // (one still loading is being waited for: not idle)
     if (!oldest) break; // everything loaded is answering: load alongside rather than cut an answer off
-    stop(oldest[0]);
+    await park(oldest[0], 'memory');
   }
 
   const headroomGB = budget - used() - sizeGB;
@@ -351,6 +400,9 @@ async function ensureNow(model, { contextSize = 8192, limit, gpu = 'auto', onSta
     // On the processor, keep the graphics card out of it completely (a broken or built-in GPU
     // driver can otherwise still fail the load even with no layers on it).
     if (!layers) args.push('--device', 'none');
+    const help = await engineHelp(engine.bin);
+    const canCache = /--slot-save-path/.test(help) && !model.embedding && !model.rerank;
+    if (canCache) args.push('--slot-save-path', cacheDir());
     if (model.embedding) args.push('--embedding');
     if (model.rerank) args.push('--reranking');
     if (kvq && !model.embedding && !model.rerank) args.push('--cache-type-k', 'q8_0', '--cache-type-v', 'q8_0');
@@ -374,7 +426,7 @@ async function ensureNow(model, { contextSize = 8192, limit, gpu = 'auto', onSta
     const proc = spawn(engine.bin, args, { windowsHide: true, stdio: ['ignore', 'pipe', 'pipe'] });
     const blocks = info.layers || 32;
     const vramGB = layers >= 999 ? sizeGB : layers ? (sizeGB * Math.min(layers, blocks)) / blocks : 0;
-    const s = { proc, port, file: model.file, draft: useDraft ? model.draft : null, sizeGB, vramGB, startedAt: Date.now(), lastUsed: Date.now(), log: [], ctx, maxCtx: info.contextLength || ctx, layers, exited: false };
+    const s = { proc, port, file: model.file, draft: useDraft ? model.draft : null, sizeGB, vramGB, startedAt: Date.now(), lastUsed: Date.now(), log: [], ctx, maxCtx: info.contextLength || ctx, layers, exited: false, slotCache: canCache };
     const keep = (d) => { s.log.push(d.toString()); if (s.log.length > 200) s.log.shift(); };
     proc.stdout.on('data', keep);
     proc.stderr.on('data', keep);
@@ -385,6 +437,7 @@ async function ensureNow(model, { contextSize = 8192, limit, gpu = 'auto', onSta
     s.loading = true;
     s.ready = waitReady(s, 600000);
     try { await s.ready; } finally { s.loading = false; }
+    if (await restoreReading(s)) onStatus?.(`${model.name || 'Model'} loaded; picking up where it left off…`);
     return s;
   };
   const t0 = Date.now();
@@ -498,6 +551,7 @@ async function* chat(model, opts) {
     srv = s;
     s.busy = (s.busy || 0) + 1;
     s.lastUsed = Date.now();
+    s.lastChat = Date.now();
     onStatus?.('');
     for await (const ev of oai.streamChat({
       baseUrl: `http://127.0.0.1:${s.port}/v1`,
@@ -560,4 +614,4 @@ const isLoaded = (file) => [...servers.values()].some((s) => s.file === file && 
 
 // The last lines each running engine printed (for "Save diagnostics").
 const logTails = () => [...servers.values()].map((s) => ({ file: require('node:path').basename(s.file), lines: s.log.join('').split('\n').slice(-40).join('\n') }));
-module.exports = { tidyRoles, releaseIdle, ramHeld, gpuLayers, countedVram, gpuHeld, releaseGpu, roomyContext, idleMs, readGguf, ensure, prefill, chat, stop, stopAll, stopFile, status, isLoaded, contextFor, prefetch, logTails };
+module.exports = { park, savedReading, tidyRoles, releaseIdle, ramHeld, gpuLayers, countedVram, gpuHeld, releaseGpu, roomyContext, idleMs, readGguf, ensure, prefill, chat, stop, stopAll, stopFile, status, isLoaded, contextFor, prefetch, logTails };

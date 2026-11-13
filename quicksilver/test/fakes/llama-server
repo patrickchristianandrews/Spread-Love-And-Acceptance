@@ -4,13 +4,33 @@ const http = require('http');
 const args = process.argv.slice(2);
 const arg = (f) => { const i = args.indexOf(f); return i >= 0 ? args[i + 1] : null; };
 if (args.includes('--list-devices')) { console.log('Available devices:\n  Vulkan0: Fake GPU 8GB (8192 MiB, 7800 MiB free)'); process.exit(0); }
-if (args.includes('--help')) { console.log('-md,   --model-draft FNAME\n-ngld, --gpu-layers-draft N\n--spec-draft-n-max N\n--spec-draft-n-min N\n--draft, --draft-n, --draft-max N   the argument has been removed. use --spec-draft-n-max'); process.exit(0); }
+if (args.includes('--help')) { console.log('--slot-save-path PATH   path to save slot kv cache (default: disabled)\n-md,   --model-draft FNAME\n-ngld, --gpu-layers-draft N\n--spec-draft-n-max N\n--spec-draft-n-min N\n--draft, --draft-n, --draft-max N   the argument has been removed. use --spec-draft-n-max'); process.exit(0); }
 if (process.env.QS_SPAWN_LOG) require('fs').appendFileSync(process.env.QS_SPAWN_LOG, `${process.pid}\n`); // tests count engine starts
 const port = Number(arg('--port'));
 const model = require('path').basename(arg('-m') || 'model');
 const vision = Boolean(arg('--mmproj'));
+let seenTokens = 0; let restored = 0; // for the slot cache
 const server = http.createServer((req, res) => {
   if (req.url === '/health') { res.writeHead(200); return res.end('{"status":"ok"}'); }
+  // Slot save and restore (--slot-save-path), like llama.cpp: what the model has read is saved to a
+  // file and put back later. /slots reports how much slot 0 has read.
+  if (req.url === '/slots' && req.method === 'GET') { res.writeHead(200, { 'Content-Type': 'application/json' }); return res.end(JSON.stringify([{ id: 0, is_processing: false, n_past: seenTokens }])); }
+  if (req.url === '/_restored') { res.writeHead(200, { 'Content-Type': 'application/json' }); return res.end(JSON.stringify({ restored })); }
+  const slotOp = req.url.match(/^\/slots\/(\d+)\?action=(save|restore)/);
+  if (slotOp && req.method === 'POST') {
+    let b = ''; req.on('data', (c) => (b += c));
+    return req.on('end', () => {
+      const dir = arg('--slot-save-path');
+      const name = JSON.parse(b || '{}').filename || '';
+      if (!dir || !/^[\w.-]+$/.test(name)) { res.writeHead(400); return res.end('{}'); }
+      const f = require('path').join(dir, name);
+      if (slotOp[2] === 'save') { require('fs').writeFileSync(f, JSON.stringify({ model, tokens: seenTokens })); res.writeHead(200); return res.end(JSON.stringify({ n_saved: seenTokens })); }
+      if (!require('fs').existsSync(f)) { res.writeHead(404); return res.end('{}'); }
+      const saved = JSON.parse(require('fs').readFileSync(f, 'utf8'));
+      restored = saved.tokens; seenTokens = Math.max(seenTokens, saved.tokens);
+      res.writeHead(200); return res.end(JSON.stringify({ n_restored: saved.tokens }));
+    });
+  }
   let body = '';
   req.on('data', (c) => (body += c));
   req.on('end', () => {
@@ -39,6 +59,7 @@ const server = http.createServer((req, res) => {
       return res.end(JSON.stringify({ data: input.map((t, index) => ({ index, embedding: vecOf(t) })) }));
     }
     const msgs = j.messages || [];
+    seenTokens = Math.max(seenTokens, Math.ceil(JSON.stringify(msgs).length / 4));
     // Like the real Qwen3.5 chat template: a system message anywhere but first is refused.
     if (msgs.some((m, i) => m.role === 'system' && i > 0)) { res.writeHead(500, { 'Content-Type': 'application/json' }); return res.end(JSON.stringify({ error: { message: 'Jinja Exception: System message must be at the beginning.' } })); }
     const imgs = msgs.flatMap((m) => (Array.isArray(m.content) ? m.content.filter((p) => p.type === 'image_url') : []));

@@ -259,7 +259,7 @@ function preloadDefault() {
   const a = assistantById(S.data.prefs.lastAssistant) || S.data.assistants[0];
   const target = a.target || S.data.prefs.defaultTarget;
   if (!target || target.startsWith('api:') || !targetValid(target)) return;
-  qs.call('models:prefill', target, [{ role: 'system', content: systemPrompt(a, false, {}) }], { contextSize: ctxOf(a), gpu: S.data.prefs.gpu }).catch(() => {});
+  if (!cloudAnswers()) qs.call('models:prefill', target, [{ role: 'system', content: systemPrompt(a, false, {}) }], { contextSize: ctxOf(a), gpu: S.data.prefs.gpu }).catch(() => {});
 }
 
 // Which kind of question an answer was for (for learning which model suits what).

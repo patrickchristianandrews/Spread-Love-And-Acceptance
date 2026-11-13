@@ -21,7 +21,7 @@ const llama = require('../src/main/llama');
 }
 assert.equal(llama.roomyContext(4096, 32768, 10), 32768, 'plenty of memory: starts at 32K');
 assert.equal(llama.roomyContext(4096, 32768, 5), 16384, 'some memory: starts at 16K');
-assert.equal(llama.roomyContext(4096, 32768, 1), 4096, 'tight memory: smallest size that fits');
+assert.equal(llama.roomyContext(4096, 32768, 1), 8192, 'tight memory: still 8K, so a chat does not outgrow its model (a full restart) after a few messages');
 assert.equal(llama.roomyContext(4096, 8192, 10), 8192, 'never above the Conversation memory setting');
 assert.equal(llama.roomyContext(65536, 32768, 10), 65536, 'a long chat still gets what it needs');
 store.saveConfig({ keepLoaded: 0 });

@@ -14,7 +14,7 @@ document.addEventListener('input', (e) => {
   if (!target || target.startsWith('api:')) return;
   if (Date.now() - (warmedAt.get(target) || 0) < 3 * 60 * 1000) return;
   warmedAt.set(target, Date.now());
-  qs.call('models:warm', target, { contextSize: 8192, gpu: S.data.prefs.gpu }).catch(() => {});
+  if (!cloudAnswers()) qs.call('models:warm', target, { contextSize: 8192, gpu: S.data.prefs.gpu }).catch(() => {});
 }, true);
 
 // ---------- automatic chat titles ----------

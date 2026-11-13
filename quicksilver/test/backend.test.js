@@ -1629,6 +1629,31 @@ async function collect(gen) {
     console.log('✓ cloud AI with this PC as backup: a cloud that cannot answer hands over to this PC, and says so');
   }
 
+  // The reading cache: a model unloaded to make room (or after a while unused) saves what it had read,
+  // and picks up from there when it loads again, instead of re-reading the whole chat.
+  {
+    models.add({ id: 'cache-m', name: 'Cache Test', kind: 'text', files: { model: copy('cache.gguf') }, size: 2e9 });
+    const long = [{ role: 'system', content: 'You are helpful. '.repeat(120) }, { role: 'user', content: 'Tell me about the sea.' }];
+    await collect(complete.run('local:cache-m', { messages: long, maxTokens: 40, contextSize: 4096 }));
+    const file = models.get('cache-m').files.model;
+    const before = llama.status().find((x) => x.file === file);
+    assert.ok(before, 'loaded');
+    await llama.park(file, 'memory');
+    assert.ok(!llama.isLoaded(file), 'unloaded');
+    assert.ok(llama.savedReading.get(file), 'what it read was saved');
+    const said = [];
+    await collect(complete.run('local:cache-m', { messages: [...long, { role: 'assistant', content: 'It is big.' }, { role: 'user', content: 'And deep?' }], maxTokens: 40, contextSize: 4096, onStatus: (t) => said.push(t) }));
+    const now = llama.status().find((x) => x.file === file);
+    const r = await (await fetch(`http://127.0.0.1:${now.port}/_restored`)).json();
+    assert.ok(r.restored > 100, `the reading was put back on load (${r.restored} tokens)`);
+    llama.stop(file); models.remove('cache-m');
+    // Room for a longer chat from the start: a first message never gets less than 8K.
+    assert.equal(llama.roomyContext(4096, 32768, 0.5), 8192);
+    assert.equal(llama.roomyContext(4096, 32768, 2), 16384);
+    assert.equal(llama.roomyContext(4096, 4096, 10), 4096, 'never above the Conversation memory setting');
+    console.log('✓ reading cache: an unloaded model saves what it read and picks up there when it loads again; chats start with room to grow');
+  }
+
   console.log('\nBACKEND TESTS PASSED');
   process.exit(0);
 })().catch((e) => { console.error('FAIL', e); llama.stopAll(); process.exit(1); });

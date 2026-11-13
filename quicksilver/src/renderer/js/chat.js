@@ -853,7 +853,7 @@ async function generate(chat, rerollMsg, withTarget, opts = {}) {
   const force = skill?.tools || {};
   if ((chat.library ?? a.library) || webWanted(chat, a, lastUser?.text || '', force) || force.knowledge) { alt.status = 'Searching sources…'; paintStreaming(chat, msg); }
   // Load the model at the same time as the search runs, instead of one after the other.
-  if (!target.startsWith('api:')) qs.call('models:warm', target, { contextSize: ctxOf(a), gpu: p.gpu }).catch(() => {});
+  if (!target.startsWith('api:') && !cloudAnswers()) qs.call('models:warm', target, { contextSize: ctxOf(a), gpu: p.gpu }).catch(() => {});
   // Small background jobs (suggestions, titles, memory notes) step aside for the new question.
   stopBackgroundJobs();
   const sources = await gatherSources(chat, a, lastUser?.text || skill?.name || '', force);
@@ -1375,6 +1375,7 @@ qs.onChat(({ requestId, ev }) => {
 // Start loading the chat's model in the background while you type.
 const warmed = new Set();
 function warmUp(chat, a) {
+  if (cloudAnswers()) return; // the cloud answers: nothing to load on this PC ahead of time
   const target = resolveTarget(chat, a);
   const key = `${target}|${ctxOf(a)}`;
   if (!target || warmed.has(key) || target.startsWith('api:')) return;
