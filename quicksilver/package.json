@@ -11,7 +11,7 @@
   "private": true,
   "scripts": {
     "start": "electron .",
-    "test": "node test/backend.test.js && node test/media-catalog.test.js && node test/loading.test.js && node test/skills-auto.test.js && node test/pro.test.js && node test/fixes.test.js && node test/plugins.test.js && node test/torrents.test.js && node test/giant.test.js && node test/safesearch.test.js && node scripts/api-directory.js --check && node test/ui.test.js && node test/liquid-picture.test.js",
+    "test": "node test/backend.test.js && node test/media-catalog.test.js && node test/loading.test.js && node test/skills-auto.test.js && node test/pro.test.js && node test/fixes.test.js && node test/plugins.test.js && node test/torrents.test.js && node test/giant.test.js && node test/safesearch.test.js && node test/provider-settings.test.js && node scripts/api-directory.js --check && node test/ui.test.js && node test/liquid-picture.test.js",
     "fetch-engines": "node scripts/fetch-engines.js",
     "dist": "electron-builder",
     "dist:win": "electron-builder --win",

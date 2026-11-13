@@ -1,6 +1,8 @@
 // A small client for OpenAI-style chat APIs. llama-server, OpenAI, Google Gemini, OpenRouter,
 // Groq, Mistral, DeepSeek, xAI, Together, Ollama and LM Studio all speak this format.
 
+const netlog = require('./netlog');
+
 async function* sse(res) {
   const decoder = new TextDecoder();
   let buf = '';
@@ -79,23 +81,32 @@ function localFetch(url, { method = 'GET', headers = {}, body, signal } = {}) {
 }
 
 // Streams a chat. Yields {type:'text'|'reasoning', text} and finally {type:'stats', ...}.
-async function* streamChat({ baseUrl, apiKey, body, signal, headers = {} }) {
+async function* streamChat({ baseUrl, apiKey, body, signal, headers = {}, meta = {} }) {
   const url = `${baseUrl.replace(/\/+$/, '')}/chat/completions`;
+  const t0 = Date.now();
   const res = await (isLocal(url) ? localFetch : fetch)(url, {
     method: 'POST',
     signal,
     headers: { 'Content-Type': 'application/json', ...(apiKey ? { Authorization: `Bearer ${apiKey}` } : {}), ...headers },
     body: JSON.stringify({ ...body, stream: true }),
   });
-  if (!res.ok) { const e = new Error(await errorText(res)); e.status = res.status; throw e; }
+  const sent = Object.fromEntries(Object.entries(body).filter(([k]) => !['messages', 'tools'].includes(k)));
+  if (!res.ok) {
+    const e = new Error(await errorText(res)); e.status = res.status;
+    netlog.log({ provider: meta.provider || url, model: body.model, key: meta.key, url, sent, status: res.status, warning: e.message.slice(0, 300) });
+    throw e;
+  }
   const split = thinkSplitter();
   const started = Date.now();
+  let ttfb = null;
   let tokens = 0;
   let stats = null;
   let finish = null;
   const calls = []; // tool calls arrive in pieces: { index, id, function: { name, arguments } }
   let minDigitP = null; // the model's lowest confidence in any digit it wrote (local engines)
+  let timings = null;
   for await (const ev of sse(res)) {
+    if (ttfb == null) ttfb = Date.now() - t0;
     const choice = ev.choices?.[0];
     const d = choice?.delta || {};
     const reasoning = d.reasoning_content ?? d.reasoning;
@@ -110,12 +121,15 @@ async function* streamChat({ baseUrl, apiKey, body, signal, headers = {} }) {
       if (tc.function?.arguments) calls[i].arguments += tc.function.arguments;
     }
     if (choice?.finish_reason) finish = choice.finish_reason;
+    if (ev.timings) timings = ev.timings;
     if (ev.timings) stats = { tps: ev.timings.predicted_per_second, promptTps: ev.timings.prompt_per_second, tokens: ev.timings.predicted_n };
     if (ev.usage && !stats) stats = { tokens: ev.usage.completion_tokens };
   }
   const toolCalls = calls.filter((c) => c && c.name).map((c, i) => ({ id: c.id || `call_${Date.now().toString(36)}_${i}`, name: c.name, arguments: c.arguments || '{}' }));
   if (toolCalls.length) yield { type: 'tool_calls', calls: toolCalls };
   const secs = (Date.now() - started) / 1000;
+  netlog.log({ provider: meta.provider || url, model: body.model, key: meta.key, url, sent, status: res.status,
+    timing: { ttfbMs: ttfb, totalMs: Date.now() - t0, ...(timings ? { promptMs: Math.round(timings.prompt_ms ?? 0), evalMs: Math.round(timings.predicted_ms ?? 0), cachedTokens: timings.cache_n } : {}) } });
   yield { type: 'stats', tps: stats?.tps || (secs ? tokens / secs : 0), tokens: stats?.tokens || tokens, finish, ...(minDigitP != null ? { minDigitP } : {}) };
 }
 

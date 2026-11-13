@@ -2,6 +2,7 @@
 // Anthropic (Claude) uses its own SDK; everything else speaks the OpenAI format.
 const store = require('./store');
 const oai = require('./oai');
+const netlog = require('./netlog');
 
 // free: 'local' (runs on this PC), 'free' (a free plan with a key), 'some' (some free models or
 // credits), 'paid' (pay as you go). Free plans change, so the app also links to the pricing page.
@@ -127,7 +128,7 @@ function upsert(p, key) {
   const i = list.findIndex((x) => x.id === id);
   if (i >= 0) list[i] = { ...list[i], ...entry }; else list.push(entry);
   store.saveConfig({ providers: list });
-  if (key !== undefined && key !== null && key !== '') store.setSecret(keyName(id), key.trim());
+  if (key !== undefined && key !== null && key !== '') store.setSecret(keyName(id), netlog.cleanKey(key));
   return entry;
 }
 
@@ -138,7 +139,7 @@ function remove(id) {
 
 function anthropicClient(p) {
   const Anthropic = require('@anthropic-ai/sdk').default;
-  return { Anthropic, client: new Anthropic({ apiKey: store.getSecret(keyName(p.id)) }) };
+  return { Anthropic, client: new Anthropic({ apiKey: secretOf(p.id) }) };
 }
 
 async function refreshModels(id) {
@@ -152,11 +153,11 @@ async function refreshModels(id) {
     for await (const m of client.models.list()) models.push(m.id);
   } else if (p.preset === 'github') {
     // GitHub Models lists its catalog at a separate address.
-    const res = await fetch('https://models.github.ai/catalog/models', { headers: { Authorization: `Bearer ${store.getSecret(keyName(p.id))}`, Accept: 'application/json' }, signal: AbortSignal.timeout(15000) });
+    const res = await fetch('https://models.github.ai/catalog/models', { headers: { Authorization: `Bearer ${secretOf(p.id)}`, Accept: 'application/json' }, signal: AbortSignal.timeout(15000) });
     if (!res.ok) throw new Error(`GitHub Models returned HTTP ${res.status}`);
     models = (await res.json()).filter((m) => !m.supported_output_modalities || m.supported_output_modalities.includes('text')).map((m) => m.id);
   } else {
-    models = await oai.listModels({ baseUrl: p.baseUrl, apiKey: store.getSecret(keyName(p.id)) });
+    models = await oai.listModels({ baseUrl: p.baseUrl, apiKey: secretOf(p.id) });
   }
   if (p.preset === 'openai') models = models.filter((m) => /^(gpt|o\d|chatgpt)/.test(m) && !/(audio|realtime|transcribe|tts|embedding|search)/.test(m));
   const best = PRESETS[p.preset]?.best;
@@ -167,6 +168,22 @@ async function refreshModels(id) {
 
 // Claude's newest models take an effort level and a server-side fallback on refusal.
 const CLAUDE_5 = /claude-(opus-5|sonnet-5-5|fable-5|haiku-5-5)/;
+// Models that still accept temperature: Claude 4.6 and older. Opus 4.7/4.8, Sonnet 5 and every
+// Claude 5 model return HTTP 400 when temperature or top_p is sent.
+const CLAUDE_TAKES_TEMPERATURE = (model) => !/claude-(opus-4-[78]|sonnet-5|opus-5|fable|mythos|haiku-5)/.test(model);
+// Turning thinking off, where the model allows it (Anthropic's model notes):
+// - Opus 5.5 and Fable: can't be turned off ({type:"disabled"} is a 400 at every effort level);
+//   the lowest effort is the only control, so nothing is sent.
+// - Sonnet 5.5: {type:"disabled"} is a 400; {type:"between_tools"} turns it off, effort high or below.
+// - Haiku 5.5: {type:"disabled"} accepted at effort high or below.
+// - Opus 5: accepted at high or below, but Anthropic warns it can then write tool calls into the
+//   answer text instead of running them, so Quicksilver leaves thinking on and uses low effort.
+function claudeThinkingOff(model, effort) {
+  const lowEnough = !['xhigh', 'max'].includes(effort);
+  if (/claude-sonnet-5-5/.test(model) && lowEnough) return { type: 'between_tools' };
+  if (/claude-haiku-5-5/.test(model) && lowEnough) return { type: 'disabled' };
+  return null;
+}
 
 // Converts OpenAI-format messages (including tool calls and tool results) to Anthropic's format.
 function toAnthropic(messages) {
@@ -211,9 +228,13 @@ async function* chat(providerId, model, { messages, temperature, maxTokens, sign
     const params = { model, max_tokens: maxTokens || 8192, system: system || undefined, messages: msgs, ...(tools?.length ? { tools: tools.map((t) => ({ name: t.function.name, description: t.function.description, input_schema: t.function.parameters })) } : {}) };
     let stream;
     if (CLAUDE_5.test(model)) {
-      stream = client.beta.messages.stream({ ...params, output_config: { effort: effort || 'medium' }, betas: ['server-side-fallback-2026-07-01'], fallbacks: 'default' }, { signal });
+      const thinking = claudeThinkingOff(model, effort || 'medium');
+      stream = client.beta.messages.stream({ ...params, ...(thinking ? { thinking } : {}), output_config: { effort: effort || 'medium' }, betas: ['server-side-fallback-2026-07-01'], fallbacks: 'default' }, { signal });
+      netlog.log({ provider: p.name, model, key: netlog.fingerprint(secretOf(p.id)), url: 'https://api.anthropic.com/v1/messages', sent: { effort: effort || 'medium', thinking: thinking || '(adaptive: this model can\'t turn it off)', max_tokens: params.max_tokens } });
     } else {
-      stream = client.messages.stream({ ...params, temperature }, { signal });
+      const t = CLAUDE_TAKES_TEMPERATURE(model) ? { temperature } : {};
+      stream = client.messages.stream({ ...params, ...t }, { signal });
+      netlog.log({ provider: p.name, model, key: netlog.fingerprint(secretOf(p.id)), url: 'https://api.anthropic.com/v1/messages', sent: { ...t, max_tokens: params.max_tokens } });
     }
     const started = Date.now();
     try {
@@ -236,12 +257,26 @@ async function* chat(providerId, model, { messages, temperature, maxTokens, sign
     }
     return;
   }
-  const key = store.getSecret(keyName(p.id));
+  const key = secretOf(p.id);
   const extra = p.preset === 'openrouter' ? { 'HTTP-Referer': 'https://quicksilver.app', 'X-Title': 'Quicksilver' } : {};
   const usesMaxCompletion = p.preset === 'openai' && /^(o\d|gpt-5)/.test(model);
-  const body = { model, messages, ...(tools?.length ? { tools } : {}), ...(usesMaxCompletion ? { max_completion_tokens: maxTokens, reasoning_effort: effort === 'max' ? 'high' : effort || 'medium' } : { max_tokens: maxTokens, temperature }) };
+  const base = { model, messages, ...(tools?.length ? { tools } : {}), ...(usesMaxCompletion ? { max_completion_tokens: maxTokens, reasoning_effort: effort === 'max' ? 'high' : effort || 'medium' } : { max_tokens: maxTokens, ...sampling(temperature) }) };
+  const extras = serviceSettings(p.preset, model);
+  const meta = { provider: p.name, key: netlog.fingerprint(key) };
+  if (!key && !PRESETS[p.preset]?.noKey) netlog.log({ provider: p.name, model, key: 'none', warning: `${p.name} has no key saved: this request goes out without one and will be refused. Add the key in Settings → API connections.` });
   try {
-    yield* oai.streamChat({ baseUrl: p.baseUrl, apiKey: key, body, signal, headers: extra });
+    try {
+      yield* oai.streamChat({ baseUrl: p.baseUrl, apiKey: key, body: { ...base, ...extras }, signal, headers: extra, meta });
+    } catch (err) {
+      // A service that rejects one of the optional settings: say which, then send without them.
+      const full = { ...base, ...extras };
+      const minimal = Object.fromEntries(Object.entries(full).filter(([k]) => ['model', 'messages', 'tools', 'max_tokens', 'max_completion_tokens', 'reasoning_effort', 'temperature'].includes(k)));
+      const dropped = Object.keys(full).filter((k) => !(k in minimal));
+      if (err.status !== 400 || !dropped.length || signal?.aborted) throw err;
+      netlog.log({ provider: p.name, model, key: meta.key, warning: `${p.name} rejected the request with ${dropped.join(', ')} (HTTP 400: ${String(err.message).slice(0, 160)}). Sent again without them; ${p.name} is the blocker.` });
+      yield { type: 'status', text: `⚠️ ${p.name} didn't accept ${dropped.join(', ')}, so it was sent without them.` };
+      yield* oai.streamChat({ baseUrl: p.baseUrl, apiKey: key, body: minimal, signal, headers: extra, meta });
+    }
   } catch (err) {
     if (signal?.aborted) return;
     if (/fetch failed|ECONNREFUSED/i.test(String(err.message))) throw new Error(`Could not reach ${p.name}. ${PRESETS[p.preset]?.noKey ? 'Is it running?' : 'Check your internet connection.'}`);
@@ -249,11 +284,32 @@ async function* chat(providerId, model, { messages, temperature, maxTokens, sign
   }
 }
 
+// Sampling for chat: temperature 0.9 unless the caller chose one (Quicksilver picks lower values
+// on purpose for planning, checking and maths), top_p 0.95, and for open-ended answers
+// (temperature 0.5 and up) presence 0.6 / frequency 0.3 to cut repetition. No stop sequences.
+function sampling(temperature) {
+  const t = temperature ?? 0.9;
+  return { temperature: t, top_p: 0.95, ...(t >= 0.5 ? { presence_penalty: 0.6, frequency_penalty: 0.3 } : {}) };
+}
+// Each service's own documented switches.
+// - Venice: no Venice system prompt added to yours, no thinking, thinking stripped from replies.
+// - Google Gemini (OpenAI-compatible endpoint, extra_body.google): no thinking budget, and the
+//   adjustable safety filters set to BLOCK_NONE (Google keeps its own fixed protections).
+const GEMINI_CATEGORIES = ['HARM_CATEGORY_HARASSMENT', 'HARM_CATEGORY_HATE_SPEECH', 'HARM_CATEGORY_SEXUALLY_EXPLICIT', 'HARM_CATEGORY_DANGEROUS_CONTENT', 'HARM_CATEGORY_CIVIC_INTEGRITY'];
+function serviceSettings(preset, model) {
+  if (preset === 'venice') return { venice_parameters: { include_venice_system_prompt: false, disable_thinking: true, strip_thinking_response: true } };
+  if (preset === 'google') {
+    const canStopThinking = !/gemini-[\d.]+-pro/.test(model); // Gemini Pro models can't turn thinking off
+    return { extra_body: { google: { ...(canStopThinking ? { thinking_config: { thinking_budget: 0 } } : {}), safety_settings: GEMINI_CATEGORIES.map((category) => ({ category, threshold: 'BLOCK_NONE' })) } } };
+  }
+  return {};
+}
+
 // Image generation or editing through an API (OpenAI-compatible /images endpoints).
 async function image(providerId, model, { prompt, size = '1024x1024', image: input, mask }) {
   const p = get(providerId);
   if (!p) throw new Error('That API connection was removed.');
-  const key = store.getSecret(keyName(p.id));
+  const key = secretOf(p.id);
   const headers = { ...(key ? { Authorization: `Bearer ${key}` } : {}) };
   let res;
   if (input) {
@@ -278,5 +334,5 @@ async function image(providerId, model, { prompt, size = '1024x1024', image: inp
   throw new Error('The API returned no image.');
 }
 
-const secretOf = (id) => store.getSecret(keyName(id));
-module.exports = { PRESETS, publicList, get, upsert, remove, refreshModels, chat, image, secretOf };
+const secretOf = (id) => netlog.cleanKey(store.getSecret(keyName(id)));
+module.exports = { PRESETS, publicList, get, upsert, remove, refreshModels, chat, image, secretOf, sampling, serviceSettings, claudeThinkingOff, CLAUDE_TAKES_TEMPERATURE };
