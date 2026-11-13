@@ -21,7 +21,7 @@
      fade, so nothing jumps or zippers. It fades in over about 9 s and the sleep timer fades out over 90 s.
    - It respects the site's Quiet mode and sound switch (starts silent; a Sound button turns it on for this page).
    What it remembers: the timer, sound and dimmer choices (localStorage 'tol-sleepcam-v1'), on this device only.
-   Nothing is sent anywhere. Draws the pals with pups.js (window.TOLPups).
+   Sent nowhere, except to your own TV when you cast the cam there (sleepcam-cast.js). Draws the pals with pups.js (window.TOLPups).
    sleep25: this file is the base cam. Three add-on files hang off the small hook list below (HK) through
    TOLSleepCam.core() and TOLSleepCam.hook(): sleepcam-pets.js (fur babies drawn and animated in the room),
    sleepcam-sounds.js (their sleep sounds, the overlay mixer, presets) and sleepcam-ui.js (the panels). If they

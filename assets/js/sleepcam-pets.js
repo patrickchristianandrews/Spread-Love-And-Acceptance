@@ -8,7 +8,8 @@
    hamster runs in its wheel in its sleep, and so on).
    A pet can also be kept close with a soft star and halo (a gentle touch for a pet who has passed). That pet
    just sleeps; no funny moments, and its sound starts off.
-   Saved on this device only, in localStorage 'tol-sleepcam-pets-v1'. Nothing is sent anywhere.
+   Saved on this device only, in localStorage 'tol-sleepcam-pets-v1'. Sent nowhere, except to your own TV when you
+   cast the cam there (sleepcam-cast.js), so the TV shows your room.
    Calm motion (reduce motion, Quiet mode): smaller breaths and twitches, rarer and slower moments.
    The sounds live in sleepcam-sounds.js (TOLSleepMix); the panels in sleepcam-ui.js.
    window.TOLSleepPets: list / add / update / remove / clear / kinds / colors / drawPreview / describe / onChange. */

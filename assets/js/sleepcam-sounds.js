@@ -17,7 +17,7 @@
       for one) start off when pets are in the room, and a pet marked "sound sensitive" pauses every overlay whose
       share of energy above 2 kHz is over a small threshold (HF table below, measured offline).
    4. Presets and a short picker that suggests a starter mix; "Try it for tonight" and a thumbs up or down the next
-      day. Stored on this device only: localStorage 'tol-sleepcam-mixes-v1'.
+      day. Stored on this device only: localStorage 'tol-sleepcam-mixes-v1' (copied to your own TV when you cast the cam there).
    A personal preference tool, not medical advice. window.TOLSleepMix is the API used by sleepcam-ui.js. */
 (function () {
   'use strict';

@@ -4,7 +4,8 @@
    you sleep best?" picker that suggests a starter mix.
    One panel, built once. On the start screen it sits in the page (#spc-panels); once the cam runs it moves into a
    sheet that the toolbar's Fur babies and Mix buttons open and close (Done, or Esc, closes it).
-   Everything is saved on this device only (pets: 'tol-sleepcam-pets-v1', mixes and notes: 'tol-sleepcam-mixes-v1').
+   Everything is saved on this device only (pets: 'tol-sleepcam-pets-v1', mixes and notes: 'tol-sleepcam-mixes-v1'), and
+   copied to your own TV only when you cast the cam there (sleepcam-cast.js).
    A personal preference tool, not medical advice. Uses TOLSleepPets (sleepcam-pets.js) and TOLSleepMix (sleepcam-sounds.js). */
 (function () {
   'use strict';
@@ -126,7 +127,7 @@
     return h('details', { class: 'spc-sec', id: 'spc-sec-pets' }, [
       h('summary', {}, [h('span', { class: 'spc-sec-t', text: 'Your fur babies' }), REF.petCount]),
       h('div', { class: 'spc-sec-body' }, [
-        h('p', { class: 'spc-note', text: 'Add up to four of your own animals. They sleep on a quilt in front of Tidbit and Sugarfoot, each on a pillow with their name, each with their own soft sleep sound. Everything stays on this device.' }),
+        h('p', { class: 'spc-note', text: 'Add up to four of your own animals. They sleep on a quilt in front of Tidbit and Sugarfoot, each on a pillow with their name, each with their own soft sleep sound. Everything stays on this device, unless you cast the cam to your own TV.' }),
         REF.petSum, REF.cvAria, REF.petList, REF.undo, REF.full, REF.formWrap, REF.clear
       ])
     ]);

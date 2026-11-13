@@ -193,6 +193,8 @@
   var start = document.getElementById('tv-start'), go = document.getElementById('tv-go'), hint = document.getElementById('tv-hint');
   var on = false, timer = 0, lock = null, capsOff = false, quietT = 0, hintT = 0, soundSaid = false;
   var cam = function () { return window.TOLPalsCam; };
+  // the pal cam's own Cast channel: the phone says which cam the TV should show ("day", or "sleep" for the Sleeping Pals Cam)
+  var NS = 'urn:x-cast:com.spreadloveandacceptance.palcam', wantSleep = false, sleepFrame = null, sleepKey = '', gotMode = false;
 
   function say(t) { hint.textContent = t; hint.classList.add('is-on'); clearTimeout(hintT); hintT = setTimeout(function () { hint.classList.remove('is-on'); }, 3500); }
   function ov() { return document.querySelector('.pc-ov'); }
@@ -237,6 +239,7 @@
     styleCam();
   }
   function begin() {
+    if (wantSleep) return;
     if (!cam()) { say('The pal cam is still loading. Try again in a moment.'); return; }
     on = true; start.hidden = true;
     var el = document.documentElement;
@@ -307,15 +310,48 @@
   var videoMode = /[?&]cast=video\b/.test(location.search) || !!(castTest && CAST_APP_ID === DEFAULT_RX);
   if (videoMode) CAST_APP_ID = DEFAULT_RX;
   function addScript(src) { var sc = document.createElement('script'); sc.src = src; document.head.appendChild(sc); return sc; }
+  // the Sleeping Pals Cam on the TV: that page, full screen in a frame (it starts by itself with ?receiver=1), with the
+  // person's own sleep room copied over first (their fur babies, sound mixes and choices) so it looks like theirs
+  function toSleep(d) {
+    wantSleep = true;
+    var o = d.opts || {}, st = d.store || {}, key = JSON.stringify([o, st]);
+    if (sleepFrame && key === sleepKey) return; // the same room again (the phone resends until the TV answers)
+    sleepKey = key;
+    Object.keys(st).forEach(function (k) { if (/^tol-sleepcam-(v1|pets-v1|mixes-v1)$/.test(k) && typeof st[k] === 'string' && st[k].length < 60000) { try { localStorage.setItem(k, st[k]); } catch (e) {} } });
+    if (on) end();
+    var qs = new URLSearchParams({ receiver: '1' });
+    ['timer', 'sound', 'snore', 'dim'].forEach(function (k) { if (o[k] != null) qs.set(k, String(o[k]).slice(0, 4)); });
+    if (sleepFrame) sleepFrame.remove();
+    sleepFrame = document.createElement('iframe');
+    sleepFrame.title = 'Sleeping Pals Cam'; sleepFrame.allow = 'autoplay; fullscreen; screen-wake-lock';
+    sleepFrame.style.cssText = 'position:fixed;inset:0;width:100%;height:100%;border:0;z-index:2147483600;background:#0D0B16';
+    sleepFrame.src = '/sleeping-pals-cam.html?' + qs.toString();
+    document.body.appendChild(sleepFrame);
+  }
+  function toDay() {
+    wantSleep = false; sleepKey = '';
+    if (sleepFrame) { sleepFrame.remove(); sleepFrame = null; }
+    if (!on) begin();
+  }
   if (receiver) {
     addScript('https://www.gstatic.com/cast/sdk/libs/caf_receiver/v3/cast_receiver_framework.js').onload = function () {
       try {
         var o = new cast.framework.CastReceiverOptions();
         o.disableIdleTimeout = true; o.skipPlayersLoad = true;
-        cast.framework.CastReceiverContext.getInstance().start(o);
-      } catch (e) {}
+        o.customNamespaces = {}; o.customNamespaces[NS] = cast.framework.system.MessageType.JSON;
+        var rc = cast.framework.CastReceiverContext.getInstance();
+        rc.addCustomMessageListener(NS, function (ev) {
+          var d = ev && ev.data; try { if (typeof d === 'string') d = JSON.parse(d); } catch (e) { d = null; }
+          if (!d || (d.mode !== 'sleep' && d.mode !== 'day')) return;
+          gotMode = true;
+          try { if (d.mode === 'sleep') toSleep(d); else toDay(); } catch (e) { showErr(e); }
+          try { rc.sendCustomMessage(NS, ev.senderId, { ok: true, mode: d.mode }); } catch (e) {}
+        });
+        rc.start(o);
+      } catch (e) { showErr(e); }
     };
-    window.addEventListener('load', function () { setTimeout(begin, 300); });
+    // the phone says which cam to show as soon as it joins; a phone with an older page says nothing, so the daytime cam starts after a short wait
+    window.addEventListener('load', function () { setTimeout(function () { if (!gotMode) begin(); }, 4000); });
   } else if (CAST_APP_ID) {
     // The button always shows; the line under it says what's happening or what's missing.
     var castBtn = document.getElementById('tv-cast'), castState = document.getElementById('tv-cast-state'), castReady = false, ctx = null;
@@ -326,8 +362,13 @@
         ? 'Casting from this page needs Chrome on a computer or an Android phone. On an iPhone, open the Google Home app, tap your Chromecast and choose Cast my screen.'
         : 'Casting from this page needs Google Chrome on a computer or an Android phone. Open this page in Chrome and the button will work.';
     }
+    var wantDay = false;
+    function sendDay(ses) { if (!ses || videoMode) return; try { var p = ses.sendMessage(NS, { mode: 'day' }); if (p && p.catch) p.catch(function () {}); } catch (e) {} }
     castBtn.addEventListener('click', function () {
       if (!castReady) { noCast(); return; }
+      wantDay = true;
+      // already casting (the Sleeping Pals Cam, say): switch the TV to the daytime cam
+      if (ctx.getCurrentSession() && !videoMode) { sendDay(ctx.getCurrentSession()); castState.textContent = 'Switching ' + ctx.getCurrentSession().getCastDevice().friendlyName + ' to the daytime Pal Cam.'; return; }
       if (ctx.getCastState() === cast.framework.CastState.NO_DEVICES_AVAILABLE) {
         castState.textContent = 'No Chromecast found yet. Check that this device is on the same Wi-Fi as the Chromecast. If you registered the Chromecast in the last few minutes, wait 15 minutes, unplug it for 10 seconds, then reload this page.' + TAB_TIP;
       }
@@ -346,6 +387,12 @@
         if (castTest) castState.textContent += ' [test: app ' + CAST_APP_ID + ', state ' + st + ']';
       }
       ctx.addEventListener(cast.framework.CastContextEventType.CAST_STATE_CHANGED, sync); sync();
+      // only a press of the button changes what the TV shows: opening this page never switches a TV away from the sleeping cam
+      ctx.addEventListener(cast.framework.CastContextEventType.SESSION_STATE_CHANGED, function (ev) {
+        var SS = cast.framework.SessionState;
+        if (wantDay && (ev.sessionState === SS.SESSION_STARTED || ev.sessionState === SS.SESSION_RESUMED)) sendDay(ev.session || ctx.getCurrentSession());
+        if (ev.sessionState === SS.SESSION_ENDED) wantDay = false;
+      });
       // if no TV shows up for the live app, explain the other live ways (no recordings)
       if (!videoMode && !castTest) setTimeout(function () {
         if (ctx.getCastState() !== cast.framework.CastState.NO_DEVICES_AVAILABLE) return;
