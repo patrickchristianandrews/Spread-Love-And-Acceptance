@@ -25,19 +25,57 @@ views.settings = {
   html() {
     // Phone, API server and Engines are rarely needed, so they share one Advanced tab.
     if (ADV_PARTS.some(([k]) => k === setTab)) { advFocus = setTab; setTab = 'advanced'; }
-    const tabs = { general: 'General', features: 'Features', guide: 'Guide & tips', chat: 'Chat & accuracy', memory: 'Memory', voice: 'Voice', web: 'Web search', accounts: 'Accounts', advanced: 'Advanced', about: "What's inside" };
+    const tabs = { general: 'General', apis: '☁️ API connections', features: 'Features', guide: 'Guide & tips', chat: 'Chat & accuracy', memory: 'Memory', voice: 'Voice', web: 'Web search', accounts: 'Accounts', advanced: 'Advanced', about: "What's inside" };
     const adv = new Set(['web', 'accounts', 'advanced']);
     return `<div class="page"><div class="page-head"><h1>Settings</h1></div>
       <div class="tabs">${Object.entries(tabs).filter(([k]) => !simpleOn() || !adv.has(k) || setTab === k).map(([k, l]) => `<button class="tab ${setTab === k ? 'active' : ''}" data-set-tab="${k}">${l}</button>`).join('')}</div>
-      <div style="max-width:860px">${({ general: generalHTML, guide: guidePageHTML, chat: chatSetHTML, memory: memSetHTML, voice: voiceSetHTML, web: webHTML, accounts: accountsHTML, advanced: advancedHTML, features: featuresHTML, about: aboutHTML })[setTab]()}</div></div>`;
+      <div style="max-width:860px">${({ general: generalHTML, apis: apisSetHTML, guide: guidePageHTML, chat: chatSetHTML, memory: memSetHTML, voice: voiceSetHTML, web: webHTML, accounts: accountsHTML, advanced: advancedHTML, features: featuresHTML, about: aboutHTML })[setTab]()}</div></div>`;
   },
   bind() {
     $$('[data-set-tab]').forEach((b) => b.addEventListener('click', () => { setTab = b.dataset.setTab; render(); }));
-    ({ general: bindGeneral, guide: bindGuidePage, chat: bindChatSet, memory: bindMemSet, voice: bindVoiceSet, web: bindWeb, accounts: bindAccounts, advanced: bindAdvanced, features: bindFeatures, about: bindAbout })[setTab]();
+    ({ general: bindGeneral, apis: bindApisSet, guide: bindGuidePage, chat: bindChatSet, memory: bindMemSet, voice: bindVoiceSet, web: bindWeb, accounts: bindAccounts, advanced: bindAdvanced, features: bindFeatures, about: bindAbout })[setTab]();
   },
 };
 
 const P = () => S.data.prefs;
+
+// ---------- API connections: every cloud AI and service you connected, and how Quicksilver uses them ----------
+function apisSetHTML() {
+  const list = S.providers || [];
+  const p = P();
+  const chat = list.filter((x) => (x.models || []).length && !x.media);
+  const media = list.filter((x) => x.media || (x.imageModels || []).length);
+  const row = (x) => `<div class="card api-row"><div class="row"><b class="grow">${esc(x.name)}</b>${x.free === 'free' ? '<span class="badge b-mint">free</span>' : x.free === 'some' ? '<span class="badge b-lemon">free plan</span>' : ''}${x.preset === 'venice' ? '<span class="badge b-lav">uncensored</span>' : ''}
+      <button class="btn small" data-set-api-edit="${esc(x.id)}">Edit</button><button class="btn small ghost" data-set-api-del="${esc(x.id)}">Remove</button></div>
+      <div class="small muted">${(x.models || []).length ? `${x.models.length} model${x.models.length === 1 ? '' : 's'}${x.models[0] ? `: ${esc(x.models.slice(0, 3).join(', '))}${x.models.length > 3 ? '…' : ''}` : ''}` : 'pictures, video or voice'}${x.hasKey || x.noKey ? '' : ' · <span style="color:var(--danger)">no key saved</span>'}</div></div>`;
+  return `<div class="stack-v">
+    <p class="lede" style="margin:0">Cloud AIs and services you connected with an API key: they answer, check, search or make pictures when Quicksilver uses them. Keys are stored encrypted on this PC.</p>
+    <div class="row"><button class="btn primary" id="set-api-add">＋ Connect a cloud AI or service</button><button class="btn" id="set-api-dir">📒 API directory (what each costs, free plans)</button></div>
+    <div class="card set-card"><h3 style="margin-top:0">How Quicksilver uses them</h3>
+      <label class="row"><input type="checkbox" id="set-cloud-hard" ${p.cloudHard ? 'checked' : ''} ${chat.length ? '' : 'disabled'}><span><b>Cloud AI for hard questions</b> <span class="help">hard questions go to your best connected cloud AI (the Liquid Edition uses an uncensored one such as Venice first)</span></span></label>
+      <label class="row" style="margin-top:6px"><input type="checkbox" id="set-cloud-all" ${p.cloudAll ? 'checked' : ''} ${chat.length ? '' : 'disabled'}><span><b>Cloud AI for everything</b> <span class="help">every message goes to it; this PC answers when you're offline or the cloud can't. Fastest on a slow PC.</span></span></label>
+      <div class="small muted" style="margin-top:8px">♻️ Free rotation: ${esc(typeof freeRotationLine === 'function' ? freeRotationLine() : '')}</div>
+      ${chat.length ? '' : '<div class="small muted" style="margin-top:6px">Connect a cloud AI to turn these on.</div>'}</div>
+    <h3>💬 Cloud AIs · ${chat.length}</h3>
+    ${chat.length ? chat.map(row).join('') : '<div class="empty small">None connected yet. Venice (uncensored) is the suggestion for the Liquid Edition; Groq, Cerebras and Google have free plans.</div>'}
+    ${media.length ? `<h3>🎨 Pictures, video & voice · ${media.length}</h3>${media.filter((x) => !chat.includes(x)).map(row).join('') || '<div class="small muted">The cloud AIs above also make pictures.</div>'}` : ''}
+    <div class="card set-card"><h3 style="margin-top:0">Other connections</h3>
+      <div class="small">🔎 Web search: <b>${esc(({ free: 'Free meta-search (DuckDuckGo, Mojeek, Wikipedia)', brave: 'Brave Search', tavily: 'Tavily', searxng: 'Your SearXNG', none: 'Off' })[S.config?.web?.provider] || 'Free meta-search')}</b> · <a href="#" data-set-tab-link="web">change</a></div>
+      <div class="small" style="margin-top:4px">🔌 Apps and plug-ins (GitHub, Gmail, Notion, Stripe…): <a href="#" id="set-api-connectors">Connectors</a></div>
+      <div class="small" style="margin-top:4px">🖥️ Quicksilver's own API, for other apps and coding agents: <a href="#" data-set-tab-link="advanced">Advanced</a></div></div>
+  </div>`;
+}
+function bindApisSet() {
+  $('#set-api-add')?.addEventListener('click', () => { modelsTab = 'api'; go({ view: 'models' }); });
+  $('#set-api-dir')?.addEventListener('click', () => apiDirectoryModal());
+  $$('[data-set-tab-link]').forEach((b) => b.addEventListener('click', (e) => { e.preventDefault(); setTab = b.dataset.setTabLink; render(); }));
+  $('#set-api-connectors')?.addEventListener('click', (e) => { e.preventDefault(); go({ view: 'integrations' }); });
+  $$('[data-set-api-edit]').forEach((b) => b.addEventListener('click', async () => { const presets = await qs.call('providers:presets'); editProvider(S.providers.find((x) => x.id === b.dataset.setApiEdit), presets); }));
+  $$('[data-set-api-del]').forEach((b) => b.addEventListener('click', async () => { if (!(await confirmBox('Remove this connection and its saved key?'))) return; await call('providers:remove', b.dataset.setApiDel); await refreshProviders(); render(); }));
+  const flip = (key) => (e) => { P()[key] = e.target.checked; P().cloudChosen = true; save(); toast(`${key === 'cloudAll' ? 'Cloud AI for everything' : 'Cloud AI for hard questions'} ${e.target.checked ? 'on' : 'off'}.`); };
+  $('#set-cloud-hard')?.addEventListener('change', flip('cloudHard'));
+  $('#set-cloud-all')?.addEventListener('change', flip('cloudAll'));
+}
 
 function generalHTML() {
   return `<div class="stack-v">

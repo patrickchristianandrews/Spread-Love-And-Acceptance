@@ -1712,6 +1712,12 @@ function redPng(size = 64) {
   await win.waitForTimeout(500);
   await shot(win, '17-phone');
   await win.uncheck('#ph-on');
+  // Settings → API connections: every connected cloud AI and how Quicksilver uses them.
+  await win.click('[data-set-tab="apis"]');
+  await win.waitForSelector('#set-cloud-all');
+  assert.match(await win.locator('#main').innerText(), /How Quicksilver uses them[\s\S]*Cloud AI for hard questions[\s\S]*Cloud AI for everything[\s\S]*Cloud AIs · \d/);
+  assert.equal(await win.locator('[data-set-api-edit]').count(), await win.evaluate(() => S.providers.filter((x) => (x.models || []).length && !x.media).length + S.providers.filter((x) => (x.media || (x.imageModels || []).length) && !((x.models || []).length && !x.media)).length), 'each connection can be edited or removed here');
+  await shot(win, '17b-settings-apis');
   await win.click('[data-set-tab="general"]');
   await win.waitForSelector('#upd-box');
   // "What's new" stays open (and keeps its place) while the update downloads.
