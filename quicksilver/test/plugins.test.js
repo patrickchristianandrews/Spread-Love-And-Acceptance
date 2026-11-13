@@ -93,14 +93,15 @@ const mcpCatalog = require('../src/main/mcp-catalog');
   const tools = require('../src/main/tools');
   const builtIn = integrations.list().filter((c) => c.builtIn);
   assert.ok(builtIn.length >= 18 && builtIn.every((c) => c.enabled && c.noToken && c.when), `${builtIn.length} built-in plug-ins, all on, each saying when it is needed`);
-  const want = { 'what is 15% of 2,340?': 'calc', 'convert 5 miles to km': 'calc', 'what time is it in Tokyo': 'worldtime', 'bitcoin price today': 'money', 'find papers on retrieval augmented generation': 'research',
+  const want = { 'what is the square root of 2 to 10 places': 'calc', 'convert 40 knots to mph': 'calc', 'what time is it in Tokyo': 'worldtime', 'bitcoin price today': 'money', 'find papers on retrieval augmented generation': 'research',
     'how far is Leeds from London': 'maps', 'define serendipity': 'words', 'public holidays in Germany 2027': 'holidays', 'find my invoice pdf in my downloads': 'pcfiles', 'take a screenshot of stripe.com on a phone': 'webshot',
     'summarize https://example.com/post': 'webtools', 'will it rain in Paris tomorrow': 'weather', 'translate hello into Spanish': 'translate', 'test my app at localhost:3000': 'apptest', 'is my supabase app secure?': 'securityaudit' };
   for (const [t, id] of Object.entries(want)) assert.ok(integrations.relevant(t).has(id), `"${t}" → ${id} (got ${[...integrations.relevant(t)]})`);
   assert.equal(integrations.relevant('write me a poem about cats').size, 0, 'an ordinary message needs no plug-in');
   const offered = async (t) => (await tools.available(t)).map((x) => x.name);
   assert.deepEqual(await offered('write me a poem about cats'), [], 'so no tools are handed to the model');
-  assert.deepEqual((await offered('convert 5 miles to km')).sort(), ['calculate', 'convert_units'], 'only the calculator for a conversion');
+  assert.deepEqual((await offered('convert 40 knots to mph')).sort(), ['calculate', 'convert_units'], 'only the calculator for a conversion');
+  assert.equal(integrations.relevant('Calculate 17 × 23 and explain why').size, 0, 'a plain sum is worked out by the app itself, no plug-in round trip');
   assert.ok((await tools.available()).length >= 30, 'without a message: everything that is on (Connectors page)');
   console.log(`✓ ${builtIn.length} built-in plug-ins, on by default; each is offered to the model only when the message needs it`);
 

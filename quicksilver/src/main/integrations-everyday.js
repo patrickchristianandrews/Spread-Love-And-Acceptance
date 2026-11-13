@@ -102,7 +102,9 @@ module.exports = ({ cfg }) => {
       when: /https?:\/\/\S+|\bwww\.\S+\.\w+|\b(read|open|summari[sz]e|look at|check) (this|the|that) (page|article|link|url|site|post)\b|\bsearch (the web|online|the internet) (for|and)\b|\bresearch (and|then) (write|compare|summari[sz]e)\b/i,
       blurb: 'Search the web and read any page as clean text, so answers can use what is online now. Free, no account (DuckDuckGo with backups; your own search key if you set one in Settings).', fields: [] },
     calc: { name: 'Calculator & units', icon: '🧮', group: 'Everyday', defaultOn: true, noToken: true, builtIn: true,
-      when: /\d+(\.\d+)?\s*%\s*of\b|\d\s*[-+*/^×÷%]\s*\d|\b(calculate|compute|how much is|what is \d|convert|in (km|miles?|kg|lbs?|pounds|celsius|fahrenheit|liters?|gallons?|feet|meters?|inches|cm|mph|km\/h)|sqrt|square root|percent|factorial)\b/i,
+      // (Plain sums, percentages, unit conversions and dates are already worked out exactly by the
+      // app before the model answers, so this is only for what that doesn't cover.)
+      when: /\b(sqrt|square root|cube root|cbrt|log(arithm)?|ln|sine?|cos(ine)?|tan(gent)?|factorial|to the power of|exponent)\b|\d\s*\^\s*\d|\d!(?!\w)|\b(convert|in) (\w+ )?(knots|nautical miles?|btu|kwh|psi|atm|mmhg|hectares?|acres?|gib|mib|tib|stone)\b/i,
       blurb: 'Exact sums (brackets, powers, percentages, sqrt, log, sin…) and unit conversions (length, weight, volume, speed, area, data, energy, temperature), worked out on this PC.', fields: [] },
     worldtime: { name: 'World time', icon: '🕒', group: 'Everyday', defaultOn: true, noToken: true, builtIn: true,
       when: /\b(what time|time (is it )?in|time zones?|timezone|local time|days? (until|between|since)|what day)\b/i,
