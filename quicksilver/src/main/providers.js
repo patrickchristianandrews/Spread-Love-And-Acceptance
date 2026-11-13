@@ -109,7 +109,7 @@ function get(id) { return all().find((p) => p.id === id); }
 const keyName = (id) => `provider:${id}`;
 
 function publicList() {
-  return all().map((p) => ({ ...p, hasKey: store.hasSecret(keyName(p.id)), noKey: Boolean(PRESETS[p.preset]?.noKey) }));
+  return all().map((p) => ({ ...p, hasKey: store.hasSecret(keyName(p.id)), noKey: Boolean(PRESETS[p.preset]?.noKey), free: PRESETS[p.preset]?.free || '' }));
 }
 
 function upsert(p, key) {

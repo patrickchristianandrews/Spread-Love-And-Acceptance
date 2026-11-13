@@ -376,6 +376,13 @@ qs.onApp?.(async (d) => {
   if (['models', 'stacks'].includes(S.route.view) && $('#modal').hidden) render();
 });
 
+// "Venice AI · needs one more to rotate": the connected services free rotation can use.
+function freeRotationLine() {
+  const list = (S.providers || []).filter((p) => ['free', 'some'].includes(p.free) && (p.hasKey || p.noKey) && !p.media && (p.models || []).length);
+  if (!list.length) return 'No free services connected';
+  const names = list.map((p) => p.name.replace(/\s*\(.*\)$/, '')).join(', ');
+  return list.length === 1 ? `${names} · connect one more for rotation` : `${list.length} connected: ${names} · on`;
+}
 // ---------- add-ons: what each addition does for your stack ----------
 // Shown under the main models: memory (Mem0-style), local RAG and the rest, each with what it adds
 // (accuracy, speed, privacy), whether it's on, and one button.
@@ -413,7 +420,8 @@ function addonsHTML() {
     ['📁', 'Projects', 'shared background', 'In the menu', 'Instructions and files for a piece of work that every chat in the project knows, so you don\'t repeat yourself.', 'Answers that fit your work · no extra time', ['data-addon-go="projects"', 'Open Projects']],
     ['⚡', 'Skills', 'ready-made tasks', 'Type / in the message bar', 'One-click tasks with the right settings built in: research brief, music finder, SWOT, summaries, code review and dozens more.', 'Better-shaped answers for common jobs', ['data-addon-go="skills"', 'Open Skills']],
     ['🧩', 'MCP tool servers', 'the open standard', 'Add in Connectors', 'Hundreds of extra tools from the Model Context Protocol world: files, databases, browsers, design tools and more, used by the stack when a chat needs them.', 'New abilities · asks before changing anything', ['data-addon-go="integrations"', 'Add a tool server']],
-    ['♻️', 'Free rotation', 'free cloud AIs', `${(S.providers || []).filter((p) => ['cerebras', 'groq', 'mistral', 'google', 'openrouter', 'sambanova', 'github'].includes(p.preset)).length} free services connected`, 'Connect two or more free cloud AIs and, when one hits its daily limit, the next takes over automatically.', 'Keeps the cloud free · no waiting', null],
+    // (Counted the same way the engine picks them: any connected service with a free plan or a free allowance.)
+    ['♻️', 'Free rotation', 'free cloud AIs', freeRotationLine(), 'Connect two or more free cloud AIs and, when one hits its daily limit, the next takes over automatically. A message pops up when it switches.', 'Keeps the cloud free · no waiting', ['data-goto-api', 'Connect a free AI']],
     ['🛡️', 'Private online', 'Proton VPN', typeof privacyMode === 'function' ? ({ offline: 'Fully private (offline)', vpn: 'On', online: 'Off' })[privacyMode()] : '', 'Web search and cloud AIs only through Proton VPN (a free plan is available), so sites and services can\'t see where you are.', 'Privacy ↑ · a little slower online', null],
     ['☁️', 'A cloud AI', 'optional', cloud ? 'Connected' : 'None', 'A big cloud model for the hardest questions, or as the lead of a custom AI. Everyday messages stay on this PC.', 'Accuracy ↑↑ on hard questions · needs internet', ['data-guide="apis"', 'Compare cloud AIs']],
   ];

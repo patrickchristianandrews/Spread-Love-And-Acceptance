@@ -1637,6 +1637,9 @@ function redPng(size = 64) {
   assert.deepEqual(tbl.byLikes, ['Qwen3 Coder', 'Phi-4', 'Gemma 3 12B', 'Qwen3 8B', 'Devstral'], 'numbers sort as numbers (1,200 above 980)');
   assert.equal(tbl.byLikesDown, 'Devstral', 'a second click reverses');
   console.log('✓ tables: sort by any column header, filter with a menu or a search box under it');
+  // Free rotation counts every connected service with a free plan or allowance (Venice too), as the engine does.
+  const fr = await win.evaluate(() => { const keep = S.providers; try { S.providers = [{ preset: 'venice', name: 'Venice AI (private, uncensored)', free: 'some', hasKey: true, models: ['venice-uncensored'] }]; const one = freeRotationLine(); S.providers.push({ preset: 'groq', name: 'Groq', free: 'free', hasKey: true, models: ['m'] }); return [one, freeRotationLine()]; } finally { S.providers = keep; } });
+  assert.equal(fr[0], 'Venice AI · connect one more for rotation'); assert.equal(fr[1], '2 connected: Venice AI, Groq · on');
   // Under an answer: the cloud service that was used, and nothing when it all ran on this PC.
   const cl = await win.evaluate(() => [cloudUsedHTML({ cloud: [{ service: 'Venice AI', model: 'venice-uncensored' }] }), cloudUsedHTML({ media: { cloud: 'fal.ai · Veo 3.1' } }), cloudUsedHTML({})]);
   assert.match(cl[0], /☁️ Used <b>Venice AI<\/b> <span class="muted">\(venice-uncensored\)/); assert.match(cl[1], /fal\.ai · Veo 3\.1/); assert.equal(cl[2], '');
