@@ -141,7 +141,7 @@ async function* rotateFrom(list, req, firstErr) {
     yield { type: 'status', text: `♻️ Free limit reached; switching to ${label(tg)}…` };
     let produced = false;
     try {
-      for await (const ev of providers.chat(t.providerId, t.model, req)) { if (ev.type === 'text') produced = true; yield ev; }
+      for await (const ev of providers.chat(t.providerId, t.model, req)) { if (ev.type === 'text' && !produced) { produced = true; cloudUsed(req, t); } yield ev; }
       return true;
     } catch (err) {
       if (produced || !isLimit(err)) throw err;
@@ -151,11 +151,15 @@ async function* rotateFrom(list, req, firstErr) {
   if (lastErr) throw new Error(`Every free cloud AI you've connected has hit its limit for now (${String(lastErr.message || lastErr).slice(0, 120)}). Try again later, connect another free one under Models → Connect an API, or use the models on this PC.`);
   return false;
 }
+// Which cloud service answered (or helped): told to the chat so it can say so under the answer.
+function cloudUsed(req, t) {
+  try { const p = providers.get(t.providerId); req.onCloud?.({ service: p?.name || t.providerId, model: t.model }); } catch {}
+}
 async function* withFreeRotation(target, req) {
   const t = parse(target);
   let produced = false;
   try {
-    for await (const ev of providers.chat(t.providerId, t.model, req)) { if (ev.type === 'text') produced = true; yield ev; }
+    for await (const ev of providers.chat(t.providerId, t.model, req)) { if (ev.type === 'text' && !produced) { produced = true; cloudUsed(req, t); } yield ev; }
   } catch (err) {
     const p = providers.get(t.providerId);
     const free = ['free', 'some'].includes(providers.PRESETS[p?.preset]?.free);

@@ -430,6 +430,7 @@ ipcMain.on('chat:send', async (_e, p) => {
       approve: (q) => askApproval(p.requestId, q, controller.signal), requestId: p.requestId,
       onStatus: (text) => send({ type: 'status', text }),
       onStep: (step) => send({ type: 'step', step: { ...step } }),
+      onCloud: (c) => send({ type: 'cloud', service: String(c.service || ''), model: String(c.model || '') }),
       calib: cfg.calib,
     })) send(ev);
     send({ type: 'done', aborted: controller.signal.aborted });

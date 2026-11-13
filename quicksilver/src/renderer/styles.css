@@ -1594,3 +1594,7 @@ code.sel { user-select: all; background: var(--soft); padding: 1px 6px; border-r
 .tbl-filters th { padding-top: 2px; padding-bottom: 6px; font-weight: 400; }
 .tbl-filter { width: 100%; min-width: 70px; max-width: 220px; padding: 3px 6px; font-size: .8rem; border-radius: 6px; border: 1px solid var(--line); background: var(--card); color: var(--text); }
 .tbl-count { margin: 6px 0 0; }
+
+/* Under an answer: the cloud service that was used */
+.cloud-used { margin: 6px 0 2px; color: var(--muted); }
+.cloud-used b { color: var(--text); font-weight: 600; }

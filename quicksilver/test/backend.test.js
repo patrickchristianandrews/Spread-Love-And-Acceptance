@@ -209,7 +209,14 @@ async function collect(gen) {
   const r4 = await collect(complete.run(`api:${p.id}:test-model`, { messages: [{ role: 'user', content: 'Hi API' }], maxTokens: 50 }));
   assert.match(r4.text, /you said "Hi API"/);
   assert.ok(complete.targets().some((t) => t.target === `api:${p.id}:test-model`));
-  console.log('✓ OpenAI-compatible API provider');
+  // Which cloud service answered is reported, so the chat can say so under the answer.
+  const seen = [];
+  await collect(complete.run(`api:${p.id}:test-model`, { messages: [{ role: 'user', content: 'Hi again' }], maxTokens: 50, onCloud: (c) => seen.push(c) }));
+  assert.deepEqual(seen, [{ service: 'Test API', model: 'test-model' }], 'the cloud service and model are reported once');
+  const none = [];
+  await collect(complete.run('local:qwen3-8b', { messages: [{ role: 'user', content: 'Hi local' }], maxTokens: 50, onCloud: (c) => none.push(c) }));
+  assert.equal(none.length, 0, 'an answer from this PC reports no cloud service');
+  console.log('✓ OpenAI-compatible API provider; the cloud service used is reported');
 
   // Think-tag splitting for models that write <think> inline.
   const split = oai.thinkSplitter();

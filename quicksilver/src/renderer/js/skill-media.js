@@ -158,6 +158,7 @@ async function runSkillMedia(chat, msg, alt, skill) {
   const pick = pickMediaModel(kind, { liquid, pro: chatIsPro(chat), prompt });
   if (!pick) { alt.media.need = liquidNeed(liquid, kind); repaint(); return; }
   alt.media.model = pick.api ? pick.label : pick.inst.name;
+  if (pick.api) alt.media.cloud = pick.label; // said under the answer: made in the cloud
   let imageId;
   if (kind === 'edit' || kind === 'animate') {
     const att = (user?.attachments || []).find((x) => x.type === 'image' && x.dataUrl);

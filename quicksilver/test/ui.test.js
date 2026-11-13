@@ -1637,6 +1637,9 @@ function redPng(size = 64) {
   assert.deepEqual(tbl.byLikes, ['Qwen3 Coder', 'Phi-4', 'Gemma 3 12B', 'Qwen3 8B', 'Devstral'], 'numbers sort as numbers (1,200 above 980)');
   assert.equal(tbl.byLikesDown, 'Devstral', 'a second click reverses');
   console.log('✓ tables: sort by any column header, filter with a menu or a search box under it');
+  // Under an answer: the cloud service that was used, and nothing when it all ran on this PC.
+  const cl = await win.evaluate(() => [cloudUsedHTML({ cloud: [{ service: 'Venice AI', model: 'venice-uncensored' }] }), cloudUsedHTML({ media: { cloud: 'fal.ai · Veo 3.1' } }), cloudUsedHTML({})]);
+  assert.match(cl[0], /☁️ Used <b>Venice AI<\/b> <span class="muted">\(venice-uncensored\)/); assert.match(cl[1], /fal\.ai · Veo 3\.1/); assert.equal(cl[2], '');
   // The "That answer took a while" tip sits near the top and never covers the message box.
   const tip = await win.evaluate(async () => {
     newChat(); await new Promise((r) => setTimeout(r, 300));
