@@ -1,0 +1,117 @@
+{
+  "version": 1,
+  "updated": "2026-11",
+  "tiers": [
+    {
+      "n": 1,
+      "minVram": 0,
+      "name": "Basic",
+      "good": "Chatting with the built-in models, writing, simple questions",
+      "gpu": "None needed (runs on the processor)",
+      "ram": "16 GB",
+      "disk": "512 GB SSD",
+      "cpu": "Any recent 6-core (Intel Core i5 / Ryzen 5)",
+      "ex": [
+        "Dell Inspiron Desktop, HP Pavilion Desktop or Lenovo IdeaCentre with a Core i5 / Ryzen 5 and 16 GB RAM",
+        "Most current laptops with 16 GB RAM"
+      ]
+    },
+    {
+      "n": 2,
+      "minVram": 6,
+      "name": "Everyday, fast",
+      "good": "Quick answers, 8B models, coding help, small stacks, voice",
+      "gpu": "8 GB: RTX 5060 / 4060",
+      "ram": "32 GB",
+      "disk": "1 TB NVMe",
+      "cpu": "6–8 core",
+      "ex": [
+        "MSI Codex (Core i5-14400F, RTX 5060, 32 GB DDR5, 2 TB)",
+        "iBUYPOWER Slate (Core i7-14700F, RTX 5060, 32 GB)",
+        "ABS Cyclone Aqua (RTX 5060, 32 GB DDR4)"
+      ]
+    },
+    {
+      "n": 3,
+      "minVram": 12,
+      "name": "Power user",
+      "good": "14B–30B models, full stacks, exam coaches, the website builder, pictures (SDXL, FLUX Schnell)",
+      "gpu": "16 GB: RTX 5060 Ti 16 GB, RTX 5070 Ti or Radeon RX 9070 XT",
+      "ram": "32–64 GB",
+      "disk": "2 TB NVMe",
+      "cpu": "8 core",
+      "ex": [
+        "ZOTAC MEK (Ryzen 7 9700X, RTX 5060 Ti 16 GB, 32 GB DDR5)",
+        "CyberPowerPC with Ryzen 7 8700F and RTX 5060 Ti 16 GB",
+        "Skytech Nebula 2 (RTX 5060 Ti 16 GB)",
+        "ABS Flux II Aqua (Core i7-14700F, RTX 5060 Ti 16 GB, 32 GB)"
+      ]
+    },
+    {
+      "n": 4,
+      "minVram": 20,
+      "name": "Photo & video creation",
+      "good": "Best picture models (FLUX Dev, photo editing), AI video (Wan), the largest stacks, everything at once",
+      "gpu": "24–32 GB: RTX 5090 (32 GB), or a used RTX 4090 / 3090 (24 GB)",
+      "ram": "64–128 GB",
+      "disk": "2–4 TB NVMe (Gen 4 or 5)",
+      "cpu": "8–16 core, 1000 W power supply, good cooling",
+      "ex": [
+        "Lenovo Legion Tower 7i Gen 10 (Core Ultra 9 285K, RTX 5090, 64 GB, 2 TB)",
+        "HP OMEN MAX 45L (Ryzen 9 9900X3D, RTX 5090, 64 GB, 4 TB)",
+        "Alienware Area-51 (RTX 5090, Ryzen 9 9950X3D or Core Ultra 9 285K)"
+      ]
+    }
+  ],
+  "tips": [
+    {
+      "b": "Go NVIDIA if you can.",
+      "t": "Picture and video generation runs best on NVIDIA; AMD cards work for chat but are slower for images and video."
+    },
+    {
+      "b": "VRAM beats card speed.",
+      "t": "A slower card with 16 GB is usually a better AI buy than a faster one with 12 GB, because bigger, smarter models fit entirely on it."
+    },
+    {
+      "b": "Avoid 12 GB for creation work.",
+      "t": "It's too small for the good image and video models."
+    },
+    {
+      "b": "Laptops have less VRAM than desktops with the same card name",
+      "t": "(often 8 GB). For tiers 3–4, a desktop is far better value."
+    },
+    {
+      "b": "Leave room for models.",
+      "t": "Picture and video models are 10–25 GB each, and chat models add up fast: get more storage than you think."
+    },
+    {
+      "b": "A used RTX 3090 (24 GB)",
+      "t": "is the best-value way into tier 4 on a tight budget."
+    },
+    {
+      "b": "Check the graphics card's memory on the listing.",
+      "t": "Some cards come in two versions (the RTX 5060 Ti has 8 GB and 16 GB); for tier 3 you want the 16 GB one."
+    },
+    {
+      "b": "",
+      "t": "Roughly: tier 1 is any current PC, tier 2 a mid-range gaming PC, tier 3 upper mid-range, tier 4 high-end (mostly because of the graphics card). Models, parts and prices change often — compare the specs above."
+    }
+  ],
+  "upgrades": {
+    "ram32": {
+      "cost": "about $40–100"
+    },
+    "ram64": {
+      "cost": "about $80–180"
+    },
+    "gpu12": {
+      "cost": "about $200–280 used"
+    },
+    "gpu16": {
+      "cost": "about $330–450"
+    },
+    "gpu24": {
+      "cost": "about $650–850 used"
+    }
+  }
+}

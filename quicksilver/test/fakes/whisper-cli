@@ -1,0 +1,11 @@
+#!/usr/bin/env node
+// Stand-in for whisper.cpp's CLI, for tests: checks it was given 16 kHz WAV and "transcribes" it.
+const fs = require('fs');
+const args = process.argv.slice(2);
+const arg = (f) => { const i = args.indexOf(f); return i >= 0 ? args[i + 1] : null; };
+if (!arg('-m') || !fs.existsSync(arg('-m'))) { console.error('error: failed to load model'); process.exit(2); }
+const wav = fs.readFileSync(arg('-f'));
+if (wav.toString('ascii', 0, 4) !== 'RIFF') { console.error('error: not a WAV file'); process.exit(3); }
+const rate = wav.readUInt32LE(24);
+console.error('whisper_init_from_file: loading model');
+console.log(`[BLANK_AUDIO] Hello from the fake whisper at ${rate} Hz.`);

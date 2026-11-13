@@ -11,17 +11,18 @@ import json, os, re, subprocess, sys
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
 ID = 'GTM-N7K8M6ZL'
+# Google's standard container snippet. Its gtm.js push is the "page loaded" event that every All Pages trigger in the
+# container waits for; loading gtm.js on its own, without that push, leaves those tags silent.
 TAG = ('<!-- gtm:start -->\n'
-       '<script async src="https://www.googletagmanager.com/gtm.js?id=' + ID + '"></script>\n'
-       '<script>\n'
-       '  window.dataLayer = window.dataLayer || [];\n'
-       '  function gtag(){dataLayer.push(arguments);}\n'
-       "  gtag('js', new Date());\n"
-       '</script>\n'
+       "<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});"
+       "var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;"
+       "j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);"
+       "})(window,document,'script','dataLayer','" + ID + "');</script>\n"
        '<!-- gtm:end -->\n')
 BLOCK = re.compile(r'<!-- gtm:start -->.*?<!-- gtm:end -->\n?', re.S)
-# not pages people visit: print sources for the PDFs, internal tooling, drafts
-NOT_PAGES = re.compile(r'^(tools/[^/]+/|_manuscripts/|node_modules/|book/(print|kids|adult)/src/)')
+# not pages people visit: print sources for the PDFs, internal tooling, drafts, and the Quicksilver desktop app's own
+# window (its CSP allows no network at all)
+NOT_PAGES = re.compile(r'^(tools/[^/]+/|_manuscripts/|node_modules/|book/(print|kids|adult)/src/|quicksilver/)')
 
 
 def private():

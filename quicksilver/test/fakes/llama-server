@@ -1,0 +1,102 @@
+#!/usr/bin/env node
+// Stand-in for llama.cpp's llama-server, for tests. Same flags, same HTTP API, canned replies.
+const http = require('http');
+const args = process.argv.slice(2);
+const arg = (f) => { const i = args.indexOf(f); return i >= 0 ? args[i + 1] : null; };
+if (args.includes('--list-devices')) { console.log('Available devices:\n  Vulkan0: Fake GPU 8GB (8192 MiB, 7800 MiB free)'); process.exit(0); }
+if (args.includes('--help')) { console.log('-md,   --model-draft FNAME\n-ngld, --gpu-layers-draft N\n--spec-draft-n-max N\n--spec-draft-n-min N\n--draft, --draft-n, --draft-max N   the argument has been removed. use --spec-draft-n-max'); process.exit(0); }
+if (process.env.QS_SPAWN_LOG) require('fs').appendFileSync(process.env.QS_SPAWN_LOG, `${process.pid}\n`); // tests count engine starts
+const port = Number(arg('--port'));
+const model = require('path').basename(arg('-m') || 'model');
+const vision = Boolean(arg('--mmproj'));
+const server = http.createServer((req, res) => {
+  if (req.url === '/health') { res.writeHead(200); return res.end('{"status":"ok"}'); }
+  let body = '';
+  req.on('data', (c) => (body += c));
+  req.on('end', () => {
+    const j = JSON.parse(body || '{}');
+    // Embeddings (the search model): words in the same meaning group land in the same place.
+    if (req.url.startsWith('/v1/rerank')) {
+      const qw = new Set(String(j.query || '').toLowerCase().match(/[a-z]+/g) || []);
+      const results = (j.documents || []).map((d, index) => ({ index, relevance_score: (String(d).toLowerCase().match(/[a-z]+/g) || []).filter((w) => qw.has(w)).length }));
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      return res.end(JSON.stringify({ results }));
+    }
+    if (req.url.startsWith('/v1/embeddings')) {
+      const GROUPS = [['car', 'automobile', 'vehicle'], ['wheels', 'tyres', 'tires'], ['money', 'cash', 'budget'], ['dog', 'puppy', 'hound']];
+      const vecOf = (t) => {
+        const v = new Array(64).fill(0);
+        for (const w of String(t).toLowerCase().replace(/^search_(query|document):\s*/, '').match(/[a-z]+/g) || []) {
+          const g = GROUPS.findIndex((x) => x.includes(w));
+          const key = g >= 0 ? `group${g}` : w;
+          let h = 0; for (const ch of key) h = (h * 31 + ch.charCodeAt(0)) % 64;
+          v[h] += 1;
+        }
+        return v;
+      };
+      const input = Array.isArray(j.input) ? j.input : [j.input];
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      return res.end(JSON.stringify({ data: input.map((t, index) => ({ index, embedding: vecOf(t) })) }));
+    }
+    const msgs = j.messages || [];
+    const imgs = msgs.flatMap((m) => (Array.isArray(m.content) ? m.content.filter((p) => p.type === 'image_url') : []));
+    if (imgs.length && !vision) { res.writeHead(400, { 'Content-Type': 'application/json' }); return res.end(JSON.stringify({ error: { message: 'image input is not supported by this model' } })); }
+    const last = msgs[msgs.length - 1];
+    // Tool use: "use <word>" asks for the first tool whose name contains <word>; a tool result is echoed back.
+    const strip = (t) => String(t || '').replace(/^<context>[\s\S]*?<\/context>\s*/, '');
+    const want = strip(typeof last?.content === 'string' ? last.content : '').match(/use (\w+)/);
+    const tool = want && last.role === 'user' && (j.tools || []).find((t) => t.function.name.includes(want[1]));
+    if (tool && j.stream) {
+      res.writeHead(200, { 'Content-Type': 'text/event-stream' });
+      const args = JSON.stringify({ text: 'hello from the model' });
+      res.write(`data: ${JSON.stringify({ choices: [{ delta: { tool_calls: [{ index: 0, id: 'call_1', type: 'function', function: { name: tool.function.name, arguments: args.slice(0, 10) } }] } }] })}\n\n`);
+      res.write(`data: ${JSON.stringify({ choices: [{ delta: { tool_calls: [{ index: 0, function: { arguments: args.slice(10) } }] } }] })}\n\n`);
+      res.write(`data: ${JSON.stringify({ choices: [{ delta: {}, finish_reason: 'tool_calls' }] })}\n\n`);
+      return res.end('data: [DONE]\n\n');
+    }
+    if (last?.role === 'tool' && j.stream) {
+      res.writeHead(200, { 'Content-Type': 'text/event-stream' });
+      res.write(`data: ${JSON.stringify({ choices: [{ delta: { content: `Tool said: ${last.content}` } }] })}\n\n`);
+      return res.end('data: [DONE]\n\n');
+    }
+    const fullText = typeof last?.content === 'string' ? last.content : (last?.content || []).filter((p) => p.type === 'text').map((p) => p.text).join(' ');
+    const context = (fullText.match(/^<context>\n([\s\S]*?)\n<\/context>/) || [])[1] || '';
+    const lastText = strip(fullText);
+    let reply;
+    const sys = `${msgs.filter((m) => m.role === 'system').map((m) => (typeof m.content === 'string' ? m.content : '')).join('\n')}\n${context}`;
+    const memo = sys.match(/remember about the user[^\n]*\n- ([^\n]+)/);
+    const proj = sys.match(/part of the user's project "([^"]+)"/);
+    const tags = `${memo ? ` [memory: ${memo[1].slice(0, 50)}]` : ''}${proj ? ` [project: ${proj[1]}]` : ''}${/open in an editor beside the chat/.test(sys) ? ' [sees the document]' : ''}${/found these problems/.test(sys) ? ' [fixed]' : ''}${/Exact results worked out by the app/.test(sys) ? ` [facts: ${(sys.match(/Exact results worked out by the app[^\n]*\n- ([^\n]+)/) || [])[1]}]` : ''}${(sys.match(/Instructions for this chat \(follow them\):\n([^\n]+)/) || [])[1] ? ` [chat: ${sys.match(/Instructions for this chat \(follow them\):\n([^\n]+)/)[1].slice(0, 30)}]` : ''}`;
+    if (/rigorous, impartial fact-checker/.test(sys) && /WRONGFACT/.test(lastText)) reply = 'VERDICT: Has errors\nCONFIDENCE: 85%\n### Claims\n- ❌ The sky is green — it is blue.\n### Corrections\nThe sky is blue.';
+    else if (/\bwebsite\b|full updated file/i.test(lastText) && !/rigorous|most likely|short title|careful editor|keep a short memory/.test(sys)) reply = `Here is the page.\n\n\`\`\`html\n<!doctype html>\n<html><head><title>Crumb & Co</title></head><body><header><button id="dark">Dark mode</button></header><section id="menu">Menu: sourdough £4.50. Closed Sunday.</section><section id="gallery">gallery</section><form onsubmit="event.preventDefault(); this.innerHTML='thank you'"><input type="email"></form></body></html>\n\`\`\``;
+    else if (/expert (CPA|CIA) Exam coach/.test(sys) && /practice|quiz|lesson|start/i.test(lastText) && !/rigorous|most likely|short title|keep a short memory/.test(sys)) reply = 'A quick lesson, then practice.\n\n```quiz\n' + JSON.stringify({ exam: 'CPA', section: 'FAR', topic: 'Leases', questions: [
+      { q: 'A lessee signs a lease that transfers ownership at the end of the term. How is it classified?', choices: ['Operating lease', 'Finance lease', 'Short-term lease', 'Service contract'], answer: 1, why: 'Transfer of ownership is one of the five finance-lease criteria under ASC 842.', wrong: ['Operating needs none of the criteria met.', 'Correct.', 'Short-term is 12 months or less with no purchase option.', 'A lease conveys the right to control an asset.'], topic: 'Lease classification' },
+      { q: 'Annual payments are $10,000 for 5 years. What is the total of the undiscounted payments?', choices: ['$40,000', '$45,000', '$50,000', '$55,000'], answer: 2, why: '5 × 10,000 = 50,000.', wrong: ['One payment short.', 'Not a multiple of the payment.', 'Correct.', 'Too many payments.'], topic: 'Lease measurement' },
+    ] }) + '\n```';
+    else if (/MATHBAD/.test(lastText) && !/rigorous|most likely|short title|keep a short memory/.test(sys)) reply = /found these problems/.test(sys) ? 'Working it out: 17 × 23 = 391. [fixed]' : 'Working it out: 17 × 23 = 381.';
+    else if (/JSBAD/.test(lastText) && !/rigorous|most likely|short title|keep a short memory/.test(sys)) reply = /found these problems/.test(sys) ? 'Fixed:\n```js\nfunction add(a, b) {\n  return a + b;\n}\n```' : 'Here:\n```js\nfunction add(a, b {\n  return a + b;\n}\n```';
+    else if (/most likely (want to )?ask (the assistant )?next/.test(sys)) reply = JSON.stringify([`Show an example of ${(lastText.match(/Their question: ([^\n]{0,24})/) || [])[1] || 'it'}`, 'Which option suits a beginner?', 'What should I do first?']);
+    else if (/You keep a short memory about a user/.test(sys)) reply = /\bmy\b/i.test(lastText) ? JSON.stringify([`The user mentioned: ${lastText.slice(0, 50)}`]) : '[]';
+    else if (/You make memes/.test(sys)) reply = JSON.stringify({ top: `${model} tries ${lastText.replace(/^Make a meme about: /, '')}`, bottom: 'and it goes exactly as planned', picture: 'a cat staring at a laptop' });
+    else if (/You are a careful editor/.test(sys)) reply = `Edited by ${model}: ${(lastText.split('<<<\n')[1] || '').split('\n>>>')[0].toUpperCase().slice(0, 200)}`;
+    else if (/Describe this one image/.test(lastText)) reply = `A chart showing sales rising, described by ${model}.`;
+    else if (/Describe each image/.test(lastText)) reply = imgs.map((_, i) => `### Image ${i + 1}\nA chart showing sales rising, described by ${model}.`).join('\n\n');
+    else if (/<draft number/.test(lastText)) reply = `FINAL from ${model} combining ${(lastText.match(/<draft number/g) || []).length} drafts.`;
+    else reply = `Answer from ${model}: you said "${lastText.slice(0, 40)}"${msgs.some((m) => typeof m.content === 'string' && m.content.includes('[Image 1:')) ? ' (saw image description)' : ''}${imgs.length ? ' (saw real image)' : ''}.${tags}`;
+    if (/You chair a council of three AIs/.test(sys)) reply = `AGREEMENT: 90%\nCouncil answer from ${model}.`;
+    if (/Write only the numbered steps/.test(sys)) reply = 'Step 1: read the question. Step 2: work it out.';
+    else if (/Your working for the user's latest message/.test(sys)) reply = `${reply} [steps]`;
+    const words = reply.split(/(?<= )/);
+    if (!j.stream) { res.writeHead(200, { 'Content-Type': 'application/json' }); return res.end(JSON.stringify({ choices: [{ message: { content: reply } }] })); }
+    res.writeHead(200, { 'Content-Type': 'text/event-stream' });
+    res.write(`data: ${JSON.stringify({ choices: [{ delta: { reasoning_content: 'thinking… ' } }] })}\n\n`);
+    let i = 0;
+    const t = setInterval(() => {
+      if (i < words.length) { const w = words[i++]; return res.write(`data: ${JSON.stringify({ choices: [{ delta: { content: w }, ...(j.logprobs ? { logprobs: { content: [{ token: w, logprob: /UNSURE/.test(lastText) && /\d/.test(w) ? Math.log(0.2) : -0.01 }] } } : {}) }] })}\n\n`); }
+      clearInterval(t);
+      res.write(`data: ${JSON.stringify({ choices: [{ delta: {}, finish_reason: 'stop' }], timings: { predicted_per_second: 42.5, predicted_n: words.length } })}\n\n`);
+      res.end('data: [DONE]\n\n');
+    }, Number(process.env.QS_FAKE_TOKEN_MS) || 5);
+  });
+});
+setTimeout(() => server.listen(port, '127.0.0.1'), 150);

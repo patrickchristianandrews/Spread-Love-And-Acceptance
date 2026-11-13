@@ -1,0 +1,430 @@
+// Models: installed, the curated catalog (text & vision, images & video), all of Hugging Face,
+// and cloud API connections.
+'use strict';
+
+let modelsTab = 'installed';
+let hfResults = null;
+let hfQuery = '';
+let catFilter = 'all';
+let fitsOnly = false;
+
+views.models = {
+  html() {
+    const tabs = { installed: `On this PC (${S.installed.length})`, text: 'Text & vision', media: 'Images & video', trending: '🔥 Trending now', hf: 'Search Hugging Face', api: `Connect an API (${S.providers.length})` };
+    return `<div class="page">
+      <div class="page-head"><h1>Models</h1>
+        <button class="btn" id="find-models">Find models on this PC</button><button class="btn" id="import-gguf">Import a .gguf file</button><button class="btn ghost" id="open-folder">Open models folder</button></div>
+      <p class="lede">Free, open models run on your PC: private, offline, no account. Ratings show how each one will run on <b>your</b> hardware. Not sure? Let the <a href="#" data-goto-stacks>Setup Advisor</a> choose.</p>
+      ${foundBanner()}
+      ${shownUpgrades().length || shownStackUpdates().length ? modelUpdatesHTML() : ''}
+      <div class="tabs" role="tablist">${Object.entries(tabs).map(([k, l]) => `<button class="tab ${modelsTab === k ? 'active' : ''}" data-tab="${k}" role="tab">${esc(l)}</button>`).join('')}</div>
+      ${({ installed: installedHTML, text: textHTML, media: mediaHTML, trending: trendingHTML, hf: hfHTML, api: apiHTML })[modelsTab]()}
+      ${['installed', 'text'].includes(modelsTab) ? `<div class="section sf-new"><h2>Built into Quicksilver</h2><span class="small muted">The Liquid Edition that comes with the app, its optional add-ons and its cloud partner.</span></div>${builtinModelHTML()}${addonsHTML()}` : ''}
+      ${!(shownUpgrades().length || shownStackUpdates().length) && modelsTab === 'installed' ? modelUpdatesHTML() : ''}
+    </div>`;
+  },
+  bind() {
+    if (!S.est) refreshEstimates().then(() => S.route.view === 'models' && render());
+    if (modelsTab === 'installed' && S.disk === undefined) { S.disk = null; qs.call('disk:info').then((d) => { S.disk = d; if (S.route.view === 'models' && modelsTab === 'installed') render(); }).catch(() => {}); }
+    if (!S.modelUpgrades) loadModelUpgrades().then(() => S.route.view === 'models' && $('#modal').hidden && render());
+    bindModelUpdates(); bindBuiltinModel();
+    $$('[data-tab]').forEach((b) => b.addEventListener('click', () => { modelsTab = b.dataset.tab; render(); }));
+    $$('[data-goto-stacks]').forEach((b) => b.addEventListener('click', (e) => { e.preventDefault(); go({ view: 'stacks' }); }));
+    $('#import-gguf').addEventListener('click', async () => { const m = await call('models:import'); if (m) { await refreshModels(); render(); toast(`${m.name} added${m.vision ? ' (with vision)' : ''}.`); } });
+    $('#open-folder').addEventListener('click', () => call('models:folder'));
+    loadFound();
+    $('#found-review')?.addEventListener('click', foundModal);
+    $('#find-models').addEventListener('click', async () => {
+      S.found = await call('models:found');
+      if (S.found.length) foundModal(); else toast('No other models found. Checked LM Studio, Jan, Ollama, GPT4All and Downloads.', 6000);
+      render();
+    });
+    $$('[data-get]').forEach((b) => b.addEventListener('click', async () => {
+      const m = [...S.catalog.text, ...S.catalog.media].find((x) => x.id === b.dataset.get);
+      const est = S.est?.text[m.id] || S.est?.media[m.id];
+      if (est?.fit === 'no' && !(await confirmBox(`${m.name} probably won't fit in this PC's memory (${est.label}). Download anyway?`, { yes: 'Download anyway', danger: false }))) return;
+      await download({ catalogId: m.id }, m.name); render();
+      const line = pcForecastLine(m.id); // how it will run here, said as the download starts
+      if (line) toast(`Downloading ${m.name}. ${line}`, 9000);
+    }));
+    $$('[data-remove]').forEach((b) => b.addEventListener('click', async () => {
+      const m = S.installed.find((x) => x.id === b.dataset.remove);
+      if (!(await confirmBox(`Remove ${m.name}?${m.source === 'imported' ? ' The file stays where it is.' : ` This frees ${gb(m.size)}.`}`, { yes: 'Remove' }))) return;
+      await call('models:remove', m.id); S.disk = undefined; await refreshModels(); render();
+    }));
+    $$('[data-repair]').forEach((b) => b.addEventListener('click', async () => {
+      b.disabled = true; b.textContent = 'Checking…';
+      try { const r = await call('models:repair', b.dataset.repair); S.downloads[r.id] = r; paintDownloads(); toast('Checking the files and downloading anything missing. You can keep working.'); } catch (err) { toast(err.message, 8000); }
+      render();
+    }));
+    $$('[data-use-model]').forEach((b) => b.addEventListener('change', async () => {
+      const m = S.installed.find((x) => x.id === b.dataset.useModel);
+      b.disabled = true;
+      try {
+        await qs.call('models:use', b.dataset.useModel, b.checked);
+        await refreshModels();
+        toast(b.checked ? `${m?.name || 'The model'} is in use: Quicksilver may now use it by itself.` : `${m?.name || 'The model'} is now only used when you choose it.`, 5000);
+      } catch (err) { toast(err.message, 8000); }
+      render();
+    }));
+    $$('[data-default]').forEach((b) => b.addEventListener('click', () => { S.data.prefs.defaultTarget = b.dataset.default; S.data.prefs.defaultAuto = false; S.data.prefs.defaultChosen = true; save(); render(); toast('Default model set.'); }));
+    $$('[data-cat]').forEach((b) => b.addEventListener('click', () => { catFilter = b.dataset.cat; render(); }));
+    $('#fits-only')?.addEventListener('change', (e) => { fitsOnly = e.target.checked; render(); });
+    bindHf();
+    if (modelsTab === 'trending') bindTrending();
+    bindApi();
+  },
+};
+
+// A plain summary of disk use: what the models take up, and how much room is left. Warns when the
+// drive is getting full so a download won't fail halfway.
+function diskSummaryHTML() {
+  const d = S.disk;
+  const modelsBytes = S.installed.reduce((t, m) => t + (m.size || 0), 0);
+  const low = d && d.freeBytes < 20 * 1024 ** 3;
+  const freeTxt = d ? `${gb(d.freeBytes)} free of ${gb(d.totalBytes)}` : 'checking free space…';
+  return `<div class="card set-card" style="margin-bottom:12px"><div class="row" style="align-items:baseline"><b>💾 Storage</b><span class="grow"></span><span class="small muted">Your models use <b>${gb(modelsBytes)}</b> · ${freeTxt}</span></div>
+    ${d && d.totalBytes ? `<div class="bar" style="margin-top:8px;height:8px"><i style="width:${Math.min(100, Math.round(((d.totalBytes - d.freeBytes) / d.totalBytes) * 100))}%"></i></div>` : ''}
+    ${low ? '<div class="small" style="color:var(--danger);margin-top:6px">⚠️ Low on space. Remove models you don\'t use (the Remove button next to each) before downloading large ones.</div>' : '<div class="small muted" style="margin-top:6px">Remove any model with its Remove button to free space. Damaged downloads show a Repair button.</div>'}</div>`;
+}
+
+// Models in use: which chat models Quicksilver may use by itself. A chat always uses the model
+// you chose for it, or the members of its stack or fusion; nothing else on this PC joins in
+// unless it is ticked here. (Models from other apps start unticked.)
+function modelsInUseHTML() {
+  const list = S.installed.filter((m) => m.kind === 'text');
+  if (!list.length) return '';
+  const def = resolveTarget(null, null);
+  const team = new Set(teamTargets(def));
+  const defStack = S.stacks.find((x) => `stack:${x.id}` === def);
+  const defName = defStack ? defStack.name : 'your default model';
+  const lp = S.catalog?.liquidPro || {};
+  const proText = new Set([lp.brain, lp.closer, lp.thinker, lp.muse].filter(Boolean));
+  const inStacks = (t) => S.stacks.filter((s) => `stack:${s.id}` !== def && teamTargets(`stack:${s.id}`).includes(t)).map((s) => s.name);
+  // The default's own models first, then ticked ones, then the rest, by name.
+  // The default's own models: locked on. In the Liquid Edition those are the models that come
+  // with it (Pro: its line-up); a helper that joined because you ticked it can be unticked.
+  const ownOf = (m) => team.has(`local:${m.id}`) && (!isLiquidStack(defStack) || liquidLocked(m) || (defStack.id === 'quicksilver-pro' && proText.has(m.catalogId)));
+  const single = Boolean(def) && !def.startsWith('stack:');
+  const rank = (m) => (ownOf(m) ? 0 : m.inUse ? 1 : 2);
+  const rows = [...list].sort((a, b) => rank(a) - rank(b) || a.name.localeCompare(b.name)).map((m) => {
+    const t = `local:${m.id}`;
+    const own = ownOf(m);
+    const helper = team.has(t) && !own;
+    const on = own || m.inUse;
+    const also = inStacks(t);
+    const where = m.source === 'imported' ? (m.from ? `from ${m.from}` : 'imported') : liquidLocked(m) ? 'comes with Quicksilver' : 'downloaded here';
+    const role = own ? `🔒 Part of ${esc(defName)}` : helper && on ? `Ticked: helps ${esc(defName)}` : also.length ? `Also in ${esc(also.slice(0, 2).join(', '))}${also.length > 2 ? '…' : ''}` : on ? 'Ticked by you' : single && liquidLocked(m) ? 'Built in: may step in' : 'Only when you choose it';
+    return `<label class="pick-row ${on ? 'on' : ''}"><input type="checkbox" data-use-model="${esc(m.id)}" ${on ? 'checked' : ''} ${own ? 'disabled' : ''} aria-label="Use ${esc(m.name)}">
+      <span class="grow"><b>${esc(m.name)}</b>${m.vision ? ' <span title="Can see photos and video">👁</span>' : ''}${liquidOk(t) ? ' <span class="badge b-lav">uncensored</span>' : ''}<div class="small muted">${gb(m.size)} · ${esc(where)}</div></span>
+      <span class="small muted">${role}</span></label>`;
+  }).join('');
+  const ticked = list.filter((m) => m.inUse && !ownOf(m)).length;
+  return `<div class="card set-card" id="models-in-use" style="margin-bottom:12px">
+    <div class="row" style="align-items:baseline"><b>✅ Models in use</b><span class="grow"></span><span class="small muted">${team.size ? `${esc(defName)}${ticked ? ` + ${ticked} ticked` : ', nothing else'}` : `${ticked} ticked`}</span></div>
+    <p class="small muted" style="margin:6px 0 10px">A chat uses the model you chose for it, or the members of its stack or fusion, and nothing else on this PC. Tick a model to let Quicksilver also use it by itself: Automatic may pick it, it can double-check answers and sit on the Council, and an uncensored one helps the Liquid Edition. Unticked models are only used when you choose them (as a chat's model, or in a stack you build).${single ? ' Your default is a single model, so with Automatic on Quicksilver\'s own built-in models and your stacks may still step in (to read a photo it can\'t see, or for a question another answers better); with a stack or fusion as the default, nothing else does.' : ''}</p>
+    <div class="pick-list">${rows}</div>
+  </div>`;
+}
+
+function installedHTML() {
+  if (!S.installed.length) return `<div class="notice info">Nothing installed yet. Start with the <a href="#" data-goto-stacks>Setup Advisor</a>, or browse <b>Text & vision</b>.</div>`;
+  const kinds = { text: '💬 Text & vision', image: '🎨 Images', video: '🎬 Video', embed: '🔎 Smarter search', rerank: '🔎 Sharper search' };
+  const onlyStarter = S.installed.some((m) => m.kind === 'text') && S.installed.filter((m) => m.kind === 'text').every((m) => m.source === 'bundled');
+  const note = onlyStarter ? '<div class="notice info" style="margin-bottom:12px"><b>💡 Only the starter models so far.</b> They are limited on their own; download stronger ones under <b>Text &amp; vision</b>, or let the <a href="#" data-goto-stacks>Setup Advisor</a> pick a team for your PC. To let Quicksilver use one by itself, tick it under <b>Models in use</b> below.</div>' : '';
+  return note + diskSummaryHTML() + modelsInUseHTML() + Object.entries(kinds).map(([k, label]) => {
+    const list = S.installed.filter((m) => m.kind === k);
+    if (!list.length) return '';
+    return `<div class="section"><h2>${label}</h2></div><table class="list"><thead><tr><th>Model</th><th>Size</th><th>Abilities</th><th>On your PC</th><th></th></tr></thead><tbody>
+      ${list.map((m) => {
+        const est = k === 'text' ? S.est?.text[m.catalogId] : S.est?.media[m.catalogId];
+        const def = S.data.prefs.defaultTarget === `local:${m.id}`;
+        return `<tr><td><b>${esc(m.name)}</b>${m.source === 'imported' ? ` <span class="badge b-lemon">${esc(m.from ? `from ${m.from}` : 'imported')}</span>` : m.source === 'bundled' ? ' <span class="badge b-mint">included</span>' : ''}</td><td>${gb(m.size)}</td>
+          <td>${m.vision ? '<span class="badge b-sky">👁 sees images</span>' : ''}${S.catalog.text.find((c) => c.id === m.catalogId)?.reasoning ? ' <span class="badge b-lav">🧠 thinks</span>' : ''}</td>
+          <td>${est ? rateBadge(est, k === 'text' ? 'text' : 'media') : '<span class="small muted">n/a</span>'}${(S.running || []).some((x) => x.ready && x.file === m.files?.model) ? ` <span class="badge b-mint" title="Loaded in memory">● Running</span> <button class="btn small ghost" data-stop-model="${esc(m.files.model)}" title="Stop it and free its memory; it loads again when needed">Stop</button>` : ''}</td>
+          <td class="row" style="justify-content:flex-end">${k === 'text' ? `${boostBtn(`local:${m.id}`)}${def ? '<span class="badge b-mint">default</span>' : `<button class="btn small" data-default="local:${m.id}">Make default</button>`}` : ''}${!['imported', 'bundled'].includes(m.source) ? `<button class="btn small" data-repair="${m.id}" title="Check the files and download again anything missing or damaged">Repair</button>` : ''}${liquidLocked(m) ? LOCK_BADGE : `<button class="btn small danger" data-remove="${m.id}">Remove</button>`}</td></tr>`;
+      }).join('')}</tbody></table>`;
+  }).join('');
+}
+
+// What a model produces, how accurate it is, and its rating for each kind of work (out of 5).
+const ACC_LABELS = ['Basic', 'Basic', 'Fair', 'Good', 'Very high', 'Excellent'];
+function modelAccuracy(m, kind) {
+  const q = kind === 'text' ? Math.max(m.jobs?.general ?? 0, m.jobs?.office ?? 0, m.jobs?.research ?? 0) : m.quality ?? 0;
+  const dots = Math.max(1, Math.min(5, Math.round(q / 2)));
+  return { q, dots, label: ACC_LABELS[dots] };
+}
+function modelOutput(m, kind) {
+  if (kind !== 'text') {
+    const d = m.defaults || {};
+    if (m.kind === 'video') return `Video clips, about ${Math.round((d.frames || 33) / (d.fps || 16))} s at ${d.width || 832}×${d.height || 480}${m.animate ? '; also animates photos' : ''}`;
+    if (m.category === 'edit') return 'Edited photos, from a description of the change';
+    return `Pictures up to ${d.width || 1024}×${d.height || 1024}${m.edit === 'img2img' ? '; can redraw a photo' : ''}`;
+  }
+  return ['Text answers', m.vision && 'reads photos & screenshots', m.reasoning && 'shows its reasoning', (m.jobs?.coding ?? 0) >= 7 && 'strong code', m.ctx >= 100000 && `long documents (${Math.round(m.ctx / 1024)}K)`].filter(Boolean).join(' · ');
+}
+function modelRatings(m, kind) {
+  const star = (v) => Math.max(0.5, Math.round(v) / 2);
+  if (kind !== 'text') return [['Quality', star(m.quality ?? 5)]];
+  const j = m.jobs || {};
+  const r = [['Everyday', star(j.general ?? 5)], ['Writing', star(Math.min(10, (j.general ?? 5) + (/Google|Meta|Mistral|Anthropic/.test(m.maker || '') ? 1 : 0) - (m.category === 'coding' ? 2 : 0)))], ['Research', star(j.research ?? 5)], ['Documents', star(j.office ?? 5)], ['Coding', star(j.coding ?? 5)]];
+  if (m.vision) r.push(['Photos', star(j.vision ?? 5)]);
+  return r;
+}
+function modelProfileHTML(m, kind) {
+  const acc = modelAccuracy(m, kind);
+  return `<div class="mp">
+    <div class="mp-row"><span class="mp-k">Output</span><span class="mp-v">${esc(modelOutput(m, kind))}</span></div>
+    <div class="mp-row"><span class="mp-k">Accuracy</span><span class="mp-v"><span class="acc-dots">${'●'.repeat(acc.dots)}<i>${'●'.repeat(5 - acc.dots)}</i></span> ${acc.label}</span></div>
+    <div class="mp-rates">${modelRatings(m, kind).map(([k, v]) => `<span class="mp-rate"><span>${k}</span><b>${tenText(v)}</b></span>`).join('')}</div>
+    ${kind === 'text' ? scoreChipsHTML(scoresFor(m.id)) || '<div class="sc-row"><span class="sc-k">Tested</span><span class="small muted">No published test scores for this model.</span></div>' : ''}
+    ${createRowHTML(modelCreate(m), { all: true })}
+  </div>`;
+}
+
+function modelCard(m, est, kind) {
+  const inst = S.installed.some((x) => x.catalogId === m.id);
+  const tags = [];
+  if (isFeatured(m.id)) tags.push('<span class="badge b-lemon" title="One of the best models right now that runs on this PC; this list updates online">⭐ Featured</span>');
+  if (m.remote) tags.push('<span class="badge b-mint">🆕 New</span>');
+  if (m.vision) tags.push('<span class="badge b-sky">👁 vision</span>');
+  if (m.reasoning) tags.push('<span class="badge b-lav">🧠 thinks</span>');
+  if (m.activeGB) tags.push('<span class="badge b-mint">⚡ mixture-of-experts</span>');
+  if (m.ctx >= 100000) tags.push(`<span class="badge b-lemon">📜 ${Math.round(m.ctx / 1024)}K context</span>`);
+  if (m.edit === 'instruct') tags.push('<span class="badge b-peach">🪄 edit by instruction</span>');
+  if (m.animate) tags.push('<span class="badge b-peach">📷→🎬 animates photos</span>');
+  if (m.uncensored) tags.push('<span class="badge b-lav" title="No content filter">🔓 uncensored</span>');
+  if ((S.catalog?.liquid || []).includes(m.id)) tags.push('<span class="badge b-mint" title="Part of Quicksilver Liquid Edition: comes with it and stays installed">💧 in the Liquid Edition</span>');
+  else if ((S.catalog?.liquidAddons || []).some((a) => a.id === m.id)) tags.push('<span class="badge b-sky" title="Optional: fills a gap in the Liquid Edition and joins its crew once downloaded">💧 suggested Liquid add-on</span>');
+  if (m.id === (S.catalog?.picks?.liquid?.pictures || 'lustify')) tags.push('<span class="badge b-mint" title="The Liquid Edition makes its pictures with this model">💧 Liquid Edition pictures</span>');
+  if (/^wan2\.2/.test(m.id)) tags.push(`<span class="badge b-mint" title="The Liquid Edition makes its videos with Wan 2.2">💧 Liquid Edition videos${m.id === (S.catalog?.picks?.liquid?.videos || 'wan2.2-5b') ? '' : ' (fast)'}</span>`);
+  if (m.style === 'anime') tags.push('<span class="badge b-peach">🎌 anime</span>');
+  if (m.promptPrefix) tags.push('<span class="badge b-sky" title="Quicksilver adds this model\'s quality tags (score_9…) to your prompts by itself">🏷 Pony tags added for you</span>');
+  if (m.license) tags.push(`<span class="badge b-lemon" title="License">📄 ${esc(m.license)}</span>`);
+  return `<div class="card model-card" data-model-card="${esc(m.id)}" tabindex="0" title="Click for details">
+    <div class="row"><h3 class="grow">${esc(m.name)}</h3><span class="small" style="font-weight:800">${(m.sizeGB + (m.mmprojGB || 0)).toFixed(1)} GB</span></div>
+    <div class="meta" style="margin:4px 0 8px">${esc(m.maker)}${m.params ? ` · ${esc(m.params)} parameters` : ''}</div>
+    <p class="desc" style="margin:0 0 10px">${esc(m.blurb)}</p>
+    ${modelProfileHTML(m, kind)}
+    <div class="row" style="margin-bottom:10px">${tags.join('')}</div>
+    <div class="row" style="margin-bottom:${kind === 'text' && est?.wordsPerSec ? 2 : 12}px"><span class="small" style="font-weight:700">On your PC:</span>${rateBadge(est, kind)}</div>
+    ${kind === 'text' && est?.wordsPerSec ? timesHTML(WORDS.chat / Math.max(0.1, est.wordsPerSec), { label: false }) : ''}
+    <div class="row">${S.downloads[m.id] ? downloadBox(m.id) : inst ? '<span class="badge b-mint">✓ Installed</span>' : `<button class="btn primary small" data-get="${esc(m.id)}">Download</button>`}<span class="grow"></span>${kind === 'text' ? boostBtn(m.id) : ''}<button class="btn small ghost" data-details="${esc(m.id)}">${est?.rating === 'wont' ? 'Why? What would it need?' : 'Details'}</button></div>
+  </div>`;
+}
+
+function filterBar(cats) {
+  return `<div class="row" style="margin-bottom:16px">${[['all', { label: 'All' }], ...Object.entries(cats)].map(([k, c]) => `<button class="btn small ${catFilter === k ? 'on' : ''}" data-cat="${k}">${esc(c.label)}</button>`).join('')}
+    <label class="row small" style="margin-left:auto;font-weight:700"><input type="checkbox" id="fits-only" ${fitsOnly ? 'checked' : ''}> Only show models that fit my PC</label></div>
+    <p class="small muted" id="feat-note" style="margin:-8px 0 14px">⭐ Featured marks the best models right now that run on this PC${featuredHidden() ? ` (${featuredHidden()} other top pick${featuredHidden() > 1 ? 's are' : ' is'} not marked because ${featuredHidden() > 1 ? 'they' : 'it'} will not fit on it)` : ''}. The picks update online.</p>`;
+}
+
+function textHTML() {
+  const cats = S.catalog.textCategories;
+  if (catFilter !== 'all' && !cats[catFilter]) catFilter = 'all';
+  const order = { great: 0, good: 1, ok: 2, slow: 3, wont: 4 };
+  return `${filterBar(cats)}${Object.entries(cats).filter(([k]) => catFilter === 'all' || catFilter === k).map(([k, c]) => {
+    const list = S.catalog.text.filter((m) => m.category === k && !m.retired && (!fitsOnly || S.est?.text[m.id]?.fit !== 'no'));
+    if (!list.length) return '';
+    return `<div class="section"><h2>${esc(c.label)} <span class="small muted" style="font-weight:600">· ${list.length}</span></h2>${c.note ? `<span class="small muted">${esc(c.note)}</span>` : ''}</div><div class="cards">${list.sort((a, b) => (order[S.est?.text[a.id]?.rating] ?? 5) - (order[S.est?.text[b.id]?.rating] ?? 5) || isFeatured(b.id) - isFeatured(a.id) || a.sizeGB - b.sizeGB).map((m) => modelCard(m, S.est?.text[m.id], 'text')).join('')}</div>`;
+  }).join('')}`;
+}
+
+function mediaHTML() {
+  const cats = S.catalog.mediaCategories;
+  if (catFilter !== 'all' && !cats[catFilter]) catFilter = 'all';
+  return `<div class="notice info" style="margin-bottom:14px">Image and video models run with stable-diffusion.cpp on your graphics card. Video generation needs a strong card (8 GB+); on the processor alone it takes a very long time.</div>
+    ${filterBar(cats)}${Object.entries(cats).filter(([k]) => catFilter === 'all' || catFilter === k).map(([k, c]) => {
+      const list = S.catalog.media.filter((m) => !m.retired && m.category === k && (!fitsOnly || S.est?.media[m.id]?.fit !== 'no'));
+      if (!list.length) return '';
+      return `<div class="section"><h2>${esc(c.icon || '')} ${esc(c.label)} <span class="small muted" style="font-weight:600">· ${list.length}</span></h2>${c.note ? `<span class="small muted">${esc(c.note)}</span>` : ''}</div><div class="cards">${list.map((m) => modelCard(m, S.est?.media[m.id], 'media')).join('')}</div>`;
+    }).join('')}`;
+}
+
+// ---------- trending now (Hugging Face, refreshed every few hours) ----------
+
+let trend = null;      // { at, list } or { error }
+let trendType = 'all';
+let trendAll = false;  // also show what will not run on this PC
+// This PC in a few words, for the note that says what the lists are matched to.
+function pcLine() {
+  const h = S.est?.hardware;
+  if (!h) return 'this PC';
+  return [h.vramGB ? `${h.gpuName || 'graphics card'}, ${h.vramGB.toFixed(0)} GB video memory` : 'no graphics card', `${h.ramGB.toFixed(0)} GB memory`].join(', ');
+}
+const TREND_TYPES = { all: 'All', general: 'Everyday', reasoning: 'Reasoning', coding: 'Coding', vision: 'Vision', open: 'Uncensored' };
+async function loadTrending(force = false) {
+  try { trend = await qs.call('models:trending', force); } catch (err) { trend = { error: err.message }; }
+  if (S.route.view === 'models' && modelsTab === 'trending') render();
+}
+// Keep it fresh while the app is open.
+setInterval(() => { if (!S.config?.offline) loadTrending(false); }, 60 * 60 * 1000);
+
+function trendingHTML() {
+  if (!trend) { loadTrending(false); return '<div class="empty">Loading what\'s trending…</div>'; }
+  if (trend.error) return `<div class="notice">Couldn't load trending models: ${esc(trend.error)} <button class="btn small" id="tr-refresh">Try again</button></div>`;
+  const ago = Math.max(1, Math.round((Date.now() - trend.at) / 60000));
+  // Only what runs on this PC, unless you ask to see the rest. A model whose size is not known
+  // cannot be promised, so it counts as hidden too.
+  const fits = (m) => Boolean(m.est) && m.est.fit !== 'no';
+  const mine = trend.list.filter((m) => trendAll || fits(m));
+  const hidden = trend.list.length - trend.list.filter(fits).length;
+  const list = mine.filter((m) => trendType === 'all' || m.type === trendType);
+  const rate = (e) => (e ? `<span class="badge rate-${e.rating}">${esc(e.label)}${e.wordsPerSec ? ` · ~${Math.round(e.wordsPerSec)} words/s` : ''}</span>` : '<span class="small muted">size unknown</span>');
+  return `<div class="row" style="margin-bottom:12px;flex-wrap:wrap"><p class="muted grow" style="margin:0">The open models people are downloading most on Hugging Face right now, newest hits first. Updated ${ago < 60 ? `${ago} min` : `${Math.round(ago / 60)} h`} ago; it refreshes by itself every few hours.</p><button class="btn small" id="tr-refresh">↻ Refresh</button></div>
+    <div class="notice info" id="tr-fit" style="margin-bottom:12px">${trendAll ? 'Showing everything that is trending, including what will not run on this PC.' : `<b>Showing only what runs on this PC</b> (${esc(pcLine())}).${hidden ? ` ${hidden} more ${hidden > 1 ? 'are' : 'is'} trending but hidden: too big for it, or the size is not known.` : ''}`} <button class="btn small" id="tr-all">${trendAll ? 'Only what runs here' : 'Show the hidden ones too'}</button></div>
+    <div class="row" style="margin-bottom:14px;flex-wrap:wrap">${Object.entries(TREND_TYPES).map(([k, l]) => `<button class="btn small ${trendType === k ? 'on' : ''}" data-trtype="${k}">${l}${k === 'all' ? '' : ` · ${mine.filter((m) => m.type === k).length}`}</button>`).join('')}</div>
+    ${list.length ? `<table class="list"><thead><tr><th>#</th><th>Model</th><th>Type</th><th>Size</th><th>On your PC</th><th>Popularity</th><th></th></tr></thead><tbody>${list.map((m, i) => `<tr>
+      <td class="muted">${i + 1}</td>
+      <td><b>${esc(m.repo.split('/').pop())}</b><div class="small muted">${esc(m.repo.split('/')[0])}${m.created ? ` · new ${esc(String(m.created).slice(0, 10))}` : ''}${m.catalogId ? ' · <span class="badge b-mint">in our catalog</span>' : ''}</div></td>
+      <td><span class="badge b-lav">${esc(TREND_TYPES[m.type] || m.type)}</span></td>
+      <td>${m.sizeGB ? `~${m.sizeGB} GB` : '—'}</td>
+      <td>${rate(m.est)}</td>
+      <td class="small">❤ ${m.likes.toLocaleString()} · ⬇ ${m.downloads.toLocaleString()}</td>
+      <td><button class="btn small primary" data-hf="${esc(m.repo)}">Download…</button></td></tr>`).join('')}</tbody></table>` : '<div class="empty">Nothing trending in this group runs on this PC right now.</div>'}
+    ${trendOthersHTML()}${trendSpacesHTML()}`;
+}
+// Everything else trending on Hugging Face, by what it makes. For looking, with a link to each:
+// Quicksilver runs the ones marked "in Quicksilver"; the rest are not claimed to run here.
+const TREND_OTHER = { pictures: '🖼️ Pictures', editing: '🪄 Photo editing', video: '🎬 Video', animate: '✨ Photo to video', voice: '🎙️ Voices', listening: '👂 Speech to text', music: '🎵 Music & sound', search: '🔎 Search' };
+function trendOthersHTML() {
+  const g = trend?.others;
+  if (!g || !Object.values(g).some((l) => l.length)) return '';
+  // These kinds run here only from the catalog, so "runs on this PC" means: in it, and it fits.
+  const fits = (m) => m.inCatalog && (!m.catalogId || S.est?.media?.[m.catalogId]?.fit !== 'no');
+  const shown = Object.entries(TREND_OTHER).map(([k, label]) => [k, label, (g[k] || []).filter((m) => trendAll || fits(m)).slice(0, 8)]).filter(([, , l]) => l.length);
+  const hidden = Object.values(g).flat().filter((m) => !fits(m)).length;
+  return `<div class="section sf-new"><h2>Also trending on Hugging Face</h2><span class="small muted">Pictures, video, voice, music and search models people are picking up right now. ${trendAll ? 'Everything is listed; only the ones marked "in Quicksilver" run here.' : `Only the ones Quicksilver can run on this PC are listed.${hidden ? ` ${hidden} more are hidden: not in Quicksilver yet, or too big for this PC.` : ''}`}</span></div>
+    ${shown.length ? `<div class="cards" style="grid-template-columns:repeat(auto-fill,minmax(280px,1fr))">${shown.map(([, label, l]) => `<div class="card"><h3 style="margin:0 0 8px">${label}</h3>
+      ${l.map((m, i) => `<div class="row small" style="gap:6px;margin:3px 0"><span class="muted">${i + 1}</span><a class="grow" href="https://huggingface.co/${esc(m.repo)}" title="Opens ${esc(m.repo)} on Hugging Face${m.license ? ` · license: ${esc(m.license)}` : ''}">${esc(m.repo.split('/').pop())}</a>${m.inCatalog ? `<span class="badge b-mint">in Quicksilver</span>` : ''}<span class="muted">❤ ${Number(m.likes).toLocaleString()}</span></div>`).join('')}</div>`).join('')}</div>` : '<div class="empty">None of these that are trending right now can run on this PC yet.</div>'}`;
+}
+// Trending Spaces: small apps hosted on Hugging Face. They run on its computers, in the browser,
+// so they work whatever this PC is. Links only: what you type there goes to that app's owner.
+function trendSpacesHTML() {
+  const l = trend?.spaces || [];
+  if (!l.length) return '';
+  return `<div class="section sf-new" id="tr-spaces"><h2>🚀 Trending Spaces</h2><span class="small muted">Small apps people have put on Hugging Face. They run on Hugging Face's computers, not on yours, so they work on any PC. Each opens in your browser. They are online and not private: what you type or upload goes to whoever made the app.</span></div>
+    <div class="cards" style="grid-template-columns:repeat(auto-fill,minmax(240px,1fr))">${l.map((s) => `<div class="card" style="padding:10px 12px"><a href="https://huggingface.co/spaces/${esc(s.id)}" title="Opens this Space on Hugging Face in your browser"><b>${esc(s.id.split('/').pop())}</b> ↗</a><div class="small muted">${esc(s.id.split('/')[0])} · ❤ ${Number(s.likes).toLocaleString()} <span class="badge b-sky">online</span></div></div>`).join('')}</div>`;
+}
+function bindTrending() {
+  $('#tr-refresh')?.addEventListener('click', (e) => { e.target.textContent = 'Refreshing…'; loadTrending(true); });
+  $('#tr-all')?.addEventListener('click', () => { trendAll = !trendAll; render(); });
+  $$('[data-trtype]').forEach((b) => b.addEventListener('click', () => { trendType = b.dataset.trtype; render(); }));
+}
+
+// ---------- Hugging Face search ----------
+
+function hfHTML() {
+  return `<p class="muted">Search every GGUF model on Hugging Face: thousands of models, including the newest releases. Pick a size (quantization) that fits your PC; smaller sizes run faster but are slightly less accurate.</p>
+    <form class="row" id="hf-form" style="margin-bottom:16px"><input id="hf-q" type="search" class="grow" placeholder="e.g. Qwen3, Llama, Mistral, DeepSeek, medical, legal, German…" value="${esc(hfQuery)}"><button class="btn primary">Search</button></form>
+    <div id="hf-out">${hfResults === 'loading' ? '<div class="empty">Searching…</div>' : Array.isArray(hfResults) ? (hfResults.length ? `<table class="list"><thead><tr><th>Model</th><th>Downloads</th><th>Tags</th><th></th></tr></thead><tbody>${hfResults.map((r) => `<tr><td><b>${esc(r.repo)}</b></td><td>${r.downloads.toLocaleString()}</td><td>${r.tags.map((t) => `<span class="badge b-lav">${esc(t)}</span>`).join(' ')}</td><td><button class="btn small" data-hf="${esc(r.repo)}">Choose size…</button></td></tr>`).join('')}</tbody></table>` : '<div class="empty">No GGUF models found.</div>') : ''}</div>`;
+}
+
+function bindHf() {
+  $('#hf-form')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    hfQuery = $('#hf-q').value.trim();
+    hfResults = 'loading'; render();
+    try { hfResults = await qs.call('models:search', hfQuery); } catch (err) { hfResults = []; toast(err.message, 6000); }
+    render();
+  });
+  $$('[data-hf]').forEach((b) => b.addEventListener('click', () => chooseQuant(b.dataset.hf)));
+}
+
+async function chooseQuant(repo) {
+  const box = openModal(`<h2>${esc(repo)}</h2><div class="empty">Reading the file list…</div>`);
+  let info;
+  try { info = await qs.call('models:options', repo); } catch (err) { box.innerHTML = `<h2>${esc(repo)}</h2><div class="notice">${esc(err.message)}</div><div class="modal-actions"><button class="btn" data-close>Close</button></div>`; $$('[data-close]', box).forEach((x) => x.addEventListener('click', closeModal)); return; }
+  const hw = S.est?.hardware || { ramGB: 8, vramGB: 0 };
+  const budget = Math.max(hw.vramGB || 0, 0) + hw.ramGB * 0.8 - 2;
+  box.innerHTML = `<h2>${esc(repo)}</h2>
+    <p class="help">${info.mmproj ? '👁 Includes vision: it can see images. ' : ''}Q4_K_M is the usual best balance of size and accuracy.</p>
+    <table class="list"><thead><tr><th>Size option</th><th>Download</th><th>Fits?</th><th></th></tr></thead><tbody>
+    ${info.options.slice(0, 14).map((o) => { const g = o.size / 1024 ** 3; const fit = g + 0.8 <= (hw.vramGB || 0) * 0.92 ? '<span class="badge rate-great">fits graphics card</span>' : g + 1 <= budget ? '<span class="badge rate-ok">fits memory</span>' : '<span class="badge rate-wont">too big</span>'; return `<tr><td><b>${esc(o.quant)}</b>${o.files.length > 1 ? ` <span class="small muted">(${o.files.length} parts)</span>` : ''}</td><td>${gb(o.size)}</td><td>${fit}</td><td><button class="btn small primary" data-q="${esc(o.quant)}">Download</button></td></tr>`; }).join('')}
+    </tbody></table><div class="modal-actions"><button class="btn" data-close>Cancel</button></div>`;
+  $$('[data-close]', box).forEach((x) => x.addEventListener('click', closeModal));
+  $$('[data-q]', box).forEach((x) => x.addEventListener('click', async () => { closeModal(); await download({ repo, quant: x.dataset.q }, repo); modelsTab = 'installed'; render(); }));
+}
+
+// ---------- API connections ----------
+
+const FREE_BADGE = {
+  free: '<span class="badge b-mint" title="Has a free plan">✓ Free</span>',
+  some: '<span class="badge b-lemon" title="Free credits or some free models, then paid">◐ Free to start, then paid</span>',
+  local: '<span class="badge b-mint">✓ Free · on this PC</span>',
+  paid: '<span class="badge b-peach">$ Paid</span>',
+};
+
+function apiHTML() {
+  return `<p class="muted">Optional. Connect cloud AI services to use their models next to your local ones, as the lead of a team, as your double-checker, or for image generation. Keys are encrypted on this PC and only sent to that service.</p>
+    ${fusionHTML()}
+    ${S.providers.length ? `<div class="section"><h2>Connected (${S.providers.length})</h2><span class="small muted">Connect as many as you like, even two accounts with the same service: each appears separately in every model menu.</span></div><div class="cards">${S.providers.map((p) => `<div class="card">
+      <div class="row"><h3 class="grow">${esc(p.name)}</h3>${p.hasKey || p.noKey ? '<span class="badge b-mint">✓ connected</span>' : '<span class="badge b-pink">needs key</span>'}</div>
+      <div class="meta" style="margin:4px 0 8px">${esc(p.baseUrl)}</div>
+      <div class="row small" style="margin-bottom:10px">${(p.models || []).slice(0, 8).map((m) => `<span class="badge b-lav">${esc(m)}</span>`).join('')}${(p.models || []).length > 8 ? `<span class="small muted">+${p.models.length - 8} more</span>` : ''}${(p.imageModels || []).map((m) => `<span class="badge b-peach">🎨 ${esc(m)}</span>`).join('')}</div>
+      <div class="row"><button class="btn small" data-api-refresh="${p.id}">Refresh models</button><button class="btn small" data-api-edit="${p.id}">Edit</button><button class="btn small danger" data-api-del="${p.id}">Remove</button></div>
+    </div>`).join('')}</div>` : ''}
+    ${S.providers.length > 1 ? '<div class="notice info" style="margin-bottom:12px">☁️ <b>Several cloud AIs connected.</b> On Automatic, Quicksilver picks the best one for each question — a strong coder for code, a research model for research, and so on — and your 👍/👎 refine the choice over time. Pick one by hand at the top of any chat to override it.</div>' : ''}
+    <div class="section"><h2>Add a connection</h2><button class="btn small" data-api-dir="all" title="Every service in one list: by task, free or paid, what the free plan gives you, with a link to each">📒 API directory: by task, free vs paid</button><span class="small muted">Every cloud AI that works with Quicksilver, marked free or paid, with the best model to use. <a href="#" data-guide="apis">Which should I choose? What's a dev plan? Calculator: alone vs through Quicksilver</a></span></div>
+    <div id="presets"></div>`;
+}
+
+// Fusion: combine any AIs (on this PC and in the cloud) into one that answers as a team.
+function fusionHTML() {
+  return `<div class="card fusion-card"><div class="row"><span class="emoji-badge">⚗️</span><div class="grow"><b>Mix cloud AIs with your own models in a Fusion</b>
+      <div class="small muted">Connected cloud AIs can be fused with the models on this PC into one AI. Fusions live on their own tab under Stacks &amp; Fusion.</div></div>
+      <button class="btn" id="fusion-open">Open ⚗️ Fusion</button></div></div>`;
+}
+document.addEventListener('click', (e) => {
+  if (e.target.closest('#fusion-open')) { stacksTab = 'fusion'; go({ view: 'stacks' }); return; }
+  const f = e.target.closest('[data-fusion-chat]');
+  if (f) { newChat(); const c = chatById(S.route.id); if (c) { c.target = `stack:${f.dataset.fusionChat}`; save(); render(); } }
+});
+
+async function bindApi() {
+  if (modelsTab !== 'api') return;
+  const presets = await qs.call('providers:presets');
+  const box = $('#presets');
+  if (!box) return;
+  // Free options first, so people can try cloud models without paying.
+  const groups = [['Free', (p) => p.free === 'free'], ['Free to start, then paid', (p) => p.free === 'some'], ['Paid', (p) => p.free === 'paid'], ['Other', (p) => !p.free]];
+  box.innerHTML = `<p class="small muted" style="margin:-4px 0 12px">Free plans have daily limits and can change; each card links to the current prices.</p>` + groups.map(([title, test]) => {
+    const list = Object.entries(presets).filter(([, p]) => test(p));
+    return list.length ? `<h3 class="small muted" style="margin:14px 0 8px;text-transform:uppercase;letter-spacing:.05em">${title}</h3><div class="cards" style="grid-template-columns:repeat(auto-fill,minmax(250px,1fr))">${list.map(([k, p]) => `<button class="card" data-preset="${k}" style="text-align:left">
+      <div class="row"><h3 class="grow">${esc(p.name)}</h3>${FREE_BADGE[p.free] || ''}</div>
+      ${devBadgeHTML(k) ? `<div style="margin-top:6px">${devBadgeHTML(k)}</div>` : ''}
+      <div class="small muted" style="font-weight:600;margin-top:6px">${esc(p.freeNote || (k === 'custom' ? 'Any OpenAI-compatible endpoint' : 'Needs an API key'))}</div>
+      ${p.keyUrl ? `<div class="small" style="margin-top:6px">🔑 <a href="${esc(p.keyUrl)}" title="Opens ${esc(p.keyUrl)}">Get your API key →</a></div>` : ''}
+      ${p.best ? `<div class="small" style="margin-top:6px">⭐ <b>Best to link:</b> <code>${esc(p.best)}</code>${p.bestWhy ? ` <span class="muted">· ${esc(p.bestWhy)}</span>` : ''}</div>` : ''}
+      ${scoreChipsHTML(cloudScoresFor(k), { label: 'Tested', note: cloudScoresFor(k)?.model ? `Scores of ${cloudScoresFor(k).model}.` : '' })}
+      ${(p.imageModels || []).length ? createRowHTML(createRatings(p.imageModels.map((x) => ({ cloudImage: x })))) : ''}
+      ${S.providers.some((x) => x.preset === k) ? '<div class="small" style="margin-top:4px"><span class="badge b-mint">✓ connected</span> · click to connect another account</div>' : ''}</button>`).join('')}</div>` : '';
+  }).join('');
+  $$('[data-preset]').forEach((b) => b.addEventListener('click', () => editProvider({ preset: b.dataset.preset }, presets)));
+  $$('[data-api-edit]').forEach((b) => b.addEventListener('click', () => editProvider(S.providers.find((p) => p.id === b.dataset.apiEdit), presets)));
+  $$('[data-api-del]').forEach((b) => b.addEventListener('click', async () => { if (!(await confirmBox('Remove this connection and its saved key?'))) return; await call('providers:remove', b.dataset.apiDel); await refreshProviders(); render(); }));
+  $$('[data-api-refresh]').forEach((b) => b.addEventListener('click', async () => { b.disabled = true; try { await call('providers:refresh', b.dataset.apiRefresh); await refreshProviders(); render(); toast('Model list updated.'); } catch { b.disabled = false; } }));
+}
+
+function editProvider(p, presets) {
+  const pre = presets[p.preset];
+  const b = openModal(`<h2>${p.id ? 'Edit' : 'Connect'} ${esc(pre.name)}</h2>
+    <div class="stack-v">
+      <div class="field"><label for="pv-name">Name</label><input id="pv-name" value="${esc(p.name || pre.name)}"></div>
+      <div class="field"><label for="pv-url">Address (base URL)</label><input id="pv-url" value="${esc(p.baseUrl || pre.baseUrl)}" ${p.preset === 'custom' ? 'placeholder="https://…/v1"' : ''}></div>
+      ${pre.freeNote ? `<div class="notice ${['free', 'some', 'local'].includes(pre.free) ? 'info' : ''}" style="margin:0">${FREE_BADGE[pre.free] || ''} ${esc(pre.freeNote)}${pre.priceUrl ? ` <a href="${esc(pre.priceUrl)}">Current prices and limits</a>` : ''}</div>` : ''}
+      ${pre.noKey ? '' : `<div class="field"><label for="pv-key">API key</label><span class="help">${p.hasKey ? 'A key is saved. Paste a new one to replace it.' : (pre.keyUrl ? `🔑 <a href="${esc(pre.keyUrl)}" title="Opens ${esc(pre.keyUrl)}">Get your API key from ${esc(pre.name)} →</a> (opens in your browser), then paste it here.` : 'Paste your key from the provider\'s website.')}</span><input id="pv-key" type="password" autocomplete="off" placeholder="Paste key"></div>`}
+      <div class="field"><label for="pv-models">Models</label><span class="help">One per line. Leave empty and press "Save & load models" to fetch the list.</span><textarea id="pv-models" rows="4">${esc((p.models || pre.models || []).join('\n'))}</textarea></div>
+      <div class="field"><label for="pv-img">Image models (optional)</label><input id="pv-img" value="${esc((p.imageModels || pre.imageModels || []).join(', '))}" placeholder="e.g. gpt-image-1"></div>
+      <label class="row"><input type="checkbox" id="pv-vision" ${(p.vision ?? pre.vision) ? 'checked' : ''}> <b>Its models can see images</b></label>
+    </div>
+    <div class="modal-actions"><button class="btn" data-close>Cancel</button><button class="btn primary" id="pv-save">Save & load models</button></div>`);
+  b.querySelector('#pv-save').addEventListener('click', async () => {
+    const entry = { ...p, name: b.querySelector('#pv-name').value.trim(), baseUrl: b.querySelector('#pv-url').value.trim(), models: b.querySelector('#pv-models').value.split('\n').map((x) => x.trim()).filter(Boolean), imageModels: b.querySelector('#pv-img').value.split(',').map((x) => x.trim()).filter(Boolean), vision: b.querySelector('#pv-vision').checked };
+    if (!entry.baseUrl) { toast('Enter the address.'); return; }
+    const saved = await call('providers:save', entry, b.querySelector('#pv-key')?.value || '');
+    closeModal();
+    try { await qs.call('providers:refresh', saved.id); toast('Connected. Model list loaded.'); } catch (err) { toast(`Saved, but loading models failed: ${err.message}`, 7000); }
+    await refreshProviders(); render();
+  });
+}
