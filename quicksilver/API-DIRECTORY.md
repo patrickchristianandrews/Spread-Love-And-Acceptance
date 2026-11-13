@@ -270,6 +270,7 @@ Free, and nothing leaves your PC. Quicksilver connects to these if you already r
 
 - **LiteLLM proxy (your server)**: Free: your own LiteLLM proxy, which can route to any provider. Add its key if you set one.
 - **Ollama (on this PC)**: Free: runs on this PC with no key.
+- **Giant models (colibri, on this PC)**: Free: colibri runs models bigger than this PC's memory, streaming from the SSD. Set up from Your PC → Giant models.
 - **LM Studio (on this PC)**: Free: runs on this PC with no key.
 - **Jan (on this PC)**: Free: runs on this PC with no key. Start Jan's local API server first.
 - **llama.cpp server (on this PC)**: Free: a llama-server you run yourself.

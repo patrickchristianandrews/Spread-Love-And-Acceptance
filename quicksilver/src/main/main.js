@@ -802,6 +802,12 @@ handle('diag:save', async () => {
   return true;
 });
 handle('shell:open', (url) => { if (/^https?:\/\//.test(url)) shell.openExternal(url); });
+// Giant models (Your PC → Giant models): colibri, optional.
+const giant = require('./giant');
+handle('giant:info', async () => ({ ...giant.fit(await hardware.detect()), ...giant.status() }));
+handle('giant:install', async () => { const r = await giant.install(await hardware.detect(), (text) => emit('app:event', { kind: 'giant', text })); emit('app:event', { kind: 'giant', text: '' }); return r; });
+handle('giant:start', () => giant.start((text) => emit('app:event', { kind: 'giant', text })));
+handle('giant:stop', () => giant.stop());
 // Torrent downloads (Your Crew → Downloads).
 const torrents = require('./torrents');
 handle('torrents:list', () => torrents.list());
@@ -901,5 +907,5 @@ app.whenReady().then(() => { try { require('./guide').start(); require('./catalo
   app.on('activate', () => { if (BrowserWindow.getAllWindows().length === 0) createWindow(); });
 });
 
-app.on('before-quit', () => { try { require('./torrents').stopAll(); } catch {} llama.stopAll(); media.stopAll(); apiserver.stop(); phone.stop(); mcp.disconnectAll(); });
+app.on('before-quit', () => { try { require('./torrents').stopAll(); } catch {} try { require('./giant').stop(); } catch {} llama.stopAll(); media.stopAll(); apiserver.stop(); phone.stop(); mcp.disconnectAll(); });
 app.on('window-all-closed', () => { llama.stopAll(); media.stopAll(); if (process.platform !== 'darwin') app.quit(); });

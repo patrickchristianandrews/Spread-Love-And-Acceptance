@@ -46,6 +46,7 @@ const PRESETS = {
     free: 'some', freeNote: 'A free tier with limited requests, then pay as you go.', priceUrl: 'https://aimlapi.com/ai-ml-api-pricing' },
   litellm: { name: 'LiteLLM proxy (your server)', baseUrl: 'http://localhost:4000/v1', noKey: true, free: 'local', freeNote: 'Free: your own LiteLLM proxy, which can route to any provider. Add its key if you set one.' },
   ollama: { name: 'Ollama (on this PC)', baseUrl: 'http://localhost:11434/v1', noKey: true, vision: true, free: 'local', freeNote: 'Free: runs on this PC with no key.' },
+  colibri: { name: 'Giant models (colibri, on this PC)', baseUrl: 'http://127.0.0.1:8000/v1', noKey: true, free: 'local', freeNote: 'Free: colibri runs models bigger than this PC\'s memory, streaming from the SSD. Set up from Your PC → Giant models.' },
   lmstudio: { name: 'LM Studio (on this PC)', baseUrl: 'http://localhost:1234/v1', noKey: true, vision: true, free: 'local', freeNote: 'Free: runs on this PC with no key.' },
   // ---------- more cloud AIs (all OpenAI-compatible) ----------
   perplexity: { name: 'Perplexity (answers with web sources)', baseUrl: 'https://api.perplexity.ai', keyUrl: 'https://www.perplexity.ai/settings/api', best: 'sonar-pro', bestWhy: 'Searches the web and cites sources in every answer.', models: ['sonar-pro', 'sonar', 'sonar-reasoning-pro'],

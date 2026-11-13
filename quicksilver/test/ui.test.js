@@ -1313,6 +1313,9 @@ function redPng(size = 64) {
   assert.ok(await win.locator('#pcc-vram').isVisible(), 'another card: type its memory');
   await win.fill('#pcc-vram', '0'); await win.locator('#pcc-vram').dispatchEvent('change');
   await win.waitForFunction(() => /Tier\s*1/i.test(document.querySelector('#pcc-out').innerText) && /Chat works on the processor/.test(document.querySelector('#pcc-out').innerText));
+  // Giant models (optional): what this PC could run with colibri, and one button to get it.
+  await win.waitForSelector('#giant h2:has-text("Giant models")', { timeout: 15000 });
+  assert.match(await win.locator('#giant').innerText(), /DeepSeek V4 Flash[\s\S]*(Get colibri|Start colibri)/);
   await win.locator('#pc-calc').scrollIntoViewIfNeeded();
   await shot(win, '06d-pc-calculator');
   // Upgrades: faster (same models) vs smarter (a bigger model), with cost and cheaper alternatives.

@@ -12,6 +12,8 @@ Updating from 2.18: the Liquid Edition now includes its Closer and its picture a
 
 ### New in 2.20.7
 
+- **Giant models (optional, experimental),** under Your PC: run open models far bigger than your PC's memory (DeepSeek V4 Flash, Qwen3.8 Flash Next, GLM-5.2) with colibri, which keeps the busiest parts on the graphics card and streams the rest from the SSD. Quicksilver checks whether your PC is up to it and estimates each model's speed, downloads colibri from its official releases only when you ask (checking its published fingerprint), starts it, and its models appear in every model menu. Best for a hard question you can wait for; on a PC without a big graphics card it says it's too slow.
+
 - **9 new skills:** a Growing businesses group (account outreach, account profiles, billable hours estimates, brand inspiration boards, brand reputation checks, competitive intelligence) and three for builders (Graphify: a knowledge graph of a codebase; a PHP web-shell exposure check; reverse engineering of apps you're authorized to examine). 253 skills in all.
 
 - **Torrent downloads** (Your Crew → Downloads): paste a magnet link or a .torrent address, or pick a .torrent file, and it downloads into the folder you choose, with progress, speed, pause, resume and remove (removing keeps the files). Search covers free, legal collections: the Internet Archive's public-domain and openly licensed films, music, books and software. Unfinished downloads carry on when Quicksilver opens; sharing stops when a download finishes unless you choose to keep sharing.

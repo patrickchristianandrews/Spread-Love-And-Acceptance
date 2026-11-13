@@ -27,6 +27,7 @@ views.pc = {
       ${h.integrated?.length && !h.vramGB ? `<div class="notice info" style="margin-top:12px">Your built-in graphics (${esc(h.integrated[0])}) shares system memory and is often unstable for AI, so Quicksilver uses the processor. That's normal for laptops.</div>` : ''}
       ${upgradesHTML()}
       ${newPcGuideHTML(h)}
+      ${giantHTML()}
       <div class="card" style="margin-top:16px">
         <div class="row"><div class="grow"><h3>⏱ Speed test</h3><div class="small muted" style="font-weight:600">Runs your smallest installed model for a few seconds and tunes every estimate on this page to your real speed.</div></div>
         <button class="btn primary" id="bench" ${benchState === 'running' ? 'disabled' : ''}>${benchState === 'running' ? 'Testing…' : 'Run speed test'}</button></div>
@@ -53,6 +54,7 @@ views.pc = {
       const box = document.querySelector('.tier-ability'); if (box) box.outerHTML = tierAbilityHTML(S.tierPick, S.est?.hardware);
     }));
     bindPcCalc();
+    bindGiant();
     $$('[data-upg-to]').forEach((b) => b.addEventListener('click', (e) => {
       e.preventDefault();
       const card = document.querySelector(`.upg[data-upg-id="${b.dataset.upgTo}"]`);
@@ -258,4 +260,31 @@ function upgradesHTML() {
       ${x.cheaper && nameOf[x.cheaper] ? `<p class="small upg-cheaper">💸 On a budget? <a href="#" data-upg-to="${esc(x.cheaper)}">${esc(nameOf[x.cheaper].split(' (')[0])}</a> is cheaper.</p>` : ''}
     </div>`; }).join('')}</div>
     <p class="small muted">Prices are rough US ranges and change often; check current prices and that a part fits your PC before buying. Most laptops can only upgrade memory (and some not even that).</p>`;
+}
+
+// ---------- Giant models (optional): colibri ----------
+let giantInfo = null; let giantBusy = ''; let giantErr = '';
+qs.onApp?.((d) => { if (d.kind === 'giant') { giantBusy = d.text || giantBusy; const el = document.getElementById('giant-status'); if (el) el.textContent = d.text || ''; } });
+function giantHTML() {
+  if (!giantInfo) { qs.call('giant:info').then((g) => { giantInfo = g; if (S.route.view === 'pc') { const el = document.getElementById('giant'); if (el) { el.outerHTML = giantHTML(); bindGiant(); } } }).catch(() => {}); return '<div id="giant"></div>'; }
+  const g = giantInfo;
+  return `<div id="giant"><div class="section"><h2>🦣 Giant models <span class="badge b-lemon">optional · experimental</span></h2><span class="small muted">Run open models far bigger than this PC's memory (DeepSeek V4 Flash, GLM-5.2, Qwen3.8 Flash Next) with colibri: the busiest parts on the graphics card, the rest in memory, the least used streamed from the SSD. Best for a hard question you can wait for, not everyday chat.</span></div>
+    <div class="card"><p class="small" style="margin-top:0;${g.level === 'no' ? 'color:var(--danger)' : ''}">${esc(g.text)} · ${g.freeGB} GB free on the drive</p>
+      <table class="list"><thead><tr><th>Model</th><th>Size</th><th>Published speed</th><th>On this PC (estimate)</th><th></th></tr></thead><tbody>
+      ${g.models.map((m) => `<tr><td><b>${esc(m.name)}</b><div class="small muted">${esc(m.note)}</div></td><td>${m.sizeGB} GB</td><td>~${m.wps} words/s</td><td>~${m.wpsHere} words/s</td><td>${m.roomOk ? '' : '<span class="small" style="color:var(--danger)">not enough disk space</span>'}</td></tr>`).join('')}</tbody></table>
+      <div class="row" style="margin-top:10px;gap:8px;flex-wrap:wrap">
+        ${!g.installed ? `<button class="btn ${g.level === 'no' ? '' : 'primary'}" id="giant-get" ${giantBusy ? 'disabled' : ''}>Get colibri (free, about 50 MB)</button>`
+          : g.running ? '<span class="badge b-mint">● Running</span><button class="btn small" id="giant-chat">Chat with a giant model</button><button class="btn small ghost" id="giant-stop">Stop</button>'
+          : '<button class="btn primary" id="giant-start">Start colibri</button>'}
+        <span class="small muted" id="giant-status">${esc(giantBusy)}</span></div>
+      ${giantErr ? `<div class="notice" style="margin-top:8px">${esc(giantErr)}</div>` : ''}
+      <p class="small muted" style="margin-bottom:0">${g.installed ? `colibri ${esc(g.version || '')} is in ${esc(g.folder)}. Its models come from its own setup (run "coli setup" there once, or "coli import" for a GGUF file); once it's running they appear in every model menu as "Giant models (colibri, on this PC)".` : 'Downloaded from colibri\'s official releases with its published fingerprint checked. Its speed figures are its authors\' own, measured on a 24 GB graphics card with fast SSDs.'}</p></div></div>`;
+}
+function bindGiant() {
+  const redo = async () => { giantInfo = await qs.call('giant:info').catch(() => giantInfo); const el = document.getElementById('giant'); if (el) { el.outerHTML = giantHTML(); bindGiant(); } };
+  const run = (ch, done) => async () => { giantErr = ''; giantBusy = 'Working…'; await redo(); try { await call(ch); if (done) toast(done); } catch (err) { giantErr = err.message; } giantBusy = ''; await refreshProviders().catch(() => {}); redo(); };
+  $('#giant-get')?.addEventListener('click', async () => { if (giantInfo?.level === 'no' && !(await confirmBox(`${giantInfo.text}\n\nGet colibri anyway?`, { yes: 'Get it anyway', danger: false }))) return; run('giant:install', 'colibri is installed. Start it to use giant models.')(); });
+  $('#giant-start')?.addEventListener('click', run('giant:start', 'colibri is running: its models are in the model menus.'));
+  $('#giant-stop')?.addEventListener('click', run('giant:stop'));
+  $('#giant-chat')?.addEventListener('click', () => { const t = (S.targets || []).find((x) => x.target.startsWith('api:') && /colibri/i.test(x.group || '')); newChat(); const c = chatById(S.route.id); if (c && t) { c.target = t.target; save(); render(); } });
 }
