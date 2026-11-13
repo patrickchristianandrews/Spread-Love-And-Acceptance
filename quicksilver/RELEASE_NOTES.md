@@ -1,14 +1,22 @@
 ### Download
 
-There are three ways to get Quicksilver 2.20.2. All install the same app; they differ in how the Liquid Edition's models (about 30 GB) arrive.
+There are three ways to get Quicksilver 2.20.3. All install the same app; they differ in how the Liquid Edition's models (about 30 GB) arrive.
 
-- **Quicksilver-Setup-2.20.2.exe** (below, about 1.9 GB, with a matching `.sha256`): the installer with the small 2B model inside. The first time Quicksilver opens, its setup screen downloads the rest of the Liquid Edition before the app starts.
-- **Quicksilver-Web-Setup-2.20.2.exe** (below, about 200 MB): the web installer. No models inside at all; the setup screen downloads the whole Liquid Edition on first launch.
+- **Quicksilver-Setup-2.20.3.exe** (below, about 1.9 GB, with a matching `.sha256`): the installer with the small 2B model inside. The first time Quicksilver opens, its setup screen downloads the rest of the Liquid Edition before the app starts.
+- **Quicksilver-Web-Setup-2.20.3.exe** (below, about 200 MB): the web installer. No models inside at all; the setup screen downloads the whole Liquid Edition on first launch.
 - **Full offline package** (about 31 GB): the installer plus a "Quicksilver models" folder. Keep the two together when you run the installer and everything is copied in: nothing to download, works with no internet from the first minute. It is too large for a GitHub release file, so it is the **Quicksilver-Windows-installer** build artifact on this release's build run (linked at the top of these notes; a GitHub sign-in is needed, and GitHub keeps build artifacts for 90 days).
 
 Updating from 2.19 or 2.20: nothing extra to download; your chats, settings and models are kept.
 
 Updating from 2.18: the Liquid Edition now includes its Closer and its picture and video makers, and Quicksilver does not open until all of them are installed. After the update the setup screen downloads what is missing (about 30 GB) before the app starts. Your chats, settings and the models you already have are kept.
+
+### New in 2.20.3
+
+- **Film studio:** two new stacks in Stacks → Video. One runs on your PC (a writer and director, a model that checks continuity, FLUX.3 Klein for storyboard frames, Wan 2.2 to animate them, voices, music and the video editor); the other uses a cloud video service you connect to animate shots with sound.
+- **Film skills:** short film script, character & style bible (fixed descriptions so characters look the same in every shot), shot list with picture and motion prompts, storyboard frames, a film shot and a trailer plan. "Storyboard" now makes wide film frames; the comic skill keeps comics.
+- **Imagination Studio** under Connectors → Creative & media: chat can drive it (pictures, video with sound, voices, songs, edits, whole films) on machines that run it.
+- **New picture models:** Qwen-Image 2.1 Turbo (the best text in pictures, 8 steps) and FLUX.3 Klein (fast, sharp pictures on an 8 GB card, plus photo edits). Both licenses rule out commercial use. They need the latest picture engine.
+- **Fixes:** big downloads no longer use the method that could crash the app partway through, and a background message no longer pushes the "Undo" button aside.
 
 ### New in 2.20.2
 
