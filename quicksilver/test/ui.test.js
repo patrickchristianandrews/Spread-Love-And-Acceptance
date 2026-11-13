@@ -1126,7 +1126,7 @@ function redPng(size = 64) {
   await win.click('#modal [data-close]');
   // The built-in model and what it can do; featured picks; better models swap in when installed.
   await win.waitForSelector('#builtin-model:has-text("Built in: Quicksilver Liquid Edition")');
-  assert.match(await win.evaluate(() => dolphinOfferHTML({ members: { drafters: ['local:starter-brain'], vision: 'local:starter' } })), /Add Dolphin/, 'a crew of one is offered Dolphin as a second opinion');
+  assert.match(await win.evaluate(() => dolphinOfferHTML({ members: { drafters: ['local:starter-brain'], vision: 'local:starter' } })), /Add NeuralDaredevil/, 'a crew of one is offered an abliterated second opinion (NeuralDaredevil, from the Llama family)');
   assert.equal(await win.evaluate(() => dolphinOfferHTML({ members: { drafters: ['local:a', 'local:b'] } })), '', 'not offered once the crew has a second model');
   assert.match(await win.evaluate(() => qsRolesHTML({ members: { drafters: ['local:starter-brain'], vision: 'local:starter' }, bench: 'local:starter-dolphin' })), /On the Council/, 'a slow PC shows Dolphin on the Council');
   // Tested scores and create ratings on models, stacks and cloud AIs.
@@ -1200,7 +1200,7 @@ function redPng(size = 64) {
     if (!/locked/i.test(editErr)) throw new Error('the Liquid Edition should refuse to be edited');
     // Six suggested add-ons, optional: listed with a download button, none of them locked.
     const addons = liquidAddonsHTML();
-    if (!['Rocinante', 'WAI-NSFW', 'Chroma1-HD', 'CyberRealistic', 'Mistral Small', 'gpt-oss'].every((n) => addons.includes(n))) throw new Error('the six suggested add-ons should be listed');
+    if (!['Gemma 3 12B', 'WAI-NSFW', 'Chroma1-HD', 'CyberRealistic', 'Mistral Small', 'gpt-oss'].every((n) => addons.includes(n))) throw new Error('the six suggested add-ons should be listed');
     if (S.catalog.liquidAddons.some((a) => S.catalog.liquid.includes(a.id))) throw new Error('add-ons must not be locked');
     if (S.catalog.picks) S.catalog.picks.recipes = picksRecipes;
     S.data.chats = S.data.chats.filter((c) => c.id !== 'c-up');

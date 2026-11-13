@@ -892,7 +892,7 @@ const LIQUID_PRO = {
   brain: 'qwen3-30b-a3b-uncensored',      // answers: 30B knowledge at 3B speed (mixture of experts)
   closer: 'mistral-small-3.2-uncensored', // leads hard questions and reads photos
   thinker: 'gpt-oss-20b-uncensored',      // maths and logic, thought through
-  muse: 'rocinante-12b',                  // stories, role-play and fresh angles
+  muse: 'gemma-3-12b-uncensored',         // stories, role-play and fresh angles (Gemma 3 12B, abliterated)
   pictures: ['chroma-hd', 'wai-nsfw-illustrious'], // top-quality pictures; anime
   minVramGB: 16, recVramGB: 24, minRamGB: 32, recRamGB: 64,
 };
@@ -905,7 +905,7 @@ const LIQUID_ADDONS = [
   { id: 'wai-nsfw-illustrious', why: 'Anime: Lustify is a photo model, this is the most popular uncensored anime model. Anime requests use it by themselves.' },
   { id: 'chroma-hd', why: 'The highest-quality uncensored pictures, with negative prompts.', minVramGB: 8 },
   { id: 'cyberrealistic-sd15', why: 'Uncensored pictures on older 4 GB graphics cards and laptops, where Lustify is slow.' },
-  { id: 'rocinante-12b', why: 'Stories and role-play: vivid prose, far better than the core at fiction.' },
+  { id: 'gemma-3-12b-uncensored', why: 'Stories and role-play: Gemma 3 12B, abliterated. Vivid prose from a different family than the core, far better at fiction.' },
   { id: 'mistral-small-3.2-uncensored', why: 'A stronger Closer that sees photos, for 16 GB+ graphics cards.', minVramGB: 16 },
   { id: 'gpt-oss-20b-uncensored', why: 'A strong, fast reasoner for maths and logic on 12 GB+ graphics cards.', minVramGB: 12 },
 ];

@@ -78,7 +78,7 @@ function quicksilverBoost() {
   const leadInst = S.installed.find((m) => `local:${m.id}` === st.members?.judge);
   const best = Math.max(0, ...S.installed.filter((m) => m.kind === 'text' && S.est.text[m.catalogId]?.rating === 'great').map((m) => score(m.catalogId)), score(leadInst?.catalogId));
   const f = S.catalog.picks?.featured || {};
-  const pick = [...new Set([...(f.open || [])])] // Quicksilver is uncensored: only uncensored models join it
+  const pick = [...new Set([...(f.open || [])])].filter((id) => /abliterat|heretic/i.test(`${id} ${catModel(id)?.repo || ''}`)) // only abliterated models join the Liquid Edition
     .filter((id) => S.catalog.text.some((x) => x.id === id) && !haveModel(id) && S.est.text[id]?.rating === 'great' && score(id) >= best + 1)
     .sort((a, b) => score(b) - score(a))[0];
   if (!pick) return null;
@@ -287,7 +287,7 @@ function builtinModelHTML() {
 // Dolphin in the crew: an uncensored model from a different family (Llama-based) that's about as
 // strong as the Brain, so it adds a genuinely different view on hard questions. Everyday messages
 // stay with the fast Brain. Offered when the crew has no second model yet.
-const DOLPHIN = 'dolphin-3-llama-3.1-8b';
+const DOLPHIN = 'neuraldaredevil-8b-abliterated'; // (the second opinion: abliterated, from the Llama family)
 function dolphinOfferHTML(qst) {
   const m = qst?.members || {};
   const crew = [...(m.drafters || []), m.judge].filter(Boolean);
@@ -296,9 +296,9 @@ function dolphinOfferHTML(qst) {
   const est = S.est?.text?.[DOLPHIN];
   if (est?.rating === 'wont') return '';
   const slow = est && !['great', 'good'].includes(est.rating);
-  return `<div class="pair-card"><div class="grow"><b>🐬 Add Dolphin to the crew</b>
-      <div class="small muted">Dolphin 3.0 8B is uncensored and about as strong as the Brain, but from a different family, so on hard questions it adds a second view and they catch each other's mistakes. Everyday messages stay with the fast Brain. ${d.sizeGB} GB download.${slow ? ' On this PC it runs slowly, so hard answers will take noticeably longer.' : ''}</div></div>
-    ${S.downloads[DOLPHIN] ? downloadBox(DOLPHIN) : `<button class="btn small ${slow ? '' : 'primary'}" data-get="${DOLPHIN}" data-use-when-done="${DOLPHIN}">Add Dolphin</button>`}</div>`;
+  return `<div class="pair-card"><div class="grow"><b>😈 Add NeuralDaredevil to the crew</b>
+      <div class="small muted">NeuralDaredevil 8B is abliterated (its refusals removed from the weights) and about as strong as the Brain, but from a different family (Llama), so on hard questions it adds a second view and they catch each other's mistakes. Everyday messages stay with the fast Brain. ${d.sizeGB} GB download.${slow ? ' On this PC it runs slowly, so hard answers will take noticeably longer.' : ''}</div></div>
+    ${S.downloads[DOLPHIN] ? downloadBox(DOLPHIN) : `<button class="btn small ${slow ? '' : 'primary'}" data-get="${DOLPHIN}" data-use-when-done="${DOLPHIN}">Add NeuralDaredevil</button>`}</div>`;
 }
 // The Liquid Edition's cloud helper for hard questions: any cloud AI you connect (an uncensored
 // one is used first when you have both). Venice is the suggestion, because it is uncensored and

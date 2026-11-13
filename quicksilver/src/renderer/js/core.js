@@ -186,8 +186,9 @@ function liquidOk(t) {
   if (t.startsWith('local:')) {
     const m = S.installed.find((x) => `local:${x.id}` === t);
     if (!m) return false;
+    // Only abliterated builds join the Liquid Edition (the same rule as models.looksUncensored).
     const c = S.catalog?.text?.find((x) => x.id === m.catalogId);
-    return m.source === 'bundled' || c?.category === 'open' || UNCENSORED_RX.test(modelNameText(m));
+    return m.source === 'bundled' || /abliterat|heretic/i.test(`${modelNameText(m)} ${c?.repo || ''}`);
   }
   if (t.startsWith('api:')) {
     const [, pid, ...rest] = t.split(':');

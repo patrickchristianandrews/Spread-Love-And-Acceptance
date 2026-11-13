@@ -920,7 +920,7 @@ async function collect(gen) {
     assert.ok(ids.includes('local:starter-brain') && ids.includes('local:starter'), 'the built-in brain and eyes');
     // The Liquid Edition uses its own models and nothing else: another uncensored model on this PC
     // joins the team for hard questions only once it is ticked under Models → "Models in use".
-    models.add({ id: 'dolphin-test', name: 'Dolphin 3.0 8B', kind: 'text', catalogId: 'dolphin-3-llama-3.1-8b', files: { model: copy('dolphin.gguf') }, size: 4.9e9 });
+    models.add({ id: 'dolphin-test', name: 'Qwen3 8B Abliterated', kind: 'text', catalogId: 'qwen3-8b-uncensored', files: { model: copy('Huihui-Qwen3-8B-abliterated.gguf') }, size: 4.9e9 });
     await complete.ensureQuicksilverStack();
     {
       const pure = complete.stacks().find((x) => x.id === 'quicksilver');
@@ -930,9 +930,9 @@ async function collect(gen) {
       assert.ok(![c0.structurer, c0.critic, c0.pragmatist, c0.lead].includes('local:dolphin-test'), 'and it does not sit on the Liquid Edition\'s Council');
       // Suggested Liquid add-ons you download in Quicksilver are in use from the start; models
       // found in other apps and the built-in ones (members already) are not ticked by default.
-      assert.equal(models.inUse({ kind: 'text', catalogId: 'rocinante-12b' }), true);
-      assert.equal(models.inUse({ kind: 'text', catalogId: 'rocinante-12b', source: 'imported' }), false);
-      assert.equal(models.inUse({ kind: 'text', catalogId: 'rocinante-12b', use: false }), false, 'your own choice wins');
+      assert.equal(models.inUse({ kind: 'text', catalogId: 'gemma-3-12b-uncensored' }), true);
+      assert.equal(models.inUse({ kind: 'text', catalogId: 'gemma-3-12b-uncensored', source: 'imported' }), false);
+      assert.equal(models.inUse({ kind: 'text', catalogId: 'gemma-3-12b-uncensored', use: false }), false, 'your own choice wins');
       assert.equal(models.inUse({ kind: 'image', catalogId: 'lustify', use: true }), false, 'only chat models are ticked');
       assert.ok(models.setUse('dolphin-test', true) && models.inUse(models.get('dolphin-test')));
       // Registering the model again (an update or a repair) keeps the tick.
@@ -948,7 +948,7 @@ async function collect(gen) {
     // Dolphin joins hard questions only where it runs smoothly; on a slow PC it waits on the bench.
     {
       const hwNow = await hardware.detect();
-      const dol = catalog.TEXT_MODELS.find((m) => m.id === 'dolphin-3-llama-3.1-8b');
+      const dol = catalog.TEXT_MODELS.find((m) => m.id === 'qwen3-8b-uncensored');
       assert.ok(complete.smoothHelper(dol, hwNow), 'smooth on the 8 GB graphics card');
       assert.ok(!complete.smoothHelper(dol, { ...hwNow, vramGB: 0, gpus: [], ramGB: 8, freeRamGB: 6 }), 'too slow on an 8 GB laptop without a graphics card');
       assert.ok(!qs2.bench, 'nothing on the bench when it runs smoothly');
@@ -956,6 +956,10 @@ async function collect(gen) {
     // Completely uncensored: filtered models never answer, check or sit on its Council.
     assert.ok(complete.isUncensored('local:dolphin-test') && complete.isUncensored('local:starter-brain') && complete.isUncensored('stack:quicksilver'));
     assert.ok(!complete.isUncensored('local:qwen3-8b') && !complete.isUncensored('local:phi-4'), 'filtered models are not uncensored');
+    // Only abliterated builds: a model that is merely fine-tuned to be uncensored does not join.
+    models.add({ id: 'finetune-test', name: 'Rocinante 12B', kind: 'text', catalogId: 'rocinante-12b', files: { model: copy('Rocinante-12B-v1.1-Q4_K_M.gguf') }, size: 7.5e9, use: true });
+    assert.ok(!complete.isUncensored('local:finetune-test'), 'an uncensored fine-tune is not abliterated, so it is not part of the Liquid Edition');
+    models.remove('finetune-test');
     const cm = complete.councilMembers('stack:quicksilver', {});
     assert.ok([cm.structurer, cm.critic, cm.pragmatist, cm.lead].every((t) => complete.isUncensored(t)), 'the Liquid Edition\'s Council is uncensored only');
     // Locked: an edited Liquid Edition (from an older version) is put back to Quicksilver's own uncensored crew.
@@ -1003,7 +1007,7 @@ async function collect(gen) {
     {
       const nd = fs.mkdtempSync(path.join(os.tmpdir(), 'qs-l2-'));
       const cp = (n) => { const f = path.join(nd, n); fs.copyFileSync(TINY, f); return f; };
-      models.add({ id: 'b35', name: 'Qwen3.5 4B (uncensored)', kind: 'text', catalogId: 'qwen3.5-4b', files: { model: cp('b.gguf'), mmproj: cp('bp.gguf') }, size: 3.1e9 });
+      models.add({ id: 'b35', name: 'Qwen3.5 4B (uncensored)', kind: 'text', catalogId: 'qwen3.5-4b', repo: 'mradermacher/Huihui-Qwen3.5-4B-abliterated-GGUF', files: { model: cp('b.gguf'), mmproj: cp('bp.gguf') }, size: 3.1e9 });
       await complete.ensureQuicksilverStack();
       const l2 = complete.stacks().find((x) => x.id === 'quicksilver').members;
       assert.equal(l2.drafters[0], 'local:b35', 'the Qwen3.5 Brain leads');

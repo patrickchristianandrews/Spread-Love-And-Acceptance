@@ -92,14 +92,16 @@ function add(entry) {
   return entry;
 }
 
-// Is this installed chat model an uncensored one? The models that came with Quicksilver are; so
-// are the catalog's "open" models; otherwise the name, file name or repository says so.
+// May this installed chat model be part of the Liquid Edition? Only abliterated builds: models
+// whose refusal direction was removed from the weights (abliteration; "heretic" is the automated
+// tool for it), not merely fine-tuned to be uncensored. The models that came with Quicksilver are
+// abliterated; otherwise its name, file name, repository or catalog entry must say so.
 // (Never the folder: a Windows user called Alexis has "lexi" in every path.)
-const UNCENSORED_NAME = /abliterat|uncensor|unfiltered|dolphin|hermes|lexi|rocinante/i;
+const ABLITERATED_NAME = /abliterat|heretic/i;
 function looksUncensored(m) {
   if (!m) return false;
   const c = catalog.TEXT_MODELS.find((x) => x.id === m.catalogId);
-  return m.source === 'bundled' || c?.category === 'open' || UNCENSORED_NAME.test(`${m.name || ''} ${path.basename(m.files?.model || '')} ${m.repo || ''}`);
+  return m.source === 'bundled' || ABLITERATED_NAME.test(`${m.name || ''} ${path.basename(m.files?.model || '')} ${m.repo || ''} ${c?.repo || ''} ${(c?.alt || []).join(' ')}`);
 }
 // Is this copy one of the Liquid Edition's own models: the ones that came with it, or the same
 // models downloaded by its setup screen? A copy found in another app only counts once you tick it,

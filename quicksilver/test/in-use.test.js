@@ -34,7 +34,7 @@ function gguf(p, arch, name, size = 2e6) {
     { id: 'starter', name: 'Qwen3.5 2B (uncensored)', kind: 'text', catalogId: 'qwen3.5-2b', files: { model: copy('model.gguf'), mmproj: copy('mmproj.gguf') }, size: 1.5e9, vision: true, source: 'bundled' },
     { id: 'starter-brain', name: 'Qwen3.5 4B (uncensored)', kind: 'text', catalogId: 'qwen3.5-4b', files: { model: copy('brain.gguf'), mmproj: copy('brain-mmproj.gguf') }, size: 2.9e9, vision: true, source: 'bundled' },
     // What an older version added by itself from other apps and Downloads:
-    { id: 'imp-dolphin', name: 'Dolphin 3.0 8B', kind: 'text', catalogId: 'dolphin-3-llama-3.1-8b', files: { model: theirs('Dolphin3.0-Llama3.1-8B-Q4_K_M.gguf') }, size: 4.9e9, source: 'imported', from: 'LM Studio' },
+    { id: 'imp-dolphin', name: 'Qwen3 8B Abliterated', kind: 'text', catalogId: 'qwen3-8b-uncensored', files: { model: theirs('Huihui-Qwen3-8B-abliterated-v2.Q4_K_M.gguf') }, size: 4.9e9, source: 'imported', from: 'LM Studio' },
     { id: 'imp-llama', name: 'Llama 3.2 3B Instruct', kind: 'text', catalogId: 'llama-3.2-3b', files: { model: theirs('Llama-3.2-3B-Instruct-Q4_K_M.gguf') }, size: 2e9, source: 'imported', from: 'LM Studio' },
     { id: 'imp-wan', name: 'wan2.2 5b', kind: 'text', files: { model: gguf(path.join(HOME, 'Downloads', 'Quicksilver models', 'wan2.2-5b.gguf'), 'wan', 'Wan 2.2') }, size: 2e6, source: 'imported', from: 'Downloads' },
     { id: 'imp-umt5', name: 'Umt5 Xxl', kind: 'text', files: { model: gguf(path.join(other, 'encoder-q4.gguf'), 't5encoder', 'umt5') }, size: 2e6, source: 'imported', from: 'Downloads' },
@@ -81,7 +81,7 @@ function gguf(p, arch, name, size = 2e6) {
     const st = S.stacks.find((x) => x.id === 'quicksilver');
     return { team: JSON.stringify([st.members, st.bench || '']), dolphin: mayUse('local:imp-dolphin', 'stack:quicksilver'), llama: mayUse('local:imp-llama', 'stack:quicksilver'), note: document.querySelector('#models-in-use').innerText };
   });
-  assert.ok(/imp-dolphin/.test(ticked.team), `a ticked uncensored model joins the Liquid Edition: ${ticked.team}`);
+  assert.ok(/imp-dolphin/.test(ticked.team), `a ticked abliterated model joins the Liquid Edition: ${ticked.team}`);
   assert.ok(!/imp-llama/.test(ticked.team), 'a filtered model never does');
   assert.deepEqual([ticked.dolphin, ticked.llama], [true, false]);
   // A filtered model can be ticked too (Automatic may pick it for other chats); the Liquid
