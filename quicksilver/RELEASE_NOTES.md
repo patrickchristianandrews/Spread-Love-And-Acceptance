@@ -1,14 +1,22 @@
 ### Download
 
-There are three ways to get Quicksilver 2.20.3. All install the same app; they differ in how the Liquid Edition's models (about 30 GB) arrive.
+There are three ways to get Quicksilver 2.20.4. All install the same app; they differ in how the Liquid Edition's models (about 30 GB) arrive.
 
-- **Quicksilver-Setup-2.20.3.exe** (below, about 1.9 GB, with a matching `.sha256`): the installer with the small 2B model inside. The first time Quicksilver opens, its setup screen downloads the rest of the Liquid Edition before the app starts.
-- **Quicksilver-Web-Setup-2.20.3.exe** (below, about 200 MB): the web installer. No models inside at all; the setup screen downloads the whole Liquid Edition on first launch.
+- **Quicksilver-Setup-2.20.4.exe** (below, about 1.9 GB, with a matching `.sha256`): the installer with the small 2B model inside. The first time Quicksilver opens, its setup screen downloads the rest of the Liquid Edition before the app starts.
+- **Quicksilver-Web-Setup-2.20.4.exe** (below, about 200 MB): the web installer. No models inside at all; the setup screen downloads the whole Liquid Edition on first launch.
 - **Full offline package** (about 31 GB): the installer plus a "Quicksilver models" folder. Keep the two together when you run the installer and everything is copied in: nothing to download, works with no internet from the first minute. It is too large for a GitHub release file, so it is the **Quicksilver-Windows-installer** build artifact on this release's build run (linked at the top of these notes; a GitHub sign-in is needed, and GitHub keeps build artifacts for 90 days).
 
 Updating from 2.19 or 2.20: nothing extra to download; your chats, settings and models are kept.
 
 Updating from 2.18: the Liquid Edition now includes its Closer and its picture and video makers, and Quicksilver does not open until all of them are installed. After the update the setup screen downloads what is missing (about 30 GB) before the app starts. Your chats, settings and the models you already have are kept.
+
+### New in 2.20.4
+
+- **Models stop reloading after every message.** The chat title, follow-up suggestions and memory notes made after each answer now only use a model that is already loaded (or are skipped), so they never push your chat model out of memory. This mattered most on PCs without a graphics card.
+- **Sort and filter any table from its column headers:** click a heading to sort; pick from a menu or type in the box under it to filter (models, trending, leaderboards, Compare models, Your PC and more).
+- **Your Crew** (was Assistants), with a new **Debate** crew member at the top: it takes the other side and argues it fairly, scores the points, and can run a formal debate or argue both sides.
+- **The Liquid Edition can use any cloud AI** you connect for hard questions (an uncensored one such as Venice is used first). The switch and the connect buttons are right on its card, and Venice is the suggestion.
+- **Fixes:** a stack whose models aren't installed shows as "not set up" and a chat set to it answers with a model you have; Meme battle uses models on your PC by default, never two from one cloud service, and explains an empty cloud account; the "That answer took a while" tip appears at the top and no longer covers the message box.
 
 ### New in 2.20.3
 
