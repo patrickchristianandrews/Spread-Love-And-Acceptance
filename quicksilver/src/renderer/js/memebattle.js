@@ -15,7 +15,19 @@ const MEME_SYS = 'You make memes. Reply with ONLY a JSON object, no other text: 
 // Reads a model's reply: JSON (possibly in a code block or with thinking before it), or lines.
 function parseMeme(text) {
   const t = String(text || '').replace(/<think>[\s\S]*?(<\/think>|$)/g, '').trim();
-  const m = t.match(/\{[\s\S]*\}/);
+  // A template meme, given last (after the brainstorm): the last JSON object that names a format.
+  const objs = [...t.matchAll(/\{[^{}]*\}/g)].map((x) => { try { return JSON.parse(x[0]); } catch { return null; } }).filter(Boolean);
+  const tj = [...objs].reverse().find((j) => j.template && Array.isArray(j.boxes) && j.boxes.some((b) => String(b || '').trim()));
+  const tpl = tj && typeof memeTemplateByName === 'function' ? memeTemplateByName(tj.template) : null;
+  if (tpl) {
+    const boxes = tj.boxes.map((b) => String(b || '').trim().slice(0, 120));
+    const n = tpl.top ? 2 : tpl.boxes.length;
+    while (boxes.length < n) boxes.push('');
+    return { template: tpl.name, tplId: tpl.id, boxes: boxes.slice(0, n), ...(tpl.top ? { top: boxes[0], bottom: boxes[1] } : { top: '', bottom: '' }), picture: '' };
+  }
+  const m = objs.length ? null : t.match(/\{[\s\S]*\}/);
+  const last = [...objs].reverse().find((j) => j.top || j.bottom);
+  if (last) return { top: String(last.top || '').slice(0, 120), bottom: String(last.bottom || '').slice(0, 120), picture: String(last.picture || '').slice(0, 300) };
   if (m) { try { const j = JSON.parse(m[0]); if (j.top || j.bottom) return { top: String(j.top || '').slice(0, 120), bottom: String(j.bottom || '').slice(0, 120), picture: String(j.picture || '').slice(0, 300) }; } catch {} }
   const lines = t.split('\n').map((l) => l.replace(/^[-*#>\s]*(top|bottom|picture|caption)?\s*[:：-]?\s*/i, '').replace(/^["']|["']$/g, '').trim()).filter(Boolean);
   return lines.length ? { top: (lines[0] || '').slice(0, 120), bottom: (lines[1] || '').slice(0, 120), picture: (lines[2] || '').slice(0, 300) } : null;
@@ -69,9 +81,17 @@ views.memes = {
 
 const memeFinished = (r) => r.sides.every((s) => s.done) && !r.painting && !r.animating;
 
+// A box's text size, as a share of the meme's width: smaller for more words and narrower boxes.
+const boxFont = (text, w) => Math.max(2.4, Math.min(7.5, (w * 100) / Math.max(4.5, Math.sqrt(String(text).length) * 2.3)));
 function memeCardHTML(s, i) {
   if (s.error) return `<div class="meme meme-empty"><span class="muted">${esc(s.error)}</span></div>`;
   if (!s.meme) return `<div class="meme meme-empty"><span class="status-line">${s.done ? 'No meme came back.' : 'Thinking up a meme…'}</span></div>`;
+  const tpl = s.meme.tplId && MEME_TEMPLATES.find((x) => x.id === s.meme.tplId);
+  if (tpl && !tpl.top) {
+    return `<div class="meme meme-tpl" id="mb-meme-${i}">${s.tpl ? `<img class="meme-img" src="${esc(s.tpl)}" alt="${esc(tpl.name)}">` : `<div class="meme-img meme-plain"><span>${esc(tpl.name)}</span></div>`}
+      ${tpl.boxes.map(([x, y, w, h], n) => (s.meme.boxes[n] ? `<div class="meme-box" style="left:${x * 100}%;top:${y * 100}%;width:${w * 100}%;height:${h * 100}%;font-size:${boxFont(s.meme.boxes[n], w).toFixed(2)}cqw">${esc(s.meme.boxes[n])}</div>` : '')).join('')}</div>`;
+  }
+  if (tpl && s.tpl && !s.img) s.img = { url: s.tpl, tpl: true };
   const bg = s.img?.url ? `<img class="meme-img" src="${esc(s.img.url)}" alt="">` : `<div class="meme-img meme-plain" style="background:${['linear-gradient(135deg,#7c5cff,#ff6fae)', 'linear-gradient(135deg,#1fb6ff,#7cf5c4)'][i % 2]}"><span>${esc(s.meme.picture || '')}</span></div>`;
   return `<div class="meme" id="mb-meme-${i}">${bg}<div class="meme-t top">${esc(s.meme.top)}</div><div class="meme-t bottom">${esc(s.meme.bottom)}</div>${s.painting ? '<div class="meme-busy small">Painting the picture…</div>' : ''}</div>`;
 }
@@ -81,8 +101,8 @@ function memeRoundHTML(r) {
     const L = 'AB'[i];
     const won = r.voted && (r.voted === L ? 'won' : r.voted === 'tie' ? 'tie' : r.voted === 'bad' ? 'bad' : 'lost');
     return `<div class="card arena-side ${won || ''}"><div class="row arena-h"><span class="arena-l">${L}</span>${r.voted ? `<b class="grow">${esc(targetLabel(s.target))}</b>${won === 'won' ? '<span class="badge b-mint">Funnier</span>' : ''}` : '<span class="grow muted small">Name hidden until you vote</span>'}${s.meme ? `<button class="btn small ghost" data-msave="${i}" title="Save this meme as a PNG picture">⬇ Save</button>` : ''}</div>
-      ${memeCardHTML(s, i)}${s.meme?.picture && s.img?.url ? `<span class="small muted">Picture: ${esc(s.meme.picture)}</span>` : ''}
-      ${s.img?.id && s.meme && !s.gif && !r.gifs ? `<button class="btn small" data-mgif="${i}" ${s.gifBusy ? 'disabled' : ''}>🌀 ${s.gifBusy ? esc(s.gifBusy) : 'Make it a GIF'}</button>` : ''}
+      ${memeCardHTML(s, i)}${s.meme?.template ? `<span class="small muted">Format: ${esc(s.meme.template)}</span>` : s.meme?.picture && s.img?.url ? `<span class="small muted">Picture: ${esc(s.meme.picture)}</span>` : ''}
+      ${(s.img?.id || (s.tpl && MEME_TEMPLATES.find((x) => x.id === s.meme?.tplId)?.top)) && s.meme && !s.gif && !r.gifs ? `<button class="btn small" data-mgif="${i}" ${s.gifBusy ? 'disabled' : ''}>🌀 ${s.gifBusy ? esc(s.gifBusy) : 'Make it a GIF'}</button>` : ''}
       ${s.gifBusy && r.gifs ? `<span class="status-line small">${esc(s.gifBusy)}</span>` : ''}
       ${s.gif ? `<div class="meme-gif"><img src="${esc(s.gif.url)}" alt="GIF"><span class="small muted">🌀 GIF saved to your Gallery${s.gif.captionsSkipped ? ' (without captions: this FFmpeg can\'t write text)' : ''}</span></div>` : ''}
       ${s.gifError ? `<div class="small" style="color:var(--danger)">${esc(s.gifError)}</div>` : ''}</div>`;
@@ -135,10 +155,15 @@ function runMemeSide(r, i) {
   oneShots.set(requestId, {
     text: '',
     onText: (t) => { s.raw = t; },
-    resolve: (t) => { s.raw = t || s.raw; s.meme = parseMeme(s.raw); if (!s.meme) s.error = 'This model did not write a meme.'; next(); },
+    resolve: async (t) => {
+      s.raw = t || s.raw; s.meme = parseMeme(s.raw);
+      if (!s.meme) s.error = 'This model did not write a meme.';
+      else if (s.meme.tplId) { const tpl = MEME_TEMPLATES.find((x) => x.id === s.meme.tplId); s.tpl = await qs.call('memes:image', tpl.id, tpl.url).catch(() => null); }
+      next();
+    },
     reject: (err) => { s.error = err.message === 'aborted' ? 'Stopped.' : memeError(err.message); next(); },
   });
-  qs.sendChat({ requestId, target: s.target, messages: [{ role: 'system', content: MEME_SYS }, { role: 'user', content: `Make a meme about: ${r.topic}` }], temperature: 0.9, maxTokens: 400, contextSize: 4096, gpu: p.gpu, effort: 'fast', level: 'fast' });
+  qs.sendChat({ requestId, target: s.target, messages: [{ role: 'system', content: memeSystemPrompt({ topBottomOnly: r.gifs }) }, { role: 'user', content: `Make a meme about: ${r.topic}` }], temperature: 0.9, maxTokens: 900, contextSize: 4096, gpu: p.gpu, effort: 'fast', level: 'quick' }); // one model writes it (a team's lead), so the meme it picks is the one shown
 }
 // The pictures, one after the other, with the same picture model for both so it stays fair.
 async function paintMemes(r) {
@@ -146,7 +171,7 @@ async function paintMemes(r) {
   if (!pick) { if (S.route.view === 'memes') render(); return; }
   r.painting = true;
   for (const s of r.sides) {
-    if (memeRound !== r || !s.meme?.picture) continue;
+    if (memeRound !== r || !s.meme?.picture || s.meme.tplId) continue;
     s.painting = true; if (S.route.view === 'memes') render();
     const prompt = `${s.meme.picture}, meme picture, clear subject, no text, no words, no letters`;
     try {
@@ -166,7 +191,7 @@ async function paintMemes(r) {
   r.painting = false;
   if (r.gifs && memeRound === r) {
     r.animating = true;
-    for (let i = 0; i < r.sides.length; i++) if (memeRound === r && r.sides[i].img?.id && r.sides[i].meme) await memeToGif(i);
+    for (let i = 0; i < r.sides.length; i++) if (memeRound === r && (r.sides[i].img?.id || r.sides[i].tpl) && r.sides[i].meme) await memeToGif(i);
     r.animating = false;
   }
   if (S.route.view === 'memes') render();
@@ -203,9 +228,27 @@ async function saveMeme(i) {
   const c = document.createElement('canvas'); c.width = W; c.height = H;
   const g = c.getContext('2d');
   let drew = false;
-  if (s.img?.id) {
+  const tplDef = s.meme.tplId && MEME_TEMPLATES.find((x) => x.id === s.meme.tplId);
+  if (tplDef && s.tpl) {
+    const im = await new Promise((res, rej) => { const x = new Image(); x.onload = () => res(x); x.onerror = rej; x.src = s.tpl; }).catch(() => null);
+    if (im && !tplDef.top) {
+      c.width = 900; c.height = Math.round(900 * im.height / im.width);
+      const g2 = c.getContext('2d'); g2.drawImage(im, 0, 0, c.width, c.height);
+      tplDef.boxes.forEach(([x, y, w, h], n) => {
+        const text = String(s.meme.boxes[n] || '').toUpperCase(); if (!text) return;
+        let size = Math.round(boxFont(text, w) * 9); let lines;
+        do { g2.font = `900 ${size}px Impact, "Anton", "Arial Black", sans-serif`; lines = memeWrap(g2, text, w * c.width - 8); size -= 2; } while (lines.length * size * 1.05 > h * c.height && size > 14);
+        g2.textAlign = 'center'; g2.lineJoin = 'round'; g2.lineWidth = Math.max(3, size / 8); g2.strokeStyle = '#000'; g2.fillStyle = '#fff';
+        const top = y * c.height + (h * c.height - lines.length * size * 1.05) / 2 + size;
+        lines.forEach((l, k) => { const yy = top + k * size * 1.05; g2.strokeText(l, (x + w / 2) * c.width, yy); g2.fillText(l, (x + w / 2) * c.width, yy); });
+      });
+      const a = document.createElement('a'); a.href = c.toDataURL('image/png'); a.download = `meme-${(memeRound.topic || 'battle').replace(/[^\w]+/g, '-').slice(0, 40)}-${'AB'[i]}.png`; a.click();
+      return;
+    }
+  }
+  if (s.img?.id || s.tpl) {
     try {
-      const src = await qs.call('media:dataUrl', s.img.id);
+      const src = s.img?.id ? await qs.call('media:dataUrl', s.img.id) : s.tpl;
       const im = await new Promise((res, rej) => { const x = new Image(); x.onload = () => res(x); x.onerror = rej; x.src = src; });
       const k = Math.max(W / im.width, H / im.height);
       g.drawImage(im, (W - im.width * k) / 2, (H - im.height * k) / 2, im.width * k, im.height * k);
@@ -304,6 +347,7 @@ async function makeGif(prompt) {
 async function memeToGif(i) {
   const round = memeRound;
   const s = round?.sides?.[i];
+  if (s && !s.img?.id && s.tpl && s.meme?.tplId) { try { const g = await call('media:saveDataUrl', s.tpl, { title: `Meme: ${s.meme.template}` }); s.img = { id: g.id, url: g.url || s.tpl }; } catch {} }
   if (!s?.img?.id || s.gifBusy) return;
   const pick = gifVideoPick(s.meme.picture || round.topic, true);
   const repaint = () => { if (S.route.view === 'memes' && memeTab === 'battle') render(); };

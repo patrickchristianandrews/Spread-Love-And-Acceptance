@@ -1598,6 +1598,11 @@ function redPng(size = 64) {
   assert.match(await win.locator('.arena-board').innerText(), /1[\s\S]*0/);
   assert.deepEqual(await win.evaluate(() => [parseMeme('Sure! ```json\n{"top":"a","bottom":"b","picture":"c"}\n```'), parseMeme('<think>hmm</think>Top: when it works\nBottom: first try')]),
     [{ top: 'a', bottom: 'b', picture: 'c' }, { top: 'when it works', bottom: 'first try', picture: '' }]);
+  // Real meme formats: the last JSON after the brainstorm is the meme; its boxes fill the format.
+  const tm = await win.evaluate(() => parseMeme('1. {"template":"Success Kid","boxes":["a","b"]}\nFinal: {"template": "drake hotline bling", "boxes": ["Writing tests", "Shipping on Friday"]}'));
+  assert.deepEqual([tm.template, tm.boxes], ['Drake Hotline Bling', ['Writing tests', 'Shipping on Friday']]);
+  assert.ok(await win.locator('.meme-tpl .meme-box').count() >= 2 || await win.locator('.meme').count() === 2, 'template memes show their boxes');
+  assert.match(await win.evaluate(() => memeSystemPrompt()), /Drake Hotline Bling[\s\S]*Specific and relatable[\s\S]*three different meme ideas/);
   await shot(win, '16c-meme-voted');
   // The GIF maker sits beside Meme battle, and a battle can be a GIF battle.
   assert.equal(await win.locator('#mb-gifs').count(), 1, 'a GIF battle switch in the battle form');

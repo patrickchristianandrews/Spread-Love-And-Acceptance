@@ -636,6 +636,34 @@ handle('media:frame', async (id, at) => {
   const item = await media.extractFrame(media.gallery().find((x) => x.id === id).file, at);
   return { ...item, url: `qsmedia://g/${item.id}` };
 });
+// Meme battle's template pictures (Drake, Distracted Boyfriend…): from Imgflip's public list of
+// popular memes the first time, then kept on this PC so they work offline too.
+let imgflipList = null;
+handle('memes:image', async (id, fallbackUrl) => {
+  if (!/^\d{1,12}$/.test(String(id))) throw new Error('Unknown meme template.');
+  const dir = path.join(store.dir('media'), 'meme-templates');
+  fs.mkdirSync(dir, { recursive: true });
+  const kept = fs.readdirSync(dir).find((f) => f.startsWith(`${id}.`));
+  const asData = (f) => `data:image/${/\.png$/i.test(f) ? 'png' : 'jpeg'};base64,${fs.readFileSync(path.join(dir, f)).toString('base64')}`;
+  if (kept) return asData(kept);
+  if (require('./offline').isOffline()) throw new Error('offline');
+  if (!imgflipList || Date.now() - imgflipList.at > 864e5) {
+    try {
+      const r = await fetch('https://api.imgflip.com/get_memes', { headers: { 'User-Agent': 'Quicksilver' }, signal: AbortSignal.timeout(15000) });
+      const j = await r.json();
+      imgflipList = { at: Date.now(), byId: Object.fromEntries((j?.data?.memes || []).map((m) => [String(m.id), m.url])) };
+    } catch { imgflipList = { at: Date.now(), byId: {} }; }
+  }
+  const url = imgflipList.byId[String(id)] || fallbackUrl;
+  if (!/^https:\/\/i\.imgflip\.com\/[\w.-]+\.(jpe?g|png)$/i.test(String(url || ''))) throw new Error('No picture for that template.');
+  const res = await fetch(url, { headers: { 'User-Agent': 'Quicksilver' }, signal: AbortSignal.timeout(20000) });
+  if (!res.ok || !/^image\//.test(res.headers.get('content-type') || '')) throw new Error(`The template picture returned HTTP ${res.status}.`);
+  const buf = Buffer.from(await res.arrayBuffer());
+  if (buf.length > 6 * 1024 * 1024) throw new Error('That template picture is too large.');
+  const file = `${id}.${/\.png$/i.test(url) ? 'png' : 'jpg'}`;
+  fs.writeFileSync(path.join(dir, file), buf);
+  return asData(file);
+});
 handle('media:dataUrl', (id) => {
   const g = media.gallery().find((x) => x.id === id);
   const ext = path.extname(g.file).slice(1).toLowerCase();
