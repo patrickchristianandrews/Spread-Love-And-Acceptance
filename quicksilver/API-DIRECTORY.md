@@ -32,7 +32,7 @@ Tasks: 💬 Everyday chat · 🧠 Hard reasoning & maths · 💻 Coding · ✍�
 | **NVIDIA NIM** (7.5/10) | Many open models (DeepSeek, Qwen, Nemotron) | Free developer credits, rate limited | Paid plans | [Get a key](https://build.nvidia.com) · [Prices](https://build.nvidia.com/explore/discover) |
 | **Together AI** (7.5/10) | Open models and FLUX pictures | $5 credits; FLUX.1 Schnell Free | Low, per use | [Get a key](https://api.together.ai/settings/api-keys) · [Prices](https://www.together.ai/pricing) |
 | **Z.ai (GLM)** (7.5/10) | GLM Flash models free; GLM flagship is strong at coding | GLM Flash models free | Flagship pay as you go, low | [Get a key](https://z.ai/manage-apikey/apikey-list) · [Prices](https://docs.z.ai/guides/overview/pricing) |
-| **Venice AI** (7/10) | Uncensored and private (the only cloud AI the Liquid Edition uses) | A small free allowance | About $0.70 in / $2.80 out per million tokens | [Get a key](https://venice.ai/settings/api) · [Prices](https://docs.venice.ai/overview/pricing) |
+| **Venice AI** (7/10) | Uncensored and private (the suggested cloud AI for the Liquid Edition) | A small free allowance | About $0.70 in / $2.80 out per million tokens | [Get a key](https://venice.ai/settings/api) · [Prices](https://docs.venice.ai/overview/pricing) |
 | **AI21 (Jamba)** | Very long documents (256K context). | Free trial credit for new accounts, then pay as you go. | See its price page | [Get a key](https://studio.ai21.com/account/api-key) · [Prices](https://www.ai21.com/pricing) |
 | **Alibaba Qwen (Model Studio)** | Alibaba's strongest Qwen model in the cloud. | A free token allowance for new users, then pay as you go. | See its price page | [Get a key](https://modelstudio.console.alibabacloud.com/) · [Prices](https://www.alibabacloud.com/help/en/model-studio/models) |
 | **Chutes** | Big open models on a decentralized network. | Some free models with daily limits; others are paid. | See its price page | [Get a key](https://chutes.ai/app/api) · [Prices](https://chutes.ai/) |
@@ -175,7 +175,7 @@ Tasks: 💬 Everyday chat · 🧠 Hard reasoning & maths · 💻 Coding · ✍�
 
 | Service | Best for | What free gets you | After that | Links |
 |---|---|---|---|---|
-| **Venice AI** (7/10) | Uncensored and private (the only cloud AI the Liquid Edition uses) | A small free allowance | About $0.70 in / $2.80 out per million tokens | [Get a key](https://venice.ai/settings/api) · [Prices](https://docs.venice.ai/overview/pricing) |
+| **Venice AI** (7/10) | Uncensored and private (the suggested cloud AI for the Liquid Edition) | A small free allowance | About $0.70 in / $2.80 out per million tokens | [Get a key](https://venice.ai/settings/api) · [Prices](https://docs.venice.ai/overview/pricing) |
 
 ### Paid
 
