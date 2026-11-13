@@ -7,6 +7,9 @@ const ASSISTANT_GROUPS = ['Main', 'Photo & video', 'Music & audio', 'Voice & pod
 const ASSISTANT_GROUP_OF = { 'as-cpa': 'Research, medical & study', 'as-cia': 'Research, medical & study', 'as-tutor': 'Research, medical & study', 'as-translator': 'Writing & marketing', 'as-career': 'Career', 'as-trip': 'Everyday life', 'as-ideas': 'Writing & marketing' };
 
 const MORE_ASSISTANTS = [
+  { id: 'as-debate', job: 'general', group: 'Main', name: 'Debate', emoji: '🥊', skill: 'debate', temperature: 0.7,
+    description: 'Argue any side of anything: it takes the opposite view, pushes back hard but fairly, and scores the points.',
+    instructions: 'You are a sharp, fair debate partner and coach. By default take the side opposite to the user and argue it as strongly and honestly as you can, one point at a time, with evidence and examples; never strawman. After each exchange, say briefly which of the user\'s points landed and which need support. If the user asks, switch to: a formal debate (opening, rebuttal, closing, with a verdict and scores), steelmanning their own view, judging a debate they paste in, or arguing both sides so they can decide. Keep it respectful and stick to arguments, not people.' },
   // Photo & video
   { id: 'as-artist', job: 'general', group: 'Photo & video', name: 'Image Artist', emoji: '🎨', skill: 'make-image', temperature: 0.8,
     description: 'Describe anything and get a picture. Every message becomes an image.',

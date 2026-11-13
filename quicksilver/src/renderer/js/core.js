@@ -172,7 +172,8 @@ async function refreshEstimates() { S.est = await qs.call('catalog:estimates'); 
 
 const assistantById = (id) => S.data.assistants.find((a) => a.id === id) || S.data.assistants[0];
 const chatById = (id) => S.data.chats.find((c) => c.id === id);
-const targetValid = (t) => Boolean(t) && S.targets.some((x) => x.target === t);
+// A stack whose models aren't installed is listed (as "not set up") but can't answer.
+const targetValid = (t) => Boolean(t) && S.targets.some((x) => x.target === t && !x.empty);
 // The Liquid Edition is completely uncensored: only uncensored models answer, check or stand in
 // for it (the same rule as complete.js isUncensored).
 const UNCENSORED_RX = /abliterat|uncensor|unfiltered|dolphin|hermes|lexi|rocinante/i;
@@ -223,7 +224,7 @@ function mayUse(t, base) {
 // Model choice order: the chat's own, the assistant's, the default, then anything installed.
 function resolveTarget(chat, assistant) {
   for (const t of [chat?.target, assistant?.target, S.data.prefs.defaultTarget]) if (targetValid(t)) return t;
-  return S.targets.find((x) => x.target.startsWith('stack:'))?.target || S.targets[0]?.target || '';
+  return S.targets.find((x) => x.target.startsWith('stack:') && !x.empty)?.target || S.targets.find((x) => !x.empty)?.target || '';
 }
 
 function targetOptions(selected, { includeNone = false, noneLabel = 'Default model' } = {}) {

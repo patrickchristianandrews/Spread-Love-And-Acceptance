@@ -77,7 +77,7 @@ function redPng(size = 64) {
   await win.evaluate(async () => { S.data.prefs.addFoundModels = true; save(); await startupModels(); });
   await win.waitForSelector('text=and added it. Ready to use', { timeout: 30000 });
   // Start something: expert assistants for one task each (the everyday Quicksilver isn't listed).
-  assert.match(await win.locator('.start-note').innerText(), /assistant programmed to be an expert at one task/);
+  assert.match(await win.locator('.start-note').innerText(), /a helper set up to be an expert at one task/);
   assert.equal(await win.locator('[data-start="as-general"]').count(), 0);
   assert.ok(await win.locator('[data-start]').count() >= 10);
   console.log('✓ home (models from other apps added only when you choose; expert assistants explained)');
@@ -1569,6 +1569,31 @@ function redPng(size = 64) {
   await win.click('[data-cmp-tab="blind"]');
   await win.waitForSelector('#ar-q');
   console.log('✓ meme battle: two hidden memes on one topic, vote, its own leaderboard');
+  // A battle picks models on this PC, never two from one cloud service; an empty account is explained.
+  await win.evaluate(() => go({ view: 'memes' }));
+  await win.waitForSelector('#mb-topic');
+  const mb2 = await win.evaluate(() => {
+    const keep = S.targets;
+    S.targets = [...keep.filter((t) => !t.target.startsWith('api:')), { target: 'api:v1:venice-uncensored', label: 'venice-uncensored', group: 'Venice' }, { target: 'api:v1:other', label: 'other', group: 'Venice' }];
+    const pairs = [];
+    try {
+      for (let i = 0; i < 12; i++) { $('#mb-topic').value = 'cats'; startMemeBattle(); pairs.push(memeRound.sides.map((x) => x.target)); memeRound = null; oneShots.clear?.(); }
+    } finally { S.targets = keep; render(); }
+    return { pairs, err: memeError('Venice AI (private, uncensored): {"error":"Insufficient USD or Diem balance to complete request."}') };
+  });
+  assert.ok(mb2.pairs.every(([a, b]) => !a.startsWith('api:') && !b.startsWith('api:')), `"Any two" uses models on this PC: ${JSON.stringify(mb2.pairs)}`);
+  assert.match(mb2.err, /^Venice AI \(private, uncensored\) is out of credits/);
+  // A stack with none of its models installed is never picked to answer.
+  const emptyStack = await win.evaluate(async () => {
+    await qs.call('stacks:save', { id: 't-empty', name: 'Coding Balanced test', members: { drafters: ['local:not-installed-a'], judge: 'local:not-installed-b' } });
+    S.targets = await qs.call('targets:list');
+    const row = S.targets.find((t) => t.target === 'stack:t-empty');
+    const chosen = resolveTarget({ target: 'stack:t-empty' }, {});
+    await qs.call('stacks:delete', 't-empty'); S.targets = await qs.call('targets:list');
+    return { listed: Boolean(row), empty: row?.empty, label: row?.label, valid: targetValid('stack:t-empty'), chosen };
+  });
+  assert.ok(emptyStack.listed && emptyStack.empty && /not set up/.test(emptyStack.label), `listed as not set up: ${JSON.stringify(emptyStack)}`);
+  assert.ok(!emptyStack.valid && emptyStack.chosen && emptyStack.chosen !== 'stack:t-empty', 'a chat set to it answers with a model you have');
   // Coding agents: the setup box opens from Settings and lists the models it would use.
   await win.evaluate(() => agentsModal());
   await win.waitForFunction(() => /OpenCode[\s\S]*Kilo Code[\s\S]*Cline[\s\S]*Aider[\s\S]*OpenHands/.test(document.querySelector('#modal')?.textContent || '') && document.querySelectorAll('#ag-model option').length > 0, null, { timeout: 15000 });
@@ -1576,6 +1601,24 @@ function redPng(size = 64) {
   await shot(win, '16d-coding-agents');
   await win.click('#modal [data-close]');
   console.log('✓ coding agents: OpenCode and OpenHands setup on your models');
+  // "Helpers" (not "Assistants"), with a Debate helper near the top.
+  await win.evaluate(() => go({ view: 'assistants' }));
+  await win.waitForSelector('[data-chat-with="as-debate"]');
+  assert.match(await win.locator('.page-head h1').innerText(), /^Helpers$/);
+  assert.match(await win.locator('[data-nav="assistants"]').first().innerText(), /Helpers/);
+  assert.match(await win.evaluate(() => assistantById('as-debate')?.instructions || ''), /opposite to the user/);
+  console.log('✓ helpers: the menu and page say Helpers, and a Debate helper is ready');
+  // The "That answer took a while" tip sits near the top and never covers the message box.
+  const tip = await win.evaluate(async () => {
+    newChat(); await new Promise((r) => setTimeout(r, 300));
+    const box = Object.assign(document.createElement('div'), { id: 'speed-tip', className: 'speed-tip' });
+    box.innerHTML = `<b>⏳ That answer took a while.</b><p>${'Your options are already lean. '.repeat(30)}</p><div class="card">Add a free cloud AI <button class="btn">Connect</button></div>`;
+    document.body.appendChild(box);
+    const t = box.getBoundingClientRect(); const c = document.querySelector('#composer').getBoundingClientRect();
+    box.remove();
+    return { tipTop: t.top, tipBottom: t.bottom, composerTop: c.top, winH: innerHeight };
+  });
+  assert.ok(tip.tipTop < tip.winH / 3 && tip.tipBottom <= tip.composerTop, `the tip stays above the message box: ${JSON.stringify(tip)}`);
 
   // Voice, phone and updates settings.
   await win.click('[data-nav="settings"]');

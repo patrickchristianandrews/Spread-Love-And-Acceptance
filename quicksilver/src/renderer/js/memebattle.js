@@ -20,6 +20,13 @@ function parseMeme(text) {
   return lines.length ? { top: (lines[0] || '').slice(0, 120), bottom: (lines[1] || '').slice(0, 120), picture: (lines[2] || '').slice(0, 300) } : null;
 }
 
+// A cloud error in plain words (an empty account is the usual one).
+function memeError(msg) {
+  const m = String(msg || '');
+  if (/insufficient|balance|credit|quota|402|payment/i.test(m)) return `${m.split(':')[0] || 'This cloud AI'} is out of credits, so it couldn't make a meme. Add credits on its site, or pick other contestants.`;
+  if (/401|403|unauthori[sz]ed|invalid api key/i.test(m)) return `${m.split(':')[0] || 'This cloud AI'} refused the key. Check it under Models → Connect an API.`;
+  return m.length > 220 ? `${m.slice(0, 220)}…` : m;
+}
 const memePicker = () => (typeof pickMediaModel === 'function' ? pickMediaModel('image') : null);
 
 views.memes = {
@@ -89,11 +96,19 @@ function startMemeBattle() {
   const topic = input?.value.trim();
   if (!topic) return;
   if (pending) { toast('Wait for the chat answer to finish first.'); return; }
-  const pool = arenaTargets().map((t) => t.target);
+  const all = arenaTargets().filter((t) => targetValid(t.target)).map((t) => t.target);
+  // "Any two" uses models on this PC (free, no credits needed); cloud AIs join only when there
+  // aren't two of them, and never two from the same cloud service.
+  const svc = (t) => (t.startsWith('api:') ? t.split(':')[1] : t);
+  const local = all.filter((t) => !t.startsWith('api:'));
+  const pool = local.length >= 2 ? local : all;
   if (pool.length < 2) return;
   const shuffle = (a) => a.map((x) => [Math.random(), x]).sort((p, q) => p[0] - q[0]).map((x) => x[1]);
-  const fixed = S.data.prefs.memeFixed && pool.includes(S.data.prefs.memeFixed) ? S.data.prefs.memeFixed : null;
-  const pair = shuffle(fixed ? [fixed, shuffle(pool.filter((t) => t !== fixed))[0]] : shuffle(pool).slice(0, 2));
+  const fixed = S.data.prefs.memeFixed && all.includes(S.data.prefs.memeFixed) ? S.data.prefs.memeFixed : null;
+  const first = fixed || shuffle(pool)[0];
+  const rival = shuffle(pool.filter((t) => t !== first && svc(t) !== svc(first)))[0] || shuffle(all.filter((t) => t !== first && svc(t) !== svc(first)))[0];
+  if (!rival) { toast('A battle needs two different models: download another model or connect a second cloud AI.'); return; }
+  const pair = shuffle([first, rival]);
   memeRound = { topic, paint: Boolean(memePicker()) && S.data.prefs.memePaint !== false, sides: pair.map((target) => ({ target, raw: '', meme: null, done: false })), voted: null };
   render();
   runMemeSide(memeRound, 0);
@@ -110,7 +125,7 @@ function runMemeSide(r, i) {
     text: '',
     onText: (t) => { s.raw = t; },
     resolve: (t) => { s.raw = t || s.raw; s.meme = parseMeme(s.raw); if (!s.meme) s.error = 'This model did not write a meme.'; next(); },
-    reject: (err) => { s.error = err.message === 'aborted' ? 'Stopped.' : err.message; next(); },
+    reject: (err) => { s.error = err.message === 'aborted' ? 'Stopped.' : memeError(err.message); next(); },
   });
   qs.sendChat({ requestId, target: s.target, messages: [{ role: 'system', content: MEME_SYS }, { role: 'user', content: `Make a meme about: ${r.topic}` }], temperature: 0.9, maxTokens: 400, contextSize: 4096, gpu: p.gpu, effort: 'fast', level: 'fast' });
 }

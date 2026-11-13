@@ -1152,8 +1152,11 @@ function targets() {
   const st = stacks();
   const fusion = (s) => s.infused || s.builtFor === 'power';
   for (const s of st.filter((x) => LIQUID_STACKS.has(x.id)).sort((a, b) => a.id.length - b.id.length)) out.push({ target: `stack:${s.id}`, label: `${s.emoji || '💧'} ${s.name}`, name: s.name, group: '💧 Built in', stack: true });
-  for (const s of st.filter((x) => !LIQUID_STACKS.has(x.id) && !fusion(x))) out.push({ target: `stack:${s.id}`, label: `${s.emoji || '🧩'} ${s.name}`, name: s.name, group: '🧩 Stacks', stack: true });
-  for (const s of st.filter(fusion)) out.push({ target: `stack:${s.id}`, label: `${s.emoji || '⚗️'} ${s.name}`, name: s.name, group: '⚗️ Fusions', stack: true, fusion: true });
+  // A stack or fusion none of whose models is installed can't answer: it is listed as not set up
+  // and never picked to answer (a chat set to it uses your default model instead).
+  const empty = (s) => { const m = s.members || {}; return ![...(m.drafters || []), m.judge, m.vision].filter(Boolean).some((t) => exists(t)); };
+  for (const s of st.filter((x) => !LIQUID_STACKS.has(x.id) && !fusion(x))) out.push({ target: `stack:${s.id}`, label: `${s.emoji || '🧩'} ${s.name}${empty(s) ? ' (not set up)' : ''}`, name: s.name, group: '🧩 Stacks', stack: true, ...(empty(s) ? { empty: true } : {}) });
+  for (const s of st.filter(fusion)) out.push({ target: `stack:${s.id}`, label: `${s.emoji || '⚗️'} ${s.name}${empty(s) ? ' (not set up)' : ''}`, name: s.name, group: '⚗️ Fusions', stack: true, fusion: true, ...(empty(s) ? { empty: true } : {}) });
   for (const m of models.list().filter((x) => x.kind === 'text')) out.push({ target: `local:${m.id}`, label: m.name, name: m.name, group: 'On this PC', vision: Boolean(m.files.mmproj) });
   for (const k of kbModels()) if (exists(k.base)) out.push({ target: `kbm:${k.id}`, label: `${k.emoji || '📚'} ${k.name}`, name: k.name, group: 'Knowledge models', vision: canSee(k.base), knowledge: true });
   const off = Boolean(store.config().offline);
