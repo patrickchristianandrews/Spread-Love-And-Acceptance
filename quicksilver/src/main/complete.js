@@ -1295,6 +1295,7 @@ async function warm(target, { contextSize, gpu } = {}) {
     if (!first) return false;
     t = parse(first);
   }
+  if (t.kind === 'api') return providers.warm(t.providerId, t.model); // opens the connection: a 1-token request
   if (t.kind !== 'local') return false;
   const m = models.get(t.id);
   if (!m) return false;

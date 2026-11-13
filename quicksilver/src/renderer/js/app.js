@@ -469,6 +469,9 @@ async function startupModels() {
   if (p.preloadDefault !== false) {
     const t = resolveTarget(null, assistantById(p.lastAssistant));
     if (t && !cloudAnswers()) qs.call('models:warm', t, { contextSize: p.contextSize, gpu: p.gpu }).catch(() => {});
+    // Cloud AI for everything: open the connection to the cloud AI that will answer, before the first question.
+    const cloud = cloudAnswers() && (bestApiTarget('general', (x) => liquidOk(x)) || bestApiTarget('general'));
+    if (cloud) qs.call('models:warm', cloud).catch(() => {});
   }
   // Measured speeds: if no answer has been timed on this PC yet, run a short speed test once the
   // app is idle, so every "~6 s" on screen is real rather than estimated.

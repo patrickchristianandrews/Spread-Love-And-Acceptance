@@ -85,7 +85,8 @@ function apisSetHTML() {
       <div class="small muted">${(x.models || []).length ? `${x.models.length} model${x.models.length === 1 ? '' : 's'}${x.models[0] ? `: ${esc(x.models.slice(0, 3).join(', '))}${x.models.length > 3 ? '…' : ''}` : ''}` : 'pictures, video or voice'}${x.hasKey || x.noKey ? '' : ' · <span style="color:var(--danger)">no key saved</span>'}</div></div>`;
   return `<div class="stack-v">
     <p class="lede" style="margin:0">Cloud AIs and services you connected with an API key: they answer, check, search or make pictures when Quicksilver uses them. Keys are stored encrypted on this PC.</p>
-    <div class="row"><button class="btn primary" id="set-api-add">＋ Connect a cloud AI or service</button><button class="btn" id="set-api-dir">📒 API directory (what each costs, free plans)</button></div>
+    <div class="row"><button class="btn primary" id="set-api-add">＋ Connect a cloud AI or service</button><button class="btn" id="set-api-dir">📒 API directory (what each costs, free plans)</button><button class="btn" id="set-api-health" ${chat.length ? '' : 'disabled'}>🩺 Check connections</button></div>
+    <div id="set-api-health-out"></div>
     <div class="card set-card"><h3 style="margin-top:0">How Quicksilver uses them</h3>
       <label class="row"><input type="checkbox" id="set-cloud-hard" ${p.cloudHard ? 'checked' : ''} ${chat.length ? '' : 'disabled'}><span><b>Cloud AI for hard questions</b> <span class="help">hard questions go to your best connected cloud AI (the Liquid Edition uses an uncensored one such as Venice first)</span></span></label>
       <label class="row" style="margin-top:6px"><input type="checkbox" id="set-cloud-all" ${p.cloudAll ? 'checked' : ''} ${chat.length ? '' : 'disabled'}><span><b>Cloud AI for everything</b> <span class="help">every message goes to it; this PC answers when you're offline or the cloud can't. Fastest on a slow PC.</span></span></label>
@@ -103,6 +104,15 @@ function apisSetHTML() {
 function bindApisSet() {
   $('#set-api-add')?.addEventListener('click', () => { modelsTab = 'api'; go({ view: 'models' }); });
   $('#set-api-dir')?.addEventListener('click', () => apiDirectoryModal());
+  // Each connected cloud AI answers a 1-token request: pass or fail, how long, and which key was used.
+  $('#set-api-health')?.addEventListener('click', async (e) => {
+    const out = $('#set-api-health-out'); e.target.disabled = true; out.innerHTML = '<div class="small muted">Checking each connection…</div>';
+    try {
+      const rows = await call('providers:health');
+      out.innerHTML = `<div class="card set-card">${rows.map((r) => `<div class="small">${r.ok ? '✅' : '❌'} <b>${esc(r.provider)}</b> · ${esc(r.model || '')} · ${r.skipped ? esc(r.skipped) : `${r.ms} ms`}${r.ok ? '' : ` · ${esc(r.error || `HTTP ${r.status}`)}`} <span class="muted">key ${esc(r.key)}</span></div>`).join('') || '<div class="small muted">No cloud AIs connected.</div>'}</div>`;
+    } catch (err) { out.innerHTML = `<div class="small">❌ ${esc(err.message)}</div>`; }
+    e.target.disabled = false;
+  });
   $$('[data-set-tab-link]').forEach((b) => b.addEventListener('click', (e) => { e.preventDefault(); setTab = b.dataset.setTabLink; render(); }));
   $('#set-api-connectors')?.addEventListener('click', (e) => { e.preventDefault(); go({ view: 'integrations' }); });
   $$('[data-set-api-edit]').forEach((b) => b.addEventListener('click', async () => { const presets = await qs.call('providers:presets'); editProvider(S.providers.find((x) => x.id === b.dataset.setApiEdit), presets); }));

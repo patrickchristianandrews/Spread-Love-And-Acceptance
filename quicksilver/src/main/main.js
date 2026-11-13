@@ -405,6 +405,8 @@ handle('providers:list', () => providers.publicList());
 handle('providers:save', (p, key) => providers.upsert(p, key));
 handle('providers:remove', (id) => providers.remove(id));
 handle('providers:refresh', (id) => providers.refreshModels(id));
+handle('providers:health', () => providers.health());
+handle('netlog:recent', () => require('./netlog').recent.slice(-50));
 
 // ---------- stacks and chat ----------
 handle('targets:list', () => complete.targets());

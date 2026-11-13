@@ -218,6 +218,9 @@ const STOP = new Set('the and for are but not you all any can had her was one ou
 // are dropped. Thumbnails are downloaded by Quicksilver and kept briefly on this PC, so the chat
 // shows them without the page reaching out to other sites.
 const EXPLICIT = /\b(nude|nudes|naked|nsfw|porn\w*|xxx|sex|sexy|hentai|boobs?|tits|pussy|dick|cock|penis|vagina|genitals?|topless|lingerie|erotic\w*|fetish|onlyfans|strip(per|ping)?|explicit|gore|beheading|corpse)\b/i;
+// TODO(safesearch): picture search is always strict (Openverse mature=false, Brave safesearch=strict,
+// SearXNG safesearch=2): the web Safe search switch does not apply here. A deliberate decision,
+// tracked here. The change would be getSafeSearchParam on the Brave/SearXNG/DuckDuckGo picture calls.
 async function images(query, { count = 8 } = {}) {
   const q = String(query || '').trim();
   if (!q) throw new Error('Say what pictures to look for.');

@@ -284,6 +284,46 @@ async function* chat(providerId, model, { messages, temperature, maxTokens, sign
   }
 }
 
+// A 1-token request: proves the key reaches the service and opens the connection (TLS) so the
+// first real question doesn't pay for it. Used by the connection check and the warm-up at start.
+async function ping(providerId, model) {
+  const p = get(providerId);
+  if (!p) return { ok: false, error: 'Not connected' };
+  model = model || p.models?.[0];
+  const key = secretOf(p.id);
+  const fp = netlog.fingerprint(key);
+  const t0 = Date.now();
+  const done = (r) => netlog.log({ provider: p.name, model, key: fp, url: p.baseUrl, sent: { max_tokens: 1, purpose: 'ping' }, status: r.status, timing: { totalMs: r.ms }, ...(r.ok ? {} : { warning: `ping failed: ${r.error}` }) }) && { provider: p.name, id: p.id, model, key: fp, ...r };
+  if (!model) return done({ ok: false, ms: 0, error: 'No model listed for this connection' });
+  if (PRESETS[p.preset]?.media) return done({ ok: true, ms: 0, skipped: 'pictures/video/voice only' });
+  if (!key && !PRESETS[p.preset]?.noKey) return done({ ok: false, ms: 0, error: 'No key saved' });
+  try {
+    if (p.preset === 'anthropic') {
+      const { client } = anthropicClient(p);
+      await client.messages.create({ model, max_tokens: 1, messages: [{ role: 'user', content: 'hi' }] }, { timeout: 20000 });
+      return done({ ok: true, ms: Date.now() - t0, status: 200 });
+    }
+    const res = await fetch(`${p.baseUrl}/chat/completions`, { method: 'POST', headers: { 'Content-Type': 'application/json', ...(key ? { Authorization: `Bearer ${key}` } : {}) }, body: JSON.stringify({ model, max_tokens: 1, messages: [{ role: 'user', content: 'hi' }] }), signal: AbortSignal.timeout(20000) });
+    if (!res.ok) return done({ ok: false, ms: Date.now() - t0, status: res.status, error: (await oai.errorText(res)).slice(0, 200) });
+    return done({ ok: true, ms: Date.now() - t0, status: res.status });
+  } catch (err) {
+    return done({ ok: false, ms: Date.now() - t0, status: err.status, error: String(err.message || err).slice(0, 200) });
+  }
+}
+// Every connected chat service, pinged at once: pass or fail, with the time it took.
+async function health() {
+  const list = all().filter((p) => !PRESETS[p.preset]?.media && (p.models || []).length);
+  return Promise.all(list.map((p) => ping(p.id)));
+}
+// Warm-up at start: once per service every ten minutes.
+const warmed = new Map();
+async function warm(providerId, model) {
+  const k = `${providerId}|${model}`;
+  if (Date.now() - (warmed.get(k) || 0) < 600000) return true;
+  warmed.set(k, Date.now());
+  return (await ping(providerId, model)).ok;
+}
+
 // Sampling for chat: temperature 0.9 unless the caller chose one (Quicksilver picks lower values
 // on purpose for planning, checking and maths), top_p 0.95, and for open-ended answers
 // (temperature 0.5 and up) presence 0.6 / frequency 0.3 to cut repetition. No stop sequences.
@@ -335,4 +375,4 @@ async function image(providerId, model, { prompt, size = '1024x1024', image: inp
 }
 
 const secretOf = (id) => netlog.cleanKey(store.getSecret(keyName(id)));
-module.exports = { PRESETS, publicList, get, upsert, remove, refreshModels, chat, image, secretOf, sampling, serviceSettings, claudeThinkingOff, CLAUDE_TAKES_TEMPERATURE };
+module.exports = { PRESETS, publicList, get, upsert, remove, refreshModels, chat, image, secretOf, ping, health, warm, sampling, serviceSettings, claudeThinkingOff, CLAUDE_TAKES_TEMPERATURE };
