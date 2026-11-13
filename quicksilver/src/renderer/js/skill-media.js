@@ -101,17 +101,36 @@ function chatIsLiquid(chat) {
   const t = resolveTarget(chat, assistantById(chat.assistantId));
   return isLiquid(t) || isLiquidStack(S.stacks?.find((x) => `stack:${x.id}` === t));
 }
+// A picture service in the cloud to use instead of this PC: for the Liquid Edition only an
+// uncensored one (Venice); otherwise any picture API you connected.
+function cloudPictureFor(liquid) {
+  const opts = mediaModelOptions(['image']).filter((o) => o.value.startsWith('api:'));
+  const venice = opts.find((o) => S.providers.find((p) => p.id === o.value.split(':')[1])?.preset === 'venice');
+  const o = liquid ? venice : venice || opts[0];
+  return o ? { value: o.value, api: true, label: o.label } : null;
+}
+// Picture models that couldn't run on this PC this session (out of memory): the cloud goes first.
+const localMediaFailed = new Set();
+// Would this picture model fail or crawl on this PC? Then a connected cloud service goes first.
+function localPictureBad(m) {
+  if (!m) return false;
+  if (localMediaFailed.has(m.catalogId || m.id)) return true;
+  const e = S.est?.media?.[m.catalogId];
+  return Boolean(e && (e.fit === 'no' || e.rating === 'wont'));
+}
 function pickLiquidMedia(kind, prompt, specOf, pro = false) {
   const first = pro && S.installed.some((m) => m.catalogId === 'chroma-hd') ? 'chroma-hd' : S.catalog.picks?.liquid?.pictures || LIQUID_PICTURES;
   const anime = ANIME_RX.test(prompt || '');
   const unc = S.installed.filter((m) => m.kind === 'image' && specOf(m).uncensored);
   const score = (m) => { const c = specOf(m); return (c.quality || 0) + (m.catalogId === first && !anime ? 5 : 0) + ((c.style === 'anime') === anime ? 3 : 0); };
   if (kind === 'image' || kind === 'edit') {
-    const local = unc.sort((a, b) => score(b) - score(a))[0];
-    if (local) return { value: `local:${local.id}`, inst: local, spec: specOf(local) };
-    // No uncensored picture model here yet: Venice (uncensored) in the cloud if it's connected.
-    const api = mediaModelOptions(['image']).find((o) => o.value.startsWith('api:') && S.providers.find((p) => p.id === o.value.split(':')[1])?.preset === 'venice');
-    return api ? { value: api.value, api: true, label: api.label } : null;
+    const ranked = unc.sort((a, b) => score(b) - score(a));
+    const local = ranked.find((m) => !localPictureBad(m)) || ranked[0];
+    // Venice (uncensored) in the cloud when it's connected and this PC can't run the picture model
+    // (not enough memory, or it already failed here), or when no picture model is here yet.
+    const cloud = cloudPictureFor(true);
+    if (local && !(cloud && localPictureBad(local))) return { value: `local:${local.id}`, inst: local, spec: specOf(local), fallback: cloud };
+    return cloud;
   }
   // Videos: Wan 2.2 (open weights, no content filter), the online pick first, then Turbo; Wan 2.1 if that's all there is.
   const firstVid = S.catalog.picks?.liquid?.videos || LIQUID_VIDEO;
@@ -137,7 +156,8 @@ function pickMediaModel(kind, opts = {}) {
   if (kind === 'video') list = S.installed.filter((m) => m.kind === 'video');
   if (kind === 'animate') list = S.installed.filter((m) => m.kind === 'video' && specOf(m).animate);
   if (kind !== 'edit') list.sort((a, b) => (`local:${b.id}` === S.data.prefs[kind === 'image' ? 'imageModel' : 'videoModel']) - (`local:${a.id}` === S.data.prefs[kind === 'image' ? 'imageModel' : 'videoModel']) || q(b) - q(a));
-  if (list.length) return { value: `local:${list[0].id}`, inst: list[0], spec: specOf(list[0]) };
+  const cloudAlt = kind === 'image' || kind === 'edit' ? cloudPictureFor(false) : null;
+  if (list.length && !(cloudAlt && localPictureBad(list[0]) && kind !== 'edit')) return { value: `local:${list[0].id}`, inst: list[0], spec: specOf(list[0]), fallback: cloudAlt };
   if (kind === 'image' || kind === 'edit') {
     const api = mediaModelOptions(['image']).find((o) => o.value.startsWith('api:'));
     if (api) return { value: api.value, api: true, label: api.label };
@@ -216,7 +236,19 @@ async function makeMedia(chat, msg, alt, pick, { imageId, count = 1 }, repaint) 
         });
         md.jobs = md.jobs.filter((x) => x !== jobId);
         if (item) md.items.push({ id: item.id, url: item.url, kind: item.kind || (pick.inst.kind === 'video' ? 'video' : 'image') });
-        else { md.error = mediaJobs[jobId]?.error || 'Stopped.'; break; }
+        else {
+          const why = mediaJobs[jobId]?.error || 'Stopped.';
+          // The picture model couldn't run on this PC (memory) or crashed: a connected cloud service
+          // (Venice for the Liquid Edition) makes it instead, and goes first for the rest of this session.
+          if (pick.fallback && (kind === 'image' || kind === 'edit') && /memory|generate failed|out of memory|crash|exited|bad_alloc|killed|failed to load|alloc/i.test(why)) {
+            localMediaFailed.add(pick.inst.catalogId || pick.inst.id);
+            md.note = `${pick.inst.name} couldn't run on this PC (${/memory|alloc/i.test(why) ? 'not enough memory' : 'it stopped'}), so ${pick.fallback.label} made it instead.`;
+            md.model = pick.fallback.label; md.cloud = pick.fallback.label;
+            await makeMedia(chat, msg, alt, pick.fallback, { imageId, count: count - i }, repaint);
+            return;
+          }
+          md.error = why; break;
+        }
       }
     }
   } catch (err) { md.error = err.message; delete md.status; }
@@ -250,6 +282,7 @@ function skillMediaHTML(m, alt, streaming) {
     ${md.jobs.map((id) => jobBox(id)).join('')}
     ${md.status ? `<div class="progress-box"><span class="jt">${esc(md.status)}</span></div>` : ''}
     ${md.error ? `<div class="notice">${esc(md.error)}</div>` : ''}
+    ${md.note && !md.error ? `<div class="small muted" style="margin:4px 0">☁️ ${esc(md.note)}</div>` : ''}
     ${items ? `<div class="skill-media-grid">${items}</div>` : ''}
     <div class="row small">${md.model ? `<span class="muted">Made with ${esc(md.model)}</span>` : ''}${!md.jobs.length && !md.status && MEDIA_OUTPUTS.has(md.kind) ? `<button class="tool" data-act="m-again" data-id="${m.id}">${icon('refresh', 14)} Make another ${word}</button>` : ''}${md.prompt && MEDIA_OUTPUTS.has(md.kind) ? '' : '<span class="grow"></span>'}<details class="grow" ${md.prompt && MEDIA_OUTPUTS.has(md.kind) ? '' : 'hidden'}><summary class="small muted" style="cursor:pointer">Prompt used</summary><p class="small" style="margin:6px 0">${esc(md.instruction ? `${md.instruction} · ${md.prompt}` : md.prompt)}</p></details></div>
   </div>`;
@@ -282,7 +315,7 @@ async function skillMediaAction(chat, m, act, el) {
     const liquid = chatIsLiquid(chat);
     const pick = pickMediaModel(md.kind, { liquid, pro: chatIsPro(chat), prompt: md.prompt });
     if (!pick) { md.need = liquidNeed(liquid, md.kind); save(); render(); return; }
-    delete md.error; delete md.need;
+    delete md.error; delete md.need; delete md.note;
     const repaint = () => { save(); if (S.route.view === 'chat' && S.route.id === chat.id) paintStreaming(chat, m); };
     let imageId;
     if (md.kind === 'edit' || md.kind === 'animate') {
