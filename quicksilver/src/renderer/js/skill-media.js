@@ -101,13 +101,28 @@ function chatIsLiquid(chat) {
   const t = resolveTarget(chat, assistantById(chat.assistantId));
   return isLiquid(t) || isLiquidStack(S.stacks?.find((x) => `stack:${x.id}` === t));
 }
+// Picture services that make images in the cloud through their own endpoints (Venice uncensored,
+// Pollinations free, fal, Replicate, Stability), not the OpenAI /images endpoint — they must be
+// recognized here or they're never offered as a fallback. The main process (media:apiImage) routes
+// them to the right endpoint, so here they're plain api: targets.
+const CLOUD_IMG_PRESETS = ['venice', 'pollinations', 'fal', 'replicate', 'stability'];
+const CLOUD_IMG_MODEL = { venice: 'lustify-v8', pollinations: 'flux', fal: 'fal-ai/flux/dev', replicate: 'black-forest-labs/flux-schnell', stability: 'core' };
+const CLOUD_IMG_UNC = new Set(['venice']); // uncensored picture services (the only cloud ones the Liquid Edition uses)
+// Every connected cloud picture service, in one list (their own endpoints plus OpenAI-style ones).
+function cloudImageServices() {
+  const cm = (S.providers || []).filter((p) => CLOUD_IMG_PRESETS.includes(p.preset) && (p.hasKey || p.preset === 'pollinations')).map((p) => ({
+    value: `api:${p.id}:${CLOUD_IMG_MODEL[p.preset]}`, label: `${p.name}${CLOUD_IMG_UNC.has(p.preset) ? ' (uncensored)' : ''}`, api: true, uncensored: CLOUD_IMG_UNC.has(p.preset),
+  }));
+  const api = (S.providers || []).flatMap((p) => (p.imageModels || []).map((m) => ({ value: `api:${p.id}:${m}`, label: `${m} (${p.name})`, api: true, uncensored: false })));
+  return [...cm, ...api];
+}
 // A picture service in the cloud to use instead of this PC: for the Liquid Edition only an
-// uncensored one (Venice); otherwise any picture API you connected.
+// uncensored one (Venice); otherwise any picture service you connected (Venice first).
 function cloudPictureFor(liquid) {
-  const opts = mediaModelOptions(['image']).filter((o) => o.value.startsWith('api:'));
+  const opts = cloudImageServices();
   const venice = opts.find((o) => S.providers.find((p) => p.id === o.value.split(':')[1])?.preset === 'venice');
-  const o = liquid ? venice : venice || opts[0];
-  return o ? { value: o.value, api: true, label: o.label } : null;
+  if (liquid) return venice || opts.find((o) => o.uncensored) || null;
+  return venice || opts[0] || null;
 }
 // Picture models that couldn't run on this PC this session (out of memory): the cloud goes first.
 const localMediaFailed = new Set();
@@ -159,8 +174,8 @@ function pickMediaModel(kind, opts = {}) {
   const cloudAlt = kind === 'image' || kind === 'edit' ? cloudPictureFor(false) : null;
   if (list.length && !(cloudAlt && localPictureBad(list[0]) && kind !== 'edit')) return { value: `local:${list[0].id}`, inst: list[0], spec: specOf(list[0]), fallback: cloudAlt };
   if (kind === 'image' || kind === 'edit') {
-    const api = mediaModelOptions(['image']).find((o) => o.value.startsWith('api:'));
-    if (api) return { value: api.value, api: true, label: api.label };
+    const cloud = cloudPictureFor(false); // any connected cloud picture service (Venice included)
+    if (cloud) return cloud;
   }
   return null;
 }

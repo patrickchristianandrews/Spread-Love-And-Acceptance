@@ -151,9 +151,9 @@ const TINY = path.join(__dirname, 'fixtures', 'tiny.gguf');
   // With Venice connected, a picture this PC can't make (out of memory) is made by Venice instead,
   // says so, and Venice goes first for the rest of the session.
   const fb = await win.evaluate(async () => {
-    const realOpts = mediaModelOptions; const realCall = call;
-    S.providers.push({ id: 'vtest', preset: 'venice', name: 'Venice' });
-    mediaModelOptions = (k, f) => [...realOpts(k, f), ...(k.includes('image') ? [{ value: 'api:vtest:lustify-sdxl', label: 'Venice · lustify-sdxl' }] : [])];
+    const realCall = call;
+    // Venice is a connected picture service (its images route through media:apiImage in the main process).
+    S.providers.push({ id: 'vtest', preset: 'venice', name: 'Venice', hasKey: true });
     const asked = [];
     call = async (ch, ...a) => { if (ch === 'media:apiImage') { asked.push(a); return { id: 'cloud-pic', url: 'qsmedia://x/cloud.png' }; } return realCall(ch, ...a); };
     try {
@@ -161,16 +161,17 @@ const TINY = path.join(__dirname, 'fixtures', 'tiny.gguf');
       const alt = { media: { kind: 'image', prompt: 'a fox [fail:memory]', items: [], jobs: [], shape: 'square' } };
       await makeMedia({ id: 'x', messages: [] }, {}, alt, first, { count: 1 }, () => {});
       const after = pickMediaModel('image', { liquid: true, prompt: 'a fox' });
-      return { first: first.value, fallback: first.fallback?.value, items: alt.media.items.map((x) => x.id), note: alt.media.note, error: alt.media.error || '', model: alt.media.model, asked: asked.length, after: after.value };
-    } finally { mediaModelOptions = realOpts; call = realCall; S.providers = S.providers.filter((p) => p.id !== 'vtest'); localMediaFailed.clear(); }
+      return { first: first.value, fallback: first.fallback?.value, items: alt.media.items.map((x) => x.id), note: alt.media.note, error: alt.media.error || '', model: alt.media.model, asked, after: after.value };
+    } finally { call = realCall; S.providers = S.providers.filter((p) => p.id !== 'vtest'); localMediaFailed.clear(); }
   });
   assert.match(fb.first, /^local:/, 'Lustify on this PC is tried first');
-  assert.equal(fb.fallback, 'api:vtest:lustify-sdxl', 'with Venice ready behind it');
+  assert.equal(fb.fallback, 'api:vtest:lustify-v8', 'with Venice ready behind it');
   assert.deepEqual(fb.items, ['cloud-pic'], `Venice made the picture: ${JSON.stringify(fb)}`);
   assert.equal(fb.error, '', 'no error shown');
-  assert.match(fb.note, /couldn't run on this PC \(not enough memory\), so Venice · lustify-sdxl made it instead/);
-  assert.equal(fb.model, 'Venice · lustify-sdxl');
-  assert.equal(fb.after, 'api:vtest:lustify-sdxl', 'and Venice goes first for the rest of the session');
+  assert.ok(fb.asked.some((a) => a[0] === 'vtest' && a[1] === 'lustify-v8'), `Venice was asked for the picture: ${JSON.stringify(fb.asked)}`);
+  assert.match(fb.note, /couldn't run on this PC \(not enough memory\), so Venice \(uncensored\) made it instead/);
+  assert.equal(fb.model, 'Venice (uncensored)');
+  assert.equal(fb.after, 'api:vtest:lustify-v8', 'and Venice goes first for the rest of the session');
   // Where Venice is suggested for the Liquid Edition, it says what the pairing gives you: how
   // much less of Venice you use, how much faster hard answers are on this PC, and the quality.
   await win.evaluate(() => { go({ view: 'models' }); });

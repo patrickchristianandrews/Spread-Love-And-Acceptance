@@ -609,9 +609,18 @@ handle('media:generate', (jobId, req) => {
   return true;
 });
 handle('media:stop', (jobId) => media.stop(jobId));
+// A picture from a cloud service, awaited and returned. Services with their own picture endpoint
+// (Venice uncensored, Pollinations free, fal, Replicate, Stability) go through cloudmedia; the rest
+// (OpenAI, Together…) use the OpenAI /images endpoint.
+const CLOUD_MEDIA_PRESETS = ['venice', 'pollinations', 'fal', 'replicate', 'stability'];
 handle('media:apiImage', async (providerId, model, req) => {
   const g = media.gallery();
   const input = req.imageId ? `data:image/png;base64,${fs.readFileSync(g.find((x) => x.id === req.imageId).file).toString('base64')}` : undefined;
+  const pre = providerId === 'pollinations' ? { id: 'pollinations', preset: 'pollinations', name: 'Pollinations' } : providers.get(providerId);
+  if (pre && CLOUD_MEDIA_PRESETS.includes(pre.preset)) {
+    const item = await require('./cloudmedia').generate(pre, pre.preset === 'pollinations' ? '' : providers.secretOf(pre.id), input ? 'edit' : 'image', model, { ...req, imageDataUrl: input }, () => {});
+    return { ...item, url: `qsmedia://g/${item.id}` };
+  }
   const buf = await providers.image(providerId, model, { ...req, image: input, mask: req.maskDataUrl });
   const item = media.saveBuffer(buf, 'png', { prompt: req.prompt, model, mode: input ? 'edit' : 'generate' });
   return { ...item, url: `qsmedia://g/${item.id}` };
