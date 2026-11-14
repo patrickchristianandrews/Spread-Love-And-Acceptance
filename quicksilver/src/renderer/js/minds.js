@@ -169,10 +169,11 @@ function exportMind(a) {
 function mindCard(m, a) {
   const src = a ? (a.mind.source === 'imported' ? '<span class="badge b-sky">opened from a file</span>' : a.mind.source === 'yours' ? '<span class="badge b-pink">yours</span>' : '') : '';
   const key = a ? `data-mind-a="${esc(a.id)}"` : `data-mind-b="${esc(m.id)}"`;
+  const target = a ? resolveTarget(null, a) : resolveTarget(null, { target: '' });
   return `<div class="card as-card">
     <div class="row"><span class="emoji-badge">${esc(a?.emoji || m.emoji)}</span><h3 class="grow">${esc(a?.name || m.name)}</h3>${src}</div>
     <p class="desc" style="margin:10px 0">${esc(a?.description || m.tagline)}</p>
-    <div class="row small" style="margin-bottom:10px;flex-wrap:wrap"><span class="badge b-lav">🧠 ${esc(a?.target ? targetLabel(a.target) : 'Default model')}</span>${a?.mind.notes?.length ? `<span class="badge b-mint">💭 remembers ${a.mind.notes.length}</span>` : ''}</div>
+    <div class="row small" style="margin-bottom:10px;flex-wrap:wrap"><span class="badge b-lav">🧠 ${esc(a?.target ? targetLabel(a.target) : 'Default model')}</span>${etaBadge(etaFor(target, wordsForJob('general')), 'per answer', starsOf(target, 'general'))}${a?.mind.notes?.length ? `<span class="badge b-mint">💭 remembers ${a.mind.notes.length}</span>` : ''}</div>
     <div class="row"><button class="btn primary small" ${key} data-mind-act="chat">Chat</button><button class="btn small" ${key} data-mind-act="how">How it works</button><button class="btn small ghost" ${key} data-mind-act="share">Share</button></div>
   </div>`;
 }

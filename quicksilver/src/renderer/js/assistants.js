@@ -17,7 +17,8 @@ function assistantCard(a) {
     <p class="desc" style="margin:10px 0">${esc(a.description || '')}</p>
     <div class="row small" style="margin-bottom:10px;flex-wrap:wrap">
       <span class="badge b-lav">🧠 ${esc(a.target ? targetLabel(a.target) : 'Default model')}</span>
-      ${sk ? `<span class="badge b-peach" title="Applied to every message">⚡ ${esc(sk.name)}</span>` : etaBadge(etaFor(t, wordsForJob(a.job)), a.job === 'coding' ? 'per code answer' : 'per answer', starsOf(t, a.job || 'general'))}
+      ${etaBadge(etaFor(t, wordsForJob(a.job)), a.job === 'coding' ? 'per code answer' : 'per answer', starsOf(t, a.job || 'general'))}
+      ${sk ? `<span class="badge b-peach" title="Applied to every message">⚡ ${esc(sk.name)}</span>` : ''}
       ${a.library ? `<span class="badge b-sky">📚 ${a.knowledge?.length ? `${a.knowledge.length} knowledge base${a.knowledge.length > 1 ? 's' : ''}` : 'Knowledge'}${a.strict ? ' · 🔒 only' : ''}</span>` : ''}${a.web ? '<span class="badge b-mint">🌐 Web</span>' : ''}${a.tools ? '<span class="badge b-mint">🔌 Tools</span>' : ''}${a.factCheck ? '<span class="badge b-peach">✅ Double-check</span>' : ''}
     </div>
     <div class="row">
