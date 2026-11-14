@@ -153,6 +153,7 @@ const TIPS_GUIDE = [
   ['Shortcuts', 'Ctrl+N new chat, Ctrl+K search chats, Ctrl+Space voice, and / in the message box for skills.'],
   ['Keep it private when it matters', 'Go offline for a fully private session, or use Private online with Proton VPN; each chat\'s header tells you which.'],
   ['Bring your history', 'Import your chats from ChatGPT, Claude, Gemini and others (Settings → General) and carry on any of them here.'],
+  ['Advanced: borrow a cloud GPU', 'To try a model too big for this PC, run it on a free cloud GPU (Google Colab) or your own server: start an OpenAI-compatible server there (llama.cpp or Ollama), open a tunnel (cloudflared or ngrok) and paste its address into Models → Connect an API → Custom OpenAI-compatible API. It\'s a lab tool, not an always-on connection: a free Colab session disconnects after a while and its address changes each time. For reliable big models, connect Groq, Cerebras or Gemini (free plans) instead.'],
 ];
 
 const SCORES_GUIDE = [
