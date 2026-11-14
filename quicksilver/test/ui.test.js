@@ -885,15 +885,22 @@ function redPng(size = 64) {
   }
   assert.match(direct.sys, /Rules for every answer: the first words are the answer itself/);
   console.log(`✓ direct answers: rules in the system prompt; filler removed with human writing on and off\n    "${direct.off}"`);
-  // Click the download bar: which models are downloading, each with its own progress. (Any real
-  // downloads in progress are set aside for this check and put back after, so the count is exact.)
-  const savedDl = await win.evaluate(() => { const s = JSON.stringify(S.downloads); S.downloads = { 'fake-a': { id: 'fake-a', name: 'Lustify', downloaded: 2e9, total: 7e9 }, 'fake-b': { id: 'fake-b', name: 'Wan 2.2 5B', downloaded: 1e9, total: 10e9 } }; paintDownloads(); return s; });
-  await win.click('#dl-mini');
-  const dlText = await win.locator('#modal-body').innerText();
-  assert.match(dlText, /Downloading 2 models[\s\S]*Lustify[\s\S]*\(29%\)[\s\S]*Wan 2\.2 5B[\s\S]*\(10%\)/, dlText);
-  await win.evaluate(() => { S.downloads['fake-a'].downloaded = 7e9; delete S.downloads['fake-b']; paintDownloads(); });
-  assert.doesNotMatch(await win.locator('#dl-list').innerText(), /Wan 2\.2/, 'a finished download leaves the list');
-  await win.evaluate((s) => { S.downloads = JSON.parse(s); paintDownloads(); closeModal(); }, savedDl);
+  // Click the download bar: which models are downloading, each with its own progress. Done in one
+  // synchronous step so live download-progress events can't repopulate the list between set-up and
+  // read; real downloads are set aside and restored within the same step.
+  const dl = await win.evaluate(() => {
+    const saved = S.downloads;
+    S.downloads = { a: { id: 'a', name: 'QS-Test Alpha', downloaded: 2e9, total: 7e9 }, b: { id: 'b', name: 'QS-Test Beta', downloaded: 1e9, total: 10e9 } };
+    downloadsModal();
+    const text = document.querySelector('#modal-body').innerText;
+    S.downloads = { a: { id: 'a', name: 'QS-Test Alpha', downloaded: 7e9, total: 7e9 } }; // one finished, one still going elsewhere
+    paintDownloads();
+    const after = document.querySelector('#dl-list')?.innerText || '';
+    S.downloads = saved; paintDownloads(); closeModal();
+    return { text, after };
+  });
+  assert.match(dl.text, /Downloading 2 models[\s\S]*QS-Test Alpha[\s\S]*\(29%\)[\s\S]*QS-Test Beta[\s\S]*\(10%\)/, dl.text);
+  assert.doesNotMatch(dl.after, /QS-Test Beta/, 'a finished download leaves the list');
   console.log('✓ download bar: clicking it lists each model downloading, with its own progress, kept up to date');
   // Minds: characters with their own voice, opening line, example lines and memory, in plain view.
   await win.evaluate(() => go({ view: 'minds' }));
