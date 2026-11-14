@@ -244,6 +244,12 @@ function mayUse(t, base) {
 }
 
 // Model choice order: the chat's own, the assistant's, the default, then anything installed.
+// The best connected cloud AI for a job, preferring an uncensored one for the Liquid Edition. Used
+// by the background helper (so background jobs follow "Cloud AI for everything" too).
+function bestCloudTarget(job = 'general') {
+  if (typeof bestApiTarget !== 'function') return '';
+  return bestApiTarget(job, (t) => liquidOk(t)) || bestApiTarget(job) || '';
+}
 function resolveTarget(chat, assistant) {
   for (const t of [chat?.target, assistant?.target, S.data.prefs.defaultTarget]) if (targetValid(t)) return t;
   return S.targets.find((x) => x.target.startsWith('stack:') && !x.empty)?.target || S.targets.find((x) => !x.empty)?.target || '';

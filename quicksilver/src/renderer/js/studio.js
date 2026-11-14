@@ -80,6 +80,9 @@ const IMPROVE = {
 function improveBtn(id, kind) { return `<button type="button" class="btn small ghost" data-improve="${id}" data-kind="${kind}" title="Let AI write a more detailed prompt">✨ Improve</button>`; }
 function promptHelper() {
   if (targetValid(S.data.prefs.promptHelper)) return S.data.prefs.promptHelper;
+  // Cloud AI for everything: the background jobs (chat titles, follow-up suggestions, memory notes,
+  // picking a skill) use your connected cloud AI too, so nothing loads a local model behind the scenes.
+  if (typeof cloudAnswers === 'function' && cloudAnswers()) { const cloud = bestCloudTarget('general'); if (targetValid(cloud)) return cloud; }
   // Otherwise the quickest local text model: Quicksilver's own or one in use first, a model from
   // another app only when there is nothing else.
   const mineFirst = (m) => (liquidLocked(m) || m.inUse ? 0 : m.source === 'imported' ? 2 : 1);

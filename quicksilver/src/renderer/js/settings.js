@@ -89,7 +89,7 @@ function apisSetHTML() {
     <div id="set-api-health-out"></div>
     <div class="card set-card"><h3 style="margin-top:0">How Quicksilver uses them</h3>
       <label class="row"><input type="checkbox" id="set-cloud-hard" ${p.cloudHard ? 'checked' : ''} ${chat.length ? '' : 'disabled'}><span><b>Cloud AI for hard questions</b> <span class="help">hard questions go to your best connected cloud AI (the Liquid Edition uses an uncensored one such as Venice first)</span></span></label>
-      <label class="row" style="margin-top:6px"><input type="checkbox" id="set-cloud-all" ${p.cloudAll ? 'checked' : ''} ${chat.length ? '' : 'disabled'}><span><b>Cloud AI for everything</b> <span class="help">every message goes to it; this PC answers when you're offline or the cloud can't. Fastest on a slow PC.</span></span></label>
+      <label class="row" style="margin-top:6px"><input type="checkbox" id="set-cloud-all" ${p.cloudAll ? 'checked' : ''} ${chat.length ? '' : 'disabled'}><span><b>Cloud AI for everything</b> <span class="help">use your connected cloud AI across the whole app: every chat, every crew member (exam coaches, medical…), and the background tasks (chat titles, suggestions, memory, double-check). This PC answers only when you're offline or the cloud can't. Fastest on a slow PC; uses your cloud credits.</span></span></label>
       <div class="small muted" style="margin-top:8px">♻️ Free rotation: ${esc(typeof freeRotationLine === 'function' ? freeRotationLine() : '')}</div>
       ${chat.length ? '' : '<div class="small muted" style="margin-top:6px">Connect a cloud AI to turn these on.</div>'}</div>
     <h3>💬 Cloud AIs · ${chat.length}</h3>

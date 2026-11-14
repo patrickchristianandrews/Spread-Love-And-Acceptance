@@ -1744,6 +1744,22 @@ function redPng(size = 64) {
   assert.match(await win.locator('[data-nav="assistants"]').first().innerText(), /Your Crew/);
   assert.match(await win.evaluate(() => assistantById('as-debate')?.instructions || ''), /opposite to the user/);
   console.log('✓ your crew: the menu and page say Your Crew, and a Debate crew member is ready');
+  // Cloud AI for everything also sends the background tasks (titles, suggestions, memory) to the
+  // connected cloud AI, instead of loading a local helper model; off, it uses this PC.
+  const route = await win.evaluate(() => {
+    const saved = { targets: S.targets, prefs: JSON.parse(JSON.stringify(S.data.prefs)) };
+    S.targets = [...S.targets, { target: 'api:test-cloud', label: 'Test Cloud', group: 'Cloud AIs', empty: false }];
+    delete S.data.prefs.promptHelper;
+    S.data.prefs.cloudAll = true;
+    const on = promptHelper();
+    S.data.prefs.cloudAll = false;
+    const off = promptHelper();
+    S.targets = saved.targets; S.data.prefs = saved.prefs;
+    return { on, off };
+  });
+  assert.equal(route.on, 'api:test-cloud', 'Cloud-for-everything sends background tasks to the cloud');
+  assert.notEqual(route.off, 'api:test-cloud', 'off, background tasks stay on this PC');
+  console.log('✓ cloud routing: with Cloud-for-everything on, background tasks use the connected cloud, not a local model');
   // Tables: click a header to sort, a menu or a search box under each header to filter.
   const tbl = await win.evaluate(async () => {
     const wrap = document.createElement('div'); wrap.id = 'tbl-test';

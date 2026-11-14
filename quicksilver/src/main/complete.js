@@ -972,29 +972,59 @@ function backgroundTarget(target) {
   return pick ? `local:${pick.id}` : null;
 }
 
+// A cloud service that failed for lack of credit or a bad key, so it's skipped for a few minutes.
+const cloudDown = new Map();
+const isDeadCloud = (err) => /insufficient|balance|\bquota\b|credit|payment required|402|401|403|unauthorized|forbidden|invalid api key|no key saved|expired/i.test(String(err?.message || err));
+// Other connected cloud AIs to roll over to (uncensored only when the failed one was uncensored).
+function altApis(failedTarget, uncOnly) {
+  if (store.config().offline) return [];
+  const failedPid = parse(failedTarget).providerId;
+  return targets().filter((t) => t.target.startsWith('api:') && exists(t.target) && parse(t.target).providerId !== failedPid && (!uncOnly || isUncensored(t.target))).map((t) => t.target);
+}
+// This PC as the final backup: the chat's own local fallback, else the Liquid Edition, else any local model.
+function localBackup(req, uncOnly) {
+  if (req.fallback && parse(req.fallback).kind !== 'api' && exists(req.fallback)) return req.fallback;
+  for (const id of ['quicksilver', 'quicksilver-max', 'quicksilver-pro']) if (stacks().find((x) => x.id === id) && exists(`stack:${id}`)) return `stack:${id}`;
+  return targets().find((t) => t.target.startsWith('local:') && exists(t.target) && (!uncOnly || isUncensored(t.target)))?.target || '';
+}
 async function* run(target, req) {
   if (req.background) {
     const bg = backgroundTarget(target);
     if (!bg) throw new Error('skipped: no model is loaded, and a background job never loads one');
     target = bg; req = { ...req, level: 'quick' };
   }
-  // A cloud AI picked for you with this PC as the backup (Cloud AI for everything / hard questions):
-  // if it fails before writing anything (no credit, no connection, a refusal of the key), this PC answers.
-  if (req.fallback && parse(target).kind === 'api' && req.fallback !== target && exists(req.fallback)) {
-    const backup = req.fallback;
-    const inner = { ...req }; delete inner.fallback;
+  // A cloud AI that fails before writing anything — no credit, a refused or missing key, no
+  // connection — must not become the answer. Roll over to another connected cloud AI, then to this
+  // PC's Liquid Edition, so you can keep going. A credit/key failure is remembered for a few minutes
+  // so the dead service isn't tried again on every message.
+  if (parse(target).kind === 'api' && !req.noCloudFallback && !req.background) {
+    const uncOnly = isUncensored(target); // a Liquid/uncensored chat only rolls to uncensored clouds or local
+    const chain = [...altApis(target, uncOnly), localBackup(req, uncOnly)].filter((x, i, a) => x && x !== target && a.indexOf(x) === i);
+    const inner = { ...req, noCloudFallback: true }; delete inner.fallback;
+    const pid = parse(target).providerId;
+    const dead = cloudDown.get(pid);
+    const start = dead && Date.now() < dead.until && chain.length ? null : target; // skip a known-dead service
     let wrote = false;
-    try {
-      for await (const ev of run(target, inner)) { if (ev.type === 'text' && ev.text) wrote = true; yield ev; }
-      return;
-    } catch (err) {
-      if (wrote || req.signal?.aborted) throw err;
-      const why = String(err?.message || err).replace(/^Error:\s*/, '').slice(0, 140);
-      yield { type: 'status', text: `${label(target)} didn't answer (${why}), so this PC is answering instead…` };
-      req.onCloudFail?.(target, why);
-      yield* run(backup, inner);
-      return;
+    let lastErr = dead ? new Error(dead.why) : null;
+    const queue = start ? [start, ...chain] : chain;
+    for (let i = 0; i < queue.length; i++) {
+      const tg = queue[i];
+      if (i > 0 || (!start && lastErr)) {
+        const why = String(lastErr?.message || lastErr).replace(/^Error:\s*/, '').slice(0, 140);
+        yield { type: 'status', text: `${start || i > 0 ? `${label(queue[i - 1] || target)} couldn't answer (${why}), ` : ''}switching to ${label(tg)}…` };
+        if (parse(target).kind === 'api') req.onCloudFail?.(target, why);
+      }
+      let w = false;
+      try {
+        for await (const ev of run(tg, { ...inner })) { if (ev.type === 'text' && ev.text) { w = true; wrote = true; } yield ev; }
+        return;
+      } catch (err) {
+        if (w || req.signal?.aborted) throw err;
+        lastErr = err;
+        if (parse(tg).kind === 'api' && isDeadCloud(err)) cloudDown.set(parse(tg).providerId, { until: Date.now() + 600000, why: String(err.message || err).replace(/^Error:\s*/, '').slice(0, 140) });
+      }
     }
+    throw lastErr || new Error('No model could answer.');
   }
   if (req.council && !hasImages(req.messages)) { yield* council(target, req); return; }
   if (req.useTools) {

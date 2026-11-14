@@ -1658,19 +1658,22 @@ async function collect(gen) {
     console.log('✓ stacks: inner steps skip the reasoning pass, no self-review, honest status');
   }
 
-  // A cloud AI picked for you with this PC as the backup: when it can't answer (no credit, no
-  // connection), this PC answers instead and says so; when it answers, this PC isn't used.
+  // A cloud AI that can't answer (no credit, no connection, a bad key) rolls over instead of
+  // becoming the answer: to the chat's backup if given, and to a model on this PC even when no
+  // backup was set — so a Venice "insufficient balance" never ends the chat.
   {
     const down = providers.upsert({ preset: 'custom', name: 'Down Cloud', baseUrl: 'http://127.0.0.1:9/v1', models: ['big-model'] }, 'sk-x');
     const failed = [];
     models.add({ id: 'backup-pc', name: 'Backup on this PC', kind: 'text', files: { model: copy('backup.gguf') }, size: 2e9 });
     const r = await collect(complete.run(`api:${down.id}:big-model`, { messages: [{ role: 'user', content: 'Hello cloud' }], maxTokens: 60, contextSize: 2048, fallback: 'local:backup-pc', onCloudFail: (t, why) => failed.push([t, why]) }));
-    assert.match(r.text, /Answer from/, `this PC answered: ${r.text}`);
-    assert.ok(r.status.some((t) => /Down Cloud.*didn't answer.*this PC is answering instead/.test(t)), `and says why: ${r.status}`);
+    assert.match(r.text, /Answer from/, `this PC answered after the cloud failed: ${r.text}`);
+    assert.ok(r.status.some((t) => /Down Cloud\) couldn't answer[\s\S]*switching to Backup on this PC/.test(t)), `and says it switched: ${r.status}`);
     assert.equal(failed.length, 1);
-    await assert.rejects(collect(complete.run(`api:${down.id}:big-model`, { messages: [{ role: 'user', content: 'Hello cloud' }], maxTokens: 60, contextSize: 2048 })), 'without a backup the error is shown as before');
+    // Even with no backup set, it rolls over to a model on this PC rather than showing the error.
+    const r2 = await collect(complete.run(`api:${down.id}:big-model`, { messages: [{ role: 'user', content: 'Hi again' }], maxTokens: 60, contextSize: 2048 }));
+    assert.match(r2.text, /Answer from/, `rolls over to this PC without an explicit backup too: ${r2.text}`);
     providers.remove(down.id); models.remove('backup-pc');
-    console.log('✓ cloud AI with this PC as backup: a cloud that cannot answer hands over to this PC, and says so');
+    console.log('✓ cloud rollover: a cloud that can\'t answer rolls over to another cloud or this PC instead of showing the error');
   }
 
   // The reading cache: a model unloaded to make room (or after a while unused) saves what it had read,
