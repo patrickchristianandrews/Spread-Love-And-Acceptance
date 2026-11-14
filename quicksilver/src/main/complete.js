@@ -963,8 +963,11 @@ async function* council(target, req) {
 // are skipped when none is loaded.
 function backgroundTarget(target) {
   const t = parse(target);
-  if (t.kind === 'api') return target;
   const loaded = models.list().filter((m) => m.kind === 'text' && m.files?.model && llama.isLoaded(m.files.model));
+  // The answer came from a cloud AI: the background jobs (chat titles, follow-up suggestions, memory
+  // notes) run on a model already loaded on this PC instead, so they don't spend API credits. Only
+  // when nothing local is loaded do they fall back to the cloud.
+  if (t.kind === 'api') { const pick = loaded.sort((a, b) => (a.size || 0) - (b.size || 0))[0]; return pick ? `local:${pick.id}` : target; }
   if (t.kind === 'local' && loaded.some((m) => m.id === t.id)) return target;
   // A stack or a model that isn't loaded: one of the stack's own models that is, else any loaded one.
   const own = t.kind === 'stack' ? teamOf(target).filter((x) => parse(x).kind === 'local').map((x) => parse(x).id) : [];

@@ -134,7 +134,14 @@ async function collect(gen) {
     const bg = await collect(complete.run('stack:office-power', { messages: [{ role: 'user', content: 'Write a short title' }], maxTokens: 20, contextSize: 4096, background: true }));
     assert.ok(bg.text, 'it answered with the model already loaded');
     assert.deepEqual(llama.status().map((x) => x.file).sort(), before, 'and loaded nothing else');
-    console.log('✓ background jobs use a model that is already loaded and never load one');
+    // The answer came from a cloud AI: the background job runs on the loaded local model, not the
+    // API, so it spends no API credits (only falls back to the cloud if nothing local is loaded).
+    const down = providers.upsert({ preset: 'custom', name: 'Pricey Cloud', baseUrl: 'http://127.0.0.1:9/v1', models: ['big'] }, 'sk-x');
+    const bgCloud = await collect(complete.run(`api:${down.id}:big`, { messages: [{ role: 'user', content: 'Write a short title' }], maxTokens: 20, contextSize: 4096, background: true }));
+    assert.match(bgCloud.text, /Answer from/, 'a background job on a cloud chat ran on this PC instead');
+    assert.deepEqual(llama.status().map((x) => x.file).sort(), before, 'and still loaded nothing new');
+    providers.remove(down.id);
+    console.log('✓ background jobs use a model already loaded (and a cloud chat\'s background runs on this PC to save API credits)');
   }
 
   // Efficient stacks: an easy question goes to the strongest member alone; when drafts agree the
