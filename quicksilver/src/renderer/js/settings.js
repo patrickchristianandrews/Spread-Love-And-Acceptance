@@ -90,6 +90,7 @@ function apisSetHTML() {
     <div class="card set-card"><h3 style="margin-top:0">How Quicksilver uses them</h3>
       <label class="row"><input type="checkbox" id="set-cloud-hard" ${p.cloudHard ? 'checked' : ''} ${chat.length ? '' : 'disabled'}><span><b>Cloud AI for hard questions</b> <span class="help">hard questions go to your best connected cloud AI (the Liquid Edition uses an uncensored one such as Venice first)</span></span></label>
       <label class="row" style="margin-top:6px"><input type="checkbox" id="set-cloud-all" ${p.cloudAll ? 'checked' : ''} ${chat.length ? '' : 'disabled'}><span><b>Cloud AI for everything</b> <span class="help">use your connected cloud AI across the whole app: every chat, every crew member (exam coaches, medical…), and the background tasks (chat titles, suggestions, memory, double-check). This PC answers only when you're offline or the cloud can't. Fastest on a slow PC; uses your cloud credits.</span></span></label>
+      <label class="row" style="margin-top:6px"><input type="checkbox" id="set-hybrid" ${p.hybrid ? 'checked' : ''} ${chat.length ? '' : 'disabled'}><span><b>Hybrid — save your API</b> <span class="help">this PC first, the web next, your cloud AI last: the local models answer everything they can, current-information questions use web search on this PC, and only a genuinely hard question the web can't settle goes to the cloud. Keeps your API use to a minimum. (Turn off "for hard questions / everything" to use this.)</span></span></label>
       <div class="small muted" style="margin-top:8px">♻️ Free rotation: ${esc(typeof freeRotationLine === 'function' ? freeRotationLine() : '')}</div>
       ${chat.length ? '' : '<div class="small muted" style="margin-top:6px">Connect a cloud AI to turn these on.</div>'}</div>
     <h3>💬 Cloud AIs · ${chat.length}</h3>
@@ -117,9 +118,11 @@ function bindApisSet() {
   $('#set-api-connectors')?.addEventListener('click', (e) => { e.preventDefault(); go({ view: 'integrations' }); });
   $$('[data-set-api-edit]').forEach((b) => b.addEventListener('click', async () => { const presets = await qs.call('providers:presets'); editProvider(S.providers.find((x) => x.id === b.dataset.setApiEdit), presets); }));
   $$('[data-set-api-del]').forEach((b) => b.addEventListener('click', async () => { if (!(await confirmBox('Remove this connection and its saved key?'))) return; await call('providers:remove', b.dataset.setApiDel); await refreshProviders(); render(); }));
-  const flip = (key) => (e) => { P()[key] = e.target.checked; P().cloudChosen = true; save(); toast(`${key === 'cloudAll' ? 'Cloud AI for everything' : 'Cloud AI for hard questions'} ${e.target.checked ? 'on' : 'off'}.`); };
+  const LABELS = { cloudAll: 'Cloud AI for everything', cloudHard: 'Cloud AI for hard questions', hybrid: 'Hybrid (API last)' };
+  const flip = (key) => (e) => { P()[key] = e.target.checked; P().cloudChosen = true; save(); toast(`${LABELS[key]} ${e.target.checked ? 'on' : 'off'}.`); render(); };
   $('#set-cloud-hard')?.addEventListener('change', flip('cloudHard'));
   $('#set-cloud-all')?.addEventListener('change', flip('cloudAll'));
+  $('#set-hybrid')?.addEventListener('change', flip('hybrid'));
 }
 
 function generalHTML() {

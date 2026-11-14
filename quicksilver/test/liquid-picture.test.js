@@ -148,6 +148,22 @@ const TINY = path.join(__dirname, 'fixtures', 'tiny.gguf');
   assert.equal(cl.pick.fallback, 'stack:quicksilver', 'with the Liquid Edition as the backup');
   assert.deepEqual([cl.off.hard, cl.off.all, cl.off.chosen], [false, false, true], 'one click keeps answers on this PC');
   assert.deepEqual([cl.after.hard, cl.after.all], [false, false], 'and that choice sticks');
+  // Hybrid (API last): this PC first, the cloud only for a hard question the web can't settle.
+  const hyb = await win.evaluate(() => {
+    const p = S.data.prefs; const was = { h: p.cloudHard, a: p.cloudAll, hy: p.hybrid, c: p.cloudChosen };
+    const t = { target: 'api:hybtest:venice-uncensored', label: 'venice-uncensored', name: 'venice-uncensored', group: 'Venice' };
+    S.providers.push({ id: 'hybtest', preset: 'venice', name: 'Venice' }); S.targets.push(t);
+    try {
+      delete p.cloudChosen; p.cloudHard = false; p.cloudAll = false; p.hybrid = true;
+      const chat = { id: 'c-hyb', messages: [], assistantId: 'as-general' }; const a = assistantById('as-general');
+      const hard = autoPick(chat, a, 'Prove rigorously, step by step, that the square root of two is an irrational number', false);
+      const easy = autoPick(chat, a, 'hi there', false);
+      return { hard: hard.target, hardWhy: hard.why || '', hardFallback: hard.fallback, easy: easy.target };
+    } finally { S.providers = S.providers.filter((x) => x.id !== 'hybtest'); S.targets = S.targets.filter((x) => x !== t); Object.assign(p, { cloudHard: was.h, cloudAll: was.a, hybrid: was.hy }); if (was.c === undefined) delete p.cloudChosen; else p.cloudChosen = was.c; }
+  });
+  assert.equal(hyb.hard, 'api:hybtest:venice-uncensored', `Hybrid: a hard question goes to the cloud as a last resort: ${JSON.stringify(hyb)}`);
+  assert.match(hyb.hardWhy, /Hybrid[\s\S]*last resort/);
+  assert.ok(!String(hyb.easy).startsWith('api:'), `an everyday question stays on this PC: ${hyb.easy}`);
   // With Venice connected, a picture this PC can't make (out of memory) is made by Venice instead,
   // says so, and Venice goes first for the rest of the session.
   const fb = await win.evaluate(async () => {

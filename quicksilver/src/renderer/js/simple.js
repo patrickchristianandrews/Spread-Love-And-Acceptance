@@ -90,6 +90,14 @@ function autoPick(chat, a, text, hasImage) {
     const cloud = cloudFor(false);
     if (cloud) return { target: cloud, fallback: base?.startsWith('api:') ? '' : base, why: `Picked automatically: ${apiServiceName(cloud)}, your best connected cloud AI ${AUTO_WHY[job] || 'for this question'}, for a hard question.` };
   }
+  // Hybrid: this PC first, the web next, a connected cloud AI last. The local models answer
+  // everything they can; a question that needs current information is answered on this PC with web
+  // search; only a genuinely hard question that the web wouldn't settle goes to the cloud (with this
+  // PC as the backup). Keeps API use to a minimum. Skipped while "Cloud AI for everything/hard" is on.
+  if (S.data.prefs.hybrid && !S.data.prefs.cloudAll && !S.data.prefs.cloudHard && !S.config?.offline && !hasImage && looksHard(text || '')) {
+    const webHandles = typeof webWanted === 'function' && webWanted(chat, a, text);
+    if (!webHandles) { const cloud = cloudFor(false); if (cloud) return { target: cloud, fallback: base?.startsWith('api:') ? '' : base, why: `Hybrid: ${apiServiceName(cloud)} for a hard question — the cloud is the last resort. Everyday questions, and ones the web can answer, stay on this PC.` }; }
+  }
   const T = S.speed?.targets;
   if (!T || !base) return { target: base };
   const hard = looksHard(text);
