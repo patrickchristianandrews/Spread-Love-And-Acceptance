@@ -30,7 +30,7 @@ const PNG = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAIAAABLbSncA
   const errors = [];
   win.on('pageerror', (e) => errors.push(e.message));
   await win.waitForSelector('text=Forms to fit your work.');
-  await win.waitForFunction(() => S.data?.prefs?.defaultTarget === 'stack:quicksilver', null, { timeout: 60000 });
+  await win.waitForFunction(() => typeof S !== 'undefined' && S.data?.prefs?.defaultTarget === 'stack:quicksilver', null, { timeout: 60000 });
   await win.evaluate(() => { document.querySelector('#wc-close')?.click(); S.data.prefs.preanswer = false; S.data.prefs.readAhead = false; newChat(); });
   await win.waitForSelector('#input');
   const say = async (text) => { await win.fill('#input', text); await win.keyboard.press('Enter'); };

@@ -45,7 +45,7 @@ function gguf(p, arch, name, size = 2e6) {
   const errors = [];
   win.on('pageerror', (e) => errors.push(e.message));
   await win.waitForSelector('text=Forms to fit your work.');
-  await win.waitForFunction(() => S.data?.prefs?.defaultTarget === 'stack:quicksilver', null, { timeout: 60000 });
+  await win.waitForFunction(() => typeof S !== 'undefined' && S.data?.prefs?.defaultTarget === 'stack:quicksilver', null, { timeout: 60000 });
   await win.evaluate(() => { document.querySelector('#wc-close')?.click(); });
 
   // Files that are not chat models are off the list (and still on disk).

@@ -25,7 +25,7 @@ const TINY = path.join(__dirname, 'fixtures', 'tiny.gguf');
   const errors = [];
   win.on('pageerror', (e) => errors.push(e.message));
   await win.waitForSelector('text=Forms to fit your work.');
-  await win.waitForFunction(() => S.data?.prefs?.defaultTarget === 'stack:quicksilver', null, { timeout: 60000 });
+  await win.waitForFunction(() => typeof S !== 'undefined' && S.data?.prefs?.defaultTarget === 'stack:quicksilver', null, { timeout: 60000 });
   await win.evaluate(() => { document.querySelector('#wc-close')?.click(); S.data.prefs.preanswer = false; S.data.prefs.readAhead = false; newChat(); });
   await win.waitForSelector('#input');
   assert.equal(await win.evaluate(() => resolveTarget(chatById(S.route.id), assistantById(chatById(S.route.id).assistantId))), 'stack:quicksilver');
