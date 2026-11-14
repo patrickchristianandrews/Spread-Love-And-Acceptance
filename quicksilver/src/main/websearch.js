@@ -121,6 +121,9 @@ async function search(query, { pages = 3, safe } = {}) {
   checkSafe(safe);
   const cfg = store.config().web;
   const meta = { provider: cfg.provider, safe, params: [], requests: [], warnings: [] };
+  // Debug level: the raw results the service returned, so results it dropped (safe search, region,
+  // rate limits) are visible. On only when QS_DEBUG_SEARCH is set, so it never spams normal use.
+  const dbg = (engine, raw) => { if (process.env.QS_DEBUG_SEARCH) console.log(`[web search] ${engine} raw response: ${(typeof raw === 'string' ? raw : JSON.stringify(raw)).slice(0, 4000)}`); };
   let results = [];
   if (cfg.provider === 'free') {
     // Meta-search, like SearXNG: every free engine is asked at once and the answers are merged. A page
@@ -140,6 +143,7 @@ async function search(query, { pages = 3, safe } = {}) {
     const res = await fetch(url, { headers: { Accept: 'application/json', 'X-Subscription-Token': key }, signal: AbortSignal.timeout(15000) });
     if (!res.ok) throw new Error(`Brave Search returned HTTP ${res.status}.`);
     const j = await res.json();
+    dbg('Brave', j);
     results = (j.web?.results || []).map((r) => ({ title: r.title, url: r.url, snippet: stripHtml(r.description || '') }));
   } else if (cfg.provider === 'tavily') {
     const key = store.getSecret('web:tavily');

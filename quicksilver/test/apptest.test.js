@@ -95,21 +95,22 @@ const ROOT = path.join(__dirname, '..');
     // Flip the switch in the same tick it's found, so a re-render can't detach it between find and click.
     const clickSwitch = () => win.waitForFunction(() => { const el = document.querySelector('#w-safe'); if (el) { el.click(); return true; } if (typeof go === 'function' && typeof S !== 'undefined' && S.data) { setTab = 'web'; go({ view: 'settings' }); } return false; }, { timeout: 20000 });
     await win.evaluate(() => localStorage.removeItem('safesearch.v1')); // (a fresh start: nothing saved yet)
-    assert.equal(await openSwitch(), true, 'on by default');
+    assert.equal(await openSwitch(), false, 'off by default');
+    // Off by default reaches the request (and the search again too), not just the screen.
+    const sentOff = await win.evaluate(async () => { await webSearch('breast augmentation'); await webSearch('breast augmentation'); return true; }).then(() => app.evaluate(() => global.__sent.splice(0)));
+    assert.ok(sentOff.filter((l) => /duckduckgo/.test(l)).length === 2 && sentOff.filter((l) => /duckduckgo/.test(l)).every((l) => /kp=-2/.test(l)), `off by default (and on the search again): ${sentOff}`);
+    assert.ok(sentOff.some((l) => /mojeek\.com\/search\?q=breast%20augmentation&safe=0/.test(l)));
+    // Turn it on: persisted, kept across a reload, and the switch shows it.
     await clickSwitch();
-    assert.equal(await win.evaluate(() => localStorage.getItem('safesearch.v1')), 'off');
+    assert.equal(await win.evaluate(() => localStorage.getItem('safesearch.v1')), 'on');
     await win.reload();
     await win.waitForFunction(() => typeof safeSearchValue === 'function' && typeof S !== 'undefined' && S.data);
-    assert.equal(await win.evaluate(() => safeSearchValue()), 'off', 'still off after a reload');
-    assert.equal(await openSwitch(), false, 'and the switch shows it');
-    const sentOff = await win.evaluate(async () => { await webSearch('breast augmentation'); await webSearch('breast augmentation'); return true; }).then(() => app.evaluate(() => global.__sent.splice(0)));
-    assert.ok(sentOff.filter((l) => /duckduckgo/.test(l)).length === 2 && sentOff.filter((l) => /duckduckgo/.test(l)).every((l) => /kp=-2/.test(l)), `off (and on the search again): ${sentOff}`);
-    assert.ok(sentOff.some((l) => /mojeek\.com\/search\?q=breast%20augmentation&safe=0/.test(l)));
-    await clickSwitch();
+    assert.equal(await win.evaluate(() => safeSearchValue()), 'on', 'still on after a reload');
+    assert.equal(await openSwitch(), true, 'and the switch shows it');
     await win.evaluate(() => webSearch('breast augmentation'));
     const sentOn = await app.evaluate(() => global.__sent.splice(0));
     assert.ok(sentOn.some((l) => /duckduckgo.*kp=1\b/.test(l)) && sentOn.some((l) => /safe=1\b/.test(l)), `on flips it: ${sentOn}`);
-    console.log(`✓ safe search in the app: on by default, kept across a reload, sent with every search (search again too), flipped by the switch\n    sent: ${sentOff.find((l) => /duckduckgo/.test(l))}`);
+    console.log(`✓ safe search in the app: off by default, reaches every request, turning it on persists across a reload and flips the value\n    sent: ${sentOff.find((l) => /duckduckgo/.test(l))}`);
     // The plug-ins on the Liquid Edition card.
     await win.evaluate(() => { document.querySelector('#wc-close')?.click(); go({ view: 'stacks' }); });
     await win.waitForSelector('#liquid-plugins:has-text("App tester"):has-text("Security audit"):has-text("Design extractor")', { timeout: 30000 });
