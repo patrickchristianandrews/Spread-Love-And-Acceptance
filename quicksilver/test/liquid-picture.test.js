@@ -185,20 +185,28 @@ const TINY = path.join(__dirname, 'fixtures', 'tiny.gguf');
   // With Venice connected, a picture this PC can't make (out of memory) is made by Venice instead,
   // says so, and Venice goes first for the rest of the session.
   const fb = await win.evaluate(async () => {
-    const realCall = call;
+    const realCall = call; const realEst = S.est;
     // Venice is a connected picture service (its images route through media:apiImage in the main process).
     S.providers.push({ id: 'vtest', preset: 'venice', name: 'Venice', hasKey: true });
+    // This PC can make the picture in a reasonable time (Smooth), so it's tried first; then we test
+    // the crash fallback. (When it's slow, the picture defaults to the cloud — checked below.)
+    const lustify = S.installed.find((m) => m.kind === 'image');
+    S.est = { ...(S.est || {}), media: { ...(S.est?.media || {}), [lustify?.catalogId]: { fit: 'full', rating: 'good', label: 'Smooth', sec: 10 } } };
     const asked = [];
     call = async (ch, ...a) => { if (ch === 'media:apiImage') { asked.push(a); return { id: 'cloud-pic', url: 'qsmedia://x/cloud.png' }; } return realCall(ch, ...a); };
     try {
       const first = pickMediaModel('image', { liquid: true, prompt: 'a fox' });
       const alt = { media: { kind: 'image', prompt: 'a fox [fail:memory]', items: [], jobs: [], shape: 'square' } };
       await makeMedia({ id: 'x', messages: [] }, {}, alt, first, { count: 1 }, () => {});
+      // Now the PC is Slow for this model: a picture defaults straight to the connected cloud service.
+      S.est = { ...S.est, media: { ...S.est.media, [lustify?.catalogId]: { fit: 'full', rating: 'slow', label: 'Slow', sec: 300 } } };
+      const slow = pickMediaModel('image', { liquid: true, prompt: 'a fox' });
       const after = pickMediaModel('image', { liquid: true, prompt: 'a fox' });
-      return { first: first.value, fallback: first.fallback?.value, items: alt.media.items.map((x) => x.id), note: alt.media.note, error: alt.media.error || '', model: alt.media.model, asked, after: after.value };
-    } finally { call = realCall; S.providers = S.providers.filter((p) => p.id !== 'vtest'); localMediaFailed.clear(); }
+      return { first: first.value, fallback: first.fallback?.value, items: alt.media.items.map((x) => x.id), note: alt.media.note, error: alt.media.error || '', model: alt.media.model, asked, after: after.value, slow: slow.value, slowApi: slow.api || false };
+    } finally { call = realCall; S.est = realEst; S.providers = S.providers.filter((p) => p.id !== 'vtest'); localMediaFailed.clear(); }
   });
-  assert.match(fb.first, /^local:/, 'Lustify on this PC is tried first');
+  assert.match(fb.first, /^local:/, 'when this PC is fast enough, its picture model is tried first');
+  assert.equal(fb.slow, 'api:vtest:lustify-v8', `when this PC would be slow, a picture defaults to the cloud: ${JSON.stringify(fb)}`);
   assert.equal(fb.fallback, 'api:vtest:lustify-v8', 'with Venice ready behind it');
   assert.deepEqual(fb.items, ['cloud-pic'], `Venice made the picture: ${JSON.stringify(fb)}`);
   assert.equal(fb.error, '', 'no error shown');

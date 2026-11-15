@@ -1,9 +1,9 @@
 ### Download
 
-There are three ways to get Quicksilver 2.20.8. All install the same app; they differ in how the Liquid Edition's models (about 30 GB) arrive.
+There are three ways to get Quicksilver 2.20.9. All install the same app; they differ in how the Liquid Edition's models (about 30 GB) arrive.
 
-- **Quicksilver-Setup-2.20.8.exe** (below, about 1.9 GB, with a matching `.sha256`): the installer with the small 2B model inside. The first time Quicksilver opens, its setup screen downloads the rest of the Liquid Edition before the app starts.
-- **Quicksilver-Web-Setup-2.20.8.exe** (below, about 200 MB): the web installer. No models inside at all; the setup screen downloads the whole Liquid Edition on first launch.
+- **Quicksilver-Setup-2.20.9.exe** (below, about 1.9 GB, with a matching `.sha256`): the installer with the small 2B model inside. The first time Quicksilver opens, its setup screen downloads the rest of the Liquid Edition before the app starts.
+- **Quicksilver-Web-Setup-2.20.9.exe** (below, about 200 MB): the web installer. No models inside at all; the setup screen downloads the whole Liquid Edition on first launch.
 - **Full offline package** (about 31 GB): the installer plus a "Quicksilver models" folder. Keep the two together when you run the installer and everything is copied in: nothing to download, works with no internet from the first minute. It is too large for a GitHub release file, so it is the **Quicksilver-Windows-installer** build artifact on this release's build run (linked at the top of these notes; a GitHub sign-in is needed, and GitHub keeps build artifacts for 90 days).
 
 Updating from 2.19 or 2.20: nothing extra to download; your chats, settings and models are kept.
@@ -15,6 +15,19 @@ Updating from 2.18: the Liquid Edition now includes its Closer and its picture a
 - **Automations** (Explore → Automations): things Quicksilver does by itself on a schedule (every day, weekdays, once a week, every hour, every few minutes, or when it starts), with web search, plug-ins and your connected apps. Start from an idea (morning briefing, crypto and stock check, research digest, tech news, a website check, a price-drop watch, a weekly plan) or write your own. Each run goes to its own chat with a desktop notification; a run missed while Quicksilver was closed runs once when it opens.
 - **When the AI says it can't do something,** a button under the answer offers the fix: search the web, let it read your files, ask a model that sees pictures, connect the app, Full access to run commands, a picture or video model, Memory, or a search of the plug-in directory for the task.
 - **Meme battle always has pictures:** when a meme's picture can't be painted on this PC, Venice (or another picture service you connected) paints it; a meme format whose template picture can't be downloaded gets a painted picture instead; and if no picture can be made it says how to get one, instead of showing words alone.
+
+### New in 2.20.9
+
+- **A cloud AI that can't answer rolls over instead of erroring.** If a connected cloud AI fails before writing a word — out of credits, a bad key, no connection — Quicksilver switches to another connected cloud AI, then to your local models, instead of showing the error. For an uncensored chat it only rolls to another uncensored cloud or your PC. A credit/key failure is remembered for a few minutes so the dead service isn't retried every message. This applies everywhere that answers: chat, meme battle, GIF battle and the rest.
+- **A failed picture falls back to the cloud.** When the on-PC picture model (Lustify) crashes or runs out of memory, a connected cloud service (Venice first for the Liquid Edition, also Pollinations, fal, Replicate, Stability) makes the picture instead — and is used first for the rest of the session.
+- **Pictures default to the cloud when this PC would be slow.** If a cloud picture service is connected, pictures (and memes/GIFs) go to it unless this PC can make them in a reasonable time (Fast or Smooth). Photo editing and video stay on this PC.
+- **Hybrid mode — keep API use to a minimum** (Settings → API connections): this PC first, the web next, a paid cloud AI last — only a genuinely hard question the web can't settle goes to the cloud.
+- **Your own free GPU is used when it's connected.** Run a model on a free cloud GPU (Google Colab, Kaggle, Lightning AI) or a home/LAN server and connect it as a Custom OpenAI-compatible API; Quicksilver then uses it automatically for hard questions — before any paid cloud — because it costs nothing. The Guide explains the setup, and that your graphics card is used automatically.
+- **Background tasks save your API.** Chat titles, follow-up suggestions and memory notes run on a model already loaded on this PC, so a connected cloud AI is spent only on the actual answers.
+- **The Liquid Edition is always your default** unless you pick another model or stack yourself.
+- **"Cloud AI for everything" covers the whole app** (chats, crew members and background tasks), and **Minds** — 22 characters and tools with their own voice, memory and file sharing — are in Your Crew. Safe search is a switch under Web search (off by default); answers start with the answer itself, no filler.
+- **Clarifai** added to the API directory (free, OpenAI-compatible), now 47 services.
+- **Updates download the app only** (about 200 MB) from the version after this one, keeping your models in place; click the download bar to see what's downloading. Time and speed show on every crew and Mind card.
 
 ### New in 2.20.8
 

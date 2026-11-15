@@ -252,7 +252,13 @@ function bestCloudTarget(job = 'general') {
 }
 function resolveTarget(chat, assistant) {
   for (const t of [chat?.target, assistant?.target, S.data.prefs.defaultTarget]) if (targetValid(t)) return t;
-  return S.targets.find((x) => x.target.startsWith('stack:') && !x.empty)?.target || S.targets.find((x) => !x.empty)?.target || '';
+  // Nothing chosen: the Liquid Edition is always the default, unless you deactivated it and picked
+  // another model or stack (which is a valid defaultTarget, returned above). The Liquid variants
+  // (Max, Pro) come before any other stack, and a stack before a lone model.
+  return S.targets.find((x) => x.target === 'stack:quicksilver' && !x.empty)?.target
+    || S.targets.find((x) => /^stack:quicksilver(-max|-pro)?$/.test(x.target) && !x.empty)?.target
+    || S.targets.find((x) => x.target.startsWith('stack:') && !x.empty)?.target
+    || S.targets.find((x) => !x.empty)?.target || '';
 }
 
 function targetOptions(selected, { includeNone = false, noneLabel = 'Default model' } = {}) {

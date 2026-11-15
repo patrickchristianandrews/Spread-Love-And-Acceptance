@@ -133,6 +133,14 @@ function localPictureBad(m) {
   const e = S.est?.media?.[m.catalogId];
   return Boolean(e && (e.fit === 'no' || e.rating === 'wont'));
 }
+// Can this PC make the picture in a reasonable time — Fast or Smooth? If not (Usable/Slow/won't, or
+// it already failed here), and a cloud picture service is connected, pictures default to the cloud.
+function localMediaReasonable(m) {
+  if (!m || localPictureBad(m)) return false;
+  const e = S.est?.media?.[m.catalogId];
+  if (!e) return true; // no estimate yet (a fresh install): give this PC the benefit of the doubt
+  return e.rating === 'great' || e.rating === 'good';
+}
 function pickLiquidMedia(kind, prompt, specOf, pro = false) {
   const first = pro && S.installed.some((m) => m.catalogId === 'chroma-hd') ? 'chroma-hd' : S.catalog.picks?.liquid?.pictures || LIQUID_PICTURES;
   const anime = ANIME_RX.test(prompt || '');
@@ -144,8 +152,12 @@ function pickLiquidMedia(kind, prompt, specOf, pro = false) {
     // Venice (uncensored) in the cloud when it's connected and this PC can't run the picture model
     // (not enough memory, or it already failed here), or when no picture model is here yet.
     const cloud = cloudPictureFor(true);
-    if (local && !(cloud && localPictureBad(local))) return { value: `local:${local.id}`, inst: local, spec: specOf(local), fallback: cloud };
-    return cloud;
+    // Pictures default to the cloud (Venice for the Liquid Edition) when one is connected, unless
+    // this PC can make them in a reasonable time. Editing a photo stays on this PC's model (the
+    // cloud may not match the edit); it only moves to the cloud when the local model can't run.
+    const localGood = kind === 'edit' ? (local && !localPictureBad(local)) : localMediaReasonable(local);
+    if (localGood || (local && !cloud)) return { value: `local:${local.id}`, inst: local, spec: specOf(local), fallback: cloud };
+    return cloud || (local ? { value: `local:${local.id}`, inst: local, spec: specOf(local) } : null);
   }
   // Videos: Wan 2.2 (open weights, no content filter), the online pick first, then Turbo; Wan 2.1 if that's all there is.
   const firstVid = S.catalog.picks?.liquid?.videos || LIQUID_VIDEO;
@@ -172,11 +184,14 @@ function pickMediaModel(kind, opts = {}) {
   if (kind === 'animate') list = S.installed.filter((m) => m.kind === 'video' && specOf(m).animate);
   if (kind !== 'edit') list.sort((a, b) => (`local:${b.id}` === S.data.prefs[kind === 'image' ? 'imageModel' : 'videoModel']) - (`local:${a.id}` === S.data.prefs[kind === 'image' ? 'imageModel' : 'videoModel']) || q(b) - q(a));
   const cloudAlt = kind === 'image' || kind === 'edit' ? cloudPictureFor(false) : null;
-  if (list.length && !(cloudAlt && localPictureBad(list[0]) && kind !== 'edit')) return { value: `local:${list[0].id}`, inst: list[0], spec: specOf(list[0]), fallback: cloudAlt };
-  if (kind === 'image' || kind === 'edit') {
-    const cloud = cloudPictureFor(false); // any connected cloud picture service (Venice included)
-    if (cloud) return cloud;
+  if (list.length) {
+    // A picture defaults to a connected cloud service unless this PC can make it in a reasonable
+    // time; editing stays on this PC's model unless it can't run; video stays on this PC.
+    const localGood = kind === 'image' ? localMediaReasonable(list[0]) : !localPictureBad(list[0]);
+    if (localGood || !cloudAlt) return { value: `local:${list[0].id}`, inst: list[0], spec: specOf(list[0]), fallback: cloudAlt };
   }
+  if ((kind === 'image' || kind === 'edit') && cloudAlt) return cloudAlt;
+  if (list.length) return { value: `local:${list[0].id}`, inst: list[0], spec: specOf(list[0]) };
   return null;
 }
 
