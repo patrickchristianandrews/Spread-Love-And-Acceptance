@@ -56,6 +56,8 @@
   .pc-ov.is-tv .pc-cap { position: absolute; left: 50%; bottom: 3vh; transform: translateX(-50%); max-width: 80vw; min-height: 0; padding: .45rem 1.1rem; border-radius: 999px; background: rgba(255,251,244,.82); font-size: clamp(1rem, .7rem + 1vw, 1.6rem); }
   .pc-ov.is-tv .pc-cap:empty, .pc-ov.is-tv .pc-cap.tv-off { display: none; }
   html.tv-quiet, html.tv-quiet * { cursor: none !important; }
+  /* on the TV itself nobody can tap "Allow location": the weather shows only once the phone that cast it sends it */
+  html.tv-receiver .pc-ov.is-tv .pc-wx:not(.is-set) { display: none; }
   .tv-hint { position: fixed; right: 12px; top: 12px; z-index: 10001; padding: .4rem .8rem; border-radius: 999px; background: rgba(20,14,34,.7); color: #fff; font: 500 .85rem Lora, Georgia, serif; opacity: 0; transition: opacity .4s; pointer-events: none; }
   .tv-hint.is-on { opacity: 1; }
   /* touch controls: always there on phones and tablets; on a computer they show when the mouse moves */
@@ -189,7 +191,7 @@
     window.addEventListener('error', function (ev) { showErr(ev.error || ev.message); });
     // on the TV the start page never shows: a dark screen until the cam (daytime or sleeping) appears
     var st0 = document.getElementById('tv-start');
-    st0.style.visibility = 'hidden';
+    st0.style.visibility = 'hidden'; document.documentElement.classList.add('tv-receiver');
     document.documentElement.style.background = document.body.style.background = '#0D0B16';
   }
   var start = document.getElementById('tv-start'), go = document.getElementById('tv-go'), hint = document.getElementById('tv-hint');
@@ -330,6 +332,17 @@
     sleepFrame.src = '/sleeping-pals-cam.html?' + qs.toString();
     document.body.appendChild(sleepFrame);
   }
+  // the weather on the TV: the phone sends its rounded spot (a TV can't ask where it is); the TV reads the weather
+  // for it from Open-Meteo, like the phone does, and reads it again through the day
+  var wxSpotTv = null, wxTimer = 0;
+  function tvWeather(w) {
+    var lat = Math.round(+w.lat * 10) / 10, lon = Math.round(+w.lon * 10) / 10;
+    if (!isFinite(lat) || !isFinite(lon) || Math.abs(lat) > 90 || Math.abs(lon) > 180) return;
+    wxSpotTv = { lat: lat, lon: lon };
+    var go = function () { if (cam() && cam().weatherAt) cam().weatherAt(wxSpotTv.lat, wxSpotTv.lon); };
+    if (cam()) go(); else window.addEventListener('load', go);
+    clearInterval(wxTimer); wxTimer = setInterval(function () { if (cam() && cam().weatherRefresh) cam().weatherRefresh(); }, 10 * 60 * 1000);
+  }
   function toDay() {
     wantSleep = false; sleepKey = '';
     if (sleepFrame) { sleepFrame.remove(); sleepFrame = null; }
@@ -344,7 +357,9 @@
         var rc = cast.framework.CastReceiverContext.getInstance();
         rc.addCustomMessageListener(NS, function (ev) {
           var d = ev && ev.data; try { if (typeof d === 'string') d = JSON.parse(d); } catch (e) { d = null; }
-          if (!d || (d.mode !== 'sleep' && d.mode !== 'day')) return;
+          if (!d || (d.mode !== 'sleep' && d.mode !== 'day' && d.mode !== 'wx')) return;
+          if (d.wx) tvWeather(d.wx);
+          if (d.mode === 'wx') { try { rc.sendCustomMessage(NS, ev.senderId, { ok: true, mode: 'wx' }); } catch (e) {} return; }
           gotMode = true;
           try { if (d.mode === 'sleep') toSleep(d); else toDay(); } catch (e) { showErr(e); }
           try { rc.sendCustomMessage(NS, ev.senderId, { ok: true, mode: d.mode }); } catch (e) {}
@@ -365,7 +380,22 @@
         : 'Casting from this page needs Google Chrome on a computer or an Android phone. Open this page in Chrome and the button will work.';
     }
     var wantDay = false;
-    function sendDay(ses) { if (!ses || videoMode) return; try { var p = ses.sendMessage(NS, { mode: 'day' }); if (p && p.catch) p.catch(function () {}); } catch (e) {} }
+    function wxSpot() { var c = null; try { c = JSON.parse(localStorage.getItem('tol-pc-wx') || 'null'); } catch (e) {} return c && isFinite(c.lat) && isFinite(c.lon) ? { lat: c.lat, lon: c.lon } : null; }
+    function sendDay(ses) { if (!ses || videoMode) return; var m = { mode: 'day' }, sp = wxSpot(); if (sp) m.wx = sp; try { var p = ses.sendMessage(NS, m); if (p && p.catch) p.catch(function () {}); } catch (e) {} syncWxBtn(); }
+    // "Show the weather on the TV": asks for the location here (a TV can't ask), keeps the rounded spot on this device like the pal cam does, and sends it
+    var wxBtn = document.createElement('button'); wxBtn.type = 'button'; wxBtn.className = 'tv-resend'; wxBtn.hidden = true; wxBtn.textContent = '📍 Show the weather on the TV';
+    function syncWxBtn() { var on = castReady && ctx && ctx.getCastState() === cast.framework.CastState.CONNECTED && !videoMode; wxBtn.hidden = !on || !!wxSpot(); }
+    wxBtn.addEventListener('click', function () {
+      if (!navigator.geolocation) { castState.textContent = 'This browser can’t share a location, so the TV can’t show the weather.'; return; }
+      wxBtn.disabled = true; castState.textContent = 'Finding the weather where you are…';
+      navigator.geolocation.getCurrentPosition(function (pos) {
+        var lat = Math.round(pos.coords.latitude * 10) / 10, lon = Math.round(pos.coords.longitude * 10) / 10;
+        try { localStorage.setItem('tol-pc-wx', JSON.stringify({ lat: lat, lon: lon, at: 0, d: null })); } catch (e) {}
+        var ses = ctx && ctx.getCurrentSession();
+        if (ses) { try { var p = ses.sendMessage(NS, { mode: 'wx', wx: { lat: lat, lon: lon } }); if (p && p.catch) p.catch(function () {}); } catch (e) {} }
+        wxBtn.disabled = false; syncWxBtn(); castState.textContent = 'The weather is on the TV now. You can close this page. The TV keeps going.';
+      }, function () { wxBtn.disabled = false; castState.textContent = 'The location wasn’t shared, so the TV can’t show the weather. Press the button to try again.'; }, { timeout: 10000, maximumAge: 3600000 });
+    });
     castBtn.addEventListener('click', function () {
       if (!castReady) { noCast(); return; }
       wantDay = true;
@@ -391,7 +421,8 @@
       var stopCast = document.createElement('button'); stopCast.type = 'button'; stopCast.className = 'tv-resend'; stopCast.hidden = true; stopCast.textContent = 'Stop casting';
       stopCast.addEventListener('click', function () { wantDay = false; try { ctx.endCurrentSession(true); } catch (e) {} });
       castState.parentNode.insertBefore(stopCast, castState.nextSibling);
-      ctx.addEventListener(cast.framework.CastContextEventType.CAST_STATE_CHANGED, function () { stopCast.hidden = ctx.getCastState() !== cast.framework.CastState.CONNECTED; });
+      castState.parentNode.insertBefore(wxBtn, castState.nextSibling);
+      ctx.addEventListener(cast.framework.CastContextEventType.CAST_STATE_CHANGED, function () { stopCast.hidden = ctx.getCastState() !== cast.framework.CastState.CONNECTED; syncWxBtn(); });
       ctx.addEventListener(cast.framework.CastContextEventType.CAST_STATE_CHANGED, sync); sync(); stopCast.hidden = ctx.getCastState() !== cast.framework.CastState.CONNECTED;
       // only a press of the button changes what the TV shows: opening this page never switches a TV away from the sleeping cam
       ctx.addEventListener(cast.framework.CastContextEventType.SESSION_STATE_CHANGED, function (ev) {

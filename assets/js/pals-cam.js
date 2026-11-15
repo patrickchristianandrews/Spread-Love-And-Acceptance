@@ -781,12 +781,13 @@
       wxBusy = false; if (!j || !j.current) return; var k = wxKind(j.current.weather_code);
       var d = { kind: k[0], text: k[1], icon: k[2], deg: Math.round(j.current.temperature_2m) };
       try { localStorage.setItem(wxKey, JSON.stringify({ lat: lat, lon: lon, at: Date.now(), d: d })); } catch (e) {}
-      wxApply(d);
+      var fresh = !WX; wxApply(d); if (fresh && typeof castWx === 'function') castWx();
     }).catch(function () { wxBusy = false; });
   }
   function wxStart(ask) {
     var c = null; try { c = JSON.parse(localStorage.getItem(wxKey) || 'null'); } catch (e) {}
     if (c && c.d) { if (!WX) wxApply(c.d); if (Date.now() - c.at > 20 * 60 * 1000) wxFetch(c.lat, c.lon); return; }
+    if (c && isFinite(c.lat) && isFinite(c.lon)) { wxFetch(c.lat, c.lon); return; } // a spot kept without a reading yet (shared for the TV)
     if (!ask || !navigator.geolocation) return;
     if (wxEl) wxEl.textContent = '📍 Finding the weather…';
     navigator.geolocation.getCurrentPosition(function (pos) { wxFetch(Math.round(pos.coords.latitude * 10) / 10, Math.round(pos.coords.longitude * 10) / 10); }, function () { if (wxEl) wxEl.textContent = '📍 Location was not shared. Tap to try again'; }, { timeout: 8000, maximumAge: 3600000 });
@@ -1486,10 +1487,19 @@
     if (sb && connected != null) sb.hidden = !connected;
   }
   function castTv(ses) { try { return ses.getCastDevice().friendlyName; } catch (e) { return 'your TV'; } }
+  // the rounded spot the weather uses on this device, if the weather is on (the TV can't ask where it is)
+  function wxSpot() { var c = null; try { c = JSON.parse(localStorage.getItem(wxKey) || 'null'); } catch (e) {} return c && isFinite(c.lat) && isFinite(c.lon) ? { lat: c.lat, lon: c.lon } : null; }
   function castDay(ses) {
     if (!ses) return;
-    try { var p = ses.sendMessage(PALCAM_NS, { mode: 'day' }); if (p && p.catch) p.catch(function () {}); } catch (e) {}
-    castSay('Playing on ' + castTv(ses) + '. You can close this, and the TV keeps going.', true);
+    var spot = wxSpot(), msg = { mode: 'day' }; if (spot) msg.wx = spot;
+    try { var p = ses.sendMessage(PALCAM_NS, msg); if (p && p.catch) p.catch(function () {}); } catch (e) {}
+    castSay('Playing on ' + castTv(ses) + '. You can close this, and the TV keeps going.' + (spot ? '' : ' To show the weather on the TV too, tap 📍 Allow location for weather.'), true);
+  }
+  // weather turned on here while casting: send it to the TV as well
+  function castWx() {
+    var c = PCAST.ctx, ses = c && PCAST.want && c.getCurrentSession(), spot = wxSpot(); if (!ses || !spot) return;
+    try { var p = ses.sendMessage(PALCAM_NS, { mode: 'wx', wx: spot }); if (p && p.catch) p.catch(function () {}); } catch (e) {}
+    castSay('Playing on ' + castTv(ses) + ', with the weather. You can close this, and the TV keeps going.', true);
   }
   function castSdk(cb) {
     if (PCAST.st === 'ready') { cb(true); return; } if (PCAST.st === 'failed') { cb(false); return; }
@@ -1684,6 +1694,9 @@
     tricks: function () { if (!ACTS.length) loadActs(); return TRICKS.map(function (l) { return l.map(function (t) { return { id: t.id, name: t.name }; }); }); },
     facts: function () { return shownFacts.map(function (l) { return l.map(function (f) { return f.k; }); }); }, factCounts: function () { if (!ACTS.length) loadActs(); return [FACTS[0].length, FACTS[1].length]; },
     isOpen: function () { return isOpen; },
+    // the TV (pal-cam-tv.html?receiver=1) can't ask where it is: the phone that cast it sends its rounded spot instead
+    weatherAt: function (lat, lon) { lat = Math.round(+lat * 10) / 10; lon = Math.round(+lon * 10) / 10; if (!isFinite(lat) || !isFinite(lon) || Math.abs(lat) > 90 || Math.abs(lon) > 180) return false; wxBusy = false; wxFetch(lat, lon); return true; },
+    weatherRefresh: function () { wxStart(false); }, // fetched again when the last reading is over 20 minutes old
     newPlace: function () { if (!isOpen) return false; wantPlace = true; return true; }, // after the current moment, on to a new place
     adBreak: function (fit) { if (!isOpen || MB.prev || setting.id === 'theater') return false; AD.forceFit = fit == null ? null : Math.max(0, Math.floor(+fit) || 0); AD.load(); var go = function () { AD.last = clock; AD.dur = 58500 * SPEED; startTravel(AD, {}); }; if (AD.buf) go(); else { var n = 0, w = setInterval(function () { if (AD.buf || ++n > 40) { clearInterval(w); go(); } }, 150); } return true; },
     movieBreak: function () { if (!isOpen || MB.prev || setting.id === 'theater' || !BYID[MOVIE.id]) return false; MB.prev = setting; MB.last = clock; TH.clip = null; toSetting(SETTINGS.filter(function (x) { return x.id === 'theater'; })[0]); startTravel(BYID[MOVIE.id], {}); return true; },

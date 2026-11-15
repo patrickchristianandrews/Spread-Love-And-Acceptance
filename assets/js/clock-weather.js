@@ -30,6 +30,7 @@
   function start(ask) {
     var c = null; try { c = JSON.parse(lsGet(KEY) || 'null'); } catch (e) {}
     if (c && c.d) { WX = c.d; render(); if (Date.now() - c.at > 20 * 60 * 1000) fetchWx(c.lat, c.lon); return Promise.resolve('ok'); }
+    if (c && isFinite(c.lat) && isFinite(c.lon)) return fetchWx(c.lat, c.lon).then(function () { return WX ? 'ok' : 'error'; }); // a spot kept without a reading yet (shared for the TV)
     if (!ask || !navigator.geolocation) return Promise.resolve(navigator.geolocation ? 'idle' : 'unavailable');
     return new Promise(function (done) {
       navigator.geolocation.getCurrentPosition(function (p) {
