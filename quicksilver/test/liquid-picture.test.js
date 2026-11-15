@@ -164,6 +164,24 @@ const TINY = path.join(__dirname, 'fixtures', 'tiny.gguf');
   assert.equal(hyb.hard, 'api:hybtest:venice-uncensored', `Hybrid: a hard question goes to the cloud as a last resort: ${JSON.stringify(hyb)}`);
   assert.match(hyb.hardWhy, /Hybrid[\s\S]*last resort/);
   assert.ok(!String(hyb.easy).startsWith('api:'), `an everyday question stays on this PC: ${hyb.easy}`);
+  // A connected free GPU (Google Colab / Kaggle / your server, added as a Custom API) is used for a
+  // hard question automatically — before any paid cloud and with no toggle — because it costs nothing.
+  const gpu = await win.evaluate(() => {
+    const p = S.data.prefs; const was = { h: p.cloudHard, a: p.cloudAll, hy: p.hybrid, c: p.cloudChosen };
+    const g = { target: 'api:colab:qwen3-8b', label: 'Colab GPU', name: 'Colab GPU', group: 'Your GPU' };
+    S.providers.push({ id: 'colab', preset: 'custom', name: 'Colab GPU' }); S.targets.push(g);
+    try {
+      delete p.cloudChosen; p.cloudHard = false; p.cloudAll = false; p.hybrid = false; // no cloud toggle at all
+      const chat = { id: 'c-gpu', messages: [], assistantId: 'as-general' }; const a = assistantById('as-general');
+      const hard = autoPick(chat, a, 'Prove rigorously, step by step, that the square root of two is an irrational number', false);
+      const easy = autoPick(chat, a, 'hi there', false);
+      return { hard: hard.target, why: hard.why || '', fallback: hard.fallback, easy: easy.target };
+    } finally { S.providers = S.providers.filter((x) => x.id !== 'colab'); S.targets = S.targets.filter((x) => x !== g); Object.assign(p, { cloudHard: was.h, cloudAll: was.a, hybrid: was.hy }); if (was.c === undefined) delete p.cloudChosen; else p.cloudChosen = was.c; }
+  });
+  assert.equal(gpu.hard, 'api:colab:qwen3-8b', `a connected free GPU answers a hard question: ${JSON.stringify(gpu)}`);
+  assert.match(gpu.why, /free GPU[\s\S]*costs nothing/);
+  assert.ok(!String(gpu.easy).startsWith('api:'), 'an everyday question still stays on this PC');
+  console.log('✓ routing: a connected free GPU (Colab/Kaggle/your server) answers hard questions for free; Hybrid keeps a paid cloud as the last resort');
   // With Venice connected, a picture this PC can't make (out of memory) is made by Venice instead,
   // says so, and Venice goes first for the rest of the session.
   const fb = await win.evaluate(async () => {

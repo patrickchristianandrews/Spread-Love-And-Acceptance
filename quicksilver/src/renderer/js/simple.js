@@ -74,13 +74,35 @@ function cloudAutoOn() {
   'Keep answers on this PC', () => { p.cloudHard = false; p.cloudAll = false; p.cloudChosen = true; save(); toast('Answers stay on this PC. Change it any time in Settings (Cloud AI for hard questions / for everything).', 8000); }, 16000);
 }
 
+// A connected endpoint that costs nothing per message: your own compute (Google Colab, Kaggle, a
+// home server) added as a Custom OpenAI-compatible API, a local server (Ollama, LM Studio, LiteLLM,
+// vLLM, llama.cpp, KoboldCpp, GPT4All, Jan, Giant models), or a no-key free service (Pollinations).
+const FREE_ENDPOINT_PRESETS = new Set(['custom', 'litellm', 'vllm', 'ollama', 'lmstudio', 'llamacpp', 'koboldcpp', 'gpt4all', 'jan', 'colibri']);
+function isFreeEndpoint(target) {
+  if (!String(target).startsWith('api:')) return false;
+  const p = (S.providers || []).find((x) => x.id === target.split(':')[1]);
+  return Boolean(p && (FREE_ENDPOINT_PRESETS.has(p.preset) || p.noKey));
+}
 function autoPick(chat, a, text, hasImage) {
   const base = resolveTarget(chat, a);
   const job = jobOfQuestion(text || '', a);
   // Your own cloud AI for the hardest questions, if you switched that on (it uses your credits).
-  // When several cloud AIs are connected, use the one that's best for this kind of question.
+  // When several cloud AIs are connected, use the one that's best for this kind of question; a free
+  // endpoint (your own GPU, a local server) is preferred over a paid one, since it costs nothing.
   // With "Cloud AI for everything", every message (a photo too, when that cloud AI can see).
-  const cloudFor = (photo) => { const ok = (t) => !photo || S.speed?.targets?.[t]?.vision || S.targets.find((x) => x.target === t)?.vision; return (liquidOk(base) && bestApiTarget(job, (t) => liquidOk(t) && ok(t))) || bestApiTarget(job, ok); };
+  const cloudFor = (photo) => {
+    const ok = (t) => !photo || S.speed?.targets?.[t]?.vision || S.targets.find((x) => x.target === t)?.vision;
+    const pick = (extra) => (liquidOk(base) && bestApiTarget(job, (t) => liquidOk(t) && ok(t) && extra(t))) || bestApiTarget(job, (t) => ok(t) && extra(t));
+    return pick(isFreeEndpoint) || pick(() => true); // free/self-hosted first, then any
+  };
+  // Your own free GPU (Google Colab, Kaggle, a home/LAN server) connected as a Custom API: used
+  // automatically for a hard question when it's connected, before any paid cloud and ahead of a slow
+  // processor — it costs nothing, so there's no reason to hold it back. (You stay on this PC for
+  // everyday questions, and on whatever model you picked if that's a cloud one.)
+  if (!S.config?.offline && !hasImage && !String(base).startsWith('api:') && looksHard(text || '')) {
+    const gpu = (liquidOk(base) ? bestApiTarget(job, (t) => isFreeEndpoint(t) && liquidOk(t)) : null) || bestApiTarget(job, (t) => isFreeEndpoint(t));
+    if (gpu && gpu !== base) return { target: gpu, fallback: base?.startsWith('api:') ? '' : base, why: `Using your connected free GPU (${apiServiceName(gpu)}) for a hard question — it costs nothing.` };
+  }
   if (S.data.prefs.cloudAll && !S.config?.offline) {
     const cloud = cloudFor(hasImage);
     if (cloud && cloud !== base) return { target: cloud, fallback: base?.startsWith('api:') ? '' : base, why: `Cloud AI for everything: ${apiServiceName(cloud)}, your best connected cloud AI ${AUTO_WHY[job] || 'for this question'}. This PC answers if it can't.` };
