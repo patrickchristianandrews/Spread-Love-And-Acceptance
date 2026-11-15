@@ -76,7 +76,7 @@
   //   voices -> snore / bed / sfx buses -> fade -> mute -> rumble filter -> low-pass -> gentle compressor
   //   -> soft clipper (a safety net that only matters if something ever got loud) -> speakers.
   // Fades only ever use setTargetAtTime, so no volume change can jump or zipper.
-  var A = { c: null, fade: null, master: null, mute: null, snore: null, bed: null, sfx: null, bufs: null, voices: {}, bedNodes: null, sched: 0, off: 0 };
+  var A = { c: null, fade: null, master: null, mute: null, snore: null, bed: null, sfx: null, bufs: null, voices: {}, bedNodes: null, sched: 0, off: null };
   // the hook list the add-on files register on; a failing hook can never break the cam
   var HK = {};
   function hk(name, a, b) { var fs = HK[name], r, out; if (!fs) return undefined; for (var i = 0; i < fs.length; i++) { try { r = fs[i](a, b); } catch (e) { r = undefined; } if (r && !out) out = r; } return out; }
@@ -105,7 +105,16 @@
     cv[0] = 0; cv[n - 1] = 0;
     return cv;
   }
-  function play(param, curve, t, dur) { try { param.setValueCurveAtTime(curve, t, dur); } catch (e) {} }
+  // one shaped swell on a control. Two swells can never overlap on the same control (the browser refuses the second
+  // one, which used to make a breath, a purr or a chirp simply go missing), so a swell that would start while the last
+  // one is still playing starts just after it instead; if it is still refused, what was booked ahead is cleared first.
+  function play(param, curve, t, dur) {
+    var c = A.c, busy = param.__busy || 0;
+    if (c && t < busy + 0.01 && busy - t < dur * 0.8) t = busy + 0.01;
+    try { param.setValueCurveAtTime(curve, t, dur); param.__busy = t + dur; return; } catch (e) {}
+    if (!c) return;
+    try { var t2 = Math.max(t, c.currentTime + 0.03); param.cancelScheduledValues(t2); param.setValueCurveAtTime(curve, t2, dur); param.__busy = t2 + dur; } catch (e) {}
+  }
   // seamless looping noise (equal-power crossfade of the tail into the head), so no loop point can be heard
   function makeNoise(c, kind, secs, rms) {
     var sr = c.sampleRate, n = Math.round(secs * sr), x = Math.round(Math.min(1.2, secs * 0.15) * sr), tot = n + x, d = new Float32Array(tot), i, w, p;
@@ -139,8 +148,12 @@
   function actx() {
     if (A.c) return A.c;
     var AC = window.AudioContext || window.webkitAudioContext; if (!AC) return null;
+    // on an iPhone or iPad, play even with the ring/silent switch on (the person chose to hear the pups)
+    try { if (navigator.audioSession) navigator.audioSession.type = 'playback'; } catch (e) {}
     try { A.c = new AC(); } catch (e) { return null; }
     var c = A.c;
+    // back from a pause: line the clocks up again (syncClock books everything again if they drifted apart) and book the next breaths
+    c.addEventListener('statechange', function () { if (c.state === 'running' && S.on && !S.ended) { syncClock(); sendBreaths(); hk('tick', S.T); } });
     A.fade = gainNode(0); A.mute = gainNode(S.soundOn ? 1 : 0);
     var trim = gainNode(TRIM), rumble = filt('highpass', 32, 0.5), tone = filt('lowpass', 3600, 0.5);
     var comp = c.createDynamicsCompressor(); comp.threshold.value = -34; comp.knee.value = 12; comp.ratio.value = 2.5; comp.attack.value = 0.1; comp.release.value = 0.8;
@@ -184,8 +197,32 @@
   }
   // the visual breath: 0 (out) .. 1 (full); it follows the same planned breaths as the sound
   function breathAt(p, T) { for (var i = p.breaths.length - 1; i >= 0; i--) { var b = p.breaths[i]; if (T >= b.t) { var u = (T - b.t) / b.dur; return u < 0.42 ? sio(u / 0.42) : 1 - sio((u - 0.42) / 0.58); } } return 0; }
-  function aT(T) { return T + A.off; } // the page clock (T) to the audio clock
-  function syncClock() { if (A.c) A.off = A.c.currentTime - S.T; }
+  function aT(T) { return T + (A.off || 0); } // the page clock (T) to the audio clock
+  // The audio clock and the page clock stay in step to a few milliseconds while the sound plays. When the sound
+  // stops for a while (a phone locking its screen or taking a call, Bluetooth reconnecting, the tab being put
+  // away), the audio clock stops and the page clock doesn't. Then everything booked ahead would play at the wrong
+  // moments and new breaths would run into it, so it is all cleared and booked again on the new clock.
+  function syncClock() {
+    if (!A.c) return;
+    var off = A.c.currentTime - S.T;
+    if (A.off == null) { A.off = off; return; }
+    if (Math.abs(off - A.off) < 0.25) { A.off = off; return; }
+    A.off = off; resync();
+  }
+  function resync() {
+    var c = A.c, now = c.currentTime;
+    ['tidbit', 'sugarfoot'].forEach(function (id) {
+      var v = A.voices[id];
+      if (v) [v.airEnv.gain, v.toneEnv.gain].forEach(function (g) { try { g.cancelScheduledValues(0); g.setValueAtTime(0, now); } catch (e) {} g.__busy = 0; });
+      PALS[id].breaths.forEach(function (b) { if (b.t > S.T + 0.15) b.sent = false; });
+    });
+    hk('resync', now);
+  }
+  // the sound stopped by itself (the phone paused it): ask for it back. Browsers that need a tap get one from the screen.
+  function wakeAudio() {
+    var c = A.c; if (!c || !S.on || !S.soundOn || S.ended || c.state === 'running' || c.state === 'closed') return;
+    try { var r = c.resume(); if (r && r.catch) r.catch(noop); } catch (e) {}
+  }
   // one breath, from its planned numbers: air always, the purr and flutter only on a snoring breath
   function breathSound(pal, b) {
     var c = A.c, v = A.voices[pal.id]; if (!c || !v || S.ended) return;
@@ -234,7 +271,10 @@
     if (!S.on) return;
     S.T = (performance.now() - S.t0) / 1000;
     planBreaths(); hk('plan', S.T);
-    if (A.c && !S.ended) { syncClock(); sendBreaths(); hk('tick', S.T); }
+    if (A.c && !S.ended) {
+      if (A.c.state !== 'running') { if (S.soundOn && S.T - (A.lastWake || 0) > 3) { A.lastWake = S.T; wakeAudio(); } return; } // nothing is booked on a stopped clock
+      syncClock(); sendBreaths(); hk('tick', S.T);
+    }
   }
   // ---- the sound bed (synthesized; a pair of different-length noise loops per layer, so it never repeats)
   function setBed(kind) {
@@ -642,7 +682,8 @@
     try { navigator.wakeLock.request('screen').then(function (l) { S.lock = l; l.addEventListener('release', function () { S.lock = null; }); }).catch(function () {}); } catch (e) {}
   }
   function releaseWake() { if (S.lock) { try { S.lock.release(); } catch (e) {} S.lock = null; } }
-  document.addEventListener('visibilitychange', function () { if (!document.hidden && S.on) { requestWake(); S.last = 0; } });
+  document.addEventListener('visibilitychange', function () { if (!document.hidden && S.on) { requestWake(); S.last = 0; wakeAudio(); } });
+  window.addEventListener('pageshow', function () { if (S.on) wakeAudio(); });
 
   // ------------------------------------------------------------------ start / stop
   function start(opts) {
@@ -761,7 +802,7 @@
     root.querySelector('.spc-exit').addEventListener('click', exitCam);
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !root.hidden) { if (hk('escape')) return; exitCam(); } });
     function wakeUp() {
-      showControls();
+      showControls(); wakeAudio(); // a tap is what some browsers need before the sound can come back
       if (S.ended) { root.classList.remove('is-done'); var keep = { timer: 0, bed: S.bed, snore: S.snore, dim: S.dim, sound: S.soundOn }; start(keep); syncButtons(); say('The cam is back. Sleep timer off.'); }
     }
     ['pointerdown', 'pointermove', 'keydown', 'focusin'].forEach(function (ev) { root.addEventListener(ev, function (e) { if (ev === 'pointermove' && e.pointerType === 'touch') return; wakeUp(); }); });

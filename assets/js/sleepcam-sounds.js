@@ -572,6 +572,14 @@
   var HKS = window.TOLSleepCam.hook;
   HKS('audioBuilt', function () { ensureBuses(); syncPets(); });
   HKS('tick', tick); HKS('mixOn', mixOn); HKS('mixStop', mixStop);
+  // the audio clock jumped against the page clock (the sound was paused): clear each fur baby's booked breaths and purrs and book them again
+  HKS('resync', function (now) {
+    Object.keys(VO).forEach(function (id) {
+      var v = VO[id]; [v.airEnv.gain, v.toneEnv.gain].forEach(function (g) { try { g.cancelScheduledValues(0); g.setValueAtTime(0, now); } catch (e) {} g.__busy = 0; });
+      v.purrEnd = 0;
+      if (window.TOLSleepPets && window.TOLSleepPets._breaths) window.TOLSleepPets._breaths(id).forEach(function (b) { if (b.t > S.T + 0.15) b.sent = false; });
+    });
+  });
   HKS('bed', function (kind) {
     ['rain', 'fan', 'brown'].forEach(function (k) { var m = ST.cur.ovl[k] || (ST.cur.ovl[k] = { on: false, vol: 100 }); m.on = k === kind; if (m.on && !m.vol) m.vol = 100; });
     changed('overlay'); recompute(0.6);
