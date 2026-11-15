@@ -71,6 +71,17 @@
     A = { c: c, out: out, bus: bus, tone: tone, dry: dry, wet: wet };
     return A;
   }
+  // Each stretch of music has its own volume, between its notes and the shared bus. When the music stops (a music
+  // video, a pause, the tab put away) or changes (a new place, day turning to night), that stretch fades out and is
+  // cut off for good, so notes already booked from it can never play over the next song. (They used to: only the
+  // overall volume went down, and when it came back up the old song's leftover notes played over the new one.)
+  function note() { if (!A.sec) { A.sec = A.c.createGain(); A.sec.gain.value = 1; A.sec.connect(A.bus); } return A.sec; }
+  function endStretch(secs) {
+    if (!A || !A.sec) return;
+    var old = A.sec, c = A.c, t = c.currentTime; A.sec = null;
+    try { old.gain.cancelScheduledValues(t); old.gain.setValueAtTime(old.gain.value, t); old.gain.setTargetAtTime(0, t, Math.max(0.05, secs / 4)); } catch (e) {}
+    setTimeout(function () { try { old.disconnect(); } catch (e) {} }, (secs + 0.6) * 1000);
+  }
   function env(g, t, a, peak, hold, rel) {
     g.gain.value = 0.0001; g.gain.setValueAtTime(0.0001, t); g.gain.linearRampToValueAtTime(peak, t + a); // silent until the note starts
     g.gain.setValueAtTime(peak, t + a + hold); g.gain.exponentialRampToValueAtTime(0.0001, t + a + hold + rel);
@@ -80,26 +91,26 @@
   function pad(f, t, len, vol) {
     [[-6, 'triangle', 0.55], [5, 'sine', 0.7], [0, 'sine', 0.35]].forEach(function (v, k) {
       var o = osc(v[1], k === 2 ? f * 2 : f, t, t + len + 2.4), g = A.c.createGain(); o.detune.value = v[0];
-      env(g, t, Math.min(2.2, len * 0.4), vol * v[2], len * 0.5, 2); o.connect(g); g.connect(A.bus);
+      env(g, t, Math.min(2.2, len * 0.4), vol * v[2], len * 0.5, 2); o.connect(g); g.connect(note());
     });
   }
-  function bass(f, t, len, vol) { var o = osc('sine', f, t, t + len + 1), g = A.c.createGain(); env(g, t, 0.08, vol, len * 0.5, len * 0.45); o.connect(g); g.connect(A.bus); }
-  function pluck(f, t, vol) { var o = osc('triangle', f, t, t + 1.4), g = A.c.createGain(); env(g, t, 0.008, vol, 0.02, 1.1); o.connect(g); g.connect(A.bus); }
+  function bass(f, t, len, vol) { var o = osc('sine', f, t, t + len + 1), g = A.c.createGain(); env(g, t, 0.08, vol, len * 0.5, len * 0.45); o.connect(g); g.connect(note()); }
+  function pluck(f, t, vol) { var o = osc('triangle', f, t, t + 1.4), g = A.c.createGain(); env(g, t, 0.008, vol, 0.02, 1.1); o.connect(g); g.connect(note()); }
   // the movies' sparkle: a soft, round plucked note
-  function spark(f, t, vol) { var o = osc('sine', f, t, t + 1), g = A.c.createGain(); env(g, t, 0.02, vol, 0.01, 0.85); o.connect(g); g.connect(A.bus); }
+  function spark(f, t, vol) { var o = osc('sine', f, t, t + 1), g = A.c.createGain(); env(g, t, 0.02, vol, 0.01, 0.85); o.connect(g); g.connect(note()); }
   function marimba(f, t, vol) {
-    [[1, 1], [4, 0.18], [10, 0.05]].forEach(function (p) { var o = osc('sine', f * p[0], t, t + 1.2), g = A.c.createGain(); env(g, t, 0.004, vol * p[1], 0.01, p[0] > 1 ? 0.25 : 0.9); o.connect(g); g.connect(A.bus); });
+    [[1, 1], [4, 0.18], [10, 0.05]].forEach(function (p) { var o = osc('sine', f * p[0], t, t + 1.2), g = A.c.createGain(); env(g, t, 0.004, vol * p[1], 0.01, p[0] > 1 ? 0.25 : 0.9); o.connect(g); g.connect(note()); });
   }
   function bell(f, t, vol) {
-    [[1, 1, 2.4], [2.76, 0.28, 1.4], [5.4, 0.1, 0.7]].forEach(function (p) { var o = osc('sine', f * p[0], t, t + p[2] + 0.2), g = A.c.createGain(); env(g, t, 0.005, vol * p[1], 0.02, p[2]); o.connect(g); g.connect(A.bus); });
+    [[1, 1, 2.4], [2.76, 0.28, 1.4], [5.4, 0.1, 0.7]].forEach(function (p) { var o = osc('sine', f * p[0], t, t + p[2] + 0.2), g = A.c.createGain(); env(g, t, 0.005, vol * p[1], 0.02, p[2]); o.connect(g); g.connect(note()); });
   }
   function flute(f, t, len, vol) {
     var o = osc('sine', f, t, t + len + 0.8), g = A.c.createGain(), lfo = osc('sine', 5.2, t, t + len + 0.8), lg = A.c.createGain();
     lg.gain.value = f * 0.006; lfo.connect(lg); lg.connect(o.frequency); // a little vibrato
-    env(g, t, 0.12, vol, Math.max(0.05, len - 0.2), 0.5); o.connect(g); g.connect(A.bus);
+    env(g, t, 0.12, vol, Math.max(0.05, len - 0.2), 0.5); o.connect(g); g.connect(note());
   }
   function piano(f, t, vol) {
-    [[1, 1, 'triangle'], [2, 0.3, 'sine'], [3, 0.1, 'sine']].forEach(function (p) { var o = osc(p[2], f * p[0], t, t + 2.6), g = A.c.createGain(); env(g, t, 0.006, vol * p[1], 0.05, 2.2 / p[0]); o.connect(g); g.connect(A.bus); });
+    [[1, 1, 'triangle'], [2, 0.3, 'sine'], [3, 0.1, 'sine']].forEach(function (p) { var o = osc(p[2], f * p[0], t, t + 2.6), g = A.c.createGain(); env(g, t, 0.006, vol * p[1], 0.05, 2.2 / p[0]); o.connect(g); g.connect(note()); });
   }
   function play(voice, f, t, len, vol) {
     if (voice === 'flute') flute(f, t, len, vol * 0.8); else if (voice === 'marimba') marimba(f, t, vol); else if (voice === 'bell') bell(f, t, vol * 0.7);
@@ -134,9 +145,13 @@
     var c = ctx(); if (!running || !A || !c || c.state !== 'running') return;
     var st = M.style, mid = moodOf(st), md = MOODS[mid], slow = night() ? 1.12 : 1, p = md.p * slow, soft = st.soft * (night() ? 0.75 : 1), key = st.key;
     var scl = SCALES[md.scale].map(function (x) { return (x + key + 12) % 12; });
-    if (M.mood !== mid) { M.mood = mid; M.chord = 0; M.part = 0; M.motif = null; M.motifB = null; }
+    if (M.mood !== mid || M.key !== key || M.restyle) {
+      if (M.mood != null) { endStretch(1.6); M.next = c.currentTime + 0.35; } // a new place, or day turning to night: no old notes in the new key
+      M.restyle = false;
+      M.mood = mid; M.key = key; M.chord = 0; M.part = 0; M.motif = null; M.motifB = null;
+    }
     if (M.next < c.currentTime) M.next = c.currentTime + 0.1;
-    while (M.next < c.currentTime + (window.__pcLite ? 2.5 : 1.5)) { // planned well ahead, so a busy moment (or a small TV stick) never leaves a gap
+    while (M.next < c.currentTime + 2.5) { // planned well ahead, so a busy moment (or a small TV stick) never leaves a gap
       var t = M.next, part = FORM[M.part % FORM.length], prog = md[part], ci = M.chord % 4;
       var chord = prog[ci].map(function (n) { return n + key; });
       // the pads: the whole chord, held and swelling gently into the next
@@ -168,7 +183,7 @@
     }
   }
   function applyStyle(id) {
-    var st = STYLES[id] || DEFAULT_STYLE; if (st !== M.style) { M.style = st; M.mood = null; }
+    var st = STYLES[id] || DEFAULT_STYLE; if (st !== M.style) { M.style = st; M.restyle = true; } // a new place gets a new song
     if (!A) return;
     var c = A.c, now = c.currentTime;
     A.tone.frequency.setTargetAtTime(st.bright * (night() ? 0.7 : 1), now, 1.5);
@@ -181,13 +196,14 @@
     if (c.state === 'suspended' && c.resume) { try { var pr = c.resume(); if (pr && pr.catch) pr.catch(function () {}); } catch (e) {} }
     build(); applyStyle(scene);
     A.out.gain.cancelScheduledValues(c.currentTime); A.out.gain.setTargetAtTime(LEVEL, c.currentTime, FADE / 3);
-    if (!running) { M.next = c.currentTime + 0.15; M.chord = 0; M.part = 0; M.motif = null; M.motifB = null; M.mood = null; }
+    if (!running) { endStretch(0.4); M.next = c.currentTime + 0.15; M.chord = 0; M.part = 0; M.motif = null; M.motifB = null; M.mood = null; M.key = null; }
     running = true;
     if (!timer) timer = setInterval(schedule, 200);
     schedule();
   }
   function stopNow(secs) {
     running = false;
+    endStretch(secs || FADE); // the notes already booked fade with it and never come back
     if (A) { var c = A.c; try { A.out.gain.cancelScheduledValues(c.currentTime); A.out.gain.setTargetAtTime(0.0001, c.currentTime, (secs || FADE) / 3); } catch (e) {} }
   }
   document.addEventListener('visibilitychange', function () { if (document.hidden) stopNow(0.6); else if (scene) start(); });
