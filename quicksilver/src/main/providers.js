@@ -60,6 +60,8 @@ const PRESETS = {
     free: 'free', freeNote: 'Free plan with rate limits, no card needed.', priceUrl: 'https://cloud.sambanova.ai/plans/pricing' },
   nvidia: { name: 'NVIDIA NIM (build.nvidia.com)', baseUrl: 'https://integrate.api.nvidia.com/v1', keyUrl: 'https://build.nvidia.com', best: 'meta/llama-3.3-70b-instruct', bestWhy: 'A wide catalog of open models run by NVIDIA.',
     free: 'some', freeNote: 'Free credits for developers with an NVIDIA account, then limits apply.', priceUrl: 'https://build.nvidia.com/explore/discover' },
+  clarifai: { name: 'Clarifai', baseUrl: 'https://api.clarifai.com/v2/ext/openai/v1', keyUrl: 'https://clarifai.com/settings/security', best: 'gpt-oss-120b', bestWhy: 'Many open models behind one key, OpenAI-compatible.',
+    free: 'free', freeNote: 'Free tier with a Clarifai account (a monthly request allowance), then pay as you go. After connecting, use "Save & load models" to list what\'s available.', priceUrl: 'https://www.clarifai.com/pricing' },
   cloudflare: { name: 'Cloudflare Workers AI', baseUrl: 'https://api.cloudflare.com/client/v4/accounts/YOUR_ACCOUNT_ID/ai/v1', keyUrl: 'https://dash.cloudflare.com/profile/api-tokens', best: '@cf/meta/llama-3.3-70b-instruct-fp8-fast', bestWhy: 'A strong open model on Cloudflare\'s network.',
     free: 'free', freeNote: 'A free daily allowance with a Cloudflare account. Replace YOUR_ACCOUNT_ID in the address with your account ID.', priceUrl: 'https://developers.cloudflare.com/workers-ai/platform/pricing/' },
   cohere: { name: 'Cohere (Command)', baseUrl: 'https://api.cohere.ai/compatibility/v1', keyUrl: 'https://dashboard.cohere.com/api-keys', best: 'command-a-03-2025', bestWhy: 'Cohere\'s strongest model, good with documents and business writing.',

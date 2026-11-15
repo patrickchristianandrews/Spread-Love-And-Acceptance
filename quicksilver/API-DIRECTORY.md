@@ -1,6 +1,6 @@
 # Quicksilver API directory
 
-Every cloud service Quicksilver can use (46 of them), by task. In each task: free ones first, then free to start, then paid, with what the free plan gives you, what it costs after, and a link to get its key. A service appears under every task it is good at.
+Every cloud service Quicksilver can use (47 of them), by task. In each task: free ones first, then free to start, then paid, with what the free plan gives you, what it costs after, and a link to get its key. A service appears under every task it is good at.
 
 Free allowances and prices are as of November 2026 and change often: the "prices" link shows today's. Quicksilver works without any of these; they are optional additions. The same list is in the app under Guide → Best cloud AIs, and under Models → Connect an API → API directory.
 
@@ -20,6 +20,7 @@ Tasks: 💬 Everyday chat · 🧠 Hard reasoning & maths · 💻 Coding · ✍�
 | **Cohere** (7.5/10) | Business writing and documents | Trial key: 1,000 calls a month | Pay as you go | [Get a key](https://dashboard.cohere.com/api-keys) · [Prices](https://cohere.com/pricing) |
 | **Cloudflare Workers AI** (7/10) | Open models and images on a free daily allowance | Free: 10,000 "neurons" a day | Low, per use | [Get a key](https://dash.cloudflare.com/profile/api-tokens) · [Prices](https://developers.cloudflare.com/workers-ai/platform/pricing/) |
 | **SambaNova** (7/10) | Big open models at high speed | Free tier with rate limits | Low | [Get a key](https://cloud.sambanova.ai/apis) · [Prices](https://cloud.sambanova.ai/plans/pricing) |
+| **Clarifai** | Many open models behind one key, OpenAI-compatible. | Free tier with a Clarifai account (a monthly request allowance), then pay as you go. After connecting, use "Save & load models" to list what's available. | Paid plans for more | [Get a key](https://clarifai.com/settings/security) · [Prices](https://www.clarifai.com/pricing) |
 | **Pollinations (free, no key)** | A free hosted model with no key or account at all. | Free: no key or account at all. Rate limited and can be busy, so it works best as a backup to your own models. | Free | [Site](https://pollinations.ai) |
 
 ### Free to start, then paid
