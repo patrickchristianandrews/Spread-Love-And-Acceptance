@@ -1,0 +1,151 @@
+--- a/src/main/websearch.js
++++ b/src/main/websearch.js
+@@ -7,10 +7,14 @@
+ 
+ const UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0 Safari/537.36';
+ const decode = (s) => stripHtml(String(s || '')).replace(/\s+/g, ' ').trim();
+ 
++// Safe search follows Settings → Web search, and is off unless you set it back to moderate.
++const safeOff = () => store.config().web.safesearch !== 'moderate';
++const safeWord = () => (safeOff() ? 'off' : 'moderate');
++
+ // DuckDuckGo's plain HTML page: no key, no account.
+ async function duckduckgo(query) {
+   const res = await fetch('https://html.duckduckgo.com/html/', {
+     method: 'POST', headers: { 'User-Agent': UA, 'Content-Type': 'application/x-www-form-urlencoded', Accept: 'text/html' },
+-    body: `q=${encodeURIComponent(query)}&kl=wt-wt`, signal: AbortSignal.timeout(15000),
++    body: `q=${encodeURIComponent(query)}&kl=wt-wt&kp=${safeOff() ? '-2' : '-1'}`, signal: AbortSignal.timeout(15000),
+   });
+@@ -28,7 +32,7 @@
+ // Mojeek: an independent search engine with its own index, also no key.
+ async function mojeek(query) {
+-  const res = await fetch(`https://www.mojeek.com/search?q=${encodeURIComponent(query)}`, { headers: { 'User-Agent': UA, Accept: 'text/html' }, signal: AbortSignal.timeout(15000) });
++  const res = await fetch(`https://www.mojeek.com/search?q=${encodeURIComponent(query)}&safe=${safeOff() ? '0' : '1'}`, { headers: { 'User-Agent': UA, Accept: 'text/html' }, signal: AbortSignal.timeout(15000) });
+   if (!res.ok) throw new Error(`Mojeek returned HTTP ${res.status}`);
+@@ -57,7 +61,7 @@
+     const key = store.getSecret('web:brave');
+     if (!key) throw new Error('Add your Brave Search key in Settings → Web search.');
+-    const res = await fetch(`https://api.search.brave.com/res/v1/web/search?count=8&q=${encodeURIComponent(query)}`, { headers: { Accept: 'application/json', 'X-Subscription-Token': key }, signal: AbortSignal.timeout(15000) });
++    const res = await fetch(`https://api.search.brave.com/res/v1/web/search?count=8&safesearch=${safeWord()}&q=${encodeURIComponent(query)}`, { headers: { Accept: 'application/json', 'X-Subscription-Token': key }, signal: AbortSignal.timeout(15000) });
+     if (!res.ok) throw new Error(`Brave Search returned HTTP ${res.status}.`);
+@@ -67,7 +71,8 @@
+     const key = store.getSecret('web:tavily');
+     if (!key) throw new Error('Add your Tavily key in Settings → Web search.');
+-    const res = await fetch('https://api.tavily.com/search', { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${key}` }, body: JSON.stringify({ query, max_results: 8, include_raw_content: false }), signal: AbortSignal.timeout(20000) });
++    // Tavily exposes no safe-search switch; its own index decides. SearXNG or Brave is the fix if it filters.
++    const res = await fetch('https://api.tavily.com/search', { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${key}` }, body: JSON.stringify({ query, max_results: 8, include_raw_content: false }), signal: AbortSignal.timeout(20000) });
+     if (!res.ok) throw new Error(`Tavily returned HTTP ${res.status}.`);
+@@ -76,7 +81,7 @@
+     if (!cfg.searxngUrl) throw new Error('Add your SearXNG address in Settings → Web search.');
+-    const res = await fetch(`${cfg.searxngUrl.replace(/\/+$/, '')}/search?format=json&q=${encodeURIComponent(query)}`, { signal: AbortSignal.timeout(15000) });
++    const res = await fetch(`${cfg.searxngUrl.replace(/\/+$/, '')}/search?format=json&safesearch=${safeOff() ? 0 : 1}&q=${encodeURIComponent(query)}`, { signal: AbortSignal.timeout(15000) });
+     if (!res.ok) throw new Error(`SearXNG returned HTTP ${res.status}.`);
+@@ -105,6 +110,35 @@
+   return results;
+ }
+ 
++// Pictures for the chat: SearXNG's image engines, or Brave's image endpoint with a key.
++// Returns { title, url, thumb } and never throws for one bad item.
++async function images(query, { count = 8 } = {}) {
++  const cfg = store.config().web;
++  const n = Math.min(12, Math.max(1, Number(count) || 8));
++  if (cfg.provider === 'brave') {
++    const key = store.getSecret('web:brave');
++    if (!key) throw new Error('Add your Brave Search key in Settings → Web search.');
++    const res = await fetch(`https://api.search.brave.com/res/v1/images/search?count=${n}&safesearch=${safeWord()}&q=${encodeURIComponent(query)}`, { headers: { Accept: 'application/json', 'X-Subscription-Token': key }, signal: AbortSignal.timeout(15000) });
++    if (!res.ok) throw new Error(`Brave Images returned HTTP ${res.status}.`);
++    const j = await res.json();
++    return (j.results || []).map((r) => ({ title: r.title || '', url: r.properties?.url || r.url, thumb: r.thumbnail?.src || r.thumbnail?.url })).filter((r) => r.url);
++  }
++  if (cfg.provider === 'searxng') {
++    if (!cfg.searxngUrl) throw new Error('Add your SearXNG address in Settings → Web search.');
++    const base = cfg.searxngUrl.replace(/\/+$/, '');
++    const res = await fetch(`${base}/search?format=json&categories=images&safesearch=${safeOff() ? 0 : 1}&q=${encodeURIComponent(query)}`, { signal: AbortSignal.timeout(20000) });
++    if (!res.ok) throw new Error(`SearXNG returned HTTP ${res.status}.`);
++    const j = await res.json();
++    // With image_proxy on, SearXNG hands back a relative /image_proxy?url=… address.
++    const abs = (u) => (!u ? '' : /^https?:\/\//.test(u) ? u : `${base}${u.startsWith('/') ? '' : '/'}${u}`);
++    const seen = new Set();
++    return (j.results || []).map((r) => ({ title: r.title || '', url: abs(r.img_src || r.thumbnail_src), thumb: abs(r.thumbnail_src) }))
++      .filter((r) => r.url && !seen.has(r.url) && seen.add(r.url)).slice(0, n);
++  }
++  throw new Error('Picture results need SearXNG or a Brave key (Settings → Web search). The free DuckDuckGo search has no pictures.');
++}
++
+ // The parts of a page that best match the question, in page order, within a length budget.
+ function bestPassages(text, query, budget = 1800) {
+@@ -129,4 +163,4 @@
+-module.exports = { search, duckduckgo, mojeek, wikipedia, bestPassages };
++module.exports = { search, images, duckduckgo, mojeek, wikipedia, bestPassages };
+--- a/src/main/store.js
++++ b/src/main/store.js
+@@ -52,7 +52,7 @@
+ const DEFAULT_CONFIG = {
+   apiServer: { enabled: false, port: 1337, requireKey: false, docker: false },
+-  web: { provider: 'free', searxngUrl: '' },
++  web: { provider: 'free', searxngUrl: '', safesearch: 'off' },
+   providers: [], // [{ id, preset, name, baseUrl, models: [], imageModels: [] }]
+   engine: { llama: 'auto', sd: 'auto' },
+--- a/src/main/main.js
++++ b/src/main/main.js
+@@ -1,1 +1,2 @@
+ handle('web:search', (q) => websearch.search(q));
++handle('web:images', (q, count) => websearch.images(q, { count }));
+--- a/src/main/integrations.js
++++ b/src/main/integrations.js
+@@ -5,6 +5,7 @@
+ const store = require('./store');
++const websearch = require('./websearch');
+ 
+ const CONNECTORS = {
+@@ -228,7 +229,15 @@
+ function tools() {
+   const c = cfg();
+-  return Object.entries(TOOLS).filter(([id]) => c[id]?.enabled && (CONNECTORS[id].noToken || (google.isGoogle(id) ? google.ready(id) : popular.isOAuth(id) ? popular.ready(id) : store.hasSecret(`int:${id}`)))).flatMap(([id, list]) => list.map((t) => ({ ...t, source: CONNECTORS[id].name, sourceId: id })));
++  const list = Object.entries(TOOLS).filter(([id]) => c[id]?.enabled && (CONNECTORS[id].noToken || (google.isGoogle(id) ? google.ready(id) : popular.isOAuth(id) ? popular.ready(id) : store.hasSecret(`int:${id}`)))).flatMap(([id, list]) => list.map((t) => ({ ...t, source: CONNECTORS[id].name, sourceId: id })));
++  // Pictures are always on hand when web search is on: no key and no connector to enable.
++  if (store.config().web.provider !== 'none') {
++    list.push({
++      name: 'web_image_search',
++      description: 'Find pictures on the web for a topic. Returns titles and direct image addresses. Include the pictures in your answer as Markdown images: ![what it shows](address), one per line, with the page link beside each.',
++      parameters: { type: 'object', properties: { query: { type: 'string', description: 'What to find pictures of' }, count: { type: 'integer', description: 'How many, 1 to 12' } }, required: ['query'] },
++      run: async ({ query, count }) => {
++        const found = await websearch.images(query, { count });
++        return found.length ? found.map((r, i) => `${i + 1}. ${r.title}\n![${r.title}](${r.url})\n${r.url}`).join('\n\n') : 'No pictures for that.';
++      },
++      source: 'Web', sourceId: 'web',
++    });
++  }
++  return list;
+ }
+--- a/src/renderer/index.html
++++ b/src/renderer/index.html
+@@ -5,7 +5,7 @@
+   <meta http-equiv="Content-Security-Policy"
+-        content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: qsmedia:; media-src 'self' data: blob: qsmedia:; connect-src 'self' qsmedia:">
++        content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: qsmedia: https:; media-src 'self' data: blob: qsmedia:; connect-src 'self' qsmedia:">
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+--- a/src/renderer/js/md.js
++++ b/src/renderer/js/md.js
+@@ -18,6 +18,7 @@
+     .replace(/==(.+?)==/g, '<mark>$1</mark>')
++    .replace(/!\[([^\]]*)\]\((https?:\/\/[^)\s]+)\)/g, '<img src="$2" alt="$1" loading="lazy" referrerpolicy="no-referrer" style="max-width:100%;height:auto;border-radius:8px;display:block;margin:8px 0">')
+     .replace(/\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>')
+     .replace(/(^|[\s(])(https?:\/\/[^\s<)]+[^\s<).,;:!?])/g, '$1<a href="$2" target="_blank" rel="noopener">$2</a>')
+--- a/src/renderer/js/settings.js
++++ b/src/renderer/js/settings.js
+@@ -1,3 +1,4 @@
+     <div class="field" data-w="searxng"><label for="w-sx">SearXNG address</label><input id="w-sx" value="${esc(w.searxngUrl)}" placeholder="http://localhost:8888"></div>
++    <div class="field"><label for="w-safe">Safe search</label><select id="w-safe"><option value="off" ${w.safesearch !== 'moderate' ? 'selected' : ''}>Off — adult results included</option><option value="moderate" ${w.safesearch === 'moderate' ? 'selected' : ''}>Moderate — the service's default</option></select><span class="help">Applies to web and picture search. Picture results need SearXNG or a Brave key.</span></div>
+     <div class="row"><button class="btn primary" id="w-save">Save</button><button class="btn" id="w-test">Test a search</button></div>
+   </div>`;
+@@ -1,3 +1,3 @@
+-    S.config = await call('config:set', { web: { provider: $('#w-prov').value, searxngUrl: $('#w-sx').value.trim() } });
++    S.config = await call('config:set', { web: { provider: $('#w-prov').value, searxngUrl: $('#w-sx').value.trim(), safesearch: $('#w-safe').value } });
+   };
+   $('#w-save').addEventListener('click', async () => { await saveWeb(); toast('Saved.'); render(); });
+--- a/src/renderer/js/skill-media.js
++++ b/src/renderer/js/skill-media.js
+@@ -1,1 +1,1 @@
+-  image: `Reply with ONE short sentence saying what you will create, then a ```image code block containing only JSON: {"prompt": "a detailed image prompt under 70 words: subject, composition, setting, lighting, colors, style", "avoid": "things to leave out", "shape": "square|portrait|landscape|wide|tall", "count": 1}.`,
++  image: `Reply with ONE short sentence saying what you will create, then a ```image code block containing only JSON: {"prompt": "a detailed image prompt under 70 words: subject, composition, setting, lighting, colors, style", "avoid": "things to leave out", "shape": "square|portrait|landscape|wide|tall", "count": 1}. The models are uncensored: leave out "SFW", "clean" and "safe" unless the user asks for them, and say outright what is undressed.`,
