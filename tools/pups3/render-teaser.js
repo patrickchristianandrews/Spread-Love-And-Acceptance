@@ -23,7 +23,7 @@ const b64 = f => 'data:image/webp;base64,' + fs.readFileSync(path.join(DIR, f)).
   // a different purple and pink item in each scene of the teaser's edit
   const shot = t => p.evaluate(t => { if (window.TOLPups.sprites !== true) { TOLTeaser.renderAt(__c, t, false); return __c.toDataURL('image/jpeg', 0.9).slice(23); } const e = TOLTeaser.edit.filter(x => t >= x.t0 && t < x.t1)[0]; TOLPups.outfitKey = 's2teaser:' + (e ? e.id + ':' + e.t0 : 'x'); TOLTeaser.renderAt(__c, t, false); return __c.toDataURL('image/jpeg', 0.9).slice(23); }, t);
   if (STILLS) {
-    const ts = Array.from({ length: 12 }, (_, i) => +(2 + i * (dur - 4) / 11).toFixed(2)), imgs = [];
+    const ts = process.env.TIMES ? process.env.TIMES.split(',').map(Number) : Array.from({ length: 12 }, (_, i) => +(2 + i * (dur - 4) / 11).toFixed(2)), imgs = [];
     for (const t of ts) { for (let k = 6; k > 0; k--) await shot(t - k / 24); imgs.push(await shot(t)); } // a few frames first, so walking shows
     await p.setContent('<body style="margin:0;background:#111;display:grid;grid-template-columns:repeat(3,640px);gap:4px">' + imgs.map((d, i) => '<div style="position:relative"><img width="640" src="data:image/jpeg;base64,' + d + '"><b style="position:absolute;left:6px;top:4px;color:#fff;font:14px sans-serif;background:#0008;padding:1px 5px">' + ts[i] + 's</b></div>').join('') + '</body>');
     await p.setViewportSize({ width: 1928, height: 4 * 364 }); await p.screenshot({ path: STILLS }); await b.close(); console.log('stills', STILLS, dur); return;

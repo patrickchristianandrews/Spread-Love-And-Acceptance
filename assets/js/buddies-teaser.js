@@ -58,7 +58,7 @@
     if (o.cape) P.cape(g, L, t * 1000, o.cape, !!o.capeFly);
     var blink = o.blink != null ? o.blink : ((t + (who === 'tidbit' ? 0 : 1.7)) % 3.9) < 0.12;
     P.draw(g, L, pose, o.ph || 0, o.wag != null ? o.wag : Math.sin(t * 9 + (who === 'tidbit' ? 0 : 2)) * 0.5, blink, t * 1000, o.tilt || 0, { ear: o.ear || 0, hat: !!o.over }); // hat: the scene puts something on the head
-    if (o.reach) { // a front paw stretched out to hold a pal's paw
+    if (o.reach && !P.sprites) { // a front paw stretched out to hold a pal's paw (painted pups come nose to nose instead)
       var ex = 12 + o.reach, ey = -14 - (o.reachUp || 0);
       g.lineCap = 'round'; g.strokeStyle = '#252120'; g.lineWidth = 6; g.beginPath(); g.moveTo(10, -24); g.quadraticCurveTo(16, -16, 12 + o.reach * 0.5, ey + 1); g.stroke();
       g.strokeStyle = L.legLow; g.lineWidth = 5; g.beginPath(); g.moveTo(12 + o.reach * 0.45, ey + 1); g.lineTo(ex - 2, ey); g.stroke();
@@ -236,8 +236,8 @@
     for (var i = 0; i < 16; i++) { var tx = 180 + rnd(i + 21) * 300, ty = 240 + rnd(i + 23) * 110, ta = calm ? 0.5 : 0.5 + 0.5 * Math.sin(u * 4 + i * 2); star(g, tx, ty, 2.2 * ta + 0.5, 'rgba(255,255,255,' + ta + ')'); }
     // a heart flag
     line(g, 326, 214, 326, 156, '#6B4A3A', 2); g.fillStyle = '#F28AA8'; g.beginPath(); g.moveTo(327, 157); g.quadraticCurveTo(350, 160 + Math.sin(u * 5) * 3, 366, 162); g.quadraticCurveTo(350, 168 + Math.sin(u * 5 + 1) * 3, 327, 175); g.fill(); heart(g, 343, 166, 4, '#FFFFFF');
-    var tid = pup(g, 'tidbit', 302, 216, 1.15, { pose: 'sit', face: 1, t: u, over: HAT.beanie('#E4566E'), tilt: -0.1 });
-    var sug = pup(g, 'sugarfoot', 348, 216, 1.15, { pose: 'sit', face: 1, t: u + 1, over: HAT.beanie('#7FB8F0'), tilt: -0.14 });
+    var tid = pup(g, 'tidbit', 302, 216, 1.15, { pose: 'sit', face: 1, t: u, over: HAT.beanie('#7B4FBF'), tilt: -0.1 });
+    var sug = pup(g, 'sugarfoot', 348, 216, 1.15, { pose: 'sit', face: 1, t: u + 1, over: HAT.beanie('#F07EA6'), tilt: -0.14 });
     // little breath clouds in the cold
     [0, 1].forEach(function (k) { var ph = ((u + k * 0.7) % 1.4) / 1.4, hx = (k ? 348 : 302) + 32 + ph * 14, hy = 180 - ph * 8; circ(g, hx, hy, 2 + ph * 5, 'rgba(255,255,255,' + (0.5 * (1 - ph)) + ')'); });
     say(g, sug, 'We made it!', u, 0.5, 1.9);
@@ -465,8 +465,9 @@
     var lean = 0.08 * sio((u - 0.4) / 0.8);
     // facing each other, front paws touching
     var rch = 26 * sio((u - 0.3) / 0.7);
-    var tid = pup(g, 'tidbit', 248, 302, 1.7, { pose: 'sit', face: 1, t: u, tilt: lean, wag: Math.sin(u * 5) * 0.5, reach: rch, reachUp: 2 });
-    var sug = pup(g, 'sugarfoot', 378, 302, 1.7, { pose: 'sit', face: -1, t: u + 1, tilt: lean, wag: Math.sin(u * 5 + 1) * 0.5, reach: rch, reachUp: 2 });
+    var near = window.TOLPups && window.TOLPups.sprites ? 21 * rch / 26 : 0;   // painted pups shuffle close, nose to nose under the heart
+    var tid = pup(g, 'tidbit', 248 + near, 302, 1.7, { pose: 'sit', face: 1, t: u, tilt: lean, wag: Math.sin(u * 5) * 0.5, reach: rch, reachUp: 2 });
+    var sug = pup(g, 'sugarfoot', 378 - near, 302, 1.7, { pose: 'sit', face: -1, t: u + 1, tilt: lean, wag: Math.sin(u * 5 + 1) * 0.5, reach: rch, reachUp: 2 });
     var ha = sio((u - 1.0) / 0.5); glow(g, 313, 274, 20, '255,225,235', 0.55 * ha);
     if (u > 1.2) { var hq = clamp((u - 1.2) / 2.6, 0, 1); g.globalAlpha = bump(hq * 0.9 + 0.1); heart(g, 313 + Math.sin(hq * 6) * 6, 250 - hq * 80, 8 + hq * 4, '#F28AA8'); g.globalAlpha = 1; }
     say(g, sug, 'Wherever we go next…', u, 0.6, 2.13);
@@ -522,7 +523,7 @@
     var look = u < 1.0 ? 1 : u < 1.8 ? -1 : 1;
     var sug = pup(g, 'sugarfoot', 238, 312, 1.6, { pose: u > 6.2 ? 'wiggle' : 'sit', face: look, t: u, tilt: u > 4 ? -0.05 : 0.05, ear: pop ? -0.6 : 0, wag: u > 6.2 ? Math.sin(u * 15) * 0.8 : undefined });
     // Tidbit, behind the bush, in a space helmet and a cape
-    var tid = pup(g, 'tidbit', 452, mix(372, 290, pq), 1.6, { pose: pop ? 'wiggle' : 'sit', face: -1, t: u, over: HAT.space, cape: '#E4566E', capeFly: false, wag: Math.sin(u * 14) * 0.8, noShadow: true });
+    var tid = pup(g, 'tidbit', 452, mix(372, 290, pq), 1.6, { pose: pop ? 'wiggle' : 'sit', face: -1, t: u, over: HAT.space, cape: '#7B4FBF', capeFly: false, wag: Math.sin(u * 14) * 0.8, noShadow: true });
     var rs = u > 3.2 && u < 3.95 && !calm ? Math.sin(u * 40) * 0.04 : 0;
     g.save(); g.translate(452, 318); g.rotate(rs); [[-46, -8, 30], [-14, -22, 36], [24, -12, 32], [52, 0, 24], [-60, 6, 20]].forEach(function (b) { circ(g, b[0], b[1], b[2], '#24453C'); }); [[-30, -20, 4], [10, -34, 4], [36, -18, 3]].forEach(function (b) { circ(g, b[0], b[1], b[2], '#F28AA8'); }); g.restore();
     rr(g, 380, 318, 150, 50, 0, '#1E3530');
@@ -586,8 +587,12 @@
     // Tidbit paddles on a duck ring
     var by = WL + 5 + Math.sin(u * 2.3) * 3, leap = clamp((u - 3.0) / 1.0, 0, 1), air = bump(leap) * 110, fl = leap < 1 && leap > 0 ? -TAU * leap : 0, tx = 250 + leap * 60;
     if (u < 3.0 || u > 4.1) {
-      var tid = pup(g, 'tidbit', tx, (u > 4.1 ? WL + 36 : by) + 18, 1.45, { pose: 'sit', face: 1, t: u, tilt: u < 3.0 ? Math.sin(u * 2) * 0.06 : 0.1, noShadow: true, ear: u >= 2.7 && u < 3 ? -1.2 : 0 });
-      if (u < 3.0) { ell(g, tx + 2, by + 8, 36, 12, '#F7DC6F'); ell(g, tx + 2, by + 6, 24, 6, '#14265A'); circ(g, tx - 30, by + 2, 6, '#F7DC6F'); }
+      var deep = window.TOLPups && window.TOLPups.sprites ? 14 : 0, ring = u < 3.0, cut0 = ring ? by + 7 : WL + 2;
+      if (ring) { ell(g, tx + 2, by + 8, 36, 12, '#F7DC6F'); ell(g, tx + 2, by + 6, 24, 6, '#14265A'); }
+      g.save(); g.beginPath(); g.rect(-60, -60, VW + 120, cut0 + 60); g.clip();   // sitting in the ring (or in the water): only the top of him shows
+      var tid = pup(g, 'tidbit', tx, (u > 4.1 ? WL + 36 : by) + 18 + deep, 1.45, { pose: 'sit', face: 1, t: u, tilt: u < 3.0 ? Math.sin(u * 2) * 0.06 : 0.1, noShadow: true, ear: u >= 2.7 && u < 3 ? -1.2 : 0 });
+      g.restore();
+      if (ring) { g.save(); g.beginPath(); g.rect(-60, by + 7, VW + 120, 60); g.clip(); ell(g, tx + 2, by + 8, 36, 12, '#F7DC6F'); g.restore(); circ(g, tx - 30, by + 2, 6, '#F7DC6F'); }
     } else { var tl = pup(g, 'tidbit', tx, WL + 18 - air, 1.45, { pose: 'wiggle', face: 1, t: u, rot: fl, noShadow: true, ear: -1 }); }
     // the fin glides in from the right, two beats at a time
     var fx = u < 2.7 ? mix(660, 330, clamp((u - 0.5) / 2.2, 0, 1)) : 330;
@@ -653,7 +658,7 @@
     // the two on the case
     var stand = clamp((u - 1.5) / 0.4, 0, 1), tcx = 200, tid = pup(g, 'tidbit', tcx, 326, 1.45, { pose: u < 1.5 ? 'sit' : 'run', face: 1, t: u, ph: u * 5, over: HAT.goggles, tilt: -0.04 + 0.04 * Math.sin(u * 9) * stand, wag: 0.3, lift: 0 });
     var dash = u < 2.84 ? 470 : u < 3.24 ? mix(470, 262, eio((u - 2.84) / 0.4)) : u < 4.85 ? 262 : mix(262, 340, sio((u - 4.85) / 0.6));
-    var sug = pup(g, 'sugarfoot', dash, 326, 1.45, { pose: (u >= 2.84 && u < 3.24) ? 'run' : 'sit', face: -1, t: u + 1, ph: u * 18, over: HAT.beanie('#7FB8F0'), lift: (u >= 2.84 && u < 3.24) ? 6 : 0 });
+    var sug = pup(g, 'sugarfoot', dash, 326, 1.45, { pose: (u >= 2.84 && u < 3.24) ? 'run' : 'sit', face: -1, t: u + 1, ph: u * 18, over: HAT.beanie('#F07EA6'), lift: (u >= 2.84 && u < 3.24) ? 6 : 0 });
     // the paw that stops the word
     if (u >= 3.2 && u < 4.08) { var px = tid.x + 14, py = tid.y + 8; ell(g, px, py, 11, 8, '#C98A4E', 0.2); circ(g, px - 4, py - 5, 2.2, '#B97847'); circ(g, px + 1, py - 6, 2.2, '#B97847'); circ(g, px + 6, py - 4, 2.2, '#B97847'); }
     onomato(g, 'FWUMP!', 300, 186, 30, '#FFF8EC', win(u, 3.15, 4.05, 0.1), 0.08);
@@ -737,7 +742,7 @@
     // Tidbit, caped, on the roof, then airborne
     var lq = clamp((u - 1.6) / (landU - 1.6), 0, 1), air = u > 1.6 && u < landU;
     var tx = air ? mix(96, 480, lq) : u >= landU ? 480 : 96, ty = air ? mix(190, 280, lq) - 120 * 4 * lq * (1 - lq) : u >= landU ? 282 + 12 * bump(clamp((u - landU) / 0.4, 0, 1)) : 190;
-    var tid = pup(g, 'tidbit', tx, ty, 1.55, { pose: air ? 'wiggle' : u >= landU ? 'sit' : 'sit', face: 1, t: u, over: HAT.goggles, cape: '#E4566E', capeFly: air, rot: air ? -0.5 + lq * 1.1 : 0, ear: air ? -1.2 : 0, wag: 0.6, noShadow: air });
+    var tid = pup(g, 'tidbit', tx, ty, 1.55, { pose: air ? 'wiggle' : u >= landU ? 'sit' : 'sit', face: 1, t: u, over: HAT.goggles, cape: '#7B4FBF', capeFly: air, rot: air ? -0.5 + lq * 1.1 : 0, ear: air ? -1.2 : 0, wag: 0.6, noShadow: air });
     if (u >= landU) {
       var q2 = clamp((u - landU) / 1.2, 0, 1); for (var s = 0; s < 14; s++) { var a = -Math.PI * (0.1 + 0.8 * rnd(s + 2000)), v = 80 + rnd(s + 2001) * 120, px1 = 480 + Math.cos(a) * v * q2, py1 = 276 + Math.sin(a) * v * q2 + 300 * q2 * q2; if (py1 > 306) py1 = 306 + (s % 3) * 3; ell(g, px1, py1, 13, 6, ['#F2A0B8', '#7FB8F0', '#F7DC6F', '#8FD694', '#B79CEB'][s % 5], q2 * 6 + s); }
       // a sock lands on Tidbit's head
@@ -947,7 +952,7 @@
     triumph: { p: 3.2, c: [[48, 55, 64, 67], [41, 48, 60, 65], [43, 50, 59, 67], [48, 55, 64, 72]], arp: 1 }
   };
   var SHOT_MOOD = { cold: 'gentle', balloon: 'brave', lighthouse: 'gentle', mountain: 'brave', library: 'happy', market: 'happy', underwater: 'gentle', rooftop: 'brave', friend: 'gentle', sneeze: 'happy', puddle: 'happy', boulder: 'tense', jaws: 'tense', matrix: 'tense', snakes: 'tense', vault: 'tense', bridge: 'brave', laundry: 'happy', flash1: 'triumph', flash2: 'triumph', flash3: 'triumph', hill: 'happy', riser: 'triumph', reveal: 'triumph', post: 'gentle' };
-  var SHOT_AMB = { cold: [['crickets', 0.5]], balloon: [['wind', 0.55]], lighthouse: [['waves', 0.6], ['wind', 0.25]], mountain: [['wind', 0.6]], library: [['cafe', 0.2]], market: [['carnival', 0.4], ['city', 0.2]], underwater: [['underwater', 0.6]], rooftop: [['city', 0.35], ['wind', 0.25]], friend: [['birds', 0.4]], sneeze: [['birds', 0.35]], puddle: [['rain', 0.5]], boulder: [['wind', 0.35], ['birds', 0.2]], jaws: [['waves', 0.55], ['crickets', 0.25]], bridge: [['stream', 0.5], ['birds', 0.3]], laundry: [['birds', 0.5]], hill: [['birds', 0.4]], post: [['crickets', 0.4]] };
+  var SHOT_AMB = { cold: [['crickets', 0.5]], balloon: [['wind', 0.55]], lighthouse: [['waves', 0.6], ['wind', 0.25]], mountain: [['wind', 0.6]], library: [['cafe', 0.2]], market: [['carnival', 0.4], ['city', 0.2]], underwater: [['underwater', 0.6]], rooftop: [['city', 0.35], ['wind', 0.25]], friend: [['birds', 0.4]], sneeze: [['birds', 0.35]], puddle: [['rain', 0.5]], boulder: [['wind', 0.35], ['birds', 0.2]], jaws: [['waves', 0.28], ['crickets', 0.25]], bridge: [['stream', 0.5], ['birds', 0.3]], laundry: [['birds', 0.5]], hill: [['birds', 0.4]], post: [['crickets', 0.4]] };
   // every line that appears on screen, and when: found by playing the picture quietly on a tiny canvas, so the sound can never drift from it
   var SCAN = {};
   function ckey(who, text) { var h = 0x811c9dc5, t = who + '|' + text; for (var i = 0; i < t.length; i++) { h ^= t.charCodeAt(i); h = Math.imul(h, 0x01000193) >>> 0; } return ('0000000' + h.toString(16)).slice(-8); }
@@ -1061,7 +1066,7 @@
     // 2. pond: two dramatic notes, faster and faster
     marks.push(E.length); T = starts[1];
     for (var k2 = 0, t2 = T + 0.9; k2 < 5 && t2 < T + 2.9; k2++) { ev(t2, 'bass', 40, 0.5, 0.15); ev(t2 + 0.26, 'bass', 41, 0.5, 0.15); t2 += k2 < 2 ? 0.9 : 0.6; }
-    ev(T + 2.9, 'swell', 0.5, 0.14 * H); ev(T + 2.95, 'crash', 0.08 * H); ev(T + 3.0, 'glide', 300, 1500, 0.3, 0.07, 'triangle'); ev(T + 3.3, 'sample', 'sugarfoot-laugh-2', 0.45); ev(T + 3.9, 'splash', 0.35);
+    ev(T + 2.9, 'swell', 0.5, 0.08 * H); ev(T + 2.95, 'crash', 0.08 * H); ev(T + 3.0, 'glide', 300, 1500, 0.3, 0.07, 'triangle'); ev(T + 3.3, 'sample', 'sugarfoot-laugh-2', 0.45); ev(T + 3.9, 'splash', 0.35);
     talk(T + 0.3, 6, 640); talk(T + 2.0, 3, 640); talk(T + 3.0, 4, 470); talk(T + 4.4, 7, 640);
     // 3. slow motion: a long low sweep, a splat, and a sad trombone
     marks.push(E.length); T = starts[2];
