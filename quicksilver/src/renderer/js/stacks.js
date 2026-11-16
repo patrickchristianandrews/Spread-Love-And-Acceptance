@@ -688,7 +688,7 @@ function liquidEditionsHTML() {
     <div class="cards" id="liquid-editions" style="margin-bottom:18px">
       <div class="card">
         <div class="row"><span class="emoji-badge">💧</span><h3 class="grow">Liquid Edition</h3><span class="badge b-mint">For any PC</span></div>
-        <p class="desc">Comes with Quicksilver. Qwen3.5 4B answers and sees photos, Qwen3.5 9B leads hard questions, Qwen3.5 2B adds fresh angles; Lustify makes pictures and Wan 2.2 makes video. Runs on laptops and everyday PCs; best with an 8 GB graphics card.</p>
+        <p class="desc">Comes with Quicksilver — a real mix of abliterated families, all installed before first use: Qwen3.5 4B answers, sees photos and thinks (Alibaba); Gemma 3 12B leads hard questions and writes (Google); Rocinante 12B tells stories and roleplays (Mistral); Qwen3.5 2B adds quick fresh angles; Lustify makes pictures and Wan 2.2 makes video. Runs on laptops and everyday PCs; best with an 8 GB graphics card (on a smaller PC the bigger models take turns on the bench).</p>
         <p class="small muted" style="margin:-2px 0 6px">💻 Example PCs: most laptops and desktops with 16 GB of memory; an 8 GB graphics card (RTX 3050 / 4060, Arc B580) or an Apple M1 / M2 / M3 make it quick. Works with no graphics card at all — just slower, and the 9 GB Closer waits on the bench.</p>
         ${liquidPluginsHTML()}
         <div class="row">${liquidReady ? '<button class="btn small primary" data-chat-stack="quicksilver">Chat</button><span class="badge b-lav">🔒 Locked</span>' : '<span class="badge b-lemon">Setting up…</span>'}</div>

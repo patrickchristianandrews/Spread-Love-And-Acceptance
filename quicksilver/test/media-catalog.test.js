@@ -27,9 +27,9 @@ const mine = catalog.advise('create', hw, { installed: [{ id: 'my-lustify', name
 assert.equal(mine.mine?.members.image, 'my-lustify', 'your own Lustify makes the pictures in your kit');
 // The Liquid Edition's core is locked; the suggested add-ons are optional and outside the lock.
 for (const id of ['qwen3.5-4b', 'qwen3.5-9b-uncensored', 'lustify', 'wan2.2-5b']) assert.ok(catalog.liquidMember(id), `${id} in the core`);
-assert.equal(catalog.LIQUID_ADDONS.length, 8, 'eight suggested add-ons');
-// At least three different-family abliterated chat models are offered, so the crew need not be all Qwen.
-assert.ok(['gemma-3-12b-uncensored', 'rocinante-12b', 'dolphin-3-llama-3.1-8b', 'mistral-small-3.2-uncensored', 'gpt-oss-20b-uncensored'].filter((id) => catalog.LIQUID_ADDONS.some((a) => a.id === id)).length >= 3, 'different-family chat add-ons');
+// The core is a real mix of families, not all Qwen: Gemma 3 (Google) and Rocinante (Mistral) ship in it.
+for (const id of ['gemma-3-12b-uncensored', 'rocinante-12b']) assert.ok(catalog.liquidMember(id), `${id} is a core crew member (different family)`);
+assert.equal(catalog.LIQUID_ADDONS.length, 6, 'six suggested add-ons beyond the core');
 for (const a of catalog.LIQUID_ADDONS) {
   assert.ok(!catalog.liquidMember(a.id), `${a.id} is optional (not locked)`);
   assert.ok([...catalog.TEXT_MODELS, ...catalog.MEDIA_MODELS].some((m) => m.id === a.id), `${a.id} is in the catalog`);

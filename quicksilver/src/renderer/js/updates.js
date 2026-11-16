@@ -406,9 +406,9 @@ function addonsHTML() {
     ['🎯', 'Sharper search', 'BGE Reranker v2 M3, 0.44 GB', sem?.rerank ? 'On' : 'Off',
       'A small reranker reads your question together with each passage search found and puts the ones that really answer it first, so the model reads the right part of your files. Works with or without Smarter search.',
       'Accuracy ↑ on questions about your files · well under a second per question', sem?.rerank ? null : ['data-addon-rerank', 'Turn on']],
-    ['🎭', 'A different-family Closer', 'Gemma 3 12B (Google), 8 GB', S.installed.some((m) => ['gemma-3-12b-uncensored', 'rocinante-12b', 'dolphin-3-llama-3.1-8b', 'mistral-small-3.2-uncensored'].includes(m.catalogId)) ? 'Installed · in the crew' : (S.est?.hardware?.vramGB || 0) >= 8 ? 'Recommended for this PC' : 'Best with a graphics card (8 GB or more)',
-      'Adds an abliterated model from a different family than the Qwen Brain, so the Liquid Edition is a real mix, not all Qwen. Gemma 3 12B (Google) leads hard questions, sees photos and writes vivid prose; it joins the crew by itself. Prefer stories and role-play? Add Rocinante 12B (Mistral) from the Liquid Edition\'s Suggested add-ons. Nothing is removed: the Brain and Muse keep their jobs.',
-      'Variety + stronger writing · needs an 8 GB+ graphics card to stay quick', S.installed.some((m) => m.catalogId === 'gemma-3-12b-uncensored') ? null : ['data-addon-closer', 'Download Gemma 3 12B']],
+    ['🏁', 'An even stronger Closer', 'Mistral Small 3.2 24B, 15 GB', S.installed.some((m) => m.catalogId === 'mistral-small-3.2-uncensored') ? 'Installed · in the crew' : (S.est?.hardware?.vramGB || 0) >= 16 ? 'Recommended for this PC' : 'Best with a 16 GB+ graphics card',
+      'The Liquid Edition already installs a Closer (Gemma 3 12B, Google) and a storyteller (Rocinante 12B, Mistral) alongside the Qwen Brain. On a 16 GB+ graphics card you can add Mistral Small 3.2 24B (abliterated) — a sharper Closer that also sees photos. It joins the crew by itself; nothing is removed.',
+      'Accuracy ↑ on hard questions · needs a 16 GB+ graphics card to stay quick', S.installed.some((m) => m.catalogId === 'mistral-small-3.2-uncensored') ? null : ['data-addon-closer', 'Download Mistral Small 24B']],
     ['🌐', 'Web search', 'free, no account', S.config?.offline ? 'Off (offline)' : 'Ready', 'For anything current (news, prices, today\'s facts) the stack searches the web first and answers with sources. Used automatically when a question needs it.', 'Up-to-date answers · a few seconds', null],
     ['✓', 'Double-check', 'a second opinion', S.data.prefs.factCheck ? 'On for every answer' : 'Off (on per chat)', 'A second model checks each claim in an answer and fixes clear mistakes. Worth it for health, money, legal and work answers.', 'Accuracy ↑ · roughly doubles the time', null],
     ['🎙', 'Voice', 'Whisper, runs here', voiceOn ? 'Ready' : 'Downloads when first used', 'Speak to the stack and hear it answer; your voice never leaves this PC.', 'Hands-free · no change to answers', null],
@@ -440,7 +440,7 @@ document.addEventListener('click', async (e) => {
     return;
   }
   if (e.target.closest('[data-addon-closer]')) {
-    try { await download({ catalogId: 'gemma-3-12b-uncensored' }, 'Gemma 3 12B (uncensored)'); toast('Downloading Gemma 3 12B (uncensored, Google). When it\'s done it joins the Liquid Edition as a different-family Closer.', 8000); } catch (err) { toast(err.message, 8000); }
+    try { await download({ catalogId: 'mistral-small-3.2-uncensored' }, 'Mistral Small 3.2 24B (uncensored)'); toast('Downloading Mistral Small 3.2 24B (uncensored). When it\'s done it joins the Liquid Edition as a stronger Closer.', 8000); } catch (err) { toast(err.message, 8000); }
     return;
   }
   if (e.target.closest('[data-addon-semantic]')) {

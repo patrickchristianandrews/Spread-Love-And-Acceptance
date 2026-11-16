@@ -942,9 +942,9 @@ async function collect(gen) {
       assert.ok(![c0.structurer, c0.critic, c0.pragmatist, c0.lead].includes('local:dolphin-test'), 'and it does not sit on the Liquid Edition\'s Council');
       // Suggested Liquid add-ons you download in Quicksilver are in use from the start; models
       // found in other apps and the built-in ones (members already) are not ticked by default.
-      assert.equal(models.inUse({ kind: 'text', catalogId: 'gemma-3-12b-uncensored' }), true);
-      assert.equal(models.inUse({ kind: 'text', catalogId: 'gemma-3-12b-uncensored', source: 'imported' }), false);
-      assert.equal(models.inUse({ kind: 'text', catalogId: 'gemma-3-12b-uncensored', use: false }), false, 'your own choice wins');
+      assert.equal(models.inUse({ kind: 'text', catalogId: 'dolphin-3-llama-3.1-8b' }), true);
+      assert.equal(models.inUse({ kind: 'text', catalogId: 'dolphin-3-llama-3.1-8b', source: 'imported' }), false);
+      assert.equal(models.inUse({ kind: 'text', catalogId: 'dolphin-3-llama-3.1-8b', use: false }), false, 'your own choice wins');
       assert.equal(models.inUse({ kind: 'image', catalogId: 'lustify', use: true }), false, 'only chat models are ticked');
       assert.ok(models.setUse('dolphin-test', true) && models.inUse(models.get('dolphin-test')));
       // Registering the model again (an update or a repair) keeps the tick.

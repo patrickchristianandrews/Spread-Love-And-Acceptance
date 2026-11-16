@@ -1254,9 +1254,10 @@ function redPng(size = 64) {
     if (!/locked/i.test(proErr)) throw new Error('Liquid Edition Pro should refuse to be deleted');
     const editErr = await qs.call('stacks:save', { id: 'quicksilver', name: 'Mine', members: { drafters: [] } }).then(() => '', (e) => e.message);
     if (!/locked/i.test(editErr)) throw new Error('the Liquid Edition should refuse to be edited');
-    // Six suggested add-ons, optional: listed with a download button, none of them locked.
+    // Six suggested add-ons beyond the core crew, optional: listed with a download button, none locked.
+    // (Gemma 3 and Rocinante are now part of the core crew, not add-ons.)
     const addons = liquidAddonsHTML();
-    if (!['Gemma 3 12B', 'WAI-NSFW', 'Chroma1-HD', 'CyberRealistic', 'Mistral Small', 'gpt-oss'].every((n) => addons.includes(n))) throw new Error('the six suggested add-ons should be listed');
+    if (!['Dolphin 3.0', 'WAI-NSFW', 'Chroma1-HD', 'CyberRealistic', 'Mistral Small', 'gpt-oss'].every((n) => addons.includes(n))) throw new Error('the six suggested add-ons should be listed');
     if (S.catalog.liquidAddons.some((a) => S.catalog.liquid.includes(a.id))) throw new Error('add-ons must not be locked');
     if (S.catalog.picks) S.catalog.picks.recipes = picksRecipes;
     S.data.chats = S.data.chats.filter((c) => c.id !== 'c-up');

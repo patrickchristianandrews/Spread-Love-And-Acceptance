@@ -42,6 +42,14 @@ const MODELS = [
   // questions and sees photos, on PCs with a graphics card (on smaller PCs it waits on the bench).
   { id: 'starter-closer', catalogId: 'qwen3.5-9b-uncensored', name: 'Qwen3.5 9B', vision: true, where: 'pack', limit: 6.6e9, file: 'qwen3.5-9b.gguf', proj: 'qwen3.5-9b-mmproj.gguf', pack: true,
     licenseRepo: 'Qwen/Qwen3.5-9B', repos: ['mradermacher/Huihui-Qwen3.5-9B-abliterated-GGUF', 'mradermacher/Qwen3.5-9B-abliterated-GGUF'] },
+  // Different-family abliterated models, so the Liquid Edition's crew is a real mix (not all Qwen):
+  // a Google Gemma Closer that also writes and sees photos, and a Mistral-based storyteller (the
+  // Muse). Part of the pack like the Brain and Closer: copied in by the full installer, and fetched
+  // by the setup screen before the app opens on the web/standard installer.
+  { id: 'starter-gemma', catalogId: 'gemma-3-12b-uncensored', name: 'Gemma 3 12B', vision: true, where: 'pack', limit: 8.5e9, file: 'gemma-3-12b.gguf', proj: 'gemma-3-12b-mmproj.gguf', pack: true,
+    by: 'Google (uncensored by mlabonne)', licenseRepo: 'google/gemma-3-12b-it', repos: ['bartowski/mlabonne_gemma-3-12b-it-abliterated-GGUF', 'mlabonne/gemma-3-12b-it-abliterated-v2-GGUF'] },
+  { id: 'starter-rocinante', catalogId: 'rocinante-12b', name: 'Rocinante 12B', where: 'pack', limit: 8e9, file: 'rocinante-12b.gguf', pack: true,
+    by: 'TheDrummer (Mistral-based)', licenseRepo: 'TheDrummer/Rocinante-12B-v1.1', repos: ['TheDrummer/Rocinante-12B-v1.1-GGUF'] },
   // Next to the installer: Sharper search. The reranker puts the passage that answers the question
   // first (it scores text, writes none, so no filter applies).
   { id: 'starter-rerank', catalogId: 'bge-reranker-v2-m3', name: 'BGE Reranker v2 M3', kind: 'rerank', where: 'pack', limit: 0.6e9, file: 'rerank.gguf', pack: true,
