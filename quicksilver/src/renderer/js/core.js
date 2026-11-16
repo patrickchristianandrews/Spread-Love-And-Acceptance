@@ -251,13 +251,21 @@ function bestCloudTarget(job = 'general') {
   return bestApiTarget(job, (t) => liquidOk(t)) || bestApiTarget(job) || '';
 }
 function resolveTarget(chat, assistant) {
-  for (const t of [chat?.target, assistant?.target, S.data.prefs.defaultTarget]) if (targetValid(t)) return t;
-  // Nothing chosen: the Liquid Edition is always the default, unless you deactivated it and picked
-  // another model or stack (which is a valid defaultTarget, returned above). The Liquid variants
-  // (Max, Pro) come before any other stack, and a stack before a lone model.
+  // An explicit choice for this chat, or this Mind's own brain, always wins (incl. a cloud AI you
+  // picked yourself for the chat).
+  for (const t of [chat?.target, assistant?.target]) if (targetValid(t)) return t;
+  // A default YOU set to a stack or a model on this PC wins next ("another stack or model activated").
+  const d = S.data.prefs.defaultTarget;
+  if (S.data.prefs.defaultChosen && targetValid(d) && (String(d).startsWith('stack:') || String(d).startsWith('local:'))) return d;
+  // Otherwise the Liquid Edition is ALWAYS the default: its own stack, then Max/Pro, then any stack,
+  // then a model on this PC. A connected cloud AI is never auto-selected as your default brain — it
+  // is used automatically behind the scenes for hard questions and as rollover, but Quicksilver stays
+  // the selected default. (A cloud default is only used as a last resort, e.g. a PC with no local models.)
   return S.targets.find((x) => x.target === 'stack:quicksilver' && !x.empty)?.target
     || S.targets.find((x) => /^stack:quicksilver(-max|-pro)?$/.test(x.target) && !x.empty)?.target
     || S.targets.find((x) => x.target.startsWith('stack:') && !x.empty)?.target
+    || S.targets.find((x) => x.target.startsWith('local:') && !x.empty)?.target
+    || (targetValid(d) ? d : '')
     || S.targets.find((x) => !x.empty)?.target || '';
 }
 

@@ -18,6 +18,7 @@ Updating from 2.18: the Liquid Edition now includes its Closer and its picture a
 
 ### New in 2.20.12
 
+- **Quicksilver (the Liquid Edition) is always your default again — a connected cloud AI never steals the top slot.** After connecting a free cloud AI, "Automatic" could show and default to that cloud model (e.g. `aion-labs-aion-3-0`) instead of your Liquid Edition. Now the Liquid Edition stack is always the default brain unless you pick another stack or on-PC model yourself; the cloud is still used automatically behind the scenes for hard questions and as rollover, it just isn't shown as your default. "Automatic" also names what it uses, e.g. "✨ Automatic · Quicksilver Liquid Edition".
 - **A long chat with tools stays inside its memory.** When the AI has tools loaded (the GitHub connector, your own APIs, and so on), their definitions take up room in the model's context. A very long conversation could tip over the limit and fail with "request exceeds the available context size". Quicksilver now reserves room for the tool definitions when it trims the conversation, so a long chat with tools keeps working.
 
 ### New in 2.20.11
