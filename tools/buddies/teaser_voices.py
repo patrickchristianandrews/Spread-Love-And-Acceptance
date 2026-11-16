@@ -16,6 +16,9 @@ import prosody as P
 
 ROOT = P.ROOT
 SRC = os.path.join(ROOT, 'tools', 'buddies', 'voice-src', 's2teaser')
+# lines kept as recorded (any reshaping blurred a word: "bone" came out as "bond")
+KEEP = {'You owe me a bigger bone!': 1.0, 'Gotcha! Just me!': 1.5}
+BUILT = os.path.join(ROOT, 'tools', 'buddies', 'voice-src', 's2teaser-built')  # lines rebuilt by teaser_build.py, used as they are
 DST = os.path.join(ROOT, 'assets', 'audio', 'buddies', 's2teaser')
 
 # extra deliveries: pitch offset (semitones), melody widening, pace (>1 slower), tremble, drift over the line
@@ -50,7 +53,7 @@ MOOD = {
     'Ah… ahh…': ('build', 1.0), 'CHOO!': ('burst', 1.3), '…Bless you!': ('happy', 0.9), 'Hee hee!': ('giggly', 1.1),
     'That was on purpose!': ('proud', 1.1), 'A golden bone? Easy!': ('proud', 1.1), 'Tidbit! RUN!': ('scared', 1.3),
     'Wait… a beach ball?': ('surprised', 1.0), 'Every single time.': ('dry', 1.0), 'Nice night for a swim.': ('calm', 1.0),
-    'Um… hello?': ('timid', 1.0), 'Gotcha! Just me!': ('silly', 1.2), 'You owe me a bigger bone!': ('annoyed', 1.1),
+    'Um… hello?': ('timid', 1.0), 'Gotcha! Just me!': ('silly', 0.8), 'You owe me a bigger bone!': ('annoyed', 0.8),
     'Whoa… slow motion.': ('slowmo', 1.0), 'I know pie-fu.': ('cool', 1.0), 'Why is it always me?': ('grumpy', 1.1),
     'At least it’s cherry.': ('dry', 0.9), 'What a smooth flight!': ('happy', 1.0), 'Wait… snakes?!': ('scared', 1.2),
     'I have had it with these snakes on this…': ('fed up', 1.2), '…PLANE! This lovely plane!': ('excited', 1.2),
@@ -99,6 +102,17 @@ def main():
             print('no recording:', l['text']); continue
         mood, energy = MOOD.get(l['text'], ('', 1.0))
         a = P.decode(src)
+        built = os.path.join(BUILT, k + '.mp3')
+        if os.path.exists(built):  # rebuilt: its delivery is already in it
+            b = P.decode(built)
+            P.encode(b, os.path.join(DST, k + '.mp3')); out[k] = [round(len(b) / P.SR, 2)]; done += 1
+            print('%-10s %-8s %5.2fs (rebuilt, room %.2fs)  %s' % (l['who'], 'built', len(b) / P.SR, l['room'], l['text']), flush=True)
+            continue
+        if l['text'] in KEEP:
+            b = a / max(1e-9, np.abs(a).max()) * np.abs(a).max() * 10 ** ((KEEP[l['text']] - 2.0) / 20)
+            P.encode(b, os.path.join(DST, k + '.mp3')); out[k] = [round(len(b) / P.SR, 2)]; done += 1
+            print('%-10s %-8s %5.2fs (kept as recorded)  %s' % (l['who'], 'kept', len(b) / P.SR, l['text']), flush=True)
+            continue
         on = onsets_for(a, l['text'])
         room = l['room']
         base = P.FEEL[mood]

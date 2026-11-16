@@ -140,8 +140,8 @@
     }
     // two little "!"s when the ears go up
     if (u > 3.85 && u < 4.9) { var a = win(u, 3.9, 4.9, 0.12); g.globalAlpha = a; font(g, '800', 22); g.textAlign = 'center'; g.fillStyle = '#FFE08A'; g.fillText('!', tid.x + 4, tid.y - 10 - 4 * eout((u - 3.9) / 0.2)); g.fillText('!', sug.x - 4, sug.y - 10 - 4 * eout((u - 3.9) / 0.2)); g.globalAlpha = 1; }
-    say(g, tid, 'Did you hear that?', u, 5.0, 6.55);
-    say(g, sug, 'It came from out there!', u, 6.6, 8.0);
+    say(g, tid, 'Did you hear that?', u, 5.0, 6.27);
+    say(g, sug, 'It came from out there!', u, 6.29, 8.0);
     g.restore();
   }
   function card(g, u, d, text, o, calm) {
@@ -397,8 +397,8 @@
     for (var f = 0; f < 10; f++) { var ffx = rnd(f + 401) * VW + Math.sin(u + f) * 10, ffy = 190 + rnd(f + 402) * 100; glow(g, ffx, ffy, 8, '255,240,150', 0.4); }
     var tid = pup(g, 'tidbit', 196, 314, 1.5, { pose: 'sit', face: 1, t: u, ear: -0.7, tilt: -0.1 });
     var sug = pup(g, 'sugarfoot', 126, 314, 1.5, { pose: 'sit', face: 1, t: u + 1, ear: -0.6, tilt: -0.15 });
-    say(g, tid, 'Who’s that?', u, 0.55, 2.2);
-    say(g, sug, 'Maybe a new friend!', u, 2.35, 3.95);
+    say(g, tid, 'Who’s that?', u, 0.55, 1.69);
+    say(g, sug, 'Maybe a new friend!', u, 1.71, 3.95);
     g.restore();
   }
   function meadow(g, u) {
@@ -469,8 +469,8 @@
     var sug = pup(g, 'sugarfoot', 378, 302, 1.7, { pose: 'sit', face: -1, t: u + 1, tilt: lean, wag: Math.sin(u * 5 + 1) * 0.5, reach: rch, reachUp: 2 });
     var ha = sio((u - 1.0) / 0.5); glow(g, 313, 274, 20, '255,225,235', 0.55 * ha);
     if (u > 1.2) { var hq = clamp((u - 1.2) / 2.6, 0, 1); g.globalAlpha = bump(hq * 0.9 + 0.1); heart(g, 313 + Math.sin(hq * 6) * 6, 250 - hq * 80, 8 + hq * 4, '#F28AA8'); g.globalAlpha = 1; }
-    say(g, sug, 'Wherever we go next…', u, 0.6, 2.75);
-    say(g, tid, '…we go together.', u, 2.9, 5.6);
+    say(g, sug, 'Wherever we go next…', u, 0.6, 2.13);
+    say(g, tid, '…we go together.', u, 2.15, 5.6);
     g.restore();
   }
   function riser(g, u, d, calm) {
@@ -604,8 +604,8 @@
     if (u > 3.9) for (var rr2 = 0; rr2 < 2; rr2++) { var q3 = ((u - 3.9) * 0.8 + rr2 * 0.4) % 1; g.strokeStyle = 'rgba(210,235,255,' + 0.6 * (1 - q3) + ')'; g.lineWidth = 1.4; g.beginPath(); g.ellipse(tx + 20, WL + 4, 18 + q3 * 70, 3 + q3 * 9, 0, 0, TAU); g.stroke(); }
     say(g, { x: tx, y: by - 38, who: 'tidbit' }, 'Nice night for a swim.', u, 0.3, 1.7);
     say(g, { x: tx, y: by - 38, who: 'tidbit' }, 'Um… hello?', u, 2.0, 2.9);
-    say(g, sug, 'Gotcha! Just me!', u, 3.0, 4.2, { big: true });
-    say(g, { x: tx, y: WL - 20, who: 'tidbit' }, 'You owe me a bigger bone!', u, 4.4, 6.0);
+    say(g, sug, 'Gotcha! Just me!', u, 3.0, 4.13, { big: true });
+    say(g, { x: tx, y: WL - 20, who: 'tidbit' }, 'You owe me a bigger bone!', u, 4.15, 6.0);
   }
   // 3. slow motion (The Matrix): Tidbit dodges a pie, and the pie finds Sugarfoot
   function matrix(g, u, d, calm) {
@@ -621,8 +621,8 @@
     onomato(g, 'SPLAT!', 500, 170, 34, '#FFF8EC', win(u, 3.6, 4.7, 0.1), 0.1);
     say(g, tid, 'Whoa… slow motion.', u, 0.3, 1.8);
     say(g, tid, 'I know pie-fu.', u, 2.0, 3.4);
-    say(g, sug, 'Why is it always me?', u, 4.0, 5.4);
-    say(g, sug, 'At least it’s cherry.', u, 5.5, 6.4);
+    say(g, sug, 'Why is it always me?', u, 4.0, 5.05);
+    say(g, sug, 'At least it’s cherry.', u, 5.07, 6.4);
   }
   // 4. snakes on a plane (the famous line, kept family-friendly): Tidbit has had it, and Sugarfoot gets there first
   function snk(g, x0, y0, x1, y1, t, amp, w, col, headCol) {
@@ -652,18 +652,18 @@
     onomato(g, 'SSSSSSS', 330, 72, 34, '#2F8A4C', win(u, 1.2, 2.8, 0.15), -0.04);
     // the two on the case
     var stand = clamp((u - 1.5) / 0.4, 0, 1), tcx = 200, tid = pup(g, 'tidbit', tcx, 326, 1.45, { pose: u < 1.5 ? 'sit' : 'run', face: 1, t: u, ph: u * 5, over: HAT.goggles, tilt: -0.04 + 0.04 * Math.sin(u * 9) * stand, wag: 0.3, lift: 0 });
-    var dash = u < 3.7 ? 470 : u < 4.1 ? mix(470, 262, eio((u - 3.7) / 0.4)) : u < 5.4 ? 262 : mix(262, 340, sio((u - 5.4) / 0.6));
-    var sug = pup(g, 'sugarfoot', dash, 326, 1.45, { pose: (u >= 3.7 && u < 4.1) ? 'run' : 'sit', face: -1, t: u + 1, ph: u * 18, over: HAT.beanie('#7FB8F0'), lift: (u >= 3.7 && u < 4.1) ? 6 : 0 });
+    var dash = u < 2.84 ? 470 : u < 3.24 ? mix(470, 262, eio((u - 2.84) / 0.4)) : u < 4.85 ? 262 : mix(262, 340, sio((u - 4.85) / 0.6));
+    var sug = pup(g, 'sugarfoot', dash, 326, 1.45, { pose: (u >= 2.84 && u < 3.24) ? 'run' : 'sit', face: -1, t: u + 1, ph: u * 18, over: HAT.beanie('#7FB8F0'), lift: (u >= 2.84 && u < 3.24) ? 6 : 0 });
     // the paw that stops the word
-    if (u >= 4.05 && u < 5.5) { var px = tid.x + 14, py = tid.y + 8; ell(g, px, py, 11, 8, '#C98A4E', 0.2); circ(g, px - 4, py - 5, 2.2, '#B97847'); circ(g, px + 1, py - 6, 2.2, '#B97847'); circ(g, px + 6, py - 4, 2.2, '#B97847'); }
-    onomato(g, 'FWUMP!', 300, 186, 30, '#FFF8EC', win(u, 4.0, 4.9, 0.1), 0.08);
+    if (u >= 3.2 && u < 4.08) { var px = tid.x + 14, py = tid.y + 8; ell(g, px, py, 11, 8, '#C98A4E', 0.2); circ(g, px - 4, py - 5, 2.2, '#B97847'); circ(g, px + 1, py - 6, 2.2, '#B97847'); circ(g, px + 6, py - 4, 2.2, '#B97847'); }
+    onomato(g, 'FWUMP!', 300, 186, 30, '#FFF8EC', win(u, 3.15, 4.05, 0.1), 0.08);
     say(g, sug, 'What a smooth flight!', u, 0.2, 1.4);
-    say(g, tid, 'Wait… snakes?!', u, 1.6, 2.5);
-    say(g, tid, 'I have had it with these snakes on this…', u, 2.6, 4.0, { big: true });
-    say(g, sug, '…PLANE! This lovely plane!', u, 4.1, 5.0, { big: true });
-    say(g, tid, 'Hey, I was talking!', u, 5.0, 5.5);
-    say(g, tid, '…on this lovely plane.', u, 5.6, 6.3);
-    say(g, sug, 'Good girl.', u, 6.3, 7.0);
+    say(g, tid, 'Wait… snakes?!', u, 1.6, 2.3);
+    say(g, tid, 'I have had it with these snakes on this…', u, 2.32, 3.22, { big: true });
+    say(g, sug, '…PLANE! This lovely plane!', u, 3.24, 4.07, { big: true }); // cuts him off right on "this…"
+    say(g, tid, 'Hey, I was talking!', u, 4.09, 4.7);
+    say(g, tid, '…on this lovely plane.', u, 4.72, 5.52);
+    say(g, sug, 'Good girl.', u, 5.54, 6.3);
   }
   // 5. the vault (Mission: Impossible): a cookie, a rope and a muffled partner
   function vault(g, u, d, calm) {
@@ -952,7 +952,7 @@
   var SCAN = {};
   function ckey(who, text) { var h = 0x811c9dc5, t = who + '|' + text; for (var i = 0; i < t.length; i++) { h ^= t.charCodeAt(i); h = Math.imul(h, 0x01000193) >>> 0; } return ('0000000' + h.toString(16)).slice(-8); }
   // the recorded voices (one mp3 per line, listed in index.json): when a line has one, the little talking-voice stand-in stays quiet
-  var CLIPV = '1611a'; // bump whenever the teaser recordings are redone, so no browser plays an old copy
+  var CLIPV = '1611c'; // bump whenever the teaser recordings are redone, so no browser plays an old copy
   var CLIPMAP = null, CLIPP = null;
   function clipsLoad() { return CLIPP || (CLIPP = fetch('/assets/audio/buddies/s2teaser/index.json?v=' + CLIPV, { cache: 'no-cache' }).then(function (r) { return r.ok ? r.json() : null; }).then(function (m) { CLIPMAP = m || {}; return CLIPMAP; }).catch(function () { CLIPMAP = {}; return CLIPMAP; })); }
   function hasClip(who, text) { return !!(CLIPMAP && CLIPMAP[ckey(who === 'narr' ? 'narr' : who === 'sugarfoot' ? 'sugarfoot' : 'tidbit', text)]); }
