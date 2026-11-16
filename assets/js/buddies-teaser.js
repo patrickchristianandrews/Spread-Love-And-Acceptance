@@ -50,6 +50,7 @@
     var L = P.looks[who === 'tidbit' ? 'collar' : 'drop'], pose = o.pose || 'sit', face = o.face || 1, t = o.t || 0;
     var lean = L.build === 'lean', BY = lean ? -21 : -18.5;
     var hx = pose === 'lie' ? 19 : pose === 'sit' ? 18 : pose === 'bow' ? 22 : 21, hy = pose === 'lie' ? -19 : pose === 'sit' ? -38 : pose === 'bow' ? -14 : BY - 12;
+    if (P.headPos) { var hp0 = P.headPos(L, pose, o.ph || 0); hx = hp0.x; hy = hp0.y; } // hats and speech bubbles go where the pup drawing put the head
     var lift = o.lift || 0;
     // a soft shadow under the paws
     if (!o.noShadow) ell(g, x, y + 1, 21 * s, 3.4 * s, 'rgba(30,20,50,' + (0.18 * clamp(1 - lift / 60, 0.3, 1)).toFixed(3) + ')');
