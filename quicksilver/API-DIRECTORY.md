@@ -1,6 +1,6 @@
 # Quicksilver API directory
 
-Every cloud service Quicksilver can use (47 of them), by task. In each task: free ones first, then free to start, then paid, with what the free plan gives you, what it costs after, and a link to get its key. A service appears under every task it is good at.
+Every cloud service Quicksilver can use (53 of them), by task. In each task: free ones first, then free to start, then paid, with what the free plan gives you, what it costs after, and a link to get its key. A service appears under every task it is good at.
 
 Free allowances and prices are as of November 2026 and change often: the "prices" link shows today's. Quicksilver works without any of these; they are optional additions. The same list is in the app under Guide → Best cloud AIs, and under Models → Connect an API → API directory.
 
@@ -20,7 +20,12 @@ Tasks: 💬 Everyday chat · 🧠 Hard reasoning & maths · 💻 Coding · ✍�
 | **Cohere** (7.5/10) | Business writing and documents | Trial key: 1,000 calls a month | Pay as you go | [Get a key](https://dashboard.cohere.com/api-keys) · [Prices](https://cohere.com/pricing) |
 | **Cloudflare Workers AI** (7/10) | Open models and images on a free daily allowance | Free: 10,000 "neurons" a day | Low, per use | [Get a key](https://dash.cloudflare.com/profile/api-tokens) · [Prices](https://developers.cloudflare.com/workers-ai/platform/pricing/) |
 | **SambaNova** (7/10) | Big open models at high speed | Free tier with rate limits | Low | [Get a key](https://cloud.sambanova.ai/apis) · [Prices](https://cloud.sambanova.ai/plans/pricing) |
+| **Aion Labs** | A permanent free tier (no card) tuned for role-play and storytelling. | Free: create a key, no card. About 15 requests a minute and 20K tokens a day. | Paid plans for more | [Get a key](https://www.aionlabs.ai/app/api-keys/) · [Prices](https://www.aionlabs.ai) |
 | **Clarifai** | Many open models behind one key, OpenAI-compatible. | Free tier with a Clarifai account (a monthly request allowance), then pay as you go. After connecting, use "Save & load models" to list what's available. | Paid plans for more | [Get a key](https://clarifai.com/settings/security) · [Prices](https://www.clarifai.com/pricing) |
+| **Gonka Broker** | Big open models (GLM-5.3, DeepSeek V4, MiniMax) free every month. | Free: sign up (phone verification, no card). About 1M shared tokens a month; the model lineup rotates. | Paid plans for more | [Get a key](https://app.gonkabroker.com/signup) · [Prices](https://gonkabroker.com) |
+| **LLM7.io** | A free gateway: works with no key at all; a free token raises the limits. | Free: no key needed for the "turbo" models. Get a free token at token.llm7.io for higher rate and token limits. | Free | [Site](https://token.llm7.io) · [Prices](https://llm7.io) |
+| **ModelScope (Alibaba)** | Free inference for the latest Qwen and other open models. | Free for registered users (an Alibaba Cloud account with real-name verification). About 2,000 requests a day. | Paid plans for more | [Get a key](https://modelscope.cn/my/myaccesstoken) · [Prices](https://modelscope.cn) |
+| **OVHcloud AI Endpoints (EU)** | 20+ open-weight models hosted in Europe, free with no sign-up. | Free anonymous tier: no sign-up or key, about 2 requests a minute per model. Hosted in the EU. | Free | [Site](https://www.ovhcloud.com/en/public-cloud/ai-endpoints/catalog/) · [Prices](https://www.ovhcloud.com/en/public-cloud/ai-endpoints/) |
 | **Pollinations (free, no key)** | A free hosted model with no key or account at all. | Free: no key or account at all. Rate limited and can be busy, so it works best as a backup to your own models. | Free | [Site](https://pollinations.ai) |
 
 ### Free to start, then paid
@@ -43,6 +48,7 @@ Tasks: 💬 Everyday chat · 🧠 Hard reasoning & maths · 💻 Coding · ✍�
 | **Nebius AI Studio** | Low-cost open models hosted in Europe. | Trial credit for new accounts, then pay as you go. | See its price page | [Get a key](https://studio.nebius.com/settings/api-keys) · [Prices](https://studio.nebius.com/) |
 | **Novita AI** | Low-cost open models, including uncensored ones. | Trial credit for new accounts, then pay as you go. | See its price page | [Get a key](https://novita.ai/settings/key-management) · [Prices](https://novita.ai/pricing) |
 | **Poe (many bots, one key)** | Use your Poe points with models from many companies. | Uses your Poe points: free daily points, more with a subscription. | See its price page | [Get a key](https://poe.com/api_key) |
+| **SiliconFlow** | 100+ open models with one key; several are permanently free. | Some models are permanently free (identity verification required); the rest are pay as you go. | See its price page | [Get a key](https://cloud.siliconflow.cn/account/ak) · [Prices](https://siliconflow.cn) |
 | **Upstage (Solar)** | Compact and good at documents. | Free credit for new accounts, then pay as you go. | See its price page | [Get a key](https://console.upstage.ai/api-keys) · [Prices](https://www.upstage.ai/pricing) |
 
 ### Paid
