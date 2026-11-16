@@ -311,9 +311,12 @@ function contextFor(messages, maxTokens = 2048, limit = 32768) {
 // turns (never the system instructions) when it would otherwise overflow. This is what lets a model
 // stay loaded as a chat grows: without it the context would have to be enlarged, which means killing
 // the server and loading the model again from disk — the "it reloads on every message" slowness.
-function fitToContext(messages, ctx, maxTokens = 2048) {
+// reserveChars: extra prompt text that isn't in `messages` but still counts against the context,
+// above all the tool definitions (their JSON schemas) sent alongside a tools request — without
+// reserving room for them a long chat with tools loaded overflows ("request … exceeds … context").
+function fitToContext(messages, ctx, maxTokens = 2048, reserveChars = 0) {
   if (!ctx || !Array.isArray(messages) || messages.length <= 1) return messages;
-  const budget = Math.max(1024, ctx - Math.min(maxTokens || 2048, 8192) - 512) * 3.2;
+  const budget = Math.max(1024, Math.max(1024, ctx - Math.min(maxTokens || 2048, 8192) - 512) * 3.2 - Math.max(0, reserveChars));
   const cost = (m) => (typeof m.content === 'string' ? m.content.length : (m.content || []).reduce((k, p) => k + (p.text?.length || 0) + (p.type === 'image_url' ? 3000 : 0), 0)) + 8;
   if (messages.reduce((n, m) => n + cost(m), 0) <= budget) return messages;
   const sys = messages.filter((m) => m.role === 'system');
@@ -576,7 +579,10 @@ async function* chat(model, opts) {
     const ctxLimit = contextSize || 16384;
     const s = await untilStopped(ensure(model, { contextSize: Math.min(ctxLimit, 8192), limit: ctxLimit, gpu: useGpu, onStatus }), signal);
     srv = s;
-    messages = fitToContext(messages, s.ctx, maxTokens);
+    // Tool definitions ride along with the request but aren't in `messages`; reserve room for them
+    // (with a little margin) so a long chat with tools loaded doesn't overflow the context.
+    const toolReserve = tools && tools.length ? Math.round(JSON.stringify(tools).length * 1.1) : 0;
+    messages = fitToContext(messages, s.ctx, maxTokens, toolReserve);
     s.busy = (s.busy || 0) + 1;
     s.lastUsed = Date.now();
     s.lastChat = Date.now();
@@ -645,4 +651,4 @@ const isLoaded = (file) => [...servers.values()].some((s) => s.file === file && 
 
 // The last lines each running engine printed (for "Save diagnostics").
 const logTails = () => [...servers.values()].map((s) => ({ file: require('node:path').basename(s.file), lines: s.log.join('').split('\n').slice(-40).join('\n') }));
-module.exports = { park, savedReading, tidyRoles, releaseIdle, ramHeld, gpuLayers, countedVram, gpuHeld, releaseGpu, roomyContext, idleMs, readGguf, ensure, prefill, chat, stop, stopAll, stopFile, status, isLoaded, contextFor, prefetch, logTails };
+module.exports = { park, savedReading, tidyRoles, releaseIdle, ramHeld, gpuLayers, countedVram, gpuHeld, releaseGpu, roomyContext, idleMs, readGguf, ensure, prefill, chat, stop, stopAll, stopFile, status, isLoaded, contextFor, fitToContext, prefetch, logTails };

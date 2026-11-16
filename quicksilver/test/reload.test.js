@@ -51,6 +51,19 @@ async function drain(model, messages) {
 
   assert.equal(starts(), 1, 'the SAME engine answers every message — the model is never reloaded as the chat grows');
 
+  // Trimming keeps a long chat inside the loaded context, and reserves room for tool definitions so
+  // a tools request doesn't overflow ("request … exceeds … context"). The reserve trims more.
+  const longChat = [{ role: 'system', content: 'sys' }];
+  for (let i = 0; i < 40; i++) longChat.push({ role: i % 2 ? 'assistant' : 'user', content: `msg ${i} ` + 'word '.repeat(200) });
+  const ctx = 8192;
+  const chars = (ms) => ms.reduce((n, m) => n + m.content.length, 0);
+  const noTools = llama.fitToContext(longChat, ctx, 2048, 0);
+  const withTools = llama.fitToContext(longChat, ctx, 2048, 8000); // ~ a 2.5K-token tool schema
+  assert.ok(noTools.length < longChat.length, 'a long chat is trimmed to fit the context');
+  assert.ok(noTools.some((m) => m.role === 'system'), 'the system message is always kept');
+  assert.ok(chars(noTools) <= (ctx - 2048 - 512) * 3.2 + 1200, 'the trimmed chat fits the context');
+  assert.ok(withTools.length < noTools.length && chars(withTools) < chars(noTools), 'reserving room for tool definitions trims the chat further');
+
   llama.stopAll();
   await new Promise((r) => setTimeout(r, 300));
   console.log('✓ reload: a model stays loaded as a chat grows on a memory-tight PC (no reload per message)');
