@@ -12,6 +12,9 @@ const ROLE = {
   vision: '<span class="badge b-sky">👁 Sees photos</span>',
   draft: '<span class="badge b-lav">✏️ Answers</span>',
   lead: '<span class="badge b-mint">★ Leads</span>',
+  muse: '<span class="badge b-lav">🎨 Creative angles</span>',
+  thinker: '<span class="badge b-sky">🧠 Thinks it through</span>',
+  bench: '<span class="badge b-lemon">💤 On the bench</span>',
 };
 const ROLE_ICON = { image: '🎨', openimage: '🔓', anime: '🎌', video: '🎬', edit: '🪄', animate: '✨', helper: '✍️' };
 
@@ -387,18 +390,29 @@ function stackScoresHTML(targets) {
   return `<div class="mp sc-stack">${scoreChipsHTML(sc, { label: 'Best member', note: sc ? 'Each score is its strongest member on that test; working as a team usually adds a little on hard questions.' : '' })}${createRowHTML(stackRatings(targets), { all: true })}</div>`;
 }
 function stackCard(s) {
-  const rows = [];
-  if (s.members.vision) rows.push(['vision', s.members.vision]);
-  for (const d of s.members.drafters || []) rows.push(['draft', d]);
-  if (s.members.judge) rows.push(['lead', s.members.judge]);
+  // One model can do several jobs (the Liquid Edition's Brain answers, sees photos and thinks), so
+  // group every role under the model that fills it — that way one busy model reads as one row with
+  // all its badges, not as a team that's mysteriously missing members.
+  const roleOf = new Map();
+  const add = (t, role) => { if (t) { if (!roleOf.has(t)) roleOf.set(t, []); if (!roleOf.get(t).includes(role)) roleOf.get(t).push(role); } };
+  for (const d of s.members.drafters || []) add(d, 'draft');
+  add(s.members.judge, 'lead');
+  add(s.members.vision, 'vision');
+  add(s.members.muse, 'muse');
+  add(s.members.thinker, 'thinker');
+  const rows = [...roleOf.entries()]; // [target, roles[]]
+  // The Closer or a second opinion this PC can't keep loaded next to the Brain: shown, but benched.
+  const benched = s.bench && !roleOf.has(s.bench) ? s.bench : null;
   const mode = s.members.mode && INFUSE_MODES[s.members.mode];
+  const soloNote = isLiquidStack(s) && rows.length <= 1 && !benched
+    ? '<div class="small muted" style="margin-top:4px">On this PC one model handles every job — answering, seeing photos and thinking. Add a stronger uncensored model (💧 Suggested add-ons below) and it joins the team as the Closer once there\'s memory to run it alongside the Brain.</div>' : '';
   return `<div class="card">
     <div class="row"><span class="emoji-badge">${esc(s.emoji || '🧩')}</span><h3 class="grow">${esc(s.name)}</h3>${mode ? `<span class="badge b-lav">${mode.icon} ${esc(mode.name)}</span>` : ''}</div>
-    <div class="stack-v" style="gap:6px;margin:12px 0">${rows.map(([role, t]) => `<div class="row">${ROLE[role]}<b class="small">${esc(targetLabel(t))}</b>${targetValid(t) ? '' : '<span class="badge b-pink">not installed yet</span>'}</div>`).join('')}</div>
+    <div class="stack-v" style="gap:6px;margin:12px 0">${rows.map(([t, roles]) => `<div class="row">${roles.map((r) => ROLE[r]).join('')}<b class="small">${esc(targetLabel(t))}</b>${targetValid(t) ? '' : '<span class="badge b-pink">not installed yet</span>'}</div>`).join('')}${benched ? `<div class="row" style="opacity:.75">${ROLE.bench}<b class="small">${esc(targetLabel(benched))}</b><span class="badge b-lemon" title="This PC can't keep it loaded next to the main model, so it waits here. You can still chat with it directly, and it joins the Council on hard questions.">needs more memory to join</span></div>` : ''}${soloNote}</div>
     ${isFusion(s) ? fusionRatingsHTML(s.members, { compact: true }) : ''}
     ${timesHTML(etaFor(`stack:${s.id}`))}
     ${stackApiHTML(s)}
-    <details class="card-fold"><summary class="small muted">Test scores and what it can make</summary>${stackScoresHTML(rows.map(([, t]) => t))}${boostsHTML(rows.map(([, t]) => t), { compact: true, liquid: isLiquidStack(s) })}</details>
+    <details class="card-fold"><summary class="small muted">Test scores and what it can make</summary>${stackScoresHTML([...rows.map(([t]) => t), ...(benched ? [benched] : [])])}${boostsHTML(rows.map(([t]) => t), { compact: true, liquid: isLiquidStack(s) })}</details>
     <div class="row card-acts"><button class="btn small primary" data-chat-stack="${s.id}">Chat</button>${isLiquidStack(s) ? '' : `<button class="btn small" data-edit-stack="${s.id}">Edit</button>`}${isFusion(s) ? `<button class="btn small" data-fz-rate="${s.id}">📊 Rating &amp; tips</button>` : ''}${boostBtn(`stack:${s.id}`)}${s.builtFor === 'quicksilver' ? `<button class="btn small" data-liquid-addons title="Optional models that fill gaps in the Liquid Edition">💧 Suggested add-ons${liquidAddonsLeft() ? ` · ${liquidAddonsLeft()}` : ''}</button>` : ''}<button class="btn small ghost" data-sug-open="stack:${s.id}" title="The best model to join and API to add for a task you pick">💡 What to add</button>${isFusion(s) && !s.community ? `<button class="btn small" data-publish="${s.id}">📤 Publish</button>` : ''}${isLiquidStack(s) ? '<span class="badge b-lav" title="The Liquid Edition can\'t be edited or deleted; choose another model or stack whenever you like">🔒 Locked</span>' : `<button class="btn small danger" data-del-stack="${s.id}">Delete</button>`}</div>
   </div>`;
 }
