@@ -206,14 +206,14 @@ const TINY = path.join(__dirname, 'fixtures', 'tiny.gguf');
     } finally { call = realCall; S.est = realEst; S.providers = S.providers.filter((p) => p.id !== 'vtest'); localMediaFailed.clear(); }
   });
   assert.match(fb.first, /^local:/, 'when this PC is fast enough, its picture model is tried first');
-  assert.equal(fb.slow, 'api:vtest:lustify-v8', `when this PC would be slow, a picture defaults to the cloud: ${JSON.stringify(fb)}`);
-  assert.equal(fb.fallback, 'api:vtest:lustify-v8', 'with Venice ready behind it');
+  assert.equal(fb.slow, 'api:vtest:lustify-sdxl', `when this PC would be slow, a picture defaults to the cloud: ${JSON.stringify(fb)}`);
+  assert.equal(fb.fallback, 'api:vtest:lustify-sdxl', 'with Venice ready behind it');
   assert.deepEqual(fb.items, ['cloud-pic'], `Venice made the picture: ${JSON.stringify(fb)}`);
   assert.equal(fb.error, '', 'no error shown');
-  assert.ok(fb.asked.some((a) => a[0] === 'vtest' && a[1] === 'lustify-v8'), `Venice was asked for the picture: ${JSON.stringify(fb.asked)}`);
+  assert.ok(fb.asked.some((a) => a[0] === 'vtest' && a[1] === 'lustify-sdxl'), `Venice was asked for the picture: ${JSON.stringify(fb.asked)}`);
   assert.match(fb.note, /couldn't run on this PC \(not enough memory\), so Venice \(uncensored\) made it instead/);
   assert.equal(fb.model, 'Venice (uncensored)');
-  assert.equal(fb.after, 'api:vtest:lustify-v8', 'and Venice goes first for the rest of the session');
+  assert.equal(fb.after, 'api:vtest:lustify-sdxl', 'and Venice goes first for the rest of the session');
   // Where Venice is suggested for the Liquid Edition, it says what the pairing gives you: how
   // much less of Venice you use, how much faster hard answers are on this PC, and the quality.
   await win.evaluate(() => { go({ view: 'models' }); });

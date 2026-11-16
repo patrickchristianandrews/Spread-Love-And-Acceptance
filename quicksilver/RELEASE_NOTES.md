@@ -1,9 +1,9 @@
 ### Download
 
-There are three ways to get Quicksilver 2.20.10. All install the same app; they differ in how the Liquid Edition's models (about 30 GB) arrive.
+There are three ways to get Quicksilver 2.20.11. All install the same app; they differ in how the Liquid Edition's models (about 30 GB) arrive.
 
-- **Quicksilver-Setup-2.20.10.exe** (below, about 1.9 GB, with a matching `.sha256`): the installer with the small 2B model inside. The first time Quicksilver opens, its setup screen downloads the rest of the Liquid Edition before the app starts.
-- **Quicksilver-Web-Setup-2.20.10.exe** (below, about 200 MB): the web installer. No models inside at all; the setup screen downloads the whole Liquid Edition on first launch.
+- **Quicksilver-Setup-2.20.11.exe** (below, about 1.9 GB, with a matching `.sha256`): the installer with the small 2B model inside. The first time Quicksilver opens, its setup screen downloads the rest of the Liquid Edition before the app starts.
+- **Quicksilver-Web-Setup-2.20.11.exe** (below, about 200 MB): the web installer. No models inside at all; the setup screen downloads the whole Liquid Edition on first launch.
 - **Full offline package** (about 31 GB): the installer plus a "Quicksilver models" folder. Keep the two together when you run the installer and everything is copied in: nothing to download, works with no internet from the first minute. It is too large for a GitHub release file, so it is the **Quicksilver-Windows-installer** build artifact on this release's build run (linked at the top of these notes; a GitHub sign-in is needed, and GitHub keeps build artifacts for 90 days).
 
 Updating from 2.19 or 2.20: nothing extra to download; your chats, settings and models are kept.
@@ -15,6 +15,11 @@ Updating from 2.18: the Liquid Edition now includes its Closer and its picture a
 - **Automations** (Explore → Automations): things Quicksilver does by itself on a schedule (every day, weekdays, once a week, every hour, every few minutes, or when it starts), with web search, plug-ins and your connected apps. Start from an idea (morning briefing, crypto and stock check, research digest, tech news, a website check, a price-drop watch, a weekly plan) or write your own. Each run goes to its own chat with a desktop notification; a run missed while Quicksilver was closed runs once when it opens.
 - **When the AI says it can't do something,** a button under the answer offers the fix: search the web, let it read your files, ask a model that sees pictures, connect the app, Full access to run commands, a picture or video model, Memory, or a search of the plug-in directory for the task.
 - **Meme battle always has pictures:** when a meme's picture can't be painted on this PC, Venice (or another picture service you connected) paints it; a meme format whose template picture can't be downloaded gets a painted picture instead; and if no picture can be made it says how to get one, instead of showing words alone.
+
+### New in 2.20.11
+
+- **The model no longer reloads on every message.** On a PC with little spare memory, a chat used to outgrow the memory its model was loaded with after a few messages, and Quicksilver would stop the model and load it again from disk — so every message started slowly, "like it was the first time". The model is now loaded with a steady amount of conversation memory and the oldest turns are trimmed to fit, so the same model keeps answering as a chat grows. The read-ahead that runs when a chat opens no longer triggers a reload either. This also means a very large Conversation memory setting no longer tries to load more than a tight PC can hold.
+- **Uncensored pictures work again (Venice "Invalid request parameters" fixed).** Venice had renamed its picture models, so asking for the old name returned a generic error. Quicksilver now checks Venice's live list of picture models, matches your choice to a current one, and sizes the picture to what that model accepts — and if something is still wrong, the error now says which setting Venice rejected.
 
 ### New in 2.20.10
 

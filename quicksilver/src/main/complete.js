@@ -117,7 +117,10 @@ function canSee(target) {
 // Free cloud plans have limits. When a free one runs out (rate limit or daily quota), the next free
 // cloud AI you've connected answers instead, so you keep going for free. "♻️ Free cloud AIs" in the
 // model menu rotates through them from the start.
-const LIMIT = /\b429\b|rate.?limit|quota|limit (reached|exceeded)|too many requests|exceeded your|resource.?exhausted|credits? (are )?(exhausted|depleted)|insufficient (balance|credit)/i;
+// A free/limited cloud service saying it can't serve this request — out of calls, quota, or paid
+// balance. Venice phrases it "Insufficient USD or Diem balance", others "add credits" or 402, so
+// match the ideas (insufficient / balance / credits / payment) loosely, not one exact wording.
+const LIMIT = /\b429\b|rate.?limit|quota|limit (reached|exceeded)|too many requests|exceeded your|resource.?exhausted|insufficient|\bbalance\b|out of (credits?|tokens?)|add credits?|payment required|\b402\b|credits? (are )?(exhausted|depleted|required)/i;
 const isLimit = (err) => err?.status === 429 || LIMIT.test(String(err?.message || err));
 let freeTurn = 0;
 function freeTargets(exclude) {
@@ -180,7 +183,16 @@ async function* freeRotation(req) {
   const list = freeTargets();
   if (!list.length) throw new Error('Connect a free cloud AI first (Models → Connect an API → Free).');
   const start = freeTurn++ % list.length;
-  yield* rotateFrom([...list.slice(start), ...list.slice(0, start)], req, null);
+  try {
+    yield* rotateFrom([...list.slice(start), ...list.slice(0, start)], req, null);
+  } catch (err) {
+    // Every connected free cloud is out (limit, bad key or no balance). Don't show the error — fall
+    // back to a model on this PC so the chat still gets an answer, the same as the cloud rollover.
+    const lb = localBackup(req, false);
+    if (!lb || req.noCloudFallback) throw err;
+    yield { type: 'status', text: 'Every free cloud AI is out for now — answering on this PC instead…' };
+    yield* run(lb, { ...req, noCloudFallback: true, noRotate: true });
+  }
 }
 
 function exists(target) {

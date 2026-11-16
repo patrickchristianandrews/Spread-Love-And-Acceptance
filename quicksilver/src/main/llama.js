@@ -307,6 +307,27 @@ function contextFor(messages, maxTokens = 2048, limit = 32768) {
   return Math.min(limit, CTX_STEPS.find((c) => c >= need) || CTX_STEPS[CTX_STEPS.length - 1]);
 }
 
+// Keep a conversation inside the context the model is ALREADY loaded with, by dropping the oldest
+// turns (never the system instructions) when it would otherwise overflow. This is what lets a model
+// stay loaded as a chat grows: without it the context would have to be enlarged, which means killing
+// the server and loading the model again from disk — the "it reloads on every message" slowness.
+function fitToContext(messages, ctx, maxTokens = 2048) {
+  if (!ctx || !Array.isArray(messages) || messages.length <= 1) return messages;
+  const budget = Math.max(1024, ctx - Math.min(maxTokens || 2048, 8192) - 512) * 3.2;
+  const cost = (m) => (typeof m.content === 'string' ? m.content.length : (m.content || []).reduce((k, p) => k + (p.text?.length || 0) + (p.type === 'image_url' ? 3000 : 0), 0)) + 8;
+  if (messages.reduce((n, m) => n + cost(m), 0) <= budget) return messages;
+  const sys = messages.filter((m) => m.role === 'system');
+  const rest = messages.filter((m) => m.role !== 'system');
+  let used = sys.reduce((n, m) => n + cost(m), 0);
+  const kept = [];
+  for (let i = rest.length - 1; i >= 0; i--) {
+    const c = cost(rest[i]);
+    if (kept.length && used + c > budget) break; // always keep at least the latest message
+    used += c; kept.unshift(rest[i]);
+  }
+  return [...sys, ...kept];
+}
+
 // Models nobody has used for a while are unloaded, giving the memory back to the PC. How long is
 // a setting (Settings → Chat → Keep models loaded): minutes, 0 = until Quicksilver closes, or
 // automatic: 2 hours with 32 GB of memory or more, 1 hour with 16 GB, else 20 minutes. Reloading
@@ -540,15 +561,22 @@ function tidyRoles(messages) {
 // and the request is retried once.
 async function* chat(model, opts) {
   const { temperature, maxTokens, contextSize, gpu, signal, onStatus, level, tools, noThink } = opts;
-  const messages = tidyRoles(opts.messages);
+  let messages = tidyRoles(opts.messages);
   const hasImages = messages.some((m) => Array.isArray(m.content) && m.content.some((p) => p.type === 'image_url'));
   if (hasImages && !model.mmproj) throw new Error(`${model.name} can't see images. Use a vision model or a stack with a vision member.`);
   const useGpu = cpuOnly.has(model.file) ? 0 : gpu;
   let produced = false;
   let srv = null;
   try {
-    const s = await untilStopped(ensure(model, { contextSize: contextFor(messages, maxTokens, contextSize || 16384), limit: contextSize || 16384, gpu: useGpu, onStatus }), signal);
+    // Load at a STABLE context (the roomy size for this PC, capped by the memory limit) instead of
+    // one sized to the current message. A size that grows with the chat means the model is killed
+    // and reloaded from disk whenever the chat gets longer — the "runs like the first time on every
+    // message" bug. With a fixed context we instead trim the oldest turns (fitToContext, below) so
+    // the same loaded server keeps answering.
+    const ctxLimit = contextSize || 16384;
+    const s = await untilStopped(ensure(model, { contextSize: Math.min(ctxLimit, 8192), limit: ctxLimit, gpu: useGpu, onStatus }), signal);
     srv = s;
+    messages = fitToContext(messages, s.ctx, maxTokens);
     s.busy = (s.busy || 0) + 1;
     s.lastUsed = Date.now();
     s.lastChat = Date.now();
@@ -596,9 +624,12 @@ async function* chat(model, opts) {
 // Reads the conversation into the model's memory without answering (one token), so the real
 // question only has to read the new message. Only for a model that's already loaded or loading.
 async function prefill(model, rawMessages, { contextSize = 16384, gpu = 'auto' } = {}) {
-  const messages = tidyRoles(rawMessages); // the same text the answer will read, so it can reuse it
+  let messages = tidyRoles(rawMessages); // the same text the answer will read, so it can reuse it
   const useGpu = cpuOnly.has(model.file) ? 0 : gpu;
-  const s = await ensure(model, { contextSize: contextFor(messages, 4096, contextSize), limit: contextSize, gpu: useGpu });
+  // Load at the same STABLE context the answer will use (not one sized to this message), so reading
+  // ahead never forces a reload, and trim to it so the prefilled text matches what the answer sends.
+  const s = await ensure(model, { contextSize: Math.min(contextSize || 16384, 8192), limit: contextSize || 16384, gpu: useGpu });
+  messages = fitToContext(messages, s.ctx, 4096);
   s.lastUsed = Date.now();
   s.busy = (s.busy || 0) + 1;
   try {

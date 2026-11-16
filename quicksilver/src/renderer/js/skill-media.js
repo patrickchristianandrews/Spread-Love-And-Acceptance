@@ -106,7 +106,7 @@ function chatIsLiquid(chat) {
 // recognized here or they're never offered as a fallback. The main process (media:apiImage) routes
 // them to the right endpoint, so here they're plain api: targets.
 const CLOUD_IMG_PRESETS = ['venice', 'pollinations', 'fal', 'replicate', 'stability'];
-const CLOUD_IMG_MODEL = { venice: 'lustify-v8', pollinations: 'flux', fal: 'fal-ai/flux/dev', replicate: 'black-forest-labs/flux-schnell', stability: 'core' };
+const CLOUD_IMG_MODEL = { venice: 'lustify-sdxl', pollinations: 'flux', fal: 'fal-ai/flux/dev', replicate: 'black-forest-labs/flux-schnell', stability: 'core' };
 const CLOUD_IMG_UNC = new Set(['venice']); // uncensored picture services (the only cloud ones the Liquid Edition uses)
 // Every connected cloud picture service, in one list (their own endpoints plus OpenAI-style ones).
 function cloudImageServices() {

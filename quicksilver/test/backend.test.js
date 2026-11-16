@@ -1537,6 +1537,30 @@ async function collect(gen) {
     console.log('✓ free rotation: a free cloud AI at its limit hands over to the next (with a message); a rotating choice in the menu');
   }
 
+  // Free rotation must roll over on a "no balance / no credit" failure, not only a 429 — Venice says
+  // "Insufficient USD or Diem balance", which isn't the word "limit" — and when every free cloud is
+  // out, fall back to a model on this PC instead of showing the error (the user's "WHY ISN'T THE API
+  // ROLLING OVER" bug).
+  {
+    const providers = require('../src/main/providers');
+    const g = providers.upsert({ preset: 'groq', models: ['openai/gpt-oss-120b'] }, 'k1');
+    const c = providers.upsert({ preset: 'cerebras', models: ['gpt-oss-120b'] }, 'k2');
+    const fbf = path.join(fs.mkdtempSync(path.join(os.tmpdir(), 'qs-fb-')), 'fb.gguf'); fs.copyFileSync(TINY, fbf);
+    models.add({ id: 'free-backup', name: 'Free Backup PC', kind: 'text', files: { model: fbf }, size: 2e9 });
+    const real = global.fetch;
+    // Every free cloud answers with Venice's exact out-of-balance error; the local model on this PC
+    // (127.0.0.1) still talks to its real engine, so the fallback can actually answer.
+    global.fetch = async (url, opts) => (/127\.0\.0\.1|localhost/.test(String(url)) ? real(url, opts) : new Response(JSON.stringify({ error: 'Insufficient USD or Diem balance to complete request. Visit https://venice.ai/settings/api to add credits.' }), { status: 402, headers: { 'content-type': 'application/json' } }));
+    const said = [];
+    const r = await collect(complete.run('free:rotate', { messages: [{ role: 'user', content: 'Hi' }], maxTokens: 50, contextSize: 2048, fallback: 'local:free-backup', onStatus: (t) => said.push(t) }));
+    assert.match(r.text, /Answer from/, `every free cloud out of balance → this PC answers: ${r.text}`);
+    assert.doesNotMatch(r.text, /Insufficient|balance/i, 'the balance error is never shown as the answer');
+    assert.ok(r.status.some((t) => /answering on this PC/i.test(t)), `and it says it fell back to this PC: ${r.status}`);
+    global.fetch = real;
+    providers.remove(g.id); providers.remove(c.id); models.remove('free-backup');
+    console.log('✓ free rollover: an out-of-balance/credit free cloud (Venice wording) rolls on, then falls back to this PC');
+  }
+
   // Smarter search: with the search model, passages are found by meaning, not only shared words.
   {
     const embed = require('../src/main/embed');
