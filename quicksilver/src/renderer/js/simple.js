@@ -110,7 +110,21 @@ function autoPick(chat, a, text, hasImage) {
   if (S.data.prefs.cloudHard && !S.config?.offline && !hasImage && looksHard(text || '')) {
     // The Liquid Edition may use any cloud AI you connected; an uncensored one (Venice…) comes first.
     const cloud = cloudFor(false);
-    if (cloud) return { target: cloud, fallback: base?.startsWith('api:') ? '' : base, why: `Picked automatically: ${apiServiceName(cloud)}, your best connected cloud AI ${AUTO_WHY[job] || 'for this question'}, for a hard question.` };
+    if (cloud) {
+      // Only hand the hard question to the cloud when the cloud actually helps: it's clearly quicker
+      // here, or clearly stronger for this kind of question (or this PC is genuinely slow). A free
+      // cloud that's no faster and no smarter than the Liquid Edition just wastes the round trip, so
+      // the answer stays on this PC — exactly as quick, with nothing sent off the machine.
+      const T = S.speed?.targets;
+      const hardWords = Math.max(wordsForJob(job), WORDS.hard);
+      const localSecs = !base || String(base).startsWith('api:') ? 999 : (etaFor(base, hardWords, { hard: true }) ?? 999);
+      const cloudSecs = etaFor(cloud, hardWords, { hard: true }) ?? 0;
+      const quicker = cloudSecs > 0 && cloudSecs <= localSecs - 4; // at least ~4s faster to be worth it
+      const stronger = Boolean(T && base && apiScore(cloud, job) >= (T[base]?.scores?.[job] ?? T[base]?.scores?.general ?? 0) + 1);
+      if (!base || String(base).startsWith('api:') || quicker || stronger || localSecs > 25) {
+        return { target: cloud, fallback: base?.startsWith('api:') ? '' : base, why: `Picked automatically: ${apiServiceName(cloud)}, ${quicker ? 'quicker here' : stronger ? `stronger ${AUTO_WHY[job] || 'for this question'}` : 'for a hard question'}.` };
+      }
+    }
   }
   // Hybrid: this PC first, the web next, a connected cloud AI last. The local models answer
   // everything they can; a question that needs current information is answered on this PC with web

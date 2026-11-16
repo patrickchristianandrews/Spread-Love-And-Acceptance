@@ -625,9 +625,11 @@ document.addEventListener('click', (e) => {
 // Max or Pro (each is only installed when chosen here).
 const LIQUID_TIER_INFO = {
   max: { id: 'quicksilver-max', name: 'Liquid Edition Max', emoji: '🚀', badge: 'For a fast PC', key: 'liquidMax',
-    pitch: 'The Liquid Edition stepped up for a fast PC: a mixture-of-experts Closer with 30B knowledge at close to 3B speed, a dedicated Thinker and Muse, and top-quality pictures. Every chat model is abliterated.' },
+    pitch: 'The Liquid Edition stepped up for a fast PC: a mixture-of-experts Closer with 30B knowledge at close to 3B speed, a dedicated Thinker and Muse, and top-quality pictures. Every chat model is abliterated.',
+    example: 'Example PCs: a gaming desktop or laptop with an RTX 4060 Ti 16 GB, RTX 4070 / 5070 (12 GB) or RTX 4070 Ti Super / 5070 Ti (16 GB) and 32 GB of memory; or a Mac with an M3 / M4 Pro and 24–36 GB of unified memory.' },
   pro: { id: 'quicksilver-pro', name: 'Liquid Edition Pro', emoji: '💎', badge: 'For a powerful PC', key: 'liquidPro',
-    pitch: 'The Liquid Edition with the biggest abliterated models in every role: sharper answers, better reasoning and writing, and top-quality pictures.' },
+    pitch: 'The Liquid Edition with the biggest abliterated models in every role: sharper answers, better reasoning and writing, and top-quality pictures.',
+    example: 'Example PCs: a desktop with an RTX 3090 / 4090 (24 GB) or RTX 5090 (32 GB) and 64 GB of memory; or a Mac with an M3 / M4 Max and 48 GB+ of unified memory.' },
 };
 function tierFit(tier) {
   const T = LIQUID_TIER_INFO[tier]; const P = S.catalog?.[T.key] || {};
@@ -657,6 +659,7 @@ function tierCardHTML(tier) {
   return `<div class="card ${fit.level === 'no' ? '' : 'hl'}" data-tier-card="${tier}">
         <div class="row"><span class="emoji-badge">${T.emoji}</span><h3 class="grow">${T.name}</h3><span class="badge b-lav">${T.badge}</span></div>
         <p class="desc">${T.pitch} Needs a ${P.minVramGB}–${P.recVramGB} GB graphics card and ${P.minRamGB}–${P.recRamGB} GB memory.</p>
+        <p class="small muted" style="margin:-2px 0 6px">💻 ${esc(T.example)}</p>
         <div class="stack-v" style="gap:4px;margin:8px 0">${rows.map(([role, id]) => { const c = id && tierSpec(id); return c ? `<div class="row small"><span class="grow">${role}: <b>${esc(c.name)}</b></span>${have(id) ? '<span class="badge b-mint">✓</span>' : S.downloads[id] ? '<span class="badge b-sky">⬇</span>' : `<span class="muted">${((c.sizeGB || 0) + (c.mmprojGB || 0)).toFixed(1)} GB</span>`}</div>` : ''; }).join('')}
           <div class="row small"><span class="grow">🎬 Video: <b>Wan 2.2</b> · photoreal pictures: <b>Lustify</b></span><span class="muted">from the Liquid Edition</span></div></div>
         <p class="small" style="margin:6px 0;${fit.level === 'no' ? 'color:var(--danger)' : ''}">${esc(fit.text)}</p>
@@ -686,6 +689,7 @@ function liquidEditionsHTML() {
       <div class="card">
         <div class="row"><span class="emoji-badge">💧</span><h3 class="grow">Liquid Edition</h3><span class="badge b-mint">For any PC</span></div>
         <p class="desc">Comes with Quicksilver. Qwen3.5 4B answers and sees photos, Qwen3.5 9B leads hard questions, Qwen3.5 2B adds fresh angles; Lustify makes pictures and Wan 2.2 makes video. Runs on laptops and everyday PCs; best with an 8 GB graphics card.</p>
+        <p class="small muted" style="margin:-2px 0 6px">💻 Example PCs: most laptops and desktops with 16 GB of memory; an 8 GB graphics card (RTX 3050 / 4060, Arc B580) or an Apple M1 / M2 / M3 make it quick. Works with no graphics card at all — just slower, and the 9 GB Closer waits on the bench.</p>
         ${liquidPluginsHTML()}
         <div class="row">${liquidReady ? '<button class="btn small primary" data-chat-stack="quicksilver">Chat</button><span class="badge b-lav">🔒 Locked</span>' : '<span class="badge b-lemon">Setting up…</span>'}</div>
       </div>
