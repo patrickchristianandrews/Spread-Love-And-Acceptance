@@ -917,13 +917,18 @@ const LIQUID_MAX_MODELS = [LIQUID_MAX.brain, LIQUID_MAX.closer, LIQUID_MAX.think
 // the core; once downloaded it joins the Liquid Edition's crew. (Any other uncensored model joins
 // only when ticked under Models → "Models in use": see models.inUse.)
 // minVramGB: below this the add-on is shown as not a good fit for this PC.
+// Each is abliterated and from a DIFFERENT family than the Qwen Brain, so adding any of them makes
+// the crew a real mix (Alibaba + Google + Mistral + Llama + OpenAI), not all Qwen. A text add-on you
+// download joins the crew by itself (it counts as a Liquid member, see liquidMember below).
 const LIQUID_ADDONS = [
   { id: 'wai-nsfw-illustrious', why: 'Anime: Lustify is a photo model, this is the most popular uncensored anime model. Anime requests use it by themselves.' },
   { id: 'chroma-hd', why: 'The highest-quality uncensored pictures, with negative prompts.', minVramGB: 8 },
   { id: 'cyberrealistic-sd15', why: 'Uncensored pictures on older 4 GB graphics cards and laptops, where Lustify is slow.' },
-  { id: 'gemma-3-12b-uncensored', why: 'Stories and role-play: Gemma 3 12B, abliterated. Vivid prose from a different family than the core, far better at fiction.' },
-  { id: 'mistral-small-3.2-uncensored', why: 'A stronger Closer that sees photos, for 16 GB+ graphics cards.', minVramGB: 16 },
-  { id: 'gpt-oss-20b-uncensored', why: 'A strong, fast reasoner for maths and logic on 12 GB+ graphics cards.', minVramGB: 12 },
+  { id: 'gemma-3-12b-uncensored', why: 'A non-Qwen Closer (Google Gemma 3 12B, abliterated): sees photos, leads hard questions and writes vivid prose — the recommended way to make the crew more than one family.', minVramGB: 8 },
+  { id: 'rocinante-12b', why: 'Stories and role-play (TheDrummer Rocinante 12B, Mistral-based): the best uncensored creative writer, a different family from the core.', minVramGB: 8 },
+  { id: 'dolphin-3-llama-3.1-8b', why: 'A lighter non-Qwen all-rounder (Dolphin 3.0, Llama 3.1 8B, uncensored) that joins the crew on an 8 GB graphics card.' },
+  { id: 'mistral-small-3.2-uncensored', why: 'A stronger Closer that sees photos (Mistral Small 3.2 24B, abliterated), for 16 GB+ graphics cards.', minVramGB: 16 },
+  { id: 'gpt-oss-20b-uncensored', why: 'A strong, fast reasoner for maths and logic (OpenAI gpt-oss 20B, abliterated) on 12 GB+ graphics cards.', minVramGB: 12 },
 ];
 
 module.exports = { LIQUID_CORE, LIQUID_MEMBERS, LIQUID_ADDONS, LIQUID_PRO, LIQUID_PRO_MODELS, LIQUID_MAX, LIQUID_MAX_MODELS, liquidMember, RETIRED, SCORES, SCORE_BASE, SUCCESSORS, FEATURED, TEXT_MODELS, TEXT_CATEGORIES, MEDIA_MODELS, MEDIA_CATEGORIES, JOBS, CLOUD_BOOST, cloudPlan, accuracyLevel, requirements, smallerAlternative, draftFor, DRAFT_FAMILIES, estimateText, estimateMedia, advise, compose, gpuBandwidth, profileInstalled, matchCatalog, scoreFor, familyOf, starsFor, capabilities, upgradeAdvice };
