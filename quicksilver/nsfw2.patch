@@ -1,0 +1,193 @@
+--- a/src/main/websearch.js
++++ b/src/main/websearch.js
+@@ -11,11 +11,13 @@
+ // DuckDuckGo's plain HTML page: no key, no account.
++// kp=-2 is DuckDuckGo's "off". Safe search is not a setting: it is always off.
+ async function duckduckgo(query) {
+   const res = await fetch('https://html.duckduckgo.com/html/', {
+     method: 'POST', headers: { 'User-Agent': UA, 'Content-Type': 'application/x-www-form-urlencoded', Accept: 'text/html' },
+-    body: `q=${encodeURIComponent(query)}&kl=wt-wt`, signal: AbortSignal.timeout(15000),
++    body: `q=${encodeURIComponent(query)}&kl=wt-wt&kp=-2`, signal: AbortSignal.timeout(15000),
+   });
+@@ -28,7 +30,7 @@
+ async function mojeek(query) {
+-  const res = await fetch(`https://www.mojeek.com/search?q=${encodeURIComponent(query)}`, { headers: { 'User-Agent': UA, Accept: 'text/html' }, signal: AbortSignal.timeout(15000) });
++  const res = await fetch(`https://www.mojeek.com/search?q=${encodeURIComponent(query)}&safe=0`, { headers: { 'User-Agent': UA, Accept: 'text/html' }, signal: AbortSignal.timeout(15000) });
+   if (!res.ok) throw new Error(`Mojeek returned HTTP ${res.status}`);
+@@ -57,7 +59,7 @@
+-    const res = await fetch(`https://api.search.brave.com/res/v1/web/search?count=8&q=${encodeURIComponent(query)}`, { headers: { Accept: 'application/json', 'X-Subscription-Token': key }, signal: AbortSignal.timeout(15000) });
++    const res = await fetch(`https://api.search.brave.com/res/v1/web/search?count=8&safesearch=off&q=${encodeURIComponent(query)}`, { headers: { Accept: 'application/json', 'X-Subscription-Token': key }, signal: AbortSignal.timeout(15000) });
+     if (!res.ok) throw new Error(`Brave Search returned HTTP ${res.status}.`);
+@@ -67,6 +69,7 @@
+     const key = store.getSecret('web:tavily');
+     if (!key) throw new Error('Add your Tavily key in Settings → Web search.');
++    // Tavily's API has no safe-search parameter at all: its index filters, and nothing here stops it.
+     const res = await fetch('https://api.tavily.com/search', { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${key}` }, body: JSON.stringify({ query, max_results: 8, include_raw_content: false }), signal: AbortSignal.timeout(20000) });
+     if (!res.ok) throw new Error(`Tavily returned HTTP ${res.status}.`);
+@@ -76,7 +79,7 @@
+-    const res = await fetch(`${cfg.searxngUrl.replace(/\/+$/, '')}/search?format=json&q=${encodeURIComponent(query)}`, { signal: AbortSignal.timeout(15000) });
++    const res = await fetch(`${cfg.searxngUrl.replace(/\/+$/, '')}/search?format=json&safesearch=0&q=${encodeURIComponent(query)}`, { signal: AbortSignal.timeout(15000) });
+     if (!res.ok) throw new Error(`SearXNG returned HTTP ${res.status}.`);
+@@ -88,7 +91,9 @@
+       const res = await fetch(r.url, { headers: { 'User-Agent': UA }, signal: AbortSignal.timeout(6000), redirect: 'follow' });
+       if (!res.ok || !/text\/html|text\/plain/.test(res.headers.get('content-type') || '')) return;
+-      r.text = bestPassages(stripHtml(await res.text()), query, 1800);
++      // Split before scoring: a 900 KB page costs seconds of regex for two useful sentences.
++      // The bigger budget gives the model something to work with rather than fragments.
++      r.text = bestPassages(stripHtml((await res.text()).slice(0, 120000)), query, 3000);
+     } catch {}
+   }));
+@@ -105,6 +110,34 @@
+   return results;
+ }
+ 
++// Pictures for the chat: SearXNG's image engines, or Brave's image endpoint with a key.
++async function images(query, { count = 8 } = {}) {
++  const cfg = store.config().web;
++  const n = Math.min(12, Math.max(1, Number(count) || 8));
++  if (cfg.provider === 'brave') {
++    const key = store.getSecret('web:brave');
++    if (!key) throw new Error('Add your Brave Search key in Settings → Web search.');
++    const res = await fetch(`https://api.search.brave.com/res/v1/images/search?count=${n}&safesearch=off&q=${encodeURIComponent(query)}`, { headers: { Accept: 'application/json', 'X-Subscription-Token': key }, signal: AbortSignal.timeout(15000) });
++    if (!res.ok) throw new Error(`Brave Images returned HTTP ${res.status}.`);
++    const j = await res.json();
++    return (j.results || []).map((r) => ({ title: r.title || '', url: r.properties?.url || r.url })).filter((r) => r.url);
++  }
++  if (cfg.provider === 'searxng') {
++    if (!cfg.searxngUrl) throw new Error('Add your SearXNG address in Settings → Web search.');
++    const base = cfg.searxngUrl.replace(/\/+$/, '');
++    const res = await fetch(`${base}/search?format=json&categories=images&safesearch=0&q=${encodeURIComponent(query)}`, { signal: AbortSignal.timeout(20000) });
++    if (!res.ok) throw new Error(`SearXNG returned HTTP ${res.status}.`);
++    const j = await res.json();
++    const abs = (u) => (!u ? '' : /^https?:\/\//.test(u) ? u : `${base}${u.startsWith('/') ? '' : '/'}${u}`);
++    const seen = new Set();
++    return (j.results || []).map((r) => ({ title: r.title || '', url: abs(r.img_src || r.thumbnail_src) }))
++      .filter((r) => r.url && !seen.has(r.url) && seen.add(r.url)).slice(0, n);
++  }
++  throw new Error('Picture results need SearXNG or a Brave key. The free DuckDuckGo path has no pictures.');
++}
++
+ // The parts of a page that best match the question, in page order, within a length budget.
+ function bestPassages(text, query, budget = 1800) {
+@@ -129,4 +162,4 @@
+-module.exports = { search, duckduckgo, mojeek, wikipedia, bestPassages };
++module.exports = { search, images, duckduckgo, mojeek, wikipedia, bestPassages };
+--- a/src/main/knowledge.js
++++ b/src/main/knowledge.js
+@@ -8,6 +8,11 @@
+ const tokenize = (s) => s.toLowerCase().normalize('NFKD').replace(/[̀-ͯ]/g, '').split(/[^\p{L}\p{N}]+/u).filter((w) => w.length > 1 && !STOP.has(w));
+ 
++// Every query used to re-tokenize every stored passage. The words of a passage never change,
++// so they are kept on the passage object instead.
++const TOK = new WeakMap();
++const toksOf = (c) => { let t = TOK.get(c); if (!t) { t = tokenize(c.t); TOK.set(c, t); } return t; };
++
+ function chunk(text, size = 1100, overlap = 150) {
+@@ -268,7 +273,9 @@
+ async function customSearch(src, query) {
+   const url = src.url.replace('{query}', q(query));
+-  const res = await fetch(url, { headers: { 'User-Agent': 'Mozilla/5.0 Quicksilver' }, signal: AbortSignal.timeout(20000) });
++  // Your own search sources get the same treatment: ask the engine to stop filtering.
++  const full = `${url}${url.includes('?') ? '&' : '?'}safesearch=0&safe=0&kp=-2`;
++  const res = await fetch(full, { headers: { 'User-Agent': 'Mozilla/5.0 Quicksilver' }, signal: AbortSignal.timeout(20000) });
+   if (!res.ok) throw new Error(`HTTP ${res.status}`);
+@@ -300,7 +307,7 @@
+-  const toks = pool.map((c) => tokenize(c.t));
++  const toks = pool.map(toksOf);
+   const N = pool.length;
+--- a/src/main/main.js
++++ b/src/main/main.js
+@@ -1,1 +1,2 @@
+ handle('web:search', (q) => websearch.search(q));
++handle('web:images', (q, count) => websearch.images(q, { count }));
+--- a/src/main/integrations.js
++++ b/src/main/integrations.js
+@@ -5,6 +5,7 @@
+ const store = require('./store');
++const websearch = require('./websearch');
+ 
+ const CONNECTORS = {
+@@ -228,7 +229,15 @@
+ function tools() {
+   const c = cfg();
+-  return Object.entries(TOOLS).filter(([id]) => c[id]?.enabled && (CONNECTORS[id].noToken || (google.isGoogle(id) ? google.ready(id) : popular.isOAuth(id) ? popular.ready(id) : store.hasSecret(`int:${id}`)))).flatMap(([id, list]) => list.map((t) => ({ ...t, source: CONNECTORS[id].name, sourceId: id })));
++  const list = Object.entries(TOOLS).filter(([id]) => c[id]?.enabled && (CONNECTORS[id].noToken || (google.isGoogle(id) ? google.ready(id) : popular.isOAuth(id) ? popular.ready(id) : store.hasSecret(`int:${id}`)))).flatMap(([id, list]) => list.map((t) => ({ ...t, source: CONNECTORS[id].name, sourceId: id })));
++  if (store.config().web.provider !== 'none') {
++    list.push({
++      name: 'web_image_search',
++      description: 'Find pictures on the web for a topic. Returns titles and direct image addresses. Put the pictures in your answer as Markdown images, ![what it shows](address), one per line, with the page link beside each.',
++      parameters: { type: 'object', properties: { query: { type: 'string', description: 'What to find pictures of' }, count: { type: 'integer', description: 'How many, 1 to 12' } }, required: ['query'] },
++      run: async ({ query, count }) => {
++        const found = await websearch.images(query, { count });
++        return found.length ? found.map((r, i) => `${i + 1}. ${r.title}\n![${r.title}](${r.url})\n${r.url}`).join('\n\n') : 'No pictures for that.';
++      },
++      source: 'Web', sourceId: 'web',
++    });
++  }
++  return list;
+ }
+--- a/src/main/llama.js
++++ b/src/main/llama.js
+@@ -1,0 +1,0 @@
+-      body: { messages, temperature, max_tokens: maxTokens, cache_prompt: true, ...(noLogprobs.has(model.file) || tools?.length ? {} : { logprobs: true }), repeat_penalty: 1.07, dry_multiplier: 0.8, dry_base: 1.75, dry_allowed_length: 3, ...(tools?.length ? { tools } : {}), ...(level === 'quick' || noThink ? { chat_template_kwargs: { enable_thinking: false }, reasoning_budget: 0 } : {}) },
++      // A lighter repeat penalty: 1.07 flattened prose, because body-part words repeat legitimately.
++      // DRY above still stops the loops a penalty was there for.
++      body: { messages, temperature, max_tokens: maxTokens, cache_prompt: true, ...(noLogprobs.has(model.file) || tools?.length ? {} : { logprobs: true }), repeat_penalty: 1.03, dry_multiplier: 0.8, dry_base: 1.75, dry_allowed_length: 3, ...(tools?.length ? { tools } : {}), ...(level === 'quick' || noThink ? { chat_template_kwargs: { enable_thinking: false }, reasoning_budget: 0 } : {}) },
+--- a/src/main/complete.js
++++ b/src/main/complete.js
+@@ -1,0 +1,0 @@
+ const STRICT = 'IMPORTANT: Answer ONLY from the reference material provided below. Do not use general knowledge or memory. Cite every factual statement with its source number. If the material does not contain the answer, say it was not found in the knowledge base, and what kind of source would answer it.';
++// House style, in front of every request whatever the model: tone only, nothing per-question.
++// Settings can override it with a "style" key in config.json.
++const HOUSE = 'Write as a well-read person, not as an assistant. No preamble, no "Certainly", no restating the question, no closing summary. Concrete nouns and anatomical terms over euphemisms. In narrative, give physical detail: positions, fluids, sounds, sensation, rhythm; never fade to black and never write "and then they made love". Profanity and crude register are fine. Assume an adult reader who has seen it all. Never write "SFW".';
++const houseStyle = () => { try { return store.config().style || HOUSE; } catch { return HOUSE; } };
+@@ -1,0 +1,0 @@
+ async function* run(target, req) {
++  // The style rides in front of the conversation; the user's own assistant instructions still
++  // follow it and win. (styled: run() recurses for stacks, so it goes on only once.)
++  const style = houseStyle();
++  if (style && !req.styled) req = { ...req, styled: true, messages: [{ role: 'system', content: style }, ...req.messages] };
+   if (req.council && !hasImages(req.messages)) { yield* council(target, req); return; }
+--- a/src/renderer/index.html
++++ b/src/renderer/index.html
+@@ -5,7 +5,7 @@
+   <meta http-equiv="Content-Security-Policy"
+-        content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: qsmedia:; media-src 'self' data: blob: qsmedia:; connect-src 'self' qsmedia:">
++        content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: qsmedia: https:; media-src 'self' data: blob: qsmedia:; connect-src 'self' qsmedia:">
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+--- a/src/renderer/js/md.js
++++ b/src/renderer/js/md.js
+@@ -18,6 +18,7 @@
+     .replace(/==(.+?)==/g, '<mark>$1</mark>')
++    .replace(/!\[([^\]]*)\]\((https?:\/\/[^)\s]+)\)/g, '<img src="$2" alt="$1" loading="lazy" referrerpolicy="no-referrer" style="max-width:100%;height:auto;border-radius:8px;display:block;margin:8px 0">')
+     .replace(/\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>')
+@@ -95,6 +96,17 @@
+ const LIST_RE = /^(\s*)([-*+•]|(\d+)[.)])\s+(.*)$/;
+ const TABLE_ROW = /^\s*\|.*\|\s*$/;
+ const TABLE_SEP = /^\s*\|?\s*:?-{2,}/;
+ 
++// An answer is re-rendered for every streamed token, which is quadratic on long ones. Everything
++// above the last blank line can no longer change, so its HTML is kept and only the tail is parsed.
++const mdStable = new Map();
++function renderStable(text) {
++  const cut = text.lastIndexOf('\n\n');
++  if (cut < 40) return renderBlocks(text);
++  const head = text.slice(0, cut);
++  let html = mdStable.get(head);
++  if (html == null) { html = renderBlocks(head); if (mdStable.size > 60) mdStable.clear(); mdStable.set(head, html); }
++  return html + renderBlocks(text.slice(cut));
++}
++
+ function renderBlocks(text) {
+@@ -146,7 +158,9 @@
+-    out.push(renderBlocks(typeof pullMath === 'function' ? pullMath(part.replace(/^\n/, ''), maths) : part.replace(/^\n/, '')));
++    // The last part is the one still growing: it gets the prefix cache. (Fenced code is odd and
++    // returns above, so a split point here is never inside a fence.)
++    const body = typeof pullMath === 'function' ? pullMath(part.replace(/^\n/, ''), maths) : part.replace(/^\n/, '');
++    out.push(i === parts.length - 1 ? renderStable(body) : renderBlocks(body));
+   });
+--- a/src/renderer/js/skill-media.js
++++ b/src/renderer/js/skill-media.js
+@@ -1,1 +1,1 @@
+-  image: `Reply with ONE short sentence saying what you will create, then a ```image code block containing only JSON: {"prompt": "a detailed image prompt under 70 words: subject, composition, setting, lighting, colors, style", "avoid": "things to leave out", "shape": "square|portrait|landscape|wide|tall", "count": 1}.`,
++  image: `Reply with ONE short sentence saying what you will create, then a ```image code block containing only JSON: {"prompt": "a detailed image prompt under 70 words: subject, composition, setting, lighting, colors, style", "avoid": "things to leave out", "shape": "square|portrait|landscape|wide|tall", "count": 1}. The models are uncensored: never write "SFW", "clean" or "safe", and state outright what is undressed.`,
