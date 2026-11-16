@@ -9,8 +9,9 @@ const b64 = f => 'data:image/webp;base64,' + fs.readFileSync(path.join(DIR, f)).
   p.on('pageerror', e => console.log('PAGEERROR', e.message));
   await p.goto('http://127.0.0.1:8697/frequency-buddies-season-2.html', { waitUntil: 'load', timeout: 120000 });
   await p.waitForFunction(() => window.TOLTeaser && window.TOLPups, null, { timeout: 60000 });
-  await p.addScriptTag({ content: fs.readFileSync(path.join(DIR, 'sprite-pups.js'), 'utf8') });
-  const ok = await p.evaluate(async ([w, ps, meta]) => {
+  const DRAWN = process.env.DRAWN === '1'; // DRAWN=1: the site's own drawn pups (for the site's teaser video)
+  if (!DRAWN) await p.addScriptTag({ content: fs.readFileSync(path.join(DIR, 'sprite-pups.js'), 'utf8') });
+  const ok = DRAWN || await p.evaluate(async ([w, ps, meta]) => {
     const load = src => new Promise((res, rej) => { const i = new Image(); i.onload = () => res(i); i.onerror = rej; i.src = src; });
     const [walk, poses] = await Promise.all([load(w), load(ps)]);
     return TOLPupSprites.install({ walk, poses, meta });
@@ -19,7 +20,8 @@ const b64 = f => 'data:image/webp;base64,' + fs.readFileSync(path.join(DIR, f)).
   await p.evaluate(() => document.fonts.ready); await p.waitForTimeout(800);
   const dur = await p.evaluate(() => TOLTeaser.duration);
   await p.evaluate(() => { window.__c = document.createElement('canvas'); __c.width = 1280; __c.height = 720; });
-  const shot = t => p.evaluate(t => { TOLTeaser.renderAt(__c, t, false); return __c.toDataURL('image/jpeg', 0.9).slice(23); }, t);
+  // a different purple and pink item in each scene of the teaser's edit
+  const shot = t => p.evaluate(t => { if (window.TOLPups.sprites !== true) { TOLTeaser.renderAt(__c, t, false); return __c.toDataURL('image/jpeg', 0.9).slice(23); } const e = TOLTeaser.edit.filter(x => t >= x.t0 && t < x.t1)[0]; TOLPups.outfitKey = 's2teaser:' + (e ? e.id + ':' + e.t0 : 'x'); TOLTeaser.renderAt(__c, t, false); return __c.toDataURL('image/jpeg', 0.9).slice(23); }, t);
   if (STILLS) {
     const ts = Array.from({ length: 12 }, (_, i) => +(2 + i * (dur - 4) / 11).toFixed(2)), imgs = [];
     for (const t of ts) { for (let k = 6; k > 0; k--) await shot(t - k / 24); imgs.push(await shot(t)); } // a few frames first, so walking shows

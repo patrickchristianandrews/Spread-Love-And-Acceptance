@@ -57,7 +57,7 @@
     g.save(); g.translate(x, y - lift); if (o.rot) g.rotate(o.rot); g.scale(s * face, s * (o.sy || 1));
     if (o.cape) P.cape(g, L, t * 1000, o.cape, !!o.capeFly);
     var blink = o.blink != null ? o.blink : ((t + (who === 'tidbit' ? 0 : 1.7)) % 3.9) < 0.12;
-    P.draw(g, L, pose, o.ph || 0, o.wag != null ? o.wag : Math.sin(t * 9 + (who === 'tidbit' ? 0 : 2)) * 0.5, blink, t * 1000, o.tilt || 0, { ear: o.ear || 0 });
+    P.draw(g, L, pose, o.ph || 0, o.wag != null ? o.wag : Math.sin(t * 9 + (who === 'tidbit' ? 0 : 2)) * 0.5, blink, t * 1000, o.tilt || 0, { ear: o.ear || 0, hat: !!o.over }); // hat: the scene puts something on the head
     if (o.reach) { // a front paw stretched out to hold a pal's paw
       var ex = 12 + o.reach, ey = -14 - (o.reachUp || 0);
       g.lineCap = 'round'; g.strokeStyle = '#252120'; g.lineWidth = 6; g.beginPath(); g.moveTo(10, -24); g.quadraticCurveTo(16, -16, 12 + o.reach * 0.5, ey + 1); g.stroke();
@@ -952,7 +952,7 @@
   var SCAN = {};
   function ckey(who, text) { var h = 0x811c9dc5, t = who + '|' + text; for (var i = 0; i < t.length; i++) { h ^= t.charCodeAt(i); h = Math.imul(h, 0x01000193) >>> 0; } return ('0000000' + h.toString(16)).slice(-8); }
   // the recorded voices (one mp3 per line, listed in index.json): when a line has one, the little talking-voice stand-in stays quiet
-  var CLIPV = '27a'; // bump whenever the teaser recordings are redone, so no browser plays an old copy
+  var CLIPV = '1611a'; // bump whenever the teaser recordings are redone, so no browser plays an old copy
   var CLIPMAP = null, CLIPP = null;
   function clipsLoad() { return CLIPP || (CLIPP = fetch('/assets/audio/buddies/s2teaser/index.json?v=' + CLIPV, { cache: 'no-cache' }).then(function (r) { return r.ok ? r.json() : null; }).then(function (m) { CLIPMAP = m || {}; return CLIPMAP; }).catch(function () { CLIPMAP = {}; return CLIPMAP; })); }
   function hasClip(who, text) { return !!(CLIPMAP && CLIPMAP[ckey(who === 'narr' ? 'narr' : who === 'sugarfoot' ? 'sugarfoot' : 'tidbit', text)]); }
