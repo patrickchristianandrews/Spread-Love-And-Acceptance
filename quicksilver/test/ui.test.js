@@ -206,7 +206,11 @@ function redPng(size = 64) {
   await win.click('#modal [data-close]');
   await win.setInputFiles('#file-in', { name: 'sales.csv', mimeType: 'text/csv', buffer: Buffer.from('Region,Revenue\nNorth,1200\nSouth,800\n') });
   await win.waitForSelector('.attach:has-text("sales.csv")');
-  if ((await win.getAttribute('#tog-fact', 'aria-pressed')) !== 'true') await win.click('#tog-fact');
+  // Turn on Double-check. Driven in-page so it doesn't race the message bar re-rendering around the
+  // new attachment chip (an auto-waited click can catch the button mid-rerender and time out in CI).
+  await win.waitForSelector('#tog-fact', { state: 'visible', timeout: 60000 });
+  await win.evaluate(() => { const b = document.querySelector('#tog-fact'); if (b && b.getAttribute('aria-pressed') !== 'true') b.click(); });
+  await win.waitForFunction(() => document.querySelector('#tog-fact')?.getAttribute('aria-pressed') === 'true', null, { timeout: 60000 });
   await win.evaluate(() => { chatById(S.route.id).effort = 'max'; save(); }); // the whole team, always combined (older setting, still honoured)
   await win.fill('#input', 'Which region sold more?');
   await win.keyboard.press('Enter');
@@ -416,7 +420,9 @@ function redPng(size = 64) {
   assert.match(await win.evaluate(() => JSON.stringify(S.data.learn)), /"up":0,"down":1/, 'switching the vote moves it, not doubles it');
   assert.ok(await win.evaluate(() => webWanted({}, {}, 'What is the latest NHS guidance on blood pressure?') !== '' || S.config?.web?.provider === 'none' || S.config?.offline), 'current questions search the web automatically');
   assert.equal(await win.evaluate(() => { const was = S.config.offline; S.config.offline = true; const r = webWanted({}, {}, 'latest news today'); S.config.offline = was; return r; }), '', 'offline: web search never runs, whatever the chat says');
-  if ((await win.getAttribute('#tog-fact', 'aria-pressed')) !== 'true') await win.click('#tog-fact');
+  await win.waitForSelector('#tog-fact', { state: 'visible', timeout: 60000 });
+  await win.evaluate(() => { const b = document.querySelector('#tog-fact'); if (b && b.getAttribute('aria-pressed') !== 'true') b.click(); });
+  await win.waitForFunction(() => document.querySelector('#tog-fact')?.getAttribute('aria-pressed') === 'true', null, { timeout: 60000 });
   await win.fill('#input', 'WRONGFACT what color is the sky?');
   await win.keyboard.press('Enter');
   await win.waitForSelector('.msg.assistant .badge:has-text("Corrected")', { timeout: 60000 });
@@ -1254,10 +1260,10 @@ function redPng(size = 64) {
     if (!/locked/i.test(proErr)) throw new Error('Liquid Edition Pro should refuse to be deleted');
     const editErr = await qs.call('stacks:save', { id: 'quicksilver', name: 'Mine', members: { drafters: [] } }).then(() => '', (e) => e.message);
     if (!/locked/i.test(editErr)) throw new Error('the Liquid Edition should refuse to be edited');
-    // Six suggested add-ons beyond the core crew, optional: listed with a download button, none locked.
-    // (Gemma 3 and Rocinante are now part of the core crew, not add-ons.)
+    // Suggested add-ons beyond the core crew, optional: listed with a download button, none locked.
+    // (Gemma 3 and Mistral Nemo are now part of the core crew; Rocinante is an optional add-on.)
     const addons = liquidAddonsHTML();
-    if (!['Dolphin 3.0', 'WAI-NSFW', 'Chroma1-HD', 'CyberRealistic', 'Mistral Small', 'gpt-oss'].every((n) => addons.includes(n))) throw new Error('the six suggested add-ons should be listed');
+    if (!['Dolphin 3.0', 'WAI-NSFW', 'Chroma1-HD', 'CyberRealistic', 'Mistral Small', 'gpt-oss', 'Rocinante'].every((n) => addons.includes(n))) throw new Error('the suggested add-ons should be listed');
     if (S.catalog.liquidAddons.some((a) => S.catalog.liquid.includes(a.id))) throw new Error('add-ons must not be locked');
     if (S.catalog.picks) S.catalog.picks.recipes = picksRecipes;
     S.data.chats = S.data.chats.filter((c) => c.id !== 'c-up');
@@ -1481,7 +1487,8 @@ function redPng(size = 64) {
   await win.waitForSelector('.about-page');
   const about = await win.locator('.about-page').innerText();
   assert.match(about, /Qwen3\.5 4B[\s\S]*Uncensored/i, 'the Brain is listed as uncensored');
-  assert.match(about, /Qwen3\.5 2B/, 'the fast helper is listed');
+  assert.match(about, /Gemma 3 12B[\s\S]*Closer/, 'the Gemma Closer is listed');
+  assert.match(about, /Mistral Nemo 12B[\s\S]*Muse/, 'the Mistral Nemo Muse is listed');
   assert.match(about, /llama\.cpp[\s\S]*stable-diffusion\.cpp[\s\S]*whisper\.cpp/, 'the engines are listed');
   assert.match(about, /Memory \(Mem0-style\)/, 'memory is listed');
   assert.match(about, /Pollinations/, 'free no-key pictures are listed');
@@ -1965,6 +1972,7 @@ function redPng(size = 64) {
   assert.ok(await win.evaluate(() => getComputedStyle(document.querySelector('#side-scroll')).overflowY === 'auto'), 'the menu scrolls');
   await win.selectOption('#pick-assistant', 'as-general');
   assert.equal(await win.inputValue('#pick-model'), '__auto');
+  await win.waitForSelector('#tog-fact', { state: 'visible', timeout: 60000 });
   await win.click('#tog-fact');
   await win.waitForSelector('#tog-fact.on', { state: 'visible' });
   await win.click('#tog-fact');

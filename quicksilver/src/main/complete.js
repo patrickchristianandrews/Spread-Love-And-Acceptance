@@ -1168,9 +1168,9 @@ async function buildQuicksilverStack() {
   // (the Gemma Closer sees too). (The old small Qwen Eyes was dropped so the crew is one Qwen.)
   const eyesOk = (m) => core.eyes && m.catalogId === core.eyes && m.source !== 'bundled' && unc(m);
   const eyes = all.find((m) => eyesOk(m) && m.files?.mmproj) || all.find(eyesOk) || (brain?.files?.mmproj ? brain : null) || all.find((m) => m.id === 'starter-gemma') || all.find((m) => /^(gemma-3|mistral-small)/.test(m.catalogId || '') && m.files?.mmproj && unc(m));
-  // The Muse: a storyteller for fresh angles, only if you added one (e.g. Rocinante). Not in the
-  // core crew, so by default there is none and the Brain/Closer handle creative work themselves.
-  const museModel = all.find((m) => core.muse && m.catalogId === core.muse && (m.source !== 'imported' || models.inUse(m)) && unc(m));
+  // The Muse: the crew's own storyteller for fresh angles (Mistral Nemo 12B, abliterated — a third
+  // family), installed with the Liquid Edition. A model you add can stand in if it matches core.muse.
+  const museModel = all.find((m) => core.muse && m.catalogId === core.muse && (m.source !== 'imported' || models.inUse(m)) && unc(m)) || all.find((m) => m.id === 'starter-muse');
   // A Brain that thinks for itself (Qwen3.5) is also the Thinker; one that sees is also the Eyes.
   const brainThinks = Boolean(brain && catalog.TEXT_MODELS.find((c) => c.id === brain.catalogId)?.reasoning);
   const brainSees = Boolean(brain?.files?.mmproj);
@@ -1192,7 +1192,7 @@ async function buildQuicksilverStack() {
     // uncensored model you ticked under Models. A model found in another app never joins by itself.
     // (The Liquid Edition's own Closer counts whichever way it arrived: in the models folder, or
     // downloaded by the setup screen after the web installer.)
-    const mine = (id) => { const m = all.find((x) => x.id === id); return ['starter-gemma', 'starter-rocinante'].includes(id) || (Boolean(m) && m.source !== 'bundled' && ((m.source !== 'imported' && catalog.liquidMember(m.catalogId)) || models.inUse(m))); };
+    const mine = (id) => { const m = all.find((x) => x.id === id); return id === 'starter-gemma' || (Boolean(m) && m.source !== 'bundled' && ((m.source !== 'imported' && catalog.liquidMember(m.catalogId)) || models.inUse(m))); };
     const openPool = pool.filter((p) => p.id !== brain.id && p.id !== eyes?.id && p.id !== thinker?.id && p.id !== museModel?.id && mine(p.id) && isOpen(p));
     const team = (openPool.length && catalog.compose(openPool, 'general', hw, calib, { vision: false, speed: 10, leadSpeed: 20, budget: 180 })) || { members: { drafters: [] } };
     const lead = team.members.judge || team.members.drafters[0];
@@ -1239,7 +1239,7 @@ async function buildQuicksilverStack() {
   if (!members.thinker) delete members.thinker;
   if (!members.muse || members.muse === members.drafters?.[0]) delete members.muse;
   const def = { id: 'quicksilver', name: 'Quicksilver Liquid Edition', emoji: '💧', builtIn: true, autoManaged: true, custom: true, builtFor: 'quicksilver', ...(bench ? { bench } : {}),
-    description: "Quicksilver Liquid Edition, Quicksilver's own uncensored crew (locked: it can't be edited or deleted, and its core models stay installed; choose any other model or stack whenever you like). It uses its own models and nothing else on this PC; a suggested add-on you download joins by itself, and any other uncensored model joins when you tick it under Models → Models in use. The built-in Qwen3.5 4B (the Brain) answers, sees photos and thinks hard questions through, Qwen3.5 2B (the Muse) sketches fresh angles for creative work, and a stronger uncensored model you add (the Closer, such as Qwen3.5 9B on a PC with a graphics card) leads on hard questions. Pictures are uncensored too: Lustify makes them (or the best uncensored picture model you add, with an anime model for anime requests), and Venice in the cloud when nothing is downloaded yet. Videos come from Wan 2.2 (open weights, no content filter), from a description or by animating a photo. Smarter search (finds your files and memories by meaning) is built in; the reranker is an optional add-on for even sharper results.", members };
+    description: "Quicksilver Liquid Edition, Quicksilver's own uncensored crew (locked: it can't be edited or deleted, and its core models stay installed; choose any other model or stack whenever you like). It uses its own models and nothing else on this PC; a suggested add-on you download joins by itself, and any other uncensored model joins when you tick it under Models → Models in use. The built-in Qwen3.5 4B (the Brain) answers, sees photos and thinks hard questions through, the Gemma 3 12B Closer (a different family, abliterated; also sees photos) leads on hard questions when it fits beside the Brain, and the Mistral Nemo 12B Muse (a third family, abliterated) sketches fresh angles for creative work. Pictures are uncensored too: Lustify makes them (or the best uncensored picture model you add, with an anime model for anime requests), and Venice in the cloud when nothing is downloaded yet. Videos come from Wan 2.2 (open weights, no content filter), from a description or by animating a photo. Smarter search (finds your files and memories by meaning) is built in; the reranker is an optional add-on for even sharper results.", members };
   if (!have || JSON.stringify(have.members) !== JSON.stringify(members) || have.builtFor !== 'quicksilver' || have.name !== def.name || (have.bench || null) !== (def.bench || null)) {
     // A model that left because it no longer qualifies (e.g. not abliterated) is switched off too.
     if (have) retireFromLiquid(have, def, (m) => !isUncensored(`local:${m.id}`));

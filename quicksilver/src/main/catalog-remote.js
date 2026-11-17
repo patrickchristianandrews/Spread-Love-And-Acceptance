@@ -89,7 +89,7 @@ function picks() {
     successors: { ...catalog.SUCCESSORS, ...applied.successors },
     featured: { ...catalog.FEATURED, ...applied.featured },
     ladders: applied.ladders,
-    liquid: { brain: 'qwen3.5-4b', eyes: 'qwen3.5-4b', closer: 'gemma-3-12b-uncensored', pictures: 'lustify', videos: 'wan2.2-5b', ...applied.liquid },
+    liquid: { brain: 'qwen3.5-4b', eyes: 'qwen3.5-4b', closer: 'gemma-3-12b-uncensored', muse: 'mistral-nemo-12b-uncensored', pictures: 'lustify', videos: 'wan2.2-5b', ...applied.liquid },
     recipes: applied.recipes,
     scores: applied.scores,
     updated: applied.updated, fetchedAt: applied.fetchedAt,

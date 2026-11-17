@@ -66,11 +66,12 @@ function quicksilverBoost() {
   // uncensored — a filtered model (even one the feed names) is never suggested or called uncensored.
   const openOk = (c) => c && (c.category === 'open' || c.open || /abliterat|uncensor|unfiltered|dolphin|hermes|lexi|rocinante/i.test(`${c.name || ''} ${c.repo || ''}`));
   const core = S.catalog.picks?.liquid || {};
-  for (const [role, label] of [['brain', 'Brain'], ['eyes', 'Eyes & Muse']]) {
+  for (const [role, label] of [['brain', 'Brain'], ['closer', 'Closer'], ['muse', 'Muse']]) {
     const id = core[role];
     const c = id && catModel(id);
     if (!c || !openOk(c) || haveModel(id) || !['great', 'good'].includes(S.est.text[id]?.rating)) continue;
-    const now = S.installed.find((m) => m.source === 'bundled' && (role === 'brain' ? m.id === 'starter-brain' : m.id === 'starter'));
+    const bundledId = role === 'brain' ? 'starter-brain' : role === 'closer' ? 'starter-gemma' : 'starter-muse';
+    const now = S.installed.find((m) => m.source === 'bundled' && m.id === bundledId);
     if (now?.catalogId === id) continue;
     return { quicksilver: true, core: role, name: 'Quicksilver Liquid Edition: new ' + label, emoji: '💧', models: [{ id, name: c.name, from: now?.name || 'the built-in one', fromId: now?.catalogId }], why: `a newer, better uncensored ${label} for the Liquid Edition, ${c.sizeGB} GB, runs well on this PC` };
   }
@@ -248,7 +249,8 @@ function bindModelUpdates() {
 // The model that comes with Quicksilver, and what it can do.
 function builtinModelHTML() {
   const brain = S.catalog.text.find((m) => m.id === 'qwen3.5-4b');
-  const eyes = S.catalog.text.find((m) => m.id === 'qwen3.5-2b');
+  const closer = S.catalog.text.find((m) => m.id === 'gemma-3-12b-uncensored');
+  const muse = S.catalog.text.find((m) => m.id === 'mistral-nemo-12b-uncensored');
   if (!brain) return '';
   const est = S.est?.text?.[brain.id];
   const have = S.installed.some((m) => m.source === 'bundled' || m.catalogId === brain.id);
@@ -270,11 +272,11 @@ function builtinModelHTML() {
   ];
   return `<div class="card builtin-card" id="builtin-model">
     <div class="row"><span class="emoji-badge">💧</span><div class="grow"><h3 style="margin:0">Built in: Quicksilver Liquid Edition</h3>
-      <div class="small muted">${esc(brain.name)} (sees photos, thinks hard ones through)${eyes ? ` + ${esc(eyes.name)} as the Muse` : ''} · ${(brain.sizeGB + (brain.mmprojGB || 0) + (eyes ? eyes.sizeGB + (eyes.mmprojGB || 0) : 0)).toFixed(1)} GB · comes with the app, works offline</div></div>
+      <div class="small muted">${esc(brain.name)} (sees photos, thinks hard ones through)${closer ? ` + ${esc(closer.name)} as the Closer` : ''}${muse ? ` + ${esc(muse.name)} as the Muse` : ''} · ${(brain.sizeGB + (brain.mmprojGB || 0) + (closer ? closer.sizeGB + (closer.mmprojGB || 0) : 0) + (muse ? muse.sizeGB + (muse.mmprojGB || 0) : 0)).toFixed(1)} GB · comes with the app, works offline</div></div>
       ${open ? '<span class="badge b-peach" title="Answers plainly, without refusing. The parental lock keeps it family-safe.">Uncensored</span>' : ''}${est ? `<span class="badge rate-${est.rating}">${esc(est.label)}</span>` : ''}</div>
     <p style="margin:10px 0 6px"><b>Fast answers you can trust.</b> Chosen as the quickest model that's still accurate: it answers almost instantly on most PCs and double-checks facts and figures, so you can rely on it for everyday work.${open ? ' It\'s uncensored: it answers plainly instead of refusing (the parental lock in Settings keeps it family-safe).' : ''}</p>
     ${qsRolesHTML(qst)}
-    ${stackScoresHTML(qst ? [...(qst.members.drafters || []), qst.members.judge, qst.members.vision, qst.members.muse, qst.members.thinker].filter(Boolean) : ['qwen3.5-4b', 'qwen3.5-2b'])}
+    ${stackScoresHTML(qst ? [...(qst.members.drafters || []), qst.members.judge, qst.members.vision, qst.members.muse, qst.members.thinker].filter(Boolean) : ['qwen3.5-4b', 'gemma-3-12b-uncensored', 'mistral-nemo-12b-uncensored'])}
     ${dolphinOfferHTML(qst)}
     ${cloudPartnerHTML()}
     <div class="builtin-can">${can.map(([i, t, d]) => `<div><span>${i}</span><b>${esc(t)}</b><span class="small muted">${esc(d)}</span></div>`).join('')}</div>
@@ -407,7 +409,7 @@ function addonsHTML() {
       'A small reranker reads your question together with each passage search found and puts the ones that really answer it first, so the model reads the right part of your files. Works with or without Smarter search.',
       'Accuracy ↑ on questions about your files · well under a second per question', sem?.rerank ? null : ['data-addon-rerank', 'Turn on']],
     ['🏁', 'An even stronger Closer', 'Mistral Small 3.2 24B, 15 GB', S.installed.some((m) => m.catalogId === 'mistral-small-3.2-uncensored') ? 'Installed · in the crew' : (S.est?.hardware?.vramGB || 0) >= 16 ? 'Recommended for this PC' : 'Best with a 16 GB+ graphics card',
-      'The Liquid Edition already installs a Closer (Gemma 3 12B, Google) and a storyteller (Rocinante 12B, Mistral) alongside the Qwen Brain. On a 16 GB+ graphics card you can add Mistral Small 3.2 24B (abliterated) — a sharper Closer that also sees photos. It joins the crew by itself; nothing is removed.',
+      'The Liquid Edition already installs a Closer (Gemma 3 12B, Google) and a storyteller Muse (Mistral Nemo 12B, Mistral) alongside the Qwen Brain. On a 16 GB+ graphics card you can add Mistral Small 3.2 24B (abliterated) — a sharper Closer that also sees photos. It joins the crew by itself; nothing is removed.',
       'Accuracy ↑ on hard questions · needs a 16 GB+ graphics card to stay quick', S.installed.some((m) => m.catalogId === 'mistral-small-3.2-uncensored') ? null : ['data-addon-closer', 'Download Mistral Small 24B']],
     ['🌐', 'Web search', 'free, no account', S.config?.offline ? 'Off (offline)' : 'Ready', 'For anything current (news, prices, today\'s facts) the stack searches the web first and answers with sources. Used automatically when a question needs it.', 'Up-to-date answers · a few seconds', null],
     ['✓', 'Double-check', 'a second opinion', S.data.prefs.factCheck ? 'On for every answer' : 'Off (on per chat)', 'A second model checks each claim in an answer and fixes clear mistakes. Worth it for health, money, legal and work answers.', 'Accuracy ↑ · roughly doubles the time', null],

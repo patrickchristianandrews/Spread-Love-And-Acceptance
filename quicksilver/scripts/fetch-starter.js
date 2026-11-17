@@ -1,10 +1,12 @@
 // Downloads the models that come with Quicksilver, so it works the moment it's installed:
-//   starter/ (inside the installer)  Qwen3.5 2B: quick on any PC, sees photos; the Muse  (Apache 2.0)
-//   pack/    (next to the installer) Qwen3.5 4B: the Brain; sees photos, thinks hard ones through (Apache 2.0)
-//            Qwen3.5 9B: the Closer; BGE Reranker; Lustify (pictures); Wan 2.2 5B and Turbo (video)
-// Together they make the built-in "Quicksilver" model (a stack with smart routing).
-// The 4B model is too big for a Windows installer (about 2 GB at most), so it ships in a folder
-// beside it; the installer copies it in. Writes starter/STARTER.json and the licenses.
+//   starter/ (inside the installer)  Qwen3.5 4B: the Brain; sees photos, thinks hard ones through
+//   pack/    (next to the installer) Gemma 3 12B: the Closer (Google, abliterated; sees photos)
+//            Mistral Nemo 12B: the Muse (abliterated storyteller); BGE Reranker; Nomic Embed;
+//            Lustify (pictures); Wan 2.2 5B and Turbo (video)
+// Three abliterated families (Qwen Brain + Gemma Closer + Mistral Nemo Muse) make the built-in
+// "Quicksilver" model (a stack with smart routing). The 12B models are too big for a Windows
+// installer (about 2 GB at most), so they ship in a folder beside it and the installer copies them
+// in. Writes starter/STARTER.json and the licenses.
 // Both are the uncensored ("abliterated") versions when they can be found: the same models with
 // the refusals taken out, so they answer plainly. The app's parental lock adds a family-safe
 // instruction instead. If no uncensored copy is available, the original models are used.
@@ -43,6 +45,10 @@ const MODELS = [
   // hard questions, writes well and sees photos; on a smaller PC it waits on the bench.
   { id: 'starter-gemma', catalogId: 'gemma-3-12b-uncensored', name: 'Gemma 3 12B', vision: true, where: 'pack', limit: 8.5e9, file: 'gemma-3-12b.gguf', proj: 'gemma-3-12b-mmproj.gguf', pack: true,
     by: 'Google (uncensored by mlabonne)', licenseRepo: 'google/gemma-3-12b-it', repos: ['bartowski/mlabonne_gemma-3-12b-it-abliterated-GGUF', 'mlabonne/gemma-3-12b-it-abliterated-v2-GGUF'] },
+  // Next to the installer: the Muse, a third family (Mistral Nemo 12B, abliterated). A vivid
+  // uncensored storyteller for fiction, role-play and fresh angles; waits on the bench on a smaller PC.
+  { id: 'starter-muse', catalogId: 'mistral-nemo-12b-uncensored', name: 'Mistral Nemo 12B', where: 'pack', limit: 8e9, file: 'mistral-nemo-12b.gguf', pack: true,
+    by: 'Mistral AI (abliterated)', licenseRepo: 'mistralai/Mistral-Nemo-Instruct-2407', repos: ['mradermacher/Mistral-Nemo-Instruct-2407-abliterated-GGUF', 'QuantFactory/Mistral-Nemo-Instruct-2407-abliterated-GGUF', 'mradermacher/Mistral-Nemo-Instruct-2407-abliterated-i1-GGUF'] },
   // Next to the installer: Sharper search. The reranker puts the passage that answers the question
   // first (it scores text, writes none, so no filter applies).
   { id: 'starter-rerank', catalogId: 'bge-reranker-v2-m3', name: 'BGE Reranker v2 M3', kind: 'rerank', where: 'pack', limit: 0.6e9, file: 'rerank.gguf', pack: true,

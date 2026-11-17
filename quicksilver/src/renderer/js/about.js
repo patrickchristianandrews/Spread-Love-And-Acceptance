@@ -7,8 +7,9 @@ let aboutVersion = '';
 
 // The AI and engines that come in the box.
 const INSIDE_MODELS = [
-  ['🧠', 'Qwen3.5 4B — the Brain', 'Uncensored (abliterated). Reasons step by step on hard questions and reads photos. In the full offline download it is already included; the slim installer fetches it in the background the first time you run Quicksilver.'],
-  ['⚡', 'Qwen3.5 2B — the fast helper', 'Uncensored (abliterated). Quick on any PC, sees photos, and speeds the 4B up. Built into the installer, so Quicksilver answers the moment it opens.'],
+  ['🧠', 'Qwen3.5 4B — the Brain', 'Uncensored (abliterated). Reasons step by step on hard questions and reads photos. Built into the installer, so Quicksilver answers the moment it opens.'],
+  ['🏁', 'Gemma 3 12B — the Closer', 'Uncensored (abliterated), a different family (Google). Leads hard questions, writes well and sees photos. Comes in the full offline download; the slim installer fetches it before the app opens.'],
+  ['✨', 'Mistral Nemo 12B — the Muse', 'Uncensored (abliterated), a third family (Mistral). A vivid storyteller that sketches fresh angles for creative work. Comes in the full offline download; the slim installer fetches it before the app opens.'],
   ['🔎', 'Nomic Embed v1.5 — Smarter search', 'A tiny model that lets Memory and your Library find things by meaning, not just keywords. Built in.'],
 ];
 const INSIDE_ENGINES = [

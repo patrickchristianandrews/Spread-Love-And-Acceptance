@@ -63,9 +63,9 @@ function redPng(size = 64) {
   let s;
   if (mode === 'web') {
     // The web installer has no models at all: the setup screen covers the app and downloads the
-    // whole Liquid Edition, the small 2B model and search included.
+    // whole Liquid Edition, the Brain, Closer, Muse and search included.
     await win.waitForSelector('#liquid-gate', { timeout: 60000 }).catch(() => { throw new Error('the web installer should open on the Liquid Edition setup screen'); });
-    const want = ['qwen3.5-4b', 'gemma-3-12b-uncensored', 'nomic-embed-v1.5', 'bge-reranker-v2-m3', 'lustify', 'wan2.2-5b', 'wan2.2-5b-turbo'];
+    const want = ['qwen3.5-4b', 'gemma-3-12b-uncensored', 'mistral-nemo-12b-uncensored', 'nomic-embed-v1.5', 'bge-reranker-v2-m3', 'lustify', 'wan2.2-5b', 'wan2.2-5b-turbo'];
     await win.waitForFunction((ids) => ids.every((id) => S.downloads[id] || S.installed.some((m) => m.catalogId === id)), want, { timeout: 120000 })
       .catch(async () => { throw new Error(`every Liquid Edition model should start downloading (downloading: ${(await state()).downloads.map((d) => d.id).join(', ') || 'none'})`); });
     await shot('01-web-setup');
@@ -77,11 +77,11 @@ function redPng(size = 64) {
     console.log(`\nINSTALLED APP WORKS (${mode})`);
     process.exit(0);
   }
-  await win.waitForFunction(() => S.installed.some((m) => m.id === 'starter'), null, { timeout: 60000 });
+  await win.waitForFunction(() => S.installed.some((m) => m.id === 'starter-brain'), null, { timeout: 60000 });
   s = await state();
-  assert.ok(s.installed.find((m) => m.id === 'starter' && m.source === 'bundled'), 'Qwen3.5 2B registered from the installer');
+  assert.ok(s.installed.find((m) => m.id === 'starter-brain' && m.source === 'bundled'), 'Qwen3.5 4B Brain registered from the installer');
   if (mode === 'full') {
-    assert.ok(s.installed.find((m) => m.id === 'starter-brain' && m.source === 'bundled'), 'Qwen3.5 4B copied in by the installer and registered');
+    assert.ok(s.installed.find((m) => m.id === 'starter-gemma' && m.source === 'bundled') && s.installed.find((m) => m.id === 'starter-muse' && m.source === 'bundled'), 'the Gemma Closer and Mistral Nemo Muse came with the full installer');
     await win.waitForFunction(() => S.stacks.some((x) => x.id === 'quicksilver') && S.data.prefs.defaultTarget === 'stack:quicksilver', null, { timeout: 60000 });
     s = await state();
     ok(`first launch: ${s.installed.map((m) => m.name).join(' + ')}; default ${s.def}; team ${JSON.stringify(s.stacks.find((x) => x.id === 'quicksilver').members)}`);
@@ -100,18 +100,18 @@ function redPng(size = 64) {
     const where = await win.evaluate(() => Object.fromEntries(S.installed.filter((m) => m.source === 'bundled').map((m) => [m.id, Object.values(m.files || {})])));
     const inApp = (f) => /resources[\\/]starter[\\/]/i.test(f || '');
     console.log(`  kept: Brain at ${where['starter-brain']?.[0]}; Lustify at ${where['starter-lustify']?.[0]}; Wan 2.2 at ${where['starter-wan']?.[0]}`);
-    for (const id of ['starter-brain', 'starter-gemma', 'starter-lustify', 'starter-wan', 'starter-wan-turbo', 'starter-rerank']) {
+    for (const id of ['starter-brain', 'starter-gemma', 'starter-muse', 'starter-lustify', 'starter-wan', 'starter-wan-turbo', 'starter-rerank']) {
       assert.ok(where[id]?.length, `${id} is installed`);
       for (const f of where[id]) assert.ok(!inApp(f) && fs.existsSync(f), `${id}: ${f} was moved out of the app's folder and is still there`);
     }
-    assert.ok(where.starter?.length && where.starter.every(inApp), 'the small model stays inside the app');
+    assert.ok(where['starter-embed']?.length && where['starter-embed'].every(inApp), 'the small search model stays inside the app');
     ok('the big models are kept outside the app\'s folder, so an update or reinstall does not remove them');
   } else {
     // Without the models folder Quicksilver doesn't open until the whole Liquid Edition is in: the
     // setup screen covers the app and every missing model starts downloading at once.
     await win.waitForSelector('#liquid-gate', { timeout: 60000 })
       .catch(() => { throw new Error('the Liquid Edition setup screen should cover the app until every model is installed'); });
-    const want = ['qwen3.5-4b', 'gemma-3-12b-uncensored', 'lustify', 'wan2.2-5b', 'wan2.2-5b-turbo'];
+    const want = ['qwen3.5-4b', 'gemma-3-12b-uncensored', 'mistral-nemo-12b-uncensored', 'lustify', 'wan2.2-5b', 'wan2.2-5b-turbo'];
     await win.waitForFunction((ids) => ids.every((id) => S.downloads[id] || S.installed.some((m) => m.catalogId === id)), want, { timeout: 120000 })
       .catch(async () => { throw new Error(`every Liquid Edition model should start downloading (downloading: ${(await state()).downloads.map((d) => d.id).join(', ') || 'none'})`); });
     await shot('01-setup');
@@ -144,8 +144,8 @@ function redPng(size = 64) {
   // the answer itself (long multiplication: partial products, carries, "step", etc.).
   const showsWorking = r.reasoning.trim().length > 20 || /\bstep\b|\bpartial\b|\bcarry\b|340|multiply|\b×\b|\*/i.test(r.a);
   assert.ok(showsWorking, `the built-in model shows its working (got: ${r.a.slice(0, 300)})`);
-  // The bundled 2B helper is much weaker than the 4B lead, so on Auto the lead answers alone
-  // (quicker, same accuracy); a team with a close second model would show its steps here.
+  // On Auto the quickest accurate route answers (the Brain alone, or with the Closer when it fits);
+  // a team with a close second model would show its steps here.
   assert.ok(r.steps.length === 0 || r.steps.length >= 2, `unexpected steps: ${r.steps.join(' → ')}`);
   ok(`hard question: ${r.steps.length ? 'two models' : 'the lead alone (helper much weaker)'}, correct answer 391`);
   await shot('03-hard');

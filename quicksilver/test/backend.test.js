@@ -868,24 +868,27 @@ async function collect(gen) {
   {
     const sd = fs.mkdtempSync(path.join(os.tmpdir(), 'qs-starter-'));
     fs.copyFileSync(TINY, path.join(sd, 'brain.gguf')); fs.copyFileSync(TINY, path.join(sd, 'brain-mmproj.gguf'));
-    // The crew is one Qwen (the Brain, which sees + thinks) and a Gemma Closer from another family
-    // (Google). Both ship in the pack; the Brain is inside the installer.
+    // The crew is three abliterated families: one Qwen (the Brain, which sees + thinks), a Gemma
+    // Closer (Google) and a Mistral Nemo Muse. The Brain is inside the installer; the two 12B models
+    // ship in the pack (fetched when the folder is missing).
     fs.writeFileSync(path.join(sd, 'STARTER.json'), JSON.stringify({ models: [
       { id: 'starter-brain', catalogId: 'qwen3.5-4b', name: 'Qwen3.5 4B (uncensored)', uncensored: true, repo: 'mradermacher/Huihui-Qwen3.5-4B-abliterated-GGUF', quant: 'Q4_K_M', files: { model: 'brain.gguf', mmproj: 'brain-mmproj.gguf' }, pack: true },
       { id: 'starter-gemma', catalogId: 'gemma-3-12b-uncensored', name: 'Gemma 3 12B (uncensored)', uncensored: true, repo: 'bartowski/mlabonne_gemma-3-12b-it-abliterated-GGUF', quant: 'Q4_K_M', files: { model: 'gemma.gguf', mmproj: 'gemma-mmproj.gguf' }, pack: true },
+      { id: 'starter-muse', catalogId: 'mistral-nemo-12b-uncensored', name: 'Mistral Nemo 12B (uncensored)', uncensored: true, repo: 'mradermacher/Mistral-Nemo-Instruct-2407-abliterated-GGUF', quant: 'Q4_K_M', files: { model: 'muse.gguf' }, pack: true },
     ] }));
-    // Installed without the "Quicksilver models" folder: the Brain is here, the Closer is fetched.
+    // Installed without the "Quicksilver models" folder: the Brain is here, the Closer and Muse fetched.
     let r = models.registerStarter(sd);
     assert.deepEqual(r.added.map((m) => m.id), ['starter-brain']); assert.ok(r.added[0].vision);
-    assert.deepEqual(r.missing.map((m) => m.catalogId), ['gemma-3-12b-uncensored'], 'the Closer is fetched when the folder is missing');
+    assert.deepEqual(r.missing.map((m) => m.catalogId), ['gemma-3-12b-uncensored', 'mistral-nemo-12b-uncensored'], 'the Closer and Muse are fetched when the folder is missing');
     assert.equal(r.missing[0].repo, 'bartowski/mlabonne_gemma-3-12b-it-abliterated-GGUF', 'a missing model is fetched from the same (uncensored) copy the installer uses');
     // The Brain answers on its own until the Closer arrives: filtered models never stand in.
     assert.ok(['stack:quicksilver', null].includes(await complete.ensureQuicksilverStack()));
-    // The installer copied the Closer in (or it finished downloading).
+    // The installer copied the Closer and Muse in (or they finished downloading).
     fs.copyFileSync(TINY, path.join(sd, 'gemma.gguf'));
     fs.copyFileSync(TINY, path.join(sd, 'gemma-mmproj.gguf'));
+    fs.copyFileSync(TINY, path.join(sd, 'muse.gguf'));
     r = models.registerStarter(sd);
-    assert.deepEqual(r.added.map((m) => m.id), ['starter-gemma']); assert.equal(r.missing.length, 0);
+    assert.deepEqual(r.added.map((m) => m.id), ['starter-gemma', 'starter-muse']); assert.equal(r.missing.length, 0);
     // Lustify and Wan 2.2 next to the installer: registered as the Liquid Edition's picture and video
     // makers; without the folder they're reported (media) so the app fetches them only where they run well.
     const MEDIA_STARTERS = [
@@ -920,7 +923,7 @@ async function collect(gen) {
     assert.equal(qsStack.members.drafters[0], 'local:starter-brain', 'the one Qwen (Qwen3.5 4B) is the Brain and answers everyday messages');
     assert.ok(!qsStack.members.vision, 'the Brain reads photos itself (no separate Qwen eyes any more)');
     assert.equal(qsStack.members.judge, 'local:starter-gemma', 'the Gemma 3 12B Closer (Google) leads hard questions');
-    assert.ok(!qsStack.members.muse, 'no separate Qwen Muse any more — the Brain and Closer cover creative work');
+    assert.equal(qsStack.members.muse, 'local:starter-muse', 'the Mistral Nemo Muse (a third family) sketches fresh angles for creative work');
     assert.equal(qsStack.members.thinker, 'local:starter-brain', 'the Qwen Brain thinks hard maths and logic through itself');
     // Only hard maths and logic go to the Thinker; plain sums and everyday questions don't.
     assert.ok(complete.thinkWorthy('How many ways can 5 people sit in a row?') && complete.thinkWorthy('Solve the equation 3x + 5 = 20') && complete.thinkWorthy('Prove that there are infinitely many primes'));
@@ -931,7 +934,7 @@ async function collect(gen) {
     assert.ok(how.times.simple < how.times.hard, 'simple questions are quicker than hard ones');
     assert.ok(how.stars >= 3 && how.caps.find((c) => c.key === 'check').on);
     assert.ok(!ids.some((t) => ['local:qwen3-8b', 'local:phi-4', 'local:gemma-3-4b'].includes(t)), 'Quicksilver is uncensored: filtered models never join it');
-    assert.ok(ids.includes('local:starter-brain') && ids.includes('local:starter-gemma'), 'the built-in Qwen Brain and Gemma Closer');
+    assert.ok(ids.includes('local:starter-brain') && ids.includes('local:starter-gemma') && ids.includes('local:starter-muse'), 'the built-in Qwen Brain, Gemma Closer and Mistral Nemo Muse');
     // The Liquid Edition uses its own models and nothing else: another uncensored model on this PC
     // joins the team for hard questions only once it is ticked under Models → "Models in use".
     models.add({ id: 'dolphin-test', name: 'Qwen3 8B Abliterated', kind: 'text', catalogId: 'qwen3-8b-uncensored', files: { model: copy('Huihui-Qwen3-8B-abliterated.gguf') }, size: 4.9e9 });
@@ -994,7 +997,7 @@ async function collect(gen) {
     assert.ok(roles.includes('draft') && roles.includes('lead'), 'a hard one: drafted, then the lead checks and combines');
     const quick = await collect(complete.run('stack:quicksilver', { messages: [{ role: 'user', content: 'Compare solar and wind power.' }], contextSize: 2048, maxTokens: 30, level: 'quick' }));
     assert.equal(quick.steps.length, 0, 'Quick effort is always one model');
-    // Creative work: with no separate Muse, the Brain (and Closer) write the piece directly.
+    // Creative work: the Muse sketches angles and the crew writes the piece.
     const poem = await collect(complete.run('stack:quicksilver', { messages: [{ role: 'user', content: 'Write a short poem about rain on a tin roof' }], contextSize: 2048, maxTokens: 60, level: 'thorough' }));
     assert.match(poem.text, /Answer from/, 'the crew writes the piece');
     // A photo when the lead can't see (a text-only model) but a member can (the Gemma Closer sees):
@@ -1017,8 +1020,9 @@ async function collect(gen) {
     assert.ok(!/System message|Jinja/i.test(skipped2.text) && /Answer from/.test(skipped2.text), `with the app's own instructions first too: ${skipped2.text.slice(0, 200)}`);
     assert.ok(!/System message|Jinja/i.test(skipped.text) && /Answer from/.test(skipped.text), `the Brain really answers from the working: ${skipped.text.slice(0, 200)}`);
     // Liquid Edition 2: a Qwen3.5 Brain sees photos and thinks for itself, so it's also the Eyes and the
-    // Thinker; the small model is the Muse. Questions that need working out switch its thinking on
-    // (with a budget); everything else is answered with thinking off.
+    // Thinker; the Mistral Nemo Muse (still installed from the crew above) sketches fresh angles.
+    // Questions that need working out switch the Brain's thinking on (with a budget); everything else
+    // is answered with thinking off.
     {
       const nd = fs.mkdtempSync(path.join(os.tmpdir(), 'qs-l2-'));
       const cp = (n) => { const f = path.join(nd, n); fs.copyFileSync(TINY, f); return f; };
@@ -1028,7 +1032,7 @@ async function collect(gen) {
       assert.equal(l2.drafters[0], 'local:b35', 'the Qwen3.5 Brain leads');
       assert.equal(l2.thinker, 'local:b35', 'it is also the Thinker');
       assert.ok(!l2.vision, 'it reads photos itself');
-      assert.ok(!l2.muse, 'no separate Muse in the core crew');
+      assert.equal(l2.muse, 'local:starter-muse', 'the Mistral Nemo Muse is in the core crew');
       const think = await collect(complete.run('stack:quicksilver', { messages: [{ role: 'user', content: 'Why do leaves change color in autumn?' }], contextSize: 2048, maxTokens: 60, level: 'thorough' }));
       assert.ok(think.status.some((t) => /thinking it through/i.test(t)) && think.text.length > 0, 'a question that needs working out switches its thinking on');
       const easy2 = await collect(complete.run('stack:quicksilver', { messages: [{ role: 'user', content: 'Hello!' }], contextSize: 2048, maxTokens: 30, level: 'thorough' }));

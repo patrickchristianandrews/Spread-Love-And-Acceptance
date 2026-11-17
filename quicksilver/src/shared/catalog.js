@@ -126,6 +126,8 @@ const TEXT_MODELS = [
     blurb: 'Mistral Small 3.2 uncensored: precise and capable, sees images, answers anything.', jobs: { general: 9, office: 8, research: 8, coding: 7, vision: 8, fast: 2 }, judge: 8 },
   { id: 'gpt-oss-20b-uncensored', name: 'gpt-oss 20B (uncensored)', maker: 'OpenAI · uncensored by huihui-ai', params: '21B (3.6B active)', category: 'open', repo: 'bartowski/huihui-ai_Huihui-gpt-oss-20b-BF16-abliterated-GGUF', verify: true, quant: 'MXFP4_MOE', sizeGB: 12.1, activeGB: 2.4, ctx: 131072, reasoning: true, open: true,
     blurb: 'OpenAI\'s open model with its refusals removed: strong reasoning, fast for its size.', jobs: { general: 8, office: 7, research: 7, coding: 7, vision: 0, fast: 5 }, judge: 7 },
+  { id: 'mistral-nemo-12b-uncensored', name: 'Mistral Nemo 12B (uncensored)', maker: 'Mistral AI · uncensored (abliterated)', params: '12B', category: 'open', repo: 'mradermacher/Mistral-Nemo-Instruct-2407-abliterated-GGUF', alt: ['QuantFactory/Mistral-Nemo-Instruct-2407-abliterated-GGUF', 'mradermacher/Mistral-Nemo-Instruct-2407-abliterated-i1-GGUF'], verify: true, quant: 'Q4_K_M', sizeGB: 7.48, ctx: 131072, open: true,
+    blurb: 'Mistral Nemo with its refusals removed: a vivid, uncensored storyteller and all-rounder — the Liquid Edition\'s Muse.', jobs: { general: 7, office: 5, research: 6, coding: 4, vision: 0, fast: 4 }, judge: 5 },
 
   // ---------- more of the most popular open models ----------
   // Small
@@ -884,11 +886,12 @@ const SCORE_BASE = { 'qwen3-8b-uncensored': 'qwen3-8b', 'qwen3-14b-uncensored': 
 // Its core ships with the installer and is locked: these models can't be removed and the stack
 // can't be edited or deleted (you can still pick any other model or stack instead).
 // The Liquid Edition's own crew — all installed before first use (the setup screen fetches whatever
-// is missing). Exactly one Qwen (the Brain, Qwen3.5 4B — the only small abliterated model that both
-// sees photos and thinks) with the Closer a different family (Gemma 3 12B, Google, abliterated), plus
-// the picture/video/search models. The bigger Closer waits on the bench on a PC that can't hold it
-// next to the Brain, but it is still installed and available.
-const LIQUID_CORE = ['qwen3.5-4b', 'gemma-3-12b-uncensored', 'nomic-embed-v1.5', 'bge-reranker-v2-m3', 'lustify', 'wan2.2-5b', 'wan2.2-5b-turbo'];
+// is missing). Three abliterated families, no add-ons to hunt down: the Brain is the one Qwen
+// (Qwen3.5 4B — the only small abliterated model that both sees photos and thinks), the Closer is a
+// different family (Gemma 3 12B, Google, abliterated) and the Muse is a third family (Mistral Nemo
+// 12B, abliterated — a vivid uncensored storyteller), plus the picture/video/search models. A bigger
+// model waits on the bench on a PC that can't hold it next to the Brain, but it is still installed.
+const LIQUID_CORE = ['qwen3.5-4b', 'gemma-3-12b-uncensored', 'mistral-nemo-12b-uncensored', 'nomic-embed-v1.5', 'bge-reranker-v2-m3', 'lustify', 'wan2.2-5b', 'wan2.2-5b-turbo'];
 const LIQUID_MEMBERS = LIQUID_CORE;
 const liquidMember = (catalogId) => Boolean(catalogId) && LIQUID_MEMBERS.includes(catalogId);
 // Quicksilver Liquid Edition Pro: the same idea for a powerful PC (a 16–24 GB graphics card and
@@ -922,13 +925,13 @@ const LIQUID_MAX_MODELS = [LIQUID_MAX.brain, LIQUID_MAX.closer, LIQUID_MAX.think
 // the core; once downloaded it joins the Liquid Edition's crew. (Any other uncensored model joins
 // only when ticked under Models → "Models in use": see models.inUse.)
 // minVramGB: below this the add-on is shown as not a good fit for this PC.
-// Optional extras beyond the core crew (which already spans Qwen + Gemma + Rocinante). Each is
+// Optional extras beyond the core crew (which already spans Qwen + Gemma + Mistral Nemo). Each is
 // abliterated; a text one you download joins the crew by itself (it counts as in use by default).
 const LIQUID_ADDONS = [
   { id: 'wai-nsfw-illustrious', why: 'Anime: Lustify is a photo model, this is the most popular uncensored anime model. Anime requests use it by themselves.' },
   { id: 'chroma-hd', why: 'The highest-quality uncensored pictures, with negative prompts.', minVramGB: 8 },
   { id: 'cyberrealistic-sd15', why: 'Uncensored pictures on older 4 GB graphics cards and laptops, where Lustify is slow.' },
-  { id: 'rocinante-12b', why: 'Stories and role-play (TheDrummer Rocinante 12B, Mistral-based): the best uncensored creative writer. Add it as a Muse for a different voice on fiction.', minVramGB: 8 },
+  { id: 'rocinante-12b', why: 'An alternative storyteller (TheDrummer Rocinante 12B, Mistral-based) for a different voice on fiction, beside the crew\'s own Mistral Nemo Muse.', minVramGB: 8 },
   { id: 'dolphin-3-llama-3.1-8b', why: 'A lighter non-Qwen all-rounder (Dolphin 3.0, Llama 3.1 8B, uncensored) that joins the crew on an 8 GB graphics card.' },
   { id: 'mistral-small-3.2-uncensored', why: 'A stronger Closer that sees photos (Mistral Small 3.2 24B, abliterated), for 16 GB+ graphics cards.', minVramGB: 16 },
   { id: 'gpt-oss-20b-uncensored', why: 'A strong, fast reasoner for maths and logic (OpenAI gpt-oss 20B, abliterated) on 12 GB+ graphics cards.', minVramGB: 12 },
