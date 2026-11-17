@@ -702,7 +702,17 @@ def main():
     C.write(os.path.join(C.SRC, 'picture-book.html'), C.doc(BOOK['title'], CSS, '\n'.join(pages)))
     # the screen edition: the same pages with no bleed (8.5 x 8.5), for the free PDF
     screen_css = CSS.replace('size: %sin %sin' % (PW, PH), 'size: %sin %sin' % (TRIM, TRIM))
-    C.write(os.path.join(C.SRC, 'picture-book-screen.html'), C.doc(BOOK['title'], screen_css + SCREEN_CSS, '\n'.join(pages)))
+    # the free screen PDF doesn't need print resolution: it uses smaller copies of the painted pups (a few MB, not 30)
+    import re as _re
+    from PIL import Image as _Im
+    sdir = os.path.join(C.SRC, 'pups', 'screen'); os.makedirs(sdir, exist_ok=True)
+    def _small(m):
+        fn = m.group(1); src = os.path.join(C.SRC, 'pups', fn); dst = os.path.join(sdir, fn)
+        if not os.path.exists(dst) or os.path.getmtime(dst) < os.path.getmtime(src):
+            im = _Im.open(src); k = 560 / max(im.size); im.resize((round(im.width * k), round(im.height * k)), _Im.LANCZOS).save(dst, optimize=True)
+        return '/book/kids/src/pups/screen/' + fn
+    screen_pages = _re.sub(r'/book/kids/src/pups/([a-z0-9-]+\.png)', _small, '\n'.join(pages))
+    C.write(os.path.join(C.SRC, 'picture-book-screen.html'), C.doc(BOOK['title'], screen_css + SCREEN_CSS, screen_pages))
     html, info = cover(PAGES)
     C.write(os.path.join(C.SRC, 'cover-picture-book.html'), html)
     meta = C.load_json(os.path.join(C.OUT, 'kids.json'), {}) or {}

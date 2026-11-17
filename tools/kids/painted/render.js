@@ -4,7 +4,7 @@
 // the head point of each, in pixels). Needs the local server (python3 -m http.server 8697 --bind 127.0.0.1).
 const { chromium } = require('playwright'); const fs = require('fs'); const path = require('path');
 const OUT = path.join(__dirname, 'png'); fs.mkdirSync(OUT, { recursive: true });
-const SC = 12;   // pixels per pup unit: a standing pup is about 50 units, so about 600 px tall
+const SC = 26;   // pixels per pup unit: a standing pup is about 50 units, so about 1300 px tall (300 ppi at the picture book's biggest pups)
 (async () => {
   const b = await chromium.launch(); const p = await b.newPage();
   await p.goto('http://127.0.0.1:8697/frequency-buddies-season-2.html', { waitUntil: 'load' });

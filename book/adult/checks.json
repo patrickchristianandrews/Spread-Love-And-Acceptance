@@ -22,7 +22,7 @@
   "blank_backs_ok": true,
   "blank_backs_with_ink": [],
   "margin_violations": [],
-  "bytes": 2627226,
+  "bytes": 3333850,
   "design_pages": [
    7,
    9,
@@ -75,7 +75,7 @@
   },
   "2": {
    "left": 1.15,
-   "right": 1.02,
+   "right": 1.03,
    "top": 1.54,
    "bottom": 5.87
   },

@@ -54,7 +54,12 @@
   "interior": {
    "pdf": "coloring-adult.pdf",
    "pages": 88,
-   "bytes": 2627226
+   "bytes": 3333850
   }
+ },
+ "cover": {
+  "width_in": 17.4482,
+  "height_in": 11.25,
+  "spine_in": 0.1982
  }
 }

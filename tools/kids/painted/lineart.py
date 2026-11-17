@@ -23,7 +23,7 @@ FEAT = {(w, p): _F[(d, 2 if p == 'lie' else 1)] for w, d in (('tidbit', 0), ('su
 
 def lineart(path, out):
     im = cv2.imread(path, cv2.IMREAD_UNCHANGED); a = im[:, :, 3].astype(np.float32) / 255; bgr = im[:, :, :3]
-    Z = 2   # work at twice the size for smooth lines
+    Z = 1   # the renders are big enough (render.js SC 26) to draw the lines at their own size
     a = cv2.resize(a, None, fx=Z, fy=Z, interpolation=cv2.INTER_CUBIC); bgr = cv2.resize(bgr, None, fx=Z, fy=Z, interpolation=cv2.INTER_CUBIC)
     H, W = a.shape
     sil = (cv2.GaussianBlur(a, (0, 0), 3) > 0.5).astype(np.uint8)

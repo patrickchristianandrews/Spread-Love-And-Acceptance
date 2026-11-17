@@ -1472,9 +1472,9 @@ def back_matter(name, deep, here, gloss, notes, figs, exs, fb=None, fb_back=()):
 <ul class="pe-bc-list"><li>An expanded version of every chapter, free online</li><li>Everyday scenes, words you could use and one small thing to try</li><li>Free tools and worksheets that stay on your device</li><li>For every kind of relationship, and for people on their own</li></ul>
 <div class="pe-bc-art">%s</div>
 <p class="pe-bc-site">Free to read at <strong>spreadloveandacceptance.com/book</strong></p>
-<p class="pe-bc-by">by %s · Spread Love &amp; Acceptance</p></div></section>''' % (
+<p class="pe-bc-by">Spread Love &amp; Acceptance</p></div></section>''' % (
         acc, tint, book_art.ledger_rules(170, 240, '#E4D7B2', acc, top=22, step=7.5, left=17), esc(COVER[name][2]), esc(BLURB[name]),
-        book_art.part_mark(4), AUTHOR)
+        book_art.part_mark(4))
     return s.replace('{ST}', ST_H)
 
 
@@ -1774,7 +1774,7 @@ def build_home():
 <ul><li><a class="bk-opt bk-opt-go" href="/book/self-1-then.html"><span class="bk-opt-t">Start at the beginning</span><span class="bk-opt-d">Part One, chapter one. Read in order, one chapter at a time (about 10 to 15 minutes each).</span></a></li><li><a class="bk-opt" href="#part-1"><span class="bk-opt-t">Part One: Self-discovery</span><span class="bk-opt-d">Where you came from, who you are now and who you are becoming. All of it works on your own.</span></a></li><li><a class="bk-opt" href="#part-2"><span class="bk-opt-t">Part Two: Between us</span><span class="bk-opt-d">One idea per chapter about sharing a life, a home or work with someone, each with a worksheet.</span></a></li><li><a class="bk-opt" href="#part-3"><span class="bk-opt-t">Part Three: Understanding people</span><span class="bk-opt-d">How feelings, stress, trust, change, grief, groups and love work, in any kind of relationship.</span></a></li><li><a class="bk-opt" href="/book/topic-start-here.html"><span class="bk-opt-t">The book at a glance</span><span class="bk-opt-d">The whole book in short paragraphs, for one person or for people together. Good if you want the gist first.</span></a></li><li><a class="bk-opt" href="#other-ways"><span class="bk-opt-t">The book by topic</span><span class="bk-opt-d">Just the parts on one subject: sharing the load, talking it through, knowing yourself, staying calm, or your kind of relationship.</span></a></li><li><a class="bk-opt" href="/book/whole.html"><span class="bk-opt-t">The whole book on one page</span><span class="bk-opt-d">Every part and chapter in one long page, to read straight through, search or print.</span></a></li><li><a class="bk-opt" href="/book/for-yourself.html"><span class="bk-opt-t">The book for one person</span><span class="bk-opt-d">Part One and Part Three on one page: everything you can read and use on your own.</span></a></li><li><a class="bk-opt" href="/book/together.html"><span class="bk-opt-t">The book for two or more</span><span class="bk-opt-d">The chapters for couples, families, friends and roommates, on one page.</span></a></li><li><a class="bk-opt" href="/book/understanding.html"><span class="bk-opt-t">Understanding People, as one book</span><span class="bk-opt-d">Part Three on its own: how people work, for anyone curious.</span></a></li><li><a class="bk-opt" href="/book/download.html"><span class="bk-opt-t">Books and downloads</span><span class="bk-opt-d">Every PDF in one place: the four books, each as the paperback text and the expanded version, the workbook, the pocket guide and more.</span></a></li><li><a class="bk-opt" href="#print-series"><span class="bk-opt-t">The paperbacks</span><span class="bk-opt-d">The same chapters as four short books in print, plus the workbook and the pocket guide.</span></a></li><li><a class="bk-opt" href="/quest.html"><span class="bk-opt-t">Your quest map</span><span class="bk-opt-d">A map that lights up as you read, so you can see how far you’ve come.</span></a></li><li><a class="bk-opt" href="#contents"><span class="bk-opt-t">Contents</span><span class="bk-opt-d">Every chapter in order, with a line on what each one is about.</span></a></li></ul></nav>
 <div class="bk-cover no-bubble" data-no-bubble><div class="bk-cover-text"><p class="bk-cover-brand">spreadloveandacceptance.com</p>
 <p class="bk-cover-k">The book</p>
-<h1>{ST}</h1><p class="bk-sub">Understanding yourself and the people you share a life with</p><p class="bk-cover-by">by %s</p></div>
+<h1>{ST}</h1><p class="bk-sub">Understanding yourself and the people you share a life with</p></div>
 <div class="bk-cover-art">%s</div></div>
 <p class="simple-lede">The idea of this book is simple, like a ledger: a notebook where you write down what happened, so you can look at it calmly later. See what is really going on, in yourself and between people, without blaming anyone, and then change one small thing.</p>
 <ul class="bk-how no-bubble" data-no-bubble>
@@ -1806,7 +1806,7 @@ def build_home():
 </main>
 </body>
 </html>
-''' % (AUTHOR, book_art.illustration('whole'), sum(1 for e in ORDER if e[1] in (1, 2, 3)), hints.meet_html(False),
+''' % (book_art.illustration('whole'), sum(1 for e in ORDER if e[1] in (1, 2, 3)), hints.meet_html(False),
        ''.join(fig_html(f, False).replace(' id="fig-front-parts"', ' id="how-the-parts-fit"') for f in FIGS if f['id'] == 'fig-front-parts'), '\n'.join(rows),
        series_site.home_html(), home_lists(), UPDATED)
     write(os.path.join(BOOK, 'index.html'), hints.with_css(page).replace('{ST}', ST_H))

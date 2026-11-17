@@ -494,7 +494,7 @@ Keep every image free of prices, review quotes and claims like "bestseller". [OW
 - For Kindle, KDP shows about the first 10%%. The EPUBs keep the same short front matter: title, copyright, contents, About this book, Find it fast, then the three friends, so Chapter 1 comes early.
 ''' % POCKET_FIRST)
     md.append('## Author Central bio (short, warm and true)\n')
-    md.append('''> Christian spent a career as a government auditor and audit manager, walking into complicated situations and finding out calmly what had really happened, without looking for someone to blame. They brought the same habit home, to the quiet, everyday work of sharing a life, and built Spread Love & Acceptance: a free website and a series of books about understanding yourself and the people you share a home, work or care with. Everything on the site is free, needs no account, and stays on your own device.
+    md.append('''> Patrick Christian Andrews spent a career as a government auditor and audit manager, walking into complicated situations and finding out calmly what had really happened, without looking for someone to blame. They brought the same habit home, to the quiet, everyday work of sharing a life, and built Spread Love & Acceptance: a free website and a series of books about understanding yourself and the people you share a home, work or care with. Everything on the site is free, needs no account, and stays on your own device.
 
 [OWNER: confirm every detail (the About page uses they/them for Christian), and whether you want a photo. Keep it to things that are true and that you're happy to share.]
 ''')
