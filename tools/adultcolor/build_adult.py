@@ -72,7 +72,7 @@ def title_page():
     pg = A.Pg()
     import ac_words as W
     # a framed lotus mandala under the title
-    pg.page(lambda p: (W.lotus_small(p, A.CX, 745, 262), W.sprig_arc(p, A.CX, 745, 290, A.PI * 0.0, A.PI * 2, 26, 40, 12)))
+    pg.page(lambda p: (W.lotus_small(p, A.CX, 720, 236), W.sprig_arc(p, A.CX, 720, 262, A.PI * 0.0, A.PI * 2, 26, 36, 11)))
     h = ('<div class="t" style="top:.82in"><div class="kicker">%s &middot; a companion</div>'
          '<h1 style="font-size:54pt;line-height:1.02;margin:.14in 0 .14in">%s</h1>'
          '<div class="sub" style="width:5.8in;margin:0 auto">%s</div></div>'

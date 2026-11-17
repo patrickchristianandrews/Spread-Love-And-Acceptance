@@ -26,8 +26,12 @@ def img(who, pose, mode='color', eyes='open', key=None, wear=None):
     ck = (name, mode)
     if ck not in _cache:
         info = dict(IDX[name])
-        if mode == 'line':
-            data = open(os.path.join(D, 'line', name + '.png'), 'rb').read()
+        if mode == 'line':   # vector line art (lineart_v.py): drawn into the page itself, crisp at any size
+            import re
+            svg = open(os.path.join(D, 'line', name + '.svg')).read()
+            info['svg'] = svg[svg.index('<g class="pupline">'):svg.rindex('</svg>')]
+            _cache[ck] = info
+            return info
         else:
             data = open(os.path.join(D, 'png', name + '.png'), 'rb').read()
             if mode == 'ink':
@@ -45,9 +49,16 @@ def img(who, pose, mode='color', eyes='open', key=None, wear=None):
     return _cache[ck]
 
 
+_USE = [0]
+
+
 def svg_image(info, k, flip=False, clip=None):
     """the <image>, placed so the paws are at (0, 0) and k page units per pixel; facing right (flip: left).
     clip: (x0, y0, x1, y1) in the same units to show only part of it (a pup peeking over a ledge)"""
     x, y, w, h = -info['paw'][0] * k, -info['paw'][1] * k, info['w'] * k, info['h'] * k
     t = ' transform="scale(-1 1)"' if flip else ''
+    if 'svg' in info:   # the line art: its own paths, scaled and moved so the paws are at (0, 0); its clip id made unique
+        _USE[0] += 1
+        g = info['svg'].replace('id="cl-', 'id="u%d-cl-' % _USE[0]).replace('url(#cl-', 'url(#u%d-cl-' % _USE[0])
+        return '<g%s><g transform="translate(%.2f %.2f) scale(%.5f)">%s</g></g>' % (t, x, y, k, g)
     return '<g%s><image href="%s" x="%.2f" y="%.2f" width="%.2f" height="%.2f" preserveAspectRatio="none"/></g>' % (t, info['href'], x, y, w, h)

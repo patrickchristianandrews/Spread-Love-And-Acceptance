@@ -13,6 +13,6 @@ Made by tools/book/kdp_audit.py from the built files.
 | pocket-the-logic-behind-it | The Logic Behind It | 78 | 5.00 x 8.00 | 10.426 x 8.250 in, spine 0.1757 in | None | OK |
 | picture-book | Tidbit and Sugarfoot’s Big Picnic | 40 | 8.63 x 8.75 | 17.347 x 8.750 in, spine 0.0939 in | 306 | OK |
 | chapter-book | Turn Down the Static | 92 | 6.00 x 9.00 | 12.457 x 9.250 in, spine 0.2072 in | 1258 | OK |
-| coloring-younger | Color with Tidbit and Sugarfoot | 68 | 8.50 x 11.00 | 17.403 x 11.250 in, spine 0.1531 in | 206 | OK |
-| coloring-older | Color and Calm with Tidbit and Sugarfoot | 68 | 8.50 x 11.00 | 17.403 x 11.250 in, spine 0.1531 in | 380 | OK |
-| coloring-adult | Color and Breathe | 88 | 8.50 x 11.00 | 17.448 x 11.250 in, spine 0.1982 in | 210 | OK |
+| coloring-younger | Color with Tidbit and Sugarfoot | 68 | 8.50 x 11.00 | 17.403 x 11.250 in, spine 0.1531 in | None | OK |
+| coloring-older | Color and Calm with Tidbit and Sugarfoot | 68 | 8.50 x 11.00 | 17.403 x 11.250 in, spine 0.1531 in | None | OK |
+| coloring-adult | Color and Breathe | 88 | 8.50 x 11.00 | 17.448 x 11.250 in, spine 0.1982 in | None | OK |

@@ -722,7 +722,7 @@ def _pt_fig(ink, who, x, y, s, left, pose, expr='happy', peek=None):
     """one painted pup with its paws at (x, y) (peek: only the top part, cut at y), facing left if left"""
     _cute.PAIR['mark'] = True
     info = _pi.img(who, pose, 'color' if ink.color else 'line', _eyes(expr), key=('c', _scene(ink)))
-    k = PK * s
+    k = PK * s * 12.0 / info['unit']   # PK was set for renders at 12 px a pup unit; the renders are bigger now, the pup is not
     W, H, px, py = info['w'], info['h'], info['paw'][0], info['paw'][1]
     top = -py * k if peek is None else -H * peek * k   # the image's top, relative to the paws (or to the ledge)
 
@@ -737,8 +737,13 @@ def _pt_fig(ink, who, x, y, s, left, pose, expr='happy', peek=None):
     else:
         cid = ink.newid('pk')
         b = box(x)
-        mk = '<defs><clipPath id="%s"><rect x="%.2f" y="%.2f" width="%.2f" height="%.2f"/></clipPath></defs><g clip-path="url(#%s)"><g transform="translate(%.2f %.2f)">%s</g></g>' % (
-            cid, b[0] - 2, b[1] - 2, b[2] - b[0] + 4, b[3] - b[1] + 2, cid, x, y + top + py * k, _pi.svg_image(info, k, left))
+        # sunk into a hole (or behind a ledge): the cut is the hole's front rim, a gentle curve, inked like the rest
+        x0, x1, dip = b[0] + 0.06 * (b[2] - b[0]), b[2] - 0.06 * (b[2] - b[0]), 0.07 * (b[2] - b[0])
+        rim = 'M%.2f %.2f Q%.2f %.2f %.2f %.2f' % (x0, y, (x0 + x1) / 2, y + 2 * dip, x1, y)
+        lw = 0.78 * info['unit'] * k
+        mk = ('<defs><clipPath id="%s"><path d="M%.2f %.2f L%.2f %.2f L%.2f %.2f Q%.2f %.2f %.2f %.2f Z"/></clipPath></defs><g clip-path="url(#%s)"><g transform="translate(%.2f %.2f)">%s</g></g>'
+              '<path d="%s" fill="none" stroke="#111" stroke-width="%.2f" stroke-linecap="round"/>') % (
+            cid, x0, b[1] - 2, x1, b[1] - 2, x1, y, (x0 + x1) / 2, y + 2 * dip, x0, y, cid, x, y + top + py * k, _pi.svg_image(info, k, left), rim, lw)
     with ink.fig(0, 0, 1.0, False) as g:
         g.raw_at(mk)
     b = box(x)

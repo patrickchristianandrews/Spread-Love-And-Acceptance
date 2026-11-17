@@ -72,6 +72,14 @@ LINES += [
     ('tidbit', 'Ow! It pinched hello!', '', 1.0, dict(R)),
     ('sugarfoot', 'There’s room in the boat. Just about.', '', 1.0, dict(R)),
 ]
+# Nov 17, last (owner: "update the voices like we discussed throughout"): more lines from the episodes, whole and as said
+LINES += [
+    ('tidbit', 'Wheee!', '', 1.0, dict(R)),
+    ('tidbit', 'Ooh, I love a mystery!', '', 1.0, dict(R)),
+    ('sugarfoot', 'Hee hee!', '', 1.0, dict(R)),
+    ('sugarfoot', 'That’s funny. I’m still scared.', '', 1.0, dict(R)),
+    ('tidbit', 'Side by side.', '', 1.0, dict(R)),
+]
 ONLY = None  # set by the command line: build just the lines whose text contains one of these
 
 

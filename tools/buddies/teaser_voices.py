@@ -20,6 +20,8 @@ SRC = os.path.join(ROOT, 'tools', 'buddies', 'voice-src', 's2teaser')
 # and Tidbit's snakes line (owner, Nov 17: "Tidbit on the snakes on the plane voice needs to be fixed": reshaping it
 # doubled the wobbles in his pitch)
 KEEP = {'You owe me a bigger bone!': 1.0, 'Gotcha! Just me!': 1.5, 'I have had it with these snakes on this…': 1.5}
+# the only line still reshaped: slow motion is the joke (owner, Nov 17 2026: every other voice as the pups said it)
+RESHAPE = {'Whoa… slow motion.'}
 BUILT = os.path.join(ROOT, 'tools', 'buddies', 'voice-src', 's2teaser-built')  # lines rebuilt by teaser_build.py, used as they are
 DST = os.path.join(ROOT, 'assets', 'audio', 'buddies', 's2teaser')
 
@@ -114,6 +116,11 @@ def main():
             b = a / max(1e-9, np.abs(a).max()) * np.abs(a).max() * 10 ** ((KEEP[l['text']] - 2.0) / 20)
             P.encode(b, os.path.join(DST, k + '.mp3')); out[k] = [round(len(b) / P.SR, 2)]; done += 1
             print('%-10s %-8s %5.2fs (kept as recorded)  %s' % (l['who'], 'kept', len(b) / P.SR, l['text']), flush=True)
+            continue
+        if l['text'] not in RESHAPE:   # as recorded (owner, Nov 17: the reshaped voices sounded robotic)
+            b = a / max(1e-9, np.abs(a).max()) * 0.89
+            P.encode(b, os.path.join(DST, k + '.mp3')); out[k] = [round(len(b) / P.SR, 2)]; done += 1
+            print('%-10s %-8s %5.2fs (as recorded)  %s' % (l['who'], 'natural', len(b) / P.SR, l['text']), flush=True)
             continue
         on = onsets_for(a, l['text'])
         room = l['room']
