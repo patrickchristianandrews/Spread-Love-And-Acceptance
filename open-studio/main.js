@@ -12,12 +12,34 @@ const KEYS_FILE = () => path.join(app.getPath('userData'), 'keys.json');
 // Clouds Open Studio can use for TEXT (all OpenAI-compatible). Free-with-key, generous tiers; plus a
 // local KoboldCpp server (no key). Keys are stored encrypted on this PC only.
 const PROVIDERS = {
-  groq:        { name: 'Groq',                 base: 'https://api.groq.com/openai/v1',     keyUrl: 'https://console.groq.com/keys',                 defModel: 'llama-3.3-70b-versatile' },
-  openrouter:  { name: 'OpenRouter',           base: 'https://openrouter.ai/api/v1',       keyUrl: 'https://openrouter.ai/keys',                    defModel: 'meta-llama/llama-3.3-70b-instruct:free' },
-  cerebras:    { name: 'Cerebras',             base: 'https://api.cerebras.ai/v1',         keyUrl: 'https://cloud.cerebras.ai',                     defModel: 'llama-3.3-70b' },
-  huggingface: { name: 'Hugging Face',         base: 'https://router.huggingface.co/v1',   keyUrl: 'https://huggingface.co/settings/tokens',        defModel: 'meta-llama/Llama-3.3-70B-Instruct' },
-  cloudflare:  { name: 'Cloudflare Workers AI', base: '',                                  keyUrl: 'https://dash.cloudflare.com/profile/api-tokens', defModel: '@cf/meta/llama-3.1-8b-instruct', cf: true, keyHint: 'ACCOUNT_ID:API_TOKEN' },
-  koboldcpp:   { name: 'KoboldCpp (on this PC)', base: 'http://localhost:5001/v1',         keyUrl: 'https://github.com/LostRuins/koboldcpp',        defModel: '', local: true },
+  groq:        { name: 'Groq',                 base: 'https://api.groq.com/openai/v1',     keyUrl: 'https://console.groq.com/keys',                 defModel: 'llama-3.3-70b-versatile',
+    blurb: 'Ultra-fast open models (Llama, Mixtral) on special hardware. Free tier with generous rate limits, no card needed.' },
+  openrouter:  { name: 'OpenRouter',           base: 'https://openrouter.ai/api/v1',       keyUrl: 'https://openrouter.ai/keys',                    defModel: 'meta-llama/llama-3.3-70b-instruct:free',
+    blurb: 'One key routes to hundreds of models. Any model whose name ends in ":free" costs nothing; others are pay as you go.' },
+  cerebras:    { name: 'Cerebras',             base: 'https://api.cerebras.ai/v1',         keyUrl: 'https://cloud.cerebras.ai',                     defModel: 'llama-3.3-70b',
+    blurb: 'The fastest big open models (Qwen3 235B, Llama). Free daily token allowance, no card.' },
+  huggingface: { name: 'Hugging Face',         base: 'https://router.huggingface.co/v1',   keyUrl: 'https://huggingface.co/settings/tokens',        defModel: 'meta-llama/Llama-3.3-70B-Instruct',
+    blurb: 'One token reaches thousands of community-hosted open models. Small free monthly credit, then pay as you go.' },
+  cloudflare:  { name: 'Cloudflare Workers AI', base: '',                                  keyUrl: 'https://dash.cloudflare.com/profile/api-tokens', defModel: '@cf/meta/llama-3.1-8b-instruct', cf: true, keyHint: 'ACCOUNT_ID:API_TOKEN',
+    blurb: 'Open models (Llama, Stable Diffusion) on Cloudflare\'s edge. Free daily "Neurons" allowance. Enter the key as ACCOUNT_ID:API_TOKEN (both from your Cloudflare dashboard).' },
+  koboldcpp:   { name: 'KoboldCpp (on this PC)', base: 'http://localhost:5001/v1',         keyUrl: 'https://github.com/LostRuins/koboldcpp',        defModel: '', local: true,
+    blurb: 'Runs a model entirely on THIS PC — no key, fully private, works offline. Start the KoboldCpp app first; it serves on localhost:5001.' },
+  deepai:      { name: 'DeepAI (images)',        base: '',                                 keyUrl: 'https://deepai.org/dashboard/profile',          defModel: '', image: true, keyHint: 'DeepAI API key',
+    blurb: 'Image generation through DeepAI. A limited amount is free with an account, then it is pay as you go.' },
+  llm7:        { name: 'LLM7.io (no key)',       base: 'https://api.llm7.io/v1',            keyUrl: 'https://token.llm7.io',                          defModel: 'gpt-oss:20b', noKey: true,
+    blurb: 'A free gateway that works with NO key or account at all. A free token (optional) raises the rate limits.' },
+  google:      { name: 'Google Gemini',          base: 'https://generativelanguage.googleapis.com/v1beta/openai', keyUrl: 'https://aistudio.google.com/apikey', defModel: 'gemini-2.5-flash',
+    blurb: 'Gemini Flash and Gemma, free in Google AI Studio with a big daily quota and a 1M-token context. Key from AI Studio, no card.' },
+  mistral:     { name: 'Mistral AI',             base: 'https://api.mistral.ai/v1',         keyUrl: 'https://console.mistral.ai/api-keys',            defModel: 'mistral-large-latest',
+    blurb: 'Mistral and Codestral models. Free "Experiment" tier with a monthly quota (phone verify, no card).' },
+  nvidia:      { name: 'NVIDIA NIM',             base: 'https://integrate.api.nvidia.com/v1', keyUrl: 'https://build.nvidia.com',                     defModel: 'meta/llama-3.3-70b-instruct',
+    blurb: 'A wide catalog of open models (Llama, DeepSeek, Qwen, Nemotron) hosted by NVIDIA. Free developer credits.' },
+  zai:         { name: 'Z.ai (GLM)',             base: 'https://api.z.ai/api/paas/v4',       keyUrl: 'https://z.ai/manage-apikey/apikey-list',        defModel: 'glm-4.5-flash',
+    blurb: 'Zhipu GLM models; the GLM Flash models are permanently free. Key from z.ai.' },
+  gonka:       { name: 'Gonka Broker',           base: 'https://proxy.gonkabroker.com/v1',   keyUrl: 'https://app.gonkabroker.com/signup',             defModel: 'zai-org/GLM-5.3-Flash',
+    blurb: 'Decentralized nodes serving big open models (GLM, DeepSeek, MiniMax). About 1M free tokens a month after phone verify.' },
+  moonshot:    { name: 'Moonshot (Kimi)',        base: 'https://api.moonshot.ai/v1',         keyUrl: 'https://platform.moonshot.ai/console/api-keys',  defModel: 'kimi-latest',
+    blurb: 'Kimi models — strong at coding and long documents. Pay as you go (new accounts often get credit).' },
 };
 
 let keys = {};
@@ -64,7 +86,17 @@ app.on('window-all-closed', () => { if (process.platform !== 'darwin') app.quit(
 
 // ---- IPC: the renderer talks to the vault and keyed providers only through these channels ----
 // The renderer learns which providers have a key (never the key itself).
-ipcMain.handle('providers', () => Object.entries(PROVIDERS).map(([id, p]) => ({ id, name: p.name, keyUrl: p.keyUrl, defModel: p.defModel, local: Boolean(p.local), keyHint: p.keyHint || '', connected: Boolean(p.local) || Boolean(keys[id]) })));
+ipcMain.handle('providers', () => Object.entries(PROVIDERS).map(([id, p]) => ({ id, name: p.name, keyUrl: p.keyUrl, defModel: p.defModel, blurb: p.blurb || '', local: Boolean(p.local), noKey: Boolean(p.noKey), image: Boolean(p.image), keyHint: p.keyHint || '', connected: Boolean(p.local) || Boolean(p.noKey) || Boolean(keys[id]) })));
+
+// DeepAI images: its own (non-OpenAI) API. The key stays in the vault; we call it from here.
+ipcMain.handle('deepai:image', async (_e, { prompt }) => {
+  const key = keys.deepai;
+  if (!key) throw new Error('Add your DeepAI API key first (Keys).');
+  const r = await fetch('https://api.deepai.org/api/text2img', { method: 'POST', headers: { 'api-key': key }, body: new URLSearchParams({ text: prompt }) });
+  const j = await r.json().catch(() => ({}));
+  if (!r.ok || !j.output_url) throw new Error(j.err || `DeepAI returned HTTP ${r.status}`);
+  return j.output_url;
+});
 ipcMain.handle('keys:set', (_e, { provider, key }) => { if (PROVIDERS[provider]) { keys[provider] = (key || '').trim(); if (!keys[provider]) delete keys[provider]; saveKeys(); } return Object.keys(keys); });
 
 // Free engines, run from the app's backend so there is no browser CORS / local-file block.
@@ -118,7 +150,7 @@ ipcMain.handle('text', async (_e, { provider, model, prompt }) => {
   if (!p) throw new Error('Unknown provider.');
   let base = p.base;
   let auth = keys[provider];
-  if (p.local) { auth = ''; }               // a local server (KoboldCpp) needs no key
+  if (p.local || p.noKey) { auth = ''; }    // a local server (KoboldCpp) or anonymous gateway (LLM7) needs no key
   else if (!auth) throw new Error(`Add your ${p.name} key first (Keys).`);
   if (p.cf) {                               // Cloudflare: the key is ACCOUNT_ID:API_TOKEN
     const [account, tok] = String(auth).split(':');

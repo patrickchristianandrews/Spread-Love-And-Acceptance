@@ -35,9 +35,9 @@
   function engine(){return $('#iengine').value}
   var hordeLoaded=false;
   function applyEngine(){
-    var h=engine()==='aihorde';
-    $('#imodel').hidden=h; $('#ihordemodel').hidden=!h;
-    $('#ihint').textContent=h?'AI Horde: free, no account, dozens of models. A free job can queue 10–60s.':'Pollinations network. Free; about one image every 45s unless you add a token (Keys).';
+    var e=engine(),h=e==='aihorde',d=e==='deepai';
+    $('#imodel').hidden=h||d; $('#ihordemodel').hidden=!h;
+    $('#ihint').textContent=d?'DeepAI: uses your DeepAI API key (add it under Keys). One image per request.':h?'AI Horde: free, no account, dozens of models. A free job can queue 10–60s.':'Pollinations network. Free; about one image every 45s unless you add a token (Keys).';
     if(h&&!hordeLoaded){hordeLoaded=true;loadHordeModels();}
   }
   function loadHordeModels(){
@@ -124,6 +124,16 @@
       }).catch(function(e){fig.remove();showErr('AI Horde: '+e.message);});
     }
   }
+  function deepaiImage(base,seed){
+    if(!(window.studio&&window.studio.deepaiImage)){showErr('DeepAI needs the desktop app.');return;}
+    var full=base+(style?(', '+style):'');
+    var item={url:'',prompt:full,base:base,w:shape.w,h:shape.h,model:'DeepAI',ts:Date.now()};
+    var fig=newTile(item),stat=fig.querySelector('.hstat'),sp=fig.querySelector('.spin'),img=fig.querySelector('img');
+    stat.textContent='DeepAI…';
+    window.studio.deepaiImage({prompt:full}).then(function(url){ item.url=url;var ax=fig.querySelectorAll('a');ax[0].href=url;ax[1].href=url;
+      img.onload=function(){sp.hidden=true;stat.textContent='';};img.onerror=function(){sp.hidden=true;};img.src=url;savedToLib(item); })
+      .catch(function(e){fig.remove();showErr('DeepAI: '+(e.message||e));});
+  }
   function runBatch(n,fromVary){
     var base=$('#iprompt').value.trim();$('#ierr').hidden=true;
     if(!base){showErr('Type a description first.');return;}
@@ -132,7 +142,7 @@
       var seed;
       if(lock&&!fromVary&&$('#iseed').value.trim()!=='')seed=parseInt($('#iseed').value,10)||0;else seed=Math.floor(Math.random()*1e9);
       if(!lock&&n===1&&!fromVary)$('#iseed').value=seed;
-      if(engine()==='aihorde')hordeImage(base,seed);else pollImage(base,seed);
+      if(engine()==='aihorde')hordeImage(base,seed);else if(engine()==='deepai')deepaiImage(base,seed);else pollImage(base,seed);
     }
     if(engine()==='pollinations')cool();
   }
@@ -144,7 +154,7 @@
   function buildTextProviders(){
     var sel=$('#tprovider'),cur=sel.value;
     var opts='<option value="pollinations">Pollinations (free, no key)</option>';
-    keyedProviders.forEach(function(p){ if(p.connected) opts+='<option value="'+esc(p.id)+'">'+esc(p.name)+' (your key)</option>'; });
+    keyedProviders.forEach(function(p){ if(p.connected&&!p.image) opts+='<option value="'+esc(p.id)+'">'+esc(p.name)+(p.local?' (on this PC)':p.noKey?' (free, no key)':' (your key)')+'</option>'; });
     sel.innerHTML=opts; sel.value=cur&&[].some.call(sel.options,function(o){return o.value===cur})?cur:'pollinations';
   }
   $('#tprompt').value=store.get('tprompt','');$('#tprompt').addEventListener('input',function(){store.set('tprompt',this.value)});
@@ -184,13 +194,17 @@
       '<input type="password" id="k-ptoken" placeholder="token (optional — removes the 45s image wait)" value="'+esc(ptoken())+'">'+
       '<button class="btn ghost" data-savep>Save</button>'+
       '<a class="chip" href="https://auth.pollinations.ai" target="_blank" rel="noopener">Get token ↗</a>'+
-      '<span class="badge '+(ptoken()?'b-on':'b-off')+'">'+(ptoken()?'set':'optional')+'</span></div>';
+      '<span class="badge '+(ptoken()?'b-on':'b-off')+'">'+(ptoken()?'set':'optional')+'</span>'+
+      '<span class="hint" style="flex-basis:100%;margin-top:2px">Free image + chat engine, no account needed. A token is optional and only removes the ~45-second limit between free images.</span></div>';
+    rows+='<div class="keyrow"><span class="pn">AI Horde</span>'+
+      '<span class="hint" style="flex:1">Free, volunteer-run network for images — no key, no account. Already on in the Image tab (pick "AI Horde"). A free job can queue 10–60s.</span>'+
+      '<a class="chip" href="https://aihorde.net" target="_blank" rel="noopener">About ↗</a><span class="badge b-on">free</span></div>';
     keyedProviders.forEach(function(p){
-      if(p.local){
+      if(p.local||p.noKey){
         rows+='<div class="keyrow"><span class="pn">'+esc(p.name)+'</span>'+
-          '<span class="hint" style="flex:1">Runs on this PC — no key. Start the KoboldCpp server (it listens on localhost:5001) and it appears in Text.</span>'+
-          '<a class="chip" href="'+esc(p.keyUrl)+'" target="_blank" rel="noopener">Get KoboldCpp ↗</a>'+
-          '<span class="badge b-on">local</span></div>';
+          '<span class="hint" style="flex:1">'+esc(p.blurb||(p.local?'Runs on this PC — no key.':'Free, no key or account.'))+'</span>'+
+          '<a class="chip" href="'+esc(p.keyUrl)+'" target="_blank" rel="noopener">'+(p.local?'Get KoboldCpp ↗':'Free token ↗')+'</a>'+
+          '<span class="badge b-on">'+(p.local?'local':'free')+'</span></div>';
         return;
       }
       rows+='<div class="keyrow"><span class="pn">'+esc(p.name)+'</span>'+
@@ -217,8 +231,10 @@
 
   // Boot
   refreshProviders().then(function(){ buildTextProviders(); renderKeys(); });
-  if(store.get('tab')==='text')document.querySelector('.tab[data-tab="text"]').click();
-  else if(store.get('tab')==='keys')document.querySelector('.tab[data-tab="keys"]').click();
+  // Chat is the first tab and the default; restore Image/Keys only if that was last open.
+  var savedTab=store.get('tab','');
+  if(savedTab==='image')document.querySelector('.tab[data-tab="image"]').click();
+  else if(savedTab==='keys')document.querySelector('.tab[data-tab="keys"]').click();
 
   // expose for the "More like this" button scope
   window.runBatch=runBatch;

@@ -74,14 +74,14 @@
     <div class="logo"></div>
     <div><h1>Open Studio</h1><p class="sub">Your own image &amp; text studio — free engines built in, your keys kept private on this PC.</p></div>
     <div class="tabs" role="tablist">
-      <button class="tab on" data-tab="image" role="tab">Image</button>
-      <button class="tab" data-tab="text" role="tab">Text</button>
+      <button class="tab on" data-tab="text" role="tab">Chat</button>
+      <button class="tab" data-tab="image" role="tab">Image</button>
       <button class="tab" data-tab="keys" role="tab">Keys</button>
     </div>
   </header>
 
   <!-- IMAGE -->
-  <section id="panel-image" class="card">
+  <section id="panel-image" class="card" hidden>
     <label for="iprompt">Describe the image</label>
     <textarea id="iprompt" placeholder="A red fox in fresh snow at sunrise, soft light, close-up, highly detailed"></textarea>
     <div style="margin-top:12px"><label>Style</label>
@@ -96,7 +96,7 @@
     </div>
     <div class="row" style="margin-top:12px">
       <div class="col" style="max-width:210px"><label for="iengine">Engine</label>
-        <select id="iengine"><option value="pollinations">Pollinations — fast, simple</option><option value="aihorde">AI Horde — more models, free</option></select></div>
+        <select id="iengine"><option value="pollinations">Pollinations — fast, simple</option><option value="aihorde">AI Horde — more models, free</option><option value="deepai">DeepAI — your key</option></select></div>
       <div class="col"><label for="imodel">Model</label>
         <select id="imodel"><option value="flux">Flux — highest quality</option><option value="turbo">Turbo — fast</option></select>
         <select id="ihordemodel" hidden><option value="">Any (fastest free worker)</option></select></div>
@@ -124,8 +124,8 @@
     <div class="empty" id="libempty">Nothing yet. Generate an image and it is saved here — your library stays after you close the app.</div>
   </section>
 
-  <!-- TEXT -->
-  <section id="panel-text" class="card" hidden>
+  <!-- CHAT (TEXT) -->
+  <section id="panel-text" class="card">
     <label for="tprompt">Ask or write a prompt</label>
     <textarea id="tprompt" placeholder="Explain black holes to a 10-year-old in one paragraph."></textarea>
     <div class="row" style="margin-top:12px">
@@ -144,7 +144,16 @@
     <h2 style="margin:0 0 4px;font-size:16px">API keys</h2>
     <p class="hint" style="margin:0 0 10px">Optional. Add a key to unlock a free‑with‑key cloud for the Text tab (fast, generous free tiers). Keys are <b>encrypted and stored only on this PC</b> — they never leave the app and are never shown to the page.</p>
     <div id="keylist"></div>
-    <p class="hint" style="margin:12px 0 0">The image engines (Pollinations, AI Horde) and Pollinations text need no key at all.</p>
+    <p class="hint" style="margin:12px 0 0">The image engines (Pollinations, AI Horde) and Pollinations chat need no key at all.</p>
+    <h2 style="margin:20px 0 4px;font-size:16px">Also available in your browser</h2>
+    <p class="hint" style="margin:0 0 10px">These have no public API to connect into an app, so Open Studio opens them in your browser instead.</p>
+    <div class="chips">
+      <a class="chip" href="https://perchance.org/ai-text-to-image-generator" target="_blank" rel="noopener">Perchance (free images) ↗</a>
+      <a class="chip" href="https://lite.koboldai.net/" target="_blank" rel="noopener">Kobold Lite ↗</a>
+      <a class="chip" href="https://app.sogni.ai/" target="_blank" rel="noopener">Sogni ↗</a>
+      <a class="chip" href="https://deepai.org/" target="_blank" rel="noopener">DeepAI site ↗</a>
+      <a class="chip" href="https://github.com/bigscience-workshop/petals" target="_blank" rel="noopener">Petals (self-host) ↗</a>
+    </div>
   </section>
 
   <p class="foot">

@@ -9,4 +9,5 @@ contextBridge.exposeInMainWorld('studio', {
   ptext: (opts) => ipcRenderer.invoke('ptext', opts),
   hordeModels: () => ipcRenderer.invoke('horde:models'),
   hordeImage: (opts) => ipcRenderer.invoke('horde:image', opts),
+  deepaiImage: (opts) => ipcRenderer.invoke('deepai:image', opts),
 });
