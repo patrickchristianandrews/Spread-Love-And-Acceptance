@@ -186,8 +186,15 @@
       '<a class="chip" href="https://auth.pollinations.ai" target="_blank" rel="noopener">Get token ↗</a>'+
       '<span class="badge '+(ptoken()?'b-on':'b-off')+'">'+(ptoken()?'set':'optional')+'</span></div>';
     keyedProviders.forEach(function(p){
+      if(p.local){
+        rows+='<div class="keyrow"><span class="pn">'+esc(p.name)+'</span>'+
+          '<span class="hint" style="flex:1">Runs on this PC — no key. Start the KoboldCpp server (it listens on localhost:5001) and it appears in Text.</span>'+
+          '<a class="chip" href="'+esc(p.keyUrl)+'" target="_blank" rel="noopener">Get KoboldCpp ↗</a>'+
+          '<span class="badge b-on">local</span></div>';
+        return;
+      }
       rows+='<div class="keyrow"><span class="pn">'+esc(p.name)+'</span>'+
-        '<input type="password" placeholder="paste your '+esc(p.name)+' key" data-k="'+esc(p.id)+'">'+
+        '<input type="password" placeholder="'+(p.keyHint?esc(p.keyHint):('paste your '+esc(p.name)+' key'))+'" data-k="'+esc(p.id)+'">'+
         '<button class="btn ghost" data-save="'+esc(p.id)+'">Save</button>'+
         '<a class="chip" href="'+esc(p.keyUrl)+'" target="_blank" rel="noopener">Get key ↗</a>'+
         '<span class="badge '+(p.connected?'b-on':'b-off')+'">'+(p.connected?'connected':'not set')+'</span></div>';

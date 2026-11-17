@@ -9,11 +9,15 @@ const fs = require('node:fs');
 
 const KEYS_FILE = () => path.join(app.getPath('userData'), 'keys.json');
 
-// Keyed clouds Open Studio can use for TEXT (all OpenAI-compatible). Free-with-key, generous tiers.
+// Clouds Open Studio can use for TEXT (all OpenAI-compatible). Free-with-key, generous tiers; plus a
+// local KoboldCpp server (no key). Keys are stored encrypted on this PC only.
 const PROVIDERS = {
-  groq:       { name: 'Groq',       base: 'https://api.groq.com/openai/v1', keyUrl: 'https://console.groq.com/keys', defModel: 'llama-3.3-70b-versatile' },
-  openrouter: { name: 'OpenRouter', base: 'https://openrouter.ai/api/v1',   keyUrl: 'https://openrouter.ai/keys',   defModel: 'meta-llama/llama-3.3-70b-instruct:free' },
-  cerebras:   { name: 'Cerebras',   base: 'https://api.cerebras.ai/v1',     keyUrl: 'https://cloud.cerebras.ai',    defModel: 'llama-3.3-70b' },
+  groq:        { name: 'Groq',                 base: 'https://api.groq.com/openai/v1',     keyUrl: 'https://console.groq.com/keys',                 defModel: 'llama-3.3-70b-versatile' },
+  openrouter:  { name: 'OpenRouter',           base: 'https://openrouter.ai/api/v1',       keyUrl: 'https://openrouter.ai/keys',                    defModel: 'meta-llama/llama-3.3-70b-instruct:free' },
+  cerebras:    { name: 'Cerebras',             base: 'https://api.cerebras.ai/v1',         keyUrl: 'https://cloud.cerebras.ai',                     defModel: 'llama-3.3-70b' },
+  huggingface: { name: 'Hugging Face',         base: 'https://router.huggingface.co/v1',   keyUrl: 'https://huggingface.co/settings/tokens',        defModel: 'meta-llama/Llama-3.3-70B-Instruct' },
+  cloudflare:  { name: 'Cloudflare Workers AI', base: '',                                  keyUrl: 'https://dash.cloudflare.com/profile/api-tokens', defModel: '@cf/meta/llama-3.1-8b-instruct', cf: true, keyHint: 'ACCOUNT_ID:API_TOKEN' },
+  koboldcpp:   { name: 'KoboldCpp (on this PC)', base: 'http://localhost:5001/v1',         keyUrl: 'https://github.com/LostRuins/koboldcpp',        defModel: '', local: true },
 };
 
 let keys = {};
@@ -60,7 +64,7 @@ app.on('window-all-closed', () => { if (process.platform !== 'darwin') app.quit(
 
 // ---- IPC: the renderer talks to the vault and keyed providers only through these channels ----
 // The renderer learns which providers have a key (never the key itself).
-ipcMain.handle('providers', () => Object.entries(PROVIDERS).map(([id, p]) => ({ id, name: p.name, keyUrl: p.keyUrl, defModel: p.defModel, connected: Boolean(keys[id]) })));
+ipcMain.handle('providers', () => Object.entries(PROVIDERS).map(([id, p]) => ({ id, name: p.name, keyUrl: p.keyUrl, defModel: p.defModel, local: Boolean(p.local), keyHint: p.keyHint || '', connected: Boolean(p.local) || Boolean(keys[id]) })));
 ipcMain.handle('keys:set', (_e, { provider, key }) => { if (PROVIDERS[provider]) { keys[provider] = (key || '').trim(); if (!keys[provider]) delete keys[provider]; saveKeys(); } return Object.keys(keys); });
 
 // Free engines, run from the app's backend so there is no browser CORS / local-file block.
@@ -112,14 +116,25 @@ ipcMain.handle('horde:image', async (_e, { prompt, model, width, height, steps, 
 ipcMain.handle('text', async (_e, { provider, model, prompt }) => {
   const p = PROVIDERS[provider];
   if (!p) throw new Error('Unknown provider.');
-  const key = keys[provider];
-  if (!key) throw new Error(`Add your ${p.name} key first (Keys).`);
-  const res = await fetch(`${p.base}/chat/completions`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${key}`,
-      ...(provider === 'openrouter' ? { 'HTTP-Referer': 'https://open-studio.app', 'X-Title': 'Open Studio' } : {}) },
-    body: JSON.stringify({ model: model || p.defModel, messages: [{ role: 'user', content: prompt }], max_tokens: 1024 }),
-  });
+  let base = p.base;
+  let auth = keys[provider];
+  if (p.local) { auth = ''; }               // a local server (KoboldCpp) needs no key
+  else if (!auth) throw new Error(`Add your ${p.name} key first (Keys).`);
+  if (p.cf) {                               // Cloudflare: the key is ACCOUNT_ID:API_TOKEN
+    const [account, tok] = String(auth).split(':');
+    if (!account || !tok) throw new Error('Cloudflare key must be ACCOUNT_ID:API_TOKEN (see Keys).');
+    base = `https://api.cloudflare.com/client/v4/accounts/${account}/ai/v1`;
+    auth = tok;
+  }
+  const headers = { 'Content-Type': 'application/json' };
+  if (auth) headers.Authorization = `Bearer ${auth}`;
+  if (provider === 'openrouter') { headers['HTTP-Referer'] = 'https://open-studio.app'; headers['X-Title'] = 'Open Studio'; }
+  let res;
+  try {
+    res = await fetch(`${base}/chat/completions`, { method: 'POST', headers, body: JSON.stringify({ model: model || p.defModel, messages: [{ role: 'user', content: prompt }], max_tokens: 1024 }) });
+  } catch (e) {
+    throw new Error(p.local ? `Could not reach ${p.name}. Start the KoboldCpp server first (localhost:5001).` : `Could not reach ${p.name}: ${e.message}`);
+  }
   const data = await res.json().catch(() => ({}));
   if (!res.ok) throw new Error(data.error?.message || `${p.name} returned HTTP ${res.status}`);
   return data.choices?.[0]?.message?.content || '(empty answer)';
