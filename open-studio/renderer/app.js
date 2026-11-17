@@ -151,10 +151,12 @@
 
   // ---------- Text ----------
   var keyedProviders=[];
+  var customProviders=[];
   function buildTextProviders(){
     var sel=$('#tprovider'),cur=sel.value;
     var opts='<option value="pollinations">Pollinations (free, no key)</option>';
     keyedProviders.forEach(function(p){ if(p.connected&&!p.image) opts+='<option value="'+esc(p.id)+'">'+esc(p.name)+(p.local?' (on this PC)':p.noKey?' (free, no key)':' (your key)')+'</option>'; });
+    customProviders.forEach(function(c){ opts+='<option value="'+esc(c.id)+'">'+esc(c.name)+' (custom)</option>'; });
     sel.innerHTML=opts; sel.value=cur&&[].some.call(sel.options,function(o){return o.value===cur})?cur:'pollinations';
   }
   $('#tprompt').value=store.get('tprompt','');$('#tprompt').addEventListener('input',function(){store.set('tprompt',this.value)});
@@ -213,8 +215,25 @@
         '<a class="chip" href="'+esc(p.keyUrl)+'" target="_blank" rel="noopener">Get key ↗</a>'+
         '<span class="badge '+(p.connected?'b-on':'b-off')+'">'+(p.connected?'connected':'not set')+'</span></div>';
     });
+    if(window.studio&&window.studio.customAdd){
+      rows+='<div class="keyrow" style="flex-direction:column;align-items:stretch;gap:8px">'+
+        '<span class="pn">+ Custom (OpenAI-compatible)</span>'+
+        '<span class="hint">Add ANY OpenAI-style service: paste its base URL (usually ending in /v1) and a key if it needs one. This covers every free API from live lists like awesome-free-llm-apis — no update needed.</span>'+
+        '<div class="row"><input type="text" id="cu-name" placeholder="Name (e.g. AxForge)" style="flex:1;min-width:120px"><input type="text" id="cu-base" placeholder="https://api.example.com/v1" style="flex:2;min-width:200px"></div>'+
+        '<div class="row"><input type="password" id="cu-key" placeholder="key — leave blank if the service needs none" style="flex:2;min-width:200px"><button class="btn ghost" data-cadd>Add service</button></div>'+
+        customProviders.map(function(c){return '<div class="row" style="align-items:center;gap:8px"><b style="flex:1;min-width:100px">'+esc(c.name)+'</b><span class="hint" style="flex:2;min-width:160px">'+esc(c.base)+'</span><button class="btn ghost" data-crem="'+esc(c.id)+'">Remove</button></div>';}).join('')+
+        '<div class="err" id="cu-err" hidden></div></div>';
+    }
     box.innerHTML=rows;
     box.querySelector('[data-savep]').addEventListener('click',function(){store.set('ptoken',box.querySelector('#k-ptoken').value.trim());renderKeys();});
+    var cadd=box.querySelector('[data-cadd]');
+    if(cadd) cadd.addEventListener('click',function(){
+      var name=box.querySelector('#cu-name').value,base=box.querySelector('#cu-base').value,key=box.querySelector('#cu-key').value;
+      cadd.disabled=true;cadd.textContent='…';
+      window.studio.customAdd({name:name,base:base,key:key}).then(function(list){customProviders=list;renderKeys();buildTextProviders();})
+        .catch(function(e){cadd.disabled=false;cadd.textContent='Add service';var er=box.querySelector('#cu-err');if(er){er.textContent=e.message||String(e);er.hidden=false;}});
+    });
+    box.querySelectorAll('[data-crem]').forEach(function(b){ b.addEventListener('click',function(){ window.studio.customRemove(b.dataset.crem).then(function(list){customProviders=list;renderKeys();buildTextProviders();}); }); });
     box.querySelectorAll('[data-save]').forEach(function(btn){
       btn.addEventListener('click',function(){
         var id=btn.dataset.save,val=box.querySelector('[data-k="'+id+'"]').value;
@@ -225,8 +244,8 @@
     });
   }
   function refreshProviders(){
-    if(!(window.studio&&window.studio.providers)){keyedProviders=[];return Promise.resolve();}
-    return window.studio.providers().then(function(list){keyedProviders=list||[];});
+    if(!(window.studio&&window.studio.providers)){keyedProviders=[];customProviders=[];return Promise.resolve();}
+    return Promise.all([window.studio.providers(),window.studio.customList?window.studio.customList():Promise.resolve([])]).then(function(r){keyedProviders=r[0]||[];customProviders=r[1]||[];});
   }
 
   // Boot

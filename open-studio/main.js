@@ -40,6 +40,10 @@ const PROVIDERS = {
     blurb: 'Decentralized nodes serving big open models (GLM, DeepSeek, MiniMax). About 1M free tokens a month after phone verify.' },
   moonshot:    { name: 'Moonshot (Kimi)',        base: 'https://api.moonshot.ai/v1',         keyUrl: 'https://platform.moonshot.ai/console/api-keys',  defModel: 'kimi-latest',
     blurb: 'Kimi models — strong at coding and long documents. Pay as you go (new accounts often get credit).' },
+  ovhcloud:    { name: 'OVHcloud (EU, no key)',  base: 'https://oai.endpoints.kepler.ai.cloud.ovh.net/v1', keyUrl: 'https://endpoints.ai.cloud.ovh.net/', defModel: 'Meta-Llama-3_3-70B-Instruct', noKey: true,
+    blurb: 'Open models hosted in Europe, usable anonymously (about 2 requests/min per IP, no account). A free key raises the limit.' },
+  cohere:      { name: 'Cohere (Command)',       base: 'https://api.cohere.ai/compatibility/v1', keyUrl: 'https://dashboard.cohere.com/api-keys',      defModel: 'command-a-03-2025',
+    blurb: 'Cohere Command models for business writing and documents. Free trial key: ~1,000 calls a month, no card.' },
 };
 
 let keys = {};
@@ -66,6 +70,29 @@ function saveKeys() {
   try { fs.writeFileSync(KEYS_FILE(), JSON.stringify(enc)); } catch { /* best effort */ }
 }
 
+// User-added OpenAI-compatible services (any base URL + optional key). Covers the whole long tail of
+// free APIs without a rebuild. Keys encrypted at rest, like the built-in ones.
+const CUSTOM_FILE = () => path.join(app.getPath('userData'), 'custom.json');
+let customs = [];
+function loadCustoms() {
+  try {
+    return JSON.parse(fs.readFileSync(CUSTOM_FILE(), 'utf8')).map((c) => {
+      let key = '';
+      try { if (c.k) { const b = Buffer.from(c.k, 'base64'); key = safeStorage.isEncryptionAvailable() ? safeStorage.decryptString(b) : b.toString('utf8'); } } catch { /* drop undecryptable */ }
+      return { id: c.id, name: c.name, base: c.base, key };
+    });
+  } catch { return []; }
+}
+function saveCustoms() {
+  const out = customs.map((c) => {
+    let k = '';
+    if (c.key) { const b = safeStorage.isEncryptionAvailable() ? safeStorage.encryptString(c.key) : Buffer.from(c.key, 'utf8'); k = b.toString('base64'); }
+    return { id: c.id, name: c.name, base: c.base, k };
+  });
+  try { fs.writeFileSync(CUSTOM_FILE(), JSON.stringify(out)); } catch { /* best effort */ }
+}
+const customPublic = () => customs.map((c) => ({ id: c.id, name: c.name, base: c.base, connected: true }));
+
 function createWindow() {
   const win = new BrowserWindow({
     width: 1180, height: 820, minWidth: 720, minHeight: 560,
@@ -79,6 +106,7 @@ function createWindow() {
 
 app.whenReady().then(() => {
   keys = loadKeys();
+  customs = loadCustoms();
   createWindow();
   app.on('activate', () => { if (BrowserWindow.getAllWindows().length === 0) createWindow(); });
 });
@@ -145,7 +173,30 @@ ipcMain.handle('horde:image', async (_e, { prompt, model, width, height, steps, 
   throw new Error('AI Horde took too long; try again or choose "Any".');
 });
 
+ipcMain.handle('custom:list', () => customPublic());
+ipcMain.handle('custom:add', (_e, { name, base, key }) => {
+  base = (base || '').trim().replace(/\/+$/, '');
+  if (!/^https?:\/\//.test(base)) throw new Error('Base URL must start with http:// or https:// (e.g. https://api.example.com/v1).');
+  name = (name || '').trim() || base.replace(/^https?:\/\//, '').split('/')[0];
+  customs.push({ id: 'custom-' + Date.now().toString(36), name, base, key: (key || '').trim() });
+  saveCustoms();
+  return customPublic();
+});
+ipcMain.handle('custom:remove', (_e, { id }) => { customs = customs.filter((c) => c.id !== id); saveCustoms(); return customPublic(); });
+
 ipcMain.handle('text', async (_e, { provider, model, prompt }) => {
+  if (String(provider).indexOf('custom-') === 0) {
+    const c = customs.find((x) => x.id === provider);
+    if (!c) throw new Error('That custom service was removed.');
+    const headers = { 'Content-Type': 'application/json' };
+    if (c.key) headers.Authorization = `Bearer ${c.key}`;
+    let res;
+    try { res = await fetch(`${c.base}/chat/completions`, { method: 'POST', headers, body: JSON.stringify({ model: model || '', messages: [{ role: 'user', content: prompt }], max_tokens: 1024 }) }); }
+    catch (e) { throw new Error(`Could not reach ${c.name}: ${e.message}`); }
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(data.error?.message || `${c.name} returned HTTP ${res.status}${model ? '' : ' (type a model name in the Model box)'}`);
+    return data.choices?.[0]?.message?.content || '(empty answer)';
+  }
   const p = PROVIDERS[provider];
   if (!p) throw new Error('Unknown provider.');
   let base = p.base;

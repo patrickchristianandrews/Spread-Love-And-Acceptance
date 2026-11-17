@@ -10,4 +10,7 @@ contextBridge.exposeInMainWorld('studio', {
   hordeModels: () => ipcRenderer.invoke('horde:models'),
   hordeImage: (opts) => ipcRenderer.invoke('horde:image', opts),
   deepaiImage: (opts) => ipcRenderer.invoke('deepai:image', opts),
+  customList: () => ipcRenderer.invoke('custom:list'),
+  customAdd: (opts) => ipcRenderer.invoke('custom:add', opts),
+  customRemove: (id) => ipcRenderer.invoke('custom:remove', { id }),
 });
