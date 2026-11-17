@@ -63,6 +63,52 @@ app.on('window-all-closed', () => { if (process.platform !== 'darwin') app.quit(
 ipcMain.handle('providers', () => Object.entries(PROVIDERS).map(([id, p]) => ({ id, name: p.name, keyUrl: p.keyUrl, defModel: p.defModel, connected: Boolean(keys[id]) })));
 ipcMain.handle('keys:set', (_e, { provider, key }) => { if (PROVIDERS[provider]) { keys[provider] = (key || '').trim(); if (!keys[provider]) delete keys[provider]; saveKeys(); } return Object.keys(keys); });
 
+// Free engines, run from the app's backend so there is no browser CORS / local-file block.
+const HORDE = 'https://aihorde.net/api/v2';
+const HAGENT = 'OpenStudio:0.1:desktop';
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+ipcMain.handle('horde:models', async () => {
+  try {
+    const r = await fetch(`${HORDE}/status/models?type=image`, { headers: { 'Client-Agent': HAGENT } });
+    const j = await r.json();
+    return Array.isArray(j) ? j.filter((m) => (m.count || 0) > 0).sort((a, b) => (b.count || 0) - (a.count || 0)).slice(0, 35).map((m) => ({ name: m.name, count: m.count })) : [];
+  } catch { return []; }
+});
+
+ipcMain.handle('ptext', async (_e, { prompt, token }) => {
+  const url = `https://text.pollinations.ai/${encodeURIComponent(prompt)}?model=openai&referrer=open-studio` + (token ? `&token=${encodeURIComponent(token)}` : '');
+  const r = await fetch(url, token ? { headers: { Authorization: `Bearer ${token}` } } : {});
+  if (!r.ok) throw new Error(r.status === 429 ? 'the free limit is cooling down — add a token in Keys' : `HTTP ${r.status}`);
+  return (await r.text());
+});
+
+// Submit an AI Horde image job and poll until a volunteer finishes it; returns the image URL.
+ipcMain.handle('horde:image', async (_e, { prompt, model, width, height, steps, seed }) => {
+  const body = { prompt, nsfw: true, censor_nsfw: false, trusted_workers: false, r2: true,
+    params: { width, height, steps, sampler_name: 'k_euler_a', cfg_scale: 7, n: 1, seed: String(seed) } };
+  if (model) body.models = [model];
+  const sub = await fetch(`${HORDE}/generate/async`, { method: 'POST', headers: { 'Content-Type': 'application/json', apikey: '0000000000', 'Client-Agent': HAGENT }, body: JSON.stringify(body) });
+  const sj = await sub.json().catch(() => ({}));
+  if (!sub.ok) throw new Error(sj.message || `HTTP ${sub.status}`);
+  const id = sj.id;
+  if (!id) throw new Error('AI Horde did not start the job.');
+  const deadline = Date.now() + 300000;
+  while (Date.now() < deadline) {
+    await sleep(2500);
+    const c = await fetch(`${HORDE}/generate/check/${id}`, { headers: { 'Client-Agent': HAGENT } });
+    const s = await c.json().catch(() => ({}));
+    if (s.faulted) throw new Error('a worker failed on this image');
+    if (s.done) {
+      const st = await (await fetch(`${HORDE}/generate/status/${id}`, { headers: { 'Client-Agent': HAGENT } })).json();
+      const url = st.generations && st.generations[0] && st.generations[0].img;
+      if (!url) throw new Error('no image came back');
+      return url;
+    }
+  }
+  throw new Error('AI Horde took too long; try again or choose "Any".');
+});
+
 ipcMain.handle('text', async (_e, { provider, model, prompt }) => {
   const p = PROVIDERS[provider];
   if (!p) throw new Error('Unknown provider.');

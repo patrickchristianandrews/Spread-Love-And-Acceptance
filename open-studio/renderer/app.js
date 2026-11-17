@@ -41,14 +41,11 @@
     if(h&&!hordeLoaded){hordeLoaded=true;loadHordeModels();}
   }
   function loadHordeModels(){
+    var fill=function(top){ var sel=$('#ihordemodel'),cur=sel.value; sel.innerHTML='<option value="">Any (fastest free worker)</option>'+top.map(function(m){return '<option value="'+esc(m.name)+'">'+esc(m.name)+' ('+m.count+')</option>'}).join(''); sel.value=cur; };
+    if(window.studio&&window.studio.hordeModels){ window.studio.hordeModels().then(fill).catch(function(){}); return; }
     fetch('https://aihorde.net/api/v2/status/models?type=image',{headers:{'Client-Agent':HORDE_AGENT}})
-      .then(function(r){return r.json()}).then(function(list){
-        if(!Array.isArray(list))return;
-        var top=list.filter(function(m){return (m.count||0)>0}).sort(function(a,b){return (b.count||0)-(a.count||0)}).slice(0,35);
-        var sel=$('#ihordemodel'),cur=sel.value;
-        sel.innerHTML='<option value="">Any (fastest free worker)</option>'+top.map(function(m){return '<option value="'+esc(m.name)+'">'+esc(m.name)+' ('+m.count+')</option>'}).join('');
-        sel.value=cur;
-      }).catch(function(){});
+      .then(function(r){return r.json()}).then(function(list){ if(!Array.isArray(list))return;
+        fill(list.filter(function(m){return (m.count||0)>0}).sort(function(a,b){return (b.count||0)-(a.count||0)}).slice(0,35).map(function(m){return{name:m.name,count:m.count}})); }).catch(function(){});
   }
   $('#iengine').value=store.get('engine','pollinations');
   $('#iengine').addEventListener('change',function(){store.set('engine',this.value);applyEngine();});
@@ -95,8 +92,17 @@
     var W=Math.max(64,Math.min(1024,Math.round(shape.w/64)*64)),H=Math.max(64,Math.min(1024,Math.round(shape.h/64)*64));
     var item={url:'',prompt:full,base:base,w:W,h:H,model:model||'AI Horde',ts:Date.now()};
     var fig=newTile(item),stat=fig.querySelector('.hstat'),sp=fig.querySelector('.spin'),img=fig.querySelector('img');
-    stat.textContent='submitting…';
+    stat.textContent='generating via AI Horde…';
     var steps=/flux/i.test(model)?8:25;
+    var onUrl=function(url){ item.url=url;var ax=fig.querySelectorAll('a');ax[0].href=url;ax[1].href=url;
+      img.onload=function(){sp.hidden=true;stat.textContent='';};img.onerror=function(){sp.hidden=true;stat.textContent='link expired — Save keepers';};img.src=url;savedToLib(item); };
+    // Desktop app: run it from the app's backend (no browser CORS / local-file block).
+    if(window.studio&&window.studio.hordeImage){
+      window.studio.hordeImage({prompt:full,model:model,width:W,height:H,steps:steps,seed:seed})
+        .then(onUrl).catch(function(e){fig.remove();showErr('AI Horde: '+(e.message||e));});
+      return;
+    }
+    // Hosted website: direct fetch + poll.
     var body={prompt:full,nsfw:true,censor_nsfw:false,trusted_workers:false,r2:true,params:{width:W,height:H,steps:steps,sampler_name:'k_euler_a',cfg_scale:7,n:1,seed:String(seed)}};
     if(model)body.models=[model];
     var deadline=Date.now()+300000;
@@ -151,9 +157,13 @@
     var fail=function(msg){out.textContent='The answer appears here.';$('#terr').textContent=msg;$('#terr').hidden=false;};
     var fin=function(){$('#tspin').hidden=true;$('#tgen').disabled=false;};
     if(provider==='pollinations'){
-      var url=withToken('https://text.pollinations.ai/'+encodeURIComponent(prompt)+'?model=openai&referrer=open-studio');
-      fetch(url).then(function(r){if(!r.ok)throw new Error(r.status===429?'the free limit is cooling down — add a token in Keys':'HTTP '+r.status);return r.text()})
-        .then(done).catch(function(e){fail('Could not generate ('+e.message+').')}).then(fin);
+      if(window.studio&&window.studio.ptext){
+        window.studio.ptext({prompt:prompt,token:ptoken()}).then(done).catch(function(e){fail('Could not generate ('+(e.message||e)+').')}).then(fin);
+      }else{
+        var url=withToken('https://text.pollinations.ai/'+encodeURIComponent(prompt)+'?model=openai&referrer=open-studio');
+        fetch(url).then(function(r){if(!r.ok)throw new Error(r.status===429?'the free limit is cooling down — add a token in Keys':'HTTP '+r.status);return r.text()})
+          .then(done).catch(function(e){fail('Could not generate ('+e.message+').')}).then(fin);
+      }
     }else if(window.studio&&window.studio.text){
       window.studio.text({provider:provider,model:model,prompt:prompt}).then(done).catch(function(e){fail(e.message||String(e))}).then(fin);
     }else{fail('Keyed services need the desktop app.');fin();}
