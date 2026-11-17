@@ -50,6 +50,36 @@
       }
     }
   }
+  // the jaw of each drawing, measured on the sheets (sprite pixels, from the head centre): the mouth line runs from the
+  // corner (the hinge, first point) to the front of the lips; the rest goes round the chin and the tongue
+  var JAW = {
+    0: { a1: [[-1, 8], [16, 12], [20, 16], [18, 22], [8, 22], [1, 16]], a2: [[9, 6], [27, 9], [26, 14], [22, 19], [15, 17], [11, 11]], w: [[-1, 8], [17, 13], [18, 18], [15, 22], [6, 20], [1, 14]] },
+    1: { a1: [[-1, 6], [18, 8], [18, 14], [14, 19], [5, 18], [1, 12]], a2: [[11, 2], [29, 4], [27, 10], [22, 16], [16, 14], [13, 8]], w: [[-3, 9], [17, 9], [17, 15], [13, 19], [4, 19], [-1, 14]] }
+  };
+  // talking (opts.talk, 0..1 from the voice's loudness): the painted mouth opens. Everything between the mouth line and
+  // the chin is stretched down smoothly (most at the chin, fading out into the neck and to each side), so the drawing's
+  // own lips and tongue open up, with no edges and nothing drawn on top
+  function jaw(ctx, fr, dog, kind, tk) {
+    var J = JAW[dog][kind], f = fr.f, fw = S.meta.fw, d = 4.2 * tk;
+    if (d < 0.15) return;
+    var xs = J.map(function (p) { return p[0]; }), ys = J.map(function (p) { return p[1]; });
+    var x0 = Math.min.apply(null, xs) - 4, x1 = Math.max.apply(null, xs) + 3, chin = Math.max.apply(null, ys), y1 = chin + 10;
+    var a = J[0], b = J[1];
+    function top(x) { var u = Math.max(0, Math.min(1, (x - a[0]) / ((b[0] - a[0]) || 1))); return a[1] + (b[1] - a[1]) * u; }
+    function ss(v) { v = Math.max(0, Math.min(1, v)); return v * v * (3 - 2 * v); }
+    function dy(x, y) {
+      var t = top(x), wy = y <= t ? 0 : y <= chin ? ss((y - t) / Math.max(2, chin - t)) : 1 - ss((y - chin) / (y1 - chin));
+      var wx = ss((x - x0) / 5) * ss((x1 - x) / 5);
+      return d * wy * wx;
+    }
+    var ytop = Math.floor(Math.min(a[1], b[1])) - 1, sx0 = f.c * fw + f.hx, sy0 = f.r * fr.fh + f.hy;
+    for (var x = Math.floor(x0); x < x1; x += 1) {
+      for (var y = ytop; y < y1; y++) {
+        var o0 = dy(x + 0.5, y), o1 = dy(x + 0.5, y + 1);
+        ctx.drawImage(fr.img, sx0 + x, sy0 + y, 1, 1, x, y + o0, 1.4, 1 + Math.max(0, o1 - o0) + 0.6);
+      }
+    }
+  }
   function frame(dog, pose, ph) {
     var M = S.meta;
     if (pose === 'run' && S.moving[dog]) { var q = Math.floor((((ph % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2)) / (Math.PI / 2)) % 4; return { img: S.walk, f: M.walk[dog * 4 + q], fh: M.wh }; }
@@ -76,6 +106,7 @@
     if (rot) { ctx.translate(0, -18); ctx.rotate(rot); ctx.translate(0, 18); }
     ctx.scale(K, K * sy);
     ctx.drawImage(fr.img, sx, sy0, fw, fr.fh, -p.cx, -p.fy, fw, fr.fh);
+    if (o && o.talk > 0) { ctx.save(); ctx.translate(f.hx - p.cx, f.hy - p.fy); jaw(ctx, fr, dog, fr.img === S.walk ? 'w' : (pose === 'lie' || pose === 'bow' ? 'a2' : 'a1'), Math.min(1, (o.talk - 0.02) / 0.98)); ctx.restore(); }
     // the outfit, at the head of this drawing
     if (!(o && o.noOutfit)) {
       var who = dog ? 'sugarfoot' : 'tidbit', wear = (o && o.outfit) || outfit(who, o);

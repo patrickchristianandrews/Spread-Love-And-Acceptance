@@ -57,7 +57,7 @@
     g.save(); g.translate(x, y - lift); if (o.rot) g.rotate(o.rot); g.scale(s * face, s * (o.sy || 1));
     if (o.cape) P.cape(g, L, t * 1000, o.cape, !!o.capeFly);
     var blink = o.blink != null ? o.blink : ((t + (who === 'tidbit' ? 0 : 1.7)) % 3.9) < 0.12;
-    P.draw(g, L, pose, o.ph || 0, o.wag != null ? o.wag : Math.sin(t * 9 + (who === 'tidbit' ? 0 : 2)) * 0.5, blink, t * 1000, o.tilt || 0, { ear: o.ear || 0, hat: !!o.over }); // hat: the scene puts something on the head
+    P.draw(g, L, pose, o.ph || 0, o.wag != null ? o.wag : Math.sin(t * 9 + (who === 'tidbit' ? 0 : 2)) * 0.5, blink, t * 1000, o.tilt || 0, { ear: o.ear || 0, hat: !!o.over, talk: talkOf(who, CURT, CURCALM) }); // hat: the scene puts something on the head
     if (o.reach && !P.sprites) { // a front paw stretched out to hold a pal's paw (painted pups come nose to nose instead)
       var ex = 12 + o.reach, ey = -14 - (o.reachUp || 0);
       g.lineCap = 'round'; g.strokeStyle = '#252120'; g.lineWidth = 6; g.beginPath(); g.moveTo(10, -24); g.quadraticCurveTo(16, -16, 12 + o.reach * 0.5, ey + 1); g.stroke();
@@ -815,6 +815,7 @@
   // ---------------------------------------------------------------- painting a frame
   // render(g, W, H, T, calm, bs): bs makes speech bubbles bigger on small screens
   function render(g, W, H, T, calm, bs) {
+    CURT = T; CURCALM = !!calm;
     FR.says = []; FR.secrets = []; FR.narr = []; FR.line = '';
     var k = Math.min(W / VW, H / VH), ox = (W - VW * k) / 2, oy = (H - VH * k) / 2;
     g.setTransform(1, 0, 0, 1, 0, 0); g.fillStyle = '#0B0816'; g.fillRect(0, 0, W, H);
@@ -955,6 +956,27 @@
   var SHOT_AMB = { cold: [['crickets', 0.5]], balloon: [['wind', 0.55]], lighthouse: [['waves', 0.6], ['wind', 0.25]], mountain: [['wind', 0.6]], library: [['cafe', 0.2]], market: [['carnival', 0.4], ['city', 0.2]], underwater: [['underwater', 0.6]], rooftop: [['city', 0.35], ['wind', 0.25]], friend: [['birds', 0.4]], sneeze: [['birds', 0.35]], puddle: [['rain', 0.5]], boulder: [['wind', 0.35], ['birds', 0.2]], jaws: [['waves', 0.28], ['crickets', 0.25]], bridge: [['stream', 0.5], ['birds', 0.3]], laundry: [['birds', 0.5]], hill: [['birds', 0.4]], post: [['crickets', 0.4]] };
   // every line that appears on screen, and when: found by playing the picture quietly on a tiny canvas, so the sound can never drift from it
   var SCAN = {};
+  // the pups' mouths follow their own recorded voices: each clip's loudness, 40 times a second, opens the mouth of the pup
+  // who is speaking (the drawn pups' grin opens; painted pups move their jaw). Envelopes are made when the clips decode.
+  var ENV = {}, CURT = 0, CURCALM = false, SCANNING = false, TALKIX = {};
+  function envOf(b) {
+    if (!b || !b.getChannelData) return null;
+    var d = b.getChannelData(0), st = Math.max(1, Math.floor(b.sampleRate / 40)), n = Math.floor(d.length / st), e = new Float32Array(n), mx = 1e-6, i, j, sm;
+    for (i = 0; i < n; i++) { sm = 0; for (j = i * st; j < (i + 1) * st; j += 4) sm += d[j] * d[j]; e[i] = Math.sqrt(sm / (st / 4)); if (e[i] > mx) mx = e[i]; }
+    for (i = 0; i < n; i++) { var v = e[i] / mx; e[i] = v < 0.12 ? 0 : Math.pow(v, 0.7); }
+    return e;
+  }
+  function talkOf(who, T, calm) {
+    var k = calm ? 'c' : 'n'; if (SCANNING || !SCAN[k]) return 0;
+    var L = TALKIX[k] || (TALKIX[k] = SCAN[k].filter(function (l) { return l.who === 'tidbit' || l.who === 'sugarfoot'; }).map(function (l) { return { who: l.who, T: l.T + 0.04, key: ckey(l.who, l.text) }; }));
+    for (var i = 0; i < L.length; i++) {
+      var l = L[i]; if (l.who !== who || T < l.T) continue;
+      var e = ENV[l.key]; if (!e) continue;
+      var x = (T - l.T) * 40, q = Math.floor(x); if (q >= e.length - 1) continue;
+      return Math.max(0.02, e[q] + (e[q + 1] - e[q]) * (x - q)); // above 0 while the line lasts, so the mouth stays in talking shape between words
+    }
+    return 0;
+  }
   function ckey(who, text) { var h = 0x811c9dc5, t = who + '|' + text; for (var i = 0; i < t.length; i++) { h ^= t.charCodeAt(i); h = Math.imul(h, 0x01000193) >>> 0; } return ('0000000' + h.toString(16)).slice(-8); }
   // the recorded voices (one mp3 per line, listed in index.json): when a line has one, the little talking-voice stand-in stays quiet
   var CLIPV = '1611c'; // bump whenever the teaser recordings are redone, so no browser plays an old copy
@@ -964,7 +986,7 @@
   function scanLines(calm) {
     var key = calm ? 'c' : 'n'; if (SCAN[key]) return SCAN[key];
     var cv = document.createElement('canvas'); cv.width = 128; cv.height = 72; var g = cv.getContext('2d'); if (!g) return [];
-    var out = [], act = {}, keep = { says: FR.says, narr: FR.narr, line: FR.line, secrets: FR.secrets, quiet: FR.quiet };
+    var out = [], act = {}, keep = { says: FR.says, narr: FR.narr, line: FR.line, secrets: FR.secrets, quiet: FR.quiet }; SCANNING = true;
     for (var T = 0; T <= DUR; T += 0.125) {
       try { render(g, 128, 72, T, !!calm, 1); } catch (e) {}
       var now = {};
@@ -975,7 +997,7 @@
     }
     Object.keys(act).forEach(function (k) { act[k].dur = DUR - act[k].T; out.push(act[k]); });
     FR.says = keep.says; FR.narr = keep.narr; FR.line = keep.line; FR.secrets = keep.secrets; FR.quiet = keep.quiet;
-    out.sort(function (x, y) { return x.T - y.T; }); SCAN[key] = out; return out;
+    out.sort(function (x, y) { return x.T - y.T; }); SCAN[key] = out; SCANNING = false; return out;
   }
   // the score: [time, instrument, ...args]; `calm` softens the big hits
   function score(calm) {
@@ -1261,7 +1283,7 @@
     function duck(on) { try { if (A.master && A.ctx) A.master.gain.setTargetAtTime(on ? 0.5 : 0.9, A.ctx.currentTime, 0.05); } catch (e) {} }
     function clipBuf(key) {
       var c = A.ctx; if (!c) return null;
-      if (!CLIP.bufs[key]) CLIP.bufs[key] = fetch('/assets/audio/buddies/s2teaser/' + key + '.mp3?v=' + CLIPV).then(function (r) { return r.ok ? r.arrayBuffer() : null; }).then(function (ab) { return ab ? new Promise(function (ok) { try { var pr = c.decodeAudioData(ab, ok, function () { ok(null); }); if (pr && pr.catch) pr.catch(function () { ok(null); }); } catch (e) { ok(null); } }) : null; }).catch(function () { return null; });
+      if (!CLIP.bufs[key]) CLIP.bufs[key] = fetch('/assets/audio/buddies/s2teaser/' + key + '.mp3?v=' + CLIPV).then(function (r) { return r.ok ? r.arrayBuffer() : null; }).then(function (ab) { return ab ? new Promise(function (ok) { try { var pr = c.decodeAudioData(ab, ok, function () { ok(null); }); if (pr && pr.catch) pr.catch(function () { ok(null); }); } catch (e) { ok(null); } }) : null; }).then(function (b) { if (b && !ENV[key]) ENV[key] = envOf(b); return b; }).catch(function () { return null; });
       return CLIP.bufs[key];
     }
     function preloadClips() { clipsLoad().then(function (m) { if (A.ctx) Object.keys(m).forEach(clipBuf); }); }   // every recorded line is ready before its moment, so the voices land on time
@@ -1472,7 +1494,7 @@
     var sr = 44100, c = new OAC(2, Math.ceil(sr * DUR), sr);
     var CB = {};
     return Promise.all([loadSamples(c), clipsLoad().then(function (m) {   // the recorded voices go into the video's soundtrack too
-      return Promise.all(Object.keys(m).map(function (k) { return fetch('/assets/audio/buddies/s2teaser/' + k + '.mp3?v=' + CLIPV).then(function (r) { return r.ok ? r.arrayBuffer() : null; }).then(function (ab) { return ab ? c.decodeAudioData(ab) : null; }).then(function (b) { CB[k] = b; }).catch(function () {}); }));
+      return Promise.all(Object.keys(m).map(function (k) { return fetch('/assets/audio/buddies/s2teaser/' + k + '.mp3?v=' + CLIPV).then(function (r) { return r.ok ? r.arrayBuffer() : null; }).then(function (ab) { return ab ? c.decodeAudioData(ab) : null; }).then(function (b) { CB[k] = b; if (b && !ENV[k]) ENV[k] = envOf(b); }).catch(function () {}); }));
     })]).then(function () {
       var bus = makeChain(c, c.destination), I = kit(c, bus, function () {});
       score(!!calm).forEach(function (e) { fire(I, e, e[0]); });
