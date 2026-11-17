@@ -1,10 +1,8 @@
 ### Download
 
-There are three ways to get Quicksilver 2.21.0. All install the same app; they differ in how the Liquid Edition's models (about 38 GB) arrive.
+**Quicksilver-Web-Setup-2.21.0.exe** (below, about 200 MB, with a matching `.sha256`) is the installer. It's small and quick to download. The first time Quicksilver opens, its setup screen downloads the whole Liquid Edition before the app starts — the three abliterated chat models (Qwen3.5 4B Brain, Gemma 3 12B Closer, Mistral Nemo 12B Muse), Lustify for pictures, Wan 2.2 for video, and the search models: about 38 GB in all — and the app opens once it's done. Keep about 45 GB free on the drive you install to. If the download stops, close and reopen Quicksilver and it picks up where it left off.
 
-- **Quicksilver-Setup-2.21.0.exe** (below, about 3.5 GB, with a matching `.sha256`): the installer with the Qwen3.5 4B Brain inside. The first time Quicksilver opens, its setup screen downloads the rest of the Liquid Edition (the Gemma Closer, the Mistral Nemo Muse, pictures, video and search) before the app starts.
-- **Quicksilver-Web-Setup-2.21.0.exe** (below, about 200 MB): the web installer. No models inside at all; the setup screen downloads the whole Liquid Edition on first launch.
-- **Full offline package** (about 38 GB): the installer plus a "Quicksilver models" folder. Keep the two together when you run the installer and everything is copied in: nothing to download, works with no internet from the first minute. It is too large for a GitHub release file, so it is the **Quicksilver-Windows-installer** build artifact on this release's build run (linked at the top of these notes; a GitHub sign-in is needed, and GitHub keeps build artifacts for 90 days).
+(A full offline package — the installer with all ~38 GB of models already beside it, so it needs no internet from the first minute — is built for tagged releases and lives as the **Quicksilver-Windows-installer** build artifact on those build runs, for anyone who wants to install with no download.)
 
 Updating from 2.19 or 2.20: nothing extra to download; your chats, settings and models are kept.
 
