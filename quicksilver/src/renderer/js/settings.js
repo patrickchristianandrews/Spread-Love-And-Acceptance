@@ -80,7 +80,7 @@ function apisSetHTML() {
   const p = P();
   const chat = list.filter((x) => (x.models || []).length && !x.media);
   const media = list.filter((x) => x.media || (x.imageModels || []).length);
-  const row = (x) => `<div class="card api-row"><div class="row"><b class="grow">${esc(x.name)}</b>${x.free === 'free' ? '<span class="badge b-mint">free</span>' : x.free === 'some' ? '<span class="badge b-lemon">free plan</span>' : ''}${x.preset === 'venice' ? '<span class="badge b-lav">uncensored</span>' : ''}
+  const row = (x) => `<div class="card api-row"><div class="row"><b class="grow">${esc(x.name)}</b>${x.free === 'free' ? '<span class="badge b-mint">free</span>' : x.free === 'some' ? '<span class="badge b-lemon">free plan</span>' : ''}${['venice', 'abliteration'].includes(x.preset) ? '<span class="badge b-lav">uncensored</span>' : ''}
       <button class="btn small" data-set-api-edit="${esc(x.id)}">Edit</button><button class="btn small ghost" data-set-api-del="${esc(x.id)}">Remove</button></div>
       <div class="small muted">${(x.models || []).length ? `${x.models.length} model${x.models.length === 1 ? '' : 's'}${x.models[0] ? `: ${esc(x.models.slice(0, 3).join(', '))}${x.models.length > 3 ? '…' : ''}` : ''}` : 'pictures, video or voice'}${x.hasKey || x.noKey ? '' : ' · <span style="color:var(--danger)">no key saved</span>'}</div></div>`;
   return `<div class="stack-v">

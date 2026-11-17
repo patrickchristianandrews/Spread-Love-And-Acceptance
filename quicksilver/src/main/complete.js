@@ -865,7 +865,7 @@ const COUNCIL_LEAD = 'You chair a council of three AIs who each looked at the us
 const LIQUID_STACKS = new Set(['quicksilver', 'quicksilver-max', 'quicksilver-pro']);
 const LIQUID_TARGETS = new Set([...LIQUID_STACKS].map((id) => `stack:${id}`));
 const UNCENSORED = /abliterat|uncensor|unfiltered|dolphin|hermes|lexi|rocinante/i;
-const UNCENSORED_CLOUD = ['venice'];
+const UNCENSORED_CLOUD = ['venice', 'abliteration'];
 function isUncensored(target) {
   if (!target) return false;
   if (LIQUID_TARGETS.has(target)) return true;

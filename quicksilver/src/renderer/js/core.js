@@ -212,7 +212,7 @@ function liquidOk(t) {
   }
   if (t.startsWith('api:')) {
     const [, pid, ...rest] = t.split(':');
-    return S.providers?.find((p) => p.id === pid)?.preset === 'venice' || UNCENSORED_RX.test(rest.join(':'));
+    return ['venice', 'abliteration'].includes(S.providers?.find((p) => p.id === pid)?.preset) || UNCENSORED_RX.test(rest.join(':'));
   }
   return false;
 }
