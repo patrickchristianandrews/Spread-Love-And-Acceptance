@@ -750,8 +750,6 @@ def _ink_fig(ink, who, x, y, s, left, pose, expr='happy'):
 
 def _pt_fig(ink, who, x, y, s, left, pose, expr='happy', peek=None):
     """one painted pup with its paws at (x, y) (peek: only the top part, cut at y), facing left if left"""
-    if not ink.color:   # the coloring pages: hand-drawn line art, not a traced painting
-        return _ink_fig(ink, who, x, y, s, left, 'peek' if peek is not None else pose, expr)
     _cute.PAIR['mark'] = True
     info = _pi.img(who, pose, 'color' if ink.color else 'line', _eyes(expr), key=('c', _scene(ink)))
     k = PK * s * 12.0 / info['unit']   # PK was set for renders at 12 px a pup unit; the renders are bigger now, the pup is not
@@ -787,7 +785,8 @@ def _pt_fig(ink, who, x, y, s, left, pose, expr='happy', peek=None):
 
 
 def pt_front(ink, who, x, y, s=1.0, expr='happy', flip=False, tilt=0.0, lvl=0, mouth=None, look=(0, 0), tail=True, arms='down', wag=0.0, hs=None, hat=None, scarf=False, coat=False):
-    return _pt_fig(ink, who, x, y, s, _left(x, flip), 'sit', expr)
+    # the painted pups look three-quarter to one side: always toward the middle of the page (toward a friend)
+    return _pt_fig(ink, who, x, y, s, _left(x), 'sit', expr)
 
 
 def pt_side(ink, who, x, y, s=1.0, pose='walk', expr='happy', flip=False, lvl=0, tilt=None, mouth=None, look=(0, 0), ph=0.0, hs=None, ear_rot=None, tail_up=1.0, turn=0.7, hat=None, scarf=False, lower=0.0):
@@ -799,7 +798,7 @@ def pt_peek(ink, who, x, y, s=1.0, expr='happy', lvl=0, tilt=0.0, paws=True, loo
 
 
 def pt_dance(ink, who, x, y, s=1.0, expr='joy', flip=False, tilt=6.0, lvl=0, kick=1, hat=None, scarf=False, mouth=None):
-    return _pt_fig(ink, who, x, y, s, _left(x, flip), 'sit', expr)
+    return _pt_fig(ink, who, x, y, s, _left(x), 'sit', expr)
 
 
 def pt_hug(ink, x, y, s=1.0, expr_a='happy', expr_b='sleep', lvl=0, hat_a=None, hat_b=None):
@@ -814,11 +813,6 @@ def pt_head(g, who, expr='happy', tilt=0.0, lvl=0, look=(0, 0), mouth=None, turn
     left, so side by side they look at each other"""
     _cute.PAIR['mark'] = True
     ink = g.ink
-    if not ink.color:   # the coloring pages: the hand-drawn head, about 150 wide, centred
-        kk = 1.0
-        svg, _ = _pk.draw(who, 'head', _eyes(expr), _pi.outfit(who, ('h', _scene(ink))), getattr(ink, 'ow', 6.0) * 0.95 / kk)
-        g.raw_at('<g transform="translate(0 8) scale(%.4f %.4f)">%s</g>' % (-kk if who == 'tidbit' else kk, kk, svg))
-        return
     info = _pi.img(who, 'sit', 'color' if ink.color else 'line', _eyes(expr), key=('h', _scene(ink)))
     R = 0.3 * info['w']                     # the head, in pixels, around its centre
     k = 75.0 / R
