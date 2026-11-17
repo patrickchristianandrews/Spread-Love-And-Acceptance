@@ -65,7 +65,7 @@ function redPng(size = 64) {
     // The web installer has no models at all: the setup screen covers the app and downloads the
     // whole Liquid Edition, the small 2B model and search included.
     await win.waitForSelector('#liquid-gate', { timeout: 60000 }).catch(() => { throw new Error('the web installer should open on the Liquid Edition setup screen'); });
-    const want = ['qwen3.5-2b', 'qwen3.5-4b', 'qwen3.5-9b-uncensored', 'gemma-3-12b-uncensored', 'rocinante-12b', 'nomic-embed-v1.5', 'bge-reranker-v2-m3', 'lustify', 'wan2.2-5b', 'wan2.2-5b-turbo'];
+    const want = ['qwen3.5-4b', 'gemma-3-12b-uncensored', 'nomic-embed-v1.5', 'bge-reranker-v2-m3', 'lustify', 'wan2.2-5b', 'wan2.2-5b-turbo'];
     await win.waitForFunction((ids) => ids.every((id) => S.downloads[id] || S.installed.some((m) => m.catalogId === id)), want, { timeout: 120000 })
       .catch(async () => { throw new Error(`every Liquid Edition model should start downloading (downloading: ${(await state()).downloads.map((d) => d.id).join(', ') || 'none'})`); });
     await shot('01-web-setup');
@@ -100,7 +100,7 @@ function redPng(size = 64) {
     const where = await win.evaluate(() => Object.fromEntries(S.installed.filter((m) => m.source === 'bundled').map((m) => [m.id, Object.values(m.files || {})])));
     const inApp = (f) => /resources[\\/]starter[\\/]/i.test(f || '');
     console.log(`  kept: Brain at ${where['starter-brain']?.[0]}; Lustify at ${where['starter-lustify']?.[0]}; Wan 2.2 at ${where['starter-wan']?.[0]}`);
-    for (const id of ['starter-brain', 'starter-closer', 'starter-gemma', 'starter-rocinante', 'starter-lustify', 'starter-wan', 'starter-wan-turbo', 'starter-rerank']) {
+    for (const id of ['starter-brain', 'starter-gemma', 'starter-lustify', 'starter-wan', 'starter-wan-turbo', 'starter-rerank']) {
       assert.ok(where[id]?.length, `${id} is installed`);
       for (const f of where[id]) assert.ok(!inApp(f) && fs.existsSync(f), `${id}: ${f} was moved out of the app's folder and is still there`);
     }
@@ -111,7 +111,7 @@ function redPng(size = 64) {
     // setup screen covers the app and every missing model starts downloading at once.
     await win.waitForSelector('#liquid-gate', { timeout: 60000 })
       .catch(() => { throw new Error('the Liquid Edition setup screen should cover the app until every model is installed'); });
-    const want = ['qwen3.5-4b', 'qwen3.5-9b-uncensored', 'gemma-3-12b-uncensored', 'rocinante-12b', 'lustify', 'wan2.2-5b', 'wan2.2-5b-turbo'];
+    const want = ['qwen3.5-4b', 'gemma-3-12b-uncensored', 'lustify', 'wan2.2-5b', 'wan2.2-5b-turbo'];
     await win.waitForFunction((ids) => ids.every((id) => S.downloads[id] || S.installed.some((m) => m.catalogId === id)), want, { timeout: 120000 })
       .catch(async () => { throw new Error(`every Liquid Edition model should start downloading (downloading: ${(await state()).downloads.map((d) => d.id).join(', ') || 'none'})`); });
     await shot('01-setup');

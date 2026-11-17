@@ -26,10 +26,13 @@ for (const id of adv.best.ids) assert.ok(!catalog.MEDIA_MODELS.find((m) => m.id 
 const mine = catalog.advise('create', hw, { installed: [{ id: 'my-lustify', name: 'Lustify', kind: 'image', catalogId: 'lustify' }] });
 assert.equal(mine.mine?.members.image, 'my-lustify', 'your own Lustify makes the pictures in your kit');
 // The Liquid Edition's core is locked; the suggested add-ons are optional and outside the lock.
-for (const id of ['qwen3.5-4b', 'qwen3.5-9b-uncensored', 'lustify', 'wan2.2-5b']) assert.ok(catalog.liquidMember(id), `${id} in the core`);
-// The core is a real mix of families, not all Qwen: Gemma 3 (Google) and Rocinante (Mistral) ship in it.
-for (const id of ['gemma-3-12b-uncensored', 'rocinante-12b']) assert.ok(catalog.liquidMember(id), `${id} is a core crew member (different family)`);
-assert.equal(catalog.LIQUID_ADDONS.length, 6, 'six suggested add-ons beyond the core');
+for (const id of ['qwen3.5-4b', 'lustify', 'wan2.2-5b']) assert.ok(catalog.liquidMember(id), `${id} in the core`);
+// The core has exactly one Qwen (the Brain) and a different-family Closer (Gemma 3, Google). The old
+// extra Qwen models (2B, 9B) are gone; Rocinante and the rest are optional add-ons, not core.
+assert.ok(catalog.liquidMember('gemma-3-12b-uncensored'), 'the Gemma Closer is a core crew member (different family)');
+assert.ok(!catalog.liquidMember('qwen3.5-2b') && !catalog.liquidMember('qwen3.5-9b-uncensored') && !catalog.liquidMember('rocinante-12b'), 'the extra Qwen models were replaced, and Rocinante is an add-on');
+assert.equal(catalog.LIQUID_CORE.filter((id) => /^qwen/.test(id)).length, 1, 'exactly one Qwen in the core (the Brain)');
+assert.equal(catalog.LIQUID_ADDONS.length, 7, 'seven suggested add-ons beyond the core');
 for (const a of catalog.LIQUID_ADDONS) {
   assert.ok(!catalog.liquidMember(a.id), `${a.id} is optional (not locked)`);
   assert.ok([...catalog.TEXT_MODELS, ...catalog.MEDIA_MODELS].some((m) => m.id === a.id), `${a.id} is in the catalog`);

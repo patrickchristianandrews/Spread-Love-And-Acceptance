@@ -1164,9 +1164,13 @@ async function buildQuicksilverStack() {
   // Nor is a copy found in another app, however well it matches, unless you ticked it as in use.
   const unc = (m) => m && isUncensored(`local:${m.id}`) && (m.source !== 'imported' || models.inUse(m));
   const brain = all.find((m) => core.brain && m.catalogId === core.brain && m.source !== 'bundled' && unc(m)) || all.find((m) => m.id === 'starter-brain') || all.find((m) => /^qwen3(\.5)?-4b$/.test(m.catalogId || '') && unc(m));
-  // The Eyes must see: a copy with its vision add-on comes first.
+  // The Eyes must see: the Brain sees photos itself, so it is the Eyes; otherwise a vision model
+  // (the Gemma Closer sees too). (The old small Qwen Eyes was dropped so the crew is one Qwen.)
   const eyesOk = (m) => core.eyes && m.catalogId === core.eyes && m.source !== 'bundled' && unc(m);
-  const eyes = all.find((m) => eyesOk(m) && m.files?.mmproj) || all.find((m) => m.id === 'starter') || all.find(eyesOk) || all.find((m) => /^qwen3(\.5-2b|-vl-)/.test(m.catalogId || '') && unc(m));
+  const eyes = all.find((m) => eyesOk(m) && m.files?.mmproj) || all.find(eyesOk) || (brain?.files?.mmproj ? brain : null) || all.find((m) => m.id === 'starter-gemma') || all.find((m) => /^(gemma-3|mistral-small)/.test(m.catalogId || '') && m.files?.mmproj && unc(m));
+  // The Muse: a storyteller for fresh angles, only if you added one (e.g. Rocinante). Not in the
+  // core crew, so by default there is none and the Brain/Closer handle creative work themselves.
+  const museModel = all.find((m) => core.muse && m.catalogId === core.muse && (m.source !== 'imported' || models.inUse(m)) && unc(m));
   // A Brain that thinks for itself (Qwen3.5) is also the Thinker; one that sees is also the Eyes.
   const brainThinks = Boolean(brain && catalog.TEXT_MODELS.find((c) => c.id === brain.catalogId)?.reasoning);
   const brainSees = Boolean(brain?.files?.mmproj);
@@ -1188,8 +1192,8 @@ async function buildQuicksilverStack() {
     // uncensored model you ticked under Models. A model found in another app never joins by itself.
     // (The Liquid Edition's own Closer counts whichever way it arrived: in the models folder, or
     // downloaded by the setup screen after the web installer.)
-    const mine = (id) => { const m = all.find((x) => x.id === id); return id === 'starter-closer' || (Boolean(m) && m.source !== 'bundled' && ((m.source !== 'imported' && catalog.liquidMember(m.catalogId)) || models.inUse(m))); };
-    const openPool = pool.filter((p) => p.id !== brain.id && p.id !== eyes?.id && p.id !== thinker?.id && mine(p.id) && isOpen(p));
+    const mine = (id) => { const m = all.find((x) => x.id === id); return ['starter-gemma', 'starter-rocinante'].includes(id) || (Boolean(m) && m.source !== 'bundled' && ((m.source !== 'imported' && catalog.liquidMember(m.catalogId)) || models.inUse(m))); };
+    const openPool = pool.filter((p) => p.id !== brain.id && p.id !== eyes?.id && p.id !== thinker?.id && p.id !== museModel?.id && mine(p.id) && isOpen(p));
     const team = (openPool.length && catalog.compose(openPool, 'general', hw, calib, { vision: false, speed: 10, leadSpeed: 20, budget: 180 })) || { members: { drafters: [] } };
     const lead = team.members.judge || team.members.drafters[0];
     // The Closer leads only where it and the Brain both stay loaded (the same memory budget the
@@ -1199,7 +1203,11 @@ async function buildQuicksilverStack() {
     const roomGB = Math.max(hw.vramGB || 0, 0) + (hw.ramGB || 0) * 0.7 - 2;
     const together = (id) => gbOf(brain.id) + gbOf(id) + (eyes && eyes.id !== brain.id ? gbOf(eyes.id) : 0) <= roomGB;
     const leadFits = Boolean(lead) && together(lead);
-    const stronger = lead && leadFits && score(lead) > score(brain.id) ? lead : null;
+    // The Liquid Edition's own Closer (a bigger model from another family, e.g. Gemma 3 12B) leads
+    // hard questions when it fits beside the Brain and is at least as strong — a 12B leads a 4B even
+    // when the coarse rating ties. Any other model only leads when it clearly out-scores the Brain.
+    const isCoreCloser = (id) => { const m = all.find((x) => x.id === id); return Boolean(m && core.closer && m.catalogId === core.closer); };
+    const stronger = lead && leadFits && (score(lead) > score(brain.id) || (isCoreCloser(lead) && score(lead) >= score(brain.id))) ? lead : null;
     // A second opinion on hard questions: the best other uncensored model that isn't the lead.
     // It joins only where it runs smoothly, so hard answers don't get much slower; on a slower PC
     // it waits on the bench (it still sits on the Council, and you can chat with it directly).
@@ -1207,12 +1215,13 @@ async function buildQuicksilverStack() {
     const second = candidate && together(candidate) && smoothHelper(pool.find((p) => p.id === candidate), hw, calib) ? candidate : null;
     bench = lead && !leadFits ? local(lead) : candidate && !second ? local(candidate) : undefined;
     members = {
-      drafters: [brain.id, ...(stronger ? [] : second ? [second] : [])].map(local),
-      // With nobody to combine, the brain answers on its own (step by step on hard questions).
-      judge: stronger || second ? local(stronger || brain.id) : undefined,
+      // The Brain always drafts; a second opinion that fits joins it (even when the Closer leads, so
+      // a model you added still takes part). With a Closer the Closer leads; otherwise the Brain does.
+      drafters: [brain.id, ...(second && second !== stronger ? [second] : [])].map(local),
+      judge: stronger ? local(stronger) : second ? local(brain.id) : undefined,
       // The Brain reads photos itself when it can (no hand-over, no second model to load).
       vision: brainSees ? undefined : local(eyes?.id),
-      muse: local(eyes?.id),
+      muse: local(museModel && museModel.id !== brain.id ? museModel.id : undefined),
       thinker: local(thinker?.id),
       mode: 'auto',
     };

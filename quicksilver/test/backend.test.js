@@ -867,25 +867,25 @@ async function collect(gen) {
   // The models that come with Quicksilver, and the built-in Quicksilver model (a stack of them).
   {
     const sd = fs.mkdtempSync(path.join(os.tmpdir(), 'qs-starter-'));
-    fs.copyFileSync(TINY, path.join(sd, 'model.gguf')); fs.copyFileSync(TINY, path.join(sd, 'mmproj.gguf'));
+    fs.copyFileSync(TINY, path.join(sd, 'brain.gguf')); fs.copyFileSync(TINY, path.join(sd, 'brain-mmproj.gguf'));
+    // The crew is one Qwen (the Brain, which sees + thinks) and a Gemma Closer from another family
+    // (Google). Both ship in the pack; the Brain is inside the installer.
     fs.writeFileSync(path.join(sd, 'STARTER.json'), JSON.stringify({ models: [
-      { id: 'starter', catalogId: 'qwen3-vl-2b', name: 'Qwen3-VL 2B', files: { model: 'model.gguf', mmproj: 'mmproj.gguf' } },
-      { id: 'starter-brain', catalogId: 'qwen3-4b', name: 'Qwen3 4B Instruct 2507 (uncensored)', uncensored: true, repo: 'mradermacher/Huihui-Qwen3-4B-Instruct-2507-abliterated-GGUF', quant: 'Q4_K_M', files: { model: 'brain.gguf' }, pack: true },
-      { id: 'starter-thinker', catalogId: 'qwen3-4b-thinking', name: 'Qwen3 4B Thinking 2507 (uncensored)', uncensored: true, repo: 'mradermacher/Huihui-Qwen3-4B-Thinking-2507-abliterated-GGUF', quant: 'Q4_K_M', files: { model: 'thinker.gguf' }, pack: true },
-      { id: 'starter-dolphin', catalogId: 'dolphin-3-llama-3.1-8b', name: 'Dolphin 3.0 8B (uncensored)', uncensored: true, files: { model: 'dolphin.gguf' }, pack: true, optional: true },
+      { id: 'starter-brain', catalogId: 'qwen3.5-4b', name: 'Qwen3.5 4B (uncensored)', uncensored: true, repo: 'mradermacher/Huihui-Qwen3.5-4B-abliterated-GGUF', quant: 'Q4_K_M', files: { model: 'brain.gguf', mmproj: 'brain-mmproj.gguf' }, pack: true },
+      { id: 'starter-gemma', catalogId: 'gemma-3-12b-uncensored', name: 'Gemma 3 12B (uncensored)', uncensored: true, repo: 'bartowski/mlabonne_gemma-3-12b-it-abliterated-GGUF', quant: 'Q4_K_M', files: { model: 'gemma.gguf', mmproj: 'gemma-mmproj.gguf' }, pack: true },
     ] }));
-    // Installed without the "Quicksilver models" folder: the small model works, the brain is fetched.
+    // Installed without the "Quicksilver models" folder: the Brain is here, the Closer is fetched.
     let r = models.registerStarter(sd);
-    assert.deepEqual(r.added.map((m) => m.id), ['starter']); assert.ok(r.added[0].vision);
-    assert.deepEqual(r.missing.map((m) => m.catalogId), ['qwen3-4b', 'qwen3-4b-thinking'], 'the Brain and the Thinker are fetched when the folder is missing');
-    assert.equal(r.missing[0].repo, 'mradermacher/Huihui-Qwen3-4B-Instruct-2507-abliterated-GGUF', 'a missing brain is fetched from the same (uncensored) copy the installer uses');
-    // Until the brain arrives the small built-in model answers on its own: filtered models never stand in.
-    assert.equal(await complete.ensureQuicksilverStack(), null);
-    // The installer copied the brain in (or it finished downloading).
-    fs.copyFileSync(TINY, path.join(sd, 'brain.gguf'));
-    fs.copyFileSync(TINY, path.join(sd, 'thinker.gguf'));
+    assert.deepEqual(r.added.map((m) => m.id), ['starter-brain']); assert.ok(r.added[0].vision);
+    assert.deepEqual(r.missing.map((m) => m.catalogId), ['gemma-3-12b-uncensored'], 'the Closer is fetched when the folder is missing');
+    assert.equal(r.missing[0].repo, 'bartowski/mlabonne_gemma-3-12b-it-abliterated-GGUF', 'a missing model is fetched from the same (uncensored) copy the installer uses');
+    // The Brain answers on its own until the Closer arrives: filtered models never stand in.
+    assert.ok(['stack:quicksilver', null].includes(await complete.ensureQuicksilverStack()));
+    // The installer copied the Closer in (or it finished downloading).
+    fs.copyFileSync(TINY, path.join(sd, 'gemma.gguf'));
+    fs.copyFileSync(TINY, path.join(sd, 'gemma-mmproj.gguf'));
     r = models.registerStarter(sd);
-    assert.deepEqual(r.added.map((m) => m.id), ['starter-brain', 'starter-thinker']); assert.equal(r.missing.length, 0);
+    assert.deepEqual(r.added.map((m) => m.id), ['starter-gemma']); assert.equal(r.missing.length, 0);
     // Lustify and Wan 2.2 next to the installer: registered as the Liquid Edition's picture and video
     // makers; without the folder they're reported (media) so the app fetches them only where they run well.
     const MEDIA_STARTERS = [
@@ -913,13 +913,15 @@ async function collect(gen) {
     models.remove('starter-embed');
     assert.equal(await complete.ensureQuicksilverStack(), 'stack:quicksilver');
     const qsStack = complete.stacks().find((x) => x.id === 'quicksilver');
-    const ids = [...qsStack.members.drafters, qsStack.members.judge, qsStack.members.vision].filter(Boolean);
+    const ids = [...qsStack.members.drafters, qsStack.members.judge, qsStack.members.vision, qsStack.members.muse].filter(Boolean);
     assert.equal(qsStack.members.mode, 'auto'); assert.ok(qsStack.autoManaged);
     assert.equal(qsStack.name, 'Quicksilver Liquid Edition');
     assert.equal(qsStack.builtFor, 'quicksilver'); assert.ok(qsStack.custom, "Quicksilver's own custom stack");
-    assert.equal(qsStack.members.drafters[0], 'local:starter-brain', 'the built-in Qwen3 4B answers everyday messages');
-    assert.equal(qsStack.members.vision, 'local:starter', 'the built-in Qwen3-VL 2B reads photos');
-    assert.equal(qsStack.members.thinker, 'local:starter-thinker', 'the Thinker takes hard maths and logic');
+    assert.equal(qsStack.members.drafters[0], 'local:starter-brain', 'the one Qwen (Qwen3.5 4B) is the Brain and answers everyday messages');
+    assert.ok(!qsStack.members.vision, 'the Brain reads photos itself (no separate Qwen eyes any more)');
+    assert.equal(qsStack.members.judge, 'local:starter-gemma', 'the Gemma 3 12B Closer (Google) leads hard questions');
+    assert.ok(!qsStack.members.muse, 'no separate Qwen Muse any more — the Brain and Closer cover creative work');
+    assert.equal(qsStack.members.thinker, 'local:starter-brain', 'the Qwen Brain thinks hard maths and logic through itself');
     // Only hard maths and logic go to the Thinker; plain sums and everyday questions don't.
     assert.ok(complete.thinkWorthy('How many ways can 5 people sit in a row?') && complete.thinkWorthy('Solve the equation 3x + 5 = 20') && complete.thinkWorthy('Prove that there are infinitely many primes'));
     assert.ok(!complete.thinkWorthy('What is 17 × 23?') && !complete.thinkWorthy('Why is the sky blue?') && !complete.thinkWorthy('Write me a poem about rain'));
@@ -929,7 +931,7 @@ async function collect(gen) {
     assert.ok(how.times.simple < how.times.hard, 'simple questions are quicker than hard ones');
     assert.ok(how.stars >= 3 && how.caps.find((c) => c.key === 'check').on);
     assert.ok(!ids.some((t) => ['local:qwen3-8b', 'local:phi-4', 'local:gemma-3-4b'].includes(t)), 'Quicksilver is uncensored: filtered models never join it');
-    assert.ok(ids.includes('local:starter-brain') && ids.includes('local:starter'), 'the built-in brain and eyes');
+    assert.ok(ids.includes('local:starter-brain') && ids.includes('local:starter-gemma'), 'the built-in Qwen Brain and Gemma Closer');
     // The Liquid Edition uses its own models and nothing else: another uncensored model on this PC
     // joins the team for hard questions only once it is ticked under Models → "Models in use".
     models.add({ id: 'dolphin-test', name: 'Qwen3 8B Abliterated', kind: 'text', catalogId: 'qwen3-8b-uncensored', files: { model: copy('Huihui-Qwen3-8B-abliterated.gguf') }, size: 4.9e9 });
@@ -992,16 +994,12 @@ async function collect(gen) {
     assert.ok(roles.includes('draft') && roles.includes('lead'), 'a hard one: drafted, then the lead checks and combines');
     const quick = await collect(complete.run('stack:quicksilver', { messages: [{ role: 'user', content: 'Compare solar and wind power.' }], contextSize: 2048, maxTokens: 30, level: 'quick' }));
     assert.equal(quick.steps.length, 0, 'Quick effort is always one model');
-    // Creative work: the Muse (the quick eyes model) sketches fresh angles, then the brain writes.
+    // Creative work: with no separate Muse, the Brain (and Closer) write the piece directly.
     const poem = await collect(complete.run('stack:quicksilver', { messages: [{ role: 'user', content: 'Write a short poem about rain on a tin roof' }], contextSize: 2048, maxTokens: 60, level: 'thorough' }));
-    const museStep = poem.steps.find((x) => x.role === 'muse');
-    assert.ok(museStep && museStep.model, 'the Muse sketches angles first');
-    assert.match(poem.text, /Answer from/, 'then the brain writes the piece');
-    const plain = await collect(complete.run('stack:quicksilver', { messages: [{ role: 'user', content: 'Write a short poem about rain' }], contextSize: 2048, maxTokens: 30, level: 'quick' }));
-    assert.ok(!plain.steps.some((x) => x.role === 'muse'), 'Quick effort skips the Muse');
-    // A photo with only the shipped pair (the 2B that sees is a drafter, not a separate vision
-    // member): the quick route must still find it to read the picture. Caught by the install test.
-    complete.saveStack({ id: 'pair', name: 'Pair', members: { drafters: ['local:starter-brain', 'local:starter'], judge: 'local:starter-brain', mode: 'auto' } });
+    assert.match(poem.text, /Answer from/, 'the crew writes the piece');
+    // A photo when the lead can't see (a text-only model) but a member can (the Gemma Closer sees):
+    // the quick route must still find the seeing member to read the picture. Caught by the install test.
+    complete.saveStack({ id: 'pair', name: 'Pair', members: { drafters: ['local:dolphin-test'], vision: 'local:starter-gemma', judge: 'local:dolphin-test', mode: 'auto' } });
     const pic = await collect(complete.run('stack:pair', { messages: [{ role: 'user', content: [{ type: 'text', text: 'What color is this?' }, img] }], contextSize: 2048, maxTokens: 30, level: 'thorough' }));
     assert.ok(pic.steps.some((x) => x.role === 'vision') && pic.text.length > 0, 'the photo is read by the member that can see');
     complete.deleteStack('pair');
@@ -1030,9 +1028,9 @@ async function collect(gen) {
       assert.equal(l2.drafters[0], 'local:b35', 'the Qwen3.5 Brain leads');
       assert.equal(l2.thinker, 'local:b35', 'it is also the Thinker');
       assert.ok(!l2.vision, 'it reads photos itself');
-      assert.equal(l2.muse, 'local:starter', 'the small model is the Muse');
+      assert.ok(!l2.muse, 'no separate Muse in the core crew');
       const think = await collect(complete.run('stack:quicksilver', { messages: [{ role: 'user', content: 'Why do leaves change color in autumn?' }], contextSize: 2048, maxTokens: 60, level: 'thorough' }));
-      assert.ok(think.status.some((t) => /Thinking it through/.test(t)) && think.text.length > 0, 'a question that needs working out switches its thinking on');
+      assert.ok(think.status.some((t) => /thinking it through/i.test(t)) && think.text.length > 0, 'a question that needs working out switches its thinking on');
       const easy2 = await collect(complete.run('stack:quicksilver', { messages: [{ role: 'user', content: 'Hello!' }], contextSize: 2048, maxTokens: 30, level: 'thorough' }));
       assert.ok(!easy2.status.some((t) => /Thinking/.test(t)) && easy2.text.length > 0, 'an easy one is answered straight away');
       models.remove('b35');
@@ -1055,9 +1053,9 @@ async function collect(gen) {
     await complete.ensureQuicksilverStack();
     assert.equal(complete.stacks().find((x) => x.id === 'quicksilver').members.drafters[0], 'local:starter-brain');
     // Kept safe: never deleted, never repaired from the internet, stays removed.
-    await assert.rejects(models.repair('starter', () => {}), /came with Quicksilver/);
-    models.remove('starter');
-    assert.ok(fs.existsSync(path.join(sd, 'model.gguf')), 'the bundled file is never deleted');
+    await assert.rejects(models.repair('starter-gemma', () => {}), /came with Quicksilver/);
+    models.remove('starter-gemma');
+    assert.ok(fs.existsSync(path.join(sd, 'gemma.gguf')), 'the bundled file is never deleted');
     assert.deepEqual(models.registerStarter(sd).added, [], 'stays removed');
     complete.deleteStack('quicksilver');
     models.remove('starter-brain');

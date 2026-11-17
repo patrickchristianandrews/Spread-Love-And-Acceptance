@@ -884,11 +884,11 @@ const SCORE_BASE = { 'qwen3-8b-uncensored': 'qwen3-8b', 'qwen3-14b-uncensored': 
 // Its core ships with the installer and is locked: these models can't be removed and the stack
 // can't be edited or deleted (you can still pick any other model or stack instead).
 // The Liquid Edition's own crew — all installed before first use (the setup screen fetches whatever
-// is missing). Deliberately more than one family: Qwen3.5 (Brain, sees + thinks), Gemma 3 12B
-// (Google — a Closer that writes and sees photos) and Rocinante 12B (Mistral-based — the storyteller
-// Muse), plus the picture/video/search models. Big ones wait on the bench on a PC that can't hold
-// them next to the Brain, but they are still installed and available.
-const LIQUID_CORE = ['qwen3.5-2b', 'qwen3.5-4b', 'qwen3.5-9b-uncensored', 'gemma-3-12b-uncensored', 'rocinante-12b', 'nomic-embed-v1.5', 'bge-reranker-v2-m3', 'lustify', 'wan2.2-5b', 'wan2.2-5b-turbo'];
+// is missing). Exactly one Qwen (the Brain, Qwen3.5 4B — the only small abliterated model that both
+// sees photos and thinks) with the Closer a different family (Gemma 3 12B, Google, abliterated), plus
+// the picture/video/search models. The bigger Closer waits on the bench on a PC that can't hold it
+// next to the Brain, but it is still installed and available.
+const LIQUID_CORE = ['qwen3.5-4b', 'gemma-3-12b-uncensored', 'nomic-embed-v1.5', 'bge-reranker-v2-m3', 'lustify', 'wan2.2-5b', 'wan2.2-5b-turbo'];
 const LIQUID_MEMBERS = LIQUID_CORE;
 const liquidMember = (catalogId) => Boolean(catalogId) && LIQUID_MEMBERS.includes(catalogId);
 // Quicksilver Liquid Edition Pro: the same idea for a powerful PC (a 16–24 GB graphics card and
@@ -928,6 +928,7 @@ const LIQUID_ADDONS = [
   { id: 'wai-nsfw-illustrious', why: 'Anime: Lustify is a photo model, this is the most popular uncensored anime model. Anime requests use it by themselves.' },
   { id: 'chroma-hd', why: 'The highest-quality uncensored pictures, with negative prompts.', minVramGB: 8 },
   { id: 'cyberrealistic-sd15', why: 'Uncensored pictures on older 4 GB graphics cards and laptops, where Lustify is slow.' },
+  { id: 'rocinante-12b', why: 'Stories and role-play (TheDrummer Rocinante 12B, Mistral-based): the best uncensored creative writer. Add it as a Muse for a different voice on fiction.', minVramGB: 8 },
   { id: 'dolphin-3-llama-3.1-8b', why: 'A lighter non-Qwen all-rounder (Dolphin 3.0, Llama 3.1 8B, uncensored) that joins the crew on an 8 GB graphics card.' },
   { id: 'mistral-small-3.2-uncensored', why: 'A stronger Closer that sees photos (Mistral Small 3.2 24B, abliterated), for 16 GB+ graphics cards.', minVramGB: 16 },
   { id: 'gpt-oss-20b-uncensored', why: 'A strong, fast reasoner for maths and logic (OpenAI gpt-oss 20B, abliterated) on 12 GB+ graphics cards.', minVramGB: 12 },

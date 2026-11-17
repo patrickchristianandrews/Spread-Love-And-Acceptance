@@ -31,25 +31,18 @@ const QUANTS = ['Q4_K_M', 'Q4_K_S', 'IQ4_XS'];
 const PROJ_ORDER = [/q8_0/i, /(^|[-_.])f16/i, /bf16/i];
 const WEB = Boolean(process.env.QS_WEB_INSTALLER);
 
+// The Liquid Edition's crew is deliberately a mix of families, not all Qwen: exactly one Qwen (the
+// Brain — the only small abliterated model that both sees photos and thinks), and the other roles
+// are other families. The Brain is inside the installer so the app works the moment it opens.
 const MODELS = [
-  // Inside the installer: small, quick on any PC, sees photos. The Muse, and the instant fallback.
-  { id: 'starter', catalogId: 'qwen3.5-2b', name: 'Qwen3.5 2B', vision: true, where: 'starter', limit: 1.75e9, file: 'model.gguf', proj: 'mmproj.gguf',
-    licenseRepo: 'Qwen/Qwen3.5-2B', repos: ['mradermacher/Huihui-Qwen3.5-2B-abliterated-GGUF', 'mradermacher/Qwen3.5-2B_Abliterated-GGUF'] },
-  // Next to the installer: the Brain. Sees photos itself and switches its own thinking on for hard questions.
-  { id: 'starter-brain', catalogId: 'qwen3.5-4b', name: 'Qwen3.5 4B', vision: true, where: 'pack', limit: 3.6e9, file: 'qwen3.5-4b.gguf', proj: 'qwen3.5-4b-mmproj.gguf', pack: true,
+  // Inside the installer: the Brain, the one Qwen. Small, sees photos, switches its own thinking on
+  // for hard questions, and is the instant model on any PC.
+  { id: 'starter-brain', catalogId: 'qwen3.5-4b', name: 'Qwen3.5 4B', vision: true, where: 'starter', limit: 3.6e9, file: 'qwen3.5-4b.gguf', proj: 'qwen3.5-4b-mmproj.gguf', pack: true,
     licenseRepo: 'Qwen/Qwen3.5-4B', repos: ['mradermacher/Huihui-Qwen3.5-4B-abliterated-GGUF', 'mradermacher/Qwen3.5-4B-abliterated-GGUF'] },
-  // Next to the installer: the Closer. The strongest uncensored model in the pack: leads on hard
-  // questions and sees photos, on PCs with a graphics card (on smaller PCs it waits on the bench).
-  { id: 'starter-closer', catalogId: 'qwen3.5-9b-uncensored', name: 'Qwen3.5 9B', vision: true, where: 'pack', limit: 6.6e9, file: 'qwen3.5-9b.gguf', proj: 'qwen3.5-9b-mmproj.gguf', pack: true,
-    licenseRepo: 'Qwen/Qwen3.5-9B', repos: ['mradermacher/Huihui-Qwen3.5-9B-abliterated-GGUF', 'mradermacher/Qwen3.5-9B-abliterated-GGUF'] },
-  // Different-family abliterated models, so the Liquid Edition's crew is a real mix (not all Qwen):
-  // a Google Gemma Closer that also writes and sees photos, and a Mistral-based storyteller (the
-  // Muse). Part of the pack like the Brain and Closer: copied in by the full installer, and fetched
-  // by the setup screen before the app opens on the web/standard installer.
+  // Next to the installer: the Closer, a different family (Google Gemma 3 12B, abliterated). Leads on
+  // hard questions, writes well and sees photos; on a smaller PC it waits on the bench.
   { id: 'starter-gemma', catalogId: 'gemma-3-12b-uncensored', name: 'Gemma 3 12B', vision: true, where: 'pack', limit: 8.5e9, file: 'gemma-3-12b.gguf', proj: 'gemma-3-12b-mmproj.gguf', pack: true,
     by: 'Google (uncensored by mlabonne)', licenseRepo: 'google/gemma-3-12b-it', repos: ['bartowski/mlabonne_gemma-3-12b-it-abliterated-GGUF', 'mlabonne/gemma-3-12b-it-abliterated-v2-GGUF'] },
-  { id: 'starter-rocinante', catalogId: 'rocinante-12b', name: 'Rocinante 12B', where: 'pack', limit: 8e9, file: 'rocinante-12b.gguf', pack: true,
-    by: 'TheDrummer (Mistral-based)', licenseRepo: 'TheDrummer/Rocinante-12B-v1.1', repos: ['TheDrummer/Rocinante-12B-v1.1-GGUF'] },
   // Next to the installer: Sharper search. The reranker puts the passage that answers the question
   // first (it scores text, writes none, so no filter applies).
   { id: 'starter-rerank', catalogId: 'bge-reranker-v2-m3', name: 'BGE Reranker v2 M3', kind: 'rerank', where: 'pack', limit: 0.6e9, file: 'rerank.gguf', pack: true,

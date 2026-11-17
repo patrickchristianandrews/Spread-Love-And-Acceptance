@@ -280,12 +280,12 @@ async function setUpQuicksilver(firstLook) {
   // an earlier version.
   const leftover = r.stack && !p.liquidDefaultOnce && targetValid(p.defaultTarget) && p.defaultTarget.startsWith('local:') && !liquidOk(p.defaultTarget);
   const choseAutomatic = p.defaultChosen && !p.defaultTarget; // "Automatic" picked in Settings
-  if (r.stack && !choseAutomatic && (!targetValid(p.defaultTarget) || p.defaultTarget === 'local:starter' || p.defaultAuto || leftover)) {
+  if (r.stack && !choseAutomatic && (!targetValid(p.defaultTarget) || p.defaultTarget === 'local:starter' || p.defaultTarget === 'local:starter-brain' || p.defaultAuto || leftover)) {
     if (leftover) toast(`💧 The Liquid Edition is now your default (it was ${targetLabel(p.defaultTarget)}, a filtered model). Change it any time in Settings → Chat.`, 10000);
     p.defaultTarget = r.stack; p.defaultAuto = false;
   }
   if (r.stack && !p.liquidDefaultOnce) { p.liquidDefaultOnce = true; save(); }
-  else if (!targetValid(p.defaultTarget) && targetValid('local:starter')) p.defaultTarget = 'local:starter';
+  else if (!targetValid(p.defaultTarget) && targetValid('local:starter-brain')) p.defaultTarget = 'local:starter-brain';
   if (p.defaultTarget !== before) save();
   if (firstLook && r.added.length) {
     toast(r.stack ? '👋 Meet Quicksilver Liquid Edition: two AI models working as one, right on your PC. It sees photos, thinks harder when a question needs it, and nothing leaves this computer. Try an idea below.'

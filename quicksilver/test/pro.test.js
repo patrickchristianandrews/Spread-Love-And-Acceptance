@@ -57,17 +57,18 @@ console.log('✓ Liquid Edition Pro: only when the user asks for it; built from 
 // on the bench) with nothing to tick, while a model from another app stays out until it is ticked.
 (async () => {
   for (const id of ['pro-closer', 'pro-thinker', 'pro-muse']) models.setUse(id, false); // suggested add-ons are in use until unticked
-  // (Named as the setup screen names them: the uncensored copies listed in the installer.)
-  models.add({ id: 'qwen3.5-2b', name: 'Qwen3.5 2B (uncensored)', kind: 'text', catalogId: 'qwen3.5-2b', repo: 'mradermacher/Huihui-Qwen3.5-2B-abliterated-GGUF', files: { model: TINY, mmproj: TINY }, size: 1 });
+  // (Named as the setup screen names them: the uncensored copies listed in the installer.) The Pro
+  // Muse (pro-muse) is itself a Gemma 3 12B — the standard Closer — so one copy can serve as the
+  // standard crew's Closer; the standard Brain (Qwen3.5 4B) is downloaded here.
   models.add({ id: 'qwen3.5-4b', name: 'Qwen3.5 4B (uncensored)', kind: 'text', catalogId: 'qwen3.5-4b', repo: 'mradermacher/Huihui-Qwen3.5-4B-abliterated-GGUF', files: { model: TINY, mmproj: TINY }, size: 1 });
-  models.add({ id: 'qwen3.5-9b-uncensored', name: 'Qwen3.5 9B (uncensored)', kind: 'text', catalogId: 'qwen3.5-9b-uncensored', files: { model: TINY, mmproj: TINY }, size: 1 });
   models.add({ id: 'imp-dolphin', name: 'Dolphin 3.0 8B', kind: 'text', catalogId: 'dolphin-3-llama-3.1-8b', files: { model: TINY }, size: 1, source: 'imported', from: 'LM Studio' });
   await complete.ensureQuicksilverStack();
   let q = complete.stacks().find((x) => x.id === 'quicksilver');
   let team = JSON.stringify([q.members, q.bench || '']);
-  assert.equal(q.members.drafters[0], 'local:qwen3.5-4b', 'the downloaded Brain answers');
-  assert.ok(/qwen3\.5-9b-uncensored/.test(team), `the downloaded Closer is the Liquid Edition's own, no tick needed: ${team}`);
-  assert.ok(!/imp-dolphin|pro-/.test(team), `nothing else on the PC joins: ${team}`);
+  const judge = q.members.judge && models.get(q.members.judge.replace('local:', ''));
+  assert.equal(q.members.drafters[0], 'local:qwen3.5-4b', 'the downloaded Qwen Brain answers');
+  assert.ok(judge && judge.catalogId === 'gemma-3-12b-uncensored', `the Gemma Closer (a different family) leads, no tick needed: ${team}`);
+  assert.ok(!/imp-dolphin|pro-brain|pro-closer|pro-thinker/.test(team), `a model from another app stays out until ticked: ${team}`);
   models.setUse('pro-muse', true); // a suggested add-on, ticked again
   await complete.ensureQuicksilverStack();
   q = complete.stacks().find((x) => x.id === 'quicksilver');

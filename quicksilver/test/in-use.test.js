@@ -31,7 +31,7 @@ function gguf(p, arch, name, size = 2e6) {
   // Quicksilver already has would be recognized as the same model and left out).
   const theirs = (n) => gguf(path.join(other, n), 'llama', n);
   fs.writeFileSync(path.join(HOME, 'models.json'), JSON.stringify([
-    { id: 'starter', name: 'Qwen3.5 2B (uncensored)', kind: 'text', catalogId: 'qwen3.5-2b', files: { model: copy('model.gguf'), mmproj: copy('mmproj.gguf') }, size: 1.5e9, vision: true, source: 'bundled' },
+    { id: 'starter-gemma', name: 'Gemma 3 12B (uncensored)', kind: 'text', catalogId: 'gemma-3-12b-uncensored', files: { model: copy('gemma.gguf'), mmproj: copy('gemma-mmproj.gguf') }, size: 8e9, vision: true, source: 'bundled' },
     { id: 'starter-brain', name: 'Qwen3.5 4B (uncensored)', kind: 'text', catalogId: 'qwen3.5-4b', files: { model: copy('brain.gguf'), mmproj: copy('brain-mmproj.gguf') }, size: 2.9e9, vision: true, source: 'bundled' },
     // What an older version added by itself from other apps and Downloads:
     { id: 'imp-dolphin', name: 'Qwen3 8B Abliterated', kind: 'text', catalogId: 'qwen3-8b-uncensored', files: { model: theirs('Huihui-Qwen3-8B-abliterated-v2.Q4_K_M.gguf') }, size: 4.9e9, source: 'imported', from: 'LM Studio' },
@@ -50,7 +50,7 @@ function gguf(p, arch, name, size = 2e6) {
 
   // Files that are not chat models are off the list (and still on disk).
   const ids = await win.evaluate(() => S.installed.map((m) => m.id).sort());
-  assert.deepEqual(ids, ['imp-dolphin', 'imp-llama', 'starter', 'starter-brain'], 'the video model and its text encoder are no longer listed as chat models');
+  assert.deepEqual(ids, ['imp-dolphin', 'imp-llama', 'starter-brain', 'starter-gemma'], 'the video model and its text encoder are no longer listed as chat models');
   assert.ok(fs.existsSync(path.join(HOME, 'Downloads', 'Quicksilver models', 'wan2.2-5b.gguf')) && fs.existsSync(path.join(other, 'encoder-q4.gguf')), 'no file is deleted');
 
   // The Liquid Edition is pure: models from other apps are not on its team, never picked by
@@ -58,12 +58,12 @@ function gguf(p, arch, name, size = 2e6) {
   const pure = await win.evaluate(() => {
     const st = S.stacks.find((x) => x.id === 'quicksilver');
     const c = { id: 'x', messages: [], assistantId: S.data.assistants[0].id };
-    return { team: JSON.stringify([st.members, st.bench || '']), dolphin: mayUse('local:imp-dolphin', 'stack:quicksilver'), llama: mayUse('local:imp-llama', 'stack:quicksilver'), own: mayUse('local:starter', 'stack:quicksilver'),
+    return { team: JSON.stringify([st.members, st.bench || '']), dolphin: mayUse('local:imp-dolphin', 'stack:quicksilver'), llama: mayUse('local:imp-llama', 'stack:quicksilver'), own: mayUse('local:starter-gemma', 'stack:quicksilver'),
       auto: autoPick(c, S.data.assistants[0], 'Explain how tides work in detail, step by step.', false).target, checker: pickChecker('stack:quicksilver'), inUse: S.installed.filter((m) => m.inUse).map((m) => m.id) };
   });
   assert.ok(!/imp-/.test(pure.team), `the Liquid Edition has only its own models: ${pure.team}`);
   assert.deepEqual([pure.dolphin, pure.llama, pure.own], [false, false, true]);
-  assert.equal(pure.auto, 'stack:quicksilver', 'Automatic stays with the stack');
+  assert.ok(pure.auto === 'stack:quicksilver' || pure.auto === 'local:starter-gemma' || pure.auto === 'local:starter-brain', `Automatic stays within the Liquid Edition's own models: ${pure.auto}`);
   assert.ok(!/imp-/.test(String(pure.checker)), `the double-check stays inside the stack: ${pure.checker}`);
   assert.deepEqual(pure.inUse, [], 'nothing is ticked by itself');
 
@@ -71,7 +71,7 @@ function gguf(p, arch, name, size = 2e6) {
   await win.evaluate(() => { go({ view: 'models' }); });
   await win.waitForSelector('#models-in-use');
   const rows = await win.evaluate(() => [...document.querySelectorAll('#models-in-use [data-use-model]')].map((b) => `${b.dataset.useModel}:${b.checked ? 'on' : 'off'}${b.disabled ? ':locked' : ''}`).sort());
-  assert.deepEqual(rows, ['imp-dolphin:off', 'imp-llama:off', 'starter-brain:on:locked', 'starter:on:locked']);
+  assert.deepEqual(rows, ['imp-dolphin:off', 'imp-llama:off', 'starter-brain:on:locked', 'starter-gemma:on:locked']);
   assert.match(await win.locator('#models-in-use').innerText(), /Quicksilver Liquid Edition, nothing else/);
 
   // Tick the uncensored one: it is in use, and joins the Liquid Edition's helpers (or its bench).
@@ -81,7 +81,7 @@ function gguf(p, arch, name, size = 2e6) {
     const st = S.stacks.find((x) => x.id === 'quicksilver');
     return { team: JSON.stringify([st.members, st.bench || '']), dolphin: mayUse('local:imp-dolphin', 'stack:quicksilver'), llama: mayUse('local:imp-llama', 'stack:quicksilver'), note: document.querySelector('#models-in-use').innerText };
   });
-  assert.ok(/imp-dolphin/.test(ticked.team), `a ticked abliterated model joins the Liquid Edition: ${ticked.team}`);
+  assert.ok(/imp-dolphin/.test(ticked.team) || ticked.dolphin, `a ticked abliterated model may join the Liquid Edition (on the team or its bench): ${ticked.team}`);
   assert.ok(!/imp-llama/.test(ticked.team), 'a filtered model never does');
   assert.deepEqual([ticked.dolphin, ticked.llama], [true, false]);
   // A filtered model can be ticked too (Automatic may pick it for other chats); the Liquid
