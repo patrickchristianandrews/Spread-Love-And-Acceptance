@@ -14,6 +14,7 @@ import json, os, sys
 import numpy as np
 sys.path.insert(0, os.path.dirname(__file__))
 import prosody as P
+import teaser_voices  # noqa: F401  (its extra deliveries: scared, timid, dry, annoyed, curious...)
 import parselmouth
 from parselmouth.praat import call
 
@@ -30,7 +31,16 @@ LINES = [
     ('sugarfoot', '…lovely plane!', 'happy', 1.1, {'lovely': ('c9f33b3a', 0.78, 1.18), 'plane': ('c9f33b3a', 1.17, 1.5)}),
     ('tidbit', 'That is NOT what I was going to say.', 'annoyed', 1.2, {}),
     ('sugarfoot', 'I know.', 'dry', 0.9, {}),
+    # Nov 17 (owner: "redo the Indiana Jones and Jaws script much better, funnier")
+    ('tidbit', 'Everything is fine.', 'timid', 1.0, {}),
+    ('tidbit', 'HELP!', 'scared', 1.3, {'raw': True}),
+    ('tidbit', 'I was NOT scared.', 'proud', 1.1, {}),
+    ('sugarfoot', 'Mm. Very brave.', 'dry', 1.0, {}),
+    ('tidbit', 'Hey… music?', 'curious', 1.0, {}),
+    ('tidbit', 'Was that YOU?', 'surprised', 1.1, {}),
+    ('sugarfoot', '…Maybe.', 'silly', 0.9, {'raw': True}),
 ]
+ONLY = None  # set by the command line: build just the lines whose text contains one of these
 
 
 def vocab():
@@ -63,7 +73,7 @@ def trim(x, rel=0.06):
     on = np.where(e > th)[0]
     if not len(on):
         return x
-    a, b = max(0, on[0] - int(0.012 * SR)), min(len(x), on[-1] + int(0.03 * SR))
+    a, b = max(0, on[0] - int(0.035 * SR)), min(len(x), on[-1] + int(0.06 * SR))  # room for soft first and last sounds (the h and p of "help")
     return x[a:b]
 
 
@@ -111,7 +121,10 @@ def word_times(path):
 
 
 # a word with one best recording (checked with the recognizer: "Oh no" read as "Oh, honey, no" from "Sunny! No!")
-PREFER = {('tidbit', 'no'): 'No. Maybe it'}
+# (each tested on its own with the recognizer; a list is used in order when the word comes more than once in a line)
+PREFER = {('tidbit', 'no'): 'No. Maybe it', ('tidbit', 'help'): 'I’m just trying to help',
+          ('tidbit', 'music'): 'Music tomorrow', ('sugarfoot', 'help'): "No, don't go in after her", ('sugarfoot', 'maybe'): 'Maybe it\'s me',
+          ('tidbit', 'not'): 'I did not!', ('tidbit', 'scared'): 'The truth is, I felt left out'}
 
 
 def chunks(who, words, teaser):
@@ -122,6 +135,8 @@ def chunks(who, words, teaser):
             res.append(('teaser', words[i], i, i + 1)); i += 1; continue
         best = None
         pref = PREFER.get((who, words[i]))
+        if isinstance(pref, list):
+            pref = pref[min(len(pref) - 1, words[:i].count(words[i]))]
         if pref:
             ps = [snt for snt in S if snt['text'].startswith(pref)]
             if ps:
@@ -133,7 +148,7 @@ def chunks(who, words, teaser):
             ws = snt['words']
             for a in range(len(ws)):
                 n = 0
-                while i + n < len(words) and a + n < len(ws) and ws[a + n] == words[i + n] and words[i + n] not in teaser:
+                while i + n < len(words) and a + n < len(ws) and ws[a + n] == words[i + n] and words[i + n] not in teaser and not (n and (who, words[i + n]) in PREFER):
                     n += 1
                 ends = (a + n == len(ws)) == (i + n == len(words)) and (a == 0) == (i == 0)
                 if n and (best is None or n > best[0] or (n == best[0] and ends and not best[3])):
@@ -184,6 +199,8 @@ def build():
     os.makedirs(OUT, exist_ok=True)
     out = {}
     for who, text, mood, energy, teaser in LINES:
+        if ONLY and not any(o in text for o in ONLY):
+            continue
         toks = P.tokens(text); words = [P.norm(w) for w, _ in toks]
         pieces = []
         for c in chunks(who, words, teaser):
@@ -204,15 +221,18 @@ def build():
             if ref and f:
                 p = shift(p, float(np.clip(12 * np.log2(ref / f), -4, 4)))
             onsets.append(len(y) / SR)
-            if len(y) > xf and len(p) > xf:
-                ramp = np.linspace(0, 1, xf); y[-xf:] = y[-xf:] * (1 - ramp) + p[:xf] * ramp; y = np.concatenate([y, p[xf:]])
-            else:
-                y = np.concatenate([y, p])
-            gap = {'…': 0.26, ',': 0.12, '.': 0.1, '!': 0.1, '?': 0.1}.get(br, 0.02)
+            # each word starts after a pause, so it goes in whole: only a 3 ms ramp against clicks (a longer crossfade
+            # into the pause faded out soft first sounds: "help" came out as "go")
+            r = min(len(p), int(0.003 * SR)); p = p.copy(); p[:r] *= np.linspace(0, 1, r); p[-r:] *= np.linspace(1, 0, r)
+            y = np.concatenate([y, p])
+            gap = {'…': 0.26, ',': 0.12, '.': 0.1, '!': teaser.get('gap', 0.1), '?': 0.1}.get(br, 0.02)
             y = np.concatenate([y, np.zeros(int(gap * SR))])
         y = y / (np.abs(y).max() + 1e-9) * 0.9
         # the whole line: one melody and its feeling (prosody.py)
+        raw = teaser.pop('raw', False) if isinstance(teaser, dict) else False
         try:
+            if raw:  # its own words already say it best: only joined, not reshaped
+                raise RuntimeError('kept as said')
             z, _ = P.say(y, {'who': who, 'text': text, 'mood': mood, 'energy': energy}, [round(t, 3) for t in onsets], len(y) / SR)
         except Exception as ex:
             print('kept unshaped:', text, ex); z = y
@@ -225,4 +245,5 @@ def build():
 
 
 if __name__ == '__main__':
+    ONLY = sys.argv[1:] or None
     build()

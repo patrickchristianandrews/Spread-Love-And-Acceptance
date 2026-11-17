@@ -546,8 +546,14 @@
   function onomato(g, text, x, y, size, col, a, rot) { if (a <= 0) return; g.save(); g.globalAlpha = a; g.translate(x, y); g.rotate(rot || 0); font(g, '800', size); g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillStyle = 'rgba(0,0,0,.35)'; g.fillText(text, 2, 3); g.fillStyle = col; g.fillText(text, 0, 0); g.restore(); }
   function splash(g, x, y, u0, u, n, seed) { var q = u - u0; if (q < 0 || q > 1.1) return; for (var i = 0; i < n; i++) { var a = -Math.PI * (0.1 + 0.8 * rnd(i + seed)), v = 70 + rnd(i + seed + 1) * 130, px1 = x + Math.cos(a) * v * q, py1 = y + Math.sin(a) * v * q + 280 * q * q; if (py1 > y + 6) continue; circ(g, px1, py1, 3.4 - q * 1.6, 'rgba(190,225,250,' + (0.9 - q * 0.8) + ')'); } }
   // 1. the boulder (Raiders of the Lost Ark): it turns out to be a beach ball
+  // a pup floating in the water: drawn as usual above the waterline, and faintly below it, as if seen through the water
+  function floaty(g, WL, draw) {
+    g.save(); g.beginPath(); g.rect(-60, -60, VW + 120, WL + 62); g.clip(); var out = draw(); g.restore();
+    g.save(); g.beginPath(); g.rect(-60, WL + 2, VW + 120, 300); g.clip(); g.globalAlpha = 0.3; draw(); g.restore();
+    return out;
+  }
   function boulder(g, u, d, calm) {
-    var shake = calm || u < 3.2 || u > 5.85 ? 0 : u < 3.9 ? 0.7 : 1.6;
+    var shake = calm || u < 3.2 || u > 6.25 ? 0 : u < 4.4 ? 0.7 : 1.6;
     g.save(); if (shake) g.translate(Math.sin(u * 53) * shake, Math.cos(u * 47) * shake);
     sky(g, [[0, '#EE9A55'], [0.55, '#F7CE88'], [1, '#FCE9BE']], 280);
     glow(g, 520, 92, 200, '255,236,190', 0.45); circ(g, 520, 92, 32, '#FFF1BE');
@@ -557,67 +563,82 @@
     rr(g, 322, 262, 44, 24, 3, '#9C7448'); rr(g, 316, 256, 56, 8, 3, '#B58A58');
     var taken = u > 2.3;
     if (!taken) { glow(g, 344, 244, 30, '255,225,120', 0.5 + 0.2 * Math.sin(u * 8)); bone(g, 344, 246, 1.2, 0, '#F6C945'); }
-    // he hears the rumble, looks back at what's coming, and runs on "RUN!"
-    var tx = u < 5.12 ? 276 : Math.min(512, 276 + (u - 5.12) * 270), running = u >= 5.12 && tx < 512, face = tx >= 512 ? -1 : u > 3.95 && u < 5.12 ? -1 : 1;
-    var tid = pup(g, 'tidbit', tx, 306, 1.5, { pose: running ? 'run' : 'sit', face: face, t: u, ph: tx * 0.24, over: HAT.explorer, wag: running ? Math.sin(u * 16) * 0.7 : u > 3.2 && u < 5.12 ? 0 : Math.sin(u * 6) * 0.4, lift: running ? 4 * Math.abs(Math.sin(u * 14)) : 0, ear: running || (u > 3.95 && u < 5.12) ? -0.8 : 0, tilt: u > 3.25 && u < 3.95 ? 0.12 : 0 });
+    // "everything is fine" while the temple shakes (chin up), a pebble on the hat, a look back, and he runs on "RUN!"
+    var R0 = 4.72, tx = u < R0 ? 276 : Math.min(512, 276 + (u - R0) * 270), running = u >= R0 && tx < 512, look = u > 4.5 && u < R0, bonk = u > 4.38 && u < 4.62;
+    var face = tx >= 512 ? -1 : look ? -1 : 1, proud = u > 7.27 && u < 8.1, sheepish = u > 8.1;
+    var tid = pup(g, 'tidbit', tx, 306, 1.5, { pose: running ? 'run' : 'sit', face: face, t: u, ph: tx * 0.24, over: HAT.explorer, wag: running ? Math.sin(u * 16) * 0.7 : u > 3.2 && u < 6.3 ? 0 : sheepish ? Math.sin(u * 5) * 0.2 : Math.sin(u * 6) * 0.4, lift: running ? 4 * Math.abs(Math.sin(u * 14)) : 0, ear: running || look ? -0.8 : bonk ? -1.1 : sheepish ? -0.6 : 0, tilt: u > 3.3 && u < 4.38 ? -0.07 : bonk ? 0.2 : proud ? -0.14 : sheepish ? 0.1 : 0, sy: proud ? 1.04 : 1 });
     if (taken) bone(g, tid.x + 17 * face, tid.y + 26, 0.95, 0.3 * face, '#F6C945');
-    var sug = pup(g, 'sugarfoot', 598, 306, 1.4, { pose: 'sit', face: -1, t: u + 1, ear: u > 3.2 && u < 6.9 ? -0.7 : 0, tilt: u > 3.2 && u < 5.85 ? -0.1 : u > 6.9 ? 0.08 : 0, lift: u > 5.05 && u < 5.5 ? 6 * bump((u - 5.05) / 0.45) : 0 });
-    // pebbles and dust shaken down from the temple roof
-    if (!calm && u > 3.2 && u < 5.9) for (var pb = 0; pb < 9; pb++) { var pq = ((u - 3.2) * 0.9 + rnd(pb + 1520)) % 1, pxx = 40 + rnd(pb + 1521) * 560; circ(g, pxx, -6 + pq * 300, 1.6 + rnd(pb + 1522) * 2, 'rgba(150,115,75,' + (0.8 * (1 - pq)).toFixed(2) + ')'); }
-    var bx = u < 3.9 ? -90 : u < 5.82 ? -90 + 442 * Math.pow((u - 3.9) / 1.92, 1.6) : 352 + 96 * eout((u - 5.82) / 0.9), isBall = u > 5.82;
-    if (u >= 3.85 && u < 7.7) {
+    var sug = pup(g, 'sugarfoot', 598, 306, 1.4, { pose: 'sit', face: -1, t: u + 1, ear: u > 3.2 && u < 6.3 ? -0.7 : 0, tilt: u > 3.2 && u < 6.25 ? -0.1 : u > 8.1 ? 0.12 : 0, lift: u > 4.55 && u < 4.95 ? 6 * bump((u - 4.55) / 0.4) : 0 });
+    // pebbles and dust shaken down from the temple roof, and one that lands right on his hat
+    if (!calm && u > 3.2 && u < 6.25) for (var pb = 0; pb < 9; pb++) { var pq = ((u - 3.2) * 0.9 + rnd(pb + 1520)) % 1, pxx = 40 + rnd(pb + 1521) * 560; circ(g, pxx, -6 + pq * 300, 1.6 + rnd(pb + 1522) * 2, 'rgba(150,115,75,' + (0.8 * (1 - pq)).toFixed(2) + ')'); }
+    if (u > 4.08 && u < 4.9) { var pf = clamp((u - 4.08) / 0.3, 0, 1), pa = Math.max(0, u - 4.38), px2 = 276 + 6 + pa * 110, py2 = u < 4.38 ? mix(-10, tid.y - 16, pf * pf) : tid.y - 16 - 70 * pa + 420 * pa * pa; circ(g, px2, py2, 3.6, '#8C6A44'); circ(g, px2 - 1, py2 - 1, 1.3, '#A8845A'); }
+    if (bonk) onomato(g, 'tok!', tid.x + 26, tid.y - 26, 18, '#FFF1BE', win(u, 4.38, 4.62, 0.04), 0.15);
+    var bx = u < 4.4 ? -90 : u < 6.25 ? -90 + 442 * Math.pow((u - 4.4) / 1.85, 1.6) : 352 + 50 * eout((u - 6.25) / 0.9), isBall = u > 6.25;   // it rolls up to him and stops, gently
+    if (u >= 4.35 && u < 9.6) {
       var rot = bx / 46;
       if (!isBall) { g.save(); g.translate(bx, 262); g.rotate(rot); circ(g, 0, 0, 46, '#8D8A94'); circ(g, -12, -14, 14, '#9C99A4'); line(g, -30, 10, -8, 22, '#6E6B76', 3); line(g, 10, -34, 24, -10, '#6E6B76', 3); line(g, 14, 24, 34, 12, '#6E6B76', 3); g.restore(); }
-      else { var sq = 1 - 0.28 * bump((u - 5.82) / 0.7) - 0.1 * clamp((u - 6.4) / 1, 0, 1); beachBall(g, bx, 262 + (1 - sq) * 40, 46, rot * 0.3, sq); }
-      if (!calm && u < 5.82) for (var k = 0; k < 8; k++) { var q = ((u * 1.6 + rnd(k + 1500)) % 1); g.globalAlpha = (1 - q) * 0.5; circ(g, bx - 30 - q * 80 - rnd(k + 1501) * 24, 300 - q * 20, 5 + q * 11, '#E2C79A'); g.globalAlpha = 1; }
+      else { var sq = 1 - 0.28 * bump((u - 6.25) / 0.7) - 0.1 * clamp((u - 6.85) / 1, 0, 1); beachBall(g, bx, 262 + (1 - sq) * 40, 46, rot * 0.3, sq); }
+      if (!calm && u < 6.25) for (var k = 0; k < 8; k++) { var q = ((u * 1.6 + rnd(k + 1500)) % 1); g.globalAlpha = (1 - q) * 0.5; circ(g, bx - 30 - q * 80 - rnd(k + 1501) * 24, 300 - q * 20, 5 + q * 11, '#E2C79A'); g.globalAlpha = 1; }
     }
-    if (u > 5.82 && u < 6.9) onomato(g, 'pffffft…', bx - 64, 236, 24, '#FFFFFF', win(u, 5.82, 6.9, 0.2), -0.08);
-    if (u > 4.4 && u < 5.0) onomato(g, '!', tid.x - 4, tid.y - 22, 30, '#FFF1BE', win(u, 4.4, 5.0, 0.08), 0);
+    if (u > 6.25 && u < 7.3) onomato(g, 'pffffft…', bx - 64, 236, 24, '#FFFFFF', win(u, 6.25, 7.3, 0.2), -0.08);
     narr('In a world of golden bones…', u, 0.1, 2.0);
     say(g, tid, 'A golden bone? Easy!', u, 2.1, 3.2);
-    say(g, sug, 'Tidbit… what did you do?', u, 3.25, 4.38);
-    say(g, tid, 'Oh no.', u, 4.42, 5.05);
-    say(g, sug, 'RUN!', u, 5.08, 5.75, { big: true });
-    say(g, tid, 'Wait… a beach ball?', u, 6.0, 6.88);
-    say(g, sug, 'This never happened.', u, 6.92, 7.65);
+    say(g, tid, 'Everything is fine.', u, 3.3, 4.4);
+    say(g, sug, 'RUN!', u, 4.58, 5.05, { big: true });
+    say(g, tid, 'HELP!', u, 5.1, 5.5, { big: true });
+    say(g, tid, 'Wait… a beach ball?', u, 6.38, 7.22);
+    say(g, tid, 'I was NOT scared.', u, 7.27, 8.05);
+    say(g, sug, 'Mm. Very brave.', u, 8.1, 9.3);
     g.restore();
   }
-  // 2. the pond (Jaws): a fin, two dramatic notes, and a very small shark
+  // 2. the pond (Jaws): a fin, two dramatic notes... and who was really making that music
   function jaws(g, u, d, calm) {
     sky(g, [[0, '#0E1636'], [1, '#25306A']], 210); stars(g, 40, 1600, u, 170, calm);
     circ(g, 520, 58, 22, '#FFF4D2'); circ(g, 529, 52, 19, '#18204A'); glow(g, 520, 58, 90, '255,240,200', 0.12);
-    var WL = 236;
+    var WL = 236, spr = !!(window.TOLPups && window.TOLPups.sprites);
     g.fillStyle = lin(g, 0, 190, 0, 360, [[0, '#2E4F8C'], [1, '#14265A']]); g.fillRect(-60, 190, VW + 120, 220);
     for (var w = 0; w < 9; w++) line(g, 20 + w * 74 + Math.sin(u * 1.2 + w) * 8, 214 + (w % 3) * 16, 60 + w * 74 + Math.sin(u * 1.2 + w) * 8, 214 + (w % 3) * 16, 'rgba(150,190,240,.25)', 1.6);
     g.fillStyle = 'rgba(255,240,200,.14)'; g.fillRect(500, 190, 40, 170);
     rr(g, 556, 196, 100, 10, 2, '#5A4636'); rr(g, 580, 204, 8, 60, 2, '#4A3A2C'); rr(g, 630, 204, 8, 60, 2, '#4A3A2C');
-    // Tidbit paddles on a duck ring
+    function fin(gg) { gg.fillStyle = '#8A8FA0'; gg.beginPath(); gg.moveTo(-8, -9); gg.lineTo(0, -38); gg.lineTo(10, -9); gg.fill(); gg.fillStyle = '#A8ADBD'; gg.beginPath(); gg.moveTo(-3, -11); gg.lineTo(0, -30); gg.lineTo(4, -11); gg.fill(); }
     var by = WL + 5 + Math.sin(u * 2.3) * 3, leap = clamp((u - 3.0) / 1.0, 0, 1), air = bump(leap) * 110, fl = leap < 1 && leap > 0 ? -TAU * leap : 0, tx = 250 + leap * 60;
-    if (u < 3.0 || u > 4.1) {
-      var deep = window.TOLPups && window.TOLPups.sprites ? 14 : 0, ring = u < 3.0, cut0 = ring ? by + 7 : WL + 2;
-      if (ring) { ell(g, tx + 2, by + 8, 36, 12, '#F7DC6F'); ell(g, tx + 2, by + 6, 24, 6, '#14265A'); }
-      g.save(); g.beginPath(); g.rect(-60, -60, VW + 120, cut0 + 60); g.clip();   // sitting in the ring (or in the water): only the top of him shows
-      var tid = pup(g, 'tidbit', tx, (u > 4.1 ? WL + 36 : by) + 18 + deep, 1.45, { pose: 'sit', face: 1, t: u, tilt: u < 3.0 ? Math.sin(u * 2) * 0.06 : 0.1, noShadow: true, ear: u >= 2.7 && u < 3 ? -1.2 : 0 });
-      g.restore();
-      if (ring) { g.save(); g.beginPath(); g.rect(-60, by + 7, VW + 120, 60); g.clip(); ell(g, tx + 2, by + 8, 36, 12, '#F7DC6F'); g.restore(); circ(g, tx - 30, by + 2, 6, '#F7DC6F'); }
-    } else { var tl = pup(g, 'tidbit', tx, WL + 18 - air, 1.45, { pose: 'wiggle', face: 1, t: u, rot: fl, noShadow: true, ear: -1 }); }
-    // the fin glides in from the right, two beats at a time
     var fx = u < 2.7 ? mix(660, 330, clamp((u - 0.5) / 2.2, 0, 1)) : 330;
     var beat = u > 0.8 && u < 3.0 ? Math.max(0, Math.sin(u * Math.PI * 2 / 0.9)) : 0;
-    var rise = clamp((u - 2.9) / 0.5, 0, 1);
-    var sy0 = WL + 40 - 30 * rise;
-    g.save(); g.beginPath(); g.rect(0, 0, VW, WL + 2); g.clip();
-    var sug = pup(g, 'sugarfoot', fx, sy0 + 50, 1.5, { pose: 'sit', face: -1, t: u + 1, over: function (gg) { gg.fillStyle = '#8A8FA0'; gg.beginPath(); gg.moveTo(-8, -9); gg.lineTo(0, -38); gg.lineTo(10, -9); gg.fill(); gg.fillStyle = '#A8ADBD'; gg.beginPath(); gg.moveTo(-3, -11); gg.lineTo(0, -30); gg.lineTo(4, -11); gg.fill(); }, noShadow: true, tilt: u > 3.0 ? 0.08 : 0 });
-    g.restore();
-    if (u > 0.5 && u < 3.0) for (var r2 = 0; r2 < 3; r2++) { var rq = ((u * 0.9 + r2 / 3) % 1); g.strokeStyle = 'rgba(200,225,255,' + 0.45 * (1 - rq) + ')'; g.lineWidth = 1.4; g.beginPath(); g.ellipse(fx, WL + 2, 14 + rq * 50, 3 + rq * 7, 0, 0, TAU); g.stroke(); }
-    ell(g, fx, WL + 3, 20, 3.5, 'rgba(120,160,220,.35)');
+    var tid, sug, floating = u > 4.1;
+    if (!floating) {
+      // Tidbit paddles on a duck ring (looking around for the music), then leaps out of it
+      if (u < 3.0) {
+        var deep = spr ? 14 : 0;
+        ell(g, tx + 2, by + 8, 36, 12, '#F7DC6F'); ell(g, tx + 2, by + 6, 24, 6, '#14265A');
+        g.save(); g.beginPath(); g.rect(-60, -60, VW + 120, by + 67); g.clip();
+        tid = pup(g, 'tidbit', tx, by + 18 + deep, 1.45, { pose: 'sit', face: u > 1.7 && u < 2.1 ? -1 : 1, t: u, tilt: u > 1.55 && u < 2.75 ? 0.14 * Math.sin(u * 5) : Math.sin(u * 2) * 0.06, noShadow: true, ear: u >= 2.7 ? -1.2 : u > 1.55 ? 0.4 : 0 });
+        g.restore();
+        g.save(); g.beginPath(); g.rect(-60, by + 7, VW + 120, 60); g.clip(); ell(g, tx + 2, by + 8, 36, 12, '#F7DC6F'); g.restore(); circ(g, tx - 30, by + 2, 6, '#F7DC6F');
+      } else { tid = pup(g, 'tidbit', tx, WL + 18 - air, 1.45, { pose: 'wiggle', face: 1, t: u, rot: fl, noShadow: true, ear: -1 }); if (u > 3.05) { ell(g, 252, by + 8, 36, 12, '#F7DC6F'); ell(g, 252, by + 6, 24, 6, '#14265A'); circ(g, 222, by + 2, 6, '#F7DC6F'); } }
+      // the fin glides in from the right, two beats at a time... and Sugarfoot comes up under it
+      var rise = clamp((u - 2.9) / 0.5, 0, 1), sy0 = WL + 40 - 30 * rise;
+      g.save(); g.beginPath(); g.rect(0, 0, VW, WL + 2); g.clip();
+      sug = pup(g, 'sugarfoot', fx, sy0 + 50, 1.5, { pose: 'sit', face: -1, t: u + 1, over: fin, noShadow: true, tilt: u > 3.0 ? 0.08 : 0 });
+      g.restore();
+      if (u > 0.5 && u < 3.0) for (var r2 = 0; r2 < 3; r2++) { var rq = ((u * 0.9 + r2 / 3) % 1); g.strokeStyle = 'rgba(200,225,255,' + 0.45 * (1 - rq) + ')'; g.lineWidth = 1.4; g.beginPath(); g.ellipse(fx, WL + 2, 14 + rq * 50, 3 + rq * 7, 0, 0, TAU); g.stroke(); }
+      ell(g, fx, WL + 3, 20, 3.5, 'rgba(120,160,220,.35)');
+    } else {
+      // both of them floating, heads and shoulders out of the water, bobbing out of step; the ring drifts away
+      var fq = sio((u - 4.1) / 0.6), tX = mix(310, spr ? 290 : 262, fq), sX = mix(330, spr ? 436 : 440, fq), bob = Math.sin(u * 2.6) * 2.5, flat = u > 5.75;
+      var rgx = 236 - (u - 4.1) * 46; ell(g, rgx, WL + 8, 36, 12, '#F7DC6F'); ell(g, rgx, WL + 6, 24, 6, '#14265A'); circ(g, rgx - 30, WL + 2, 6, '#F7DC6F');
+      tid = floaty(g, WL, function () { return pup(g, 'tidbit', tX, WL + 26 + bob, 1.45, { pose: 'sit', face: 1, t: u, noShadow: true, ear: flat ? -1.2 : u < 4.6 ? -1 : 0.3, tilt: u > 4.6 && u < 5.2 ? -0.1 : flat ? 0.14 : 0, wag: 0 }); });
+      sug = floaty(g, WL, function () { return pup(g, 'sugarfoot', sX, WL + 26 - bob, 1.5, { pose: 'sit', face: -1, t: u + 1, over: fin, noShadow: true, tilt: u > 5.2 ? 0.1 + 0.05 * Math.sin(u * 6) : 0.05, wag: Math.sin(u * 12) * 0.8 }); });
+      [tX, sX].forEach(function (cx, n) { for (var r4 = 0; r4 < 2; r4++) { var q4 = ((u - 4.1) * 0.7 + r4 * 0.5 + n * 0.25) % 1; g.strokeStyle = 'rgba(210,235,255,' + 0.5 * (1 - q4) + ')'; g.lineWidth = 1.3; g.beginPath(); g.ellipse(cx, WL + 3, 22 + q4 * 50, 3 + q4 * 7, 0, 0, TAU); g.stroke(); } });
+    }
     onomato(g, beat > 0.5 ? 'DUN…' : 'dun…', 330, 120, beat > 0.5 ? 40 : 34, '#E4566E', win(u, 0.9, 2.9, 0.25) * (0.5 + 0.5 * beat), 0);
+    // the music again, and this time it's plainly her
+    if (sug && u > 5.75) onomato(g, u < 6.02 ? 'DUN…' : 'DUN…  dun…', sug.x + 34, sug.y - 34, 24, '#E4566E', win(u, 5.75, 6.75, 0.08), -0.06);
     splash(g, tx + 20, WL + 2, 3.9, u, 16, 1700);
-    if (u > 3.9) for (var rr2 = 0; rr2 < 2; rr2++) { var q3 = ((u - 3.9) * 0.8 + rr2 * 0.4) % 1; g.strokeStyle = 'rgba(210,235,255,' + 0.6 * (1 - q3) + ')'; g.lineWidth = 1.4; g.beginPath(); g.ellipse(tx + 20, WL + 4, 18 + q3 * 70, 3 + q3 * 9, 0, 0, TAU); g.stroke(); }
-    say(g, { x: tx, y: by - 38, who: 'tidbit' }, 'Nice night for a swim.', u, 0.3, 1.7);
-    say(g, { x: tx, y: by - 38, who: 'tidbit' }, 'Um… hello?', u, 2.0, 2.9);
-    say(g, sug, 'Gotcha! Just me!', u, 3.0, 4.13, { big: true });
-    say(g, { x: tx, y: WL - 20, who: 'tidbit' }, 'You owe me a bigger bone!', u, 4.15, 6.0);
+    say(g, { x: tx, y: by - 38, who: 'tidbit' }, 'Nice night for a swim.', u, 0.3, 1.4);
+    say(g, { x: tx, y: by - 38, who: 'tidbit' }, 'Hey… music?', u, 1.6, 2.68);
+    say(g, sug, 'Gotcha! Just me!', u, 3.0, 3.95, { big: true });
+    say(g, tid, 'Was that YOU?', u, 4.6, 5.15);
+    say(g, sug, '…Maybe.', u, 5.25, 5.7);
   }
   // 3. slow motion (The Matrix): Tidbit dodges a pie, and the pie finds Sugarfoot
   function matrix(g, u, d, calm) {
@@ -667,9 +688,8 @@
     var spr = !!(window.TOLPups && window.TOLPups.sprites), near = spr ? 292 : 262, back = spr ? 352 : 322;
     var dash = u < 2.84 ? 470 : u < 3.24 ? mix(470, near, eio((u - 2.84) / 0.4)) : u < 4.1 ? near : mix(near, back, sio((u - 4.1) / 0.3));
     var sug = pup(g, 'sugarfoot', dash, 326, 1.45, { pose: (u >= 2.84 && u < 3.24) ? 'run' : 'sit', face: -1, t: u + 1, ph: u * 18, over: HAT.beanie('#F07EA6'), lift: (u >= 2.84 && u < 3.24) ? 6 : u > 4.1 && u < 4.4 ? 7 * bump((u - 4.1) / 0.3) : 0, tilt: u > 5.05 ? 0.1 : 0, wag: u > 5.05 ? Math.sin(u * 14) * 0.8 : undefined });
-    // the paw that stops the word (on the painted pups, a foreleg reaching from her chest to his mouth)
-    if (spr && u >= 3.2 && u < 4.08) { var ax = dash - 16, ay = 326 - 30; g.lineCap = 'round'; g.strokeStyle = '#2B2320'; g.lineWidth = 9; g.beginPath(); g.moveTo(ax, ay); g.quadraticCurveTo((ax + tid.x + 14) / 2, ay - 4, tid.x + 18, tid.y + 9); g.stroke(); g.strokeStyle = '#C98A4E'; g.lineWidth = 6; g.beginPath(); g.moveTo((ax + tid.x + 14) / 2, ay - 2); g.quadraticCurveTo((ax + tid.x + 14) / 2 - 6, ay - 3, tid.x + 18, tid.y + 9); g.stroke(); g.lineCap = 'butt'; }
-    if (u >= 3.2 && u < 4.08) { var px = tid.x + 14, py = tid.y + 8; ell(g, px, py, 11, 8, '#C98A4E', 0.2); circ(g, px - 4, py - 5, 2.2, '#B97847'); circ(g, px + 1, py - 6, 2.2, '#B97847'); circ(g, px + 6, py - 4, 2.2, '#B97847'); }
+    // the paw that stops the word (the drawn pups only: the painted ones have no paw to lift, so she just bursts in)
+    if (!spr && u >= 3.2 && u < 4.08) { var px = tid.x + 14, py = tid.y + 8; ell(g, px, py, 11, 8, '#C98A4E', 0.2); circ(g, px - 4, py - 5, 2.2, '#B97847'); circ(g, px + 1, py - 6, 2.2, '#B97847'); circ(g, px + 6, py - 4, 2.2, '#B97847'); }
     onomato(g, 'FWUMP!', 300, 186, 30, '#FFF8EC', win(u, 3.15, 4.05, 0.1), 0.08);
     say(g, sug, 'What a smooth flight!', u, 0.2, 1.4);
     say(g, tid, 'Wait… snakes?!', u, 1.6, 2.3);
@@ -750,14 +770,14 @@
     if (u >= 3.1 && !inWater) { pup(g, 'tidbit', tx, ty, 1.55, { pose: u < hitU ? 'run' : 'wiggle', face: 1, t: u, ph: tx * 0.24, rot: u < hitU ? 0 : -tumble * TAU, lift: u < hitU ? 3 * Math.abs(Math.sin(u * 16)) : 0, wag: 0.7, noShadow: u >= hitU }); }
     // both end up in the stream, heads out
     if (u >= hitU + 0.9) {
-      g.save(); g.beginPath(); g.rect(0, 0, VW, WL + 2); g.clip();
-      // side by side (the painted pups are wider, so they sit further apart), bobbing out of step
-      var spr = !!(window.TOLPups && window.TOLPups.sprites), bob = Math.sin(u * 3) * 2, deep = spr ? 30 : 40;
-      pup(g, 'sugarfoot', spr ? 466 : 420, WL + deep + bob, 1.55, { pose: 'sit', face: -1, t: u + 1, over: wiz, noShadow: true, ear: -0.8, tilt: 0.06 * Math.sin(u * 2.2) });
-      var tidW = pup(g, 'tidbit', spr ? 336 : 380, WL + deep - bob, 1.55, { pose: 'sit', face: 1, t: u, noShadow: true, ear: -1, tilt: u > 5.3 ? 0.14 : 0 }); g.restore();
+      // floating side by side, heads and shoulders out (the painted pups are wider, so they sit further apart), bobbing
+      // out of step; below the waterline they show faintly through the water
+      var spr = !!(window.TOLPups && window.TOLPups.sprites), bob = Math.sin(u * 3) * 2, deep = 26;
+      floaty(g, WL, function () { return pup(g, 'sugarfoot', spr ? 466 : 462, WL + deep + bob, 1.55, { pose: 'sit', face: -1, t: u + 1, over: wiz, noShadow: true, ear: -0.8, tilt: 0.06 * Math.sin(u * 2.2) }); });
+      var tidW = floaty(g, WL, function () { return pup(g, 'tidbit', spr ? 336 : 338, WL + deep - bob, 1.55, { pose: 'sit', face: 1, t: u, noShadow: true, ear: -1, tilt: u > 5.3 ? 0.14 : 0 }); });
       // a drip off each soggy pup
-      for (var dr = 0; dr < 2; dr++) { var dq = ((u - hitU) * 0.9 + dr * 0.5) % 1, dxx = dr ? (spr ? 466 : 420) - 14 : (spr ? 336 : 380) + 14; circ(g, dxx, WL - 34 + dq * 34, 2.2, 'rgba(190,225,250,' + (0.9 * (1 - dq)).toFixed(2) + ')'); }
-      for (var r3 = 0; r3 < 4; r3++) { var rq = ((u - hitU - 0.9) * 0.7 + (r3 % 2) * 0.5) % 1, rcx = r3 < 2 ? (spr ? 336 : 380) : (spr ? 466 : 420); g.strokeStyle = 'rgba(255,255,255,' + 0.6 * (1 - rq) + ')'; g.lineWidth = 1.4; g.beginPath(); g.ellipse(rcx, WL + 2, 22 + rq * 60, 3 + rq * 8, 0, 0, TAU); g.stroke(); }
+      for (var dr = 0; dr < 2; dr++) { var dq = ((u - hitU) * 0.9 + dr * 0.5) % 1, dxx = dr ? (spr ? 466 : 462) - 14 : (spr ? 336 : 338) + 14; circ(g, dxx, WL - 34 + dq * 34, 2.2, 'rgba(190,225,250,' + (0.9 * (1 - dq)).toFixed(2) + ')'); }
+      for (var r3 = 0; r3 < 4; r3++) { var rq = ((u - hitU - 0.9) * 0.7 + (r3 % 2) * 0.5) % 1, rcx = r3 < 2 ? (spr ? 336 : 338) : (spr ? 466 : 462); g.strokeStyle = 'rgba(255,255,255,' + 0.6 * (1 - rq) + ')'; g.lineWidth = 1.4; g.beginPath(); g.ellipse(rcx, WL + 2, 22 + rq * 60, 3 + rq * 8, 0, 0, TAU); g.stroke(); }
     }
     splash(g, 400, WL, hitU + 0.7, u, 20, 1900);
     var sh = u >= hitU + 0.9 ? { x: 420, y: WL - 40, who: 'sugarfoot' } : { x: sx, y: sy - 74, who: 'sugarfoot' };
@@ -799,7 +819,7 @@
   // ---------------------------------------------------------------- the edit: every shot on the timeline
   // [start, end, id, draw function, extra]
   // the funny middle: a card, then six bits (id, length in seconds, draw function)
-  var GAGS = [['boulder', 7.7, boulder], ['jaws', 6.2, jaws], ['matrix', 6.2, matrix], ['snakes', 5.95, snakes], ['vault', 6.6, vault], ['bridge', 6.6, bridge], ['laundry', 6.2, laundry]];
+  var GAGS = [['boulder', 9.5, boulder], ['jaws', 6.85, jaws], ['matrix', 6.2, matrix], ['snakes', 5.95, snakes], ['vault', 6.6, vault], ['bridge', 6.6, bridge], ['laundry', 6.2, laundry]];
   // each bit is slowed to the pace its lines need to be spoken, so the voices and the picture always go along together
   var GK = { boulder: 1.6, jaws: 1.75, matrix: 1.75, snakes: 2.1, vault: 1.25, bridge: 1.65, laundry: 1.6 };   // stretched so each line has room to breathe before the next
   GAGS = GAGS.map(function (x) { var k = GK[x[0]] || 1, f = x[2]; return [x[0], x[1] * k, k === 1 ? f : function (g, u, d, c) { return f(g, u / k, d / k, c); }, k]; });
@@ -1031,7 +1051,7 @@
   }
   function ckey(who, text) { var h = 0x811c9dc5, t = who + '|' + text; for (var i = 0; i < t.length; i++) { h ^= t.charCodeAt(i); h = Math.imul(h, 0x01000193) >>> 0; } return ('0000000' + h.toString(16)).slice(-8); }
   // the recorded voices (one mp3 per line, listed in index.json): when a line has one, the little talking-voice stand-in stays quiet
-  var CLIPV = '1711a'; // bump whenever the teaser recordings are redone, so no browser plays an old copy
+  var CLIPV = '1711b'; // bump whenever the teaser recordings are redone, so no browser plays an old copy
   var CLIPMAP = null, CLIPP = null;
   function clipsLoad() { return CLIPP || (CLIPP = fetch('/assets/audio/buddies/s2teaser/index.json?v=' + CLIPV, { cache: 'no-cache' }).then(function (r) { return r.ok ? r.json() : null; }).then(function (m) { CLIPMAP = m || {}; return CLIPMAP; }).catch(function () { CLIPMAP = {}; return CLIPMAP; })); }
   function hasClip(who, text) { return !!(CLIPMAP && CLIPMAP[ckey(who === 'narr' ? 'narr' : who === 'sugarfoot' ? 'sugarfoot' : 'tidbit', text)]); }
@@ -1133,14 +1153,15 @@
     var tEnd = G0 + GL;
     // 1. boulder: sneaky plucks, a rumble, drums, then a slide-whistle sigh
     var marks = [E.length], T = starts[0];
-    ev(T + 2.3, 'bell', 88, 0.07); ev(T + 3.2, 'rumble', 2.7, 0.4);
-    for (var k1 = 0; k1 < 7; k1++) ev(T + 3.9 + k1 * 0.28, 'tom', 90 + (k1 % 2) * 25, 0.22 * H);
-    ev(T + 3.9, 'boom', 0.4 * H); ev(T + 5.82, 'glide', 700, 150, 0.7, 0.08, 'sine');
+    ev(T + 2.3, 'bell', 88, 0.07); ev(T + 3.2, 'rumble', 3.05, 0.4); ev(T + 4.38, 'blip', 1320, 0.06);
+    for (var k1 = 0; k1 < 7; k1++) ev(T + 4.4 + k1 * 0.28, 'tom', 90 + (k1 % 2) * 25, 0.22 * H);
+    ev(T + 4.4, 'boom', 0.4 * H); ev(T + 6.25, 'glide', 700, 150, 0.7, 0.08, 'sine'); ev(T + 8.1, 'bell', 84, 0.04);
     talk(T + 2.1, 6, 640); talk(T + 3.5, 4, 470); talk(T + 5.5, 6, 640); talk(T + 6.2, 5, 470);
     // 2. pond: two dramatic notes, faster and faster
     marks.push(E.length); T = starts[1];
     for (var k2 = 0, t2 = T + 0.9; k2 < 5 && t2 < T + 2.9; k2++) { ev(t2, 'bass', 40, 0.5, 0.15); ev(t2 + 0.26, 'bass', 41, 0.5, 0.15); t2 += k2 < 2 ? 0.9 : 0.6; }
     ev(T + 2.9, 'swell', 0.5, 0.08 * H); ev(T + 2.95, 'crash', 0.08 * H); ev(T + 3.0, 'glide', 300, 1500, 0.3, 0.07, 'triangle'); ev(T + 3.3, 'sample', 'sugarfoot-laugh-2', 0.45); ev(T + 3.9, 'splash', 0.35);
+    ev(T + 5.75, 'bass', 40, 0.5, 0.15); ev(T + 6.02, 'bass', 41, 0.5, 0.15);   // dun... dun... (it was her all along)
     talk(T + 0.3, 6, 640); talk(T + 2.0, 3, 640); talk(T + 3.0, 4, 470); talk(T + 4.4, 7, 640);
     // 3. slow motion: a long low sweep, a splat, and a sad trombone
     marks.push(E.length); T = starts[2];
