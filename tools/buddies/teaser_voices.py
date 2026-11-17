@@ -51,13 +51,13 @@ MOOD = {
     'A secret door!': ('surprised', 1.1), 'So many lanterns!': ('excited', 1.0), 'Ooh, it’s glowing!': ('curious', 1.1),
     'Make a wish!': ('happy', 1.0), 'Who’s that?': ('curious', 1.0), 'Maybe a new friend!': ('happy', 1.1),
     'Ah… ahh…': ('build', 1.0), 'CHOO!': ('burst', 1.3), '…Bless you!': ('happy', 0.9), 'Hee hee!': ('giggly', 1.1),
-    'That was on purpose!': ('proud', 1.1), 'A golden bone? Easy!': ('proud', 1.1), 'Tidbit! RUN!': ('scared', 1.3),
-    'Wait… a beach ball?': ('surprised', 1.0), 'Every single time.': ('dry', 1.0), 'Nice night for a swim.': ('calm', 1.0),
+    'That was on purpose!': ('proud', 1.1), 'A golden bone? Easy!': ('proud', 1.1), 'Tidbit… what did you do?': ('worried', 1.1), 'Oh no.': ('worried', 1.0), 'RUN!': ('scared', 1.3),
+    'Wait… a beach ball?': ('surprised', 1.0), 'This never happened.': ('dry', 1.0), 'Nice night for a swim.': ('calm', 1.0),
     'Um… hello?': ('timid', 1.0), 'Gotcha! Just me!': ('silly', 0.8), 'You owe me a bigger bone!': ('annoyed', 0.8),
     'Whoa… slow motion.': ('slowmo', 1.0), 'I know pie-fu.': ('cool', 1.0), 'Why is it always me?': ('grumpy', 1.1),
     'At least it’s cherry.': ('dry', 0.9), 'What a smooth flight!': ('happy', 1.0), 'Wait… snakes?!': ('scared', 1.2),
     'I have had it with these snakes on this…': ('fed up', 1.2), '…PLANE! This lovely plane!': ('excited', 1.2),
-    'Hey, I was talking!': ('annoyed', 1.2), '…on this lovely plane.': ('dry', 0.9), 'Good girl.': ('tender', 1.0),
+    'That is NOT what I was going to say.': ('annoyed', 1.2), 'I know.': ('dry', 0.9),
     'Almost there…': ('worried', 1.0), 'I’m holding on tight!': ('scared', 1.0), 'Got it!': ('proud', 1.2), '…Oops.': ('timid', 0.9),
     'Mission: possible… ish.': ('silly', 1.0), 'YOU SHALL NOT PASS!': ('epic', 1.3), '…Okay.': ('timid', 0.9),
     'Did I do that?': ('timid', 1.0), 'Ready? Watch this!': ('excited', 1.2), 'To infinity… and beyond!': ('excited', 1.3),
@@ -98,16 +98,16 @@ def main():
             continue
         k = P.ckey(l['who'], l['text'])
         src = os.path.join(SRC, k + '.mp3')
-        if not os.path.exists(src):
+        built = os.path.join(BUILT, k + '.mp3')
+        if not os.path.exists(src) and not os.path.exists(built):
             print('no recording:', l['text']); continue
         mood, energy = MOOD.get(l['text'], ('', 1.0))
-        a = P.decode(src)
-        built = os.path.join(BUILT, k + '.mp3')
-        if os.path.exists(built):  # rebuilt: its delivery is already in it
+        if os.path.exists(built):  # rebuilt (or built from the pup's own words): its delivery is already in it
             b = P.decode(built)
             P.encode(b, os.path.join(DST, k + '.mp3')); out[k] = [round(len(b) / P.SR, 2)]; done += 1
             print('%-10s %-8s %5.2fs (rebuilt, room %.2fs)  %s' % (l['who'], 'built', len(b) / P.SR, l['room'], l['text']), flush=True)
             continue
+        a = P.decode(src)
         if l['text'] in KEEP:
             b = a / max(1e-9, np.abs(a).max()) * np.abs(a).max() * 10 ** ((KEEP[l['text']] - 2.0) / 20)
             P.encode(b, os.path.join(DST, k + '.mp3')); out[k] = [round(len(b) / P.SR, 2)]; done += 1

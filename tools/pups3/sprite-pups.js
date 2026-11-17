@@ -81,6 +81,19 @@
       }
     }
   }
+  // their eyes on each drawing (sprite pixels from the head centre: x, y, radius, and the fur colour just above), for
+  // blinking: a lid of that fur comes down over the eye with a dark lash line along its edge
+  var EYES = {
+    '0:1': [[-2.5, -4, 3.1, '#3C3425'], [12, -6, 2.6, '#6E5440']], '0:2': [[10, -5.5, 3.1, '#5A4630']],
+    '1:1': [[-3, -6, 3.3, '#B8916C'], [12, -7, 2.7, '#8E7050']], '1:2': [[11, -7, 3.1, '#A8845A']]
+  };
+  function blinkLids(ctx, dog, ang, shut) {
+    (EYES[dog + ':' + ang] || []).forEach(function (e) {
+      var x = e[0], y = e[1], r = e[2] + 0.6, h = r * 2 * shut;
+      ctx.fillStyle = e[3]; ctx.beginPath(); ctx.ellipse(x, y - r + h / 2, r + 0.4, h / 2 + 0.3, 0, 0, Math.PI * 2); ctx.fill();
+      ctx.strokeStyle = 'rgba(25,18,14,.85)'; ctx.lineWidth = 0.9; ctx.beginPath(); ctx.ellipse(x, y - r + h - 0.4, r * 0.95, 1.1, 0, 0.15, Math.PI - 0.15); ctx.stroke();
+    });
+  }
   function frame(dog, pose, ph) {
     var M = S.meta;
     if (pose === 'run' && S.moving[dog]) { var q = Math.floor((((ph % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2)) / (Math.PI / 2)) % 4; return { img: S.walk, f: M.walk[dog * 4 + q], fh: M.wh }; }
@@ -100,13 +113,21 @@
     var key = dog + ':' + pose; if (S.lastPh[key] != null) S.moving[dog] = Math.abs(ph - S.lastPh[key]) > 1e-4; S.lastPh[key] = ph;
     var fr = frame(dog, pose, ph), f = fr.f, p = place(fr), fw = S.meta.fw;
     var col = f.c, row = f.r, sx = col * fw, sy0 = row * fr.fh;
-    var breathe = 1 + 0.012 * Math.sin((t || 0) / 520 + dog * 1.7), sy = (pose === 'lie' ? 0.72 : 1) * breathe;
+    // life: breathing, a slow sway of the weight from paw to paw, a happy wiggle with the tail, and a little bounce on
+    // the stressed syllables while talking
+    var tt = (t || 0) / 1000, tk = o && o.talk > 0 ? Math.min(1, o.talk) : 0, still = fr.img !== S.walk;
+    var breathe = 1 + 0.02 * Math.sin(tt * 1.9 + dog * 1.7) + 0.03 * tk, sy = (pose === 'lie' ? 0.72 : 1) * breathe;
     ctx.save();
+    if (still) {
+      ctx.rotate(0.016 * Math.sin(tt * 1.25 + dog * 2.1));
+      ctx.transform(1, 0, -0.035 * (wag || 0), 1, 0, 0);   // the body leans a touch with each wag of the tail
+    }
     ctx.imageSmoothingEnabled = true; try { ctx.imageSmoothingQuality = 'high'; } catch (e) {}
     var rot = (tilt || 0) * 0.45 + (pose === 'bow' ? 0.16 : 0) + (pose === 'wiggle' ? Math.sin((t || 0) / 95) * 0.07 : 0);
     if (rot) { ctx.translate(0, -18); ctx.rotate(rot); ctx.translate(0, 18); }
     ctx.scale(K, K * sy);
     ctx.drawImage(fr.img, sx, sy0, fw, fr.fh, -p.cx, -p.fy, fw, fr.fh);
+    if (still && blink) { ctx.save(); ctx.translate(f.hx - p.cx, f.hy - p.fy); blinkLids(ctx, dog, f.ang, 1); ctx.restore(); }
     if (o && o.talk > 0) { ctx.save(); ctx.translate(f.hx - p.cx, f.hy - p.fy); jaw(ctx, fr, dog, fr.img === S.walk ? 'w' : (pose === 'lie' || pose === 'bow' ? 'a2' : 'a1'), Math.min(1, (o.talk - 0.02) / 0.98)); ctx.restore(); }
     // the outfit, at the head of this drawing
     if (!(o && o.noOutfit)) {
