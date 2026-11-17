@@ -3,6 +3,10 @@
 name: Open Studio installer
 
 on:
+  push:
+    paths:
+      - 'open-studio/**'
+      - '.github/workflows/open-studio-windows.yml'
   workflow_dispatch:
     inputs:
       publish:
