@@ -1,0 +1,34 @@
+{
+  "name": "open-studio",
+  "version": "0.1.0",
+  "description": "Open Studio — a free, standalone image & text generation studio. Secure local key vault; free engines (Pollinations, AI Horde) plus bring-your-own-key clouds.",
+  "main": "main.js",
+  "author": "Open Studio",
+  "license": "MIT",
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder --win --publish never"
+  },
+  "devDependencies": {
+    "electron": "33.2.1",
+    "electron-builder": "25.1.8"
+  },
+  "build": {
+    "appId": "com.openstudio.desktop",
+    "productName": "Open Studio",
+    "artifactName": "Open-Studio-Setup-${version}.${ext}",
+    "files": [
+      "main.js",
+      "preload.js",
+      "renderer/**/*"
+    ],
+    "directories": { "output": "dist" },
+    "win": { "target": "nsis" },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "shortcutName": "Open Studio"
+    }
+  }
+}

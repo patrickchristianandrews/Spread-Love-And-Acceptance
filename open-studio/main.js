@@ -1,0 +1,80 @@
+// Open Studio — Electron main process.
+// Holds a secure, local-only key vault (encrypted with the OS keychain via safeStorage) and makes
+// every keyed request from here, so an API key never reaches the page and is never exposed. The
+// free engines (Pollinations, AI Horde) need no key and are called straight from the renderer.
+'use strict';
+const { app, BrowserWindow, ipcMain, safeStorage, shell } = require('electron');
+const path = require('node:path');
+const fs = require('node:fs');
+
+const KEYS_FILE = () => path.join(app.getPath('userData'), 'keys.json');
+
+// Keyed clouds Open Studio can use for TEXT (all OpenAI-compatible). Free-with-key, generous tiers.
+const PROVIDERS = {
+  groq:       { name: 'Groq',       base: 'https://api.groq.com/openai/v1', keyUrl: 'https://console.groq.com/keys', defModel: 'llama-3.3-70b-versatile' },
+  openrouter: { name: 'OpenRouter', base: 'https://openrouter.ai/api/v1',   keyUrl: 'https://openrouter.ai/keys',   defModel: 'meta-llama/llama-3.3-70b-instruct:free' },
+  cerebras:   { name: 'Cerebras',   base: 'https://api.cerebras.ai/v1',     keyUrl: 'https://cloud.cerebras.ai',    defModel: 'llama-3.3-70b' },
+};
+
+let keys = {};
+function loadKeys() {
+  try {
+    const raw = JSON.parse(fs.readFileSync(KEYS_FILE(), 'utf8'));
+    const out = {};
+    for (const k of Object.keys(raw)) {
+      try {
+        const buf = Buffer.from(raw[k], 'base64');
+        out[k] = safeStorage.isEncryptionAvailable() ? safeStorage.decryptString(buf) : buf.toString('utf8');
+      } catch { /* a key that can't be decrypted on this machine is dropped */ }
+    }
+    return out;
+  } catch { return {}; }
+}
+function saveKeys() {
+  const enc = {};
+  for (const k of Object.keys(keys)) {
+    if (!keys[k]) continue;
+    const buf = safeStorage.isEncryptionAvailable() ? safeStorage.encryptString(keys[k]) : Buffer.from(keys[k], 'utf8');
+    enc[k] = buf.toString('base64');
+  }
+  try { fs.writeFileSync(KEYS_FILE(), JSON.stringify(enc)); } catch { /* best effort */ }
+}
+
+function createWindow() {
+  const win = new BrowserWindow({
+    width: 1180, height: 820, minWidth: 720, minHeight: 560,
+    backgroundColor: '#0b0d12', autoHideMenuBar: true,
+    webPreferences: { preload: path.join(__dirname, 'preload.js'), contextIsolation: true, nodeIntegration: false },
+  });
+  win.loadFile(path.join(__dirname, 'renderer', 'index.html'));
+  // External links (Get a key, Open image) open in the real browser, not inside the app.
+  win.webContents.setWindowOpenHandler(({ url }) => { if (/^https?:/.test(url)) shell.openExternal(url); return { action: 'deny' }; });
+}
+
+app.whenReady().then(() => {
+  keys = loadKeys();
+  createWindow();
+  app.on('activate', () => { if (BrowserWindow.getAllWindows().length === 0) createWindow(); });
+});
+app.on('window-all-closed', () => { if (process.platform !== 'darwin') app.quit(); });
+
+// ---- IPC: the renderer talks to the vault and keyed providers only through these channels ----
+// The renderer learns which providers have a key (never the key itself).
+ipcMain.handle('providers', () => Object.entries(PROVIDERS).map(([id, p]) => ({ id, name: p.name, keyUrl: p.keyUrl, defModel: p.defModel, connected: Boolean(keys[id]) })));
+ipcMain.handle('keys:set', (_e, { provider, key }) => { if (PROVIDERS[provider]) { keys[provider] = (key || '').trim(); if (!keys[provider]) delete keys[provider]; saveKeys(); } return Object.keys(keys); });
+
+ipcMain.handle('text', async (_e, { provider, model, prompt }) => {
+  const p = PROVIDERS[provider];
+  if (!p) throw new Error('Unknown provider.');
+  const key = keys[provider];
+  if (!key) throw new Error(`Add your ${p.name} key first (Keys).`);
+  const res = await fetch(`${p.base}/chat/completions`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${key}`,
+      ...(provider === 'openrouter' ? { 'HTTP-Referer': 'https://open-studio.app', 'X-Title': 'Open Studio' } : {}) },
+    body: JSON.stringify({ model: model || p.defModel, messages: [{ role: 'user', content: prompt }], max_tokens: 1024 }),
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(data.error?.message || `${p.name} returned HTTP ${res.status}`);
+  return data.choices?.[0]?.message?.content || '(empty answer)';
+});

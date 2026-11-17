@@ -1,0 +1,62 @@
+# Builds the Open Studio Windows installer (Open-Studio-Setup-x.y.z.exe), a standalone app
+# separate from Quicksilver. Run it from the Actions tab; tick "publish" to attach a GitHub release.
+name: Open Studio installer
+
+on:
+  workflow_dispatch:
+    inputs:
+      publish:
+        description: 'Publish this build as a GitHub release'
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: open-studio-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: windows-latest
+    defaults:
+      run:
+        working-directory: open-studio
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: open-studio
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Install
+        run: npm install --no-audit --no-fund
+      - name: Read version
+        id: ver
+        run: echo "v=$(node -p "require('./package.json').version")" >> "$GITHUB_OUTPUT"
+      - name: Build the installer
+        run: npx electron-builder --win --publish never
+        env:
+          CSC_IDENTITY_AUTO_DISCOVERY: 'false'
+      - name: Fingerprint
+        run: for f in dist/Open-Studio-Setup-*.exe; do (cd dist && sha256sum "$(basename "$f")" > "$(basename "$f").sha256" && cat "$(basename "$f").sha256"); done
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Open-Studio-Windows-installer
+          path: |
+            open-studio/dist/*.exe
+            open-studio/dist/*.exe.sha256
+          if-no-files-found: error
+          retention-days: 90
+      - name: Publish release
+        if: inputs.publish
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: open-studio-v${{ steps.ver.outputs.v }}
+          target_commitish: ${{ github.sha }}
+          name: Open Studio ${{ steps.ver.outputs.v }}
+          files: |
+            open-studio/dist/*.exe
+            open-studio/dist/*.exe.sha256
