@@ -29,6 +29,7 @@ const API_RANK = [
   ['venice', 'Venice AI', ['chat', 'uncensored'], 'Uncensored and private (the suggested cloud AI for the Liquid Edition)', 'A small free allowance', 'About $0.70 in / $2.80 out per million tokens', 7, 3, 7.5, 'app'],
   ['abliteration', 'Abliteration', ['chat', 'uncensored', 'coding'], 'Uncensored (abliterated) and private, with a zero-retention promise; one key also works with Claude Code', 'None: pay-as-you-go credits or a plan', 'Pay as you go', 7.5, 0, 6, 'app'],
   ['', 'Pollinations', ['photos'], 'Free pictures with no account at all', 'Free, no key (rate limited)', 'Free', 6, 10, 10, 'app'],
+  ['aihorde', 'AI Horde', ['chat', 'uncensored'], 'Free text by a crowd of volunteers — no account or key; slower, best as a no-cost backup', 'Free, no key (waits in a queue)', 'Free', 6, 10, 10, 'app'],
   ['replicate', 'Replicate', ['photos', 'video', 'music'], 'Thousands of image, video and music models', '$5 credits, no card', 'FLUX.1 Schnell about $0.003 a picture', 7.5, 7, 9, 'app'],
   ['stability', 'Stability AI', ['photos'], 'Stable Image Core and Ultra pictures', '25 credits a month (about 8 pictures)', 'Credits from $10', 7.5, 5.5, 7.5, 'app'],
   ['fal', 'fal.ai', ['photos', 'editing', 'video', 'music'], 'The best photo, edit, video and full-song models with one key', 'None (new accounts sometimes get a little)', 'Nano Banana about $0.04 a picture; Veo 3.1 about $0.40 a second; songs $0.15–$0.80/min', 9.5, 1, 6, 'app'],

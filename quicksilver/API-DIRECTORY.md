@@ -1,6 +1,6 @@
 # Quicksilver API directory
 
-Every cloud service Quicksilver can use (55 of them), by task. In each task: free ones first, then free to start, then paid, with what the free plan gives you, what it costs after, and a link to get its key. A service appears under every task it is good at.
+Every cloud service Quicksilver can use (56 of them), by task. In each task: free ones first, then free to start, then paid, with what the free plan gives you, what it costs after, and a link to get its key. A service appears under every task it is good at.
 
 Free allowances and prices are as of November 2026 and change often: the "prices" link shows today's. Quicksilver works without any of these; they are optional additions. The same list is in the app under Guide → Best cloud AIs, and under Models → Connect an API → API directory.
 
@@ -20,6 +20,7 @@ Tasks: 💬 Everyday chat · 🧠 Hard reasoning & maths · 💻 Coding · ✍�
 | **Cohere** (7.5/10) | Business writing and documents | Trial key: 1,000 calls a month | Pay as you go | [Get a key](https://dashboard.cohere.com/api-keys) · [Prices](https://cohere.com/pricing) |
 | **Cloudflare Workers AI** (7/10) | Open models and images on a free daily allowance | Free: 10,000 "neurons" a day | Low, per use | [Get a key](https://dash.cloudflare.com/profile/api-tokens) · [Prices](https://developers.cloudflare.com/workers-ai/platform/pricing/) |
 | **SambaNova** (7/10) | Big open models at high speed | Free tier with rate limits | Low | [Get a key](https://cloud.sambanova.ai/apis) · [Prices](https://cloud.sambanova.ai/plans/pricing) |
+| **AI Horde** (6/10) | Free text by a crowd of volunteers — no account or key; slower, best as a no-cost backup | Free, no key (waits in a queue) | Free | [Site](https://aihorde.net/) |
 | **Aion Labs** | A permanent free tier (no card) tuned for role-play and storytelling. | Free: create a key, no card. About 15 requests a minute and 20K tokens a day. | Paid plans for more | [Get a key](https://www.aionlabs.ai/app/api-keys/) · [Prices](https://www.aionlabs.ai) |
 | **Clarifai** | Many open models behind one key, OpenAI-compatible. | Free tier with a Clarifai account (a monthly request allowance), then pay as you go. After connecting, use "Save & load models" to list what's available. | Paid plans for more | [Get a key](https://clarifai.com/settings/security) · [Prices](https://www.clarifai.com/pricing) |
 | **Gonka Broker** | Big open models (GLM-5.3, DeepSeek V4, MiniMax) free every month. | Free: sign up (phone verification, no card). About 1M shared tokens a month; the model lineup rotates. | Paid plans for more | [Get a key](https://app.gonkabroker.com/signup) · [Prices](https://gonkabroker.com) |
@@ -183,6 +184,12 @@ Tasks: 💬 Everyday chat · 🧠 Hard reasoning & maths · 💻 Coding · ✍�
 | **xAI (Grok)** | xAI's strongest model. | Pay as you go. New accounts sometimes get promotional credits. | See its price page | [Get a key](https://console.x.ai) · [Prices](https://docs.x.ai/docs/models) |
 
 ## 🔓 Uncensored
+
+### Free
+
+| Service | Best for | What free gets you | After that | Links |
+|---|---|---|---|---|
+| **AI Horde** (6/10) | Free text by a crowd of volunteers — no account or key; slower, best as a no-cost backup | Free, no key (waits in a queue) | Free | [Site](https://aihorde.net/) |
 
 ### Free to start, then paid
 
