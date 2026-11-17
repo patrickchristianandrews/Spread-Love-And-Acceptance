@@ -718,8 +718,40 @@ def _eyes(expr):
     return 'shut' if expr in ('sleep', 'sleepy') else 'open'
 
 
+import pupink as _pk
+PKL = 0.89    # page units per hand-drawn unit at s = 1: the same size as the painted pup in color
+
+
+def _ink_fig(ink, who, x, y, s, left, pose, expr='happy'):
+    """the coloring books' pup: hand-drawn line art of the painted look (tools/kids/painted/pupink.py), paws at (x, y)"""
+    _cute.PAIR['mark'] = True
+    k = PKL * s
+    lw = getattr(ink, 'ow', 6.0) * 0.95 / k        # inked as boldly as the page around it
+    wear = _pi.outfit(who, ('c', _scene(ink)))
+    eyes = _eyes(expr)
+    pk = {'sit': 'sit', 'stand': 'stand', 'run': 'stand', 'walk': 'stand', 'jump': 'stand', 'wiggle': 'sit', 'lie': 'lie', 'sleep': 'lie', 'peek': 'peek'}.get(pose, 'sit')
+    svg, bb = _pk.draw(who, pk, eyes, wear, lw)
+    def box(x):
+        x0, x1 = (x - bb[2] * k, x - bb[0] * k) if left else (x + bb[0] * k, x + bb[2] * k)
+        return (x0, y + bb[1] * k, x1, y + bb[3] * k)
+    if not _cute.PAIR.get('placed') and not getattr(ink, '_probe', False):
+        b = box(x)
+        x += _cute.pup_room(ink, b[0], b[1], b[2], b[3])
+    mk = '<g transform="translate(%.2f %.2f) scale(%.5f %.5f)">%s</g>' % (x, y, -k if left else k, k, svg)
+    with ink.fig(0, 0, 1.0, False) as g:
+        g.raw_at(mk)
+    b = box(x)
+    g.bb_true = b
+    p = 8 * s
+    g.bb = (b[0] - p, b[1], b[2] + p, b[3])
+    g.m = _cute.mat(x, y, s, left)
+    return g
+
+
 def _pt_fig(ink, who, x, y, s, left, pose, expr='happy', peek=None):
     """one painted pup with its paws at (x, y) (peek: only the top part, cut at y), facing left if left"""
+    if not ink.color:   # the coloring pages: hand-drawn line art, not a traced painting
+        return _ink_fig(ink, who, x, y, s, left, 'peek' if peek is not None else pose, expr)
     _cute.PAIR['mark'] = True
     info = _pi.img(who, pose, 'color' if ink.color else 'line', _eyes(expr), key=('c', _scene(ink)))
     k = PK * s * 12.0 / info['unit']   # PK was set for renders at 12 px a pup unit; the renders are bigger now, the pup is not
@@ -782,6 +814,11 @@ def pt_head(g, who, expr='happy', tilt=0.0, lvl=0, look=(0, 0), mouth=None, turn
     left, so side by side they look at each other"""
     _cute.PAIR['mark'] = True
     ink = g.ink
+    if not ink.color:   # the coloring pages: the hand-drawn head, about 150 wide, centred
+        kk = 1.0
+        svg, _ = _pk.draw(who, 'head', _eyes(expr), _pi.outfit(who, ('h', _scene(ink))), getattr(ink, 'ow', 6.0) * 0.95 / kk)
+        g.raw_at('<g transform="translate(0 8) scale(%.4f %.4f)">%s</g>' % (-kk if who == 'tidbit' else kk, kk, svg))
+        return
     info = _pi.img(who, 'sit', 'color' if ink.color else 'line', _eyes(expr), key=('h', _scene(ink)))
     R = 0.3 * info['w']                     # the head, in pixels, around its centre
     k = 75.0 / R
