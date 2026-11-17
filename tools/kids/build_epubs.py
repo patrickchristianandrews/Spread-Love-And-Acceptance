@@ -71,7 +71,7 @@ def pb_pages():
     t[1] = '%s. Half title, with Peach and Lilac sharing a heart.' % B['title']
     t[2] = 'This book belongs to. A line to write your name. Professor Puddles and Tidbit wave from a green hill.'
     t[3] = '%s. %s. By %s. Tidbit and Sugarfoot with a picnic basket.' % (B['title'], B['subtitle'], B['author'])
-    t[4] = 'Copyright. Independently published. Text and pictures 2026 Christian. The characters and the story are original to this site.'
+    t[4] = 'Copyright © 2026 %s. Independently published. The characters and the story are original to this site.' % C.AUTHOR
     t[5] = 'Who is in this story: Tidbit, Sugarfoot, Professor Puddles, Ollie, Dot, Hopper, Nutmeg, Lumi, Beep, the ducklings, the Moon and the Static clouds.'
     for i, sp in enumerate(B['spreads']):
         n = 6 + 2 * i

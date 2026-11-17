@@ -67,7 +67,7 @@ function pageCount(f) { const m = /Pages:\s+(\d+)/.exec(execFileSync('pdfinfo', 
     const out = path.join(ROOT, b.out);
     fs.writeFileSync(out, await page.pdf({ preferCSSPageSize: true, printBackground: true, displayHeaderFooter: false, tagged: false }));
     await ctx.close();
-    try { execFileSync('python3', [path.join(__dirname, 'pdf_meta.py'), out, b.title, 'Christian']); } catch (e) { console.log('  pdf_meta failed:', e.message.split('\n')[0]); }
+    try { execFileSync('python3', [path.join(__dirname, 'pdf_meta.py'), out, b.title, 'Patrick Christian Andrews']); } catch (e) { console.log('  pdf_meta failed:', e.message.split('\n')[0]); }
     const n = pageCount(out);
     if (r.left || !r.swapped || n !== r.pages - r.removed) { bad++; console.log('PROBLEM', b.out, JSON.stringify(r), 'printed', n); }
     console.log(b.out + ': ' + n + ' pages (' + r.removed + ' blank pages left out, ' + r.swapped + ' lines reworded), ' + (fs.statSync(out).size / 1048576).toFixed(1) + ' MB');

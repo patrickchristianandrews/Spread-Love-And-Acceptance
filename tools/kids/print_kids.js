@@ -50,7 +50,7 @@ async function open(browser, url, vp) {
     const buf = await page.pdf({ preferCSSPageSize: true, printBackground: true, displayHeaderFooter: false, tagged: false });
     fs.writeFileSync(out, buf);
     await ctx.close();
-    try { execFileSync('python3', [path.join(__dirname, 'pdf_meta.py'), out, rec.title || id, 'Christian']); } catch (e) { console.log('  pdf_meta failed:', e.message.split('\n')[0]); }
+    try { execFileSync('python3', [path.join(__dirname, 'pdf_meta.py'), out, rec.title || id, 'Patrick Christian Andrews']); } catch (e) { console.log('  pdf_meta failed:', e.message.split('\n')[0]); }
     const pages = pageCount(out);
     const key = outName || id;
     rec.files = rec.files || {};
@@ -66,7 +66,7 @@ async function open(browser, url, vp) {
     const out = path.join(OUT, 'cover-' + id + '.pdf');
     fs.writeFileSync(out, await page.pdf({ width: W + 'in', height: H + 'in', printBackground: true, preferCSSPageSize: true, margin: { top: 0, right: 0, bottom: 0, left: 0 } }));
     await ctx.close();
-    try { execFileSync('python3', [path.join(__dirname, 'pdf_meta.py'), out, (rec.title || id) + ' (cover)', 'Christian']); } catch (e) {}
+    try { execFileSync('python3', [path.join(__dirname, 'pdf_meta.py'), out, (rec.title || id) + ' (cover)', 'Patrick Christian Andrews']); } catch (e) {}
     // the front cover as pictures: the trim box of the front, shot at 1600 px wide (the ebook cover is 1:1.6)
     const frontW = rec.trim_in[0], frontH = rec.trim_in[1];
     const dsf = 1600 / (frontW * 96);

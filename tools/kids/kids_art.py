@@ -420,9 +420,38 @@ def _pup_side_organic(P, who, x, y, s, pose, expr, ph, flip, tilt, carry, mouth_
     P.close()
 
 
+PAINTED = True   # owner, Nov 17 2026: the painted Tidbit and Sugarfoot everywhere, the books too (tools/kids/painted)
+_PSCN = {}
+
+
+def _pup_side_painted(P, who, x, y, s, pose, expr, flip, carry):
+    """the painted pup (assets/js/pups.js, painted large by tools/kids/painted/render.js): paws at (x, y), about 55 units
+    tall, facing right (flip: left). Color pages get the painting, line pages its coloring line art, one-ink pages it
+    in grays. Each page gives each pup a different outfit item (Tidbit's purple, Sugarfoot's pink)."""
+    import os, sys
+    sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), 'painted'))
+    import pimg
+    eyes = 'shut' if pose == 'sleep' or expr == 'sleep' else 'open'
+    info = pimg.img(who, pose, P.mode if P.mode in ('color', 'line', 'ink') else 'color', eyes, key=('p', _PSCN.setdefault(id(P), len(_PSCN))))
+    k = 1.0 / info['unit'] * 1.1
+    P.at(x, y, s, flip)
+    P.raw(pimg.svg_image(info, k))
+    if carry:   # something carried at the mouth: drawn where the painted head is
+        hx, hy = (info['head'][0] - info['paw'][0]) * k, (info['head'][1] - info['paw'][1]) * k
+        P.open('translate(%s %s)' % (f(hx - 2), f(hy + 2)))
+        carry(P)
+        P.close()
+    if pose == 'sleep':
+        for i, (zx, zy, zs) in enumerate(((30, -32, 4), (36, -40, 5), (43, -50, 6))):
+            P.line('M%s %s l%s 0 l%s %s l%s 0' % (f(zx), f(zy), f(zs), f(-zs), f(zs), f(zs)), '#7C86B8', 1.1, kind='fine')
+    P.close()
+
+
 def pup_side(P, who, x, y, s, pose='stand', expr='happy', ph=0.0, wag=0.0, flip=False, tilt=0, carry=None, mouth_=None):
     """pups.js drawPup as SVG. Origin at the paws, facing right (flip faces left). pose: 'stand', 'run', 'walk',
     'sit', 'lie', 'sleep'. About 55 units tall standing. carry: a function(P) drawn at the mouth."""
+    if PAINTED:
+        return _pup_side_painted(P, who, x, y, s, pose, expr, flip, carry)
     if ORGANIC:
         return _pup_side_organic(P, who, x, y, s, pose, expr, ph, flip, tilt, carry, mouth_)
     L = LOOKS[who]

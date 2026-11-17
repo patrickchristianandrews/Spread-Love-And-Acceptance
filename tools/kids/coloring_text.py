@@ -55,7 +55,7 @@ OLDER = dict(
 )
 
 COPYRIGHT = ('<p><em>{series}</em>, Book {n}: <em>{name}</em>.<br>By {author}. Independently published.</p>'
-             '<p>Pictures © 2026 {author}. First print edition, {updated}. Printed on demand, with a black-and-white interior.</p>'
+             '<p>Copyright © 2026 {author}. Pictures by the author. First print edition, {updated}. Printed on demand, with a black-and-white interior.</p>'
              '<p><strong>The back of every picture is blank</strong>, so markers will not soak through to the next one. Slide a sheet of paper under the page you are coloring.</p>'
              '<p><strong>Free online, always.</strong> Tidbit and Sugarfoot live at {site}, where everything is free to read and use, with no account and no paid version. This print book is optional. You may copy pages for personal use and for non-commercial teaching, with credit to “{site}.”</p>'
              '<p><strong>Original.</strong> The characters and the pictures are original to this site.</p>'

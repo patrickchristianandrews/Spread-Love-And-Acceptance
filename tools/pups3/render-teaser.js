@@ -11,11 +11,7 @@ const b64 = f => 'data:image/webp;base64,' + fs.readFileSync(path.join(DIR, f)).
   await p.waitForFunction(() => window.TOLTeaser && window.TOLPups, null, { timeout: 60000 });
   const DRAWN = process.env.DRAWN === '1'; // DRAWN=1: the site's own drawn pups (for the site's teaser video)
   if (!DRAWN) await p.addScriptTag({ content: fs.readFileSync(path.join(DIR, 'sprite-pups.js'), 'utf8') });
-  const ok = DRAWN || await p.evaluate(async ([w, ps, meta]) => {
-    const load = src => new Promise((res, rej) => { const i = new Image(); i.onload = () => res(i); i.onerror = rej; i.src = src; });
-    const [walk, poses] = await Promise.all([load(w), load(ps)]);
-    return TOLPupSprites.install({ walk, poses, meta });
-  }, [b64('walk.webp'), b64('poses.webp'), JSON.parse(fs.readFileSync(path.join(DIR, 'meta.json'), 'utf8'))]);
+  const ok = await p.evaluate(() => (window.TOLPups.ready || Promise.resolve()).then(() => !!window.TOLPups.painted));   // the site's own painted pups (pups.js)
   if (!ok) throw new Error('sprites not installed');
   await p.evaluate(() => document.fonts.ready); await p.waitForTimeout(800);
   const dur = await p.evaluate(() => TOLTeaser.duration);

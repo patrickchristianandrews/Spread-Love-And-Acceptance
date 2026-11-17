@@ -40,7 +40,7 @@ async function open(browser, url, vp) {
     const out = path.join(OUT, 'coloring-adult.pdf');
     fs.writeFileSync(out, await page.pdf({ preferCSSPageSize: true, printBackground: true, displayHeaderFooter: false, tagged: false }));
     await ctx.close();
-    execFileSync('python3', [path.join(__dirname, 'pdf_meta.py'), out, TITLE, 'Christian']);
+    execFileSync('python3', [path.join(__dirname, 'pdf_meta.py'), out, TITLE, 'Patrick Christian Andrews']);
     meta.files = { interior: { pdf: 'coloring-adult.pdf', pages: pageCount(out), bytes: fs.statSync(out).size } };
     console.log('interior', pageCount(out), 'pages', (fs.statSync(out).size / 1048576).toFixed(2) + ' MB');
   } else if (mode === 'cover') {
@@ -52,7 +52,7 @@ async function open(browser, url, vp) {
     const out = path.join(OUT, 'cover-coloring-adult.pdf');
     fs.writeFileSync(out, await page.pdf({ width: W + 'in', height: H + 'in', printBackground: true, preferCSSPageSize: true, margin: { top: 0, right: 0, bottom: 0, left: 0 } }));
     await ctx.close();
-    execFileSync('python3', [path.join(__dirname, 'pdf_meta.py'), out, TITLE + ' (cover)', 'Christian', String(W), String(H)]);
+    execFileSync('python3', [path.join(__dirname, 'pdf_meta.py'), out, TITLE + ' (cover)', 'Patrick Christian Andrews', String(W), String(H)]);
     const dsf = 1600 / (8.5 * 96);
     const ctx2 = await browser.newContext({ viewport: { width: Math.ceil(W * 96) + 2, height: Math.ceil(H * 96) + 2 }, deviceScaleFactor: dsf });
     const p2 = await ctx2.newPage();

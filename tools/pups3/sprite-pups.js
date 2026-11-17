@@ -84,14 +84,20 @@
   // their eyes on each drawing (sprite pixels from the head centre: x, y, radius, and the fur colour just above), for
   // blinking: a lid of that fur comes down over the eye with a dark lash line along its edge
   var EYES = {
-    '0:1': [[-2.5, -4, 3.1, '#3C3425'], [12, -6, 2.6, '#6E5440']], '0:2': [[10, -5.5, 3.1, '#5A4630']],
-    '1:1': [[-3, -6, 3.3, '#B8916C'], [12, -7, 2.7, '#8E7050']], '1:2': [[11, -7, 3.1, '#A8845A']]
+    '0:1': [[-2.5, -4, 3.1, '#332820'], [12, -6, 2.6, '#393128']], '0:2': [[10, -5.5, 3.1, '#352821']],
+    '1:1': [[-3, -6, 3.3, '#815E3E'], [12, -7, 2.7, '#725740']], '1:2': [[11, -7, 3.1, '#694A35']]
   };
-  function blinkLids(ctx, dog, ang, shut) {
+  function blinkLids(ctx, fr, dog, ang, shut) {
+    // the lid is the painted fur from just above the eye, slid down over it (so it has the fur's own colors and
+    // texture), and a closed eye is a soft dark curve, like a sleepy smile
+    var f = fr.f, fw = S.meta.fw, sx0 = f.c * fw + f.hx, sy0 = f.r * fr.fh + f.hy;
     (EYES[dog + ':' + ang] || []).forEach(function (e) {
-      var x = e[0], y = e[1], r = e[2] + 0.6, h = r * 2 * shut;
-      ctx.fillStyle = e[3]; ctx.beginPath(); ctx.ellipse(x, y - r + h / 2, r + 0.4, h / 2 + 0.3, 0, 0, Math.PI * 2); ctx.fill();
-      ctx.strokeStyle = 'rgba(25,18,14,.85)'; ctx.lineWidth = 0.9; ctx.beginPath(); ctx.ellipse(x, y - r + h - 0.4, r * 0.95, 1.1, 0, 0.15, Math.PI - 0.15); ctx.stroke();
+      var x = e[0], y = e[1], r = e[2] + 0.5, h = 2 * r * shut;
+      ctx.save(); ctx.beginPath(); ctx.ellipse(x, y, r + 0.3, r + 0.3, 0, 0, Math.PI * 2); ctx.clip();
+      ctx.fillStyle = e[3]; ctx.fillRect(x - r - 1, y - r - 1, 2 * r + 2, h + 1);
+      ctx.drawImage(fr.img, sx0 + x - r - 1, sy0 + y - r - 1 - 2 * r - 1, 2 * r + 2, 2 * r + 1, x - r - 1, y - r - 1 + h - 2 * r - 1, 2 * r + 2, 2 * r + 1);
+      ctx.restore();
+      if (shut > 0.6) { ctx.strokeStyle = 'rgba(18,12,10,.9)'; ctx.lineWidth = 1.1; ctx.lineCap = 'round'; ctx.beginPath(); ctx.ellipse(x, y - 0.6, r * 0.8, 1.4, 0, 0.25, Math.PI - 0.25); ctx.stroke(); }
     });
   }
   function frame(dog, pose, ph) {
@@ -141,7 +147,7 @@
     if (!P.quiet) { B.fr = fr; B.T = clk; B.shot = P.shot; }
     if (fr.img === S.walk) { var nx = walkNext(dog, ph); if (nx.w > 0.01) { ctx.save(); ctx.globalAlpha *= 0.92 * nx.w; blit(ctx, nx.fr); ctx.restore(); } }
     if (B.from && B.from.fr && clk - B.from.at < 0.2) { var fa = 1 - (clk - B.from.at) / 0.2; ctx.save(); ctx.globalAlpha *= 0.95 * fa * fa * (3 - 2 * fa); blit(ctx, B.from.fr); ctx.restore(); }
-    if (still && blink) { ctx.save(); ctx.translate(f.hx - p.cx, f.hy - p.fy); blinkLids(ctx, dog, f.ang, 1); ctx.restore(); }
+    if (still && blink) { ctx.save(); ctx.translate(f.hx - p.cx, f.hy - p.fy); blinkLids(ctx, fr, dog, f.ang, 1); ctx.restore(); }
     if (o && o.talk > 0) { ctx.save(); ctx.translate(f.hx - p.cx, f.hy - p.fy); jaw(ctx, fr, dog, fr.img === S.walk ? 'w' : (pose === 'lie' || pose === 'bow' ? 'a2' : 'a1'), Math.min(1, (o.talk - 0.02) / 0.98)); ctx.restore(); }
     // the outfit, at the head of this drawing
     if (!(o && o.noOutfit)) {

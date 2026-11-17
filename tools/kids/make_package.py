@@ -158,7 +158,7 @@ def md_title(t):
     row('Subtitle', t['sub'])
     row('Series', 'The Frequency Buddies Books, number %d (use "Add to series" so all four show together)' % t['n'], 'the same series, the same number')
     row('Edition number', '1')
-    row('Author', 'Christian (first name only, as on the cover) [OWNER]', 'Christian')
+    row('Author', 'Patrick Christian Andrews (as on the title page; the covers show no name)', 'Patrick Christian Andrews')
     row('Publisher / imprint', 'Nothing to type: with a free KDP ISBN, KDP shows "Independently published"', 'Leave blank')
     row('Contributors', 'None', 'None')
     row('Publishing rights', '"I own the copyright and I hold the necessary publishing rights."')
@@ -265,7 +265,7 @@ def md_title(t):
 def launch_steps():
     return ['## Launch steps (the same for each title; the Kindle steps only for the picture book and the chapter book)', '',
             '1. Sign in to KDP (kdp.amazon.com) and choose **Create**, then **Paperback**. Do the titles one at a time, in series order.',
-            '2. **Paperback Details:** language English; title, subtitle and series name and number as in the title\'s section below; author **Christian**; description (paste the HTML block); the two reading-age numbers; the 7 keywords; the 3 categories; answer the audience questions as shown.',
+            '2. **Paperback Details:** language English; title, subtitle and series name and number as in the title\'s section below; author **Patrick Christian Andrews**; description (paste the HTML block); the two reading-age numbers; the 7 keywords; the 3 categories; answer the audience questions as shown.',
             '3. **Paperback Content:** choose **Get a free KDP ISBN**; set the print options exactly as in the title\'s table (ink and paper, trim, bleed, matte cover); upload the manuscript PDF; choose the print-ready PDF cover and upload the cover file; open the **Print Previewer** and fix anything it flags (it should flag nothing; the bleed, margins and fonts were checked).',
             '4. **Paperback Rights & Pricing:** all territories; the list price in the title\'s table for Amazon.com, then let KDP suggest the other marketplaces; leave **Expanded distribution** off. Check that KDP\'s printing cost matches the one in the table (if it differs, KDP\'s figure wins and the royalty changes).',
             '5. **Order a proof copy** of the paperback. Check the color (picture book), the edges, the margins, the blank backs (coloring books), the spine and the barcode corner. Approve it, then **Publish**. Review takes up to a few days.',
@@ -277,7 +277,7 @@ def launch_steps():
 
 def at_a_glance(totals):
     out = ['## At a glance', '',
-           'Series for all four: **The Frequency Buddies Books**. Author for all four: **Christian**.', '', '| # | Title | Subtitle | Series no. |', '|---|---|---|---|']
+           'Series for all four: **The Frequency Buddies Books**. Author for all four: **Patrick Christian Andrews**.', '', '| # | Title | Subtitle | Series no. |', '|---|---|---|---|']
     for t in TITLES:
         out.append('| %d | %s | %s | %d |' % (t['n'], t['name'], t['sub'], t['n']))
     out += ['', '| # | Reading age | Grade range | Trim | Ink and paper | Bleed | Pages (from pdfinfo) |', '|---|---|---|---|---|---|---|']
@@ -465,7 +465,7 @@ hr{border:0;border-top:1px solid #d9d1bd;margin:14px 0} li{margin:2px 0}
     env = dict(os.environ)
     subprocess.run(['node', os.path.join(HERE, 'md_to_pdf.js'), tmp, out_pdf], check=True, env=env)
     os.remove(tmp)
-    subprocess.run(['python3', os.path.join(HERE, 'pdf_meta.py'), out_pdf, 'Kids titles: KDP listing', 'Christian'], check=True)
+    subprocess.run(['python3', os.path.join(HERE, 'pdf_meta.py'), out_pdf, 'Kids titles: KDP listing', 'Patrick Christian Andrews'], check=True)
 
 
 def readme(totals):

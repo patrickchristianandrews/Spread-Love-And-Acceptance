@@ -55,17 +55,17 @@ def make_cover(pages):
              '<div style="font:700 9.5pt Andika;letter-spacing:.16em;color:%s">%s &middot; ADULT COLORING BOOK</div>'
              '<div style="font:800 70pt/0.98 Fraunces,serif;color:%s;margin:.12in 0 .18in;letter-spacing:-.005em">Color and<br>Breathe</div>'
              '<div style="font:italic 15.5pt/1.32 Lora,serif;color:#3A342C;width:6.4in">%s</div></div>'
-             '<div style="position:absolute;left:.62in;right:.5in;bottom:.5in;display:flex;justify-content:space-between;align-items:baseline;font:700 12pt Andika;color:%s"><span>by %s</span><span style="font:700 9pt Andika;letter-spacing:.12em">40 DESIGNS</span></div>'
-             ) % ('SPREADLOVEANDACCEPTANCE.COM', front_art(), TEAL, T.SERIES.upper(), INK, C.esc(T.SUBTITLE), INK, C.esc(T.AUTHOR))
+             '<div style="position:absolute;left:.62in;right:.5in;bottom:.5in;display:flex;justify-content:space-between;align-items:baseline;font:700 12pt Andika;color:%s"><span></span><span style="font:700 9pt Andika;letter-spacing:.12em">40 DESIGNS</span></div>'
+             ) % ('SPREADLOVEANDACCEPTANCE.COM', front_art(), TEAL, T.SERIES.upper(), INK, C.esc(T.SUBTITLE), INK)
     back = ('<div style="position:absolute;left:0;right:0;top:0;height:.62in"></div>'
             '<div style="position:absolute;left:.75in;right:.62in;top:1.1in;color:%s">'
             '<div style="font:800 25pt Fraunces,serif;margin-bottom:.14in">%s</div>%s'
             '<ul style="margin:.1in 0 .18in;padding-left:.22in;font:12pt/1.5 Lora,serif">%s</ul>'
             '<p style="margin:.1in 0 0;font:700 10.5pt Andika;color:%s">%s</p></div>'
-            '<div style="position:absolute;left:.75in;bottom:.5in;font:700 11pt Andika;color:%s">by %s &middot; %s</div>') % (
+            '<div style="position:absolute;left:.75in;bottom:.5in;font:700 11pt Andika;color:%s">%s</div>') % (
         INK, C.esc(T.BACK_HEAD), ''.join('<p style="margin:0 0 .12in;font:12.5pt/1.5 Lora,serif">%s</p>' % C.esc(x) for x in T.BACK),
-        ''.join('<li>%s</li>' % C.esc(x) for x in T.BACK_BULLETS), TEAL, 'Free to read and print online at ' + T.SITE, INK, C.esc(T.AUTHOR), T.SITE)
-    spine = '<div class="cv-spine-t" style="font:700 6.5pt Fraunces,serif">Color and Breathe &nbsp;&middot;&nbsp; Christian</div>' if pages > 79 else ''
+        ''.join('<li>%s</li>' % C.esc(x) for x in T.BACK_BULLETS), TEAL, 'Free to read and print online at ' + T.SITE, INK, T.SITE)
+    spine = '<div class="cv-spine-t" style="font:700 6.5pt Fraunces,serif">Color and Breathe</div>' if pages > 79 else ''
     html, info = C.cover_doc(T.TITLE, (w, h), pages, 'white', bg, front, back, spine, css)
     C.write(os.path.join(SRC, 'cover-coloring-adult.html'), html)
     meta = json.load(open(os.path.join(OUT, 'adult.json')))

@@ -25,7 +25,7 @@ from pypdf.constants import PageLabelStyle
 
 
 # printfix13: the publisher's name only, no tool names or build paths, in every PDF
-CREATOR = 'Christian'
+CREATOR = 'Patrick Christian Andrews'
 PRODUCER = 'Spread Love & Acceptance'
 
 

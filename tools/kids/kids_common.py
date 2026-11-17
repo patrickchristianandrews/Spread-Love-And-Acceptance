@@ -31,7 +31,7 @@ COSTS = {
     'bw_large': {'flat': 2.84, 'label': 'Black ink, large trim (8.5 x 11), up to 110 pages: $2.84 a book'},
 }
 
-AUTHOR = 'Christian'
+AUTHOR = 'Patrick Christian Andrews'   # owner, Nov 17 2026: the full name inside the books (title and copyright pages), none on the covers
 SITE = 'spreadloveandacceptance.com'
 SERIES = 'The Frequency Buddies Books'
 UPDATED = 'October 2026'

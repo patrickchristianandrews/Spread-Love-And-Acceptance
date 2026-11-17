@@ -491,7 +491,7 @@ def rolling_p(P, y, o, w=None):
 def pg_copyright():
     p = [
         '<em>%s</em>, Book %d: <em>%s</em>.<br>By %s. Independently published.' % (C.esc(BOOK['series']), BOOK['series_no'], C.esc(BOOK['title']), C.esc(C.AUTHOR)),
-        'Text and pictures © 2026 %s. First print edition, %s. Printed on demand.' % (C.esc(C.AUTHOR), C.UPDATED),
+        'Copyright © 2026 %s. Text and pictures by %s. First print edition, %s. Printed on demand.' % (C.esc(C.AUTHOR), C.esc(C.AUTHOR), C.UPDATED),
         '<strong>Free online, always.</strong> Tidbit, Sugarfoot and their friends live at %s, where everything is free to read and use, with no account and no paid version. The print book is optional. You may copy pages of this book for personal use and for non-commercial teaching, with credit to “%s.”' % (C.SITE, C.SITE),
         'The characters and the story are original to this site.',
         'This is a story for sharing. It is general education about feelings and getting along, not a diagnosis or treatment, and it cannot know your child.',
@@ -688,8 +688,7 @@ def cover(pages=PAGES):
              '<div style="font:700 11.5pt Andika;letter-spacing:.08em;color:#3A3350">%s &middot; BOOK %d</div>'
              '<div style="font:800 49pt/0.98 Fraunces,serif;color:#FFFDF5;-webkit-text-stroke:2.4px #2F3566;paint-order:stroke fill;margin-top:.1in;text-shadow:0 3px 0 rgba(47,53,102,.25)">%s</div>'
              '<div style="font:700 13pt/1.3 Andika;color:#2F3566;margin:.12in auto 0;width:6.4in;background:rgba(255,253,245,.82);border-radius:.2in;padding:.07in .15in">%s</div></div>'
-             '<div style="position:absolute;left:0;right:0;bottom:.28in;text-align:center"><span style="display:inline-block;background:rgba(255,253,245,.9);border-radius:.2in;padding:.05in .3in;font:700 17pt Andika;color:#2F3566">%s</span></div>'
-             ) % (C.esc(BOOK['ages'].upper()), BOOK['series_no'], "Tidbit and Sugarfoot&rsquo;s Big Picnic", C.esc(BOOK['subtitle']), C.esc(C.AUTHOR))
+             ) % (C.esc(BOOK['ages'].upper()), BOOK['series_no'], "Tidbit and Sugarfoot&rsquo;s Big Picnic", C.esc(BOOK['subtitle']))
     back = ('<div style="position:absolute;left:.7in;right:.7in;top:.55in;font-size:13.5pt;line-height:1.45;background:rgba(255,253,245,.9);border-radius:.25in;padding:.22in .3in;border:2.5px solid #E8D5A2">'
             '<div style="font:800 17pt Fraunces,serif;margin-bottom:.1in;color:#3A3350">Zoom. Slow. Together.</div>%s'
             '<p style="margin:.12in 0 0;font-size:11pt;color:#4A4033">%s &middot; Free to read online at %s</p></div>') % (

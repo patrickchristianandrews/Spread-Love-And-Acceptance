@@ -435,7 +435,7 @@ def front_html():
              '<p class="pub">%s, Book %d<br>Independently published<br>%s</p></section>') % (
         C.esc(t), C.esc(BOOK['subtitle']), C.esc(C.AUTHOR), C.esc(BOOK['series']), BOOK['series_no'], C.SITE)
     copy = ('<section class="front copy"><p><em>%s</em>, Book %d: <em>%s</em>.<br>By %s. Independently published.</p>'
-            '<p>Text and pictures © 2026 %s. First print edition, %s. Printed on demand, with a black-and-white interior.</p>'
+            '<p>Copyright © 2026 %s. Text and pictures by the author. First print edition, %s. Printed on demand, with a black-and-white interior.</p>'
             '<p><strong>Free online, always.</strong> The characters in this book live at %s, where everything is free to read and use, with no account and no paid version. The print book is optional. You may copy pages of this book for personal use and for non-commercial teaching, with credit to “%s.”</p>'
             '<p><strong>Made up.</strong> Wren, Theo and their family and friends are made up. Nobody in this book is a real person, and none of it is a testimonial. The story and characters are original to this site.</p>'
             '<p>This is a story. It is general education about feelings and getting along, not a diagnosis or treatment, and it cannot know your family.</p>'
@@ -510,8 +510,7 @@ def make_cover(pages):
              '<div style="font:700 10pt Andika;letter-spacing:.16em;color:#FFF4DC">%s &middot; BOOK %d</div>'
              '<div style="font:800 46pt/0.95 Fraunces,serif;color:#FFFDF5;margin-top:.12in;text-shadow:0 3px 0 rgba(31,26,70,.55)">Turn Down the Static</div>'
              '<div style="font:600 11pt/1.3 Andika;color:#FFF4DC;margin:.14in auto 0;width:4.6in">%s</div></div>'
-             '<div style="position:absolute;left:0;right:0;bottom:.3in;text-align:center;font:700 15pt Andika;color:#FFF4DC">%s</div>'
-             ) % (C.esc(BOOK['ages'].upper()), BOOK['series_no'], C.esc(BOOK['subtitle']), C.esc(C.AUTHOR))
+             ) % (C.esc(BOOK['ages'].upper()), BOOK['series_no'], C.esc(BOOK['subtitle']))
     back = ('<div style="position:absolute;left:.5in;right:.5in;top:.55in;color:#FFFDF5;font-size:10.4pt;line-height:1.45">'
             '<div style="font:800 15pt Fraunces,serif;margin-bottom:.1in;color:#FFF4DC">One word. One very crowded house.</div>%s'
             '<p style="margin:.12in 0 0;font-size:9.5pt;color:#FFF4DC">%s &middot; Free to read online at %s</p></div>') % (

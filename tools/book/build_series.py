@@ -497,7 +497,7 @@ def copyright_page(book, workbook=False, bw=False):
     s = '<section class="ps-copy pe-only"><div class="ps-copy-in">'
     s += '<p><em>%s</em>%s: <em>%s</em>.<br>By %s. Independently published.</p>' % (
         esc(SERIES_TITLE), (', Book %d' % book['n']) if not workbook else '', esc(book['title']), B.AUTHOR)
-    s += '<p>Text and pictures © 2026 %s. First print edition, %s. Printed on demand%s.</p>' % (
+    s += '<p>Copyright © 2026 %s. Text and pictures by the author. First print edition, %s. Printed on demand%s.</p>' % (
         B.AUTHOR, B.UPDATED, ', with a black-and-white interior' if bw else '')
     s += ('<p><strong>Free online, always.</strong> Every chapter of the series is free to read at spreadloveandacceptance.com/book, with an expanded '
           'version that adds the research, more examples and more to try, and with no account and no paid version. The print books are optional. You may copy pages of %s for personal use and '
@@ -1509,14 +1509,14 @@ html, body { margin: 0; padding: 0; background: #fff; }
 <p class="cv-blurb">%(blurb)s</p>
 <p class="cv-q">“See it fairly. Say it kindly.”</p>
 <ul class="cv-series">%(others)s</ul>
-<div class="cv-free"><span class="pe-qr" data-qr="%(free_url)s"></span><span><strong>%(free_t)s</strong>%(free_l)s<span class="cv-by-back" style="display:block">by %(author)s</span></span></div>
+<div class="cv-free"><span class="pe-qr" data-qr="%(free_url)s"></span><span><strong>%(free_t)s</strong>%(free_l)s</span></div>
 </div><div class="cv-barcode" aria-hidden="true"></div></div></div>
-<div class="cv-spine"><p class="cv-spine-t">%(spine_t)s<em>%(author)s</em></p></div>
+<div class="cv-spine"><p class="cv-spine-t">%(spine_t)s</p></div>
 <div class="cv-front"><div class="cv-front-trim" id="front">%(rules_f)s
 <div class="cv-band"><span>spreadloveandacceptance.com</span><span>See it fairly. Say it kindly.</span></div>
 <div class="cv-text"><p class="cv-k">%(kicker)s</p><p class="cv-title">%(title)s</p><p class="cv-sub">%(sub)s</p></div>
 <div class="cv-art">%(art)s</div>
-<div class="cv-foot"><p class="cv-line">%(line)s</p><p class="cv-by">by %(author)s</p></div>
+<div class="cv-foot"><p class="cv-line">%(line)s</p></div>
 </div></div>
 </div>
 %(qrscript)s

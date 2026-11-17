@@ -692,3 +692,102 @@ if PL:
     pup_head_old, pup_head = pup_head, pl_head
 elif FB:
     pup_front, pup_side, pup_peek, pup_dance, pup_hug = fb_front, fb_side, fb_peek, fb_dance, fb_hug
+
+
+# ================================================================== the painted pups (owner, Nov 17 2026)
+# "Update Sugarfoot and Tidbit to the current version all over the website, including the books and the coloring books":
+# the painted Tidbit and Sugarfoot (assets/js/pups.js), as images made by tools/kids/painted (render.js paints them,
+# lineart.py makes the coloring line art). Every pose keeps its old call: front-facing and dancing poses become the
+# painted three-quarter view facing the middle of the page; walking and running stand; lying down is the side view;
+# hugs are the two of them side by side, facing each other, never touching. Each page gives each pup a different outfit
+# item (Tidbit's always purple, Sugarfoot's always pink). Scene hats are not drawn: the outfit item takes their place.
+import os as _os
+import sys as _sys
+_sys.path.insert(0, _os.path.join(_os.path.dirname(_os.path.abspath(__file__)), 'painted'))
+import pimg as _pi
+
+PK = 0.36     # page units per painted pixel at s = 1: a sitting painted pup is as tall as the line-art one was
+_SCN = {}
+
+
+def _scene(ink):
+    return _SCN.setdefault(id(ink), len(_SCN))
+
+
+def _eyes(expr):
+    return 'shut' if expr in ('sleep', 'sleepy') else 'open'
+
+
+def _pt_fig(ink, who, x, y, s, left, pose, expr='happy', peek=None):
+    """one painted pup with its paws at (x, y) (peek: only the top part, cut at y), facing left if left"""
+    _cute.PAIR['mark'] = True
+    info = _pi.img(who, pose, 'color' if ink.color else 'line', _eyes(expr), key=('c', _scene(ink)))
+    k = PK * s
+    W, H, px, py = info['w'], info['h'], info['paw'][0], info['paw'][1]
+    top = -py * k if peek is None else -H * peek * k   # the image's top, relative to the paws (or to the ledge)
+
+    def box(x):
+        x0, x1 = (x - (W - px) * k, x + px * k) if left else (x - px * k, x + (W - px) * k)
+        return (x0, y + top, x1, y + (H - py) * k if peek is None else y)
+    if not _cute.PAIR.get('placed') and not getattr(ink, '_probe', False):
+        b = box(x)
+        x += _cute.pup_room(ink, b[0], b[1], b[2], b[3])
+    if peek is None:
+        mk = '<g transform="translate(%.2f %.2f)">%s</g>' % (x, y, _pi.svg_image(info, k, left))
+    else:
+        cid = ink.newid('pk')
+        b = box(x)
+        mk = '<defs><clipPath id="%s"><rect x="%.2f" y="%.2f" width="%.2f" height="%.2f"/></clipPath></defs><g clip-path="url(#%s)"><g transform="translate(%.2f %.2f)">%s</g></g>' % (
+            cid, b[0] - 2, b[1] - 2, b[2] - b[0] + 4, b[3] - b[1] + 2, cid, x, y + top + py * k, _pi.svg_image(info, k, left))
+    with ink.fig(0, 0, 1.0, False) as g:
+        g.raw_at(mk)
+    b = box(x)
+    g.bb_true = b
+    p = 8 * s
+    g.bb = (b[0] - p, b[1], b[2] + p, b[3])
+    g.m = _cute.mat(x, y, s, left)
+    return g
+
+
+def pt_front(ink, who, x, y, s=1.0, expr='happy', flip=False, tilt=0.0, lvl=0, mouth=None, look=(0, 0), tail=True, arms='down', wag=0.0, hs=None, hat=None, scarf=False, coat=False):
+    return _pt_fig(ink, who, x, y, s, _left(x, flip), 'sit', expr)
+
+
+def pt_side(ink, who, x, y, s=1.0, pose='walk', expr='happy', flip=False, lvl=0, tilt=None, mouth=None, look=(0, 0), ph=0.0, hs=None, ear_rot=None, tail_up=1.0, turn=0.7, hat=None, scarf=False, lower=0.0):
+    return _pt_fig(ink, who, x, y, s, bool(flip), pose, expr)
+
+
+def pt_peek(ink, who, x, y, s=1.0, expr='happy', lvl=0, tilt=0.0, paws=True, look=(0, 0), mouth=None, hat=None, ears=True):
+    return _pt_fig(ink, who, x, y, s * 1.15, _left(x), 'sit', expr, peek=0.5)
+
+
+def pt_dance(ink, who, x, y, s=1.0, expr='joy', flip=False, tilt=6.0, lvl=0, kick=1, hat=None, scarf=False, mouth=None):
+    return _pt_fig(ink, who, x, y, s, _left(x, flip), 'sit', expr)
+
+
+def pt_hug(ink, x, y, s=1.0, expr_a='happy', expr_b='sleep', lvl=0, hat_a=None, hat_b=None):
+    """Sugarfoot (left) and Tidbit (right), side by side and facing each other, close but never touching"""
+    f1 = _pt_fig(ink, 'sugarfoot', x - 112 * s, y, s, False, 'sit', expr_b)
+    f2 = _pt_fig(ink, 'tidbit', x + 112 * s, y, s, True, 'sit', expr_a)
+    return _Group([f1, f2])
+
+
+def pt_head(g, who, expr='happy', tilt=0.0, lvl=0, look=(0, 0), mouth=None, turn=0.0, ear_rot=0.0, ears=True, hat=None):
+    """the painted head, for portraits in windows: centered on the origin, about 150 wide; Sugarfoot faces right, Tidbit
+    left, so side by side they look at each other"""
+    _cute.PAIR['mark'] = True
+    ink = g.ink
+    info = _pi.img(who, 'sit', 'color' if ink.color else 'line', _eyes(expr), key=('h', _scene(ink)))
+    R = 0.3 * info['w']                     # the head, in pixels, around its centre
+    k = 75.0 / R
+    hx, hy = info['head'][0] - info['paw'][0], info['head'][1] - info['paw'][1] + 0.06 * info['h']
+    left = who == 'tidbit'
+    cid = ink.newid('ph')
+    g.raw_at('<defs><clipPath id="%s"><circle cx="0" cy="0" r="78"/></clipPath></defs><g clip-path="url(#%s)"><g transform="translate(%.2f %.2f)">%s</g></g>' % (
+        cid, cid, (hx * k if left else -hx * k), -hy * k, _pi.svg_image(info, k, left)))
+
+
+PAINTED = True
+if PAINTED:
+    pup_front, pup_side, pup_peek, pup_dance, pup_hug, pup_head = pt_front, pt_side, pt_peek, pt_dance, pt_hug, pt_head
+

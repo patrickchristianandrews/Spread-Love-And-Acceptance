@@ -353,7 +353,7 @@ def main():
         else:
             row('Series', '', 'Leave it out of the numbered series, or add it unnumbered if KDP offers that for a box set [OWNER: check the series page in KDP]')
         row('Edition number', '1', '1')
-        row('Author', 'Christian (first name only, as on the cover; Author Central lets you add a surname later) [OWNER]', 'Christian')
+        row('Author', 'Patrick Christian Andrews (as on the title page; the covers show no name)', 'Patrick Christian Andrews')
         row('Publisher', 'Nothing to type: with a free KDP ISBN, KDP shows "Independently published"', 'Leave blank (decided)')
         row('Imprint', '"Independently published" (set by KDP with the free KDP ISBN; the title and copyright pages say the same)', 'Leave blank')
         row('Contributors', 'None. [OWNER]', 'None')
@@ -455,7 +455,7 @@ def main():
         md.append('\n'.join('- %s' % t for t in TAGLINES[bid]))
         base = {
             'id': bid, 'format': 'paperback', 'title': title, 'subtitle': sub, 'series': SERIES, 'series_number': num or '',
-            'edition': 1, 'author': 'Christian', 'publisher': PUBLISHER, 'imprint': IMPRINT,
+            'edition': 1, 'author': 'Patrick Christian Andrews', 'publisher': PUBLISHER, 'imprint': IMPRINT,
             'description_html': desc, 'category_1': d['cats'][0], 'category_2': d['cats'][1], 'category_3': d['cats'][2],
             'alt_category_1': d['alt'][0], 'alt_category_2': d['alt'][1], 'alt_category_3': d['alt'][2],
             **{'keyword_%d' % (i + 1): k for i, k in enumerate(d['kw'])},

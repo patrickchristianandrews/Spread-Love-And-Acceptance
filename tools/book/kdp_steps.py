@@ -97,7 +97,7 @@ def details_rows(it, fmt):
         ('Subtitle', it['sub']),
         ('Series', series_line(it, fmt) + '. Use the series button (“Add series details” in the guides; the name was not confirmed), type the series name exactly as here, and give the number. The other books join the same series.'),
         ('Edition Number', '1'),
-        ('Author (Primary Author or Contributor)', 'First name: Christian. Last name: leave empty if KDP allows it, or add yours [OWNER]. It must match the cover and be the same on every edition, so Amazon links the paperback and the Kindle edition.'),
+        ('Author (Primary Author or Contributor)', 'First name: Patrick Christian. Last name: Andrews. It must match the title page and be the same on every edition, so Amazon links the paperback and the Kindle edition.'),
         ('Contributors', 'None. (How the words and pictures were made is answered on the Content screen, not here.)'),
         ('Description', 'Paste the text in the box under this table (%d characters; KDP allows 4,000).' % len(desc)),
         ('Publishing Rights', '“I own the copyright and I hold the necessary publishing rights.”'),

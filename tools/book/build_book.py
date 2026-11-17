@@ -44,7 +44,7 @@ ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
 BOOK = os.path.join(ROOT, 'book')
 SITE = 'https://spreadloveandacceptance.com'
 UPDATED = 'October 2026'
-AUTHOR = 'Christian'
+AUTHOR = 'Patrick Christian Andrews'   # owner, Nov 17 2026: the full name inside the books, none on the covers
 # the book's name: ONE value, series_title in tools/book/series.json (print12), used here and by build_series.py
 SERIES_TITLE = series_site.config()['series_title']
 ST_H = html.escape(SERIES_TITLE, quote=True)
@@ -955,9 +955,9 @@ def cover(name, deep):
 <div class="pe-cover-text"><p class="pe-cover-title">{ST}</p>
 <p class="pe-cover-sub">Understanding yourself and the people you share a life with</p></div>
 <div class="pe-cover-art">%s</div>
-<div class="pe-cover-foot"><p class="pe-cover-pkg">%s <span>· %s</span></p><p class="pe-cover-line">%s</p><p class="pe-cover-by">by %s</p></div>
+<div class="pe-cover-foot"><p class="pe-cover-pkg">%s <span>· %s</span></p><p class="pe-cover-line">%s</p></div>
 </section>''' % (acc, tint, book_art.ledger_rules(170, 240, '#E4D7B2', acc, top=22, step=7.5, left=17), 'See it fairly. Say it kindly.',
-                 book_art.illustration(name), label, ver, line, AUTHOR)).replace('{ST}', ST_H)
+                 book_art.illustration(name), label, ver, line)).replace('{ST}', ST_H)
 
 
 def front_matter(name, deep, parts, title, who, toc_rows, fb_front=()):

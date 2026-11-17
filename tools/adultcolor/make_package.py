@@ -105,7 +105,7 @@ def listing(info):
     a('| Title | %s |' % T.TITLE)
     a('| Subtitle | %s |' % T.SUBTITLE)
     a('| Series | %s (a companion to the series: no number) |' % T.SERIES)
-    a('| Author | %s (first name only, as on the cover) |' % T.AUTHOR)
+    a('| Author | %s (as on the title page; the cover shows no name) |' % T.AUTHOR)
     a('| Audience | Adults (an adult coloring book) |')
     a('| Trim | 8.5 x 11 in (21.59 x 27.94 cm) |')
     a('| Ink and paper | Black and white, white paper |')
@@ -131,7 +131,7 @@ def listing(info):
     a('| Subtitle | %s |' % T.SUBTITLE)
     a('| Series | %s (companion, no number; optional) |' % T.SERIES)
     a('| Edition number | 1 |')
-    a('| Author | %s (first name only, as on the cover) [OWNER] |' % T.AUTHOR)
+    a('| Author | %s (as on the title page; the cover shows no name) |' % T.AUTHOR)
     a('| Publisher / imprint | Nothing to type: with a free KDP ISBN, KDP shows "Independently published" |')
     a('| Contributors | None |')
     a('| Publishing rights | "I own the copyright and I hold the necessary publishing rights." |')
@@ -212,7 +212,7 @@ hr{border:0;border-top:1px solid #d9d1bd;margin:14px 0} li{margin:2px 0}
     C.write(tmp, '<!doctype html><html lang="en-US"><head><meta charset="utf-8"><title>Color and Breathe: KDP listing</title><style>%s</style></head><body>%s</body></html>' % (css, body))
     subprocess.run(['node', os.path.join(HERE, 'md_to_pdf.js'), tmp, out_pdf], check=True, env=dict(os.environ))
     os.remove(tmp)
-    subprocess.run(['python3', os.path.join(HERE, 'pdf_meta.py'), out_pdf, 'Color and Breathe: KDP listing', 'Christian'], check=True)
+    subprocess.run(['python3', os.path.join(HERE, 'pdf_meta.py'), out_pdf, 'Color and Breathe: KDP listing', 'Patrick Christian Andrews'], check=True)
 
 
 def readme(t):

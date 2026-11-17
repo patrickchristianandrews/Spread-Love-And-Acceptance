@@ -530,6 +530,11 @@ class Fig:
         """a sub-drawing placed inside this figure: same pens, geometry moved before it is stroked"""
         return View(self, mat(x, y, s, flip, rot, sy))
 
+    def raw_at(self, markup, m=IDENT):
+        """SVG markup (an image, say) drawn in this figure's own coordinates, moved by m, in drawing order"""
+        self.items.append(('raw', markup, m))
+        return self
+
     # --- output
     def done(self):
         ink = self.ink
@@ -580,6 +585,9 @@ class Fig:
                 out.append('<path d="%s" fill="#fff"/>' % ink.d(it[1], m))
             elif k == 'brush':
                 out.append(self._brush(it))
+            elif k == 'raw':
+                mm = mmul(m, it[2])
+                out.append('<g transform="matrix(%s)">%s</g>' % (' '.join('%.5f' % v for v in mm), it[1]))
             elif k == 'clip':
                 cid = ink.newid('cp')
                 ink.defs.append('<clipPath id="%s"><path d="%s"/></clipPath>' % (cid, ink.d(it[1], m)))
@@ -635,6 +643,10 @@ class View:
 
     def part(self, path, fill='#fff', under=True, w=None, c=None):
         self.parent.part(self._p(path), fill, under, w, c)
+        return self
+
+    def raw_at(self, markup, m=IDENT):
+        self.parent.raw_at(markup, mmul(self.m, m))
         return self
 
     def line(self, path, w=None, cap='round', dash=None, fill='none'):

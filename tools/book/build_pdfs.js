@@ -57,7 +57,7 @@ const KEEP_PDF = new Set(['whole-in-depth']);
 const PRINT_OUT = path.join(OUT, 'print');
 // the book's one name (print12): series_title in tools/book/series.json
 const SERIES_TITLE = JSON.parse(fs.readFileSync(path.join(__dirname, 'series.json'), 'utf8')).series_title;
-const AUTHOR_NAME = 'Christian';
+const AUTHOR_NAME = 'Patrick Christian Andrews';
 const TMP = fs.mkdtempSync(path.join(os.tmpdir(), 'tol-book-'));
 
 function pageTexts(buf) {

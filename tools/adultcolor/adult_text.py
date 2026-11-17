@@ -5,7 +5,7 @@ American English, plain and kind. No em dashes, no semicolons."""
 TITLE = 'Color and Breathe'
 SUBTITLE = 'An Adult Coloring Book of Mandalas, Gardens and Quiet Scenes for Calm and Focus'
 SERIES = 'Spread Love & Acceptance'
-AUTHOR = 'Christian'
+AUTHOR = 'Patrick Christian Andrews'   # owner, Nov 17 2026: the full name inside the book, none on the cover
 SITE = 'spreadloveandacceptance.com'
 UPDATED = 'October 2026'
 PAGE_TARGET = '/pause-and-play'          # the Calm games page (pause-and-play.html), the QR code on the last page
@@ -36,7 +36,7 @@ THANKS_QR_LABEL = 'Calm games and a place to relax'
 # the copyright page: the same wording and format as the two kids coloring books (tools/kids/coloring_text.py), with the series name,
 # no book number, and the site named instead of the characters
 COPYRIGHT = ('<p><em>{series}</em>: <em>{name}</em>. A companion to the series.<br>By {author}. Independently published.</p>'
-             '<p>Pictures © 2026 {author}. First print edition, {updated}. Printed on demand, with a black-and-white interior.</p>'
+             '<p>Copyright © 2026 {author}. Pictures by the author. First print edition, {updated}. Printed on demand, with a black-and-white interior.</p>'
              '<p><strong>The back of every picture is blank</strong>, so markers will not soak through to the next one. Slide a sheet of paper under the page you are coloring.</p>'
              '<p><strong>Free online, always.</strong> {series} lives at {site}, where everything is free to read and use, with no account and no paid version. This print book is optional. You may copy pages for personal use and for non-commercial teaching, with credit to “{site}.”</p>'
              '<p><strong>Original.</strong> The pictures, and the two pups who appear in a few of them, are original to this site.</p>'

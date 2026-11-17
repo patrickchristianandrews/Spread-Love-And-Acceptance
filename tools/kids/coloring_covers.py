@@ -125,8 +125,7 @@ def make_cover(kind, pages):
              '<div style="font:700 12pt Andika;letter-spacing:.12em;color:#3A3350">%s &middot; BOOK %d</div>'
              '<div style="font:800 %dpt/1.0 Fraunces,serif;color:#FFFDF5;-webkit-text-stroke:2.8px #2F3566;paint-order:stroke fill;margin-top:.1in">%s<br>%s</div>'
              '<div style="font:700 14pt/1.3 Andika;color:#2F3566;margin:.16in auto 0;width:6.9in;background:rgba(255,253,245,.9);border-radius:.22in;padding:.07in .2in">%s</div></div>'
-             '<div style="position:absolute;left:0;right:0;bottom:.3in;text-align:center"><span style="display:inline-block;background:rgba(255,253,245,.94);border-radius:.2in;padding:.05in .3in;font:700 17pt Andika;color:#2F3566">%s</span></div>'
-             ) % (C.esc(X['ages'].upper()), X['series_no'], ts, C.esc(t1), C.esc(t2), C.esc(X['cover_subtitle']), C.esc(C.AUTHOR))
+             ) % (C.esc(X['ages'].upper()), X['series_no'], ts, C.esc(t1), C.esc(t2), C.esc(X['cover_subtitle']))
     back = ('<div style="position:absolute;left:.7in;right:.7in;top:.7in;font-size:13.5pt;line-height:1.42;background:rgba(255,253,245,.93);border-radius:.25in;padding:.26in .34in;border:2.5px solid #E8D5A2">'
             '<div style="font:800 20pt Fraunces,serif;margin-bottom:.1in;color:#3A3350">%s</div>%s'
             '<p style="margin:.12in 0 0;font-size:11.5pt;color:#4A4033">%s &middot; Free to read online at %s</p></div>') % (
