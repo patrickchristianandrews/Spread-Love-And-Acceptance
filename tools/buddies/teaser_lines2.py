@@ -40,6 +40,15 @@ LINES = [
     ('tidbit', 'Was that YOU?', 'surprised', 1.1, {}),
     ('sugarfoot', '…Maybe.', 'silly', 0.9, {'raw': True}),
 ]
+# Nov 17, later (owner: "the Jaws script is so corny... fix it good"; and Tidbit's plane line, stitched from many
+# recordings, now one run of his own words)
+LINES += [
+    ('tidbit', 'Sugarfoot… did you see that?', 'worried', 1.0, {}),
+    ('sugarfoot', 'I’m on the dock.', 'dry', 0.9, {}),
+    ('tidbit', 'We need a bigger boat.', 'worried', 1.0, {'a': ('89a74561', 0.42, 0.77, 2)}),
+    ('sugarfoot', 'It’s tiny.', 'dry', 0.9, {}),
+    ('tidbit', 'That’s NOT what I meant!', 'annoyed', 1.2, {'noprefer': True}),
+]
 ONLY = None  # set by the command line: build just the lines whose text contains one of these
 
 
@@ -131,10 +140,11 @@ def chunks(who, words, teaser):
     """the line as a few runs of words, each said together in one recording (longest runs first)"""
     S = sentences(who); res = []; i = 0
     while i < len(words):
-        if words[i] in teaser:
-            res.append(('teaser', words[i], i, i + 1)); i += 1; continue
+        if words[i] in teaser and not isinstance(teaser[words[i]], bool):
+            n = teaser[words[i]][3] if len(teaser[words[i]]) > 3 else 1  # a run of n words from one teaser recording
+            res.append(('teaser', words[i], i, i + n)); i += n; continue
         best = None
-        pref = PREFER.get((who, words[i]))
+        pref = None if teaser.get('noprefer') else PREFER.get((who, words[i]))
         if isinstance(pref, list):
             pref = pref[min(len(pref) - 1, words[:i].count(words[i]))]
         if pref:
@@ -148,7 +158,7 @@ def chunks(who, words, teaser):
             ws = snt['words']
             for a in range(len(ws)):
                 n = 0
-                while i + n < len(words) and a + n < len(ws) and ws[a + n] == words[i + n] and words[i + n] not in teaser and not (n and (who, words[i + n]) in PREFER):
+                while i + n < len(words) and a + n < len(ws) and ws[a + n] == words[i + n] and words[i + n] not in teaser and not (n and not teaser.get('noprefer') and (who, words[i + n]) in PREFER):
                     n += 1
                 ends = (a + n == len(ws)) == (i + n == len(words)) and (a == 0) == (i == 0)
                 if n and (best is None or n > best[0] or (n == best[0] and ends and not best[3])):
@@ -205,7 +215,9 @@ def build():
         pieces = []
         for c in chunks(who, words, teaser):
             if c[0] == 'teaser':
-                k, a0, b0 = teaser[c[1]]; xa = audio(os.path.join(TSRC, k + '.mp3')); a0 = quietest(xa, a0, 0.08, 0.06); b0 = quietest(xa, b0, 0.06, 0.08)
+                k, a0, b0 = teaser[c[1]][:3]; xa = audio(os.path.join(TSRC, k + '.mp3')); w0 = 0.03 if c[3] - c[2] > 1 else 0.08
+                if c[3] - c[2] == 1:  # one word: cut in the quiet around it (a run of words is given exactly, measured by ear)
+                    a0 = quietest(xa, a0, w0, 0.06); b0 = quietest(xa, b0, 0.06, w0)
                 x = xa[int(a0 * SR):int(b0 * SR)]; last = c[3] - 1
             else:
                 _, snt, a0, b0, i0, i1 = c; x = cut_run(snt, a0, b0); last = i1 - 1

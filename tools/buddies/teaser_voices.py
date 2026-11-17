@@ -17,7 +17,9 @@ import prosody as P
 ROOT = P.ROOT
 SRC = os.path.join(ROOT, 'tools', 'buddies', 'voice-src', 's2teaser')
 # lines kept as recorded (any reshaping blurred a word: "bone" came out as "bond")
-KEEP = {'You owe me a bigger bone!': 1.0, 'Gotcha! Just me!': 1.5}
+# and Tidbit's snakes line (owner, Nov 17: "Tidbit on the snakes on the plane voice needs to be fixed": reshaping it
+# doubled the wobbles in his pitch)
+KEEP = {'You owe me a bigger bone!': 1.0, 'Gotcha! Just me!': 1.5, 'I have had it with these snakes on this…': 1.5}
 BUILT = os.path.join(ROOT, 'tools', 'buddies', 'voice-src', 's2teaser-built')  # lines rebuilt by teaser_build.py, used as they are
 DST = os.path.join(ROOT, 'assets', 'audio', 'buddies', 's2teaser')
 
@@ -57,7 +59,7 @@ MOOD = {
     'Whoa… slow motion.': ('slowmo', 1.0), 'I know pie-fu.': ('cool', 1.0), 'Why is it always me?': ('grumpy', 1.1),
     'At least it’s cherry.': ('dry', 0.9), 'What a smooth flight!': ('happy', 1.0), 'Wait… snakes?!': ('scared', 1.2),
     'I have had it with these snakes on this…': ('fed up', 1.2), '…PLANE! This lovely plane!': ('excited', 1.2),
-    'That is NOT what I was going to say.': ('annoyed', 1.2), 'I know.': ('dry', 0.9),
+    'That’s NOT what I meant!': ('annoyed', 1.2), 'I know.': ('dry', 0.9),
     'Almost there…': ('worried', 1.0), 'I’m holding on tight!': ('scared', 1.0), 'Got it!': ('proud', 1.2), '…Oops.': ('timid', 0.9),
     'Mission: possible… ish.': ('silly', 1.0), 'YOU SHALL NOT PASS!': ('epic', 1.3), '…Okay.': ('timid', 0.9),
     'Did I do that?': ('timid', 1.0), 'Ready? Watch this!': ('excited', 1.2), 'To infinity… and beyond!': ('excited', 1.3),

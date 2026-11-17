@@ -101,6 +101,14 @@
     var f = M.poses.filter(function (x) { return x.dog === dog && x.ang === ang; })[0];
     return { img: S.poses, f: f, fh: M.fh };
   }
+  // fluid motion: the walk has only four painted frames a stride, so each frame melts into the next as the stride
+  // turns; and when a pup changes pose (sitting down, getting up to run) the old drawing fades out over the new one
+  function walkNext(dog, ph) {
+    var M = S.meta, a = (((ph % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2)) / (Math.PI / 2), q = Math.floor(a) % 4, fr = a - Math.floor(a);
+    var w = Math.max(0, Math.min(1, (fr - 0.35) / 0.65)); w = w * w * (3 - 2 * w);
+    return { fr: { img: S.walk, f: M.walk[dog * 4 + (q + 1) % 4], fh: M.wh }, w: w };
+  }
+  function blit(ctx, fr) { var p = place(fr), fw = S.meta.fw; ctx.drawImage(fr.img, fr.f.c * fw, fr.f.r * fr.fh, fw, fr.fh, -p.cx, -p.fy, fw, fr.fh); }
   function place(fr) { var f = fr.f; return { cx: (f.x0 + f.x1) / 2, fy: f.y1 }; }
   function headPos(L, pose, ph) {
     var dog = L.collar ? 0 : 1, fr = frame(dog, pose, ph), p = place(fr), f = fr.f;
@@ -127,6 +135,12 @@
     if (rot) { ctx.translate(0, -18); ctx.rotate(rot); ctx.translate(0, 18); }
     ctx.scale(K, K * sy);
     ctx.drawImage(fr.img, sx, sy0, fw, fr.fh, -p.cx, -p.fy, fw, fr.fh);
+    var P = window.TOLPups || {}, clk = P.clock || 0, B = S.blend[dog] || (S.blend[dog] = {}), kind = fr.img === S.walk ? 'w' : 'p' + f.ang;
+    if (P.quiet || B.shot !== P.shot || clk < B.T || clk - B.T > 0.3) { B.kind = kind; B.from = null; }
+    else if (kind !== B.kind) { B.from = { fr: B.fr, at: clk }; B.kind = kind; }
+    if (!P.quiet) { B.fr = fr; B.T = clk; B.shot = P.shot; }
+    if (fr.img === S.walk) { var nx = walkNext(dog, ph); if (nx.w > 0.01) { ctx.save(); ctx.globalAlpha *= 0.92 * nx.w; blit(ctx, nx.fr); ctx.restore(); } }
+    if (B.from && B.from.fr && clk - B.from.at < 0.2) { var fa = 1 - (clk - B.from.at) / 0.2; ctx.save(); ctx.globalAlpha *= 0.95 * fa * fa * (3 - 2 * fa); blit(ctx, B.from.fr); ctx.restore(); }
     if (still && blink) { ctx.save(); ctx.translate(f.hx - p.cx, f.hy - p.fy); blinkLids(ctx, dog, f.ang, 1); ctx.restore(); }
     if (o && o.talk > 0) { ctx.save(); ctx.translate(f.hx - p.cx, f.hy - p.fy); jaw(ctx, fr, dog, fr.img === S.walk ? 'w' : (pose === 'lie' || pose === 'bow' ? 'a2' : 'a1'), Math.min(1, (o.talk - 0.02) / 0.98)); ctx.restore(); }
     // the outfit, at the head of this drawing
@@ -140,7 +154,7 @@
   }
   window.TOLPupSprites = {
     install: function (o) {
-      S = { walk: o.walk, poses: o.poses, meta: o.meta, moving: [false, false], lastPh: {} };
+      S = { walk: o.walk, poses: o.poses, meta: o.meta, moving: [false, false], lastPh: {}, blend: {} };
       var P = window.TOLPups; if (!P) return false;
       P.draw = function (c, L, pose, ph, wag, blink, t, tilt, opts) { draw(c, L, pose, ph, wag, blink, t, tilt, opts); };
       P.headPos = headPos; P.cape = function () {}; P.sprites = true;
