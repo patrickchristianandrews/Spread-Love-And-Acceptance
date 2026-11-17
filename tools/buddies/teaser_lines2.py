@@ -49,6 +49,29 @@ LINES += [
     ('sugarfoot', 'It’s tiny.', 'dry', 0.9, {}),
     ('tidbit', 'That’s NOT what I meant!', 'annoyed', 1.2, {'noprefer': True}),
 ]
+# Nov 17, later still (owner: "their voices sound robotic on the Indiana Jones one... is it natural"; "the Jaws thing
+# is just stupid"): both bits are now written from whole sentences the pups really say in the episodes, each cut
+# whole from one recording and left exactly as said (no stitching, no reshaping), so they sound like themselves
+R = {'raw': True, 'noprefer': True}
+LINES += [
+    ('tidbit', 'Look what I found!', '', 1.0, dict(R)),
+    ('tidbit', 'It’s a very nice bone.', '', 1.0, dict(R)),
+    ('sugarfoot', 'Um, Tidbit?', '', 1.0, dict(R)),
+    ('tidbit', 'Uh-oh.', '', 1.0, dict(R)),
+    ('sugarfoot', 'Tidbit! Quick!', '', 1.0, dict(R)),
+    ('tidbit', 'Go, go, go!', '', 1.0, dict(R)),
+    ('tidbit', 'Fast, fast, fast!', '', 1.0, dict(R)),
+    ('tidbit', 'Hurry, hurry, hurry!', '', 1.0, dict(R)),
+    ('tidbit', 'Huh.', '', 1.0, dict(R)),
+    ('tidbit', 'This is the best day ever!', '', 1.0, dict(R)),
+    ('sugarfoot', 'That’s great, Tidbit.', '', 1.0, dict(R)),
+    ('tidbit', 'Captain Tidbit, ready to cast off!', '', 1.0, dict(R)),
+    ('sugarfoot', 'First Mate Sugarfoot, ready.', '', 1.0, dict(R)),
+    ('sugarfoot', 'I don’t like this part.', '', 1.0, dict(R)),
+    ('tidbit', 'Don’t worry! Boats float! That’s their whole job!', '', 1.0, dict(R)),
+    ('tidbit', 'Ow! It pinched hello!', '', 1.0, dict(R)),
+    ('sugarfoot', 'There’s room in the boat. Just about.', '', 1.0, dict(R)),
+]
 ONLY = None  # set by the command line: build just the lines whose text contains one of these
 
 
@@ -190,7 +213,7 @@ def cut_run(snt, a, b):
             if hs[j] == w or hs[j].startswith(w) or w.startswith(hs[j]):
                 return j
         return None
-    ja = find(want[0]); jb = find(want[-1], ja or 0) if ja is not None else None
+    ja = find(want[0]); jb = find(want[-1], ja + len(want) - 1) if ja is not None else None   # (the last word may repeat the first: "go, go, go")
     if ja is None or jb is None:  # fall back to the stored timing
         idx = json.load(open(os.path.join(P.AUD, snt['ep'], 'index.json')))[snt['k']]
         on = idx[1]; t0 = on[a]; t1 = on[b] if b < len(on) else idx[0]

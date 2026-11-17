@@ -261,3 +261,172 @@
     lowerFace: function (c, L) { ctx = c; c.save(); c.beginPath(); c.rect(-30, 3.6, 60, 30); c.clip(); sfLowerFace(L.tan || '#C4834A', '#F4EFE6'); c.restore(); }
   };
 })();
+
+/* The painted Tidbit and Sugarfoot (owner, Nov 17 2026: "update Sugarfoot and Tidbit to the current version all over
+   the website", the painted look first seen in the Season 2 teaser). Their art is two painted sheets,
+   /assets/img/pups-sprites/walk.webp (four walk frames each) and poses.webp (three views each). Once both sheets have
+   loaded, TOLPups.draw, headPos and head draw these instead of the vector pups above, with the same arguments, so every
+   page, the episode player, the pal cams, the launch screen and the games change together. Until then (and if the
+   sheets can't load) the vector pups are drawn. TOLPups.ready resolves when the painted pups are in. */
+(function () {
+  'use strict';
+  var P = (typeof window !== 'undefined' ? window : self).TOLPups; if (!P) return;
+  var window = (typeof self !== 'undefined' ? self : this);
+  var META = {"poses":[{"r":0,"c":0,"x0":32,"x1":97,"y0":14,"y1":111,"hx":64.47295673076923,"hy":35.47716346153846,"ang":0,"dog":0},{"r":0,"c":1,"x0":18,"x1":99,"y0":14,"y1":110,"hx":74.31534309946029,"hy":34.88897455666924,"ang":1,"dog":0},{"r":0,"c":2,"x0":13,"x1":116,"y0":14,"y1":110,"hx":88.06999195494771,"hy":36.154465004022526,"ang":2,"dog":0},{"r":0,"c":3,"x0":31,"x1":111,"y0":14,"y1":112,"hx":86.22783825816485,"hy":35.77760497667185,"ang":3,"dog":0},{"r":1,"c":0,"x0":33,"x1":95,"y0":9,"y1":108,"hx":64.12722802704364,"hy":31.169022741241548,"ang":4,"dog":0},{"r":1,"c":1,"x0":20,"x1":99,"y0":9,"y1":108,"hx":44.3700543056633,"hy":30.541505042668735,"ang":5,"dog":0},{"r":1,"c":2,"x0":10,"x1":114,"y0":10,"y1":107,"hx":37.67769897557132,"hy":31.84475965327029,"ang":6,"dog":0},{"r":1,"c":3,"x0":20,"x1":107,"y0":10,"y1":108,"hx":46.35302593659942,"hy":31.67435158501441,"ang":7,"dog":0},{"r":2,"c":0,"x0":30,"x1":97,"y0":6,"y1":107,"hx":64.00492341356674,"hy":28.915754923413566,"ang":0,"dog":1},{"r":2,"c":1,"x0":14,"x1":100,"y0":7,"y1":107,"hx":73.84728734092431,"hy":28.716008037508374,"ang":1,"dog":1},{"r":2,"c":2,"x0":6,"x1":114,"y0":7,"y1":107,"hx":84.59847434119278,"hy":30.002080443828017,"ang":2,"dog":1},{"r":2,"c":3,"x0":25,"x1":110,"y0":6,"y1":107,"hx":82.73403456048084,"hy":28.89556724267468,"ang":3,"dog":1},{"r":3,"c":0,"x0":30,"x1":94,"y0":3,"y1":107,"hx":61.93784078516903,"hy":25.863140676117776,"ang":4,"dog":1},{"r":3,"c":1,"x0":13,"x1":102,"y0":4,"y1":106,"hx":40.836413415468854,"hy":26.279945242984258,"ang":5,"dog":1},{"r":3,"c":2,"x0":1,"x1":115,"y0":4,"y1":106,"hx":32.72020725388601,"hy":26.91062176165803,"ang":6,"dog":1},{"r":3,"c":3,"x0":17,"x1":111,"y0":3,"y1":107,"hx":45.365396627108055,"hy":25.96002498438476,"ang":7,"dog":1}],"walk":[{"r":0,"c":0,"x0":7,"x1":120,"y0":23,"y1":105,"hx":93.2337552742616,"hy":41.94514767932489,"dog":0},{"r":0,"c":1,"x0":15,"x1":120,"y0":23,"y1":106,"hx":93.19357495881384,"hy":42.522240527182866,"dog":0},{"r":0,"c":2,"x0":14,"x1":120,"y0":23,"y1":106,"hx":93.16105176663928,"hy":42.455217748562035,"dog":0},{"r":0,"c":3,"x0":15,"x1":120,"y0":24,"y1":106,"hx":93.3774385072095,"hy":42.78201865988126,"dog":0},{"r":1,"c":0,"x0":7,"x1":120,"y0":21,"y1":109,"hx":92.9360119047619,"hy":40.85565476190476,"dog":1},{"r":1,"c":1,"x0":13,"x1":120,"y0":21,"y1":110,"hx":92.8474331164136,"hy":41.33405639913232,"dog":1},{"r":1,"c":2,"x0":13,"x1":120,"y0":21,"y1":110,"hx":93.07350800582242,"hy":41.346433770014556,"dog":1},{"r":1,"c":3,"x0":13,"x1":120,"y0":21,"y1":110,"hx":93.07272727272728,"hy":41.35345454545455,"dog":1}],"fw":128,"fh":128,"wh":128}, BASE = '/assets/img/pups-sprites/';
+
+  var K = 0.52;          // pup units per sprite pixel: a standing pup is about 50 units tall, like the drawn ones
+  var S = null;
+  // their colors (owner, Nov 3 2026): Tidbit always wears something purple, Sugarfoot something pink, a different item
+  // each scene. The painted sheets have no outfits, so the item is drawn on: on the head (a beanie, a cap, a bow) or at
+  // the neck (a bandana, a necklace). When a scene already puts something on a pup's head, the item goes at the neck.
+  var WEAR = { tidbit: { main: '#7B4FBF', light: '#B39BE0', dark: '#55329A' }, sugarfoot: { main: '#F07EA6', light: '#FAB9CF', dark: '#D45A86' } };
+  var HEAD = ['hat', 'cap', 'bow'], NECK = ['bandana', 'necklace'], ALL = HEAD.concat(NECK);
+  function hash(str) { var h = 0x811c9dc5; for (var i = 0; i < str.length; i++) { h ^= str.charCodeAt(i); h = Math.imul(h, 0x01000193) >>> 0; } return h; }
+  function outfit(who, o) {
+    var key = (window.TOLPups && window.TOLPups.outfitKey) || (typeof location !== 'undefined' && location.pathname) || 'site', h = hash(key + '|' + who);
+    if (o && o.hat) return NECK[h % NECK.length];
+    return ALL[h % ALL.length];
+  }
+  // the items, in head space (head centre at 0,0, facing right), drawn a little bigger than on the drawn pups' heads
+  function wearItem(ctx, wear, WC, neckDy) {
+    if (HEAD.indexOf(wear) >= 0) { ctx.translate(0.5, 4.6); ctx.scale(1.14, 1.14); } // these heads are bigger and sit lower than the drawn ones
+    if (wear === 'hat') {
+      ctx.fillStyle = WC.main; ctx.beginPath(); ctx.ellipse(-1.5, -9.2, 8.6, 4.8, -0.12, Math.PI, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = WC.dark; ctx.beginPath(); ctx.ellipse(-1.5, -9, 8.8, 1.7, -0.12, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = WC.light; ctx.beginPath(); ctx.arc(-2.5, -14.2, 2.4, 0, Math.PI * 2); ctx.fill();
+    } else if (wear === 'cap') {
+      ctx.fillStyle = WC.main; ctx.beginPath(); ctx.ellipse(-1, -8.8, 8.2, 5, -0.1, Math.PI, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = WC.dark; ctx.beginPath(); ctx.ellipse(6.5, -8.6, 6.5, 1.6, -0.05, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = WC.light; ctx.beginPath(); ctx.arc(-1, -13.4, 1.1, 0, Math.PI * 2); ctx.fill();
+    } else if (wear === 'bow') {
+      ctx.fillStyle = WC.main; ctx.beginPath(); ctx.ellipse(-8.3, -8.6, 3.4, 2.1, -0.5, 0, Math.PI * 2); ctx.fill(); ctx.beginPath(); ctx.ellipse(-2.5, -9.8, 3.4, 2.1, 0.5, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = WC.dark; ctx.beginPath(); ctx.arc(-5.4, -9.3, 1.5, 0, Math.PI * 2); ctx.fill();
+    } else {
+      ctx.translate(-1, neckDy);
+      if (wear === 'bandana') {
+        ctx.fillStyle = WC.main; ctx.beginPath(); ctx.moveTo(-6, 7.5); ctx.quadraticCurveTo(2, 9.5, 10, 7.5); ctx.lineTo(3, 17.5); ctx.closePath(); ctx.fill();
+        ctx.fillStyle = WC.light; ctx.beginPath(); ctx.moveTo(-5.5, 8); ctx.quadraticCurveTo(2, 9.8, 9.5, 8); ctx.quadraticCurveTo(2, 11.2, -5.5, 8); ctx.fill();
+        ctx.fillStyle = WC.dark; ctx.beginPath(); ctx.arc(-4.5, 8.5, 1.4, 0, Math.PI * 2); ctx.fill();
+      } else {
+        ctx.strokeStyle = WC.dark; ctx.lineWidth = 1.1; ctx.beginPath(); ctx.moveTo(-5, 7.5); ctx.quadraticCurveTo(2, 15, 9.5, 8); ctx.stroke();
+        ctx.fillStyle = WC.light; [[-3, 9.4], [0, 11], [5, 11], [8, 9.3]].forEach(function (b) { ctx.beginPath(); ctx.arc(b[0], b[1], 1.2, 0, Math.PI * 2); ctx.fill(); });
+        ctx.fillStyle = WC.main; ctx.beginPath(); ctx.moveTo(2.5, 15.2); ctx.bezierCurveTo(-0.5, 12.6, 0.4, 10.6, 2.5, 11.8); ctx.bezierCurveTo(4.6, 10.6, 5.5, 12.6, 2.5, 15.2); ctx.fill();
+      }
+    }
+  }
+  // the jaw of each drawing, measured on the sheets (sprite pixels, from the head centre): the mouth line runs from the
+  // corner (the hinge, first point) to the front of the lips; the rest goes round the chin and the tongue
+  var JAW = {
+    0: { a1: [[-1, 8], [16, 12], [20, 16], [18, 22], [8, 22], [1, 16]], a2: [[9, 6], [27, 9], [26, 14], [22, 19], [15, 17], [11, 11]], w: [[-1, 8], [17, 13], [18, 18], [15, 22], [6, 20], [1, 14]] },
+    1: { a1: [[-1, 6], [18, 8], [18, 14], [14, 19], [5, 18], [1, 12]], a2: [[11, 2], [29, 4], [27, 10], [22, 16], [16, 14], [13, 8]], w: [[-3, 9], [17, 9], [17, 15], [13, 19], [4, 19], [-1, 14]] }
+  };
+  // talking (opts.talk, 0..1 from the voice's loudness): the painted mouth opens. Everything between the mouth line and
+  // the chin is stretched down smoothly (most at the chin, fading out into the neck and to each side), so the drawing's
+  // own lips and tongue open up, with no edges and nothing drawn on top
+  function jaw(ctx, fr, dog, kind, tk) {
+    // while talking the jaw goes from a little closed (past the painted smile, between syllables) to wide open
+    var J = JAW[dog][kind], f = fr.f, fw = S.meta.fw, d = -2.4 + 7.9 * tk;
+    if (Math.abs(d) < 0.15) return;
+    var xs = J.map(function (p) { return p[0]; }), ys = J.map(function (p) { return p[1]; });
+    var x0 = Math.min.apply(null, xs) - 4, x1 = Math.max.apply(null, xs) + 3, chin = Math.max.apply(null, ys), y1 = chin + 10;
+    var a = J[0], b = J[1];
+    function top(x) { var u = Math.max(0, Math.min(1, (x - a[0]) / ((b[0] - a[0]) || 1))); return a[1] + (b[1] - a[1]) * u; }
+    function ss(v) { v = Math.max(0, Math.min(1, v)); return v * v * (3 - 2 * v); }
+    function dy(x, y) {
+      var t = top(x), wy = y <= t ? 0 : y <= chin ? ss((y - t) / Math.max(2, chin - t)) : 1 - ss((y - chin) / (y1 - chin));
+      var wx = ss((x - x0) / 5) * ss((x1 - x) / 5);
+      return d * wy * wx;
+    }
+    var ytop = Math.floor(Math.min(a[1], b[1])) - (d < 0 ? 4 : 1), sx0 = f.c * fw + f.hx, sy0 = f.r * fr.fh + f.hy;
+    for (var x = Math.floor(x0); x < x1; x += 1) {
+      for (var y = ytop; y < y1; y++) {
+        var o0 = dy(x + 0.5, y), o1 = dy(x + 0.5, y + 1);
+        ctx.drawImage(fr.img, sx0 + x, sy0 + y, 1, 1, x, y + o0, 1.4, Math.max(0.6, 1 + (o1 - o0)) + 0.6);
+      }
+    }
+  }
+  // their eyes on each drawing (sprite pixels from the head centre: x, y, radius, and the fur colour just above), for
+  // blinking: a lid of that fur comes down over the eye with a dark lash line along its edge
+  var EYES = {
+    '0:1': [[-2.5, -4, 3.1, '#3C3425'], [12, -6, 2.6, '#6E5440']], '0:2': [[10, -5.5, 3.1, '#5A4630']],
+    '1:1': [[-3, -6, 3.3, '#B8916C'], [12, -7, 2.7, '#8E7050']], '1:2': [[11, -7, 3.1, '#A8845A']]
+  };
+  function blinkLids(ctx, dog, ang, shut) {
+    (EYES[dog + ':' + ang] || []).forEach(function (e) {
+      var x = e[0], y = e[1], r = e[2] + 0.6, h = r * 2 * shut;
+      ctx.fillStyle = e[3]; ctx.beginPath(); ctx.ellipse(x, y - r + h / 2, r + 0.4, h / 2 + 0.3, 0, 0, Math.PI * 2); ctx.fill();
+      ctx.strokeStyle = 'rgba(25,18,14,.85)'; ctx.lineWidth = 0.9; ctx.beginPath(); ctx.ellipse(x, y - r + h - 0.4, r * 0.95, 1.1, 0, 0.15, Math.PI - 0.15); ctx.stroke();
+    });
+  }
+  function frame(dog, pose, ph) {
+    var M = S.meta;
+    if (pose === 'run' && S.moving[dog]) { var q = Math.floor((((ph % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2)) / (Math.PI / 2)) % 4; return { img: S.walk, f: M.walk[dog * 4 + q], fh: M.wh }; }
+    var ang = pose === 'lie' || pose === 'bow' ? 2 : 1;
+    var f = M.poses.filter(function (x) { return x.dog === dog && x.ang === ang; })[0];
+    return { img: S.poses, f: f, fh: M.fh };
+  }
+  // fluid motion: the walk has only four painted frames a stride, so each frame melts into the next as the stride
+  // turns; and when a pup changes pose (sitting down, getting up to run) the old drawing fades out over the new one
+  function walkNext(dog, ph) {
+    var M = S.meta, a = (((ph % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2)) / (Math.PI / 2), q = Math.floor(a) % 4, fr = a - Math.floor(a);
+    var w = Math.max(0, Math.min(1, (fr - 0.35) / 0.65)); w = w * w * (3 - 2 * w);
+    return { fr: { img: S.walk, f: M.walk[dog * 4 + (q + 1) % 4], fh: M.wh }, w: w };
+  }
+  function blit(ctx, fr) { var p = place(fr), fw = S.meta.fw; ctx.drawImage(fr.img, fr.f.c * fw, fr.f.r * fr.fh, fw, fr.fh, -p.cx, -p.fy, fw, fr.fh); }
+  function place(fr) { var f = fr.f; return { cx: (f.x0 + f.x1) / 2, fy: f.y1 }; }
+  function headPos(L, pose, ph) {
+    var dog = L.collar ? 0 : 1, fr = frame(dog, pose, ph), p = place(fr), f = fr.f;
+    var sy = pose === 'lie' ? 0.72 : 1;
+    return { x: (f.hx - p.cx) * K, y: (f.hy - p.fy) * K * sy, r: 0 };
+  }
+  function draw(ctx, L, pose, ph, wag, blink, t, tilt, o) {
+    var dog = L.collar ? 0 : 1;
+    // walking or standing still: the stride phase only moves while the pup walks
+    var key = dog + ':' + pose; if (S.lastPh[key] != null) S.moving[dog] = Math.abs(ph - S.lastPh[key]) > 1e-4; S.lastPh[key] = ph;
+    var fr = frame(dog, pose, ph), f = fr.f, p = place(fr), fw = S.meta.fw;
+    var col = f.c, row = f.r, sx = col * fw, sy0 = row * fr.fh;
+    // life: breathing, a slow sway of the weight from paw to paw, a happy wiggle with the tail, and a little bounce on
+    // the stressed syllables while talking
+    var tt = (t || 0) / 1000, tk = o && o.talk > 0 ? Math.min(1, o.talk) : 0, still = fr.img !== S.walk;
+    var breathe = 1 + 0.02 * Math.sin(tt * 1.9 + dog * 1.7) + 0.03 * tk, sy = (pose === 'lie' ? 0.72 : 1) * breathe;
+    ctx.save();
+    if (still && !(window.TOLPups || {}).reduced) {
+      ctx.rotate(0.016 * Math.sin(tt * 1.25 + dog * 2.1));
+      ctx.transform(1, 0, -0.035 * (wag || 0), 1, 0, 0);   // the body leans a touch with each wag of the tail
+    }
+    ctx.imageSmoothingEnabled = true; try { ctx.imageSmoothingQuality = 'high'; } catch (e) {}
+    var rot = (tilt || 0) * 0.45 + (pose === 'bow' ? 0.16 : 0) + (pose === 'wiggle' ? Math.sin((t || 0) / 95) * 0.07 : 0);
+    if (rot) { ctx.translate(0, -18); ctx.rotate(rot); ctx.translate(0, 18); }
+    ctx.scale(K, K * sy);
+    ctx.drawImage(fr.img, sx, sy0, fw, fr.fh, -p.cx, -p.fy, fw, fr.fh);
+    var P = window.TOLPups || {}, clk = P.clock || 0, B = S.blend[dog] || (S.blend[dog] = {}), kind = fr.img === S.walk ? 'w' : 'p' + f.ang;
+    if (P.quiet || B.shot !== P.shot || clk < B.T || clk - B.T > 0.3) { B.kind = kind; B.from = null; }
+    else if (kind !== B.kind) { B.from = { fr: B.fr, at: clk }; B.kind = kind; }
+    if (!P.quiet) { B.fr = fr; B.T = clk; B.shot = P.shot; }
+    if (fr.img === S.walk) { var nx = walkNext(dog, ph); if (nx.w > 0.01) { ctx.save(); ctx.globalAlpha *= 0.92 * nx.w; blit(ctx, nx.fr); ctx.restore(); } }
+    if (B.from && B.from.fr && clk - B.from.at < 0.2) { var fa = 1 - (clk - B.from.at) / 0.2; ctx.save(); ctx.globalAlpha *= 0.95 * fa * fa * (3 - 2 * fa); blit(ctx, B.from.fr); ctx.restore(); }
+    if (still && blink) { ctx.save(); ctx.translate(f.hx - p.cx, f.hy - p.fy); blinkLids(ctx, dog, f.ang, 1); ctx.restore(); }
+    if (o && o.talk > 0) { ctx.save(); ctx.translate(f.hx - p.cx, f.hy - p.fy); jaw(ctx, fr, dog, fr.img === S.walk ? 'w' : (pose === 'lie' || pose === 'bow' ? 'a2' : 'a1'), Math.min(1, (o.talk - 0.02) / 0.98)); ctx.restore(); }
+    // the outfit, at the head of this drawing
+    if (!(o && o.noOutfit)) {
+      var who = dog ? 'sugarfoot' : 'tidbit', wear = (o && o.outfit) || outfit(who, o);
+      ctx.save(); ctx.translate(f.hx - p.cx, f.hy - p.fy); ctx.scale(1 / K, 1 / K); ctx.scale(1.18, 1.18 / sy * (pose === 'lie' ? 0.72 : 1));
+      wearItem(ctx, wear, WEAR[who], pose === 'lie' ? 0 : 3);
+      ctx.restore();
+    }
+    ctx.restore();
+  }
+
+  function head(whoName, pose, opts) { var L = P.looks[whoName === 'sugarfoot' || whoName === 'sf' ? 'drop' : 'collar']; var h = headPos(L, pose === 'stand' ? 'run' : pose, 0); return { x: h.x, y: h.y }; }
+  function install(walk, poses) {
+    S = { walk: walk, poses: poses, meta: META, moving: [false, false], lastPh: {}, blend: {} };
+    P.draw = function (c, L, pose, ph, wag, blink, t, tilt, opts) { draw(c, L, pose === 'stand' ? 'run' : pose, ph, wag, blink, t, tilt, opts); };
+    P.headPos = function (L, pose, ph) { return headPos(L, pose === 'stand' ? 'run' : pose, ph); };
+    P.head = head; P.cape = function () {}; P.lowerFace = function () {}; P.sprites = true; P.painted = true;
+  }
+  function load(name) {
+    if (typeof document !== 'undefined') return new Promise(function (res, rej) { var im = new Image(); im.onload = function () { res(im); }; im.onerror = rej; im.src = BASE + name; });
+    return fetch(BASE + name).then(function (r) { return r.blob(); }).then(function (b) { return createImageBitmap(b); });   // in a worker
+  }
+  P.ready = Promise.all([load('walk.webp'), load('poses.webp')]).then(function (s) { install(s[0], s[1]); }).catch(function () {});
+})();
