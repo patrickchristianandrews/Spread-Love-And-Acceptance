@@ -182,6 +182,31 @@ const TINY = path.join(__dirname, 'fixtures', 'tiny.gguf');
   assert.match(gpu.why, /free GPU[\s\S]*costs nothing/);
   assert.ok(!String(gpu.easy).startsWith('api:'), 'an everyday question still stays on this PC');
   console.log('✓ routing: a connected free GPU (Colab/Kaggle/your server) answers hard questions for free; Hybrid keeps a paid cloud as the last resort');
+  // Prefer a generous-free cloud per task over a paid one: connect Groq (free tier) and OpenAI
+  // (paid). "Cloud AI for everything" then sends each task to the best FREE connected cloud — speed
+  // without spending credits — and the per-task board shows which API handles each task.
+  const freeFirst = await win.evaluate(() => {
+    const p = S.data.prefs; const was = { a: p.cloudAll, c: p.cloudChosen, off: S.config?.offline };
+    const g = { target: 'api:gq:llama-3.3-70b', label: 'Groq', name: 'Groq', group: 'Groq' };
+    const o = { target: 'api:oa:gpt-5', label: 'OpenAI', name: 'OpenAI', group: 'OpenAI' };
+    S.providers.push({ id: 'gq', preset: 'groq', name: 'Groq', hasKey: true }, { id: 'oa', preset: 'openai', name: 'OpenAI', hasKey: true });
+    S.targets.push(g, o);
+    if (S.config) S.config.offline = false;
+    try {
+      const freeGroq = isFreeCloud('api:gq:llama-3.3-70b');
+      const freeOpenai = isFreeCloud('api:oa:gpt-5');
+      const bestCode = bestConnectedForJob('coding');
+      const board = bestPerTaskHTML();
+      delete p.cloudChosen; p.cloudAll = true;
+      const pick = autoPick({ id: 'c-ff', messages: [], assistantId: 'as-general' }, assistantById('as-general'), 'hello there', false);
+      return { freeGroq, freeOpenai, bestCode, pick: pick.target, boardFree: /Groq/.test(board) && /free/.test(board) };
+    } finally { S.providers = S.providers.filter((x) => x.id !== 'gq' && x.id !== 'oa'); S.targets = S.targets.filter((x) => x !== g && x !== o); Object.assign(p, { cloudAll: was.a }); if (was.c === undefined) delete p.cloudChosen; else p.cloudChosen = was.c; if (S.config) S.config.offline = was.off; }
+  });
+  assert.deepEqual([freeFirst.freeGroq, freeFirst.freeOpenai], [true, false], 'a generous free tier (Groq) counts as free; a paid one (OpenAI) does not');
+  assert.equal(freeFirst.bestCode, 'api:gq:llama-3.3-70b', `each task prefers the free connected cloud over the paid one: ${JSON.stringify(freeFirst)}`);
+  assert.equal(freeFirst.pick, 'api:gq:llama-3.3-70b', 'Cloud AI for everything routes to the free cloud, not the paid one');
+  assert.ok(freeFirst.boardFree, 'the per-task board names the free connected cloud');
+  console.log('✓ cloud for everything prefers a generous-free cloud per task (Groq over paid OpenAI), and the per-task board shows which API handles each task');
   // With Venice connected, a picture this PC can't make (out of memory) is made by Venice instead,
   // says so, and Venice goes first for the rest of the session.
   const fb = await win.evaluate(async () => {

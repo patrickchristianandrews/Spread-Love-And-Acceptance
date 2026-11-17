@@ -114,3 +114,25 @@ function bestApiTarget(job, filter) {
   const cands = (S.targets || []).map((t) => t.target).filter((t) => t.startsWith('api:') && targetValid(t) && (!filter || filter(t)));
   return cands.sort((a, b) => apiPick(b, job) - apiPick(a, job) || apiValue(b) - apiValue(a))[0] || null;
 }
+// The connected cloud AI Quicksilver would use for a task — a free one first (so speed costs no
+// credits), then the best of any connected. Mirrors how "Cloud AI for everything" routes each task.
+function bestConnectedForJob(job) {
+  const connected = (t) => String(t).startsWith('api:') && targetValid(t);
+  const free = (t) => typeof isFreeCloud === 'function' && isFreeCloud(t);
+  return bestApiTarget(job, (t) => connected(t) && free(t)) || bestApiTarget(job, connected);
+}
+// A compact board: for each everyday task, the connected cloud AI that handles it (free first), or a
+// nudge to connect one. Shown under the rankings; it makes the per-task routing visible.
+const PER_TASK = [['general', '💬 Everyday chat'], ['coding', '💻 Coding'], ['reasoning', '🧠 Reasoning & maths'], ['writing', '✍️ Writing'], ['research', '🔎 Web research']];
+function bestPerTaskHTML() {
+  const rows = PER_TASK.map(([job, label]) => {
+    const t = bestConnectedForJob(job);
+    let right;
+    if (t) { const free = typeof isFreeCloud === 'function' && isFreeCloud(t); right = `<b>${esc(apiServiceName(t))}</b> ${free ? '<span class="badge b-mint">free</span>' : '<span class="badge b-lemon">paid</span>'}`; }
+    else { const want = JOB_TO_RANK[job] || 'chat'; const s = API_RANK.find((r) => r[0] && r[2].includes(want) && r[7] >= 6) || API_RANK.find((r) => r[0] && r[7] >= 6); right = `<span class="muted">— connect one${s ? ` (e.g. ${esc(s[1])}, free)` : ''}</span>`; }
+    return `<div class="og-row"><dt>${label}</dt><dd>${right}</dd></div>`;
+  }).join('');
+  return `<section class="card og-sec" id="per-task-best"><h3>⚡ Best connected AI for each task</h3>
+    <p class="small" style="margin:0 0 8px">Turn on <b>Cloud AI for everything</b> (Settings) and Quicksilver sends each kind of task to the best cloud you have connected for it — choosing a <b>free</b> one first, so speed costs no credits. This PC answers when you are offline or nothing is connected.</p>
+    <dl class="og">${rows}</dl></section>`;
+}

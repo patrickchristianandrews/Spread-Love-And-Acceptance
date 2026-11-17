@@ -83,6 +83,16 @@ function isFreeEndpoint(target) {
   const p = (S.providers || []).find((x) => x.id === target.split(':')[1]);
   return Boolean(p && (FREE_ENDPOINT_PRESETS.has(p.preset) || p.noKey));
 }
+// A cloud AI that costs nothing to use: a free endpoint (above), or a hosted service with a generous
+// free tier (Groq, Cerebras, Google, Cloudflare, OpenRouter's :free models, AI Horde…). Measured by
+// the API directory's "free allowance" score (row[7]); ≥ 6 means a real, usable free allowance. These
+// are preferred over paid clouds when routing a task to the cloud, so speed doesn't cost credits.
+function isFreeCloud(target) {
+  if (!String(target).startsWith('api:')) return false;
+  if (isFreeEndpoint(target)) return true;
+  const row = (typeof API_RANK !== 'undefined' ? API_RANK : []).find((r) => r[0] && r[0] === (typeof apiPreset === 'function' ? apiPreset(target) : ''));
+  return Boolean(row && row[7] >= 6);
+}
 function autoPick(chat, a, text, hasImage) {
   const base = resolveTarget(chat, a);
   const job = jobOfQuestion(text || '', a);
@@ -93,7 +103,10 @@ function autoPick(chat, a, text, hasImage) {
   const cloudFor = (photo) => {
     const ok = (t) => !photo || S.speed?.targets?.[t]?.vision || S.targets.find((x) => x.target === t)?.vision;
     const pick = (extra) => (liquidOk(base) && bestApiTarget(job, (t) => liquidOk(t) && ok(t) && extra(t))) || bestApiTarget(job, (t) => ok(t) && extra(t));
-    return pick(isFreeEndpoint) || pick(() => true); // free/self-hosted first, then any
+    // Prefer what costs nothing, per task: a free endpoint (your own GPU/server) first, then a hosted
+    // cloud with a generous free tier, then any connected cloud. So the fastest free option for this
+    // kind of task wins before any paid credits are spent.
+    return pick(isFreeEndpoint) || pick(isFreeCloud) || pick(() => true);
   };
   // Your own free GPU (Google Colab, Kaggle, a home/LAN server) connected as a Custom API: used
   // automatically for a hard question when it's connected, before any paid cloud and ahead of a slow

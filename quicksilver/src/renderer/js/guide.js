@@ -206,6 +206,7 @@ function apisGuideHTML() {
     ${addApiHTML()}
     ${apiDirectoryHTML(presetsCache)}
     ${apiRankHTML()}
+    ${bestPerTaskHTML()}
     ${freePaidHTML()}
     ${cloudCalcHTML()}
     ${expandedGuideHTML()}
