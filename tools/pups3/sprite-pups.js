@@ -60,8 +60,9 @@
   // the chin is stretched down smoothly (most at the chin, fading out into the neck and to each side), so the drawing's
   // own lips and tongue open up, with no edges and nothing drawn on top
   function jaw(ctx, fr, dog, kind, tk) {
-    var J = JAW[dog][kind], f = fr.f, fw = S.meta.fw, d = 4.2 * tk;
-    if (d < 0.15) return;
+    // while talking the jaw goes from a little closed (past the painted smile, between syllables) to wide open
+    var J = JAW[dog][kind], f = fr.f, fw = S.meta.fw, d = -2.4 + 7.9 * tk;
+    if (Math.abs(d) < 0.15) return;
     var xs = J.map(function (p) { return p[0]; }), ys = J.map(function (p) { return p[1]; });
     var x0 = Math.min.apply(null, xs) - 4, x1 = Math.max.apply(null, xs) + 3, chin = Math.max.apply(null, ys), y1 = chin + 10;
     var a = J[0], b = J[1];
@@ -72,11 +73,11 @@
       var wx = ss((x - x0) / 5) * ss((x1 - x) / 5);
       return d * wy * wx;
     }
-    var ytop = Math.floor(Math.min(a[1], b[1])) - 1, sx0 = f.c * fw + f.hx, sy0 = f.r * fr.fh + f.hy;
+    var ytop = Math.floor(Math.min(a[1], b[1])) - (d < 0 ? 4 : 1), sx0 = f.c * fw + f.hx, sy0 = f.r * fr.fh + f.hy;
     for (var x = Math.floor(x0); x < x1; x += 1) {
       for (var y = ytop; y < y1; y++) {
         var o0 = dy(x + 0.5, y), o1 = dy(x + 0.5, y + 1);
-        ctx.drawImage(fr.img, sx0 + x, sy0 + y, 1, 1, x, y + o0, 1.4, 1 + Math.max(0, o1 - o0) + 0.6);
+        ctx.drawImage(fr.img, sx0 + x, sy0 + y, 1, 1, x, y + o0, 1.4, Math.max(0.6, 1 + (o1 - o0)) + 0.6);
       }
     }
   }

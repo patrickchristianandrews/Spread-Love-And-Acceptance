@@ -57,7 +57,8 @@
     g.save(); g.translate(x, y - lift); if (o.rot) g.rotate(o.rot); g.scale(s * face, s * (o.sy || 1));
     if (o.cape) P.cape(g, L, t * 1000, o.cape, !!o.capeFly);
     var blink = o.blink != null ? o.blink : ((t + (who === 'tidbit' ? 0 : 1.7)) % 3.9) < 0.12;
-    P.draw(g, L, pose, o.ph || 0, o.wag != null ? o.wag : Math.sin(t * 9 + (who === 'tidbit' ? 0 : 2)) * 0.5, blink, t * 1000, o.tilt || 0, { ear: o.ear || 0, hat: !!o.over, talk: talkOf(who, CURT, CURCALM) }); // hat: the scene puts something on the head
+    var tk0 = talkOf(who, CURT, CURCALM); if (tk0 > 0) o = Object.assign({}, o, { tilt: (o.tilt || 0) + 0.035 * Math.max(0, tk0 - 0.35) }); // a small nod with the stressed syllables
+    P.draw(g, L, pose, o.ph || 0, o.wag != null ? o.wag : Math.sin(t * 9 + (who === 'tidbit' ? 0 : 2)) * 0.5, blink, t * 1000, o.tilt || 0, { ear: o.ear || 0, hat: !!o.over, talk: tk0 }); // hat: the scene puts something on the head
     if (o.reach && !P.sprites) { // a front paw stretched out to hold a pal's paw (painted pups come nose to nose instead)
       var ex = 12 + o.reach, ey = -14 - (o.reachUp || 0);
       g.lineCap = 'round'; g.strokeStyle = '#252120'; g.lineWidth = 6; g.beginPath(); g.moveTo(10, -24); g.quadraticCurveTo(16, -16, 12 + o.reach * 0.5, ey + 1); g.stroke();
@@ -959,11 +960,22 @@
   // the pups' mouths follow their own recorded voices: each clip's loudness, 40 times a second, opens the mouth of the pup
   // who is speaking (the drawn pups' grin opens; painted pups move their jaw). Envelopes are made when the clips decode.
   var ENV = {}, CURT = 0, CURCALM = false, SCANNING = false, TALKIX = {};
+  // how open the mouth is, 100 times a second: the loudness (over 20 ms), each syllable measured against the loudness
+  // around it (so every syllable opens and the dips between them close, loud line or soft), opening fast and closing a
+  // little slower, the way a mouth moves
+  var ENV_HZ = 100;
   function envOf(b) {
     if (!b || !b.getChannelData) return null;
-    var d = b.getChannelData(0), st = Math.max(1, Math.floor(b.sampleRate / 40)), n = Math.floor(d.length / st), e = new Float32Array(n), mx = 1e-6, i, j, sm;
-    for (i = 0; i < n; i++) { sm = 0; for (j = i * st; j < (i + 1) * st; j += 4) sm += d[j] * d[j]; e[i] = Math.sqrt(sm / (st / 4)); if (e[i] > mx) mx = e[i]; }
-    for (i = 0; i < n; i++) { var v = e[i] / mx; e[i] = v < 0.12 ? 0 : Math.pow(v, 0.7); }
+    var d = b.getChannelData(0), sr = b.sampleRate, st = Math.max(1, Math.floor(sr / ENV_HZ)), w = Math.floor(sr * 0.02), n = Math.floor(d.length / st), r = new Float32Array(n), mx = 1e-6, i, j, sm, c;
+    for (i = 0; i < n; i++) { c = i * st; sm = 0; var k0 = Math.max(0, c - w / 2), k1 = Math.min(d.length, c + w / 2); for (j = k0; j < k1; j += 2) sm += d[j] * d[j]; r[i] = Math.sqrt(sm / Math.max(1, (k1 - k0) / 2)); if (r[i] > mx) mx = r[i]; }
+    var e = new Float32Array(n), prev = 0;
+    for (i = 0; i < n; i++) {
+      var lm = 0; for (j = Math.max(0, i - 10); j < Math.min(n, i + 10); j++) if (r[j] > lm) lm = r[j];   // the loudest within about 0.1 s (a syllable)
+      var v = r[i] / Math.max(lm, 0.35 * mx), o = Math.max(0, Math.min(1, (v - 0.42) / 0.5)); o = Math.pow(o, 0.9);
+      if (r[i] < 0.06 * mx) o = 0;                                                    // silence closes it
+      prev = o > prev ? prev + (o - prev) * 0.8 : prev + (o - prev) * 0.5;            // opens fast, closes a little slower
+      e[i] = prev;
+    }
     return e;
   }
   function talkOf(who, T, calm) {
@@ -972,7 +984,7 @@
     for (var i = 0; i < L.length; i++) {
       var l = L[i]; if (l.who !== who || T < l.T) continue;
       var e = ENV[l.key]; if (!e) continue;
-      var x = (T - l.T) * 40, q = Math.floor(x); if (q >= e.length - 1) continue;
+      var x = (T - l.T + 0.03) * ENV_HZ, q = Math.floor(x); if (q >= e.length - 1) continue;   // a hair ahead of the sound, as lips lead the voice
       return Math.max(0.02, e[q] + (e[q + 1] - e[q]) * (x - q)); // above 0 while the line lasts, so the mouth stays in talking shape between words
     }
     return 0;
@@ -1510,7 +1522,7 @@
   }
   var API = window.TOLTeaser = { duration: DUR, secrets: SECRETS.map(function (s) { return s.id; }), places: PLACES.map(function (p) { return p.id; }), edit: EDIT.map(function (s) { return { t0: s[0], t1: s[1], id: s[2] }; }),
     renderAt: function (canvas, T, calm) { var g = canvas.getContext('2d'); render(g, canvas.width, canvas.height, T, !!calm, 1); return FR.shot; },
-    renderAudio: renderAudio, lines: function (calm) { return scanLines(!!calm).map(function (l) { return { t: +l.T.toFixed(2), who: l.who, text: l.text, dur: +l.dur.toFixed(2) }; }); } };
+    renderAudio: renderAudio, _talk: function (who, T, calm) { return talkOf(who, T, !!calm); }, lines: function (calm) { return scanLines(!!calm).map(function (l) { return { t: +l.T.toFixed(2), who: l.who, text: l.text, dur: +l.dur.toFixed(2) }; }); } };
   function init() {
     var host = document.querySelector('[data-teaser]'); if (host) { var pl = mount(host); API.player = pl; ['play', 'pause', 'seek', 'restart', 'found', 'secrets', 'shot', 'setCalm'].forEach(function (k) { API[k] = pl[k]; }); API.state = function () { return { t: pl.P.T, playing: pl.P.playing, ended: pl.P.ended, calm: pl.P.calm, shot: FR.shot, found: MEM.found.slice() }; }; }
     var pk = document.querySelector('[data-teaser-picker]'); if (pk) mountPicker(pk);
