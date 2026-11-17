@@ -1,0 +1,13 @@
+{
+  "name": "open-studio-android",
+  "version": "0.1.0",
+  "description": "Open Studio for Android — free image & text generation (Pollinations, AI Horde), no account.",
+  "license": "MIT",
+  "dependencies": {
+    "@capacitor/android": "6.2.0",
+    "@capacitor/core": "6.2.0"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "6.2.0"
+  }
+}

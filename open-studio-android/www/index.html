@@ -1,0 +1,403 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Open Studio</title>
+<style>
+  :root{
+    --bg:#0b0d12; --panel:#141821; --panel2:#1b2029; --line:#262c38;
+    --fg:#e8ecf3; --muted:#8b93a3; --accent:#6c7bff; --accent2:#a46bff;
+    --good:#3fd18b; --bad:#ff6b6b; --radius:14px;
+    --font:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%}
+  body{background:var(--bg);color:var(--fg);font-family:var(--font);-webkit-font-smoothing:antialiased;line-height:1.5}
+  a{color:var(--accent)}
+  .wrap{max-width:1100px;margin:0 auto;padding:18px max(16px,env(safe-area-inset-left,0px)) 56px}
+  header{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+  .logo{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,var(--accent),var(--accent2));flex:none}
+  h1{font-size:20px;margin:0;letter-spacing:.2px}
+  .sub{color:var(--muted);font-size:13px;margin:2px 0 0}
+  .tabs{display:flex;gap:6px;margin-left:auto;background:var(--panel);padding:5px;border-radius:12px;border:1px solid var(--line)}
+  .tab{appearance:none;border:0;background:transparent;color:var(--muted);font:inherit;font-weight:600;font-size:13px;padding:8px 16px;border-radius:9px;cursor:pointer}
+  .tab.on{background:var(--panel2);color:var(--fg)}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:16px}
+  label{display:block;font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin:0 0 6px}
+  textarea,select,input[type=text]{width:100%;background:var(--panel2);color:var(--fg);border:1px solid var(--line);border-radius:10px;padding:11px 12px;font:inherit;font-size:14px;resize:vertical}
+  textarea{min-height:88px}
+  .row{display:flex;gap:10px;flex-wrap:wrap}
+  .row > .col{flex:1;min-width:140px}
+  .chips{display:flex;gap:8px;flex-wrap:wrap}
+  .chip{appearance:none;border:1px solid var(--line);background:var(--panel2);color:var(--muted);font:inherit;font-size:13px;font-weight:600;padding:8px 12px;border-radius:9px;cursor:pointer}
+  .chip.on{border-color:var(--accent);color:var(--fg);background:#1d2340}
+  .opts{display:flex;gap:14px;align-items:center;flex-wrap:wrap;margin-top:12px}
+  .check{display:flex;align-items:center;gap:7px;color:var(--muted);font-size:13px;font-weight:600;cursor:pointer}
+  .btn{appearance:none;border:0;border-radius:11px;font:inherit;font-weight:700;font-size:15px;padding:12px 22px;cursor:pointer;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff}
+  .btn:disabled{opacity:.55;cursor:default}
+  .btn.ghost{background:var(--panel2);color:var(--fg);border:1px solid var(--line);font-size:13px;padding:8px 14px;font-weight:600}
+  .bar{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:14px}
+  .spin{width:16px;height:16px;border:2px solid var(--line);border-top-color:var(--accent);border-radius:50%;animation:sp .7s linear infinite}
+  @keyframes sp{to{transform:rotate(360deg)}}
+  .hint{color:var(--muted);font-size:12px}
+  .lib-head{display:flex;align-items:center;gap:12px;margin:24px 0 10px}
+  .lib-head h2{font-size:15px;margin:0}
+  .lib-head .count{color:var(--muted);font-size:13px}
+  .gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px}
+  figure{margin:0;background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;display:flex;flex-direction:column}
+  figure .imgwrap{position:relative;aspect-ratio:var(--ar,1);background:var(--panel2)}
+  figure img{display:block;width:100%;height:100%;object-fit:cover}
+  figure .imgwrap .spin{position:absolute;top:50%;left:50%;margin:-8px 0 0 -8px}
+  figcaption{padding:10px 12px;font-size:12px;color:var(--muted);display:flex;flex-direction:column;gap:8px;flex:1}
+  figcaption .p{color:var(--fg);max-height:3em;overflow:hidden}
+  .fig-acts{display:flex;gap:8px;margin-top:auto}
+  .fig-acts a,.fig-acts button{flex:1;text-align:center;text-decoration:none;font-weight:600;font-size:12px;padding:7px;border-radius:8px;border:1px solid var(--line);background:var(--panel2);color:var(--fg);cursor:pointer;font-family:inherit}
+  .empty{color:var(--muted);font-size:13px;border:1px dashed var(--line);border-radius:var(--radius);padding:26px;text-align:center}
+  .out{white-space:pre-wrap;word-break:break-word;background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:14px;margin-top:14px;min-height:80px;font-size:14px}
+  .err{color:var(--bad);font-size:13px;margin-top:10px}
+  .foot{color:var(--muted);font-size:12px;margin-top:28px;line-height:1.7}
+  .foot b{color:var(--fg)}
+  [hidden]{display:none!important}
+  @media (max-width:560px){ .tabs{margin-left:0;width:100%} .tab{flex:1} h1{font-size:18px} }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div id="filewarn" class="card" style="display:none;border-color:#7a5b16;background:#231d10;margin-bottom:14px;font-size:13px">
+    <b>Heads up:</b> this page is open as a local file. <b>Pollinations</b> images work, but <b>AI Horde</b> and <b>Text</b> need the page to run from a web address — browsers block those calls from a local file. Put it online for free (GitHub Pages, <a href="https://tiiny.host" target="_blank" rel="noopener">tiiny.host</a>, or <a href="https://app.netlify.com/drop" target="_blank" rel="noopener">Netlify Drop</a>), or use the Open Studio desktop app, where everything works.
+  </div>
+  <header>
+    <div class="logo"></div>
+    <div>
+      <h1>Open Studio</h1>
+      <p class="sub">Free image &amp; text generation — no account, no key, no limits.</p>
+    </div>
+    <div class="tabs" role="tablist">
+      <button class="tab on" data-tab="text" role="tab">Chat</button>
+      <button class="tab" data-tab="image" role="tab">Image</button>
+    </div>
+  </header>
+
+  <div class="card" style="margin-bottom:16px;padding:12px 16px">
+    <div class="row" style="align-items:flex-end">
+      <div class="col" style="min-width:220px">
+        <label for="token">Pollinations token <span style="text-transform:none;font-weight:400;color:var(--muted)">— optional, removes the wait</span></label>
+        <input type="text" id="token" placeholder="Paste a free token to skip the ~45s limit">
+      </div>
+      <div style="display:flex;gap:8px;align-items:center;padding-bottom:2px">
+        <a class="chip" href="https://auth.pollinations.ai" target="_blank" rel="noopener" style="text-decoration:none">Get a free token ↗</a>
+      </div>
+    </div>
+    <p class="hint" style="margin:8px 0 0">Without a token the free network allows about one image every 45 seconds. A token (free, no card) lifts that, so batches come at once. Stored only in this browser.</p>
+  </div>
+
+  <!-- IMAGE -->
+  <section id="panel-image" class="card" hidden>
+    <label for="iprompt">Describe the image</label>
+    <textarea id="iprompt" placeholder="A red fox in fresh snow at sunrise, soft light, close-up, highly detailed"></textarea>
+    <div style="margin-top:12px">
+      <label>Style</label>
+      <div class="chips" id="istyle">
+        <button class="chip on" data-style="">None</button>
+        <button class="chip" data-style="photorealistic, 50mm photo, natural light, highly detailed">Photoreal</button>
+        <button class="chip" data-style="cinematic film still, dramatic lighting, shallow depth of field, 35mm">Cinematic</button>
+        <button class="chip" data-style="anime key visual, studio quality, vibrant, clean lineart">Anime</button>
+        <button class="chip" data-style="digital painting, concept art, trending, intricate detail">Art</button>
+        <button class="chip" data-style="3D render, octane, soft studio lighting, product shot">3D</button>
+      </div>
+    </div>
+    <div class="row" style="margin-top:12px">
+      <div class="col" style="max-width:210px">
+        <label for="iengine">Engine</label>
+        <select id="iengine">
+          <option value="pollinations">Pollinations — fast, simple</option>
+          <option value="aihorde">AI Horde — more models, free</option>
+        </select>
+      </div>
+      <div class="col">
+        <label for="imodel">Model</label>
+        <select id="imodel">
+          <option value="flux">Flux — highest quality</option>
+          <option value="turbo">Turbo — fast</option>
+        </select>
+        <select id="ihordemodel" hidden><option value="">Any (fastest free worker)</option></select>
+      </div>
+      <div class="col">
+        <label>Shape</label>
+        <div class="chips" id="ishape">
+          <button class="chip on" data-w="1024" data-h="1024">Square</button>
+          <button class="chip" data-w="1280" data-h="720">Landscape</button>
+          <button class="chip" data-w="720" data-h="1280">Portrait</button>
+          <button class="chip" data-w="1280" data-h="960">4:3</button>
+        </div>
+      </div>
+      <div class="col" style="max-width:150px">
+        <label for="ibatch">How many</label>
+        <select id="ibatch"><option value="1">1 image</option><option value="2">2 images</option><option value="4">4 images</option></select>
+      </div>
+    </div>
+    <div class="opts">
+      <label class="check"><input type="checkbox" id="ienhance" checked> Enhance prompt</label>
+      <label class="check"><input type="checkbox" id="inologo" checked> No watermark</label>
+      <label class="check"><input type="checkbox" id="iseedlock"> Lock seed</label>
+      <input type="text" id="iseed" style="width:120px" placeholder="seed (auto)" inputmode="numeric">
+    </div>
+    <div class="bar">
+      <button class="btn" id="igen">Generate</button>
+      <span class="hint" id="ihint">Made by the open Pollinations network. First image can take ~10–20s.</span>
+    </div>
+    <div class="err" id="ierr" hidden></div>
+
+    <div class="lib-head">
+      <h2>Your library</h2><span class="count" id="libcount"></span>
+      <button class="btn ghost" id="libclear" style="margin-left:auto" hidden>Clear</button>
+    </div>
+    <div class="gallery" id="gallery"></div>
+    <div class="empty" id="libempty">Nothing yet. Generate an image and it is saved here — your library stays after you close the page.</div>
+  </section>
+
+  <!-- TEXT -->
+  <section id="panel-text" class="card">
+    <label for="tprompt">Ask or write a prompt</label>
+    <textarea id="tprompt" placeholder="Explain black holes to a 10-year-old in one paragraph."></textarea>
+    <div class="row" style="margin-top:12px">
+      <div class="col">
+        <label for="tmodel">Model</label>
+        <select id="tmodel">
+          <option value="openai">OpenAI (general)</option>
+          <option value="mistral">Mistral</option>
+          <option value="llama">Llama</option>
+          <option value="searchgpt">Web-aware</option>
+        </select>
+      </div>
+      <div class="col" style="display:flex;align-items:flex-end;gap:10px">
+        <button class="btn" id="tgen" style="flex:1">Generate text</button>
+        <span class="spin" id="tspin" hidden></span>
+      </div>
+    </div>
+    <div class="err" id="terr" hidden></div>
+    <div class="out" id="tout" aria-live="polite">The answer appears here.</div>
+    <div class="bar"><button class="btn ghost" id="tcopy" hidden>Copy</button></div>
+  </section>
+
+  <p class="foot">
+    <b>Open Studio</b> runs entirely in your browser and talks straight to the open-source
+    <b>Pollinations</b> network — free, no sign-up, no API key. Your library is saved on this device only; nothing you type is sent anywhere else.
+    Images open a direct link you can right-click → Save, or use <b>Download</b>.<br>
+    This is a free, in-browser studio: it makes <b>images and text</b>. Video, photo editing and upscaling need a paid service or a desktop app.
+  </p>
+</div>
+
+<script>
+(function(){
+  var $=function(s){return document.querySelector(s)};
+  if(location.protocol==='file:'){ var fw=document.getElementById('filewarn'); if(fw) fw.style.display='block'; }
+  var store={get:function(k,d){try{var v=localStorage.getItem('ostudio_'+k);return v===null?d:v}catch(e){return d}},
+             set:function(k,v){try{localStorage.setItem('ostudio_'+k,v)}catch(e){}}};
+
+  // Tabs
+  document.querySelectorAll('.tab').forEach(function(t){
+    t.addEventListener('click',function(){
+      document.querySelectorAll('.tab').forEach(function(x){x.classList.toggle('on',x===t)});
+      var tab=t.dataset.tab;
+      $('#panel-image').hidden = tab!=='image';
+      $('#panel-text').hidden = tab!=='text';
+      store.set('tab',tab);
+    });
+  });
+  if(store.get('tab')==='image'){ document.querySelector('.tab[data-tab="image"]').click(); }
+
+  // Token
+  $('#token').value=store.get('token','');
+  $('#token').addEventListener('input',function(){store.set('token',this.value.trim())});
+  function token(){ return ($('#token').value||'').trim(); }
+  function withToken(url){ return token()?url+'&token='+encodeURIComponent(token()):url; }
+
+  // Style + shape chips
+  var style=store.get('style','');
+  function selStyle(){ $('#istyle').querySelectorAll('.chip').forEach(function(x){x.classList.toggle('on',x.dataset.style===style)}); }
+  $('#istyle').addEventListener('click',function(e){ var b=e.target.closest('.chip'); if(!b)return; style=b.dataset.style; store.set('style',style); selStyle(); });
+  selStyle();
+  var shape={w:1024,h:1024};
+  $('#ishape').addEventListener('click',function(e){ var b=e.target.closest('.chip'); if(!b)return;
+    $('#ishape').querySelectorAll('.chip').forEach(function(x){x.classList.toggle('on',x===b)}); shape={w:+b.dataset.w,h:+b.dataset.h}; });
+
+  // Restore fields
+  $('#iprompt').value=store.get('iprompt','');
+  $('#tprompt').value=store.get('tprompt','');
+  $('#iprompt').addEventListener('input',function(){store.set('iprompt',this.value)});
+  $('#tprompt').addEventListener('input',function(){store.set('tprompt',this.value)});
+  $('#imodel').value=store.get('imodel','flux'); $('#imodel').addEventListener('change',function(){store.set('imodel',this.value)});
+  $('#tmodel').value=store.get('tmodel','openai'); $('#tmodel').addEventListener('change',function(){store.set('tmodel',this.value)});
+  $('#ibatch').value=store.get('batch','1'); $('#ibatch').addEventListener('change',function(){store.set('batch',this.value)});
+
+  // Engine: Pollinations (simple) or AI Horde (free crowd network, more models, no 45s limit)
+  var HORDE_AGENT='OpenStudio:1.0:open-studio';
+  function engine(){ return $('#iengine').value; }
+  var hordeLoaded=false;
+  function applyEngine(){
+    var h=engine()==='aihorde';
+    $('#imodel').hidden=h; $('#ihordemodel').hidden=!h;
+    $('#ihint').textContent=h ? 'AI Horde: free, no account, dozens of models. A free job can queue 10–60s.' : 'Made by the open Pollinations network. First image can take ~10–20s.';
+    if(h && !hordeLoaded){ hordeLoaded=true; loadHordeModels(); }
+  }
+  function loadHordeModels(){
+    fetch('https://aihorde.net/api/v2/status/models?type=image',{headers:{'Client-Agent':HORDE_AGENT}})
+      .then(function(r){return r.json();})
+      .then(function(list){
+        if(!Array.isArray(list)) return;
+        var top=list.filter(function(m){return (m.count||0)>0;}).sort(function(a,b){return (b.count||0)-(a.count||0);}).slice(0,35);
+        var sel=$('#ihordemodel'), cur=sel.value;
+        sel.innerHTML='<option value="">Any (fastest free worker)</option>'+top.map(function(m){return '<option value="'+esc(m.name)+'">'+esc(m.name)+' ('+m.count+')</option>';}).join('');
+        sel.value=cur;
+      }).catch(function(){});
+  }
+  $('#iengine').value=store.get('engine','pollinations');
+  $('#iengine').addEventListener('change',function(){ store.set('engine',this.value); applyEngine(); });
+  $('#ihordemodel').addEventListener('change',function(){ store.set('hordemodel',this.value); });
+  applyEngine();
+  var HORDE_AGENT='OpenStudio:1.0:open-studio';
+
+  // ---- Library (persists in this browser) ----
+  function loadLib(){ try{ return JSON.parse(store.get('lib','[]'))||[] }catch(e){ return [] } }
+  function saveLib(a){ try{ store.set('lib', JSON.stringify(a.slice(0,60))) }catch(e){} }
+  function esc(s){ return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]}) }
+  function tile(item){
+    var fig=document.createElement('figure'); fig.style.setProperty('--ar',(item.w/item.h).toFixed(4));
+    fig.innerHTML='<div class="imgwrap"><span class="spin"></span><img alt=""></div>'+
+      '<figcaption><span class="p">'+esc(item.prompt)+'</span>'+
+      '<div class="fig-acts"><a target="_blank" rel="noopener">Open</a>'+
+      '<a download="open-studio.png">Save</a>'+
+      '<button data-vary>More like this</button></div></figcaption>';
+    var a=fig.querySelectorAll('a'); a[0].href=item.url; a[1].href=item.url;
+    var img=fig.querySelector('img'), sp=fig.querySelector('.spin');
+    img.onload=function(){ sp.hidden=true; }; img.onerror=function(){ sp.hidden=true; };
+    img.src=item.url;
+    fig.querySelector('[data-vary]').addEventListener('click',function(){
+      $('#iprompt').value=item.base||item.prompt; shape={w:item.w,h:item.h};
+      $('#imodel').value=item.model; runBatch(1,true);
+    });
+    return fig;
+  }
+  function renderLib(){
+    var a=loadLib(), g=$('#gallery'); g.innerHTML='';
+    a.forEach(function(it){ g.appendChild(tile(it)); });
+    $('#libempty').hidden=a.length>0; $('#libclear').hidden=a.length===0;
+    $('#libcount').textContent=a.length?('· '+a.length+' saved'):'';
+  }
+  $('#libclear').addEventListener('click',function(){ saveLib([]); renderLib(); });
+  renderLib();
+
+  // ---- Image generation ----
+  var COOLDOWN=45, coolTimer=null;
+  function cool(){
+    if(token()) return;
+    var left=COOLDOWN, btn=$('#igen'); btn.disabled=true; clearInterval(coolTimer); btn.textContent='Ready in '+left+'s';
+    coolTimer=setInterval(function(){ left--; if(left<=0){clearInterval(coolTimer);btn.disabled=false;btn.textContent='Generate';} else btn.textContent='Ready in '+left+'s'; },1000);
+  }
+  function showErr(m){ var e=$('#ierr'); e.textContent=m; e.hidden=false; }
+  function newTile(item){
+    var fig=document.createElement('figure'); fig.style.setProperty('--ar',(item.w/item.h).toFixed(4));
+    fig.innerHTML='<div class="imgwrap"><span class="spin"></span><span class="hstat" style="position:absolute;bottom:6px;left:8px;font-size:11px;background:rgba(0,0,0,.5);padding:2px 6px;border-radius:6px;color:#fff"></span><img alt=""></div>'+
+      '<figcaption><span class="p">'+esc(item.prompt)+'</span><div class="fig-acts"><a target="_blank" rel="noopener">Open</a><a download="open-studio.png">Save</a><button data-vary>More like this</button></div></figcaption>';
+    fig.querySelector('[data-vary]').addEventListener('click',function(){ $('#iprompt').value=item.base||item.prompt; shape={w:item.w,h:item.h}; runBatch(1,true); });
+    var g=$('#gallery'); g.insertBefore(fig,g.firstChild); $('#libempty').hidden=true;
+    return fig;
+  }
+  function savedToLib(item){ var a=loadLib(); a.unshift(item); saveLib(a); $('#libclear').hidden=false; $('#libcount').textContent='· '+loadLib().length+' saved'; }
+
+  // AI Horde: submit a job, poll the queue, show the result. Free, no key (anonymous), more models.
+  function hordeImage(base, seed){
+    var full=base+(style?(', '+style):'');
+    var model=$('#ihordemodel').value;
+    var W=Math.max(64,Math.min(1024,Math.round(shape.w/64)*64)), H=Math.max(64,Math.min(1024,Math.round(shape.h/64)*64));
+    var item={url:'', prompt:full, base:base, w:W, h:H, model:model||'AI Horde', ts:Date.now()};
+    var fig=newTile(item), stat=fig.querySelector('.hstat'), sp=fig.querySelector('.spin'), img=fig.querySelector('img');
+    stat.textContent='submitting…';
+    var steps=/flux/i.test(model)?8:25;
+    var body={ prompt:full, nsfw:true, censor_nsfw:false, trusted_workers:false, r2:true,
+      params:{ width:W, height:H, steps:steps, sampler_name:'k_euler_a', cfg_scale:7, n:1, seed:String(seed) } };
+    if(model) body.models=[model];
+    var H1={'Content-Type':'application/json', apikey: token()||'0000000000', 'Client-Agent':HORDE_AGENT};
+    var deadline=Date.now()+300000;
+    fetch('https://aihorde.net/api/v2/generate/async',{method:'POST',headers:H1,body:JSON.stringify(body)})
+      .then(function(r){ return r.json().then(function(j){ if(!r.ok) throw new Error(j.message||('HTTP '+r.status)); return j; }); })
+      .then(function(j){ if(!j.id) throw new Error('no job id'); poll(j.id); })
+      .catch(function(e){ fig.remove(); showErr('AI Horde: '+e.message); });
+    function poll(id){
+      if(Date.now()>deadline){ fig.remove(); showErr('AI Horde took too long; try again, or choose "Any" for the fastest worker.'); return; }
+      fetch('https://aihorde.net/api/v2/generate/check/'+id,{headers:{'Client-Agent':HORDE_AGENT}})
+        .then(function(r){ return r.json(); })
+        .then(function(s){
+          if(s.faulted){ fig.remove(); showErr('A worker failed on that image; try again.'); return; }
+          if(!s.done){ stat.textContent=(s.queue_position>0?('#'+s.queue_position+' in queue'):'generating…')+(s.wait_time?(' ~'+s.wait_time+'s'):''); setTimeout(function(){ poll(id); },2500); return; }
+          fetch('https://aihorde.net/api/v2/generate/status/'+id,{headers:{'Client-Agent':HORDE_AGENT}})
+            .then(function(r){ return r.json(); })
+            .then(function(st){
+              var gen=(st.generations&&st.generations[0])||{}; var url=gen.img;
+              if(!url){ fig.remove(); showErr('No image came back; try again.'); return; }
+              item.url=url; var a=fig.querySelectorAll('a'); a[0].href=url; a[1].href=url;
+              img.onload=function(){ sp.hidden=true; stat.textContent=''; }; img.onerror=function(){ sp.hidden=true; stat.textContent='link expired — use Save next time'; };
+              img.src=url; savedToLib(item);
+            }).catch(function(e){ fig.remove(); showErr('AI Horde: '+e.message); });
+        }).catch(function(e){ fig.remove(); showErr('AI Horde: '+e.message); });
+    }
+  }
+
+  function oneImage(base, seed){
+    if(engine()==='aihorde') return hordeImage(base, seed);
+    var full=base+(style?(', '+style):'');
+    var nologo=$('#inologo').checked, enhance=$('#ienhance').checked;
+    var url=withToken('https://image.pollinations.ai/prompt/'+encodeURIComponent(full)
+      +'?width='+shape.w+'&height='+shape.h+'&model='+encodeURIComponent($('#imodel').value)
+      +'&seed='+seed+(nologo?'&nologo=true':'')+(enhance?'&enhance=true':'')+'&referrer=open-studio');
+    var item={url:url, prompt:full, base:base, w:shape.w, h:shape.h, model:$('#imodel').value, ts:Date.now()};
+    var fig=tile(item), g=$('#gallery'); g.insertBefore(fig,g.firstChild);
+    $('#libempty').hidden=true;
+    var probe=new Image();
+    probe.onload=function(){ var a=loadLib(); a.unshift(item); saveLib(a); $('#libclear').hidden=false; $('#libcount').textContent='· '+loadLib().length+' saved'; };
+    probe.onerror=function(){ fig.remove(); var e=$('#ierr'); e.textContent='An image could not be generated (busy, or the ~45s limit is cooling down). Add a token above to skip the wait.'; e.hidden=false; };
+    probe.src=url;
+  }
+  function runBatch(n, fromVary){
+    var base=$('#iprompt').value.trim(), err=$('#ierr'); err.hidden=true;
+    if(!base){ err.textContent='Type a description first.'; err.hidden=false; return; }
+    var lock=$('#iseedlock').checked;
+    for(var i=0;i<n;i++){
+      var seed;
+      if(lock && !fromVary && $('#iseed').value.trim()!=='') seed=parseInt($('#iseed').value,10)||0;
+      else seed=Math.floor(Math.random()*1e9);
+      if(!lock && n===1 && !fromVary) $('#iseed').value=seed;
+      oneImage(base, seed);
+    }
+    if(engine()==='pollinations') cool();
+  }
+  $('#igen').addEventListener('click',function(){ runBatch(parseInt($('#ibatch').value,10)||1,false); });
+
+  // ---- Text generation ----
+  function genText(){
+    var prompt=$('#tprompt').value.trim(), err=$('#terr'); err.hidden=true;
+    if(!prompt){ err.textContent='Type a prompt first.'; err.hidden=false; return; }
+    var out=$('#tout'); out.textContent='…'; $('#tcopy').hidden=true;
+    var spin=$('#tspin'); spin.hidden=false; $('#tgen').disabled=true;
+    var url=withToken('https://text.pollinations.ai/'+encodeURIComponent(prompt)+'?model='+encodeURIComponent($('#tmodel').value)+'&referrer=open-studio');
+    var opts=token()?{headers:{Authorization:'Bearer '+token()}}:{};
+    fetch(url,opts).then(function(r){ if(!r.ok) throw new Error(r.status===429?'the free limit is cooling down — add a token to skip it':'HTTP '+r.status); return r.text(); })
+      .then(function(txt){ out.textContent=txt.trim()||'(empty answer)'; $('#tcopy').hidden=false; })
+      .catch(function(e){ out.textContent='The answer appears here.'; err.textContent='Could not generate text ('+e.message+'). Try again or switch the model.'; err.hidden=false; })
+      .then(function(){ spin.hidden=true; $('#tgen').disabled=false; });
+  }
+  $('#tgen').addEventListener('click',genText);
+  $('#tcopy').addEventListener('click',function(){
+    var t=$('#tout').textContent;
+    if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(t).then(function(){var b=$('#tcopy');b.textContent='Copied';setTimeout(function(){b.textContent='Copy'},1200)}).catch(sel); } else sel();
+    function sel(){ var r=document.createRange(); r.selectNodeContents($('#tout')); var s=getSelection(); s.removeAllRanges(); s.addRange(r); }
+  });
+
+  $('#iprompt').addEventListener('keydown',function(e){ if((e.ctrlKey||e.metaKey)&&e.key==='Enter') $('#igen').click(); });
+  $('#tprompt').addEventListener('keydown',function(e){ if((e.ctrlKey||e.metaKey)&&e.key==='Enter') genText(); });
+})();
+</script>
+</body>
+</html>

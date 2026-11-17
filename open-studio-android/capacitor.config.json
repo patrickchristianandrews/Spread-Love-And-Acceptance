@@ -1,0 +1,8 @@
+{
+  "appId": "com.openstudio.app",
+  "appName": "Open Studio",
+  "webDir": "www",
+  "plugins": {
+    "CapacitorHttp": { "enabled": true }
+  }
+}
