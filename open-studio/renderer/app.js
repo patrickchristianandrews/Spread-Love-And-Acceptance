@@ -181,6 +181,18 @@
     }else{fail('Keyed services need the desktop app.');fin();}
   }
   $('#tgen').addEventListener('click',genText);
+  function fillModels(list){ var dl=$('#tmodels'); if(!dl)return; dl.innerHTML=(list||[]).slice(0,500).map(function(m){return '<option value="'+esc(m)+'">';}).join(''); }
+  var tml=$('#tmodels-load');
+  if(tml) tml.addEventListener('click',function(){
+    var provider=$('#tprovider').value;
+    if(provider==='pollinations'){ fillModels(['openai','mistral','llama','searchgpt','deepseek-reasoning']); return; }
+    if(!(window.studio&&window.studio.providerModels)){ $('#terr').textContent='Loading models needs the app.';$('#terr').hidden=false; return; }
+    tml.disabled=true;tml.textContent='…';
+    window.studio.providerModels(provider).then(function(list){ fillModels(list); if(!list||!list.length){$('#terr').textContent='No models returned — type a model name instead.';$('#terr').hidden=false;} })
+      .catch(function(e){$('#terr').textContent='Could not load models ('+(e.message||e)+').';$('#terr').hidden=false;})
+      .then(function(){ tml.disabled=false;tml.textContent='↻'; });
+  });
+  $('#tprovider').addEventListener('change',function(){ var dl=$('#tmodels'); if(dl)dl.innerHTML=''; $('#tmodel').value=''; });
   $('#tprompt').addEventListener('keydown',function(e){if((e.ctrlKey||e.metaKey)&&e.key==='Enter')genText()});
   $('#tcopy').addEventListener('click',function(){
     var t=$('#tout').textContent;

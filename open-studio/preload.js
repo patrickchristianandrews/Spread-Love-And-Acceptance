@@ -6,6 +6,7 @@ contextBridge.exposeInMainWorld('studio', {
   providers: () => ipcRenderer.invoke('providers'),
   setKey: (provider, key) => ipcRenderer.invoke('keys:set', { provider, key }),
   text: (opts) => ipcRenderer.invoke('text', opts),
+  providerModels: (provider) => ipcRenderer.invoke('provider:models', { provider }),
   ptext: (opts) => ipcRenderer.invoke('ptext', opts),
   hordeModels: () => ipcRenderer.invoke('horde:models'),
   hordeImage: (opts) => ipcRenderer.invoke('horde:image', opts),

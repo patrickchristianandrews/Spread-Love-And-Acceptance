@@ -68,6 +68,25 @@
       if (provider === 'openrouter') { headers['HTTP-Referer'] = 'https://open-studio.app'; headers['X-Title'] = 'Open Studio'; }
       return chatCall(base, headers, model || p.defModel, prompt);
     },
+    providerModels: async function (provider) {
+      var base, auth;
+      if (String(provider).indexOf('custom-') === 0) {
+        var c = customs().find(function (x) { return x.id === provider; });
+        if (!c) throw new Error('That custom service was removed.');
+        base = c.base; auth = c.key;
+      } else {
+        var p = PROVIDERS[provider]; if (!p) throw new Error('Unknown provider.');
+        base = p.base; auth = keyOf(provider);
+        if (p.cf) { var pr = String(auth || '').split(':'); if (!pr[0] || !pr[1]) throw new Error('Cloudflare key must be ACCOUNT_ID:API_TOKEN.'); base = 'https://api.cloudflare.com/client/v4/accounts/' + pr[0] + '/ai/v1'; auth = pr[1]; }
+        if (!auth && !p.noKey && !p.local) throw new Error('Add your ' + p.name + ' key first (Keys).');
+      }
+      var headers = {}; if (auth) headers.Authorization = 'Bearer ' + auth;
+      var res = await fetch(base + '/models', { headers: headers });
+      var data = {}; try { data = await res.json(); } catch (e) {}
+      if (!res.ok) throw new Error((data.error && data.error.message) || ('HTTP ' + res.status));
+      var arr = data.data || data.models || (Array.isArray(data) ? data : []);
+      return (Array.isArray(arr) ? arr : []).map(function (m) { return typeof m === 'string' ? m : (m.id || m.name); }).filter(Boolean).sort();
+    },
     ptext: function (opts) {
       var url = 'https://text.pollinations.ai/' + encodeURIComponent(opts.prompt) + '?model=openai&referrer=open-studio' + (opts.token ? '&token=' + encodeURIComponent(opts.token) : '');
       return fetch(url, opts.token ? { headers: { Authorization: 'Bearer ' + opts.token } } : {}).then(function (r) { if (!r.ok) throw new Error(r.status === 429 ? 'the free limit is cooling down — add a token in Keys' : 'HTTP ' + r.status); return r.text(); });

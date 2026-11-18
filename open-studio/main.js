@@ -173,6 +173,25 @@ ipcMain.handle('horde:image', async (_e, { prompt, model, width, height, steps, 
   throw new Error('AI Horde took too long; try again or choose "Any".');
 });
 
+ipcMain.handle('provider:models', async (_e, { provider }) => {
+  let base, auth;
+  if (String(provider).indexOf('custom-') === 0) {
+    const c = customs.find((x) => x.id === provider); if (!c) throw new Error('That custom service was removed.');
+    base = c.base; auth = c.key;
+  } else {
+    const p = PROVIDERS[provider]; if (!p) throw new Error('Unknown provider.');
+    base = p.base; auth = keys[provider];
+    if (p.cf) { const [a, t] = String(auth || '').split(':'); if (!a || !t) throw new Error('Cloudflare key must be ACCOUNT_ID:API_TOKEN (Keys).'); base = `https://api.cloudflare.com/client/v4/accounts/${a}/ai/v1`; auth = t; }
+    if (!auth && !p.noKey && !p.local) throw new Error(`Add your ${p.name} key first (Keys).`);
+  }
+  const headers = {}; if (auth) headers.Authorization = `Bearer ${auth}`;
+  const res = await fetch(`${base}/models`, { headers });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(data.error?.message || `HTTP ${res.status}`);
+  const arr = data.data || data.models || (Array.isArray(data) ? data : []);
+  return (Array.isArray(arr) ? arr : []).map((m) => (typeof m === 'string' ? m : (m.id || m.name))).filter(Boolean).sort();
+});
+
 ipcMain.handle('custom:list', () => customPublic());
 ipcMain.handle('custom:add', (_e, { name, base, key }) => {
   base = (base || '').trim().replace(/\/+$/, '');
