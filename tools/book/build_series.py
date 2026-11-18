@@ -1441,12 +1441,14 @@ def font_faces():
     return '\n'.join(re.findall(r'@font-face\s*\{[^}]*\}', css))
 
 
-def cover_html(item, trim, pages_hint=0, workbook=False, pocket=False, boxset=False):
+def cover_html(item, trim, pages_hint=0, workbook=False, pocket=False, boxset=False, bw=False):
     """A full-wrap cover: bleed, back, spine, front, bleed. build_pdfs.js sets --spine (inches) from the final page
     count, the @page size, and turns the spine text on above 79 pages. logicbook14: pocket=True is the 5 x 8 in pocket
     guide (its back code opens the situations online); boxset=True is the Kindle box set, whose front alone is used."""
     w, h = trim
     kicker = SERIES_TITLE + (' · Book %d' % item['n'] if not (workbook or pocket or boxset) else (' · ' + item['kicker'] if pocket else ''))
+    if bw:   # so the two editions look different on the store page
+        kicker += ' · Black-and-white edition'
     label = lambda b: ('Book %d' % b['n']) if b.get('n') else ('Pocket guide' if b.get('id') == POCKET['id'] else 'Workbook')
     others = ''.join('<li style="--bc:%s"><span>%s</span> %s</li>' % (b['color'], label(b), esc(b['title'])) for b in series_items())
     spine_t = '%s · %s' % (SERIES_TITLE, ('Book %d: %s' % (item['n'], item['title'])) if not (workbook or pocket or boxset) else item['title'])
@@ -1571,7 +1573,7 @@ def main():
     B.write(os.path.join(SRC, 'cover-workbook.html'), cover_html(CFG['workbook'], CFG['workbook_trim_in'], workbook=True))
     # finalfix15: the black-and-white interior edition (its cover is the same colour cover; its spine follows its own pages)
     build_workbook(where, bw=True)
-    B.write(os.path.join(SRC, 'cover-workbook-bw.html'), cover_html(CFG['workbook'], CFG['workbook_trim_in'], workbook=True))
+    B.write(os.path.join(SRC, 'cover-workbook-bw.html'), cover_html(CFG['workbook'], CFG['workbook_trim_in'], workbook=True, bw=True))
     # logicbook14: the pocket guide and the box set's cover
     import pocket
     pstats = pocket.build(sys.modules[__name__])

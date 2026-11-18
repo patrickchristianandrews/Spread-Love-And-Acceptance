@@ -641,8 +641,9 @@ def s_gate(ink):
             lf.part(blob([(0, 0, 'c'), (14, -10), (32, 0, 'c'), (14, 10)], k=1.0), w=ink.dw)
     for (x, y) in ((250, 330), (600, 340), (425, 215), (330, 250), (520, 250)):
         po.flower_z(ink, x, y, 0.45, 6, 30, 0, 'dots', False)
-    F(ink, lambda i, x, y, s: cast.pup_peek(i, 'tidbit', x, y, s, 'happy', lvl=1, paws=True), (250, 560, 430, 800), 'bottom')
-    F(ink, lambda i, x, y, s: cast.pup_peek(i, 'sugarfoot', x, y, s, 'calm', lvl=1, paws=True), (420, 560, 600, 800), 'bottom')
+    # standing in the open gateway, filling it
+    F(ink, lambda i, x, y, s: cast.pup_front(i, 'tidbit', x, y, s, 'happy', lvl=1), (240, 420, 425, 880), 'bottom')
+    F(ink, lambda i, x, y, s: cast.pup_front(i, 'sugarfoot', x, y, s, 'calm', lvl=1), (425, 420, 610, 880), 'bottom')
     # the gate doors (open a little) and the path
     for sgn in (-1, 1):
         with ink.fig(425 + sgn * 160, 880) as g:
@@ -672,8 +673,8 @@ def s_starry(ink):
     po.ground_z(ink, 600, 'leaves', 22, '#A9D98C', 40)
     po.ground_z(ink, 760, 'dots', 20, '#BFE3A0', 16)
     p2.pillow(ink, 425, 770, 1.0, 520, 190, '#fff', 0)
-    F(ink, lambda i, x, y, s: cast.pup_peek(i, 'sugarfoot', x, y, s, 'sleep', lvl=1, paws=False, tilt=-6), (110, 540, 440, 800), 'bottom')
-    F(ink, lambda i, x, y, s: cast.pup_peek(i, 'tidbit', x, y, s, 'sleep', lvl=1, paws=False, tilt=6), (410, 540, 740, 800), 'bottom')
+    F(ink, lambda i, x, y, s: cast.pup_front(i, 'sugarfoot', x, y, s, 'sleep', lvl=1), (120, 520, 420, 880), 'bottom')
+    F(ink, lambda i, x, y, s: cast.pup_front(i, 'tidbit', x, y, s, 'sleep', lvl=1), (430, 520, 730, 880), 'bottom')
     sh(ink, blob([(FL - 20, 870), (300, 830), (520, 870), (FRt + 20, 840), (FRt + 20, FB + 20), (FL - 20, FB + 20)], k=0.6), '#fff', 'scales', 18, box=(0, 850, 900, 930))
     tiny(ink, 'heart', [(500, 440), (160, 700), (690, 690)])
     po.stars_z(ink, 210, 10, (120, 380, 740, 580), avoid=[], size=(7, 11))
