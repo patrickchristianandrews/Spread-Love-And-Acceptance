@@ -100,8 +100,13 @@ function createWindow() {
     webPreferences: { preload: path.join(__dirname, 'preload.js'), contextIsolation: true, nodeIntegration: false },
   });
   win.loadFile(path.join(__dirname, 'renderer', 'index.html'));
-  // External links (Get a key, Open image) open in the real browser, not inside the app.
-  win.webContents.setWindowOpenHandler(({ url }) => { if (/^https?:/.test(url)) shell.openExternal(url); return { action: 'deny' }; });
+  // Puter's keyless sign-in opens a popup to puter.com and talks back to the page, so that popup
+  // must open inside the app. Every other external link (Get a key, Open image) goes to the real browser.
+  win.webContents.setWindowOpenHandler(({ url }) => {
+    try { if (/(^|\.)puter\.com$/i.test(new URL(url).hostname)) return { action: 'allow' }; } catch { /* not a URL */ }
+    if (/^https?:/.test(url)) shell.openExternal(url);
+    return { action: 'deny' };
+  });
 }
 
 app.whenReady().then(() => {

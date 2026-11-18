@@ -21,6 +21,30 @@
 
   var HORDE_AGENT='OpenStudio:0.1:desktop';
 
+  // ---------- Puter (keyless GPT/Claude/Gemini/DALL·E; its own sign-in + billing, runs in-page) ----------
+  function puterReady(){ return typeof window!=='undefined' && window.puter && window.puter.ai; }
+  function puterText(resp){
+    try{
+      if(resp==null)return '';
+      if(typeof resp==='string')return resp;
+      var m=resp.message;
+      if(m){ var c=m.content;
+        if(typeof c==='string')return c;
+        if(Array.isArray(c))return c.map(function(p){return (p&&(p.text||p.content))||''}).join(''); }
+      if(typeof resp.text==='string')return resp.text;
+      if(typeof resp.toString==='function'){ var s=resp.toString(); if(s&&s!=='[object Object]')return s; }
+    }catch(e){}
+    return '';
+  }
+  function puterImgUrl(res){
+    if(!res)return '';
+    if(typeof res==='string')return res;
+    if(res.src)return res.src;                    // txt2img returns an <img> element
+    if(typeof res.toString==='function'){ var s=res.toString(); if(/^(data:|https?:|blob:)/.test(s))return s; }
+    return '';
+  }
+  var PUTER_HINT=' — a free Puter sign-in popup may need completing on first use.';
+
   // ---------- Image ----------
   var style=store.get('style','');
   function selStyle(){ $('#istyle').querySelectorAll('.chip').forEach(function(x){x.classList.toggle('on',x.dataset.style===style)}); }
@@ -35,9 +59,9 @@
   function engine(){return $('#iengine').value}
   var hordeLoaded=false;
   function applyEngine(){
-    var e=engine(),h=e==='aihorde',d=e==='deepai';
-    $('#imodel').hidden=h||d; $('#ihordemodel').hidden=!h;
-    $('#ihint').textContent=d?'DeepAI: uses your DeepAI API key (add it under Keys). One image per request.':h?'AI Horde: free, no account, dozens of models. A free job can queue 10–60s.':'Pollinations network. Free; about one image every 45s unless you add a token (Keys).';
+    var e=engine(),h=e==='aihorde',d=e==='deepai',p=e==='puter';
+    $('#imodel').hidden=h||d||p; $('#ihordemodel').hidden=!h;
+    $('#ihint').textContent=p?'Puter: free DALL·E / Flux with no key — a one-time Puter sign-in popup appears on first use, then usage bills to your own free Puter account.':d?'DeepAI: uses your DeepAI API key (add it under Keys). One image per request.':h?'AI Horde: free, no account, dozens of models. A free job can queue 10–60s.':'Pollinations network. Free; about one image every 45s unless you add a token (Keys).';
     if(h&&!hordeLoaded){hordeLoaded=true;loadHordeModels();}
   }
   function loadHordeModels(){
@@ -134,6 +158,19 @@
       img.onload=function(){sp.hidden=true;stat.textContent='';};img.onerror=function(){sp.hidden=true;};img.src=url;savedToLib(item); })
       .catch(function(e){fig.remove();showErr('DeepAI: '+(e.message||e));});
   }
+  function puterImage(base,seed){
+    var full=base+(style?(', '+style):'');
+    var item={url:'',prompt:full,base:base,w:shape.w,h:shape.h,model:'Puter',ts:Date.now()};
+    var fig=newTile(item),stat=fig.querySelector('.hstat'),sp=fig.querySelector('.spin'),img=fig.querySelector('img');
+    stat.textContent='Puter…';
+    if(!puterReady()){fig.remove();showErr('Puter could not load — it needs an internet connection. Try Pollinations or AI Horde.');return;}
+    Promise.resolve(window.puter.ai.txt2img(full)).then(function(res){
+      var url=puterImgUrl(res);
+      if(!url){fig.remove();showErr('Puter returned no image. Try again.');return;}
+      item.url=url;var ax=fig.querySelectorAll('a');ax[0].href=url;ax[1].href=url;
+      img.onload=function(){sp.hidden=true;stat.textContent='';};img.onerror=function(){sp.hidden=true;stat.textContent='';};img.src=url;savedToLib(item);
+    }).catch(function(e){fig.remove();showErr('Puter: '+((e&&e.message)||e)+PUTER_HINT);});
+  }
   function runBatch(n,fromVary){
     var base=$('#iprompt').value.trim();$('#ierr').hidden=true;
     if(!base){showErr('Type a description first.');return;}
@@ -142,7 +179,7 @@
       var seed;
       if(lock&&!fromVary&&$('#iseed').value.trim()!=='')seed=parseInt($('#iseed').value,10)||0;else seed=Math.floor(Math.random()*1e9);
       if(!lock&&n===1&&!fromVary)$('#iseed').value=seed;
-      if(engine()==='aihorde')hordeImage(base,seed);else if(engine()==='deepai')deepaiImage(base,seed);else pollImage(base,seed);
+      if(engine()==='aihorde')hordeImage(base,seed);else if(engine()==='deepai')deepaiImage(base,seed);else if(engine()==='puter')puterImage(base,seed);else pollImage(base,seed);
     }
     if(engine()==='pollinations')cool();
   }
@@ -154,7 +191,8 @@
   var customProviders=[];
   function buildTextProviders(){
     var sel=$('#tprovider'),cur=sel.value;
-    var opts='<option value="pollinations">Pollinations (free, no key)</option>';
+    var opts='<option value="pollinations">Pollinations (free, no key)</option>'+
+             '<option value="puter">Puter (free — GPT / Claude / Gemini, sign in)</option>';
     keyedProviders.forEach(function(p){ if(p.connected&&!p.image) opts+='<option value="'+esc(p.id)+'">'+esc(p.name)+(p.local?' (on this PC)':p.noKey?' (free, no key)':' (your key)')+'</option>'; });
     customProviders.forEach(function(c){ opts+='<option value="'+esc(c.id)+'">'+esc(c.name)+' (custom)</option>'; });
     sel.innerHTML=opts; sel.value=cur&&[].some.call(sel.options,function(o){return o.value===cur})?cur:'pollinations';
@@ -168,6 +206,14 @@
     var done=function(txt){out.textContent=(txt||'').trim()||'(empty answer)';$('#tcopy').hidden=false;};
     var fail=function(msg){out.textContent='The answer appears here.';$('#terr').textContent=msg;$('#terr').hidden=false;};
     var fin=function(){$('#tspin').hidden=true;$('#tgen').disabled=false;};
+    if(provider==='puter'){
+      if(!puterReady()){fail('Puter could not load — it needs an internet connection.');fin();return;}
+      var popts={}; if(model)popts.model=model;
+      Promise.resolve(window.puter.ai.chat(prompt,popts)).then(function(r){
+        var t=puterText(r); if(!t)throw new Error('empty answer'); done(t);
+      }).catch(function(e){fail('Puter: '+((e&&e.message)||e)+PUTER_HINT)}).then(fin);
+      return;
+    }
     if(provider==='pollinations'){
       if(window.studio&&window.studio.ptext){
         window.studio.ptext({prompt:prompt,token:ptoken()}).then(done).catch(function(e){fail('Could not generate ('+(e.message||e)+').')}).then(fin);
@@ -186,6 +232,7 @@
   if(tml) tml.addEventListener('click',function(){
     var provider=$('#tprovider').value;
     if(provider==='pollinations'){ fillModels(['openai','mistral','llama','searchgpt','deepseek-reasoning']); return; }
+    if(provider==='puter'){ fillModels(['gpt-5-nano','gpt-5','gpt-4o-mini','claude-sonnet-4','claude-opus-4','gemini-2.5-flash','gemini-2.5-pro','deepseek-chat','mistral-large-latest','meta-llama/llama-3.3-70b-instruct']); $('#terr').textContent='Tip: leave Model blank for Puter’s default. These are common IDs — if one errors, it has been renamed; clear the box to use the default.';$('#terr').hidden=false; return; }
     if(!(window.studio&&window.studio.providerModels)){ $('#terr').textContent='Loading models needs the app.';$('#terr').hidden=false; return; }
     tml.disabled=true;tml.textContent='…';
     window.studio.providerModels(provider).then(function(list){ fillModels(list); if(!list||!list.length){$('#terr').textContent='No models returned — type a model name instead.';$('#terr').hidden=false;} })

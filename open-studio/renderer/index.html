@@ -5,6 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0b0d12">
 <title>Open Studio</title>
+<!-- Puter.js: keyless access to GPT / Claude / Gemini / DALL·E / Flux. Runs fully in the page
+     (its own sign-in + "User-Pays" billing), so no key ever touches our vault. -->
+<script src="https://js.puter.com/v2/"></script>
 <style>
   :root{
     --bg:#0b0d12; --panel:#141821; --panel2:#1b2029; --line:#262c38;
@@ -118,7 +121,7 @@
     </div>
     <div class="row" style="margin-top:12px">
       <div class="col" style="max-width:210px"><label for="iengine">Engine</label>
-        <select id="iengine"><option value="pollinations">Pollinations — fast, simple</option><option value="aihorde">AI Horde — more models, free</option><option value="deepai">DeepAI — your key</option></select></div>
+        <select id="iengine"><option value="pollinations">Pollinations — fast, simple</option><option value="aihorde">AI Horde — more models, free</option><option value="puter">Puter — DALL·E / Flux (free, sign in)</option><option value="deepai">DeepAI — your key</option></select></div>
       <div class="col"><label for="imodel">Model</label>
         <select id="imodel"><option value="flux">Flux — highest quality</option><option value="turbo">Turbo — fast</option></select>
         <select id="ihordemodel" hidden><option value="">Any (fastest free worker)</option></select></div>
@@ -170,6 +173,9 @@
     <p class="hint" style="margin:0 0 10px">Optional. Add a key to unlock a free‑with‑key cloud for the Text tab (fast, generous free tiers). Keys are <b>encrypted and stored only on this PC</b> — they never leave the app and are never shown to the page.</p>
     <div id="keylist"></div>
     <p class="hint" style="margin:12px 0 0">The image engines (Pollinations, AI Horde) and Pollinations chat need no key at all.</p>
+    <h2 style="margin:20px 0 4px;font-size:16px">Puter — keyless GPT / Claude / Gemini / DALL·E</h2>
+    <p class="hint" style="margin:0 0 10px">Puter gives you the big-name models with <b>no API key</b>. On first use a one-time Puter sign-in popup appears; after that, usage is billed to <b>your own free Puter account</b> (their "User-Pays" model — a free allowance, then your choice to top up). Pick <b>Puter</b> in the Chat service list or the Image engine. Nothing to paste here.</p>
+    <div class="chips"><a class="chip" href="https://puter.com" target="_blank" rel="noopener">About Puter ↗</a><span class="badge b-on" style="align-self:center">free · no key</span></div>
     <h2 style="margin:20px 0 4px;font-size:16px">Also available in your browser</h2>
     <p class="hint" style="margin:0 0 10px">These have no public API to connect into an app, so Open Studio opens them in your browser instead.</p>
     <div class="chips">
@@ -182,7 +188,7 @@
   </section>
 
   <p class="foot">
-    <b>Open Studio</b> is a standalone app. The free engines — <b>Pollinations</b> and <b>AI Horde</b> — need no account or key. Keyed clouds are called from inside the app so your key stays private.
+    <b>Open Studio</b> is a standalone app. The free engines — <b>Pollinations</b>, <b>AI Horde</b> and <b>Puter</b> (GPT/Claude/Gemini/DALL·E, keyless) — need no account or paid key. Keyed clouds are called from inside the app so your key stays private.
     Your library and settings live on this PC only.<br>
     This version does <b>images and text</b>. Video, in‑painting edits and upscaling are planned next (they need paid APIs or local engines).
   </p>
