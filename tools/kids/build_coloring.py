@@ -245,8 +245,8 @@ def meet_page(kind):
     M = X['meet']
     ink = CY.new_ink(91) if younger else CO.o_ink(91)
     lvl = 0 if younger else 1
-    Q.fit(ink, lambda i, x, y, s: cast.pup_front(i, 'tidbit', x, y, s, 'happy', lvl=lvl, arms='up', wag=1), (70, 190, 420, 560), 'bottom')
-    Q.fit(ink, lambda i, x, y, s: cast.pup_front(i, 'sugarfoot', x, y, s, 'happy', lvl=lvl, arms='chest'), (430, 200, 780, 560), 'bottom')
+    Q.fit(ink, lambda i, x, y, s: cast.pup_front(i, 'tidbit', x, y, s, 'happy', lvl=lvl, arms='up', wag=1), (110, 210, 390, 560), 'bottom')
+    Q.fit(ink, lambda i, x, y, s: cast.pup_front(i, 'sugarfoot', x, y, s, 'happy', lvl=lvl, arms='chest'), (465, 210, 745, 560), 'bottom')
     for cx in (245, 605):
         with ink.fig(0, 0) as g:
             g.part(rrect(cx - 130, 572, 260, 52, 22))
@@ -261,7 +261,7 @@ def meet_page(kind):
          '<div class="lbl" style="position:absolute;left:4.75in;width:2.6in;top:5.76in">Sugarfoot</div>'
          '<div class="sm" style="position:absolute;left:.7in;width:3.6in;top:6.4in">%s</div>'
          '<div class="sm" style="position:absolute;left:4.3in;width:3.5in;top:6.4in">%s</div>'
-         '<div class="gu" style="position:absolute;left:1.0in;right:1.0in;top:7.55in"><b>%s</b>%s</div>'
+         '<div class="gu" style="position:absolute;left:1.0in;right:1.0in;top:7.75in"><b>%s</b>%s</div>'
          '<div class="gu" style="position:absolute;left:1in;right:1in;top:8.95in"><b style="font-size:14pt;margin-bottom:0">%s</b>%s</div>') % (
         36 if younger else 34, esc(M['head']), esc(M['tidbit']), esc(M['sugarfoot']),
         esc(M['grownups_head']), esc(M['grownups']), esc(M['test_head']), esc(M['test_note']))

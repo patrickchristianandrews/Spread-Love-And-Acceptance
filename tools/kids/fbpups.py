@@ -440,6 +440,27 @@ def cut_above(regs, cut):
 
 
 def head_svg(who, size=64, pad=3.0, attrs='focusable="false" aria-hidden="true"'):
+    """the hint badges (tools/book/hints.py): the painted pup's head, as the site shows her now (owner, Nov 17 2026), in a
+    round crop, wearing her color (Tidbit a purple cap, Sugarfoot a pink bow); the painting is embedded as a small WebP"""
+    import base64, io, json, os
+    from PIL import Image, ImageDraw
+    D = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'painted')
+    name = '%s-sit-%s-open' % (who, 'cap' if who == 'tidbit' else 'bow')
+    info = json.load(open(os.path.join(D, 'index.json')))[name]
+    im = Image.open(os.path.join(D, 'png', name + '.png')).convert('RGBA')
+    hx, hy = info['head']; r = 0.52 * info['unit'] * 34      # the head, its ears and her item, with room round them
+    box = (int(hx - r * 1.0), int(hy - r * 1.15), int(hx + r * 1.0), int(hy + r * 0.85))
+    crop = Image.new('RGBA', (box[2] - box[0], box[3] - box[1]), (0, 0, 0, 0))
+    crop.alpha_composite(im.crop((max(0, box[0]), max(0, box[1]), min(im.width, box[2]), min(im.height, box[3]))), (max(0, -box[0]), max(0, -box[1])))
+    crop = crop.resize((192, 192), Image.LANCZOS)
+    m = Image.new('L', (192 * 4, 192 * 4), 0); ImageDraw.Draw(m).ellipse((8, 8, 192 * 4 - 8, 192 * 4 - 8), fill=255)   # a soft round badge
+    crop.putalpha(Image.fromarray(__import__('numpy').minimum(__import__('numpy').array(crop.getchannel('A')), __import__('numpy').array(m.resize((192, 192), Image.LANCZOS)))))
+    b = io.BytesIO(); crop.save(b, 'WEBP', quality=86, method=6)
+    href = 'data:image/webp;base64,' + base64.b64encode(b.getvalue()).decode()
+    return '<svg viewBox="0 0 %d %d" %s><image href="%s" x="0" y="0" width="%d" height="%d"/></svg>' % (size, size, attrs, href, size, size)
+
+
+def head_svg_cartoon(who, size=64, pad=3.0, attrs='focusable="false" aria-hidden="true"'):
     """Tidbit's or Sugarfoot's head exactly as the cartoon draws it (facing right, the cartoon's own colors, no outline),
     as a small square SVG: the hint badges in the books (tools/book/hints.py)"""
     rec = draw(LOOKS[WHO[who]], 'sit')

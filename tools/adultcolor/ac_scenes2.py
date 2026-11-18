@@ -180,8 +180,8 @@ def s_porch(pg):
     pg.line(Path().M(130, 900).L(730, 900), W3)
     pg.line(Path().M(160, 950).L(700, 950), W3)
     # the pups on the top step, the rocking chair, pots
-    draw_pup(pg, cast.pup_front, 'sugarfoot', 400, 858, 1.0, 'calm', tilt=5, lvl=1, arms='down')
-    draw_pup(pg, cast.pup_front, 'tidbit', 500, 858, 1.0, 'happy', tilt=-5, lvl=1, arms='down')
+    draw_pup(pg, cast.pup_front, 'sugarfoot', 350, 876, 0.82, 'calm', tilt=5, lvl=1, arms='down')
+    draw_pup(pg, cast.pup_front, 'tidbit', 545, 876, 0.82, 'happy', tilt=-5, lvl=1, arms='down')
     rocking_chair(pg, 165, 842, 0.95)
     pot(pg, 710, 862, 80, 66)
     for ang, L in ((-100, 66), (-60, 58), (-135, 58)):

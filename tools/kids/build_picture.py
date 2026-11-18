@@ -188,10 +188,11 @@ def s_puddles(P):
     A.puddles(P, 400, 735, 5.2, 'smile', pointer=False)
     A.tidbit_front(P, 1300, 745, 5.2, 'surprised', 'o')
     # callouts
-    P.raw('<g stroke="#3A3350" stroke-width="3.5" stroke-linecap="round" fill="none"><path d="M1130 690 Q1200 690 1235 700"/><path d="M1080 480 Q1170 470 1220 500"/><path d="M1500 580 Q1450 580 1410 600"/></g>')
+    # (Tidbit faces left here: her ear is at the back of her head, on the right)
+    P.raw('<g stroke="#3A3350" stroke-width="3.5" stroke-linecap="round" fill="none"><path d="M1130 700 Q1210 705 1262 732"/><path d="M1530 392 Q1460 395 1405 418"/><path d="M1515 568 Q1480 565 1448 556"/></g>')
     label(P, 1040, 705, 'buzzy paws', 26, 'middle')
-    label(P, 1000, 500, 'hot ears', 26, 'middle')
-    label(P, 1560, 575, 'tight tummy', 26, 'middle')
+    label(P, 1600, 390, 'hot ears', 26, 'middle')
+    label(P, 1600, 575, 'tight tummy', 26, 'middle')
     A.sparkle(P, 640, 420, 2.0)
 
 
@@ -204,7 +205,7 @@ def s_room(P):
     # a gentle ring of room around Sugarfoot
     P.raw('<ellipse cx="560" cy="690" rx="250" ry="62" fill="none" stroke="#9AA7C9" stroke-width="5" stroke-dasharray="4 14" stroke-linecap="round"/>')
     A.pup_side(P, 'sugarfoot', 520, 735, 5.2, 'lie', 'sad', mouth_='flat')
-    label(P, 570, 520, 'room', 28)
+    label(P, 560, 768, 'room', 28)
     A.tidbit_front(P, 1330, 745, 4.8, 'calm', 'smile')
     A.heart(P, 1010, 520, 1.4, '#F08DA8', '#D2668A')
     A.sparkle(P, 1470, 420, 1.8)
@@ -445,7 +446,7 @@ def pg_half_title():
         o = ox(1)
         sky(P, '#FFF4DC', '#FFF4DC', PH * U, PW * U)
         A.peach_lilac(P, o + 425, 640, 1.9)
-        for (x, y, s) in ((o + 180, 300, 1.6), (o + 680, 260, 1.3), (o + 560, 120, 1.0)):
+        for (x, y, s) in ((o + 110, 470, 1.6), (o + 740, 450, 1.3), (o + 640, 130, 1.0)):
             A.sparkle(P, x, y, s)
     inner = '<div class="center" style="top:2.1in"><h1 style="font-size:34pt;line-height:1.1">%s</h1></div>' % C.esc(BOOK['title'])
     return pagebox(1, inner, simple_art(art, 'r'))
@@ -674,8 +675,8 @@ def cover(pages=PAGES):
     A.pup_side(P, 'tidbit', fx + 215, 760, 4.5, 'run', 'happy', ph=0.9, wag=0.3)
     A.pup_side(P, 'sugarfoot', fx + 690, 765, 4.4, 'stand', 'happy', flip=True)
     A.basket(P, fx + 450, 770, 2.6, full=True)
-    A.static_cloud(P, 'fuzz', fx + 200, 520, 2.4, 'happy', fizz=False)
-    A.static_cloud(P, 'grumble', fx + 760, 560, 2.2, 'happy', fizz=False)
+    A.static_cloud(P, 'fuzz', fx + 95, 445, 2.0, 'happy', fizz=False)
+    A.static_cloud(P, 'grumble', fx + 800, 470, 1.9, 'happy', fizz=False)
     A.butterfly(P, fx + 480, 520, 2.4)
     # back: the friends in a row
     A.puddles(P, bx + 120, 800, 2.2, 'smile')

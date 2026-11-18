@@ -541,8 +541,8 @@ def meet_page(book, found=()):
           '<blockquote><p>“I spent my career as a government auditor and audit manager in tax enforcement, internal controls and compliance.” '
           '“Everyone else seemed to have been handed a set of instructions about being human that nobody ever gave me, so I went looking for them myself.” '
           '“Everything here exists so that you can do the same thing in far less time than it took me.”</p></blockquote>'
-          '<p class="ps-meet-note">Christian, quoted from the About page at spreadloveandacceptance.com/about. Where the chapters say “I,” '
-          'they speak for the website and these books; any fact about Christian in them comes from that page.</p></div></section>')
+          '<p class="ps-meet-note">Patrick Christian Andrews, quoted from the About page at spreadloveandacceptance.com/about. Where the chapters say “I,” '
+          'they speak for the website and these books; any fact about the author in them comes from that page.</p></div></section>')
     return s
 
 

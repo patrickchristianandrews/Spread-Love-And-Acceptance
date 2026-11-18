@@ -156,7 +156,7 @@ def s_hugs(ink):
     F(ink, lambda i, x, y, s: cast.pup_front(i, 'sugarfoot', x, y, s, 'happy', arms='wide', wag=1.0), (150, 260, 700, 890), 'bottom')
     for (x, y, r, rot) in ((200, 170, 28, -15), (690, 330, 26, 18), (340, 130, 20, 10), (600, 210, 22, -8), (430, 120, 30, 5), (110, 360, 20, 8)):
         pr.heart(ink, x, y, r, rot)
-    hide(ink, 'butterfly', [(660, 560), (205, 640), (560, 130)], 1.0)
+    hide(ink, 'butterfly', [(95, 700), (760, 640), (560, 130)], 1.0)
     ground_deco(ink, 2, 870, 930, [(140, 780, 700, 900)], 4)
     frame_end(ink)
 
@@ -509,8 +509,6 @@ def s_sled(ink):
     F(ink, lambda i, x, y, s: cast.pup_front(i, 'tidbit', x, y, s, 'joy', arms='both_up', scarf=True, hat='beanie'), (410, 330, 780, 850), 'bottom')
     tufts(ink, [(130, 925), (730, 925)], 1.2)
     sky_bits(ink, birds=((330, 230), (540, 330)), butter=())
-    for (x, y, r) in ((300, 540, 14), (560, 520, 12)):
-        pr.snowflake(ink, x, y, r, 5)
     frame_end(ink)
 
 
@@ -524,7 +522,7 @@ def s_wagon(ink):
     sky_bits(ink, birds=((300, 260), (520, 250), (240, 330)), butter=((130, 450, 12),))
     hills(ink, 640, 740)
     pr.fence(ink, 62, 400, 700, 52)
-    pr.tree(ink, 690, 720, 0.9)
+    pr.tree(ink, 120, 700, 0.8)
     F(ink, lambda i, x, y, s: cast.pup_front(i, 'sugarfoot', x, y, s, 'happy', arms='up', hat='sun'), (60, 360, 440, 780), 'bottom')
     p3.wagon(ink, 250, 905, 1.3, 360, 110)
     F(ink, lambda i, x, y, s: cast.pup_side(i, 'tidbit', x, y, s, 'walk', 'happy', turn=0.4, tail_up=1.2), (470, 560, 790, 910), 'bottom')
@@ -701,9 +699,10 @@ def s_bake(ink):
         g.part(rrect(540, 330, 200, 18, 6), c='#B07C4D')
     pr.cupcake(ink, 590, 330, 0.8)
     pr.cupcake(ink, 680, 330, 0.8, '#E8D8F8')
+    # Tidbit behind the counter: her paws hidden by it, the tray of cookies in front of her
+    F(ink, lambda i, x, y, s: cast.pup_front(i, 'tidbit', x, y, s, 'happy', arms='chest', hat='chef'), (180, 170, 670, 1120), 'bottom')
     with ink.fig(0, 0) as g:
         g.part(rrect(40, 760, 770, 200, 4), c='#E8D5B0', w=ink.dw)
-    F(ink, lambda i, x, y, s: cast.pup_front(i, 'tidbit', x, y, s, 'happy', arms='chest', hat='chef'), (170, 260, 680, 800), 'bottom')
     with ink.fig(425, 830) as g:
         g.part(rrect(-330, -40, 660, 40, 10), c='#E8B97C')
     p3.tray(ink, 425, 800, 1.2, 440)

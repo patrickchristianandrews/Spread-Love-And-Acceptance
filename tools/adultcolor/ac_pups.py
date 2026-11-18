@@ -39,8 +39,9 @@ def m_hammock(pg):
     top_y = cy - 14
     sag = 118
     ytop = top_y + sag * 0.96
-    draw_pup(pg, cast.pup_side, 'sugarfoot', cx - 86, ytop, 0.7, 'lie', 'sleep', False, 1)
-    draw_pup(pg, cast.pup_side, 'tidbit', cx + 90, ytop - 2, 0.7, 'lie', 'sleep', True, 1)
+    # asleep in the hammock: their heads and paws over the cloth's edge (the cloth, drawn next, hides the rest)
+    draw_pup(pg, cast.pup_peek, 'sugarfoot', cx - 78, ytop + 14, 0.62, 'sleep', lvl=1, paws=True)
+    draw_pup(pg, cast.pup_peek, 'tidbit', cx + 78, ytop + 14, 0.62, 'sleep', lvl=1, paws=True)
     cloth = Path().M(lx + 8, top_y + 6).C(lx + 80, top_y + sag * 1.55, rx - 80, top_y + sag * 1.55, rx - 8, top_y + 6).C(rx - 80, top_y + sag * 1.27, lx + 80, top_y + sag * 1.27, lx + 8, top_y + 6).Z()
     pg.shape(cloth, W2)
     pg.line(Path().M(lx + 22, top_y + 12).C(lx + 92, top_y + sag * 1.42, rx - 92, top_y + sag * 1.42, rx - 22, top_y + 12), W3, dash='1 9')
@@ -77,8 +78,8 @@ def b_peek(pg):
     for (x, y, a, L) in ((140, 760, -100, 120), (730, 760, -80, 120), (300, 700, -120, 100), (570, 700, -60, 100)):
         draw_leaf(pg, x, y + 120, a, L, 26, 0.2, 3)
     # the pups
-    draw_pup(pg, cast.pup_peek, 'tidbit', 330, 700, 1.15, 'happy', lvl=1, paws=True)
-    draw_pup(pg, cast.pup_peek, 'sugarfoot', 540, 706, 1.15, 'calm', lvl=1, paws=True)
+    draw_pup(pg, cast.pup_peek, 'tidbit', 285, 700, 0.98, 'happy', lvl=1, paws=True)
+    draw_pup(pg, cast.pup_peek, 'sugarfoot', 585, 706, 0.98, 'calm', lvl=1, paws=True)
     # the near row: shorter flowers hide the pups' shoulders
     near = [(130, 880, 'poppy', 58), (290, 850, 'cosmos', 52), (430, 900, 'daisy', 54), (570, 850, 'poppy', 54), (740, 880, 'cosmos', 56), (210, 960, 'daisy', 42), (660, 960, 'daisy', 42)]
     for (x, y, kind, R) in near:

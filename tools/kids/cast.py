@@ -748,10 +748,14 @@ def _ink_fig(ink, who, x, y, s, left, pose, expr='happy'):
     return g
 
 
-def _pt_fig(ink, who, x, y, s, left, pose, expr='happy', peek=None):
-    """one painted pup with its paws at (x, y) (peek: only the top part, cut at y), facing left if left"""
+def _pt_fig(ink, who, x, y, s, left, pose, expr='happy', peek=None, hat=None):
+    """one painted pup with its paws at (x, y) (peek: only the top part, cut at y), facing left if left. hat: the scene's hat
+    (a crown, a wizard hat...), drawn on her head; then her color item goes at her neck instead (as on the site)"""
     _cute.PAIR['mark'] = True
-    info = _pi.img(who, pose, 'color' if ink.color else 'line', _eyes(expr), key=('c', _scene(ink)))
+    wear = None
+    if hat:
+        wear = 'bandana' if _pi.outfit(who, ('c', _scene(ink))) in ('hat', 'bandana', 'bow') else 'necklace'
+    info = _pi.img(who, pose, 'color' if ink.color else 'line', _eyes(expr), key=('c', _scene(ink)), wear=wear)
     k = PK * s * 12.0 / info['unit']   # PK was set for renders at 12 px a pup unit; the renders are bigger now, the pup is not
     W, H, px, py = info['w'], info['h'], info['paw'][0], info['paw'][1]
     top = -py * k if peek is None else -H * peek * k   # the image's top, relative to the paws (or to the ledge)
@@ -768,14 +772,20 @@ def _pt_fig(ink, who, x, y, s, left, pose, expr='happy', peek=None):
         cid = ink.newid('pk')
         b = box(x)
         # sunk into a hole (or behind a ledge): the cut is the hole's front rim, a gentle curve, inked like the rest
-        x0, x1, dip = b[0] + 0.06 * (b[2] - b[0]), b[2] - 0.06 * (b[2] - b[0]), 0.07 * (b[2] - b[0])
+        # (the cut runs the pup's full width and a little past it, so no ear or cheek is ever sliced off at the sides)
+        x0, x1, dip = b[0] - 0.08 * (b[2] - b[0]), b[2] + 0.08 * (b[2] - b[0]), 0.07 * (b[2] - b[0])
         rim = 'M%.2f %.2f Q%.2f %.2f %.2f %.2f' % (x0, y, (x0 + x1) / 2, y + 2 * dip, x1, y)
         lw = 0.78 * info['unit'] * k
         mk = ('<defs><clipPath id="%s"><path d="M%.2f %.2f L%.2f %.2f L%.2f %.2f Q%.2f %.2f %.2f %.2f Z"/></clipPath></defs><g clip-path="url(#%s)"><g transform="translate(%.2f %.2f)">%s</g></g>'
               '<path d="%s" fill="none" stroke="#111" stroke-width="%.2f" stroke-linecap="round"/>') % (
-            cid, x0, b[1] - 2, x1, b[1] - 2, x1, y, (x0 + x1) / 2, y + 2 * dip, x0, y, cid, x, y + top + py * k, _pi.svg_image(info, k, left), rim, lw)
+            cid, x0, b[1] - 0.3 * (b[3] - b[1]), x1, b[1] - 0.3 * (b[3] - b[1]), x1, y, (x0 + x1) / 2, y + 2 * dip, x0, y, cid, x, y + top + py * k, _pi.svg_image(info, k, left), rim, lw)
     with ink.fig(0, 0, 1.0, False) as g:
         g.raw_at(mk)
+    if hat:   # the scene's hat on her head: hat space has the crown of the head at y = -52, about 0.385 painted pixels a unit
+        hpx, hpy = (info['head'][0] - info['paw'][0]) * k, (info['head'][1] - info['paw'][1]) * k
+        hs = 0.385 * 0.52 * info['unit'] * k
+        with ink.fig(0, 0, 1.0, False) as g2:
+            pup_hat(g2.view(x - hpx if left else x + hpx, y + hpy, hs, left, -6), hat, who)
     b = box(x)
     g.bb_true = b
     p = 8 * s
@@ -786,25 +796,25 @@ def _pt_fig(ink, who, x, y, s, left, pose, expr='happy', peek=None):
 
 def pt_front(ink, who, x, y, s=1.0, expr='happy', flip=False, tilt=0.0, lvl=0, mouth=None, look=(0, 0), tail=True, arms='down', wag=0.0, hs=None, hat=None, scarf=False, coat=False):
     # the painted pups look three-quarter to one side: always toward the middle of the page (toward a friend)
-    return _pt_fig(ink, who, x, y, s, _left(x), 'sit', expr)
+    return _pt_fig(ink, who, x, y, s, _left(x), 'sit', expr, hat=hat)
 
 
 def pt_side(ink, who, x, y, s=1.0, pose='walk', expr='happy', flip=False, lvl=0, tilt=None, mouth=None, look=(0, 0), ph=0.0, hs=None, ear_rot=None, tail_up=1.0, turn=0.7, hat=None, scarf=False, lower=0.0):
-    return _pt_fig(ink, who, x, y, s, bool(flip), pose, expr)
+    return _pt_fig(ink, who, x, y, s, bool(flip), pose, expr, hat=hat)
 
 
 def pt_peek(ink, who, x, y, s=1.0, expr='happy', lvl=0, tilt=0.0, paws=True, look=(0, 0), mouth=None, hat=None, ears=True):
-    return _pt_fig(ink, who, x, y, s * 1.15, _left(x), 'sit', expr, peek=0.5)
+    return _pt_fig(ink, who, x, y, s * 1.15, _left(x), 'sit', expr, peek=0.5, hat=hat)
 
 
 def pt_dance(ink, who, x, y, s=1.0, expr='joy', flip=False, tilt=6.0, lvl=0, kick=1, hat=None, scarf=False, mouth=None):
-    return _pt_fig(ink, who, x, y, s, _left(x), 'sit', expr)
+    return _pt_fig(ink, who, x, y, s, _left(x), 'sit', expr, hat=hat)
 
 
 def pt_hug(ink, x, y, s=1.0, expr_a='happy', expr_b='sleep', lvl=0, hat_a=None, hat_b=None):
     """Sugarfoot (left) and Tidbit (right), side by side and facing each other, close but never touching"""
-    f1 = _pt_fig(ink, 'sugarfoot', x - 112 * s, y, s, False, 'sit', expr_b)
-    f2 = _pt_fig(ink, 'tidbit', x + 112 * s, y, s, True, 'sit', expr_a)
+    f1 = _pt_fig(ink, 'sugarfoot', x - 96 * s, y, s, False, 'sit', expr_b, hat=hat_a)
+    f2 = _pt_fig(ink, 'tidbit', x + 96 * s, y, s, True, 'sit', expr_a, hat=hat_b)
     return _Group([f1, f2])
 
 
