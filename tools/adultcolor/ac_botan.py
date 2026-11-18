@@ -627,6 +627,4 @@ def b_lavender(pg):
     bee(pg, 220, 420, 44, -18)
     pg.line(Path().M(236, 432).C(260, 470, 300, 430, 330, 470), W3, dash='1 7')
     butterfly(pg, 650, 300, 58, 20)
-    for (x, y, a) in ((150, 900, -20), (700, 920, 200), (230, 1000, 8)):
-        lavender(pg, x, y, 120, a, 8, 10)
-        pg.line(Path().M(x, y).L(*polar(-10, math.radians(a), x, y)), W2)
+    pass   # (no loose sprigs: at print size they read as stray dashes)

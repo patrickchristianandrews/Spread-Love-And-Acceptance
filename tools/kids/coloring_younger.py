@@ -193,16 +193,6 @@ def s_read(ink):
             g.line(Path().M(-50, yy).L(50, yy), w=ink.dw * 0.8)
     gg, sc = F(ink, lambda i, x, y, s: cast.pup_front(i, 'sugarfoot', x, y, s, 'happy', look=(0, 6), arms='chest', tilt=-3), (190, 250, 660, 800), 'bottom')
     p3.book(ink, 425, 915, 1.2, 440, 260)
-    # her paws rest on the pages, and her glasses
-    for sgn in (-1, 1):
-        with ink.fig(425 + sgn * 170, 700) as g:
-            g.part(ell(0, 0, 36, 28), c='#FFFFFF')
-            paw_ = g.view(0, 0)
-            paw_.line(Path().M(-8, -2).L(-8, 12), w=ink.dw * 0.8)
-            paw_.line(Path().M(8, -2).L(8, 12), w=ink.dw * 0.8)
-    hx = gg.m[4]
-    with ink.fig(gg.m[4], gg.m[5], sc, outline=False) as g:
-        p3.glasses(g, 2)
     frame_end(ink)
 
 # 5 -------------------------------------------------------------------------------------------
@@ -525,7 +515,7 @@ def s_wagon(ink):
     pr.tree(ink, 120, 700, 0.8)
     F(ink, lambda i, x, y, s: cast.pup_front(i, 'sugarfoot', x, y, s, 'happy', arms='up', hat='sun'), (60, 360, 440, 780), 'bottom')
     p3.wagon(ink, 250, 905, 1.3, 360, 110)
-    F(ink, lambda i, x, y, s: cast.pup_side(i, 'tidbit', x, y, s, 'walk', 'happy', turn=0.4, tail_up=1.2), (470, 560, 790, 910), 'bottom')
+    F(ink, lambda i, x, y, s: cast.pup_front(i, 'tidbit', x, y, s, 'happy'), (560, 560, 790, 910), 'bottom')
     bloom_row(ink, 925, (130, 560, 640, 750), (40, 70), 7)
     frame_end(ink)
 
@@ -664,6 +654,10 @@ def s_dress(ink):
     F(ink, lambda i, x, y, s: cast.pup_front(i, 'tidbit', x, y, s, 'wink', arms='up', hat='wizard', tilt=5), (80, 200, 440, 880), 'bottom')
     F(ink, lambda i, x, y, s: cast.pup_front(i, 'sugarfoot', x, y, s, 'happy', arms='chest', hat='crown', tilt=-4), (410, 220, 780, 880), 'bottom')
     p3.sparkles_burst(ink, 130, 270, 50, 7)
+    pr.cupcake(ink, 425, 300, 0.9)                      # the snacks, appearing
+    p3.cookie(ink, 330, 215, 1.1, 0)
+    p3.cookie(ink, 525, 225, 1.1, 7)
+    p3.sparkles_burst(ink, 425, 250, 60, 7)
     frame_end(ink)
 
 

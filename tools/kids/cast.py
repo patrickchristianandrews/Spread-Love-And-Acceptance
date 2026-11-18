@@ -766,6 +766,10 @@ def _pt_fig(ink, who, x, y, s, left, pose, expr='happy', peek=None, hat=None):
     if not _cute.PAIR.get('placed') and not getattr(ink, '_probe', False):
         b = box(x)
         x += _cute.pup_room(ink, b[0], b[1], b[2], b[3])
+    if 'svg' in info and getattr(ink, 'ow', 6.0) < 4.0:   # a fine-line book (the grown-ups'): the pup's lines thinned to match
+        import re as _re
+        f_ = max(0.35, getattr(ink, 'ow', 6.0) / 4.5)
+        info = dict(info, svg=_re.sub(r'stroke-width="([\d.]+)"', lambda m: 'stroke-width="%.2f"' % (float(m.group(1)) * f_), info['svg']))
     if peek is None:
         mk = '<g transform="translate(%.2f %.2f)">%s</g>' % (x, y, _pi.svg_image(info, k, left))
     else:
@@ -783,6 +787,8 @@ def _pt_fig(ink, who, x, y, s, left, pose, expr='happy', peek=None, hat=None):
         g.raw_at(mk)
     if hat:   # the scene's hat on her head: hat space has the crown of the head at y = -52, about 0.385 painted pixels a unit
         hpx, hpy = (info['head'][0] - info['paw'][0]) * k, (info['head'][1] - info['paw'][1]) * k
+        if peek is not None:   # a peeking pup's picture is moved down into her hole (or boat): her head with it
+            hpy += top + py * k
         hs = 0.385 * 0.52 * info['unit'] * k
         with ink.fig(0, 0, 1.0, False) as g2:
             pup_hat(g2.view(x - hpx if left else x + hpx, y + hpy, hs, left, -6), hat, who)

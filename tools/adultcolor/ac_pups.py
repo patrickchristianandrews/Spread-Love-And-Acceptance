@@ -78,8 +78,8 @@ def b_peek(pg):
     for (x, y, a, L) in ((140, 760, -100, 120), (730, 760, -80, 120), (300, 700, -120, 100), (570, 700, -60, 100)):
         draw_leaf(pg, x, y + 120, a, L, 26, 0.2, 3)
     # the pups
-    draw_pup(pg, cast.pup_peek, 'tidbit', 285, 700, 0.98, 'happy', lvl=1, paws=True)
-    draw_pup(pg, cast.pup_peek, 'sugarfoot', 585, 706, 0.98, 'calm', lvl=1, paws=True)
+    draw_pup(pg, cast.pup_front, 'tidbit', 290, 905, 0.95, 'happy', lvl=1)
+    draw_pup(pg, cast.pup_front, 'sugarfoot', 585, 910, 0.95, 'calm', lvl=1)
     # the near row: shorter flowers hide the pups' shoulders
     near = [(130, 880, 'poppy', 58), (290, 850, 'cosmos', 52), (430, 900, 'daisy', 54), (570, 850, 'poppy', 54), (740, 880, 'cosmos', 56), (210, 960, 'daisy', 42), (660, 960, 'daisy', 42)]
     for (x, y, kind, R) in near:

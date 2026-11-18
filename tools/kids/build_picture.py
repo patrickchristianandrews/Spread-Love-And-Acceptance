@@ -189,7 +189,7 @@ def s_puddles(P):
     A.tidbit_front(P, 1300, 745, 5.2, 'surprised', 'o')
     # callouts
     # (Tidbit faces left here: her ear is at the back of her head, on the right)
-    P.raw('<g stroke="#3A3350" stroke-width="3.5" stroke-linecap="round" fill="none"><path d="M1130 700 Q1210 705 1262 732"/><path d="M1530 392 Q1460 395 1405 418"/><path d="M1515 568 Q1480 565 1448 556"/></g>')
+    P.raw('<g stroke="#3A3350" stroke-width="3.5" stroke-linecap="round" fill="none"><path d="M1130 700 Q1210 705 1262 732"/><path d="M1530 392 Q1460 395 1405 418"/><path d="M1515 572 Q1420 585 1352 602"/></g>')
     label(P, 1040, 705, 'buzzy paws', 26, 'middle')
     label(P, 1600, 390, 'hot ears', 26, 'middle')
     label(P, 1600, 575, 'tight tummy', 26, 'middle')
@@ -448,7 +448,7 @@ def pg_half_title():
         A.peach_lilac(P, o + 425, 640, 1.9)
         for (x, y, s) in ((o + 110, 470, 1.6), (o + 740, 450, 1.3), (o + 640, 130, 1.0)):
             A.sparkle(P, x, y, s)
-    inner = '<div class="center" style="top:2.1in"><h1 style="font-size:34pt;line-height:1.1">%s</h1></div>' % C.esc(BOOK['title'])
+    inner = '<div class="center" style="top:2.1in"><h1 style="font-size:34pt;line-height:1.1">Tidbit and Sugarfoot&rsquo;s<br>Big Picnic</h1></div>'
     return pagebox(1, inner, simple_art(art, 'r'))
 
 
@@ -689,7 +689,7 @@ def cover(pages=PAGES):
              '<div style="font:700 11.5pt Andika;letter-spacing:.08em;color:#3A3350">%s &middot; BOOK %d</div>'
              '<div style="font:800 49pt/0.98 Fraunces,serif;color:#FFFDF5;-webkit-text-stroke:2.4px #2F3566;paint-order:stroke fill;margin-top:.1in;text-shadow:0 3px 0 rgba(47,53,102,.25)">%s</div>'
              '<div style="font:700 13pt/1.3 Andika;color:#2F3566;margin:.12in auto 0;width:6.4in;background:rgba(255,253,245,.82);border-radius:.2in;padding:.07in .15in">%s</div></div>'
-             ) % (C.esc(BOOK['ages'].upper()), BOOK['series_no'], "Tidbit and Sugarfoot&rsquo;s Big Picnic", C.esc(BOOK['subtitle']))
+             ) % (C.esc(BOOK['ages'].upper()), BOOK['series_no'], "Tidbit and Sugarfoot&rsquo;s<br>Big Picnic", C.esc(BOOK['subtitle']))
     back = ('<div style="position:absolute;left:.7in;right:.7in;top:.55in;font-size:13.5pt;line-height:1.45;background:rgba(255,253,245,.9);border-radius:.25in;padding:.22in .3in;border:2.5px solid #E8D5A2">'
             '<div style="font:800 17pt Fraunces,serif;margin-bottom:.1in;color:#3A3350">Zoom. Slow. Together.</div>%s'
             '<p style="margin:.12in 0 0;font-size:11pt;color:#4A4033">%s &middot; Free to read online at %s</p></div>') % (
