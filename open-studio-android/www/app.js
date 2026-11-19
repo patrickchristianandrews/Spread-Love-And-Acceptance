@@ -11,7 +11,7 @@
       document.querySelectorAll('.tab').forEach(function(x){x.classList.toggle('on',x===t)});
       var tab=t.dataset.tab;
       $('#panel-image').hidden=tab!=='image'; $('#panel-text').hidden=tab!=='text'; $('#panel-keys').hidden=tab!=='keys';
-      $('#panel-services').hidden=tab!=='services';
+      $('#panel-services').hidden=tab!=='services'; $('#panel-video').hidden=tab!=='video';
       if(tab==='services')renderServices();
       store.set('tab',tab);
     });
@@ -94,8 +94,9 @@
   function newTile(item){
     var fig=document.createElement('figure');fig.style.setProperty('--ar',(item.w/item.h).toFixed(4));
     fig.innerHTML='<div class="imgwrap"><span class="spin"></span><span class="hstat"></span><img alt=""></div>'+
-      '<figcaption><span class="p">'+esc(item.prompt)+'</span><div class="fig-acts"><a target="_blank" rel="noopener">Open</a><a download="open-studio.png">Save</a><button data-vary>More like this</button></div></figcaption>';
+      '<figcaption><span class="p">'+esc(item.prompt)+'</span><div class="fig-acts"><a target="_blank" rel="noopener">Open</a><a download="open-studio.png">Save</a><button data-vary>More</button><button data-upscale>Upscale</button></div></figcaption>';
     fig.querySelector('[data-vary]').addEventListener('click',function(){$('#iprompt').value=item.base||item.prompt;shape={w:item.w,h:item.h};runBatch(1,true);});
+    fig.querySelector('[data-upscale]').addEventListener('click',function(){upscaleImage(item);});
     var g=$('#gallery');g.insertBefore(fig,g.firstChild);$('#libempty').hidden=true;return fig;
   }
   function renderLib(){
@@ -184,6 +185,16 @@
       item.url=url;var ax=fig.querySelectorAll('a');ax[0].href=url;ax[1].href=url;
       img.onload=function(){sp.hidden=true;stat.textContent='';};img.onerror=function(){sp.hidden=true;stat.textContent='';};img.src=url;savedToLib(item);
     }).catch(function(e){fig.remove();showErr('Puter: '+((e&&e.message)||e)+PUTER_HINT);});
+  }
+  function upscaleImage(item){
+    if(!(window.studio&&window.studio.upscale)){showErr('Upscale needs the desktop app or the HTML build.');return;}
+    var url=item.url; if(!url){showErr('Let the image finish first, then upscale.');return;}
+    var ni={url:'',prompt:'Upscaled — '+item.prompt,base:item.base,w:(item.w||1024)*2,h:(item.h||1024)*2,model:'Upscaled',ts:Date.now()};
+    var fig=newTile(ni),stat=fig.querySelector('.hstat'),sp=fig.querySelector('.spin'),img=fig.querySelector('img');
+    stat.textContent='Upscaling…';
+    window.studio.upscale({imageUrl:url}).then(function(u){ ni.url=u;var ax=fig.querySelectorAll('a');ax[0].href=u;ax[1].href=u;
+      img.onload=function(){sp.hidden=true;stat.textContent='';};img.onerror=function(){sp.hidden=true;stat.textContent='';};img.src=u;savedToLib(ni);
+    }).catch(function(e){fig.remove();showErr('Upscale: '+((e&&e.message)||e));});
   }
   function runBatch(n,fromVary){
     var base=$('#iprompt').value.trim();$('#ierr').hidden=true;
@@ -320,6 +331,40 @@
     if(!(window.studio&&window.studio.providers)){keyedProviders=[];customProviders=[];return Promise.resolve();}
     return Promise.all([window.studio.providers(),window.studio.customList?window.studio.customList():Promise.resolve([])]).then(function(r){keyedProviders=r[0]||[];customProviders=r[1]||[];});
   }
+
+  // ---------- Video ----------
+  $('#vprompt').value=store.get('vprompt','');$('#vprompt').addEventListener('input',function(){store.set('vprompt',this.value)});
+  $('#vengine').value=store.get('vengine','fal');$('#vengine').addEventListener('change',function(){store.set('vengine',this.value)});
+  function loadVids(){try{return JSON.parse(store.get('vids','[]'))||[]}catch(e){return[]}}
+  function saveVids(a){try{store.set('vids',JSON.stringify(a.slice(0,24)))}catch(e){}}
+  function vTile(item){
+    var fig=document.createElement('figure');fig.style.setProperty('--ar','1.6');
+    fig.innerHTML='<div class="imgwrap"><span class="spin"></span><span class="hstat"></span><video controls playsinline style="display:block;width:100%;height:100%;object-fit:cover;background:#000"></video></div>'+
+      '<figcaption><span class="p">'+esc(item.prompt)+'</span><div class="fig-acts"><a target="_blank" rel="noopener">Open</a><a download="open-studio.mp4">Save</a></div></figcaption>';
+    var g=$('#vgallery');g.insertBefore(fig,g.firstChild);$('#vempty').hidden=true;return fig;
+  }
+  function renderVids(){
+    var a=loadVids(),g=$('#vgallery');g.innerHTML='';
+    a.forEach(function(it){var fig=vTile(it),v=fig.querySelector('video'),sp=fig.querySelector('.spin'),ax=fig.querySelectorAll('a');ax[0].href=it.url;ax[1].href=it.url;v.src=it.url;sp.hidden=true;});
+    $('#vempty').hidden=a.length>0;$('#vclear').hidden=a.length===0;$('#vcount').textContent=a.length?('· '+a.length+' saved'):'';
+  }
+  $('#vclear').addEventListener('click',function(){saveVids([]);renderVids();});
+  function genVideo(){
+    var prompt=$('#vprompt').value.trim();$('#verr').hidden=true;
+    if(!prompt){$('#verr').textContent='Describe the video first.';$('#verr').hidden=false;return;}
+    var eng=$('#vengine').value,fn=eng==='replicate'?'replicateVideo':'falVideo',label=eng==='replicate'?'Replicate':'fal.ai';
+    if(!(window.studio&&window.studio[fn])){$('#verr').textContent='Video needs the desktop app or the HTML build.';$('#verr').hidden=false;return;}
+    var item={url:'',prompt:prompt,ts:Date.now()};
+    var fig=vTile(item),stat=fig.querySelector('.hstat'),sp=fig.querySelector('.spin'),v=fig.querySelector('video');
+    stat.textContent='Rendering… (1–5 min)';$('#vspin').hidden=false;$('#vgen').disabled=true;
+    window.studio[fn]({prompt:prompt}).then(function(url){ item.url=url;var ax=fig.querySelectorAll('a');ax[0].href=url;ax[1].href=url;
+      v.src=url;sp.hidden=true;stat.textContent='';
+      var a=loadVids();a.unshift(item);saveVids(a);$('#vclear').hidden=false;$('#vcount').textContent='· '+loadVids().length+' saved';
+    }).catch(function(e){fig.remove();$('#verr').textContent=label+': '+((e&&e.message)||e);$('#verr').hidden=false;})
+      .then(function(){$('#vspin').hidden=true;$('#vgen').disabled=false;});
+  }
+  $('#vgen').addEventListener('click',genVideo);
+  renderVids();
 
   // ---------- Services directory (every tool from the lists, honestly accounted for) ----------
   // One-tap "Add" entries are verified OpenAI-compatible TEXT endpoints (base URL confirmed in
@@ -463,8 +508,7 @@
   refreshProviders().then(function(){ buildTextProviders(); renderKeys(); renderServices(); });
   // Chat is the first tab and the default; restore Image/Keys only if that was last open.
   var savedTab=store.get('tab','');
-  if(savedTab==='image')document.querySelector('.tab[data-tab="image"]').click();
-  else if(savedTab==='keys')document.querySelector('.tab[data-tab="keys"]').click();
+  if(savedTab&&savedTab!=='text'){var st=document.querySelector('.tab[data-tab="'+savedTab+'"]');if(st)st.click();}
 
   // expose for the "More like this" button scope
   window.runBatch=runBatch;

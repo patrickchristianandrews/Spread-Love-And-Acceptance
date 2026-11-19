@@ -182,6 +182,55 @@ ipcMain.handle('segmind:image', async (_e, { prompt }) => {
   const buf = Buffer.from(await r.arrayBuffer());
   return `data:${ct.indexOf('png') >= 0 ? 'image/png' : 'image/jpeg'};base64,` + buf.toString('base64');
 });
+// Upscale — Stability "fast" upscaler. Takes any image URL/data URL, returns a larger PNG data URL.
+ipcMain.handle('upscale', async (_e, { imageUrl }) => {
+  const key = keys.stability; if (!key) throw new Error('Upscale uses your Stability key (add it in Keys).');
+  const src = await fetch(imageUrl); if (!src.ok) throw new Error('Could not load the source image.');
+  const inBuf = Buffer.from(await src.arrayBuffer());
+  const fd = new FormData();
+  fd.append('image', new Blob([inBuf]), 'image.png');
+  fd.append('output_format', 'png');
+  const r = await fetch('https://api.stability.ai/v2beta/stable-image/upscale/fast', { method: 'POST', headers: { Authorization: `Bearer ${key}`, Accept: 'image/*' }, body: fd });
+  if (!r.ok) { const t = await r.text().catch(() => ''); throw new Error(`Stability upscale HTTP ${r.status}${t ? ': ' + t.slice(0, 160) : ''}`); }
+  const buf = Buffer.from(await r.arrayBuffer());
+  return 'data:image/png;base64,' + buf.toString('base64');
+});
+// Video — fal.ai LTX (queue + poll). Returns a hosted .mp4 URL.
+ipcMain.handle('fal:video', async (_e, { prompt }) => {
+  const key = keys.fal; if (!key) throw new Error('Video uses your fal.ai key (add it in Keys).');
+  const sub = await fetch('https://queue.fal.run/fal-ai/ltx-video', { method: 'POST', headers: { Authorization: `Key ${key}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ prompt }) });
+  const sj = await sub.json().catch(() => ({}));
+  if (!sub.ok) throw new Error((sj.detail && (sj.detail[0]?.msg || sj.detail)) || sj.message || `fal.ai HTTP ${sub.status}`);
+  const statusUrl = sj.status_url, responseUrl = sj.response_url;
+  if (!statusUrl || !responseUrl) throw new Error('fal.ai did not queue the job.');
+  const deadline = Date.now() + 600000;
+  while (Date.now() < deadline) {
+    await sleep(3000);
+    const st = await (await fetch(statusUrl, { headers: { Authorization: `Key ${key}` } })).json().catch(() => ({}));
+    if (st.status === 'COMPLETED') break;
+    if (st.status === 'FAILED' || st.error) throw new Error('fal.ai could not make this video.');
+  }
+  const res = await (await fetch(responseUrl, { headers: { Authorization: `Key ${key}` } })).json().catch(() => ({}));
+  const url = res.video && res.video.url; if (!url) throw new Error('fal.ai took too long or returned no video.');
+  return url;
+});
+// Video — Replicate WAN 2.2 fast (Prefer: wait, then poll if still running). Returns a .mp4 URL.
+ipcMain.handle('replicate:video', async (_e, { prompt }) => {
+  const key = keys.replicate; if (!key) throw new Error('Video uses your Replicate token (add it in Keys).');
+  let r = await fetch('https://api.replicate.com/v1/models/wan-video/wan-2.2-t2v-fast/predictions', { method: 'POST', headers: { Authorization: `Bearer ${key}`, 'Content-Type': 'application/json', Prefer: 'wait' }, body: JSON.stringify({ input: { prompt } }) });
+  let j = await r.json().catch(() => ({}));
+  if (!r.ok) throw new Error(j.detail || j.title || `Replicate HTTP ${r.status}`);
+  const getUrl = j.urls && j.urls.get;
+  const deadline = Date.now() + 600000;
+  while ((j.status === 'starting' || j.status === 'processing') && getUrl && Date.now() < deadline) {
+    await sleep(3000);
+    j = await (await fetch(getUrl, { headers: { Authorization: `Bearer ${key}` } })).json().catch(() => ({}));
+  }
+  if (j.status !== 'succeeded') throw new Error('Replicate is still processing the video — try again in a moment.');
+  let out = j.output; if (Array.isArray(out)) out = out[0];
+  if (typeof out !== 'string') throw new Error('Replicate returned no video.');
+  return out;
+});
 ipcMain.handle('keys:set', (_e, { provider, key }) => { if (PROVIDERS[provider]) { keys[provider] = (key || '').trim(); if (!keys[provider]) delete keys[provider]; saveKeys(); } return Object.keys(keys); });
 
 // Free engines, run from the app's backend so there is no browser CORS / local-file block.
