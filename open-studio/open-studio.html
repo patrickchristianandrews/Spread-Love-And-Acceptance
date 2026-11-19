@@ -731,7 +731,16 @@
     ['Abliteration (uncensored)','https://api.abliteration.ai/v1','https://abliteration.ai/','Refusal-free models, zero-retention. Pay as you go.'],
     ['MegaNova (uncensored, 100+)','https://api.meganova.ai/v1','https://meganova.ai/api-keys','100+ models incl. uncensored; some free, rest paid.'],
     ['LibertAI (decentralized)','https://api.libertai.io/v1','https://libertai.io/api/','Open models on decentralized nodes; pay per token, no card to start.'],
-    ['AxForge','https://api.axforge.ai/v1','https://axforge.ai/','Free tier ~3M tokens / 30 days, no card (per its docs).']
+    ['AxForge','https://api.axforge.ai/v1','https://axforge.ai/','Free tier ~3M tokens / 30 days, no card (per its docs).'],
+    ['UncloseAI (free, no key)','https://hermes.ai.unturf.com/v1','https://uncloseai.com/','Free and keyless, OpenAI-compatible (Hermes on an RTX 4090).','nokey'],
+    ['BazaarLink','https://api.bazaarlink.ai/v1','https://bazaarlink.ai/free','Free gateway, no card; many models behind one key.'],
+    ['Kilo Code','https://ai-gateway.kilo.ai/api/v1','https://kilo.ai/','Free "Auto" tier (~200 requests/hour); OpenAI-compatible.']
+  ];
+  // Real API, but I won't guess a base URL — grab it from their page and paste into + Custom.
+  var SVC_DOCS=[
+    ['PeerLLM','https://www.peerllm.com/developers.html','Decentralized, free to try, OpenAI-compatible. Copy its base URL from the developer page into "+ Custom".'],
+    ['Dolphin LLM','https://dolphinllm.com/docs/','Uncensored, OpenAI-compatible, small trial credit. Copy the base URL from its docs into "+ Custom".'],
+    ['Numes AI','https://bazaarlink.ai/en/probe/relay/api.numes.ai','⚠ Works, but independent probes found it sometimes serves a different model than you ask for. Use "+ Custom" (base https://api.numes.ai) only if you accept that.']
   ];
   var SVC_LOCAL=[
     ['Ollama (on this PC)','http://localhost:11434/v1','https://ollama.com','Runs models on your PC, no key. Start Ollama first.'],
@@ -754,7 +763,7 @@
     ['Stability AI','https://platform.stability.ai/account/keys','Stable Image Core (SD3) — built in. Pick "Stability" in the Image tab, add your key.'],
     ['Segmind','https://www.segmind.com/','Fast FLUX — built in. Pick "Segmind" in the Image tab, add your key in Keys.']
   ];
-  var SVC_NOAPI=['Inferium','Kavel','PeerLLM','BazaarLink','Numes AI','UncloseAI','deAPI','Dolphin Network','Aifreeforever-2api (reverse-proxy — against providers’ terms, unstable; not safe to ship)'];
+  var SVC_NOAPI=['Inferium','Kavel','deAPI','Aifreeforever-2api (reverse-proxy — against providers’ terms, unstable; not safe to ship)'];
 
   function svcMsg(t){ var m=$('#svc-msg'); if(!m)return; m.textContent=t; m.hidden=!t; if(t)clearTimeout(svcMsg._t),svcMsg._t=setTimeout(function(){m.hidden=true},4000); }
   function gotoCustom(name,base){
@@ -788,10 +797,11 @@
     // One-tap add
     h+=grp('One-tap add — verified clouds (OpenAI-compatible)','Tap Add: it fills the Custom form and opens the key page. Paste the key, hit "Add service".');
     h+='<div style="display:grid;gap:8px">'+SVC_ADD.filter(function(s){return !builtinIds[s[0].toLowerCase().replace(/\s*\(.*$/,'')];}).map(function(s){
+      var nk=s[4]==='nokey';
       return '<div class="keyrow" style="border-top:1px solid var(--line)"><span class="pn" style="min-width:150px">'+esc(s[0])+'</span>'+
         '<span class="hint" style="flex:1;min-width:160px">'+esc(s[3])+'</span>'+
-        '<button class="btn ghost" data-add="'+esc(s[0])+'|'+esc(s[1])+'">Add</button>'+
-        '<a class="chip" href="'+esc(s[2])+'" target="_blank" rel="noopener">Key ↗</a></div>';
+        '<button class="btn ghost" data-'+(nk?'addnokey':'add')+'="'+esc(s[0])+'|'+esc(s[1])+'">Add'+(nk?' (free)':'')+'</button>'+
+        '<a class="chip" href="'+esc(s[2])+'" target="_blank" rel="noopener">'+(nk?'About ↗':'Key ↗')+'</a></div>';
     }).join('')+'</div>';
     // Local
     h+=grp('Runs on your PC — no key','Start the local server, then Add. Fully private, works offline.');
@@ -815,12 +825,20 @@
         '<span class="hint" style="flex:1;min-width:160px">'+esc(s[2])+'</span>'+
         '<a class="chip" href="'+esc(s[1])+'" target="_blank" rel="noopener">Open ↗</a></div>';
     }).join('')+'</div>';
+    // Has an API, needs a base URL from their docs
+    h+=grp('Has an API — paste its base URL into "+ Custom"','These work, but I won’t guess a base URL. Open the link, copy the base URL, then use "+ Custom" in Keys.');
+    h+='<div style="display:grid;gap:8px">'+SVC_DOCS.map(function(s){
+      return '<div class="keyrow" style="border-top:1px solid var(--line)"><span class="pn" style="min-width:150px">'+esc(s[0])+'</span>'+
+        '<span class="hint" style="flex:1;min-width:160px">'+esc(s[2])+'</span>'+
+        '<a class="chip" href="'+esc(s[1])+'" target="_blank" rel="noopener">Docs ↗</a></div>';
+    }).join('')+'</div>';
     // No verifiable API
     h+=grp('Listed, but no public API found','Checked and couldn’t find a usable public API. If you have a base URL for any of these, use "+ Custom" in Keys and it’ll work instantly.');
     h+='<div class="chips">'+SVC_NOAPI.map(function(s){return '<span class="chip">'+esc(s)+'</span>';}).join('')+'</div>';
 
     box.innerHTML=h;
     box.querySelectorAll('[data-add]').forEach(function(b){ b.addEventListener('click',function(){ var p=b.dataset.add.split('|'); gotoCustom(p[0],p[1]); }); });
+    box.querySelectorAll('[data-addnokey]').forEach(function(b){ b.addEventListener('click',function(){ var p=b.dataset.addnokey.split('|'); addNoKey(p[0],p[1]); }); });
     box.querySelectorAll('[data-addlocal]').forEach(function(b){ b.addEventListener('click',function(){ var p=b.dataset.addlocal.split('|'); addNoKey(p[0],p[1]); }); });
   }
 
