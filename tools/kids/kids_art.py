@@ -434,6 +434,9 @@ def _pup_side_painted(P, who, x, y, s, pose, expr, flip, carry):
     sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), 'painted'))
     import pimg
     eyes = 'shut' if pose == 'sleep' or expr in ('sleep', 'happy-closed', 'calm-closed') else 'open'
+    asleep = pose == 'sleep'
+    if asleep:   # asleep: face on, eyes closed (the painted pups have no lying-down drawing)
+        pose = 'front'
     info = pimg.img(who, pose, P.mode if P.mode in ('color', 'line', 'ink') else 'color', eyes, key=('p', _PSCN.setdefault(id(P), len(_PSCN))))
     k = 1.0 / info['unit'] * 1.1
     P.at(x, y, s, flip)
@@ -443,8 +446,10 @@ def _pup_side_painted(P, who, x, y, s, pose, expr, flip, carry):
         P.open('translate(%s %s)' % (f(hx - 2), f(hy + 2)))
         carry(P)
         P.close()
-    if pose == 'sleep':
-        for i, (zx, zy, zs) in enumerate(((30, -32, 4), (36, -40, 5), (43, -50, 6))):
+    if asleep:   # the z's float up from above her head, never across her face
+        hx, hy = (info['head'][0] - info['paw'][0]) * k, (info['head'][1] - info['paw'][1]) * k
+        top = -info['paw'][1] * k
+        for i, (zx, zy, zs) in enumerate(((hx + 26, top - 2, 4), (hx + 33, top - 11, 5), (hx + 41, top - 22, 6))):
             P.line('M%s %s l%s 0 l%s %s l%s 0' % (f(zx), f(zy), f(zs), f(-zs), f(zs), f(zs)), '#7C86B8', 1.1, kind='fine')
     P.close()
 

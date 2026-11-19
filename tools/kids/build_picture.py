@@ -126,7 +126,6 @@ def s_zoom(P):
     A.dust(P, 190, 700, 2.0); A.dust(P, 120, 715, 1.5)
     A.pup_side(P, 'tidbit', 430, 730, 5.4, 'run', 'happy', ph=0.9, wag=0.3)
     A.sugarfoot_front(P, 1120, 740, 4.6, 'happy-closed', 'o', view='front')
-    A.zz(P, 1235, 520, 1.6)
     A.sparkle(P, 640, 470, 2.4); A.sparkle(P, 700, 410, 1.6)
 
 def s_plan(P):
@@ -147,7 +146,6 @@ def s_plan(P):
     P.raw('<path d="M1510 300 V490 M1380 395 H1640" stroke="#B98A57" stroke-width="8"/>')
     A.basket(P, 960, 735, 2.6, full=False)
     A.tidbit_front(P, 420, 740, 5.4, 'happy', 'w', view='front')
-    A.speed_lines(P, 200, 600, 3, 120, 22, 1.2)
     A.sugarfoot_front(P, 1210, 745, 4.6, 'happy', 'smile', heart_=False)
     A.sparkle(P, 1030, 560, 2)
 
@@ -166,8 +164,6 @@ def s_pack(P):
     for (x, y, s) in ((1010, 480, 2.4), (1090, 470, 2.2)):
         A.apple(P, x, y, s)
     A.pup_side(P, 'tidbit', 1430, 735, 5.2, 'stand', 'cross', flip=True, mouth_='frown', tilt=0)
-    sweat(P, 1262, 405, 2.2); sweat(P, 1225, 445, 1.8)   # in the air by her forehead, clear of her face
-    A.dust(P, 1130, 735, 1.4)
 
 
 def s_static(P):
@@ -214,16 +210,18 @@ def s_room(P):
 def s_calm(P):
     sky(P, '#CDEBFA', '#FFF0D6')
     ground(P, 650, '#A9DB84')
-    A.tidbit_front(P, 420, 750, 5.2, 'sleep', 'smile', flip=True)
-    A.flower(P, 600, 540, 4.4, '#F7A8C2', '#FAD27A', 6, stem=True, rot=-10)
+    A.tidbit_front(P, 420, 750, 5.2, 'sleep', 'smile')   # facing the flower
+    # the flower grows from the ground, its bloom at her nose (it used to float where the old drawing's paw held it)
+    P.raw('<path d="M612 735 Q600 640 606 560" fill="none" stroke="#5E9E58" stroke-width="7" stroke-linecap="round"/><path d="M606 660 Q640 630 660 645 Q636 672 606 660Z" fill="#6FB36A"/>')
+    A.flower(P, 606, 545, 4.4, '#F7A8C2', '#FAD27A', 6, stem=False)
     P.raw('<path d="M520 470 q60 -40 110 -10" fill="none" stroke="#7FB2E0" stroke-width="5" stroke-dasharray="3 13" stroke-linecap="round"/>')
-    A.static_cloud(P, 'grumble', 200, 380, 4.4, fizz=True)
+    A.static_cloud(P, 'grumble', 130, 330, 3.8, fizz=True)
     A.tidbit_front(P, 1200, 750, 5.2, 'calm', 'blow', flip=True)   # facing the candle
     A.candle(P, 1470, 640, 4.2, lean=1.0)
     for i, (x, y, r) in enumerate(((1440, 560, 10), (1470, 520, 14), (1520, 480, 18))):
         P.raw('<circle cx="%s" cy="%s" r="%s" fill="none" stroke="#8EC5EE" stroke-width="3.5"/>' % (x, y, r))
     A.static_cloud(P, 'grumble', 1600, 400, 2.2, 'happy', fizz=False)
-    label(P, 640, 410, 'in', 28); label(P, 1370, 520, 'out', 28)
+    label(P, 640, 410, 'in', 28); label(P, 1585, 560, 'out', 28)
 
 
 def s_ask(P):
@@ -233,8 +231,8 @@ def s_ask(P):
     A.tidbit_front(P, 560, 750, 5.2, 'happy', 'smile')
     A.sparkle(P, 700, 430, 1.8)
     # the friends, all facing the basket
-    A.sugarfoot_front(P, 990, 750, 3.6, 'happy', 'smile', heart_=True)
-    A.hopper(P, 1110, 748, 3.1, flip=True, expr='happy')
+    A.sugarfoot_front(P, 1030, 750, 3.6, 'happy', 'smile', heart_=True)
+    A.hopper(P, 1145, 748, 3.1, flip=True, expr='happy')
     A.nutmeg(P, 1215, 748, 3.0, flip=True, expr='happy')
     A.beep(P, 1325, 748, 2.8, flip=True, arm_up=True)
     A.lumi(P, 1440, 748, 2.1, flip=True, lantern=False)
@@ -275,7 +273,7 @@ def s_oops(P):
     A.basket(P, 270, 745, 3.6, full=False)
     A.pup_side(P, 'tidbit', 560, 740, 5.4, 'run', 'surprised', ph=1.4, mouth_='yell', tilt=-10)
     A.speed_lines(P, 320, 600, 4, 120, 20, 1.1)
-    for (x, y, s, r) in ((330, 540, 2.6, 20), (450, 440, 2.4, -30), (590, 560, 2.2, 0), (400, 650, 2.4, 10)):
+    for (x, y, s, r) in ((330, 540, 2.6, 20), (450, 440, 2.4, -30), (790, 520, 2.2, 0), (360, 660, 2.4, 10)):
         A.apple(P, x, y, s)
     A.pie(P, 1010, 400, 3.2, rot=25)
     for (x, y) in ((1130, 700), (1250, 725), (1370, 705)):
@@ -329,8 +327,8 @@ def s_night(P):
     P.raw('<rect x="1426" y="650" width="42" height="42" rx="4" fill="#FFE49A"/>')
     for (x, y) in ((1100, 520), (1230, 600), (1320, 520), (990, 600)):
         A.firefly(P, x, y, 2.2)
-    A.pup_side(P, 'tidbit', 250, 770, 4.8, 'walk', 'calm', ph=0.4, mouth_='smile')   # a step behind Sugarfoot, not on her tail
-    A.pup_side(P, 'sugarfoot', 700, 775, 4.8, 'walk', 'calm', ph=0.9, mouth_='smile')
+    A.pup_side(P, 'tidbit', 215, 770, 4.8, 'walk', 'calm', ph=0.4, mouth_='smile')   # a step behind Sugarfoot, not on her tail
+    A.pup_side(P, 'sugarfoot', 640, 775, 4.8, 'walk', 'calm', ph=0.9, mouth_='smile')   # (clear of the gutter)
 
 
 SPREADS = [s_zoom, s_plan, s_pack, s_static, s_puddles, s_room, s_calm, s_ask, s_jobs, s_oops, s_sorry, s_clouds, s_night]
@@ -540,8 +538,9 @@ def pg_calm(spread_first):
     P = pen()
     sky(P, '#CDEBFA', '#FFF0D6')
     ground(P, 690, '#A9DB84')
-    A.tidbit_front(P, 430, 810, 4.4, 'sleep', 'smile', flip=True)
-    A.flower(P, 580, 560, 4.0, '#F7A8C2', '#FAD27A', 6, stem=True, rot=-10)
+    A.tidbit_front(P, 430, 810, 4.4, 'sleep', 'smile')   # facing the flower
+    P.raw('<path d="M590 770 Q580 690 585 610" fill="none" stroke="#5E9E58" stroke-width="6" stroke-linecap="round"/><path d="M586 700 Q616 674 634 687 Q612 710 586 700Z" fill="#6FB36A"/>')
+    A.flower(P, 585, 596, 4.0, '#F7A8C2', '#FAD27A', 6, stem=False)
     A.tidbit_front(P, 1210, 810, 4.4, 'calm', 'blow', flip=True)   # facing the candle
     A.candle(P, 1470, 790, 3.6, lean=1.0)
     for (x, y, r) in ((1430, 690, 9), (1470, 650, 12), (1520, 610, 15)):

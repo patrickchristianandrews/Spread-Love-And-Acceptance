@@ -186,7 +186,9 @@ def ill_moon(P):
     A.moon(P, 345, 70, 1.05, 'calm', glow=False)
     P.rect(40, 150, 210, 40, '#e2e2e2', r=8)
     P.rect(40, 130, 70, 24, '#f4f4f4', r=8)
-    A.pup_side(P, 'tidbit', 200, 207, 1.6, 'sleep', 'sleep')
+    A.pup_side(P, 'tidbit', 175, 186, 1.5, 'sleep', 'sleep')   # tucked into bed
+    P.raw('<path d="M118 160 Q175 150 238 160 L238 190 L118 190Z" fill="#ececec" stroke="#222" stroke-width="2.2" stroke-linejoin="round"/>')
+    P.line('M128 172 Q175 164 228 172', '#bbb', 1.2, kind='fine')
     P.rect(300, 168, 50, 36, '#d9d9d9', r=8)
     txt(P, 325, 192, 'rain', 11, w=700)
     for i, r in enumerate((14, 22, 30)):
@@ -261,7 +263,7 @@ def ill_star(P):
         P.line('M%s %s L%s %s' % (f(360 + math.cos(r) * 28), f(160 + math.sin(r) * 28), f(360 + math.cos(r) * 33), f(160 + math.sin(r) * 33)), '#333', 1.4, kind='fine')
     P.line('M360 160 L378 148', '#333', 2.2)
     A.pup_side(P, 'tidbit', 220, 207, 1.5, 'sleep', 'sleep')
-    A.sparkle(P, 160, 70, 1.0); A.sparkle(P, 300, 80, 0.9)
+    A.sparkle(P, 160, 70, 1.0); A.sparkle(P, 322, 58, 0.9)
 
 
 def ill_ladder(P):

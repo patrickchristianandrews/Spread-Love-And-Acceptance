@@ -532,7 +532,7 @@ def s_beach(ink):
     p3.sandcastle(ink, 425, 790, 1.2, 280)
     F(ink, lambda i, x, y, s: cast.pup_front(i, 'sugarfoot', x, y, s, 'happy', lvl=1, arms='up', hat='sun'), (110, 600, 330, 900), 'bottom')
     F(ink, lambda i, x, y, s: cast.pup_front(i, 'tidbit', x, y, s, 'joy', lvl=1, arms='up'), (520, 600, 740, 900), 'bottom')
-    for (x, y, r) in ((200, 720, 0), (700, 700, 20), (380, 880, 10), (560, 890, -10)):
+    for (x, y, r) in ((465, 900, 0), (775, 875, 20), (380, 880, 10), (560, 890, -10)):
         p3.shell(ink, x, y, 0.9, r)
     p3.bucket(ink, 340, 890, 0.7)
     tiny(ink, 'heart', [(120, 520), (730, 500), (425, 900)])
@@ -801,7 +801,6 @@ def s_bubbles_o(ink):
     po.ground_z(ink, 780, 'dots', 20, amp=20)
     F(ink, lambda i, x, y, s: cast.pup_front(i, 'sugarfoot', x, y, s, 'wow', lvl=1, mouth='o', arms='up', tilt=-5), (110, 560, 340, 900), 'bottom')
     F(ink, lambda i, x, y, s: cast.pup_front(i, 'tidbit', x, y, s, 'joy', lvl=1, arms='both_up', tilt=5), (500, 580, 730, 900), 'bottom')
-    p3.wand(ink, 340, 650, 0.9, 30)
     for (x, y, r, kind) in ((300, 330, 120, 'mandala'), (560, 230, 80, 'rings'), (640, 470, 64, 'stars'), (180, 180, 60, 'dots'), (430, 560, 50, 'swirls'), (700, 220, 36, 'hatch'), (140, 440, 40, 'waves')):
         c = circ(x, y, r)
         sh(ink, c, '#EAF4FF', None if kind == 'mandala' else kind, 12)

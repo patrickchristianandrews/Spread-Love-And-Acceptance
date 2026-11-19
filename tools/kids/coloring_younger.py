@@ -123,7 +123,7 @@ def scene(caption, game=None, banner='ribbon', alt='', badge='r'):
 
 
 # 1 -------------------------------------------------------------------------------------------
-@scene('Zoom! My ears have wings!', alt='Tidbit zooming across a hill under a rainbow')
+@scene('Look! A rainbow, just for me.', alt='Tidbit standing on a hill under a rainbow')
 def s_zoom(ink):
     frame_begin(ink)
     pr.rainbow(ink, 425, 700, 330, 4, 36)
@@ -136,9 +136,7 @@ def s_zoom(ink):
     pr.tree(ink, 120, 700, 0.55)
     pr.tree(ink, 690, 690, 0.5)
     pr.fence(ink, 220, 560, 750, 40)
-    pr.speed_lines(ink, 130, 590, 3, 120, 44)
-    pr.dust(ink, 190, 870, 1.5, 3)
-    F(ink, lambda i, x, y, s: cast.pup_side(i, 'tidbit', x, y, s, 'run', 'happy'), (100, 400, 770, 880), 'bottom')
+    F(ink, lambda i, x, y, s: cast.pup_side(i, 'tidbit', x, y, s, 'run', 'happy'), (240, 520, 700, 880), 'bottom')
     bloom_row(ink, 925, (110, 240, 380, 520, 650, 740), (50, 80), 3)
     tufts(ink, [(180, 915), (460, 925), (590, 915)], 1.3)
     frame_end(ink)
@@ -196,7 +194,7 @@ def s_read(ink):
     frame_end(ink)
 
 # 5 -------------------------------------------------------------------------------------------
-@scene('My feet have the wiggles!', alt='Tidbit dancing on his back legs with music notes')
+@scene('My feet have the wiggles!', alt='Tidbit dancing on her back legs with music notes')
 def s_dance(ink):
     frame_begin(ink)
     for (x, y, r) in ((140, 180, 1.0), (700, 150, 0.9)):
@@ -220,13 +218,10 @@ def s_dig(ink):
     hills(ink, 600, 700, '#E8D5B0', '#D9BF8C')
     p3.hole(ink, 425, 870, 270, 62)
     F(ink, lambda i, x, y, s: cast.pup_peek(i, 'tidbit', x, y, s, 'joy', paws=True), (150, 290, 700, 830), 'bottom', maxs=2.45)
-    for (x, y, r) in ((130, 520, 30), (230, 420, 22), (80, 380, 16), (720, 480, 28), (620, 390, 20), (770, 400, 14), (170, 650, 18), (700, 640, 18), (330, 300, 14), (520, 290, 12)):
+    for (x, y, r) in ((130, 520, 30), (230, 420, 22), (80, 380, 16), (720, 480, 28), (620, 390, 20), (770, 400, 14), (110, 660, 18), (775, 610, 16), (330, 300, 14), (520, 290, 12)):
         p3.dirt_clump(ink, x, y, r)
-    with ink.fig(0, 0, outline=False) as g:
-        g.line(curve([(200, 660), (170, 580), (140, 520)]), w=ink.dw * 0.9, dash='3 10')
-        g.line(curve([(650, 660), (690, 580), (720, 520)]), w=ink.dw * 0.9, dash='3 10')
     p3.shovel(ink, 740, 930, 1.3, 14)
-    hide(ink, 'bone', [(150, 780), (590, 780), (640, 690)], 1.3)
+    hide(ink, 'bone', [(150, 780), (770, 760), (200, 585)], 1.3)
     ground_deco(ink, 6, 905, 935, [], 2, kinds=('tuft',))
     frame_end(ink)
 
@@ -314,15 +309,13 @@ def s_sniff(ink):
     pr.sun(ink, 690, 170, 52)
     pr.puff(ink, 160, 160, 0.9, n=3)
     pr.puff(ink, 480, 260, 0.7, n=3)
-    sky_bits(ink, birds=((340, 110), (420, 160), (600, 290)), butter=((520, 410, 20), (600, 520, -15), (110, 330, 10)))
+    sky_bits(ink, birds=((340, 110), (420, 160), (600, 290)), butter=((400, 300, 20), (740, 360, -15), (110, 330, 10)))
     hills(ink, 740, 830)
     pr.tree(ink, 700, 740, 0.7)
     pr.fence(ink, 360, 790, 800, 48)
     pr.flower(ink, 250, 520, 3.2, petals=7, stem=380, c='#F7A8C2', cc='#FFD060')
     pr.flower(ink, 90, 640, 1.5, petals=6, stem=260, c='#FFE08A', cc='#F7A8C2')
     F(ink, lambda i, x, y, s: cast.pup_front(i, 'sugarfoot', x, y, s, 'calm', tilt=-9, arms='down'), (340, 360, 770, 900), 'bottom')
-    with ink.fig(0, 0, outline=False) as g:
-        g.line(curve([(520, 340), (480, 400), (530, 450), (490, 500)]), w=ink.dw * 0.7, dash='3 9')
     bloom_row(ink, 925, (130, 200, 300, 790, 740), (50, 90), 5)
     tufts(ink, [(250, 915), (330, 925)], 1.3)
     frame_end(ink)
@@ -345,7 +338,7 @@ def s_splash(ink):
 
 
 # 12 ------------------------------------------------------------------------------------------
-@scene('I had it a second ago!', game='Find the ball!', alt='Tidbit looking for his ball in a backyard')
+@scene('I had it a second ago!', game='Find the ball!', alt='Tidbit looking for her ball in a backyard')
 def s_ball(ink):
     frame_begin(ink)
     pr.sun(ink, 460, 160, 52)
@@ -371,7 +364,7 @@ def s_jar(ink):
     gg, sc = F(ink, lambda i, x, y, s: p2.jar(i, x, y, s), (510, 540, 740, 900), 'bottom')
     for (x, y, rot) in ((620, 740, 20), (650, 800, -20), (585, 830, 10)):
         p2.firefly(ink, x, y, 0.55, rot)
-    for (x, y, rot) in ((300, 280, 15), (200, 520, -10), (460, 430, 20), (700, 480, -20), (160, 300, 10)):
+    for (x, y, rot) in ((300, 280, 15), (90, 520, -10), (590, 390, 20), (700, 480, -20), (160, 300, 10)):
         p2.firefly(ink, x, y, 0.8, rot)
     ground_deco(ink, 13, 900, 935, [], 3, kinds=('tuft',))
     frame_end(ink)
@@ -486,7 +479,7 @@ def s_sled(ink):
     pr.puff(ink, 160, 170, 0.9, n=4)
     pr.puff(ink, 650, 140, 0.8, n=3)
     pr.puff(ink, 420, 300, 0.7, n=3)
-    for (x, y, r) in ((130, 330, 24), (700, 380, 28), (280, 240, 18), (560, 220, 20), (110, 520, 22), (730, 560, 20), (420, 160, 16), (330, 420, 14), (600, 430, 16)):
+    for (x, y, r) in ((130, 330, 24), (700, 380, 28), (280, 240, 18), (560, 220, 20), (110, 520, 22), (730, 560, 20), (420, 160, 16), (250, 335, 14), (640, 300, 16)):
         pr.snowflake(ink, x, y, r, 12)
     sky_bits(ink, birds=((220, 110),))
     pr.hill(ink, [(FL - 20, 620), (300, 560), (560, 650), (FRt + 20, 590)], bottom=FB + 20, c='#FFFFFF')
@@ -618,7 +611,7 @@ def s_garden(ink):
     for k in range(5):
         pr.raindrop(ink, 655 + k * 14, 770 + k * 30, 0.5)
     ground_deco(ink, 26, 900, 935, [], 3, kinds=('tuft', 'flower'))
-    sky_bits(ink, birds=((330, 110), (440, 150), (560, 290)), butter=((470, 400, 15), (150, 330, -10), (690, 600, 20)))
+    sky_bits(ink, birds=((330, 110), (440, 150), (560, 290)), butter=((300, 330, 15), (150, 330, -10), (690, 600, 20)))
     pr.puff(ink, 430, 230, 0.7, n=3)
     frame_end(ink)
 
@@ -641,7 +634,7 @@ def s_sand(ink):
     F(ink, lambda i, x, y, s: cast.pup_front(i, 'tidbit', x, y, s, 'joy', arms='up'), (510, 500, 780, 900), 'bottom')
     p3.bucket(ink, 190, 935, 0.8)
     p3.shovel(ink, 670, 930, 0.9, 20)
-    hide(ink, 'shell', [(260, 640), (600, 650), (130, 880), (740, 880), (440, 905)], 1.2)
+    hide(ink, 'shell', [(110, 555), (790, 545), (130, 880), (740, 880), (440, 905)], 1.2)
     frame_end(ink)
 
 
@@ -694,7 +687,7 @@ def s_bake(ink):
     pr.cupcake(ink, 590, 330, 0.8)
     pr.cupcake(ink, 680, 330, 0.8, '#E8D8F8')
     # Tidbit behind the counter: her paws hidden by it, the tray of cookies in front of her
-    F(ink, lambda i, x, y, s: cast.pup_front(i, 'tidbit', x, y, s, 'happy', arms='chest', hat='chef'), (180, 170, 670, 1120), 'bottom')
+    F(ink, lambda i, x, y, s: cast.pup_front(i, 'tidbit', x, y, s, 'happy', arms='chest', hat='chef'), (180, 170, 670, 1040), 'bottom')
     with ink.fig(0, 0) as g:
         g.part(rrect(40, 760, 770, 200, 4), c='#E8D5B0', w=ink.dw)
     with ink.fig(425, 830) as g:
