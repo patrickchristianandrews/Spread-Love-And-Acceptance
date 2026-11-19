@@ -748,11 +748,14 @@ def _ink_fig(ink, who, x, y, s, left, pose, expr='happy'):
     return g
 
 
+WEAR = {}   # who -> outfit item, set by a page that needs one (build_coloring.py's covers)
+
+
 def _pt_fig(ink, who, x, y, s, left, pose, expr='happy', peek=None, hat=None):
     """one painted pup with its paws at (x, y) (peek: only the top part, cut at y), facing left if left. hat: the scene's hat
     (a crown, a wizard hat...), drawn on her head; then her color item goes at her neck instead (as on the site)"""
     _cute.PAIR['mark'] = True
-    wear = None
+    wear = WEAR.get(who)   # a page can ask for a particular item (a cover: nothing over the eyes)
     if hat:
         wear = 'bandana' if _pi.outfit(who, ('c', _scene(ink))) in ('hat', 'bandana', 'bow') else 'necklace'
     info = _pi.img(who, pose, 'color' if ink.color else 'line', _eyes(expr), key=('c', _scene(ink)), wear=wear)
@@ -770,8 +773,22 @@ def _pt_fig(ink, who, x, y, s, left, pose, expr='happy', peek=None, hat=None):
         import re as _re
         f_ = max(0.35, getattr(ink, 'ow', 6.0) / 4.5)
         info = dict(info, svg=_re.sub(r'stroke-width="([\d.]+)"', lambda m: 'stroke-width="%.2f"' % (float(m.group(1)) * f_), info['svg']))
+    img = _pi.svg_image(info, k, left)
+    if 'svg' in info:   # line art: a solid white body under the lines, so nothing behind her (a hedge, a pattern) shows through
+        ci = _pi.img(who, pose, 'color', _eyes(expr), key=('c', _scene(ink)), wear=wear)
+        fid = ink.newid('wb')
+        ow = getattr(ink, 'ow', 3.0)
+        # the painted pup's shape, smoothed (no stray fur), filled white and inked round its edge like the rest of the page
+        img = ('<filter id="%s" x="-4%%" y="-4%%" width="108%%" height="108%%" color-interpolation-filters="sRGB">'
+               '<feGaussianBlur in="SourceAlpha" stdDeviation="%.2f" result="b"/>'
+               '<feComponentTransfer in="b" result="sh"><feFuncA type="discrete" tableValues="0 0 1 1"/></feComponentTransfer>'
+               '<feMorphology in="sh" operator="erode" radius="%.2f" result="in"/>'
+               '<feFlood flood-color="#111" result="k"/><feComposite in="k" in2="sh" operator="in" result="edge"/>'
+               '<feFlood flood-color="#fff" result="w"/><feComposite in="w" in2="in" operator="in" result="fill"/>'
+               '<feMerge><feMergeNode in="edge"/><feMergeNode in="fill"/></feMerge></filter>'
+               '<g filter="url(#%s)">%s</g>%s') % (fid, max(1.5, ow * 0.9), max(0.8, ow * 0.55), fid, _pi.svg_image(ci, PK * s * 12.0 / ci['unit'], left), img)
     if peek is None:
-        mk = '<g transform="translate(%.2f %.2f)">%s</g>' % (x, y, _pi.svg_image(info, k, left))
+        mk = '<g transform="translate(%.2f %.2f)">%s</g>' % (x, y, img)
     else:
         cid = ink.newid('pk')
         b = box(x)
@@ -782,7 +799,7 @@ def _pt_fig(ink, who, x, y, s, left, pose, expr='happy', peek=None, hat=None):
         lw = 0.78 * info['unit'] * k
         mk = ('<defs><clipPath id="%s"><path d="M%.2f %.2f L%.2f %.2f L%.2f %.2f Q%.2f %.2f %.2f %.2f Z"/></clipPath></defs><g clip-path="url(#%s)"><g transform="translate(%.2f %.2f)">%s</g></g>'
               '<path d="%s" fill="none" stroke="#111" stroke-width="%.2f" stroke-linecap="round"/>') % (
-            cid, x0, b[1] - 0.3 * (b[3] - b[1]), x1, b[1] - 0.3 * (b[3] - b[1]), x1, y, (x0 + x1) / 2, y + 2 * dip, x0, y, cid, x, y + top + py * k, _pi.svg_image(info, k, left), rim, lw)
+            cid, x0, b[1] - 0.3 * (b[3] - b[1]), x1, b[1] - 0.3 * (b[3] - b[1]), x1, y, (x0 + x1) / 2, y + 2 * dip, x0, y, cid, x, y + top + py * k, img, rim, lw)
     with ink.fig(0, 0, 1.0, False) as g:
         g.raw_at(mk)
     if hat:   # the scene's hat on her head: hat space has the crown of the head at y = -52, about 0.385 painted pixels a unit

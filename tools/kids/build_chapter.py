@@ -200,7 +200,7 @@ def ill_stairs(P):
     for i in range(4):
         P.rect(90 + i * 56, 60 + i * 36, 56 + (3 - i) * 0, 150 - i * 36 - 4, '#dcdcdc', r=2, kind='shape')
     P.rect(90, 196, 250, 12, '#cfcfcf', r=2)
-    A.pup_side(P, 'sugarfoot', 230, 197, 1.45, 'lie', 'calm')
+    A.pup_side(P, 'sugarfoot', 300, 169, 1.3, 'lie', 'calm-closed')   # stretched out across the bottom step
     P.rect(150, 138, 22, 18, '#fff', r=3)
     P.line('M172 142 q10 0 10 8 q0 8 -10 8', '#333', 2)
     for (x, y) in ((158, 128), (164, 118)):
@@ -262,8 +262,8 @@ def ill_star(P):
         r = math.radians(a)
         P.line('M%s %s L%s %s' % (f(360 + math.cos(r) * 28), f(160 + math.sin(r) * 28), f(360 + math.cos(r) * 33), f(160 + math.sin(r) * 33)), '#333', 1.4, kind='fine')
     P.line('M360 160 L378 148', '#333', 2.2)
-    A.pup_side(P, 'tidbit', 220, 207, 1.5, 'sleep', 'sleep')
-    A.sparkle(P, 160, 70, 1.0); A.sparkle(P, 322, 58, 0.9)
+    A.pup_side(P, 'tidbit', 220, 207, 1.5, 'sit', 'happy')   # awake, at Sunday breakfast
+    A.sparkle(P, 160, 70, 1.0); A.sparkle(P, 300, 80, 0.9)
 
 
 def ill_ladder(P):
@@ -403,6 +403,7 @@ aside.try li { margin: .2em 0; }
 .toc ol { list-style: none; margin: 0 auto; padding: 0; width: 3.7in; font-size: 11.5pt; line-height: 1.9; }
 .toc li { display: flex; gap: .6em; }
 .toc li b { flex: none; width: 1.4em; font-family: "Andika", sans-serif; }
+.toc li i { margin-left: auto; font-style: normal; font-family: "Andika", sans-serif; }
 .who-h { font-size: 22pt; text-align: center; margin: .3in 0 .4em; }
 .cast { font: 400 10.3pt/1.45 "Andika", sans-serif; margin: 0 auto; width: 4.3in; }
 .cast p { margin: 0 0 .5em; text-indent: 0 !important; }
@@ -417,7 +418,10 @@ aside.try li { margin: .2em 0; }
 
 
 def toc_html(chs):
-    return '<section class="front toc rt"><h2>Chapters</h2><ol>%s</ol></section>' % ''.join('<li><b>%d</b><span>%s</span></li>' % (i + 1, inline(c['title'])) for i, c in enumerate(chs))
+    # page numbers: read from the last printed PDF (tools/kids/chapter_pages.py writes them); the list does not change the page count
+    pn = C.load_json(os.path.join(C.SRC, 'chapter-pages.json'), None) or []
+    num = lambda i: '<i>%d</i>' % pn[i] if len(pn) == len(chs) else ''
+    return '<section class="front toc rt"><h2>Chapters</h2><ol>%s</ol></section>' % ''.join('<li><b>%d</b><span>%s</span>%s</li>' % (i + 1, inline(c['title']), num(i)) for i, c in enumerate(chs))
 
 
 def front_html():

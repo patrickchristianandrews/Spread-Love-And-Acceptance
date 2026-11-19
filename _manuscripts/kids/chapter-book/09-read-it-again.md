@@ -27,7 +27,7 @@ Wren took a breath. This was number two.
 
 "The what?"
 
-"Your 'k.' On Monday, when I said my grandpa was moving in. I told you something really hard, and you wrote 'k.' Just one letter. It felt like..." She searched for the word. "Like closing a door."
+"Your 'k.' That Monday, when I said my grandpa was moving in. I told you something really hard, and you wrote 'k.' Just one letter. It felt like..." She searched for the word. "Like closing a door."
 
 There was a long silence on the line.
 
@@ -35,7 +35,7 @@ There was a long silence on the line.
 
 "No?"
 
-"I was at the bus stop. It was freezing. I had these huge mittens on, and I was typing with one thumb and holding my backpack in the other arm, and the bus was coming." She was talking fast. "I'd just read your message and I thought, *oh no, she's sad, I should talk to her.* But I couldn't because the bus was there, and I wanted to say 'okay, I'm here, we'll talk later.' And all I had time for was a k."
+"I was at the bus stop. It was pouring. My hood was up and my hands were wet, and I was typing with one thumb and holding my backpack in the other arm, and the bus was coming." She was talking fast. "I'd just read your message and I thought, *oh no, she's sad, I should talk to her.* But I couldn't because the bus was there, and I wanted to say 'okay, I'm here, we'll talk later.' And all I had time for was a k."
 
 Wren stared at the dog. "That's... not what it looked like at all."
 

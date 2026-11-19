@@ -452,7 +452,7 @@ def epub_docs(S, Doc, B):
             nums[it['id']] = k
     docs = []
     docs.append(Doc('cover.xhtml', 'Cover', '<section class="cv" epub:type="cover"><img class="cv-img" src="images/cover.jpg" alt="%s"/></section>' % esc(
-        'Cover: %s, %s, by %s' % (p['title'], p['sub'], B.AUTHOR)), body_type='cover'))
+        'Cover: %s, %s' % (p['title'], p['sub'])), body_type='cover'))
     docs.append(Doc('title.xhtml', p['title'], (
         '<section class="ps-title" epub:type="titlepage"><p class="ps-title-k">%s · %s</p><h1 class="ps-title-t">%s</h1>'
         '<p class="ps-title-s">%s</p><p class="ps-title-art"><img src="images/art-%s.png" alt=""/></p>'

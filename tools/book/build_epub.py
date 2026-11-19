@@ -487,7 +487,7 @@ def book_docs(book, where):
     n = book['n']
     # cover and title page
     docs.append(Doc('cover.xhtml', 'Cover', '<section class="cv" epub:type="cover"><img class="cv-img" src="images/cover.jpg" alt="%s"/></section>' % html.escape(
-        'Cover: %s, Book %d of %s, by %s' % (book['title'], n, SERIES_TITLE, B.AUTHOR), quote=True), body_type='cover'))
+        'Cover: %s, Book %d of %s' % (book['title'], n, SERIES_TITLE), quote=True), body_type='cover'))
     docs.append(Doc('title.xhtml', book['title'], (
         '<section class="ps-title" epub:type="titlepage"><p class="ps-title-k">%s · Book %d</p><h1 class="ps-title-t">%s</h1>'
         '<p class="ps-title-s">%s</p><p class="ps-title-art"><img src="images/art-%s.png" alt="%s"/></p><p class="ps-title-a">by %s</p>'
@@ -537,7 +537,7 @@ def book_docs(book, where):
     # the back of the book (printfix13: Book 4's first month, job list and words, then questions people ask, as in print)
     for fname, title, h in [('month.xhtml', 'Your first month, week by week', S.month_page(book, namer, epub=True)),
                             ('jobs.xhtml', 'A list of jobs to start from', S.jobs_page(book, namer, epub=True)),
-                            ('words.xhtml', 'Words for the talk', S.words_page(book, epub=True)),
+                            ('words.xhtml', ((S.ST.TEXT.get('words', {}).get(str(book['n'])) or {}).get('title') or 'Words for the talk'), S.words_page(book, epub=True)),
                             ('faq.xhtml', 'Questions people ask', S.faq_page(book, namer, epub=True))]:
         if h:
             docs.append(Doc(fname, title, h))
@@ -1146,7 +1146,7 @@ def build_boxset(built, images):
     book = {'id': bx['id'], 'kind': 'boxset', 'title': bx['title'], 'sub': bx['sub'], 'color': bx['color'], 'art': bx['art'], 'n': 0, 'blurb': bx['blurb'],
             'line': bx['line'], 'isbn_ebook': bx.get('isbn_ebook'), 'source': '/book/'}
     docs = [Doc('cover.xhtml', 'Cover', '<section class="cv" epub:type="cover"><img class="cv-img" src="images/cover.jpg" alt="%s"/></section>' % html.escape(
-        'Cover: %s, %s, by %s' % (bx['title'], bx['sub'], B.AUTHOR), quote=True), body_type='cover')]
+        'Cover: %s, %s' % (bx['title'], bx['sub']), quote=True), body_type='cover')]
     docs.append(Doc('title.xhtml', bx['title'], (
         '<section class="ps-title" epub:type="titlepage"><p class="ps-title-k">%s</p><h1 class="ps-title-t">%s</h1><p class="ps-title-s">%s</p>'
         '<p class="ps-title-art"><img src="images/art-%s.png" alt=""/></p>'

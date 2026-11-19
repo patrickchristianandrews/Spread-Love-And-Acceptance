@@ -240,7 +240,7 @@ CONNECT = {
     'understanding-17-groups': [('understanding-3-seeing', 'bias and the stories we tell'),
                                 ('understanding-5-belonging', 'why belonging matters so much'),
                                 ('understanding-10-values', 'holding on to your own values'),
-                                ('chapter-4', 'agreeing what fair means in your group')],
+                                ('chapter-4', 'agreeing on what fair means in your group')],
     'afterword': [('self-1-then', 'start again at the beginning, on your own'),
                   ('preface', 'start the shared part, with someone'),
                   ('understanding-1-feelings', 'start the background chapters')],
@@ -1035,7 +1035,11 @@ def part_hint(part):
 
 def chapter_open(e, deep):
     hs = headings(e[0], deep)
-    lis = ''.join('<li>%s</li>' % ('<a href="#%s--%s">%s</a>' % (e[0], i, esc(t)) if i else esc(t)) for i, t in hs)
+    def sw(t):   # the same print wording as the headings themselves ("on the website", not "on this site")
+        for a_, b_ in PRINT_SWAPS:
+            t = t.replace(a_, b_)
+        return t
+    lis = ''.join('<li>%s</li>' % ('<a href="#%s--%s">%s</a>' % (e[0], i, esc(sw(t))) if i else esc(sw(t))) for i, t in hs)
     part = e[1]
     kicker = chapter_name(e) if part != 4 else 'Afterword'
     return '''<header class="ch-open no-bubble no-cheer no-dive" data-no-bubble data-part="%d">%s<p class="ch-num" aria-hidden="true">%s</p><p class="ch-kicker">%s</p>

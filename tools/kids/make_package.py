@@ -61,7 +61,7 @@ TITLES = [
 ]
 
 DESC = {
-    'picture-book': ('<p><b>Tidbit zooms. Sugarfoot floats. Today is picnic day, and Tidbit is sure she can carry the whole basket by herself.</b></p>'
+    'picture-book': ('<p><b>Tidbit zooms. Sugarfoot strolls. Today is picnic day, and Tidbit is sure she can carry the whole basket by herself.</b></p>'
                      '<p>Then her paws get buzzy, her ears get hot, and a little gray cloud of Static floats in the door. With help from Professor Puddles and a hill full of friends, Tidbit learns to listen to her body, ask for a hand, say sorry when she bumps the basket, and make it right.</p>'
                      '<p>A warm, funny read-aloud with rhymes, repeating lines and a calm-down trick children can copy: smell the flower, blow the candle.</p>'
                      '<p><b>Inside this book</b></p><ul><li>Noticing what your body is telling you (buzzy paws, heavy paws, calm)</li><li>Asking for what you need: \"room first, then a hug\"</li><li>One job each, so the basket gets light</li><li>Saying sorry in three steps and making it right</li><li>Gentle, funny clouds of Static that only want a friend</li><li>A calm-down breathing page, a find-and-count page, and a page of questions and words for grown-ups</li></ul>'

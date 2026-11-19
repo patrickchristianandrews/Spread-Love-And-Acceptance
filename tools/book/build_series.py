@@ -237,12 +237,44 @@ def override(slug):
     return B.read(f) if os.path.exists(f) else None
 
 
+def soft_hyphens_in_tables(body):
+    """The worksheet tables in the filled-in examples have narrow fixed columns in the 6 x 9 book, so a long word may have
+    to break. Soft hyphens at real syllable breaks make it break like a word in a printed book ("Break-/fast"), never in
+    the middle of a syllable with no hyphen. Needs pyphen (pip install pyphen); without it the tables are left as they are."""
+    try:
+        import pyphen
+    except ImportError:
+        return body
+    dic = pyphen.Pyphen(lang='en_US')
+
+    def word(m):
+        w = m.group(0)
+        if len(w) < 7:
+            return w
+        fixed = {'medicines': (3, 4), 'medicine': (3, 4)}   # where pyphen's dictionary breaks oddly ("Medici-nes")
+        cuts = list(fixed[w.lower()]) if w.lower() in fixed else [p for p in dic.positions(w) if 3 <= p <= len(w) - 3]
+        out, last = '', 0
+        for p in cuts:
+            out += w[last:p] + '&shy;'
+            last = p
+        return out + w[last:]
+
+    def cell(m):
+        # only the text between tags, never inside a tag or an entity
+        return re.sub(r'>([^<]+)<', lambda t: '>' + re.sub(r'(?<![&#\w])[A-Za-z]{7,}', word, t.group(1)) + '<', m.group(0))
+    return re.sub(r'<table class="bk-ex-t.*?</table>', cell, body, flags=re.S)
+
+
 def s_open(e, book):
     hs = B.headings(e[0], False)
     ov = override(e[0])
     if ov:
         hs = [(m.group(1), B.strip_tags(m.group(2)).strip().rstrip('.')) for m in re.finditer(r'<h2 id="([^"]+)">(.*?)</h2>', ov, re.S)]
-    lis = ''.join('<li>%s</li>' % ('<a href="#%s--%s">%s</a>' % (e[0], i, esc(t)) if i else esc(t)) for i, t in hs)
+    def sw(t):   # the same print wording as the headings themselves ("on the website", not "on this site")
+        for a_, b_ in B.PRINT_SWAPS:
+            t = t.replace(a_, b_)
+        return t
+    lis = ''.join('<li>%s</li>' % ('<a href="#%s--%s">%s</a>' % (e[0], i, esc(sw(t))) if i else esc(sw(t))) for i, t in hs)
     num, lab = chapter_label(e[0], book)
     kicker = 'Book %d · %s' % (book['n'], lab)
     return ('<header class="ch-open no-bubble no-cheer no-dive" data-no-bubble>%s<p class="ch-num" aria-hidden="true">%s</p>'
@@ -462,6 +494,7 @@ def s_chapter(e, book, here, where, namer=None, panels=False):
         body, n = ST.scan_panels(body, qr, classify, B.short_address, B.addr_html, esc)
         SCAN_COUNT[(book['id'], slug)] = n
     body = add_logic_boxes(body, slug)
+    body = soft_hyphens_in_tables(body)
     if not CFG.get('examples', True):
         body = re.sub(r'<div class="book-ex-wrap.*?</figure>\s*</div>', '', body, flags=re.S)
     # the made-up note is said once, at the front of the book (copyright page and "About this book")

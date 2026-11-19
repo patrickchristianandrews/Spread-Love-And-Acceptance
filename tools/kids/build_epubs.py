@@ -48,18 +48,18 @@ def art_sheet():
 
 # ------------------------------------------------------------------ picture book (fixed layout)
 ART_ALT = {
-    'zoom': 'Tidbit runs across the yard while Sugarfoot yawns beside the cottage.',
-    'plan': 'Tidbit zooms through a pantry full of jars and pies while Sugarfoot sits calmly by an empty basket.',
-    'pack': 'A heap of food on the floor, and Tidbit straining to pull a basket stuffed full.',
+    'zoom': 'Tidbit runs across the yard. Sugarfoot stands smiling beside the cottage.',
+    'plan': 'Tidbit stands in a pantry full of jars and pies. Sugarfoot waits calmly by an empty basket.',
+    'pack': 'A heap of food on the floor, and Tidbit leaning into a basket stuffed full.',
     'static': 'Tidbit with buzzing paws, and the gray cloud Grumble floating in with a frown.',
     'puddles': 'Professor Puddles, a raindrop in glasses and a graduation cap, and Tidbit pointing out her buzzy paws, hot ears and tight tummy.',
-    'room': 'Sugarfoot lies under a tree inside a ring of room, with shy Mumble behind a bush and Tidbit waiting at a distance.',
+    'room': 'Sugarfoot rests with her eyes closed inside a ring of room, with shy Mumble behind a bush and Tidbit waiting at a distance.',
     'calm': 'Tidbit smells a flower, then blows out a candle, while Grumble shrinks.',
-    'ask': 'Tidbit asks for help, and Sugarfoot, Hopper, Nutmeg, Beep, Lumi, Dot, the ducklings and Ollie gather around.',
-    'jobs': 'The friends walk to the hill, each carrying one thing, with the basket riding light in a wagon.',
+    'ask': 'Tidbit and Sugarfoot share a hug beside the basket, and Hopper, Nutmeg, Beep, Lumi, Dot, the ducklings and Ollie gather around.',
+    'jobs': 'The friends set off, each carrying one thing: Beep the blanket, Hopper the apples, Nutmeg a nut, the ducklings a napkin each and Dot a bag of crumbs. The basket rides light in a wagon.',
     'oops': 'Tidbit leaps after a butterfly and the basket tips, apples and a pie flying.',
     'sorry': 'Tidbit says sorry to Sugarfoot, and the friends catch the apples.',
-    'clouds': 'The four clouds of Static, Grumble, Fuzz, Mumble and Drift, join the picnic, and Fuzz brings back a cracker.',
+    'clouds': 'The four clouds of Static, Grumble, Fuzz, Mumble and Drift, join the picnic, and the cracker sits in the middle of the blanket.',
     'night': 'Tidbit and Sugarfoot walk home under the Moon, past the cottage, with fireflies.',
 }
 
@@ -68,7 +68,7 @@ def pb_pages():
     """(page number, text for the alt) for the 40 pages"""
     B = BP.BOOK
     t = {}
-    t[1] = '%s. Half title, with Peach and Lilac sharing a heart.' % B['title']
+    t[1] = '%s. Half title, with Tidbit and Sugarfoot under a heart.' % B['title']
     t[2] = 'This book belongs to. A line to write your name. Professor Puddles and Tidbit wave from a green hill.'
     t[3] = '%s. %s. By %s. Tidbit and Sugarfoot with a picnic basket.' % (B['title'], B['subtitle'], B['author'])
     t[4] = 'Copyright © 2026 %s. Independently published. The characters and the story are original to this site.' % C.AUTHOR
@@ -84,8 +84,8 @@ def pb_pages():
     t[36] = B['words_title'] + '. ' + ' '.join('%s. %s' % (a, b.replace('\n', ' ')) for a, b in B['words'])
     t[37] = B['find_title'] + ': ' + ', '.join(B['find_items']) + '. A picnic blanket with apples, a pie, ducklings, the four Static clouds and the two pups.'
     t[38] = 'About this book. ' + ' '.join(B['about_paras'])
-    t[39] = 'The End. Goodnight, everyone. Tidbit and Sugarfoot asleep under the Moon.'
-    t[40] = 'Thank you for reading. More at %s.' % C.SITE
+    t[39] = 'The End. Goodnight, everyone. Tidbit and Sugarfoot, eyes closed, under the Moon.'
+    t[40] = 'Thank you for reading. More at %s. Tidbit and Sugarfoot under a heart.' % C.SITE
     return [(n, C.curly(t[n])) for n in range(1, 41)]
 
 
@@ -215,7 +215,7 @@ def build_chapter_epub():
     files.append(('OEBPS/images/cover.jpg', cov))
     manifest.append('<item id="cover-img" href="images/cover.jpg" media-type="image/jpeg" properties="cover-image"/>')
     docs = []
-    cover = xhtml('Cover', '<div class="cover"><img src="images/cover.jpg" alt="Cover of Turn Down the Static" style="max-width:100%%;height:auto"/></div>', 'cover')
+    cover = xhtml('Cover', '<div class="cover"><img src="images/cover.jpg" alt="Cover of Turn Down the Static" style="max-width:100%;max-height:100%;height:auto"/></div>', 'cover')
     docs.append(('cover', 'cover.xhtml', 'Cover', cover))
     title = xhtml(B['title'], '<h1>%s</h1><p style="text-align:center"><em>%s</em></p><p style="text-align:center"><b>by %s</b></p><p class="small" style="text-align:center">%s, Book %d<br/>Independently published<br/>%s</p>' % (
         xesc(B['title']), xesc(B['subtitle']), xesc(C.AUTHOR), xesc(B['series']), B['series_no'], C.SITE))
@@ -227,6 +227,10 @@ def build_chapter_epub():
                  '<p>This is a story. It is general education about feelings and getting along, not a diagnosis or treatment, and it cannot know your family.</p></div>' % (
                      xesc(B['series']), B['series_no'], xesc(B['title']), xesc(C.AUTHOR), xesc(C.AUTHOR), C.UPDATED, C.SITE, C.SITE))
     docs.append(('copyright', 'copyright.xhtml', 'Copyright', copy))
+    # who is who, with the ladder picture, as in the print book
+    cast_html = re.search(r'<div class="cast">.*?</div>', BC.front_html(), re.S).group(0)
+    who = xhtml('Who is who', '<h2>Who is who</h2>%s<img class="spot" src="images/chapter-ladder.png" alt="Three rungs of a ladder: calm and connected, revved up and running on empty, each with a pup."/>' % cast_html)
+    docs.append(('who', 'who.xhtml', 'Who is who', who))
     for i, ch in enumerate(chs):
         docs.append(('ch%d' % (i + 1), 'chapter-%02d.xhtml' % (i + 1), '%d. %s' % (i + 1, re.sub('<[^>]+>', '', ch['title'])), chapter_xhtml(i + 1, ch)))
     words = xhtml('Words to keep', '<h2>Words to keep</h2>'

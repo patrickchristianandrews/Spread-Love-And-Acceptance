@@ -78,7 +78,7 @@
         "an.0": "A watch with only two settings, “plenty of time” and “too late.”",
         "fits": "For many people with ADHD, sensing time passing is genuinely harder. Researchers describe it as part of how attention and self-control work. It says nothing about how much someone cares.",
         "say": "“I misjudge time. You matter to me, and I’m working on it.”",
-        "step": "Set the alarm for leaving, not arriving, and text “Leaving now” as you go. Whoever’s waiting can agree a time to start without you.",
+        "step": "Set the alarm for leaving, not arriving, and text “Leaving now” as you go. Whoever’s waiting can agree on a time to start without you.",
         "looks": "Twenty after, and here they are at the door with their coat half on and a breathless apology, for the third time this month. They plainly care, and they are also plainly late.",
         "other": "Waiting tells the waiting person they matter less, whatever was meant. It costs them real time, sometimes a cold dinner or a missed movie, and over months it wears down trust.",
         "chain": [
@@ -128,7 +128,7 @@
       "headphones": {
         "an.0": "Sunglasses on a bright day. You still see everything, just without squinting.",
         "say": "“These help me stay at the table. Tap my arm and I’m all yours.”",
-        "step": "Agree a signal, a tap on the arm, that means “I’m talking to you.” Where you can, turn the room down for everyone. One conversation at a time is kinder to more people than you’d think.",
+        "step": "Agree on a signal, a tap on the arm, that means “I’m talking to you.” Where you can, turn the room down for everyone. One conversation at a time is kinder to more people than you’d think.",
         "looks": "Sunday lunch, nine people, the TV on and two conversations going at once, and one person at the end of the table has earbuds in with nothing playing through them at all.",
         "other": "From across the table it looks like a closed door. Most people won’t knock on it, so they talk around the person instead, and the person notices.",
         "chain": [
@@ -188,7 +188,7 @@
       },
       "teasing": {
         "an.0": "Puppies play-fighting. The teeth never close.",
-        "step": "Check now and then. “Was that okay?” Agree what’s off limits, and drop any joke that keeps landing as hurt, however good you think it is.",
+        "step": "Check now and then. “Was that okay?” Agree on what’s off limits, and drop any joke that keeps landing as hurt, however good you think it is.",
         "looks": "Two old friends calling each other terrible names across a bar table, both of them looking thoroughly delighted.",
         "other": "Someone who takes words literally, or who was teased cruelly at school, may hear only the insult. It stings, and they may not feel able to say so.",
         "chain": [
@@ -301,7 +301,7 @@
         ]
       },
       "love-in-deeds": {
-        "step": "Agree one word and one deed. The doer says “I love you” on the way out, and the talker notices the deeds out loud.",
+        "step": "Agree on one word and one deed. The doer says “I love you” on the way out, and the talker notices the deeds out loud.",
         "looks": "Stan hardly ever says “I love you.” He does fix the bike, fill the car and make the lunches from home at 6:50 every morning.",
         "other": "If you hear love mainly in words, you can feel unloved while surrounded by kind acts, which is a strange and lonely place to be.",
         "chain": [
@@ -322,7 +322,7 @@
         ]
       },
       "reassurance": {
-        "step": "Agree a kind limit together. One clear answer, then “I said it, and I meant it,” and something calming to do side by side.",
+        "step": "Agree on a kind limit together. One clear answer, then “I said it, and I meant it,” and something calming to do side by side.",
         "looks": "“Are you sure you’re not annoyed with me?” It’s the fourth time tonight, and you give the same answer you gave the other three times, a bit more tightly.",
         "an.0": "Going back for the third time to check the front door is locked.",
         "other": "Answering the same question for the fourth time is tiring, and it can start to feel like your word isn’t trusted. Answering it again and again can also keep the loop going, which is the unkind part of an act of kindness.",
@@ -420,7 +420,7 @@
         "step": "The quieter person can take short breaks, or ask a direct question to get a turn. The family can stop now and then and ask them in by name."
       },
       "direct-culture": {
-        "step": "Ask early: “Do you like feedback straight, or with some cushioning?” Then agree a style for the team and write it down somewhere people will see it.",
+        "step": "Ask early: “Do you like feedback straight, or with some cushioning?” Then agree on a style for the team and write it down somewhere people will see it.",
         "other": "The softer speaker can feel attacked. The plainer speaker can feel misled when the soft words turn out to have been hiding a real problem.",
         "looks": "One new colleague says “This is wrong” in the meeting. Another says “Maybe we could think about it a bit more,” and also means “This is wrong.”",
         "chain": [
@@ -470,7 +470,7 @@
           "A slow goodbye winds it down gently",
           "It’s a soft landing for a good evening"
         ],
-        "step": "Start the goodbye ten minutes earlier than you think you need to. Agree a family signal that means “It’s time. Last bits now.”"
+        "step": "Start the goodbye ten minutes earlier than you think you need to. Agree on a family signal that means “It’s time. Last bits now.”"
       },
       "unasked-advice": {
         "looks": "Three in the morning, you’re finally getting the baby down, and your mother-in-law appears in the doorway. “In my day we just let them cry.”",

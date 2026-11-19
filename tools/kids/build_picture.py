@@ -112,6 +112,26 @@ def label(P, x, y, text, size=26, anchor='middle', col='#3A3350', weight=700, bg
         f(x), f(y + 2), anchor, family, weight, size, col, C.esc(text)))
 
 
+def blanket_roll(P, x, y):
+    """a picnic blanket rolled up, carried under an arm"""
+    P.raw('<g transform="translate(%s %s)"><rect x="-38" y="-17" width="76" height="34" rx="17" fill="#E0554E" stroke="#B23D38" stroke-width="3"/>'
+          '<path d="M-14 -17 V17 M10 -17 V17" stroke="#FFF3EC" stroke-width="5"/><ellipse cx="38" cy="0" rx="9" ry="17" fill="#C9473F" stroke="#B23D38" stroke-width="3"/>'
+          '<path d="M38 -9 a7 9 0 1 1 -1 18" fill="none" stroke="#FFF3EC" stroke-width="2.5"/></g>' % (f(x), f(y)))
+
+
+def acorn(P, x, y):
+    """one nut, held in a paw (drawn in the holder's own units)"""
+    P.ell(x, y + 1.5, 3.2, 3.8, '#B9773A')
+    P.path('M%s %s Q%s %s %s %s Q%s %s %s %sZ' % (f(x - 4), f(y - 0.5), f(x), f(y - 5), f(x + 4), f(y - 0.5), f(x + 2), f(y + 1), f(x - 2), f(y + 1)), '#7A4E2A')
+
+
+def crumb_bag(P, x, y):
+    """a little paper bag of cracker crumbs"""
+    P.raw('<g transform="translate(%s %s)"><path d="M-22 26 L-18 -14 L18 -14 L22 26 Z" fill="#E2C08D" stroke="#B48A55" stroke-width="3" stroke-linejoin="round"/>'
+          '<path d="M-18 -14 L-12 -22 L-4 -15 L4 -22 L12 -15 L18 -22 L18 -14" fill="#E2C08D" stroke="#B48A55" stroke-width="3" stroke-linejoin="round"/>'
+          '<circle cx="-6" cy="6" r="3" fill="#C99A55"/><circle cx="5" cy="12" r="2.5" fill="#C99A55"/><circle cx="3" cy="1" r="2" fill="#C99A55"/></g>' % (f(x), f(y)))
+
+
 # ------------------------------------------------------------------ the thirteen spreads (spread units: 1725 x 875, gutter at x = 862.5)
 def s_zoom(P):
     sky(P, '#BFE4F7', '#FFEBC9')
@@ -122,7 +142,7 @@ def s_zoom(P):
     A.house(P, 1450, 690, 3.0)
     flowers_row(P, 690, 40, 1700, 70, 2)
     grass_tufts(P, 720, 20, 1700, 120)
-    A.speed_lines(P, 235, 590, 4, 150, 22, 1.2)
+    A.speed_lines(P, 275, 590, 4, 150, 22, 1.2)
     A.dust(P, 190, 700, 2.0); A.dust(P, 120, 715, 1.5)
     A.pup_side(P, 'tidbit', 430, 730, 5.4, 'run', 'happy', ph=0.9, wag=0.3)
     A.sugarfoot_front(P, 1120, 740, 4.6, 'happy-closed', 'o', view='front')
@@ -138,7 +158,7 @@ def s_plan(P):
         P.raw('<rect x="90" y="%s" width="12" height="48" fill="#B98A57"/><rect x="670" y="%s" width="12" height="48" fill="#B98A57"/>' % (yy + 16, yy + 16))
     for i, x in enumerate((130, 215, 300, 385, 470, 555, 635)):
         A.jar(P, x, 330, 3.0, ['#8CC66B', '#E25C4F', '#F5C84C'][i % 3])
-    A.pie(P, 150, 470, 3.2); A.cheese(P, 300, 470, 3.2); A.cupcake(P, 420, 470, 3.4); A.apple(P, 520, 470, 3.2); A.apple(P, 580, 470, 3.2); A.cup(P, 650, 470, 3.2)
+    A.pie(P, 130, 470, 3.2); A.cheese(P, 230, 470, 3.2); A.cup(P, 300, 470, 3.0); A.cupcake(P, 575, 470, 3.4); A.apple(P, 635, 470, 3.0); A.apple(P, 685, 470, 3.0)   # nothing behind Tidbit's head
     # a window on the right with the Hollow beyond
     P.raw('<rect x="1380" y="300" width="260" height="190" rx="20" fill="#CFE9F8" stroke="#B98A57" stroke-width="12"/>')
     P.raw('<path d="M1392 450 Q1510 400 1628 440 L1628 484 L1392 484Z" fill="#A9DB84"/>')
@@ -161,9 +181,7 @@ def s_pack(P):
     for kind, x, y, s in heap:
         getattr(A, kind)(P, x, y, s)
     A.basket(P, 1060, 735, 4.4, full=True)
-    for (x, y, s) in ((1010, 480, 2.4), (1090, 470, 2.2)):
-        A.apple(P, x, y, s)
-    A.pup_side(P, 'tidbit', 1430, 735, 5.2, 'stand', 'cross', flip=True, mouth_='frown', tilt=0)
+    A.pup_side(P, 'tidbit', 1335, 735, 5.2, 'run', 'cross', flip=True, mouth_='frown', tilt=0)   # leaning into the basket, tugging
 
 
 def s_static(P):
@@ -196,11 +214,11 @@ def s_room(P):
     sky(P, '#D8E4F4', '#EFE8DA')
     rolling(P, 600, [('#B7D9A0', -10, 30), ('#A5CF8C', 50, 24)])
     A.tree(P, 250, 700, 3.2, '#8FBF86', '#6C9E66')
+    A.static_cloud(P, 'mumble', 150, 645, 3.0, 'shy', fizz=False)   # hiding behind the bush, peeking over it
     A.bush(P, 120, 720, 3.2, '#6FA36A')
-    A.static_cloud(P, 'mumble', 150, 600, 3.0, 'shy', fizz=False)
     # a gentle ring of room around Sugarfoot
     P.raw('<ellipse cx="560" cy="690" rx="250" ry="62" fill="none" stroke="#9AA7C9" stroke-width="5" stroke-dasharray="4 14" stroke-linecap="round"/>')
-    A.pup_side(P, 'sugarfoot', 520, 735, 5.2, 'lie', 'sad', mouth_='flat', flip=True)
+    A.pup_side(P, 'sugarfoot', 520, 735, 5.2, 'lie', 'calm-closed', mouth_='flat', flip=True)   # quiet: eyes closed
     label(P, 560, 768, 'room', 28)
     A.tidbit_front(P, 1330, 745, 4.8, 'calm', 'smile', view='front')
     A.heart(P, 1010, 520, 1.4, '#F08DA8', '#D2668A')
@@ -227,18 +245,19 @@ def s_calm(P):
 def s_ask(P):
     sky(P, '#CFE6FA', '#FFF1D8')
     rolling(P, 600, [('#BFE6A0', -10, 30), ('#A9DB84', 55, 26)])
-    A.basket(P, 230, 745, 4.4, full=True)
-    A.tidbit_front(P, 560, 750, 5.2, 'happy', 'smile')
-    A.sparkle(P, 700, 430, 1.8)
+    A.basket(P, 140, 745, 3.6, full=True)
+    # the hug: Tidbit and Sugarfoot side by side, cheek to cheek, a heart above them
+    A.pup_side(P, 'tidbit', 335, 750, 4.6, 'stand', 'happy-closed')
+    A.pup_side(P, 'sugarfoot', 675, 752, 4.4, 'stand', 'happy-closed', flip=True)   # close, but the cap brims never touch
+    A.heart(P, 505, 400, 1.6, '#F08DA8', '#D2668A')
     # the friends, all facing the basket
-    A.sugarfoot_front(P, 1030, 750, 3.6, 'happy', 'smile', heart_=True)
-    A.hopper(P, 1145, 748, 3.1, flip=True, expr='happy')
-    A.nutmeg(P, 1215, 748, 3.0, flip=True, expr='happy')
-    A.beep(P, 1325, 748, 2.8, flip=True, arm_up=True)
-    A.lumi(P, 1440, 748, 2.1, flip=True, lantern=False)
-    A.dot_snail(P, 1545, 748, 2.2, flip=True, expr='happy')
-    A.ducklings(P, 1655, 748, 1.0, flip=True)
-    A.ollie(P, 1240, 560, 2.4, flip=True, branch=True, expr='happy')
+    A.hopper(P, 1010, 748, 3.1, flip=True, expr='happy')
+    A.nutmeg(P, 1110, 748, 3.0, flip=True, expr='happy')
+    A.beep(P, 1230, 748, 2.8, flip=True, arm_up=True)
+    A.lumi(P, 1360, 748, 2.1, flip=True, lantern=False)
+    A.dot_snail(P, 1480, 748, 2.2, flip=True, expr='happy')
+    A.ducklings(P, 1610, 748, 1.0, flip=True)
+    A.ollie(P, 1170, 560, 2.4, flip=True, branch=True, expr='happy')
 
 def s_jobs(P):
     sky(P, '#BFE4F7', '#FFEBC9')
@@ -248,22 +267,21 @@ def s_jobs(P):
     A.sky_cloud(P, 600, 340, 1.2)
     # left: the jobs
     A.beep(P, 130, 760, 3.2)
+    blanket_roll(P, 205, 712)   # Beep's job: the blanket, rolled up in her hand
     A.hopper(P, 300, 760, 3.4, expr='happy')
     A.apple(P, 355, 715, 2.6); A.apple(P, 250, 722, 2.4)
-    A.nutmeg(P, 450, 760, 3.2)
-    A.ducklings(P, 590, 760, 1.5)
-    A.napkin(P, 555, 718, 2.0); A.napkin(P, 600, 710, 2.0); A.napkin(P, 645, 718, 2.0)
+    A.nutmeg(P, 450, 760, 3.2, holding=acorn)   # Nutmeg's job: the nuts
+    A.ducklings(P, 590, 760, 1.5, carry=lambda Q: A.napkin(Q, 17, -11, 0.7))   # a napkin each, in their beaks
     A.lumi(P, 760, 760, 2.4, glow=False)
     # right: the light basket and the slowest job
     A.dot_snail(P, 1010, 760, 3.2, expr='happy')
+    crumb_bag(P, 1000, 712)   # Dot's job: the bag of cracker crumbs, riding on her shell
     wagon(P, 1330, 735, 3.4)
-    A.basket(P, 1330, 635, 2.0, full=True)
+    A.basket(P, 1330, 700, 2.0, full=True)   # sitting in the wagon
     A.pup_side(P, 'tidbit', 1170, 750, 3.6, 'walk', 'happy', ph=0.5)
     A.pup_side(P, 'sugarfoot', 1590, 750, 3.6, 'walk', 'happy', ph=0.2, flip=True)
     for (x, y) in ((1250, 500), (1400, 470), (1500, 540)):
         A.sparkle(P, x, y, 1.4)
-    for (dx, dy) in ((-34, 0), (0, -26), (34, 4)):
-        P.raw('<circle cx="%s" cy="%s" r="17" fill="#fff" fill-opacity=".9" stroke="#D8D2C4" stroke-width="2"/>' % (1330 + dx * 1.2, 520 + dy))
 
 def s_oops(P):
     sky(P, '#BFE4F7', '#FFEBC9')
@@ -287,9 +305,9 @@ def s_oops(P):
 def s_sorry(P):
     sky(P, '#CFE6FA', '#FFF1D8')
     rolling(P, 590, [('#BFE6A0', -10, 30), ('#A9DB84', 55, 26)])
-    A.tidbit_front(P, 175, 750, 4.85, 'sad', 'frown')   # face to face, with room between them (they never overlap)
-    A.pup_side(P, 'sugarfoot', 715, 745, 4.6, 'stand', 'happy', flip=True, mouth_='smile')
-    A.heart(P, 440, 420, 1.5, '#F08DA8', '#D2668A')
+    A.tidbit_front(P, 265, 750, 4.85, 'calm-closed', 'frown')   # her tail well inside the trim   # face to face, with room between them (they never overlap)
+    A.pup_side(P, 'sugarfoot', 680, 745, 4.6, 'stand', 'happy', flip=True, mouth_='smile')   # clear of the gutter
+    A.heart(P, 470, 420, 1.5, '#F08DA8', '#D2668A')
     A.blanket(P, 1250, 745, 520, 110, 1.0, '#E0554E')
     A.hopper(P, 1040, 745, 3.4, expr='happy')
     A.nutmeg(P, 1160, 745, 3.4, expr='happy')
@@ -308,11 +326,11 @@ def s_clouds(P):
     A.static_cloud(P, 'fuzz', 560, 520, 4.4, 'happy', fizz=False)
     A.cracker(P, 600, 590, 2.4, rot=15)
     A.speed_lines(P, 470, 520, 3, 100, 18, 1.0)
-    A.static_cloud(P, 'drift', 1560, 430, 5.4, 'drifty', fizz=False)
+    A.static_cloud(P, 'drift', 1560, 430, 5.4, 'happy', fizz=False)
     A.static_cloud(P, 'mumble', 1060, 560, 3.4, 'shy', fizz=False)
     A.beep(P, 1000, 745, 3.4)
     A.puddles(P, 1330, 745, 3.4, 'smile')
-    A.cracker(P, 1270, 700, 2.6, rot=-10)
+    A.cracker(P, 1190, 738, 2.6, rot=-10)   # in the middle of the blanket
     A.tidbit_front(P, 740, 750, 4.4, 'happy', 'w', view='front')
     A.sparkle(P, 1470, 600, 1.5)
 
@@ -324,7 +342,6 @@ def s_night(P):
     A.moon(P, 1480, 420, 2.2, 'calm')
     P.raw('<path d="M0 640 Q400 560 800 640 T1725 620 V875 H0Z" fill="#5C5A94"/><path d="M0 720 Q500 660 1000 720 T1725 700 V875 H0Z" fill="#4A4A7E"/>')
     A.house(P, 1500, 735, 2.8, '#E8C9A8', '#8E4A4A')
-    P.raw('<rect x="1426" y="650" width="42" height="42" rx="4" fill="#FFE49A"/>')
     for (x, y) in ((1100, 520), (1230, 600), (1320, 520), (990, 600)):
         A.firefly(P, x, y, 2.2)
     A.pup_side(P, 'tidbit', 215, 770, 4.8, 'walk', 'calm', ph=0.4, mouth_='smile')   # a step behind Sugarfoot, not on her tail
@@ -398,7 +415,7 @@ html, body { margin: 0; padding: 0; background: #fff; }
 .pg.v .tx { left: .6in; right: .62in; }
 .tx.top { top: .42in; }
 .tx.bottom { bottom: .5in; }
-.tx p { margin: 0; }
+.tx p { margin: 0; text-wrap: balance; }
 .pn { position: absolute; bottom: .3in; font-size: 9pt; color: #8B7A55; }
 .pg.r .pn { right: .6in; }
 .pg.v .pn { left: .6in; }
@@ -443,7 +460,9 @@ def pg_half_title():
     def art(P):
         o = ox(1)
         sky(P, '#FFF4DC', '#FFF4DC', PH * U, PW * U)
-        A.peach_lilac(P, o + 425, 640, 1.9)
+        A.pup_side(P, 'tidbit', o + 330, 760, 3.0, 'front', 'happy')
+        A.pup_side(P, 'sugarfoot', o + 520, 762, 3.0, 'front', 'happy')
+        A.heart(P, o + 425, 520, 1.2, '#F08DA8', '#D2668A')
         for (x, y, s) in ((o + 110, 470, 1.6), (o + 740, 450, 1.3), (o + 640, 130, 1.0)):
             A.sparkle(P, x, y, s)
     inner = '<div class="center" style="top:2.1in"><h1 style="font-size:34pt;line-height:1.1">Tidbit and Sugarfoot&rsquo;s<br>Big Picnic</h1></div>'
@@ -634,7 +653,9 @@ def pg_back():
     def art(P):
         o = ox(40)
         sky(P, '#FFF4DC', '#FFF4DC', PH * U, PW * U)
-        A.peach_lilac(P, o + 425, 600, 1.9)
+        A.pup_side(P, 'tidbit', o + 330, 740, 3.0, 'front', 'happy')
+        A.pup_side(P, 'sugarfoot', o + 520, 742, 3.0, 'front', 'happy')
+        A.heart(P, o + 425, 500, 1.2, '#F08DA8', '#D2668A')
         A.sparkle(P, o + 190, 300, 1.6); A.sparkle(P, o + 690, 260, 1.3)
     inner = '<div class="center" style="top:1.3in"><h2 style="font-size:26pt">Thank you for reading.</h2><p style="font-size:14pt;margin-top:.12in">More at %s</p></div>' % C.SITE
     return pagebox(40, inner, simple_art(art, 'v'))
@@ -664,7 +685,7 @@ def cover(pages=PAGES):
     fx = (B + TRIM + sp) * U       # the front's left edge incl. nothing: trim box starts at fx
     bx = B * U                     # the back trim box's left edge
     sky(P, '#8FD0F0', '#FFF1D2', hu, wu, mid='#D6EEF8')
-    A.sun(P, fx + 120, 360, 58)
+    A.sun(P, fx + 105, 475, 50)   # below the subtitle band
     A.sky_cloud(P, fx + 700, 400, 1.3); A.sky_cloud(P, fx + 330, 330, 0.9)
     A.sky_cloud(P, bx + 200, 200, 1.3); A.sky_cloud(P, bx + 640, 300, 1.0)
     P.raw('<path d="M0 %s C%s %s %s %s %s %s S%s %s %s %s V%s H0Z" fill="#BFE6A0"/>' % (f(hu * 0.64), f(wu * .15), f(hu * .55), f(wu * .3), f(hu * .66), f(wu * .5), f(hu * .6), f(wu * .8), f(hu * .66), f(wu), f(hu * .6), f(hu)))
@@ -674,7 +695,7 @@ def cover(pages=PAGES):
     A.pup_side(P, 'tidbit', fx + 215, 760, 4.5, 'run', 'happy', ph=0.9, wag=0.3)
     A.sugarfoot_front(P, fx + 690, 765, 4.4, 'happy', 'smile', view='front')
     A.basket(P, fx + 450, 770, 2.6, full=True)
-    A.static_cloud(P, 'fuzz', fx + 95, 445, 2.0, 'happy', fizz=False)
+    A.static_cloud(P, 'fuzz', fx + 330, 455, 2.0, 'happy', fizz=False)
     A.static_cloud(P, 'grumble', fx + 800, 470, 1.9, 'happy', fizz=False)
     A.butterfly(P, fx + 480, 520, 2.4)
     # back: the friends in a row

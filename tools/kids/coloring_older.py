@@ -161,7 +161,7 @@ def s_rainwin(ink):
     po.mug(ink, 130, 760, 0.8)
     po.potted(ink, 700, 770, 0.7)
     sh(ink, rrect(92, 800, 666, 112, 0), '#fff', 'bricks', 22, outline=False)
-    tiny(ink, 'heart', [(250, 190), (610, 520), (410, 850)])
+    tiny(ink, 'heart', [(250, 190), (560, 280), (410, 850)])
     tiny(ink, 'paw', [(560, 850)])
     end(ink)
 
@@ -231,7 +231,7 @@ def s_sail(ink):
     begin(ink, ['wave', 'dot'])
     po.sun_z(ink, 600, 250, 64)
     po.clouds(ink, [(230, 200, 1.0, 'scales'), (520, 420, 0.7, 'dots')])
-    birds(ink, [(330, 330), (400, 290), (300, 250)])
+    birds(ink, [(230, 310), (270, 255), (190, 235)])   # clear of the sails
     po.water_z(ink, 560, 'waves', 22)
     # a sailboat with two patterned sails
     sail1 = blob([(430, 220, 'c'), (560, 450), (435, 560, 'c')], k=0.6)
@@ -414,7 +414,7 @@ def s_winter(ink):
 
 
 # 12 ------------------------------------------------------------------------------------------
-@scene('Smell the flower. Breathe in for four. Breathe out for four.', alt='Tidbit and Sugarfoot sniffing big flowers in a spring meadow')
+@scene('Smell the flower. Breathe in for four. Breathe out for four.', alt='Tidbit and Sugarfoot among big flowers in a spring meadow')
 def s_meadow(ink):
     begin(ink, ['petal', 'dot'])
     po.sun_z(ink, 640, 230, 60)
@@ -612,12 +612,14 @@ def s_kite_o(ink):
     # hills
     po.ground_z(ink, 640, 'waves', 22, '#BFE3A0', 26)
     po.ground_z(ink, 780, 'leaves', 20, '#A9D98C', 18)
-    with ink.fig(0, 0, outline=False) as g:
-        g.line(curve([(500, ky + 100), (560, 520), (520, 640), (560, 740)]), w=ink.dw)
     for (x, y, w) in ((130, 450, 150), (580, 160, 130), (150, 190, 120)):
         po.swirl_wind(ink, x, y, w)
     F(ink, lambda i, x, y, s: cast.pup_front(i, 'sugarfoot', x, y, s, 'happy', lvl=1, arms='up'), (130, 560, 380, 890), 'bottom')
-    F(ink, lambda i, x, y, s: cast.pup_side(i, 'tidbit', x, y, s, 'walk', 'wow', lvl=1, turn=0.2, tail_up=1.3), (400, 650, 740, 890), 'bottom')
+    gt, _ = F(ink, lambda i, x, y, s: cast.pup_side(i, 'tidbit', x, y, s, 'walk', 'wow', lvl=1, turn=0.2, tail_up=1.3), (400, 650, 740, 890), 'bottom')
+    b = gt.bb_true   # the kite string ends in Tidbit's mouth: she is holding on
+    mx, my = b[2] - (b[2] - b[0]) * 0.07, b[1] + (b[3] - b[1]) * 0.33
+    with ink.fig(0, 0, outline=False) as g:
+        g.line(curve([(kx + 60, ky - 10), (600, 470), (mx + 30, my - 80), (mx, my)]), w=ink.dw)
     tiny(ink, 'heart', [(250, 360), (680, 440), (430, 890)])
     extras(ink, 19, (120, 130, 740, 560), 6, avoid=[(300, 120, 560, 520)], kinds=('bird', 'butterfly', 'bird', 'star', 'cloud'))
     p3.bird_plain(ink, 640, 300, 0.9)
@@ -642,19 +644,19 @@ def s_gate(ink):
     for (x, y) in ((250, 330), (600, 340), (425, 215), (330, 250), (520, 250)):
         po.flower_z(ink, x, y, 0.45, 6, 30, 0, 'dots', False)
     # standing in the open gateway, filling it
-    F(ink, lambda i, x, y, s: cast.pup_front(i, 'tidbit', x, y, s, 'happy', lvl=1), (240, 420, 425, 880), 'bottom')
-    F(ink, lambda i, x, y, s: cast.pup_front(i, 'sugarfoot', x, y, s, 'calm', lvl=1), (425, 420, 610, 880), 'bottom')
+    F(ink, lambda i, x, y, s: cast.pup_front(i, 'tidbit', x, y, s, 'happy', lvl=1), (292, 500, 425, 830), 'bottom')
+    F(ink, lambda i, x, y, s: cast.pup_front(i, 'sugarfoot', x, y, s, 'calm', lvl=1), (425, 500, 558, 830), 'bottom')
     # the gate doors (open a little) and the path
     for sgn in (-1, 1):
-        with ink.fig(425 + sgn * 160, 880) as g:
-            g.part(blob([(-34 * sgn, 0, 'c'), (-34 * sgn, -170), (34 * sgn, -180), (34 * sgn, 0, 'c')], k=0.3))
+        with ink.fig(425 + sgn * 168, 880) as g:   # swung wide open, against the posts
+            g.part(blob([(-24 * sgn, 0, 'c'), (-24 * sgn, -170), (22 * sgn, -180), (22 * sgn, 0, 'c')], k=0.3))
             for yy in (-130, -85, -40):
-                g.line(Path().M(-30 * sgn, yy).L(30 * sgn, yy), w=ink.dw * 0.9)
+                g.line(Path().M(-20 * sgn, yy).L(19 * sgn, yy), w=ink.dw * 0.9)
     path = blob([(300, 912, 'c'), (380, 800), (470, 800), (550, 912, 'c')], k=0.6)
     sh(ink, path, '#fff', 'bricks', 14)
     for (x, h, R) in ((130, 220, 36), (730, 250, 38)):
         po.flower_z(ink, x, 900 - h, 1.0, 8, R, h, 'rings')
-    tiny(ink, 'heart', [(425, 150), (300, 840), (560, 700)])
+    tiny(ink, 'heart', [(425, 150), (250, 860), (610, 860)])
     end(ink)
 
 
@@ -676,8 +678,8 @@ def s_starry(ink):
     F(ink, lambda i, x, y, s: cast.pup_front(i, 'sugarfoot', x, y, s, 'sleep', lvl=1), (120, 520, 420, 880), 'bottom')
     F(ink, lambda i, x, y, s: cast.pup_front(i, 'tidbit', x, y, s, 'sleep', lvl=1), (430, 520, 730, 880), 'bottom')
     sh(ink, blob([(FL - 20, 870), (300, 830), (520, 870), (FRt + 20, 840), (FRt + 20, FB + 20), (FL - 20, FB + 20)], k=0.6), '#fff', 'scales', 18, box=(0, 850, 900, 930))
-    tiny(ink, 'heart', [(500, 440), (160, 700), (690, 690)])
-    po.stars_z(ink, 210, 10, (120, 380, 740, 580), avoid=[], size=(7, 11))
+    tiny(ink, 'heart', [(500, 440), (300, 905), (560, 905)])
+    po.stars_z(ink, 210, 10, (120, 380, 740, 580), avoid=[(110, 500, 740, 900)], size=(7, 11))   # none on the pups
     for (x, y) in ((140, 600), (700, 590)):
         pr.tuft(ink, x, y + 40, 1.0)
     p2.crescent(ink, 650, 360, 40, -20)
@@ -691,23 +693,23 @@ def s_starry(ink):
 def s_pond(ink):
     begin(ink, ['wave', 'dot'])
     po.clouds(ink, [(220, 180, 0.9, 'scales'), (630, 230, 0.8, 'dots')])
-    po.sun_z(ink, 430, 360, 56)
+    po.sun_z(ink, 430, 250, 50)
     po.ground_z(ink, 480, 'leaves', 20, '#A9D98C', 12)
-    pond = blob([(FL - 20, 640), (200, 560), (425, 600), (650, 560), (FRt + 20, 640), (FRt + 20, FB + 20), (FL - 20, FB + 20)], k=0.5)
-    sh(ink, pond, '#BFE0F7', 'waves', 24, box=(0, 640, 900, 930))
-    for (x, y, rx) in ((200, 700, 90), (640, 680, 80), (430, 830, 110), (160, 860, 70), (700, 850, 80)):
+    pond = blob([(FL - 20, 700), (200, 670), (425, 690), (650, 665), (FRt + 20, 700), (FRt + 20, FB + 20), (FL - 20, FB + 20)], k=0.5)
+    sh(ink, pond, '#BFE0F7', 'waves', 24, box=(0, 680, 900, 930))
+    for (x, y, rx) in ((200, 760, 80), (640, 750, 72), (430, 850, 100), (160, 880, 60), (700, 870, 70)):
         p2.lily = None
         with ink.fig(x, y) as g:
             g.part(ell(0, 0, rx, rx * 0.3))
             g.line(Path().M(0, 0).L(rx * 0.9, -rx * 0.08), w=ink.dw * 0.8)
-    for (x, y) in ((200, 690), (640, 670), (430, 820)):
+    for (x, y) in ((200, 750), (640, 740), (430, 840)):
         with ink.fig(x, y, 0.7) as g:
             for (ang, ln) in ((-62, 36), (62, 36), (-32, 44), (32, 44), (0, 50)):
                 v = g.view(0, 0, 1, False, ang)
                 v.part(blob([(0, 0, 'c'), (-10, -ln * 0.45), (0, -ln, 'c'), (10, -ln * 0.45)], k=1.0), w=ink.dw)
-    F(ink, lambda i, x, y, s: cast.pup_front(i, 'sugarfoot', x, y, s, 'calm', lvl=1, arms='down', tilt=-5), (130, 450, 400, 760), 'bottom')
-    F(ink, lambda i, x, y, s: cast.pup_front(i, 'tidbit', x, y, s, 'wow', lvl=1, arms='down', tilt=5, look=(0, 3)), (440, 460, 700, 760), 'bottom')
-    for (x, y) in ((250, 330), (580, 440)):
+    F(ink, lambda i, x, y, s: cast.pup_front(i, 'sugarfoot', x, y, s, 'calm', lvl=1, arms='down', tilt=-5), (150, 400, 400, 672), 'bottom')   # on the bank
+    F(ink, lambda i, x, y, s: cast.pup_front(i, 'tidbit', x, y, s, 'wow', lvl=1, arms='down', tilt=5, look=(0, 3)), (440, 410, 690, 668), 'bottom')
+    for (x, y) in ((250, 330), (630, 360)):
         p3.butterfly_plain(ink, x, y, 0.55, 10)
     tiny(ink, 'heart', [(120, 600), (730, 620), (425, 900)])
     tiny(ink, 'paw', [(560, 880)])
@@ -735,7 +737,7 @@ def s_stage(ink):
         g.part(rrect(92, 750, 666, 26, 4))
     F(ink, lambda i, x, y, s: cast.pup_dance(i, 'tidbit', x, y, s, 'joy', lvl=1, kick=1), (290, 280, 620, 760), 'bottom')
     F(ink, lambda i, x, y, s: cast.pup_front(i, 'sugarfoot', x, y, s, 'happy', lvl=1, arms='up'), (110, 520, 330, 880), 'bottom')
-    tiny(ink, 'heart', [(500, 220), (200, 690), (700, 830)])
+    tiny(ink, 'heart', [(500, 220), (390, 860), (700, 830)])
     end(ink)
 
 
@@ -836,7 +838,7 @@ def s_globe(ink):
     sh(ink, base, '#fff', 'diamonds', 18)
     with ink.fig(0, 0) as g:
         g.part(rrect(130, 846, 590, 30, 8))
-    tiny(ink, 'heart', [(300, 600), (560, 560), (425, 810)])
+    tiny(ink, 'heart', [(360, 330), (510, 290), (425, 810)])
     end(ink)
 
 
@@ -921,7 +923,7 @@ def s_river(ink):
 
 
 # 31 ------------------------------------------------------------------------------------------
-@scene('A hug is a good place to breathe.', alt='Tidbit and Sugarfoot hugging inside a big flower mandala')
+@scene('A hug is a good place to breathe.', alt='Tidbit and Sugarfoot side by side, leaning close, inside a big flower mandala')
 def s_hug_o(ink):
     begin(ink, ['heart', 'dot'])
     pat.mandala(ink, 425, 500, 330, 6, 16)
@@ -956,5 +958,5 @@ def s_home_o(ink):
         po.flower_z(ink, x, 900 - h, 0.9, 8, R, h, 'dots')
     tiny(ink, 'heart', [(300, 330), (560, 400), (425, 900)])
     tiny(ink, 'paw', [(130, 540)])
-    extras(ink, 132, (140, 120, 560, 330), 4, avoid=[(140, 120, 360, 280)], kinds=('bird', 'butterfly', 'bird', 'cloud'))
+    extras(ink, 132, (140, 120, 560, 330), 4, avoid=[(140, 120, 360, 280), (440, 240, 580, 420)], kinds=('bird', 'butterfly', 'bird', 'cloud'))   # nothing perched on the chimney
     end(ink)

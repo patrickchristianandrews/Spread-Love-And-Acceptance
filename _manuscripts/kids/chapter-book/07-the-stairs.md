@@ -69,7 +69,7 @@ Wren plucked at her sleeve. "You said that like you know."
 
 "What happened?"
 
-"On the fifth day I walked into the kitchen and said the three things." He held up fingers. "One: *I'm sorry.* Two: *I told you something cruel, and it wasn't true, and it was my fault.* Three: *What can I do to make it right?* And Ray looked at me for a very long time, and he said, 'You can stop calling me a baby.' And I said, 'Done.'"
+"On the fifth day I walked into the kitchen and said the three things." He held up fingers. "One: *I'm sorry.* Two: *I told you something cruel, and it wasn't true, and it was my fault.* Three: *What can I do to make it right?* And Ray looked at me for a very long time, and he said, 'You can stop calling me a baby.' And I said, 'Done.' Then he tore his sandwich in half and handed me the bigger piece."
 
 "That's it?"
 

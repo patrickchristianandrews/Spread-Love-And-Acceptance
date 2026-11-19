@@ -45,7 +45,7 @@ KDP asks, on the Content screen of every book, whether you used AI-based tools t
 
 ## Book 1: Know Yourself Kindly
 
-Paperback: 154 pages, 6 x 9 in, spine 0.3468 in (8.81 mm), list price $14.99.
+Paperback: 152 pages, 6 x 9 in, spine 0.3423 in (8.69 mm), list price $14.99.
 
 Kindle: book-1-know-yourself-kindly.epub with cover-book-1-know-yourself-kindly-kindle.jpg as the cover, $5.99.
 
@@ -91,11 +91,11 @@ Click “Save and Continue” at the bottom of screen 1 to get here.
 | Print Options: Bleed Settings | No Bleed |
 | Print Options: Paperback cover finish | Matte [OWNER: choose Glossy only if the proof looks dull] |
 | Reading direction (if shown) | Left to right. Not confirmed: KDP’s own screens could not be opened from the build machine, and the help pages found by search did not mention this box. If KDP shows it, the answer here is the safe one. |
-| Manuscript | Upload book-1-know-yourself-kindly.pdf from the package (154 pages; KDP reads the count from the file). |
-| Book Cover | “Upload a cover you already have (print-ready PDF only),” then upload cover-book-1-know-yourself-kindly.pdf (full wrap 12.5968 x 9.25 in, spine 0.3468 in = 154 pages x 0.002252 in, 0.125 in bleed, barcode area left clear). Do not use Cover Creator. |
+| Manuscript | Upload book-1-know-yourself-kindly.pdf from the package (152 pages; KDP reads the count from the file). |
+| Book Cover | “Upload a cover you already have (print-ready PDF only),” then upload cover-book-1-know-yourself-kindly.pdf (full wrap 12.5923 x 9.25 in, spine 0.3423 in = 152 pages x 0.002252 in, 0.125 in bleed, barcode area left clear). Do not use Cover Creator. |
 | AI-Generated Content | See “The AI questions” near the start of this guide. Answer truthfully about how this book was made. |
 | Book Preview | Click “Launch Previewer.” Wait for it to load, then page through every spread: nothing important near the edges, the spine text centered, no red warnings, the QR codes sharp. Click “Approve” when it looks right. If it reports a problem, stop and see “If the previewer complains.” |
-| Summary | KDP shows the printing cost. It should be $4.93 on Amazon.com. If it is different, check that the page count and ink choice above are right. |
+| Summary | KDP shows the printing cost. It should be $4.88 on Amazon.com. If it is different, check that the page count and ink choice above are right. |
 
 ### Paperback, screen 3 of 3: Paperback Rights & Pricing
 
@@ -106,13 +106,13 @@ Click “Save and Continue” to get here.
 | Territories | “All territories (worldwide rights)” |
 | Primary marketplace | Amazon.com |
 | Royalty | 60% (KDP pays 60% of the list price minus printing at $9.99 and above on Amazon.com, 50% below that). |
-| Amazon.com list price | $14.99 (the owner’s rule: 100 pages or more is $14.99). Printing $4.93, so you keep about $4.06 a copy (60% x $14.99 - ($1.00 + 154 x $0.0255)). |
+| Amazon.com list price | $14.99 (the owner’s rule: 100 pages or more is $14.99). Printing $4.88, so you keep about $4.11 a copy (60% x $14.99 - ($1.00 + 152 x $0.0255)). |
 | Amazon.co.uk | £11.99 [OWNER: KDP shows the exact royalty] |
 | Amazon.de, .fr, .es, .it, .nl, .ie, .be | €13.99 |
 | Amazon.ca | CA$19.99 |
 | Amazon.com.au | AU$23.99 |
 | Other marketplaces (.co.jp, .pl, .se and so on) | Leave them “based on Amazon.com.” KDP converts the price. |
-| Expanded Distribution | Leave it unticked. The books are sold on Amazon only (and at $14.99 it would pay only $1.07 a copy). |
+| Expanded Distribution | Leave it unticked. The books are sold on Amazon only (and at $14.99 it would pay only $1.12 a copy). |
 | Request a proof copy | Do this before you publish. On your Bookshelf, click the “…” button next to the book and choose “Request Printed Proofs.” Up to 5 copies an order; they carry a “Not for Resale” mark; shipping is not free. |
 | Terms & Conditions | Read, then “Publish Your Paperback Book” only after the proof has been checked. |
 
@@ -157,7 +157,7 @@ Click “Save and Continue” to get here.
 | Kindle eBook Preview | Click “Launch Previewer.” Check on the phone, tablet and Kindle views: the contents page works, the links open, the pictures show, nothing is cut off. Then “Approve.” You can also open the EPUB in the free Kindle Previewer app on your computer first. |
 | Kindle eBook ISBN (optional) | Leave blank. Amazon gives the ebook an ASIN. |
 | Publisher (optional) | Leave blank (decided). |
-| EPUBCheck result (for you, not KDP) | Messages: 0 fatals / 0 errors / 0 warnings / 0 infos |
+| EPUBCheck result (for you, not KDP) | see the README |
 
 ### Kindle, screen 3 of 3: Kindle eBook Pricing
 
@@ -290,7 +290,7 @@ Click “Save and Continue” to get here.
 | Kindle eBook Preview | Click “Launch Previewer.” Check on the phone, tablet and Kindle views: the contents page works, the links open, the pictures show, nothing is cut off. Then “Approve.” You can also open the EPUB in the free Kindle Previewer app on your computer first. |
 | Kindle eBook ISBN (optional) | Leave blank. Amazon gives the ebook an ASIN. |
 | Publisher (optional) | Leave blank (decided). |
-| EPUBCheck result (for you, not KDP) | Messages: 0 fatals / 0 errors / 0 warnings / 0 infos |
+| EPUBCheck result (for you, not KDP) | see the README |
 
 ### Kindle, screen 3 of 3: Kindle eBook Pricing
 
@@ -416,14 +416,14 @@ Click “Save and Continue” to get here.
 
 | Box on the screen | What to type or choose |
 |---|---|
-| Manuscript | Upload book-3-understanding-each-other.epub from the package (EPUB 3, 1.09 MB). Do not upload the PDF. |
+| Manuscript | Upload book-3-understanding-each-other.epub from the package (EPUB 3, 1.10 MB). Do not upload the PDF. |
 | Digital Rights Management (DRM) | Choose No (do not apply DRM). The same chapters are free online, so DRM protects nothing. KDP’s help page now says this setting can be changed later, and that without DRM verified buyers can download an EPUB and PDF copy (from January 20, 2026). [OWNER] |
 | Kindle eBook Cover | “Upload a cover you already have,” then upload cover-book-3-understanding-each-other-kindle.jpg (1,600 × 2,560 px, JPG, the 1.6:1 shape KDP prefers). Do not use Cover Creator. |
 | AI-Generated Content | See “The AI questions.” Same honest answers as the paperback. |
 | Kindle eBook Preview | Click “Launch Previewer.” Check on the phone, tablet and Kindle views: the contents page works, the links open, the pictures show, nothing is cut off. Then “Approve.” You can also open the EPUB in the free Kindle Previewer app on your computer first. |
 | Kindle eBook ISBN (optional) | Leave blank. Amazon gives the ebook an ASIN. |
 | Publisher (optional) | Leave blank (decided). |
-| EPUBCheck result (for you, not KDP) | Messages: 0 fatals / 0 errors / 0 warnings / 0 infos |
+| EPUBCheck result (for you, not KDP) | see the README |
 
 ### Kindle, screen 3 of 3: Kindle eBook Pricing
 
@@ -435,7 +435,7 @@ Click “Save and Continue” to get here.
 | Territories | “All territories (worldwide rights)” |
 | Primary marketplace | Amazon.com |
 | Royalty Plan | 70% (the 70% band on Amazon.com is $2.99 to $12.99 since July 7, 2026, according to several guides; KDP’s screen shows the band). With 70%, KDP also takes a delivery fee of about $0.15 a megabyte. |
-| Amazon.com list price | $5.99 [OWNER]: about $4.03 a copy at 70% (1.09 MB file). |
+| Amazon.com list price | $5.99 [OWNER]: about $4.03 a copy at 70% (1.10 MB file). |
 | Other marketplaces | Let KDP set them “based on Amazon.com,” then around to .99 if you like. Keep each at least 20% below that marketplace’s paperback price (a 70% rule). |
 | Book Lending (if shown) | Leave lending on. Not confirmed: KDP’s own screens could not be opened from the build machine, and the help pages found by search did not mention this box. If KDP shows it, the answer here is the safe one. |
 | Terms & Conditions | Read, then “Publish Your Kindle eBook.” |
@@ -461,7 +461,7 @@ From your Bookshelf click “+ Create,” then “Paperback.”
 | Edition Number | 1 |
 | Author (Primary Author or Contributor) | First name: Patrick Christian. Last name: Andrews. It must match the title page and be the same on every edition, so Amazon links the paperback and the Kindle edition. |
 | Contributors | None. (How the words and pictures were made is answered on the Content screen, not here.) |
-| Description | Paste the text in the box under this table (1876 characters; KDP allows 4,000). |
+| Description | Paste the text in the box under this table (1879 characters; KDP allows 4,000). |
 | Publishing Rights | “I own the copyright and I hold the necessary publishing rights.” |
 | Primary Audience: Sexually Explicit Images or Title | No |
 | Primary Audience: Reading age | Leave both boxes empty (the books are for adults). |
@@ -473,7 +473,7 @@ From your Bookshelf click “+ Create,” then “Paperback.”
 Description to paste (KDP accepts these tags):
 
 ```html
-<p><b>Every shared home runs on work that nobody sees.</b></p><p>Noticing the shoes are too small, booking the appointment, remembering trash day: when that work is not counted, someone ends up carrying more than anyone realizes, and resentment grows quietly.</p><p>This book helps you see the whole load, kindly and without keeping score. It shows a simple way to check whether the way you share the work can last, how much of a reaction is leftover stress, how to agree what fair means to each of you, and a gentle monthly look-back that catches what weekly chats miss. It works for couples, families, roommates, co-parents and teams. It looks at the setup, never at the person.</p><p><b>Inside this book</b></p><ul><li>The work nobody sees: the mental load, made visible</li><li>Is the split working? A simple check you can both trust</li><li>Full stress tanks and seven angles on the same moment</li><li>Two kinds of fair, and letting words land</li><li>The monthly look-back</li><li>How the numbers work, in plain arithmetic</li><li>An afterword that draws the series together</li><li>A closing “All the free tools” spread: every free tool and workpaper on the website, grouped on seven pages with one code each</li></ul><p>Each chapter has everyday scenes (all made up), words you could use and one small thing to try this week. Three friendly characters, Professor Puddles, Tidbit and Sugarfoot, drop in with hints, and keep to the lighter pages.</p><p><b>Part of a series.</b> Spread Love &amp; Acceptance is a series of books that each stand on their own, plus a workbook with every form and a pocket guide. Read them in any order.</p><p>Each chapter holds the core of the idea. An expanded version of every chapter, with the research, more examples and more to try, is free to read online.</p><p><i>This book is general education, not therapy or a diagnosis.</i></p>
+<p><b>Every shared home runs on work that nobody sees.</b></p><p>Noticing the shoes are too small, booking the appointment, remembering trash day: when that work is not counted, someone ends up carrying more than anyone realizes, and resentment grows quietly.</p><p>This book helps you see the whole load, kindly and without keeping score. It shows a simple way to check whether the way you share the work can last, how much of a reaction is leftover stress, how to agree on what fair means to each of you, and a gentle monthly look-back that catches what weekly chats miss. It works for couples, families, roommates, co-parents and teams. It looks at the setup, never at the person.</p><p><b>Inside this book</b></p><ul><li>The work nobody sees: the mental load, made visible</li><li>Is the split working? A simple check you can both trust</li><li>Full stress tanks and seven angles on the same moment</li><li>Two kinds of fair, and letting words land</li><li>The monthly look-back</li><li>How the numbers work, in plain arithmetic</li><li>An afterword that draws the series together</li><li>A closing “All the free tools” spread: every free tool and workpaper on the website, grouped on seven pages with one code each</li></ul><p>Each chapter has everyday scenes (all made up), words you could use and one small thing to try this week. Three friendly characters, Professor Puddles, Tidbit and Sugarfoot, drop in with hints, and keep to the lighter pages.</p><p><b>Part of a series.</b> Spread Love &amp; Acceptance is a series of books that each stand on their own, plus a workbook with every form and a pocket guide. Read them in any order.</p><p>Each chapter holds the core of the idea. An expanded version of every chapter, with the research, more examples and more to try, is free to read online.</p><p><i>This book is general education, not therapy or a diagnosis.</i></p>
 ```
 
 ### Paperback, screen 2 of 3: Paperback Content
@@ -528,7 +528,7 @@ On your Bookshelf, next to this book’s paperback, use the link to create the K
 | Edition Number | 1 |
 | Author (Primary Author or Contributor) | First name: Patrick Christian. Last name: Andrews. It must match the title page and be the same on every edition, so Amazon links the paperback and the Kindle edition. |
 | Contributors | None. (How the words and pictures were made is answered on the Content screen, not here.) |
-| Description | Paste the text in the box under this table (1876 characters; KDP allows 4,000). |
+| Description | Paste the text in the box under this table (1879 characters; KDP allows 4,000). |
 | Publishing Rights | “I own the copyright and I hold the necessary publishing rights.” |
 | Primary Audience: Sexually Explicit Images or Title | No |
 | Primary Audience: Reading age | Leave both boxes empty (the books are for adults). |
@@ -540,7 +540,7 @@ On your Bookshelf, next to this book’s paperback, use the link to create the K
 Description to paste (KDP accepts these tags):
 
 ```html
-<p><b>Every shared home runs on work that nobody sees.</b></p><p>Noticing the shoes are too small, booking the appointment, remembering trash day: when that work is not counted, someone ends up carrying more than anyone realizes, and resentment grows quietly.</p><p>This book helps you see the whole load, kindly and without keeping score. It shows a simple way to check whether the way you share the work can last, how much of a reaction is leftover stress, how to agree what fair means to each of you, and a gentle monthly look-back that catches what weekly chats miss. It works for couples, families, roommates, co-parents and teams. It looks at the setup, never at the person.</p><p><b>Inside this book</b></p><ul><li>The work nobody sees: the mental load, made visible</li><li>Is the split working? A simple check you can both trust</li><li>Full stress tanks and seven angles on the same moment</li><li>Two kinds of fair, and letting words land</li><li>The monthly look-back</li><li>How the numbers work, in plain arithmetic</li><li>An afterword that draws the series together</li><li>A closing “All the free tools” spread: every free tool and workpaper on the website, grouped on seven pages with one code each</li></ul><p>Each chapter has everyday scenes (all made up), words you could use and one small thing to try this week. Three friendly characters, Professor Puddles, Tidbit and Sugarfoot, drop in with hints, and keep to the lighter pages.</p><p><b>Part of a series.</b> Spread Love &amp; Acceptance is a series of books that each stand on their own, plus a workbook with every form and a pocket guide. Read them in any order.</p><p>Each chapter holds the core of the idea. An expanded version of every chapter, with the research, more examples and more to try, is free to read online.</p><p><i>This book is general education, not therapy or a diagnosis.</i></p>
+<p><b>Every shared home runs on work that nobody sees.</b></p><p>Noticing the shoes are too small, booking the appointment, remembering trash day: when that work is not counted, someone ends up carrying more than anyone realizes, and resentment grows quietly.</p><p>This book helps you see the whole load, kindly and without keeping score. It shows a simple way to check whether the way you share the work can last, how much of a reaction is leftover stress, how to agree on what fair means to each of you, and a gentle monthly look-back that catches what weekly chats miss. It works for couples, families, roommates, co-parents and teams. It looks at the setup, never at the person.</p><p><b>Inside this book</b></p><ul><li>The work nobody sees: the mental load, made visible</li><li>Is the split working? A simple check you can both trust</li><li>Full stress tanks and seven angles on the same moment</li><li>Two kinds of fair, and letting words land</li><li>The monthly look-back</li><li>How the numbers work, in plain arithmetic</li><li>An afterword that draws the series together</li><li>A closing “All the free tools” spread: every free tool and workpaper on the website, grouped on seven pages with one code each</li></ul><p>Each chapter has everyday scenes (all made up), words you could use and one small thing to try this week. Three friendly characters, Professor Puddles, Tidbit and Sugarfoot, drop in with hints, and keep to the lighter pages.</p><p><b>Part of a series.</b> Spread Love &amp; Acceptance is a series of books that each stand on their own, plus a workbook with every form and a pocket guide. Read them in any order.</p><p>Each chapter holds the core of the idea. An expanded version of every chapter, with the research, more examples and more to try, is free to read online.</p><p><i>This book is general education, not therapy or a diagnosis.</i></p>
 ```
 
 ### Kindle, screen 2 of 3: Kindle eBook Content
@@ -556,7 +556,7 @@ Click “Save and Continue” to get here.
 | Kindle eBook Preview | Click “Launch Previewer.” Check on the phone, tablet and Kindle views: the contents page works, the links open, the pictures show, nothing is cut off. Then “Approve.” You can also open the EPUB in the free Kindle Previewer app on your computer first. |
 | Kindle eBook ISBN (optional) | Leave blank. Amazon gives the ebook an ASIN. |
 | Publisher (optional) | Leave blank (decided). |
-| EPUBCheck result (for you, not KDP) | Messages: 0 fatals / 0 errors / 0 warnings / 0 infos |
+| EPUBCheck result (for you, not KDP) | see the README |
 
 ### Kindle, screen 3 of 3: Kindle eBook Pricing
 
@@ -682,14 +682,14 @@ Click “Save and Continue” to get here.
 
 | Box on the screen | What to type or choose |
 |---|---|
-| Manuscript | Upload pocket-the-logic-behind-it.epub from the package (EPUB 3, 0.31 MB). Do not upload the PDF. |
+| Manuscript | Upload pocket-the-logic-behind-it.epub from the package (EPUB 3, 0.30 MB). Do not upload the PDF. |
 | Digital Rights Management (DRM) | Choose No (do not apply DRM). The same chapters are free online, so DRM protects nothing. KDP’s help page now says this setting can be changed later, and that without DRM verified buyers can download an EPUB and PDF copy (from January 20, 2026). [OWNER] |
 | Kindle eBook Cover | “Upload a cover you already have,” then upload cover-pocket-the-logic-behind-it-kindle.jpg (1,600 × 2,560 px, JPG, the 1.6:1 shape KDP prefers). Do not use Cover Creator. |
 | AI-Generated Content | See “The AI questions.” Same honest answers as the paperback. |
 | Kindle eBook Preview | Click “Launch Previewer.” Check on the phone, tablet and Kindle views: the contents page works, the links open, the pictures show, nothing is cut off. Then “Approve.” You can also open the EPUB in the free Kindle Previewer app on your computer first. |
 | Kindle eBook ISBN (optional) | Leave blank. Amazon gives the ebook an ASIN. |
 | Publisher (optional) | Leave blank (decided). |
-| EPUBCheck result (for you, not KDP) | Messages: 0 fatals / 0 errors / 0 warnings / 0 infos |
+| EPUBCheck result (for you, not KDP) | see the README |
 
 ### Kindle, screen 3 of 3: Kindle eBook Pricing
 
@@ -701,7 +701,7 @@ Click “Save and Continue” to get here.
 | Territories | “All territories (worldwide rights)” |
 | Primary marketplace | Amazon.com |
 | Royalty Plan | 70% (the 70% band on Amazon.com is $2.99 to $12.99 since July 7, 2026, according to several guides; KDP’s screen shows the band). With 70%, KDP also takes a delivery fee of about $0.15 a megabyte. |
-| Amazon.com list price | $2.99 [OWNER: recommended]: about $2.05 a copy at 70% (0.31 MB file). |
+| Amazon.com list price | $2.99 [OWNER: recommended]: about $2.05 a copy at 70% (0.30 MB file). |
 | Other marketplaces | Let KDP set them “based on Amazon.com,” then around to .99 if you like. Keep each at least 20% below that marketplace’s paperback price (a 70% rule). |
 | Book Lending (if shown) | Leave lending on. Not confirmed: KDP’s own screens could not be opened from the build machine, and the help pages found by search did not mention this box. If KDP shows it, the answer here is the safe one. |
 | Terms & Conditions | Read, then “Publish Your Kindle eBook.” |

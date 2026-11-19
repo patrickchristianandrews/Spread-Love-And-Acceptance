@@ -152,7 +152,7 @@ def s_hugs(ink):
         pr.flower(ink, x, 930 - h, 1.8, petals=6, stem=h, c=c, cc='#FFD060')
     hills(ink, 750, 830)
     F(ink, lambda i, x, y, s: cast.pup_front(i, 'sugarfoot', x, y, s, 'happy', arms='wide', wag=1.0), (150, 260, 700, 890), 'bottom')
-    for (x, y, r, rot) in ((200, 170, 28, -15), (690, 330, 26, 18), (340, 130, 20, 10), (600, 210, 22, -8), (430, 120, 30, 5), (110, 360, 20, 8)):
+    for (x, y, r, rot) in ((290, 240, 26, -15), (690, 330, 26, 18), (340, 120, 20, 10), (600, 210, 22, -8), (450, 140, 28, 5)):
         pr.heart(ink, x, y, r, rot)
     hide(ink, 'butterfly', [(95, 700), (760, 640), (560, 130)], 1.0)
     ground_deco(ink, 2, 870, 930, [(140, 780, 700, 900)], 4)
@@ -160,7 +160,7 @@ def s_hugs(ink):
 
 
 # 3 -------------------------------------------------------------------------------------------
-@scene('Best friends share the sky.', game='Find 3 hearts!', alt='Tidbit and Sugarfoot sitting together under a rainbow')
+@scene('Best friends share the sky.', game='Find 3 little hearts!', alt='Tidbit and Sugarfoot sitting together under a rainbow')
 def s_friends(ink):
     frame_begin(ink)
     pr.rainbow(ink, 425, 760, 340, 4, 38)
@@ -170,7 +170,7 @@ def s_friends(ink):
     F(ink, lambda i, x, y, s: cast.pup_front(i, 'sugarfoot', x, y, s, 'happy', tilt=-6, arms='chest'), (330, 300, 790, 910), 'bottom')
     F(ink, lambda i, x, y, s: cast.pup_front(i, 'tidbit', x, y, s, 'happy', tilt=-6, arms='up', flip=True), (60, 300, 520, 910), 'bottom')
     pr.heart(ink, 425, 190, 50, 0)
-    hide(ink, 'heart', [(150, 780), (700, 300), (110, 380)], 1.0)
+    hide(ink, 'heart', [(270, 125), (700, 300), (110, 380)], 1.0)
     ground_deco(ink, 3, 890, 935, [(60, 780, 790, 900)], 3)
     frame_end(ink)
 
@@ -197,15 +197,15 @@ def s_read(ink):
 @scene('My feet have the wiggles!', alt='Tidbit dancing on her back legs with music notes')
 def s_dance(ink):
     frame_begin(ink)
-    for (x, y, r) in ((140, 180, 1.0), (700, 150, 0.9)):
+    for (x, y, r) in ((140, 180, 1.0), (620, 170, 0.9)):
         p3.music_note(ink, x, y, 1.6, 10, double=True)
     p3.music_note(ink, 110, 520, 1.5, -10)
-    p3.music_note(ink, 730, 460, 1.7, 12)
+    p3.music_note(ink, 695, 470, 1.7, 12)
     p3.music_note(ink, 190, 330, 1.2, 6)
     p3.music_note(ink, 640, 300, 1.2, -8, True)
     hills(ink, 820, 890, '#F5EAD6', '#E8D5B0')
     F(ink, lambda i, x, y, s: cast.pup_dance(i, 'tidbit', x, y, s, 'joy', kick=1), (140, 220, 710, 900), 'bottom')
-    p2.sprinkles(ink, 5, 8, (100, 200, 760, 800), avoid=[(150, 230, 700, 900)], kinds=('star', 'sparkle'), size=(12, 20), minsep=80)
+    p2.sprinkles(ink, 5, 8, (100, 200, 760, 800), avoid=[(150, 230, 700, 900), (80, 90, 260, 280), (540, 90, 790, 340), (50, 440, 180, 600), (630, 380, 790, 580), (130, 250, 260, 400)], kinds=('star', 'sparkle'), size=(12, 20), minsep=80)
     frame_end(ink)
 
 
@@ -221,7 +221,7 @@ def s_dig(ink):
     for (x, y, r) in ((130, 520, 30), (230, 420, 22), (80, 380, 16), (720, 480, 28), (620, 390, 20), (770, 400, 14), (110, 660, 18), (775, 610, 16), (330, 300, 14), (520, 290, 12)):
         p3.dirt_clump(ink, x, y, r)
     p3.shovel(ink, 740, 930, 1.3, 14)
-    hide(ink, 'bone', [(150, 780), (770, 760), (200, 585)], 1.3)
+    hide(ink, 'bone', [(150, 780), (730, 760), (200, 585)], 1.3)
     ground_deco(ink, 6, 905, 935, [], 2, kinds=('tuft',))
     frame_end(ink)
 
@@ -230,7 +230,7 @@ def s_dig(ink):
 @scene('Next stop: the Moon! Pack snacks.', game='Find 4 stars!', alt='Tidbit and Sugarfoot looking out of the windows of a rocket')
 def s_rocket(ink):
     frame_begin(ink)
-    p2.sprinkles(ink, 7, 14, (90, 100, 760, 800), avoid=[(200, 100, 650, 800)], kinds=('star', 'sparkle', 'dot'), size=(12, 24), minsep=80)
+    p2.sprinkles(ink, 7, 14, (90, 100, 760, 800), avoid=[(200, 100, 650, 800)], kinds=('sparkle', 'dot'), size=(12, 24), minsep=80)   # no five-point stars: those are the four to find
     p2.planet(ink, 140, 300, 56)
     p2.planet(ink, 700, 600, 40, ring=False, c='#B79CEB')
     with ink.fig(0, 0) as g:
@@ -287,7 +287,6 @@ def s_bed(ink):
         g.part(blob([(-128, 140, 'c'), (-128, -36), (-88, -130), (0, -166), (88, -130), (128, -36), (128, 140, 'c')], k=0.8), c='#8FA4D8', under=False, w=ink.dw)
         g.line(Path().M(0, -166).L(0, 140).M(-128, 20).L(128, 20), w=ink.dw)
     p2.crescent(ink, 380, 290, 46, -20)
-    pr.star5(ink, 480, 240, 16)
     hills(ink, 810, 0, '#E8D5B0')
     with ink.fig(425, 760) as g:
         g.part(blob([(-330, 130, 'c'), (-330, -100), (-300, -150), (-250, -160), (250, -160), (300, -150), (330, -100), (330, 130, 'c')], k=0.4), c='#B07C4D')
@@ -332,7 +331,7 @@ def s_splash(ink):
     hills(ink, 800, 860, '#BFE3A0', '#A9D98C')
     pr.puddle(ink, 425, 890, 340, 52)
     F(ink, lambda i, x, y, s: cast.pup_side(i, 'tidbit', x, y, s, 'jump', 'joy', turn=0.2, ear_rot=30, tail_up=1.2), (110, 440, 740, 850), 'bottom', maxs=2.1)
-    for (x, y, r) in ((140, 810, 14), (205, 770, 10), (690, 790, 14), (745, 840, 10), (620, 740, 8), (110, 740, 9)):
+    for (x, y, r) in ((95, 880, 12), (165, 905, 9), (690, 905, 12), (750, 875, 9)):
         pr.raindrop(ink, x, y, r / 12 * 0.9)
     frame_end(ink)
 
@@ -371,7 +370,7 @@ def s_jar(ink):
 
 
 # 14 ------------------------------------------------------------------------------------------
-@scene('Wash, rinse, bubble beard!', alt='Tidbit in a bubble bath')
+@scene('Wash, rinse, bubbles everywhere!', alt='Tidbit in a bubble bath')
 def s_bath(ink):
     frame_begin(ink)
     p2.tub(ink, 425, 900, 1.15, 600)
@@ -428,7 +427,7 @@ def s_birthday(ink):
     pr.bunting(ink, [(62, 130), (250, 190), (425, 150), (610, 190), (788, 130)], 9, 52)
     for (x, y, c, t) in ((120, 330, '#F2877E', -8), (230, 250, '#8FCBF0', 6), (620, 260, '#F7D56A', -5), (720, 340, '#B79CEB', 9)):
         pr.balloon(ink, x, y, 1.15, c, 160, t)
-    F(ink, lambda i, x, y, s: cast.pup_front(i, 'tidbit', x, y, s, 'calm', mouth='o', arms='down', hat='party', tilt=-4), (150, 290, 700, 810), 'bottom')
+    F(ink, lambda i, x, y, s: cast.pup_peek(i, 'tidbit', x, y, s, 'calm', mouth='o', hat='party', paws=False), (170, 290, 680, 800), 'bottom')   # behind the cake
     pr.cake(ink, 425, 930, 1.3, 3, True, 330)
     pr.gift(ink, 120, 930, 1.1, '#8FCBF0', 100, 80)
     pr.gift(ink, 730, 930, 1.0, '#B79CEB', 90, 70)
@@ -448,7 +447,7 @@ def s_picnic(ink):
     F(ink, lambda i, x, y, s: cast.pup_front(i, 'sugarfoot', x, y, s, 'happy', arms='chest'), (260, 300, 600, 840), 'bottom')
     p2.basket(ink, 650, 860, 1.0, 190)
     pr.apple(ink, 190, 860, 1.4)
-    hide(ink, 'apple', [(90, 440), (190, 360), (260, 440), (740, 520)], 1.4)
+    hide(ink, 'apple', [(90, 440), (190, 360), (260, 440)], 1.4)
     pr.cupcake(ink, 140, 790, 0.7)
     ground_deco(ink, 18, 905, 935, [(40, 780, 790, 900)], 2, kinds=('tuft',))
     frame_end(ink)
@@ -461,10 +460,13 @@ def s_kite(ink):
     pr.puff(ink, 140, 560, 0.9, n=4)
     pr.puff(ink, 700, 430, 0.8, n=3)
     hills(ink, 780, 850)
-    p2.kite(ink, 400, 270, 1.25, rot=10)
+    p2.kite(ink, 470, 215, 1.15, rot=10)   # high enough that its tail clears Sugarfoot's hat
+    gt, _ = F(ink, lambda i, x, y, s: cast.pup_side(i, 'tidbit', x, y, s, 'walk', 'wow', turn=0.2, tail_up=1.3), (410, 560, 770, 900), 'bottom')
+    # the kite string ends in Tidbit's mouth: she is holding on
+    b = gt.bb_true
+    mx, my = b[2] - (b[2] - b[0]) * 0.07, b[1] + (b[3] - b[1]) * 0.33
     with ink.fig(0, 0, outline=False) as g:
-        g.line(curve([(445, 372), (540, 560), (520, 700), (560, 770)]), w=ink.dw * 0.9)
-    F(ink, lambda i, x, y, s: cast.pup_side(i, 'tidbit', x, y, s, 'walk', 'wow', turn=0.2, tail_up=1.3), (410, 560, 770, 900), 'bottom')
+        g.line(curve([(511, 309), (600, 430), (mx + 30, my - 90), (mx, my)]), w=ink.dw * 0.9)
     F(ink, lambda i, x, y, s: cast.pup_front(i, 'sugarfoot', x, y, s, 'happy', arms='up'), (90, 520, 380, 900), 'bottom')
     for (x, y) in ((620, 130), (300, 120)):
         p3.bird_plain(ink, x, y, 1.0)
@@ -541,7 +543,6 @@ def s_bubbles(ink):
     pr.bush(ink, 700, 800, 1.2)
     F(ink, lambda i, x, y, s: cast.pup_front(i, 'sugarfoot', x, y, s, 'wow', mouth='o', arms='up', tilt=-5), (60, 380, 460, 910), 'bottom')
     F(ink, lambda i, x, y, s: cast.pup_front(i, 'tidbit', x, y, s, 'joy', arms='both_up', tilt=5), (520, 600, 780, 910), 'bottom')
-    p3.wand(ink, 450, 590, 1.0, 30)
     pr.bubbles(ink, [(510, 500, 70), (600, 330, 52), (690, 480, 40), (560, 230, 34), (700, 270, 28), (450, 390, 24), (440, 230, 18), (740, 380, 20), (640, 590, 22)])
     bloom_row(ink, 925, (480, 770, 130, 320), (40, 70), 9)
     tufts(ink, [(430, 920), (610, 925)], 1.3)
@@ -634,7 +635,7 @@ def s_sand(ink):
     F(ink, lambda i, x, y, s: cast.pup_front(i, 'tidbit', x, y, s, 'joy', arms='up'), (510, 500, 780, 900), 'bottom')
     p3.bucket(ink, 190, 935, 0.8)
     p3.shovel(ink, 670, 930, 0.9, 20)
-    hide(ink, 'shell', [(110, 555), (790, 545), (130, 880), (740, 880), (440, 905)], 1.2)
+    hide(ink, 'shell', [(110, 555), (560, 915), (130, 880), (740, 880), (440, 905)], 1.2)
     frame_end(ink)
 
 
@@ -705,7 +706,7 @@ def s_bake(ink):
 def s_goodnight(ink):
     frame_begin(ink)
     p2.crescent(ink, 425, 230, 120, 0)
-    p2.sprinkles(ink, 31, 14, (90, 100, 760, 480), avoid=[(300, 100, 560, 360)], kinds=('star', 'sparkle', 'dot'), size=(12, 24), minsep=80)
+    p2.sprinkles(ink, 31, 14, (90, 100, 760, 480), avoid=[(300, 100, 560, 360), (620, 330, 760, 460)], kinds=('star', 'sparkle', 'dot'), size=(12, 24), minsep=80)
     with ink.fig(650, 400, outline=False) as g:
         g.line(Path().M(0, 0).L(34, 0).L(0, 36).L(36, 36), w=ink.ow * 0.8)
         g.line(Path().M(50, -34).L(72, -34).L(50, -12).L(72, -12), w=ink.ow * 0.7)

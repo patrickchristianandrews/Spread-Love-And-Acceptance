@@ -7,14 +7,14 @@
   "author": "Patrick Christian Andrews",
   "ages": "Ages 4 to 7",
   "back_cover": [
-    "Tidbit zooms. Sugarfoot floats. Today is picnic day, and Tidbit is sure she can carry the whole basket by herself.",
+    "Tidbit zooms. Sugarfoot strolls. Today is picnic day, and Tidbit is sure she can carry the whole basket by herself.",
     "Then her paws get buzzy, her ears get hot, and a little gray cloud of Static drifts in. With help from Professor Puddles and a hill full of friends, Tidbit learns to listen to her body, ask for a hand, say sorry when she bumps the basket, and make it right.",
     "A warm, funny read-aloud with a calm-down trick kids can copy, and a page of gentle talking points for grown-ups."
   ],
   "spreads": [
     {
       "id": "zoom",
-      "left": "Tidbit woke up zoom, zoom, zoom,\nand zipped around the living room.",
+      "left": "Tidbit woke up zoom, zoom, zoom,\nand zipped outside past every bloom.",
       "right": "Sugarfoot woke up slow, slow, slow,\nand stretched her paws from head to toe."
     },
     {
@@ -49,12 +49,12 @@
     },
     {
       "id": "ask",
-      "left": "Sugarfoot was feeling better.\n\"Now I would love that hug,\" she said,\nand Tidbit gave it, gently, for a long, long time.\nThen Tidbit did something brave.\n\"This basket is too heavy for me,\" she said. \"Can you help?\"",
-      "right": "\"Yes!\" said Sugarfoot.\n\"Yes!\" said Hopper.\n\"Yes!\" said Nutmeg, and Dot, and Ollie, and Lumi, and Beep,\nand all three ducklings, who said it very small."
+      "left": "Sugarfoot was feeling better.\n\"Now I would love that hug,\" she said,\nand Tidbit gave it, gently, for a long, long time.\nThen Tidbit did something brave.\n\"This basket is too heavy for me,\" she said.\n\"Can you help?\"",
+      "right": "\"Yes!\" said Sugarfoot.\n\"Yes!\" said Hopper.\n\"Yes!\" said Nutmeg, and Dot, and Ollie,\nand Lumi, and Beep,\nand all three ducklings, who said it very small."
     },
     {
       "id": "jobs",
-      "left": "One job each. That is how it goes.\nBeep took the blanket. Hopper took the apples.\nNutmeg took the nuts. The ducklings took the napkins, one each.\nLumi lit the lantern path.",
+      "left": "One job each. That is how it goes.\nBeep took the blanket. Hopper took the apples.\nNutmeg took the nuts.\nThe ducklings took the napkins, one each.\nLumi lit the lantern path.",
       "right": "The basket was light as a dandelion.\nDot had the slowest job, the bag of cracker crumbs,\nand nobody hurried her.\nSlow is a speed too."
     },
     {
@@ -64,18 +64,18 @@
     },
     {
       "id": "sorry",
-      "left": "Tidbit took a slow breath.\n\"I'm sorry. I zoomed too fast and I knocked the basket.\nThat was my fault.\nWhat can I do to make it right?\"",
+      "left": "Tidbit took a slow breath.\n\"I'm sorry. I zoomed too fast\nand I knocked the basket.\nThat was my fault.\nWhat can I do to make it right?\"",
       "right": "\"Help us catch the apples,\" said Hopper.\nSo she did. They all did.\nThe sandwiches were still yummy, just a little flat.\n\"Thank you for saying sorry,\" said Sugarfoot.\n\"Next time I will look before I zoom,\" said Tidbit."
     },
     {
       "id": "clouds",
-      "left": "The clouds of Static drifted over to see.\nGrumble grumbled a little less.\nFuzz grabbed a cracker and zipped away.\nMumble peeked out from behind Beep.",
+      "left": "The clouds of Static drifted over to see.\nGrumble grumbled a little less.\nFuzz grabbed a cracker and zipped away.\nMumble peeked out from behind Beep,\nand Drift came wandering after.",
       "right": "\"Static is just loud feelings looking for a friend,\"\nsaid Professor Puddles.\nFuzz tiptoed back and put the cracker in the middle\nas if nothing had happened.\nEverybody laughed, even Grumble."
     },
     {
       "id": "night",
       "left": "When the sun got low and the sky turned pink,\nTidbit gave a great big yawn.\n\"Can we walk home slow?\" she asked.\n\"My legs want a slow walk.\"",
-      "right": "\"Yes,\" said Sugarfoot. \"Slow it is.\"\nFast and slow, side by side,\nthey walked home under the Moon.\n\"Goodnight, Tidbit. Goodnight, Sugarfoot.\"\n\"Goodnight, Moon. Goodnight, everyone. Goodnight, Static.\""
+      "right": "\"Yes,\" said Sugarfoot. \"Slow it is.\"\nFast and slow, side by side,\nthey walked home under the Moon.\n\"Goodnight, Tidbit. Goodnight, Sugarfoot.\"\n\"Goodnight, Moon. Goodnight, everyone.\nGoodnight, Static.\""
     }
   ],
   "calm_title": "Smell the flower, blow the candle",
@@ -86,7 +86,7 @@
     ],
     [
       "Blow the candle",
-      "Breathe out slowly through your mouth, like you are blowing a candle without putting it out too fast."
+      "Breathe out slowly through your mouth, like you are blowing on a candle just enough to make it flicker."
     ],
     [
       "Do it again",

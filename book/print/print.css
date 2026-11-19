@@ -379,7 +379,7 @@ body { font-size: 11pt; line-height: 1.55; }
 /* book31: the worksheet tables in the filled-in examples fit the narrower column (a table wider than the column makes
    Chromium print the whole book smaller): fixed columns, and long words may break */
 .bk-ex-t { table-layout: fixed; width: 100%; }
-.bk-ex-t th, .bk-ex-t td { overflow-wrap: anywhere; hyphens: auto; }
+.bk-ex-t th, .bk-ex-t td { overflow-wrap: anywhere; hyphens: manual; }   /* soft hyphens come from build_series.py: words break at syllables, with a hyphen */
 /* book31: the front matter and the plain back pages carry no margin codes, so they keep the book's earlier, wider text column */
 @page pe-front:right { margin: 15.24mm 12.7mm 19.05mm 19.05mm; }
 @page pe-front:left { margin: 15.24mm 19.05mm 19.05mm 12.7mm; }

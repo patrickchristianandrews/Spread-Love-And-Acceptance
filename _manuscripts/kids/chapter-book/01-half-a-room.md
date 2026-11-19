@@ -61,7 +61,7 @@ That was a nice thing to say. It was a perfectly reasonable thing to say. But Wr
 
 "Fine," she said.
 
-It came out flat and fast. She pushed back her chair, and it scraped, and Theo flinched. She stepped over Sugarfoot without saying "Excuse me." She went upstairs and shut her door, and she did not knock first on the way out, because it was her own door.
+It came out flat and fast. She pushed back her chair, and it scraped, and Theo flinched. She stepped over Sugarfoot without saying "Excuse me." She went upstairs and shut her door, and she did not knock first, because it was her own door.
 
 She sat on her bed with her back against the wall and looked at the room that was about to stop being hers.
 

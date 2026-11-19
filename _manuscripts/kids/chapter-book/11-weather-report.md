@@ -49,7 +49,7 @@ They had all learned a lot in ten weeks.
 
 The ladder on the fridge was crowded with magnets now, and nobody's was always on green. Dad's was often orange on Mondays. Mom's, since the permission slip, spent more time on green than it had in years. Grandpa Lou's lived mostly on a rung of its own, which he'd drawn in himself with a pencil: *CHEERFULLY CONFUSED.* Theo's moved around, but he moved it himself, and he told people why. Wren's magnet had been on gray twice and orange five times since October, but she had put it there each time without being asked. That was the difference. She noticed, and she said.
 
-The group chat had a pinned message now, at the top, with all seven rules, and a drawing underneath of a round peach-colored friend and a squishy purple square friend sharing one heart. Imani had drawn it. She said she'd copied it off a logo and changed the faces.
+The group chat had a pinned message now, at the top, with all seven rules, and a drawing underneath of Tidbit and Sugarfoot sharing one heart. Imani had drawn it, and she had gotten Sugarfoot's ears exactly right.
 
 Mateo had invited everybody to the roller rink, and Josie had invited everybody to the same roller rink on the same day, and neither of them had checked with the other, which Imani said was the most Four Corners thing that had ever happened.
 
@@ -73,7 +73,7 @@ She raised her hand to Theo's door. Then she knocked. Three times. And waited.
 
 "I learned it from somebody."
 
-There was a pause. Then the door opened a few inches, and Theo stood there in his rocket pajamas, with his headphones around his neck and his glasses on crooked. Behind him, the room was exactly as it should be: the little row of stuffed Frequency Buddies on the shelf, in order of height, with the ducklings last. The soft rain sound was pattering. The nightlight was shaped like the Moon. And there was Tidbit, curled in a circle on the rug, who lifted her head and thumped her tail.
+There was a pause. Then the door opened a few inches, and Theo stood there in his rocket pajamas, with his headphones around his neck and his hair sticking up on one side. Behind him, the room was exactly as it should be: the little row of stuffed Frequency Buddies on the shelf, in order of height, with the ducklings last. The soft rain sound was pattering. The nightlight was shaped like the Moon. And there was Tidbit, curled in a circle on the rug, who lifted her head and thumped her tail.
 
 "I couldn't sleep," Wren said. "It's too quiet."
 
@@ -93,7 +93,7 @@ She did not trust her voice for a second.
 
 "Okay." She laughed softly. "Okay. Goodnight, Theo."
 
-"Goodnight." He paused. "It's 8:20. You're two minutes late to bed. I'm not mad. I'm just saying the number."
+"Goodnight." He paused. "It's 8:32. You're two minutes late to bed. I'm not mad. I'm just saying the number."
 
 "Noted," said Wren.
 

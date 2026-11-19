@@ -117,7 +117,7 @@ She wasn't sure that was an original thought. It had a slightly Mom-ish ring. Bu
 
 They carried the boxes in all afternoon. Wren's things went upstairs in a pile of her own boxes, labeled in marker: BOOKS, SKETCHBOOKS, CLOTHES, STUFF. She was going to be sleeping on the spare bed in Theo's room, the one the cousins used when they visited, under a ceiling with no star on it.
 
-By dinner, Grandpa Lou was settled in her old room. Wren walked past the open door. He'd hung his barometer on her wall right above the glowing star, which was still stuck to the ceiling, since nobody could reach it.
+By dinner, Grandpa Lou was settled in her old room. Wren walked past the open door. He'd set his lighthouse lamp on her windowsill, and the glowing star was still stuck to the ceiling above it, since nobody could reach it.
 
 "It's a good star," said Grandpa Lou from the bed, where he was resting his knee on two pillows. "I'll keep an eye on it for you."
 

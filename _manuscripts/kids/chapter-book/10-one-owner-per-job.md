@@ -43,7 +43,7 @@ On Wednesday, Mateo's model collapsed, clay and all, in the middle of the cafete
 
 He looked up.
 
-"Fine or need a minute?" she asked.
+"Fine, or need a minute?" she asked.
 
 He stared at her. Then, slowly, he sat back down. "Minute," he said. "I need a minute. I'm nervous."
 

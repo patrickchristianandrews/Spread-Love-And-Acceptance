@@ -109,7 +109,7 @@ L = {
         'hook': 'Every shared home runs on work that nobody sees.',
         'body': [
             'Noticing the shoes are too small, booking the appointment, remembering trash day: when that work is not counted, someone ends up carrying more than anyone realizes, and resentment grows quietly.',
-            'This book helps you see the whole load, kindly and without keeping score. It shows a simple way to check whether the way you share the work can last, how much of a reaction is leftover stress, how to agree what fair means to each of you, and a gentle monthly look-back that catches what weekly chats miss. It works for couples, families, roommates, co-parents and teams. It looks at the setup, never at the person.',
+            'This book helps you see the whole load, kindly and without keeping score. It shows a simple way to check whether the way you share the work can last, how much of a reaction is leftover stress, how to agree on what fair means to each of you, and a gentle monthly look-back that catches what weekly chats miss. It works for couples, families, roommates, co-parents and teams. It looks at the setup, never at the person.',
         ],
         'inside': ['The work nobody sees: the mental load, made visible', 'Is the split working? A simple check you can both trust', 'Full stress tanks and seven angles on the same moment',
                    'Two kinds of fair, and letting words land', 'The monthly look-back', 'How the numbers work, in plain arithmetic', 'An afterword that draws the series together', 'A closing “All the free tools” spread: every free tool and workpaper on the website, grouped on seven pages with one code each'],

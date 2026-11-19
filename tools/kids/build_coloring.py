@@ -212,7 +212,9 @@ def title_page(kind):
         pr.puff(ink, 150, 450, 0.9, n=4)
         pr.puff(ink, 700, 430, 0.9, n=4)
         CY.hills(ink, 770, 850)
+        cast.WEAR.update(sugarfoot='bow', tidbit='necklace')   # on the cover nothing hides an eye or reaches over the other pup
         Q.fit(ink, lambda i, x, y, s: cast.pup_hug(i, x, y, s, 'happy', 'happy'), (110, 440, 740, 900), 'bottom')
+        cast.WEAR.clear()
         for (x, y, r, rot) in ((150, 380, 22, -12), (700, 360, 24, 14), (300, 345, 16, 8), (560, 340, 18, -6)):
             pr.heart(ink, x, y, r, rot)
         CY.frame_end(ink)
@@ -223,7 +225,9 @@ def title_page(kind):
         CO.begin(ink, ['leaf', 'dot'], rect=rect)
         pat.mandala(ink, 425, 640, 250, 5, 14)
         CO.sh(ink, circ(425, 640, 150), '#fff')
+        cast.WEAR.update(sugarfoot='bow', tidbit='necklace')
         Q.fit(ink, lambda i, x, y, s: cast.pup_hug(i, x, y, s, 'happy', 'happy', 1), (300, 520, 550, 740), 'bottom')
+        cast.WEAR.clear()
         for (x, y, r) in ((150, 840, 12), (700, 840, 12), (425, 360, 14)):
             pr.heart(ink, x, y, r, 8)
         po.stars_z(ink, 91, 8, (110, 360, 740, 440), size=(7, 12))
