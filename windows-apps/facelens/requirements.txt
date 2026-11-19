@@ -4,4 +4,6 @@ tensorflow>=2.16,<2.22
 tf-keras>=2.16,<2.22
 pandas
 PySide6>=6.6
+# Prebuilt dlib (no compiler needed) for DeepFace's "Dlib" model and detector.
+dlib-bin>=19.24
 # OpenCV comes with DeepFace (opencv-contrib-python-headless). Do not add opencv-python: the two clash.

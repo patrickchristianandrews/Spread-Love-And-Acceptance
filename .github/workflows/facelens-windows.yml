@@ -38,7 +38,7 @@ jobs:
 
       - name: Version
         run: |
-          $v = '1.0.0'
+          $v = '1.1.0'
           if ('${{ github.ref }}' -like 'refs/tags/facelens-v*') { $v = '${{ github.ref_name }}'.Substring(10) }
           "FACELENS_VERSION=$v" | Out-File -Append $env:GITHUB_ENV
 

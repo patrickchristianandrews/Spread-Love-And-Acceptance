@@ -1,7 +1,7 @@
 ; Inno Setup script for FaceLens. Run build.bat first (it calls this automatically when Inno Setup 6 is installed).
 #define AppVersion GetEnv("FACELENS_VERSION")
 #if AppVersion == ""
-  #define AppVersion "1.0.0"
+  #define AppVersion "1.1.0"
 #endif
 
 [Setup]

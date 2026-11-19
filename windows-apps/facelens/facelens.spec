@@ -6,7 +6,7 @@ from PyInstaller.utils.hooks import collect_all, collect_data_files, collect_sub
 datas, binaries, hiddenimports = [("facelens.ico", ".")], [], []
 
 # DeepFace loads its models and detectors by name at run time, so PyInstaller can't see them.
-for pkg in ("deepface", "retinaface", "mtcnn", "tf_keras", "gdown", "onnxruntime", "insightface"):
+for pkg in ("deepface", "retinaface", "mtcnn", "tf_keras", "gdown", "onnxruntime", "insightface", "dlib"):
     try:
         d, b, h = collect_all(pkg)
     except Exception:
@@ -20,7 +20,9 @@ for pkg in ("deepface", "retinaface", "mtcnn", "tf_keras", "gdown", "onnxruntime
 datas += collect_data_files("cv2", subdir="data", includes=["*.xml"])
 
 hiddenimports += collect_submodules("deepface")
-hiddenimports += ["tf_keras", "tensorflow", "pandas", "PySide6.QtSvg"]
+# The add-on tabs are imported by name at start-up, so list them explicitly.
+hiddenimports += ["tf_keras", "tensorflow", "pandas", "PySide6.QtSvg", "dlib",
+                  "fl_people", "fl_investigate", "fl_video", "fl_bench", "fl_server"]
 
 a = Analysis(
     ["facelens.py"],

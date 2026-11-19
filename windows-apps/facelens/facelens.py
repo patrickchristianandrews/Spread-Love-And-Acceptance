@@ -13,6 +13,7 @@ DeepFace: https://github.com/serengil/deepface (MIT licence)
 
 from __future__ import annotations
 
+import importlib
 import inspect
 import json
 import os
@@ -31,9 +32,10 @@ from PySide6.QtCore import (
     QSize,
     Qt,
     QTimer,
+    QUrl,
     Signal,
 )
-from PySide6.QtGui import QAction, QFont, QIcon, QImage, QPixmap
+from PySide6.QtGui import QAction, QDesktopServices, QFont, QIcon, QImage, QPixmap
 from PySide6.QtWidgets import (
     QAbstractItemView,
     QApplication,
@@ -51,6 +53,7 @@ from PySide6.QtWidgets import (
     QListWidget,
     QListWidgetItem,
     QMainWindow,
+    QMenu,
     QMessageBox,
     QProgressBar,
     QPushButton,
@@ -67,7 +70,16 @@ from PySide6.QtWidgets import (
 )
 
 APP_NAME = "FaceLens"
-APP_VERSION = "1.0.0"
+APP_VERSION = "1.1.0"
+
+# (module, class, tab title) for the add-on tabs, each in its own fl_*.py file.
+ADDON_TABS = [
+    ("fl_people", "PeopleTab", "People"),
+    ("fl_investigate", "InvestigateTab", "Investigate"),
+    ("fl_video", "VideoTab", "Video"),
+    ("fl_bench", "BenchmarkTab", "Benchmark"),
+    ("fl_server", "ServerTab", "API server"),
+]
 
 INSIGHT_MODEL = "InsightFace buffalo_l (research only)"
 MODELS = [
@@ -291,83 +303,322 @@ class InsightEngine:
         }
 
     @classmethod
-    def build_index(cls, db: str, rebuild: bool = False) -> dict:
-        """Embed every face in every photo under db, reusing the saved index for unchanged files."""
-        root = Path(db)
-        index_path = root / INSIGHT_INDEX
-        old: dict[str, tuple] = {}  # relative path -> (mtime, size, position in the old index)
-        old_faces = None
-        if index_path.exists() and not rebuild:
+    def find(cls, img: np.ndarray, db: str, rebuild: bool = False) -> tuple[list[dict], int]:
+        query = cls.faces(img)
+        index = FaceIndex(db, Options(model_name=INSIGHT_MODEL)).build(rebuild)
+        rows = []
+        for q in query:
+            for hit in index.search(q.normed_embedding.astype(np.float32), INSIGHT_THRESHOLD):
+                rows.append({"identity": hit["path"], "distance": hit["distance"],
+                             "threshold": INSIGHT_THRESHOLD, "box": hit["box"]})
+        return rows, len(query)
+
+
+# --------------------------------------------------------------------------------------
+# Shared building blocks for every engine (used by Investigate, People, Benchmark, Video, API)
+# --------------------------------------------------------------------------------------
+
+
+@dataclass
+class FaceVec:
+    """One detected face: its box (x, y, w, h), a unit-length embedding and the detector score."""
+
+    box: tuple[int, int, int, int]
+    emb: np.ndarray
+    score: float = 0.0
+    kps: np.ndarray | None = None  # five facial keypoints (InsightFace only)
+
+
+def engine_name(opts: Options) -> str:
+    return "InsightFace buffalo_l" if opts.model_name == INSIGHT_MODEL else f"{opts.model_name} / {opts.detector_backend}"
+
+
+def engine_slug(opts: Options) -> str:
+    """Short, file-safe engine id, used to keep one saved index per engine."""
+    if opts.model_name == INSIGHT_MODEL:
+        return "insightface"
+    raw = f"{opts.model_name}-{opts.detector_backend}-{'a' if opts.align else 'n'}{opts.expand_percentage}"
+    return "".join(c if c.isalnum() else "_" for c in raw).lower()
+
+
+def match_threshold(opts: Options) -> float:
+    """Cosine distance at or below which two faces count as the same person, for this engine."""
+    if opts.model_name == INSIGHT_MODEL:
+        return INSIGHT_THRESHOLD
+    try:
+        deepface()
+        from deepface.modules.verification import find_threshold  # noqa: WPS433
+
+        return float(find_threshold(opts.model_name, "cosine"))
+    except Exception:  # noqa: BLE001
+        return 0.40
+
+
+def embed_faces(img: np.ndarray, opts: Options) -> list[FaceVec]:
+    """Every face in img, largest first, with unit-length embeddings from the chosen engine.
+    Returns [] when no face is found (never a whole-image stand-in)."""
+    if opts.model_name == INSIGHT_MODEL:
+        out = []
+        for f in InsightEngine.faces(img, require=False):
+            b = InsightEngine._box(f)
+            out.append(FaceVec((b["x"], b["y"], b["w"], b["h"]), f.normed_embedding.astype(np.float32),
+                               float(f.det_score), np.array(f.kps, dtype=np.float32)))
+        return out
+    try:
+        reps = deepface().represent(
+            img_path=img,
+            model_name=opts.model_name,
+            detector_backend=opts.detector_backend,
+            enforce_detection=True,
+            align=opts.align,
+            expand_percentage=opts.expand_percentage,
+        )
+    except ValueError as exc:
+        if "could not be detected" in str(exc).lower():
+            return []
+        raise
+    out = []
+    for r in reps:
+        emb = np.asarray(r["embedding"], dtype=np.float32)
+        n = float(np.linalg.norm(emb)) or 1.0
+        x, y, w, h = region_of(r)
+        out.append(FaceVec((x, y, w, h), emb / n, float(r.get("face_confidence") or 0)))
+    out.sort(key=lambda f: -f.box[2] * f.box[3])
+    return out
+
+
+class FaceIndex:
+    """A saved, incrementally updated index of every face in a folder of photos, for one engine.
+
+    Stored as <folder>/facelens_index_<engine>.npz. Unchanged photos (same size and modified time)
+    are reused, so only new or edited photos are processed. Searching is one matrix product."""
+
+    def __init__(self, folder: str, opts: Options):
+        self.folder = Path(folder)
+        self.opts = opts
+        slug = engine_slug(opts)
+        name = INSIGHT_INDEX if slug == "insightface" else f"facelens_index_{slug}.npz"
+        self.path = self.folder / name
+        self.files: list[str] = []
+        self.face_file = np.zeros(0, dtype=np.int64)
+        self.boxes = np.zeros((0, 4), dtype=np.int64)
+        self.embs = np.zeros((0, 0), dtype=np.float32)
+
+    def build(self, rebuild: bool = False, progress=None, cancelled=None) -> "FaceIndex":
+        old: dict[str, tuple] = {}
+        old_faces: dict[int, list] = {}
+        if self.path.exists() and not rebuild:
             try:
-                with np.load(index_path, allow_pickle=False) as z:
+                with np.load(self.path, allow_pickle=False) as z:
                     for i, rel in enumerate(z["files"]):
                         old[str(rel)] = (float(z["mtimes"][i]), int(z["sizes"][i]), i)
-                    # Group the old faces by file once, so each unchanged file is a dictionary lookup.
-                    old_faces = {}
                     for j, owner in enumerate(z["face_file"]):
                         old_faces.setdefault(int(owner), []).append((z["boxes"][j], z["embs"][j]))
             except Exception:  # noqa: BLE001 - a damaged index is simply rebuilt
-                old = {}
+                old, old_faces = {}, {}
+        paths = [p for p in sorted(self.folder.rglob("*")) if p.suffix.lower() in IMAGE_EXTS and p.is_file()]
         files, mtimes, sizes, face_file, boxes, embs = [], [], [], [], [], []
-        added = 0
-        for path in sorted(root.rglob("*")):
-            if path.suffix.lower() not in IMAGE_EXTS or not path.is_file():
-                continue
-            rel = path.relative_to(root).as_posix()
+        changed = False
+        for n, path in enumerate(paths):
+            if cancelled and cancelled():
+                raise RuntimeError("Cancelled.")
+            rel = path.relative_to(self.folder).as_posix()
             st = path.stat()
             fi = len(files)
             files.append(rel)
             mtimes.append(st.st_mtime)
             sizes.append(st.st_size)
             prev = old.get(rel)
-            if prev and prev[:2] == (st.st_mtime, st.st_size) and old_faces is not None:
+            if prev and prev[:2] == (st.st_mtime, st.st_size):
                 for box, emb in old_faces.get(prev[2], []):
                     face_file.append(fi)
                     boxes.append(box)
                     embs.append(emb)
                 continue
-            added += 1
+            changed = True
+            if progress:
+                progress(n + 1, len(paths), rel)
             try:
                 img = read_image(str(path))
             except ValueError:
                 continue
-            for f in cls.app().get(img):
-                b = cls._box(f)
+            for f in embed_faces(img, self.opts):
                 face_file.append(fi)
-                boxes.append([b["x"], b["y"], b["w"], b["h"]])
-                embs.append(f.normed_embedding.astype(np.float32))
-        data = {
-            "files": np.array(files, dtype=str),
-            "mtimes": np.array(mtimes, dtype=np.float64),
-            "sizes": np.array(sizes, dtype=np.int64),
-            "face_file": np.array(face_file, dtype=np.int64),
-            "boxes": np.array(boxes, dtype=np.int64).reshape(-1, 4),
-            "embs": np.array(embs, dtype=np.float32).reshape(-1, 512),
-        }
-        if added or rebuild or not index_path.exists() or len(files) != len(old):
-            tmp = index_path.with_suffix(".tmp.npz")
-            np.savez(tmp, **data)
-            os.replace(tmp, index_path)
-        return data
+                boxes.append(list(f.box))
+                embs.append(f.emb)
+        dim = len(embs[0]) if embs else 0
+        self.files = files
+        self.face_file = np.array(face_file, dtype=np.int64)
+        self.boxes = np.array(boxes, dtype=np.int64).reshape(-1, 4)
+        self.embs = np.array(embs, dtype=np.float32).reshape(-1, dim)
+        if changed or rebuild or len(files) != len(old) or not self.path.exists():
+            tmp = self.path.with_name(self.path.stem + ".tmp.npz")
+            np.savez(tmp, files=np.array(files, dtype=str), mtimes=np.array(mtimes, dtype=np.float64),
+                     sizes=np.array(sizes, dtype=np.int64), face_file=self.face_file, boxes=self.boxes,
+                     embs=self.embs)
+            os.replace(tmp, self.path)
+        return self
+
+    def search(self, emb: np.ndarray, threshold: float | None = None, top: int | None = None) -> list[dict]:
+        """Faces closest to emb, nearest first. Each: path, distance, box, face index."""
+        if not len(self.embs):
+            return []
+        dist = np.clip(1.0 - self.embs @ emb.astype(np.float32), 0.0, 2.0)
+        order = np.argsort(dist)
+        if threshold is not None:
+            order = order[dist[order] <= threshold]
+        if top:
+            order = order[:top]
+        return [
+            {
+                "path": str(self.folder / self.files[self.face_file[j]]),
+                "distance": float(dist[j]),
+                "box": tuple(int(v) for v in self.boxes[j]),
+                "face": int(j),
+            }
+            for j in order
+        ]
+
+
+class AuditLog:
+    """Append-only, hash-chained JSON-lines log. Each entry stores the SHA-256 of the previous entry,
+    so editing or deleting any line breaks the chain from that point on (see verify())."""
+
+    def __init__(self, path: str | Path):
+        self.path = Path(path)
+        self.path.parent.mkdir(parents=True, exist_ok=True)
+        self._lock = threading.Lock()
+
+    def _last_hash(self) -> str:
+        last = "0" * 64
+        if self.path.exists():
+            with open(self.path, encoding="utf-8") as fh:
+                for line in fh:
+                    if line.strip():
+                        last = json.loads(line)["hash"]
+        return last
+
+    def append(self, event: str, **fields) -> dict:
+        import hashlib
+        import getpass
+
+        with self._lock:
+            entry = {
+                "time": time.strftime("%Y-%m-%dT%H:%M:%S%z"),
+                "computer_user": getpass.getuser(),
+                "event": event,
+                **jsonable(fields),
+                "prev": self._last_hash(),
+            }
+            body = json.dumps(entry, sort_keys=True, ensure_ascii=False)
+            entry["hash"] = hashlib.sha256(body.encode("utf-8")).hexdigest()
+            with open(self.path, "a", encoding="utf-8") as fh:
+                fh.write(json.dumps(entry, sort_keys=True, ensure_ascii=False) + "\n")
+            return entry
+
+    def entries(self) -> list[dict]:
+        if not self.path.exists():
+            return []
+        with open(self.path, encoding="utf-8") as fh:
+            return [json.loads(line) for line in fh if line.strip()]
+
+    def verify(self) -> tuple[bool, str]:
+        import hashlib
+
+        prev = "0" * 64
+        for n, entry in enumerate(self.entries(), 1):
+            stored = entry.pop("hash", "")
+            if entry.get("prev") != prev:
+                return False, f"Entry {n} does not follow entry {n - 1}: lines were removed, reordered or edited."
+            body = json.dumps(entry, sort_keys=True, ensure_ascii=False)
+            if hashlib.sha256(body.encode("utf-8")).hexdigest() != stored:
+                return False, f"Entry {n} was changed after it was written."
+            prev = stored
+        return True, f"All {len(self.entries())} entries are intact."
+
+
+def data_dir() -> Path:
+    base = Path(os.environ.get("LOCALAPPDATA") or Path.home() / ".local" / "share") / APP_NAME
+    base.mkdir(parents=True, exist_ok=True)
+    return base
+
+
+def quality_check(img: np.ndarray, box: tuple[int, int, int, int], kps: np.ndarray | None = None) -> dict:
+    """Simple, explainable photo-quality checks for one face. Matching is least reliable on
+    small, blurry, badly lit or side-on faces, so these warnings travel with every result."""
+    x, y, w, h = box
+    crop = img[max(0, y): y + h, max(0, x): x + w]
+    warnings = []
+    metrics = {"face_pixels": int(min(w, h))}
+    if min(w, h) < 80:
+        warnings.append(f"small face ({min(w, h)} px; 112+ px is better)")
+    if crop.size:
+        gray = cv2.cvtColor(crop, cv2.COLOR_BGR2GRAY)
+        sharp = float(cv2.Laplacian(cv2.resize(gray, (160, 160)), cv2.CV_64F).var())
+        bright = float(gray.mean())
+        metrics.update(sharpness=round(sharp, 1), brightness=round(bright, 1))
+        if sharp < 60:
+            warnings.append("blurry")
+        if bright < 55:
+            warnings.append("too dark")
+        elif bright > 210:
+            warnings.append("overexposed")
+    if kps is not None and len(kps) >= 3:
+        left, right, nose = kps[0], kps[1], kps[2]
+        eye_dist = float(np.linalg.norm(right - left)) or 1.0
+        yaw = float((nose[0] - (left[0] + right[0]) / 2) / eye_dist)
+        roll = float(np.degrees(np.arctan2(right[1] - left[1], right[0] - left[0])))
+        metrics.update(yaw=round(yaw, 2), roll_degrees=round(roll, 1))
+        if abs(yaw) > 0.35:
+            warnings.append("face turned to the side")
+        if abs(roll) > 25:
+            warnings.append("head tilted")
+    metrics["ok"] = not warnings
+    return {"warnings": warnings, **metrics}
+
+
+class Extras:
+    """Optional InsightFace extras: 106-point landmarks and the liveness (anti-spoofing) add-on."""
+
+    _landmark_app = None
+    _liveness = None
 
     @classmethod
-    def find(cls, img: np.ndarray, db: str, rebuild: bool = False) -> tuple[list[dict], int]:
-        query = cls.faces(img)
-        data = cls.build_index(db, rebuild)
-        rows = []
-        if len(data["embs"]):
-            for q in query:
-                dist = 1.0 - data["embs"] @ q.normed_embedding.astype(np.float32)
-                for j in np.nonzero(dist <= INSIGHT_THRESHOLD)[0]:
-                    rows.append(
-                        {
-                            "identity": str(Path(db) / data["files"][data["face_file"][j]]),
-                            "distance": max(0.0, float(dist[j])),
-                            "threshold": INSIGHT_THRESHOLD,
-                            "box": tuple(int(v) for v in data["boxes"][j]),
-                        }
-                    )
-        return rows, len(query)
+    def landmarks(cls, img: np.ndarray) -> list[tuple[tuple[int, int, int, int], np.ndarray]]:
+        if cls._landmark_app is None:
+            InsightEngine.app()  # same install check and error message
+            from insightface.app import FaceAnalysis  # noqa: WPS433
+
+            fa = FaceAnalysis(name="buffalo_l", allowed_modules=["detection", "landmark_2d_106"],
+                              providers=["CPUExecutionProvider"])
+            fa.prepare(ctx_id=-1, det_size=(640, 640))
+            cls._landmark_app = fa
+        out = []
+        for f in cls._landmark_app.get(img):
+            b = InsightEngine._box(f)
+            pts = getattr(f, "landmark_2d_106", None)
+            if pts is not None:
+                out.append(((b["x"], b["y"], b["w"], b["h"]), np.asarray(pts)))
+        return out
+
+    @classmethod
+    def liveness(cls, img: np.ndarray, kps: np.ndarray) -> dict:
+        """Probability that the face is a live person rather than a printed photo or screen.
+        Only meaningful for photos taken straight from a camera; a re-shot or edited image scores low."""
+        if cls._liveness is None:
+            InsightEngine.app()
+            from insightface.addons import Liveness, ensure_addon  # noqa: WPS433
+
+            model = Liveness(ensure_addon("liveness"), providers=["CPUExecutionProvider"])
+            model.prepare(ctx_id=-1)
+            cls._liveness = model
+        return cls._liveness.predict(img, kps)
+
+
+def draw_landmarks(img: np.ndarray, pts: np.ndarray, color=(80, 230, 255)) -> None:
+    r = max(1, round(min(img.shape[:2]) / 400))
+    for px, py in pts.astype(int):
+        cv2.circle(img, (int(px), int(py)), r, color, -1, cv2.LINE_AA)
 
 
 def friendly_error(exc: BaseException) -> str:
@@ -534,6 +785,37 @@ class BusyMixin:
 # --------------------------------------------------------------------------------------
 
 
+REVERSE_SEARCH = [
+    ("TinEye", "https://tineye.com/"),
+    ("Google Lens", "https://lens.google.com/"),
+    ("Bing Visual Search", "https://www.bing.com/visualsearch"),
+]
+
+
+def best_overlap(box, insight_faces):
+    """The InsightFace face that overlaps a DeepFace box the most (to borrow its keypoints)."""
+    x, y, w, h = box
+    best, best_iou = None, 0.2
+    for f in insight_faces:
+        bx1, by1, bx2, by2 = f.bbox
+        ix = max(0.0, min(x + w, bx2) - max(x, bx1))
+        iy = max(0.0, min(y + h, by2) - max(y, by1))
+        inter = ix * iy
+        union = w * h + (bx2 - bx1) * (by2 - by1) - inter
+        iou = inter / union if union else 0.0
+        if iou > best_iou:
+            best, best_iou = f, iou
+    return best
+
+
+def liveness_text(live) -> str:
+    if not live:
+        return "–"
+    if live.get("status") != "ok":
+        return "not checked" if live.get("status") == "input_rejected" else "error"
+    return f"{'live' if live['is_live'] else 'possible spoof'} ({live['live_score'] * 100:.0f}%)"
+
+
 class AnalyzeTab(QWidget, BusyMixin):
     def __init__(self, get_options):
         super().__init__()
@@ -554,6 +836,17 @@ class AnalyzeTab(QWidget, BusyMixin):
             cb.setChecked(True)
             self.checks[a] = cb
             actions_row.addWidget(cb)
+        actions_row.addSpacing(16)
+        self.landmarks_cb = QCheckBox("Landmarks")
+        self.landmarks_cb.setToolTip("Draw 106 facial landmark points (eyes, brows, nose, lips, jaw). Needs InsightFace.")
+        self.quality_cb = QCheckBox("Quality && liveness")
+        self.quality_cb.setToolTip(
+            "Check each face's size, sharpness, lighting and angle, and estimate whether it is a live person "
+            "rather than a photo of a photo or screen (InsightFace liveness add-on, ~1.5 MB download)."
+        )
+        self.quality_cb.setChecked(True)
+        actions_row.addWidget(self.landmarks_cb)
+        actions_row.addWidget(self.quality_cb)
         actions_row.addStretch()
 
         open_btn = QPushButton("Open photo…")
@@ -566,14 +859,25 @@ class AnalyzeTab(QWidget, BusyMixin):
         self.save_json_btn = QPushButton("Export JSON…")
         self.save_json_btn.clicked.connect(self.save_json)
         self.run_buttons = [self.run_btn]
+        self.online_btn = QPushButton("Search this photo online")
+        self.online_btn.setToolTip(
+            "Find where this exact picture appears on the web (e.g. a fake profile reusing your photos). "
+            "These services match the image, not the person's face."
+        )
+        menu = QMenu(self.online_btn)
+        for label, url in REVERSE_SEARCH:
+            act = menu.addAction(label)
+            act.triggered.connect(lambda _=False, u=url, n=label: self.search_online(n, u))
+        self.online_btn.setMenu(menu)
 
         btns = QHBoxLayout()
-        for b in (open_btn, self.run_btn, self.save_img_btn, self.save_json_btn):
+        for b in (open_btn, self.run_btn, self.save_img_btn, self.save_json_btn, self.online_btn):
             btns.addWidget(b)
         btns.addStretch()
 
-        self.table = QTableWidget(0, 6)
-        self.table.setHorizontalHeaderLabels(["Face", "Age", "Gender", "Emotion", "Race", "Detection"])
+        self.table = QTableWidget(0, 8)
+        self.table.setHorizontalHeaderLabels(["Face", "Age", "Gender", "Emotion", "Race", "Detection", "Quality",
+                                              "Liveness"])
         header = self.table.horizontalHeader()
         header.setSectionResizeMode(QHeaderView.ResizeMode.ResizeToContents)
         header.setStretchLastSection(True)
@@ -597,7 +901,7 @@ class AnalyzeTab(QWidget, BusyMixin):
         split = QSplitter()
         split.addWidget(self.view)
         split.addWidget(right)
-        split.setSizes([620, 420])
+        split.setSizes([520, 600])
 
         layout = QVBoxLayout(self)
         layout.addLayout(actions_row)
@@ -637,9 +941,11 @@ class AnalyzeTab(QWidget, BusyMixin):
             return
         opts = self.get_options()
         img = self.image.copy()
+        want_landmarks = self.landmarks_cb.isChecked()
+        want_quality = self.quality_cb.isChecked()
 
         def job():
-            return deepface().analyze(
+            results = deepface().analyze(
                 img_path=img,
                 actions=actions,
                 detector_backend=opts.detector_backend,
@@ -648,6 +954,28 @@ class AnalyzeTab(QWidget, BusyMixin):
                 expand_percentage=opts.expand_percentage,
                 silent=True,
             )
+            results = results if isinstance(results, list) else [results]
+            extras = {"landmarks": [], "notes": []}
+            insight_faces = []
+            if want_quality or want_landmarks:
+                try:
+                    insight_faces = InsightEngine.faces(img, require=False)
+                except ImportError:
+                    extras["notes"].append("Install InsightFace for landmarks, face angle and liveness.")
+            for face in results:
+                box = region_of(face)
+                match = best_overlap(box, insight_faces)
+                kps = np.array(match.kps, dtype=np.float32) if match is not None else None
+                if want_quality:
+                    face["quality"] = quality_check(img, box, kps)
+                    if kps is not None:
+                        try:
+                            face["liveness"] = Extras.liveness(img, kps)
+                        except Exception as exc:  # noqa: BLE001 - liveness is optional
+                            face["liveness"] = {"status": "error", "reason": str(exc)[:200]}
+            if want_landmarks and insight_faces:
+                extras["landmarks"] = [pts for _, pts in Extras.landmarks(img)]
+            return results, extras
 
         worker = Worker(job)
         worker.signals.finished.connect(self.done)
@@ -655,10 +983,13 @@ class AnalyzeTab(QWidget, BusyMixin):
         self.set_busy(True, "Analyzing… (the first run downloads models and can take a minute)")
         worker.start()
 
-    def done(self, results):
-        self.set_busy(False, f"Found {len(results)} face(s)")
-        self.results = results if isinstance(results, list) else [results]
+    def done(self, out):
+        results, extras = out
+        self.set_busy(False, f"Found {len(results)} face(s)" + ("  ·  " + " ".join(extras["notes"]) if extras["notes"] else ""))
+        self.results = results
         self.annotated = self.image.copy()
+        for pts in extras["landmarks"]:
+            draw_landmarks(self.annotated, pts)
         self.table.setRowCount(len(self.results))
         for i, face in enumerate(self.results):
             x, y, w, h = region_of(face)
@@ -673,6 +1004,8 @@ class AnalyzeTab(QWidget, BusyMixin):
                 f"{e} ({face['emotion'][e]:.0f}%)" if "emotion" in face else "–",
                 f"{r} ({face['race'][r]:.0f}%)" if "race" in face else "–",
                 f"{face.get('face_confidence', 0) * 100:.0f}%" if face.get("face_confidence") else "–",
+                ("OK" if face["quality"]["ok"] else "⚠ " + ", ".join(face["quality"]["warnings"])) if "quality" in face else "–",
+                liveness_text(face.get("liveness")),
             ]
             for c, text in enumerate(cells):
                 self.table.setItem(i, c, QTableWidgetItem(text))
@@ -691,6 +1024,15 @@ class AnalyzeTab(QWidget, BusyMixin):
         for key, title in (("gender", "Gender"), ("emotion", "Emotion"), ("race", "Race")):
             if key in face:
                 parts.append(f"<p><b>{title}</b></p>{self._bars(face[key])}")
+        if "quality" in face:
+            q = face["quality"]
+            metrics = ", ".join(f"{k.replace('_', ' ')} {v}" for k, v in q.items() if k not in ("warnings", "ok"))
+            parts.append(f"<p><b>Photo quality:</b> {'OK' if q['ok'] else '; '.join(q['warnings'])}<br>"
+                         f"<span style='color:gray'>{metrics}</span></p>")
+        if face.get("liveness"):
+            parts.append(f"<p><b>Liveness:</b> {liveness_text(face['liveness'])}<br><span style='color:gray'>"
+                         "Only meaningful for a photo taken straight from a camera; a photo of a printout or "
+                         "screen, or a heavily edited image, scores low.</span></p>")
         x, y, w, h = region_of(face)
         parts.append(f"<p style='color:gray'>Box: x={x}, y={y}, w={w}, h={h}</p>")
         self.detail.setHtml("".join(parts))
@@ -706,6 +1048,19 @@ class AnalyzeTab(QWidget, BusyMixin):
                 f"&nbsp;{v:.1f}%</td></tr>"
             )
         return f"<table cellspacing='2'>{''.join(rows)}</table>"
+
+    def search_online(self, name: str, url: str):
+        if self.image is None:
+            self.show_error("Open a photo first.")
+            return
+        QApplication.clipboard().setImage(to_qpixmap(self.image).toImage())
+        QDesktopServices.openUrl(QUrl(url))
+        QMessageBox.information(
+            self, APP_NAME,
+            f"The photo is copied. In the {name} page that just opened, press Ctrl+V (or use its upload button).\n\n"
+            "This sends the photo to that service. It finds copies of this picture online; it does not "
+            "recognise the person in other photos.",
+        )
 
     def save_image(self):
         if self.annotated is None:
@@ -1398,12 +1753,27 @@ class MainWindow(QMainWindow):
         for tab in (self.analyze, self.verify, self.find, self.live, self.embed):
             tab.status = self.set_status
 
+        # Add-on tabs live in their own modules; one failing to load never stops the app.
+        self.addons: dict[str, QWidget] = {}
+        for module, cls, _title in ADDON_TABS:
+            try:
+                tab = getattr(importlib.import_module(module), cls)(get_opts)
+            except Exception:  # noqa: BLE001
+                print(f"Could not load {module}:\n{traceback.format_exc()}", file=sys.stderr)
+                continue
+            tab.status = self.set_status
+            self.addons[module] = tab
+
         self.tabs = QTabWidget()
-        self.tabs.addTab(self.analyze, "Analyze")
-        self.tabs.addTab(self.verify, "Verify")
-        self.tabs.addTab(self.find, "Find")
-        self.tabs.addTab(self.live, "Live camera")
-        self.tabs.addTab(self.embed, "Embeddings")
+        self.tabs.setUsesScrollButtons(True)
+        order = [("Analyze", self.analyze), ("Verify", self.verify), ("Find", self.find),
+                 ("People", self.addons.get("fl_people")), ("Investigate", self.addons.get("fl_investigate")),
+                 ("Live camera", self.live), ("Video", self.addons.get("fl_video")),
+                 ("Embeddings", self.embed), ("Benchmark", self.addons.get("fl_bench")),
+                 ("API server", self.addons.get("fl_server"))]
+        for title, tab in order:
+            if tab is not None:
+                self.tabs.addTab(tab, title)
 
         side = QWidget()
         sl = QVBoxLayout(side)
@@ -1488,6 +1858,13 @@ class MainWindow(QMainWindow):
 
     def closeEvent(self, event):  # noqa: N802
         self.live.stop()
+        for tab in self.addons.values():
+            for method in ("stop", "shutdown"):
+                if hasattr(tab, method):
+                    try:
+                        getattr(tab, method)()
+                    except Exception:  # noqa: BLE001
+                        pass
         super().closeEvent(event)
 
 
@@ -1554,6 +1931,10 @@ def main():
     setup_logging()
     if len(sys.argv) >= 4 and sys.argv[1] == "--self-test":
         sys.exit(self_test(sys.argv[2], sys.argv[3]))
+    if "--serve" in sys.argv:
+        import fl_server  # noqa: WPS433
+
+        sys.exit(fl_server.serve_cli(sys.argv[1:]))
     if sys.platform == "win32":
         # Own taskbar icon/group instead of python.exe's.
         try:
@@ -1575,4 +1956,7 @@ def main():
 
 
 if __name__ == "__main__":
+    # Add-on modules do "import facelens"; point that at this running script so they share its
+    # state (loaded models, locks) instead of loading a second copy.
+    sys.modules.setdefault("facelens", sys.modules["__main__"])
     main()
