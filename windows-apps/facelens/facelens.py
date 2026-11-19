@@ -1297,6 +1297,9 @@ class SettingsPanel(QGroupBox):
         self.settings = settings
         self.model_box = QComboBox()
         self.model_box.addItems(MODELS)
+        # Don't let the long InsightFace name widen the box and squeeze the labels.
+        self.model_box.setSizeAdjustPolicy(QComboBox.SizeAdjustPolicy.AdjustToMinimumContentsLengthWithIcon)
+        self.model_box.setMinimumContentsLength(12)
         self.model_box.setToolTip("Recognition model used by Verify, Find and Embed. ArcFace and Facenet512 are the most accurate.")
         self.detector_box = QComboBox()
         self.detector_box.addItems(DETECTORS)
