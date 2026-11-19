@@ -306,6 +306,7 @@
         '<div class="row"><input type="text" id="cu-name" placeholder="Name (e.g. AxForge)" style="flex:1;min-width:120px"><input type="text" id="cu-base" placeholder="https://api.example.com/v1" style="flex:2;min-width:200px"></div>'+
         '<div class="row"><input type="password" id="cu-key" placeholder="key — leave blank if the service needs none" style="flex:2;min-width:200px"><button class="btn ghost" data-cadd>Add service</button></div>'+
         customProviders.map(function(c){return '<div class="row" style="align-items:center;gap:8px"><b style="flex:1;min-width:100px">'+esc(c.name)+'</b><span class="hint" style="flex:2;min-width:160px">'+esc(c.base)+'</span><button class="btn ghost" data-crem="'+esc(c.id)+'">Remove</button></div>';}).join('')+
+        '<div class="hint" id="cu-note" hidden style="color:var(--good);font-weight:600"></div>'+
         '<div class="err" id="cu-err" hidden></div></div>';
     }
     box.innerHTML=rows;
@@ -446,10 +447,12 @@
   function svcMsg(t){ var m=$('#svc-msg'); if(!m)return; m.textContent=t; m.hidden=!t; if(t)clearTimeout(svcMsg._t),svcMsg._t=setTimeout(function(){m.hidden=true},4000); }
   function gotoCustom(name,base){
     document.querySelector('.tab[data-tab="keys"]').click();
-    setTimeout(function(){ var n=$('#cu-name'),b=$('#cu-base'),k=$('#cu-key');
+    setTimeout(function(){ var n=$('#cu-name'),b=$('#cu-base'),k=$('#cu-key'),note=$('#cu-note');
       if(!b){svcMsg('Open the Keys tab, then use "+ Custom".');return;}
       if(n)n.value=name; b.value=base; b.scrollIntoView({behavior:'smooth',block:'center'}); if(k)k.focus();
-    },40);
+      [n,b,k].forEach(function(el){ if(!el)return; el.style.transition='box-shadow .25s'; el.style.boxShadow='0 0 0 2px var(--accent)'; setTimeout(function(){el.style.boxShadow='';},1800); });
+      if(note){ note.textContent='✓ Prefilled "'+name+'". Paste its key (or leave blank if it needs none) and press "Add service".'; note.hidden=false; setTimeout(function(){note.hidden=true;},9000); }
+    },60);
   }
   function addNoKey(name,base){
     if(!(window.studio&&window.studio.customAdd)){svcMsg('Adding services needs the app or the HTML build.');return;}
@@ -503,7 +506,7 @@
     var chips=[['all','All'],['text','Text'],['image','Image'],['video','Video'],['nokey','No key'],['free','Free to use']];
     box.innerHTML='<input type="text" id="svc-q" placeholder="Search services…" value="'+esc(svcQ)+'" style="margin-bottom:10px">'+
       '<div class="chips" id="svc-filters" style="margin-bottom:8px">'+chips.map(function(c){return '<button class="chip'+(svcF===c[0]?' on':'')+'" data-f="'+c[0]+'">'+c[1]+'</button>';}).join('')+'</div>'+
-      '<p class="hint" style="margin:0 0 8px">Ranked by value (free + capable first). <b>Key</b> badge shows if an API key is needed. Power ● is a rough quality tier; costs are approximate — a guide, not exact.</p>'+
+      '<p class="hint" style="margin:0 0 8px">Ranked by value (free + capable first). <b>Key</b> badge shows if an API key is needed. Power ● is a rough quality tier; costs are approximate — a guide, not exact. <b>Keyless image</b> = Pollinations, AI Horde, Puter (filter “No key” + “Image”). <b>Keyless video doesn’t exist</b> — every video provider now requires a key.</p>'+
       '<div id="svc-rows"></div>';
     var qi=$('#svc-q'); if(qi) qi.addEventListener('input',function(){svcQ=this.value;renderSvcList();});
     $('#svc-filters').querySelectorAll('[data-f]').forEach(function(b){b.addEventListener('click',function(){svcF=b.dataset.f;$('#svc-filters').querySelectorAll('.chip').forEach(function(x){x.classList.toggle('on',x===b);});renderSvcList();});});
