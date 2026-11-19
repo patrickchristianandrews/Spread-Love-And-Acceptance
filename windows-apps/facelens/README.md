@@ -46,6 +46,8 @@ The first entry in **Recognition model** is **InsightFace buffalo_l**, from [dee
 
 **API server.** Starts a local REST server (`/health`, `/detect`, `/verify`, `/embed`, `/search`, `/gallery/enroll`, `/gallery/refresh`) that answers in JSON, with images sent as base64. Every call except `/health` needs the `X-Api-Key` header. A new key is made each session and never saved. Each call is written to `%LOCALAPPDATA%\FaceLens\audit\api.jsonl` with an optional `X-Case-Id` and `X-User` (never the images). It listens on 127.0.0.1 only unless you choose otherwise, and the traffic isn't encrypted, so keep it on a trusted network. You can run it without the window: `FaceLens.exe --serve --gallery D:\gallery --port 8765`. The key is written to `facelens.log`.
 
+**Dataset privacy.** **Help → Check if your photos are in face datasets** opens [exposing.ai](https://exposing.ai/), which documents face datasets collected without consent and lets you check whether your own Flickr photos were used. **Help → Where face datasets come from** explains which well-known datasets were collected without consent and points to consented or synthetic ones (Casual Conversations, DigiFace-1M) for testing.
+
 **Dlib.** The DeepFace "Dlib" model and detector work out of the box. The `dlib-bin` package is a prebuilt dlib, so no compiler is needed.
 
 ## Get the app

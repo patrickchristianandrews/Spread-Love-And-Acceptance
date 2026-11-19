@@ -291,8 +291,11 @@ def histogram_image(gen: np.ndarray, imp: np.ndarray, threshold: float, title: s
     cv2.putText(img, title[:80], (left, 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (20, 20, 20), 1, cv2.LINE_AA)
     cv2.putText(img, "cosine distance", (left + pw // 2 - 50, height - 6), cv2.FONT_HERSHEY_SIMPLEX, 0.42,
                 (60, 60, 60), 1, cv2.LINE_AA)
+    lx = width - right - 156
+    cv2.rectangle(img, (lx - 6, top + 12), (width - right, top + 52), (255, 255, 255), -1)
+    cv2.rectangle(img, (lx - 6, top + 12), (width - right, top + 52), (200, 200, 200), 1)
     for k, (label, color) in enumerate((("same person", (70, 170, 60)), ("different people", (70, 70, 220)))):
-        x = width - right - 150
+        x = lx
         y = top + 26 + k * 18
         cv2.rectangle(img, (x, y - 9), (x + 12, y + 1), color, -1)
         cv2.putText(img, label, (x + 18, y), cv2.FONT_HERSHEY_SIMPLEX, 0.42, (40, 40, 40), 1, cv2.LINE_AA)

@@ -792,6 +792,22 @@ REVERSE_SEARCH = [
 ]
 
 
+EXPOSING_AI = "https://exposing.ai/"
+DATASET_SOURCES_HTML = (
+    "<p>Many well-known face datasets were built from photos collected online without asking the people "
+    "in them. <a href='https://exposing.ai/'>exposing.ai</a> documents these datasets and lets you check "
+    "whether your own Flickr photos were used.</p>"
+    "<p><b>Collected without consent (examples):</b> MegaFace and FairFace (Flickr photos), MS-Celeb-1M "
+    "(web photos of public figures; withdrawn by Microsoft in 2019), VGGFace2 and WebFace (web image search), "
+    "LFW (news photos). Some of the models in FaceLens were trained on datasets like these.</p>"
+    "<p><b>Made with consent or without real people:</b> Meta's "
+    "<a href='https://ai.meta.com/datasets/casual-conversations-dataset/'>Casual Conversations</a> (paid, "
+    "consenting participants, with age, gender and skin-tone labels for checking bias) and Microsoft's "
+    "<a href='https://github.com/microsoft/DigiFace1M'>DigiFace-1M</a> (computer-generated faces). The "
+    "Benchmark tab can test the engines on both. Check each dataset's licence before use.</p>"
+)
+
+
 def best_overlap(box, insight_faces):
     """The InsightFace face that overlaps a DeepFace box the most (to borrow its keypoints)."""
     x, y, w, h = box
@@ -1810,6 +1826,13 @@ class MainWindow(QMainWindow):
         weights = QAction("Open model folder", self)
         weights.triggered.connect(self.open_weights)
         m.addAction(weights)
+        m.addSeparator()
+        check = QAction("Check if your photos are in face datasets (exposing.ai)…", self)
+        check.triggered.connect(lambda: QDesktopServices.openUrl(QUrl(EXPOSING_AI)))
+        m.addAction(check)
+        sources = QAction("Where face datasets come from…", self)
+        sources.triggered.connect(self.dataset_sources)
+        m.addAction(sources)
 
     def _warm_up(self):
         """Import TensorFlow/DeepFace in the background so the first click is quick."""
@@ -1840,6 +1863,15 @@ class MainWindow(QMainWindow):
             os.startfile(folder)  # noqa: S606
         else:
             QMessageBox.information(self, APP_NAME, str(folder))
+
+    def dataset_sources(self):
+        box = QMessageBox(self)
+        box.setWindowTitle("Where face datasets come from")
+        box.setTextFormat(Qt.TextFormat.RichText)
+        box.setText(DATASET_SOURCES_HTML)
+        box.setTextInteractionFlags(Qt.TextInteractionFlag.TextBrowserInteraction)
+        box.setStandardButtons(QMessageBox.StandardButton.Ok)
+        box.exec()
 
     def about(self):
         QMessageBox.about(
