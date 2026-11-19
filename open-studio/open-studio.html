@@ -869,6 +869,24 @@
   ];
   var SVC_NOAPI=['Inferium','Kavel','deAPI','Aifreeforever-2api (reverse-proxy — against providers’ terms, unstable; not safe to ship)'];
 
+  // Image + video engine comparison. Power = rough quality tier (1–5) for everyday prompts.
+  // Costs are APPROXIMATE and change — they come from each provider's public pricing and vary with
+  // size/length. Always treated as a guide, never exact.
+  var ENGINE_META=[
+    ['Image','Pollinations','Free','$0',3,'Fast everyday images, zero setup'],
+    ['Image','AI Horde','Free','$0 (queues 10–60s)',3,'Uncensored; many community models'],
+    ['Image','Puter','Free*','$0 to you — bills to your Puter account',4,'DALL·E / Flux with no key'],
+    ['Image','Segmind','Free credits, then paid','~$0.001–0.002 / image',4,'Cheapest FLUX; free allowance'],
+    ['Image','fal.ai','Paid (trial credit)','~$0.003–0.01 / image',5,'Very fast FLUX, top quality'],
+    ['Image','Replicate','Paid (trial credit)','~$0.003 / image (FLUX schnell)',5,'Huge model catalog'],
+    ['Image','Stability','Paid (some free credits)','~$0.03 / image (SD3 Core)',5,'Stable Diffusion 3, reliable'],
+    ['Image','DeepAI','Free credits, then paid','~$0.01 / image',2,'Simple and quick'],
+    ['Video','fal.ai (LTX)','Paid','~$0.05–0.20 / short clip',4,'Fast text-to-video'],
+    ['Video','Replicate (WAN 2.2)','Paid','~$0.10–0.50 / clip',4,'Higher-quality clips']
+  ];
+  function dots(n){ n=Math.max(0,Math.min(5,n)); return '●●●●●'.slice(0,n)+'○○○○○'.slice(0,5-n); }
+  function freeBadge(txt){ var free=/^free/i.test(txt); return '<span class="badge '+(free?'b-on':'b-off')+'">'+esc(txt)+'</span>'; }
+
   function svcMsg(t){ var m=$('#svc-msg'); if(!m)return; m.textContent=t; m.hidden=!t; if(t)clearTimeout(svcMsg._t),svcMsg._t=setTimeout(function(){m.hidden=true},4000); }
   function gotoCustom(name,base){
     document.querySelector('.tab[data-tab="keys"]').click();
@@ -894,6 +912,19 @@
     h+='<div class="chips">'+
       '<span class="chip on">Pollinations · free</span><span class="chip on">AI Horde · free</span>'+
       '<span class="chip on">Puter · GPT/Claude/Gemini/DALL·E, free sign-in</span><span class="chip on">DeepAI · images (key)</span></div>';
+    // Engine comparison — free / power / cost
+    h+=grp('Image & video engines — free, power & cost','Power is a rough quality tier (●) for everyday prompts. Costs are approximate and change with size/length — a guide, not exact.');
+    h+='<div style="overflow:auto"><table style="width:100%;border-collapse:collapse;font-size:13px;min-width:560px">'+
+      '<thead><tr style="text-align:left;color:var(--muted)"><th style="padding:6px 8px">Type</th><th style="padding:6px 8px">Engine</th><th style="padding:6px 8px">Free?</th><th style="padding:6px 8px">Power</th><th style="padding:6px 8px">Cost / image or clip</th><th style="padding:6px 8px">Best for</th></tr></thead><tbody>'+
+      ENGINE_META.map(function(m){ return '<tr style="border-top:1px solid var(--line)">'+
+        '<td style="padding:6px 8px">'+esc(m[0])+'</td>'+
+        '<td style="padding:6px 8px;font-weight:700">'+esc(m[1])+'</td>'+
+        '<td style="padding:6px 8px">'+freeBadge(m[2])+'</td>'+
+        '<td style="padding:6px 8px;letter-spacing:1px;color:var(--accent)" title="'+m[4]+'/5">'+dots(m[4])+'</td>'+
+        '<td style="padding:6px 8px;white-space:nowrap">'+esc(m[3])+'</td>'+
+        '<td style="padding:6px 8px;color:var(--muted)">'+esc(m[5])+'</td></tr>'; }).join('')+
+      '</tbody></table></div>'+
+      '<p class="hint" style="margin:6px 0 0">* Puter is free to use — charges go to the visitor’s own free Puter account (their "User-Pays" model).</p>';
     // Built-in keyed clouds
     var bi=(keyedProviders||[]).filter(function(p){return !p.image;});
     if(bi.length){ h+=grp('Built in — just add a key','Open the Keys tab and paste a key to switch these on.');
@@ -901,9 +932,10 @@
     // One-tap add
     h+=grp('One-tap add — verified clouds (OpenAI-compatible)','Tap Add: it fills the Custom form and opens the key page. Paste the key, hit "Add service".');
     h+='<div style="display:grid;gap:8px">'+SVC_ADD.filter(function(s){return !builtinIds[s[0].toLowerCase().replace(/\s*\(.*$/,'')];}).map(function(s){
-      var nk=s[4]==='nokey';
+      var nk=s[4]==='nokey', isFree=nk||/free|no card|no key|permanently/i.test(s[3]);
       return '<div class="keyrow" style="border-top:1px solid var(--line)"><span class="pn" style="min-width:150px">'+esc(s[0])+'</span>'+
-        '<span class="hint" style="flex:1;min-width:160px">'+esc(s[3])+'</span>'+
+        '<span class="badge '+(isFree?'b-on':'b-off')+'">'+(isFree?'free tier':'your key')+'</span>'+
+        '<span class="hint" style="flex:1;min-width:150px">'+esc(s[3])+'</span>'+
         '<button class="btn ghost" data-'+(nk?'addnokey':'add')+'="'+esc(s[0])+'|'+esc(s[1])+'">Add'+(nk?' (free)':'')+'</button>'+
         '<a class="chip" href="'+esc(s[2])+'" target="_blank" rel="noopener">'+(nk?'About ↗':'Key ↗')+'</a></div>';
     }).join('')+'</div>';
