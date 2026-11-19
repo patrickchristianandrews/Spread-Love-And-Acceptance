@@ -164,8 +164,13 @@
       <div class="col" style="max-width:170px;display:flex;align-items:flex-end;gap:10px">
         <button class="btn" id="tgen" style="flex:1">Generate</button><span class="spin" id="tspin" hidden></span></div>
     </div>
+    <div id="combo" hidden style="margin-top:10px;background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:12px">
+      <div class="hint" style="margin:0 0 8px">Tick the AIs to chain. Ask once — it tries them top to bottom and stops at the first that answers. Saved on this device.</div>
+      <div id="combo-list" class="chips"></div>
+    </div>
     <div class="err" id="terr" hidden></div>
     <div class="out" id="tout" aria-live="polite">The answer appears here.</div>
+    <div class="hint" id="tby" hidden style="color:var(--good);font-weight:600;margin-top:6px"></div>
     <div class="bar"><button class="btn ghost" id="tcopy" hidden>Copy</button></div>
   </section>
 
@@ -658,40 +663,74 @@
   var customProviders=[];
   function buildTextProviders(){
     var sel=$('#tprovider'),cur=sel.value;
-    var opts='<option value="pollinations">Pollinations (free, no key)</option>'+
+    var opts='<optgroup label="⚡ Auto-combine (tries each until one works)">'+
+               '<option value="auto:uncensored">All uncensored — failover</option>'+
+               '<option value="auto:free">All free — failover</option>'+
+               '<option value="auto:all">Everything available — failover</option>'+
+               '<option value="auto:custom">My combo… (pick below)</option>'+
+             '</optgroup>'+
+             '<option value="pollinations">Pollinations (free, no key)</option>'+
              '<option value="puter">Puter (free — GPT / Claude / Gemini, sign in)</option>';
     keyedProviders.forEach(function(p){ if(p.connected&&!p.image) opts+='<option value="'+esc(p.id)+'">'+esc(p.name)+(p.local?' (on this PC)':p.noKey?' (free, no key)':' (your key)')+'</option>'; });
     customProviders.forEach(function(c){ opts+='<option value="'+esc(c.id)+'">'+esc(c.name)+' (custom)</option>'; });
     sel.innerHTML=opts; sel.value=cur&&[].some.call(sel.options,function(o){return o.value===cur})?cur:'pollinations';
   }
   $('#tprompt').value=store.get('tprompt','');$('#tprompt').addEventListener('input',function(){store.set('tprompt',this.value)});
+  // Call ONE provider, returning a Promise<string>. Used by single-provider and by auto-combine.
+  var UNC_RE=/venice|abliter|meganova|unclose|dolphin|uncensor|heretic|nsfw/i;
+  function callOne(provider,prompt,model){
+    model=model||'';
+    if(provider==='puter'){
+      if(!puterReady())return Promise.reject(new Error('Puter not loaded'));
+      var o={}; if(model)o.model=model;
+      return Promise.resolve(window.puter.ai.chat(prompt,o)).then(function(r){var t=puterText(r); if(!t)throw new Error('empty'); return t;});
+    }
+    if(provider==='pollinations'){
+      if(window.studio&&window.studio.ptext) return window.studio.ptext({prompt:prompt,token:ptoken()}).then(function(t){if(!t)throw new Error('empty');return t;});
+      return fetch(withToken('https://text.pollinations.ai/'+encodeURIComponent(prompt)+'?model=openai&referrer=open-studio'))
+        .then(function(r){if(!r.ok)throw new Error(r.status===429?'rate limited':'HTTP '+r.status);return r.text();}).then(function(t){if(!t)throw new Error('empty');return t;});
+    }
+    if(window.studio&&window.studio.text) return window.studio.text({provider:provider,model:model,prompt:prompt}).then(function(t){ if(!t||t==='(empty answer)')throw new Error('empty answer'); return t; });
+    return Promise.reject(new Error('needs the app or HTML build'));
+  }
+  // Which providers are usable right now (for the auto-combine chains).
+  function availableProviders(){
+    var out=[{id:'pollinations',name:'Pollinations',free:true,unc:false},{id:'puter',name:'Puter',free:true,unc:false}];
+    (keyedProviders||[]).forEach(function(p){ if(p.image)return; if(!(p.connected||p.noKey||p.local))return; out.push({id:p.id,name:p.name.replace(/\s*\(.*$/,''),free:!!(p.noKey||p.local),unc:UNC_RE.test(p.name)}); });
+    (customProviders||[]).forEach(function(c){ out.push({id:c.id,name:c.name,free:false,unc:UNC_RE.test(c.name)}); });
+    return out;
+  }
+  function comboList(kind){
+    var avail=availableProviders();
+    if(kind==='custom'){ var sel; try{sel=JSON.parse(store.get('combo','[]'))||[]}catch(e){sel=[]} return avail.filter(function(a){return sel.indexOf(a.id)>=0;}); }
+    if(kind==='free') return avail.filter(function(a){return a.free;});
+    if(kind==='uncensored') return avail.filter(function(a){return a.unc;});
+    return avail; // all
+  }
   function genText(){
-    var prompt=$('#tprompt').value.trim();$('#terr').hidden=true;
+    var prompt=$('#tprompt').value.trim();$('#terr').hidden=true;$('#tby')&&($('#tby').hidden=true);
     if(!prompt){$('#terr').textContent='Type a prompt first.';$('#terr').hidden=false;return;}
     var provider=$('#tprovider').value,model=$('#tmodel').value.trim();
     var out=$('#tout');out.textContent='…';$('#tcopy').hidden=true;$('#tspin').hidden=false;$('#tgen').disabled=true;
     var done=function(txt){out.textContent=(txt||'').trim()||'(empty answer)';$('#tcopy').hidden=false;};
     var fail=function(msg){out.textContent='The answer appears here.';$('#terr').textContent=msg;$('#terr').hidden=false;};
     var fin=function(){$('#tspin').hidden=true;$('#tgen').disabled=false;};
-    if(provider==='puter'){
-      if(!puterReady()){fail('Puter could not load — it needs an internet connection.');fin();return;}
-      var popts={}; if(model)popts.model=model;
-      Promise.resolve(window.puter.ai.chat(prompt,popts)).then(function(r){
-        var t=puterText(r); if(!t)throw new Error('empty answer'); done(t);
-      }).catch(function(e){fail('Puter: '+((e&&e.message)||e)+PUTER_HINT)}).then(fin);
+    var by=function(name){ var m=$('#tby'); if(m){m.textContent='✓ answered by '+name;m.hidden=false;} };
+    if(provider.indexOf('auto:')===0){
+      var kind=provider.split(':')[1], list=comboList(kind);
+      if(!list.length){ fail(kind==='uncensored'?'No uncensored providers are on yet — add Venice / Abliteration / MegaNova / UncloseAI / Dolphin in Services.':kind==='custom'?'Pick at least one provider in the combo list below.':'No providers available — add some in Services or Keys.'); fin(); return; }
+      var i=0;
+      (function tryNext(){
+        if(i>=list.length){ fail('Tried all '+list.length+' — none answered. Add keys, or try again.'); fin(); return; }
+        var pv=list[i]; out.textContent='Trying '+pv.name+'… ('+(i+1)+'/'+list.length+')';
+        callOne(pv.id,prompt,'').then(function(t){ if(!t||!t.trim())throw new Error('empty'); done(t); by(pv.name); fin(); })
+          .catch(function(){ i++; tryNext(); });
+      })();
       return;
     }
-    if(provider==='pollinations'){
-      if(window.studio&&window.studio.ptext){
-        window.studio.ptext({prompt:prompt,token:ptoken()}).then(done).catch(function(e){fail('Could not generate ('+(e.message||e)+').')}).then(fin);
-      }else{
-        var url=withToken('https://text.pollinations.ai/'+encodeURIComponent(prompt)+'?model=openai&referrer=open-studio');
-        fetch(url).then(function(r){if(!r.ok)throw new Error(r.status===429?'the free limit is cooling down — add a token in Keys':'HTTP '+r.status);return r.text()})
-          .then(done).catch(function(e){fail('Could not generate ('+e.message+').')}).then(fin);
-      }
-    }else if(window.studio&&window.studio.text){
-      window.studio.text({provider:provider,model:model,prompt:prompt}).then(done).catch(function(e){fail(e.message||String(e))}).then(fin);
-    }else{fail('Keyed services need the desktop app.');fin();}
+    callOne(provider,prompt,model).then(function(t){done(t);}).catch(function(e){
+      fail((provider==='puter'?'Puter: ':'')+((e&&e.message)||e)+(provider==='puter'?PUTER_HINT:((e&&/needs the app/.test(e.message))?' (keyed services need the app or HTML build)':'')));
+    }).then(fin);
   }
   $('#tgen').addEventListener('click',genText);
   function fillModels(list){ var dl=$('#tmodels'); if(!dl)return; dl.innerHTML=(list||[]).slice(0,500).map(function(m){return '<option value="'+esc(m)+'">';}).join(''); }
@@ -706,7 +745,21 @@
       .catch(function(e){$('#terr').textContent='Could not load models ('+(e.message||e)+').';$('#terr').hidden=false;})
       .then(function(){ tml.disabled=false;tml.textContent='↻'; });
   });
-  $('#tprovider').addEventListener('change',function(){ var dl=$('#tmodels'); if(dl)dl.innerHTML=''; $('#tmodel').value=''; });
+  function renderCombo(){
+    var box=$('#combo-list'); if(!box)return;
+    var sel; try{sel=JSON.parse(store.get('combo','[]'))||[]}catch(e){sel=[]}
+    var av=availableProviders();
+    box.innerHTML=av.map(function(a){ var on=sel.indexOf(a.id)>=0;
+      return '<label class="chip'+(on?' on':'')+'" style="cursor:pointer"><input type="checkbox" data-combo="'+esc(a.id)+'" '+(on?'checked':'')+' style="margin-right:6px;vertical-align:middle">'+esc(a.name)+(a.unc?' ·🔓':a.free?' ·free':'')+'</label>';
+    }).join('')||'<span class="hint">No providers available yet — add some in Services.</span>';
+    box.querySelectorAll('[data-combo]').forEach(function(cb){ cb.addEventListener('change',function(){
+      var s; try{s=JSON.parse(store.get('combo','[]'))||[]}catch(e){s=[]}
+      var id=cb.dataset.combo; if(cb.checked){if(s.indexOf(id)<0)s.push(id);}else{s=s.filter(function(x){return x!==id;});}
+      store.set('combo',JSON.stringify(s)); cb.closest('.chip').classList.toggle('on',cb.checked);
+    }); });
+  }
+  function syncCombo(){ var isC=$('#tprovider').value==='auto:custom'; var c=$('#combo'); if(c)c.hidden=!isC; if(isC)renderCombo(); }
+  $('#tprovider').addEventListener('change',function(){ var dl=$('#tmodels'); if(dl)dl.innerHTML=''; $('#tmodel').value=''; syncCombo(); });
   $('#tprompt').addEventListener('keydown',function(e){if((e.ctrlKey||e.metaKey)&&e.key==='Enter')genText()});
   $('#tcopy').addEventListener('click',function(){
     var t=$('#tout').textContent;
@@ -824,15 +877,15 @@
     {n:'Pollinations',k:['text','image'],key:'none',p:3,c:'$0',v:86,note:'Fast everyday images + chat, no key',a:'img'},
     {n:'Cerebras',k:['text'],key:'free',p:4,c:'free tier',v:85,note:'The fastest big open models',a:'keys',url:'https://cloud.cerebras.ai'},
     {n:'GitHub Models',k:['text'],key:'free',p:5,c:'free w/ GitHub token',v:83,note:'GPT-4.1, Llama, DeepSeek free',a:'add',base:'https://models.github.ai/inference',url:'https://github.com/settings/personal-access-tokens'},
-    {n:'AI Horde',k:['image'],key:'none',p:3,c:'$0 (queues 10–60s)',v:82,note:'Uncensored; many community models',a:'img'},
+    {n:'AI Horde',k:['image'],key:'none',p:3,c:'$0 (queues 10–60s)',v:82,unc:true,note:'Uncensored; many community models',a:'img'},
     {n:'Mistral AI',k:['text'],key:'free',p:4,c:'free tier',v:80,note:'Mistral + Codestral',a:'keys',url:'https://console.mistral.ai/api-keys'},
     {n:'NVIDIA NIM',k:['text'],key:'free',p:4,c:'free credits',v:79,note:'Llama, DeepSeek, Qwen, Nemotron',a:'keys',url:'https://build.nvidia.com'},
     {n:'SambaNova',k:['text'],key:'free',p:4,c:'free tier',v:78,note:'Large open models, very fast',a:'add',base:'https://api.sambanova.ai/v1',url:'https://cloud.sambanova.ai/apis'},
-    {n:'UncloseAI',k:['text'],key:'none',p:3,c:'$0',v:77,note:'Free + keyless (Hermes)',a:'nok',base:'https://hermes.ai.unturf.com/v1',url:'https://uncloseai.com/'},
+    {n:'UncloseAI',k:['text'],key:'none',p:3,c:'$0',v:77,unc:true,note:'Free + keyless (Hermes)',a:'nok',base:'https://hermes.ai.unturf.com/v1',url:'https://uncloseai.com/'},
     {n:'LLM7.io',k:['text'],key:'none',p:3,c:'$0',v:76,note:'Free gateway, no key; a token raises limits',a:'chat',url:'https://token.llm7.io'},
     {n:'ModelScope',k:['text'],key:'free',p:4,c:'free',v:76,note:'Free inference for the latest Qwen',a:'add',base:'https://api-inference.modelscope.cn/v1',url:'https://modelscope.cn/my/myaccesstoken'},
     {n:'OVHcloud (EU)',k:['text'],key:'none',p:3,c:'$0',v:75,note:'Open models in Europe, no sign-up',a:'chat',url:'https://endpoints.ai.cloud.ovh.net/'},
-    {n:'Venice AI',k:['text'],key:'free',p:4,c:'some free',v:74,note:'Private + uncensored',a:'add',base:'https://api.venice.ai/api/v1',url:'https://venice.ai/settings/api'},
+    {n:'Venice AI',k:['text'],key:'free',p:4,c:'some free',v:74,unc:true,note:'Private + uncensored',a:'add',base:'https://api.venice.ai/api/v1',url:'https://venice.ai/settings/api'},
     {n:'Hugging Face',k:['text'],key:'free',p:3,c:'small free credit',v:74,note:'Thousands of open models',a:'keys',url:'https://huggingface.co/settings/tokens'},
     {n:'SiliconFlow',k:['text'],key:'free',p:4,c:'some free',v:73,note:'100+ models, several permanently free',a:'add',base:'https://api.siliconflow.cn/v1',url:'https://cloud.siliconflow.cn/account/ak'},
     {n:'Z.ai (GLM)',k:['text'],key:'free',p:3,c:'free Flash',v:73,note:'GLM Flash models permanently free',a:'keys',url:'https://z.ai/manage-apikey/apikey-list'},
@@ -847,7 +900,7 @@
     {n:'Ollama',k:['text'],key:'local',p:4,c:'$0',v:70,note:'Runs on your PC, no key',a:'local',base:'http://localhost:11434/v1',url:'https://ollama.com'},
     {n:'Cohere',k:['text'],key:'free',p:3,c:'free trial',v:70,note:'Command models for documents',a:'keys',url:'https://dashboard.cohere.com/api-keys'},
     {n:'BazaarLink',k:['text'],key:'free',p:3,c:'free, no card',v:70,note:'Many models behind one key',a:'add',base:'https://api.bazaarlink.ai/v1',url:'https://bazaarlink.ai/free'},
-    {n:'MegaNova',k:['text'],key:'free',p:4,c:'some free',v:70,note:'100+ models incl. uncensored',a:'add',base:'https://api.meganova.ai/v1',url:'https://meganova.ai/api-keys'},
+    {n:'MegaNova',k:['text'],key:'free',p:4,c:'some free',v:70,unc:true,note:'100+ models incl. uncensored',a:'add',base:'https://api.meganova.ai/v1',url:'https://meganova.ai/api-keys'},
     {n:'Stability AI',k:['image'],key:'paid',p:5,c:'~$0.03/img',v:70,note:'Stable Diffusion 3 (Core) + upscale',a:'img',url:'https://platform.stability.ai/account/keys'},
     {n:'LM Studio',k:['text'],key:'local',p:4,c:'$0',v:69,note:'Runs on your PC, no key',a:'local',base:'http://localhost:1234/v1',url:'https://lmstudio.ai'},
     {n:'Kilo Code',k:['text'],key:'free',p:3,c:'free Auto tier',v:69,note:'~200 requests/hour free',a:'add',base:'https://ai-gateway.kilo.ai/api/v1',url:'https://kilo.ai/'},
@@ -865,10 +918,10 @@
     {n:'OpenAI',k:['text'],key:'paid',p:5,c:'pay as you go',v:60,note:'Official GPT models',a:'add',base:'https://api.openai.com/v1',url:'https://platform.openai.com/api-keys'},
     {n:'LibertAI',k:['text'],key:'paid',p:4,c:'pay per token',v:60,note:'Decentralized nodes, no card to start',a:'add',base:'https://api.libertai.io/v1',url:'https://libertai.io/api/'},
     {n:'LiteLLM proxy',k:['text'],key:'local',p:3,c:'$0',v:58,note:'Your own router to any provider',a:'local',base:'http://localhost:4000/v1',url:'https://docs.litellm.ai'},
-    {n:'Abliteration',k:['text'],key:'paid',p:4,c:'pay as you go',v:58,note:'Uncensored, refusal-free, zero-retention',a:'add',base:'https://api.abliteration.ai/v1',url:'https://abliteration.ai/'},
+    {n:'Abliteration',k:['text'],key:'paid',p:4,c:'pay as you go',v:58,unc:true,note:'Uncensored, refusal-free, zero-retention',a:'add',base:'https://api.abliteration.ai/v1',url:'https://abliteration.ai/'},
     {n:'DeepAI',k:['image'],key:'free',p:2,c:'~$0.01/img',v:55,note:'Simple, quick images',a:'img',url:'https://deepai.org/dashboard/profile'},
     {n:'PeerLLM',k:['text'],key:'doc',p:3,c:'free to try',v:50,note:'Decentralized; copy base URL from its docs',a:'doc',url:'https://www.peerllm.com/developers.html'},
-    {n:'Dolphin LLM',k:['text'],key:'doc',p:3,c:'trial credit',v:48,note:'Uncensored; copy base URL from its docs',a:'doc',url:'https://dolphinllm.com/docs/'},
+    {n:'Dolphin LLM',k:['text'],key:'doc',p:3,c:'trial credit',v:48,unc:true,note:'Uncensored; copy base URL from its docs',a:'doc',url:'https://dolphinllm.com/docs/'},
     {n:'Perchance',k:['image'],key:'browser',p:3,c:'$0',v:42,note:'Free images — browser only',a:'web',url:'https://perchance.org/ai-text-to-image-generator'},
     {n:'Sogni',k:['image'],key:'browser',p:3,c:'$0',v:40,note:'Community image app — browser only',a:'web',url:'https://app.sogni.ai/'},
     {n:'Kobold Lite',k:['text'],key:'browser',p:3,c:'$0',v:38,note:'Chat / story UI — browser only',a:'web',url:'https://lite.koboldai.net/'},
@@ -920,6 +973,7 @@
     return '<div class="keyrow" style="border-top:1px solid var(--line);align-items:center;gap:8px">'+
       '<span class="pn" style="min-width:140px">'+esc(s.n)+'</span>'+
       '<span class="badge '+ki[1]+'">'+esc(ki[0])+'</span>'+
+      (s.unc?'<span class="badge b-on" title="uncensored / refusal-free">🔓</span>':'')+
       power+
       '<span class="hint" style="flex:1;min-width:150px">'+(s.c&&s.c!=='—'?('<b style="color:var(--fg)">'+esc(s.c)+'</b> · '):'')+esc(s.note)+'</span>'+
       types+act+'</div>';
@@ -931,6 +985,7 @@
       if(svcF!=='all'){
         if(svcF==='nokey'){ if(!(s.key==='none'||s.key==='signin'||s.key==='local'))return false; }
         else if(svcF==='free'){ if(!(s.key==='none'||s.key==='signin'||s.key==='local'||s.key==='free'))return false; }
+        else if(svcF==='unc'){ if(!s.unc)return false; }
         else if(s.k.indexOf(svcF)<0) return false;
       }
       if(q&&(s.n+' '+s.note+' '+s.k.join(' ')).toLowerCase().indexOf(q)<0) return false;
@@ -945,7 +1000,7 @@
   }
   function renderServices(){
     var box=$('#svc-list'); if(!box)return;
-    var chips=[['all','All'],['text','Text'],['image','Image'],['video','Video'],['nokey','No key'],['free','Free to use']];
+    var chips=[['all','All'],['text','Text'],['image','Image'],['video','Video'],['nokey','No key'],['free','Free to use'],['unc','Uncensored 🔓']];
     box.innerHTML='<input type="text" id="svc-q" placeholder="Search services…" value="'+esc(svcQ)+'" style="margin-bottom:10px">'+
       '<div class="chips" id="svc-filters" style="margin-bottom:8px">'+chips.map(function(c){return '<button class="chip'+(svcF===c[0]?' on':'')+'" data-f="'+c[0]+'">'+c[1]+'</button>';}).join('')+'</div>'+
       '<p class="hint" style="margin:0 0 8px">Ranked by value (free + capable first). <b>Key</b> badge shows if an API key is needed. Power ● is a rough quality tier; costs are approximate — a guide, not exact. <b>Keyless image</b> = Pollinations, AI Horde, Puter (filter “No key” + “Image”). <b>Keyless video doesn’t exist</b> — every video provider now requires a key.</p>'+

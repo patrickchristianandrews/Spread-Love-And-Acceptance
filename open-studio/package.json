@@ -1,6 +1,6 @@
 {
   "name": "open-studio",
-  "version": "0.1.12",
+  "version": "0.1.13",
   "description": "Open Studio — a free, standalone image & text generation studio. Secure local key vault; free engines (Pollinations, AI Horde) plus bring-your-own-key clouds.",
   "main": "main.js",
   "author": "Open Studio",

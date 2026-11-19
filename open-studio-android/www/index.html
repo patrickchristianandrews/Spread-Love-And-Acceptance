@@ -164,8 +164,13 @@
       <div class="col" style="max-width:170px;display:flex;align-items:flex-end;gap:10px">
         <button class="btn" id="tgen" style="flex:1">Generate</button><span class="spin" id="tspin" hidden></span></div>
     </div>
+    <div id="combo" hidden style="margin-top:10px;background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:12px">
+      <div class="hint" style="margin:0 0 8px">Tick the AIs to chain. Ask once — it tries them top to bottom and stops at the first that answers. Saved on this device.</div>
+      <div id="combo-list" class="chips"></div>
+    </div>
     <div class="err" id="terr" hidden></div>
     <div class="out" id="tout" aria-live="polite">The answer appears here.</div>
+    <div class="hint" id="tby" hidden style="color:var(--good);font-weight:600;margin-top:6px"></div>
     <div class="bar"><button class="btn ghost" id="tcopy" hidden>Copy</button></div>
   </section>
 
