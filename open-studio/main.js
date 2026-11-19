@@ -44,7 +44,20 @@ const PROVIDERS = {
     blurb: 'Open models hosted in Europe, usable anonymously (about 2 requests/min per IP, no account). A free key raises the limit.' },
   cohere:      { name: 'Cohere (Command)',       base: 'https://api.cohere.ai/compatibility/v1', keyUrl: 'https://dashboard.cohere.com/api-keys',      defModel: 'command-a-03-2025',
     blurb: 'Cohere Command models for business writing and documents. Free trial key: ~1,000 calls a month, no card.' },
+  // Image clouds (each has its own non-OpenAI API; called from here with the key kept in the vault).
+  fal:         { name: 'fal.ai (images)',         base: '', keyUrl: 'https://fal.ai/dashboard/keys',                defModel: '', image: true, keyHint: 'fal API key',
+    blurb: 'Very fast FLUX / SD image generation. Pay as you go; new accounts get trial credit.' },
+  replicate:   { name: 'Replicate (images)',      base: '', keyUrl: 'https://replicate.com/account/api-tokens',     defModel: '', image: true, keyHint: 'Replicate token (r8_…)',
+    blurb: 'Thousands of image models (FLUX, SDXL, more). Pay per run; trial credit to start.' },
+  stability:   { name: 'Stability AI (images)',   base: '', keyUrl: 'https://platform.stability.ai/account/keys',   defModel: '', image: true, keyHint: 'Stability key (sk-…)',
+    blurb: 'Stable Diffusion / SD3 (Core). Pay with credits; some free credits on sign-up.' },
+  segmind:     { name: 'Segmind (images)',        base: '', keyUrl: 'https://www.segmind.com/',                      defModel: '', image: true, keyHint: 'Segmind API key',
+    blurb: 'FLUX / SDXL image API. A free credit allowance, then pay as you go.' },
 };
+
+// Map the chosen shape to each image cloud's own size/aspect argument.
+function aspectOf(w, h) { return w > h ? '16:9' : h > w ? '9:16' : '1:1'; }
+function falSize(w, h) { return w > h ? 'landscape_16_9' : h > w ? 'portrait_16_9' : 'square_hd'; }
 
 let keys = {};
 function loadKeys() {
@@ -129,6 +142,45 @@ ipcMain.handle('deepai:image', async (_e, { prompt }) => {
   const j = await r.json().catch(() => ({}));
   if (!r.ok || !j.output_url) throw new Error(j.err || `DeepAI returned HTTP ${r.status}`);
   return j.output_url;
+});
+// fal.ai — synchronous FLUX schnell; returns a hosted image URL.
+ipcMain.handle('fal:image', async (_e, { prompt, width, height }) => {
+  const key = keys.fal; if (!key) throw new Error('Add your fal.ai key first (Keys).');
+  const r = await fetch('https://fal.run/fal-ai/flux/schnell', { method: 'POST', headers: { Authorization: `Key ${key}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ prompt, image_size: falSize(width, height) }) });
+  const j = await r.json().catch(() => ({}));
+  if (!r.ok) throw new Error((j.detail && (j.detail[0]?.msg || j.detail)) || j.message || `fal.ai HTTP ${r.status}`);
+  const url = j.images && j.images[0] && j.images[0].url;
+  if (!url) throw new Error('fal.ai returned no image.');
+  return url;
+});
+// Replicate — FLUX schnell with Prefer: wait (runs synchronously); returns a hosted URL.
+ipcMain.handle('replicate:image', async (_e, { prompt, width, height }) => {
+  const key = keys.replicate; if (!key) throw new Error('Add your Replicate token first (Keys).');
+  const r = await fetch('https://api.replicate.com/v1/models/black-forest-labs/flux-schnell/predictions', { method: 'POST', headers: { Authorization: `Bearer ${key}`, 'Content-Type': 'application/json', Prefer: 'wait' }, body: JSON.stringify({ input: { prompt, aspect_ratio: aspectOf(width, height) } }) });
+  const j = await r.json().catch(() => ({}));
+  if (!r.ok) throw new Error(j.detail || j.title || `Replicate HTTP ${r.status}`);
+  let out = j.output; if (Array.isArray(out)) out = out[0];
+  if (typeof out !== 'string') throw new Error('Replicate is still processing — try again in a moment.');
+  return out;
+});
+// Stability AI — Stable Image Core; returns raw PNG bytes, which we turn into a data URL.
+ipcMain.handle('stability:image', async (_e, { prompt, width, height }) => {
+  const key = keys.stability; if (!key) throw new Error('Add your Stability key first (Keys).');
+  const fd = new FormData();
+  fd.append('prompt', prompt); fd.append('output_format', 'png'); fd.append('aspect_ratio', aspectOf(width, height));
+  const r = await fetch('https://api.stability.ai/v2beta/stable-image/generate/core', { method: 'POST', headers: { Authorization: `Bearer ${key}`, Accept: 'image/*' }, body: fd });
+  if (!r.ok) { const t = await r.text().catch(() => ''); throw new Error(`Stability HTTP ${r.status}${t ? ': ' + t.slice(0, 160) : ''}`); }
+  const buf = Buffer.from(await r.arrayBuffer());
+  return 'data:image/png;base64,' + buf.toString('base64');
+});
+// Segmind — fast FLUX schnell; returns raw image bytes -> data URL.
+ipcMain.handle('segmind:image', async (_e, { prompt }) => {
+  const key = keys.segmind; if (!key) throw new Error('Add your Segmind key first (Keys).');
+  const r = await fetch('https://api.segmind.com/v1/fast-flux-schnell', { method: 'POST', headers: { 'x-api-key': key, 'Content-Type': 'application/json' }, body: JSON.stringify({ prompt, samples: 1 }) });
+  if (!r.ok) { const t = await r.text().catch(() => ''); throw new Error(`Segmind HTTP ${r.status}${t ? ': ' + t.slice(0, 160) : ''}`); }
+  const ct = r.headers.get('content-type') || 'image/jpeg';
+  const buf = Buffer.from(await r.arrayBuffer());
+  return `data:${ct.indexOf('png') >= 0 ? 'image/png' : 'image/jpeg'};base64,` + buf.toString('base64');
 });
 ipcMain.handle('keys:set', (_e, { provider, key }) => { if (PROVIDERS[provider]) { keys[provider] = (key || '').trim(); if (!keys[provider]) delete keys[provider]; saveKeys(); } return Object.keys(keys); });
 

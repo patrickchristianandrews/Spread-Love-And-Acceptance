@@ -60,10 +60,18 @@
 
   function engine(){return $('#iengine').value}
   var hordeLoaded=false;
+  // Keyed image clouds: engine id -> {fn on window.studio, friendly hint}
+  var KEYED_IMG={
+    deepai:    {fn:'deepaiImage',    hint:'DeepAI: uses your DeepAI API key (add it under Keys). One image per request.'},
+    fal:       {fn:'falImage',       hint:'fal.ai: very fast FLUX, using your fal.ai key (Keys). Pay as you go; trial credit on new accounts.'},
+    replicate: {fn:'replicateImage', hint:'Replicate: FLUX schnell, using your Replicate token (Keys). Pay per run.'},
+    stability: {fn:'stabilityImage', hint:'Stability: Stable Image Core (SD3), using your Stability key (Keys). Uses credits.'},
+    segmind:   {fn:'segmindImage',   hint:'Segmind: fast FLUX, using your Segmind key (Keys). Free credit allowance, then pay as you go.'}
+  };
   function applyEngine(){
-    var e=engine(),h=e==='aihorde',d=e==='deepai',p=e==='puter';
-    $('#imodel').hidden=h||d||p; $('#ihordemodel').hidden=!h;
-    $('#ihint').textContent=p?'Puter: free DALL·E / Flux with no key — a one-time Puter sign-in popup appears on first use, then usage bills to your own free Puter account.':d?'DeepAI: uses your DeepAI API key (add it under Keys). One image per request.':h?'AI Horde: free, no account, dozens of models. A free job can queue 10–60s.':'Pollinations network. Free; about one image every 45s unless you add a token (Keys).';
+    var e=engine(),h=e==='aihorde',p=e==='puter',k=!!KEYED_IMG[e];
+    $('#imodel').hidden=h||p||k; $('#ihordemodel').hidden=!h;
+    $('#ihint').textContent=k?KEYED_IMG[e].hint:p?'Puter: free DALL·E / Flux with no key — a one-time Puter sign-in popup appears on first use, then usage bills to your own free Puter account.':h?'AI Horde: free, no account, dozens of models. A free job can queue 10–60s.':'Pollinations network. Free; about one image every 45s unless you add a token (Keys).';
     if(h&&!hordeLoaded){hordeLoaded=true;loadHordeModels();}
   }
   function loadHordeModels(){
@@ -150,15 +158,19 @@
       }).catch(function(e){fig.remove();showErr('AI Horde: '+e.message);});
     }
   }
-  function deepaiImage(base,seed){
-    if(!(window.studio&&window.studio.deepaiImage)){showErr('DeepAI needs the desktop app.');return;}
+  // Generic keyed image cloud (DeepAI, fal.ai, Replicate, Stability, Segmind) — the app/shim backend
+  // holds the key and returns a hosted URL or a data: URL.
+  function keyedImage(eng,base,seed){
+    var cfg=KEYED_IMG[eng],fn=cfg&&cfg.fn,label=$('#iengine').selectedOptions[0].text.split(' —')[0];
+    if(!(window.studio&&window.studio[fn])){showErr(label+' needs the desktop app or the HTML build.');return;}
     var full=base+(style?(', '+style):'');
-    var item={url:'',prompt:full,base:base,w:shape.w,h:shape.h,model:'DeepAI',ts:Date.now()};
+    var item={url:'',prompt:full,base:base,w:shape.w,h:shape.h,model:label,ts:Date.now()};
     var fig=newTile(item),stat=fig.querySelector('.hstat'),sp=fig.querySelector('.spin'),img=fig.querySelector('img');
-    stat.textContent='DeepAI…';
-    window.studio.deepaiImage({prompt:full}).then(function(url){ item.url=url;var ax=fig.querySelectorAll('a');ax[0].href=url;ax[1].href=url;
-      img.onload=function(){sp.hidden=true;stat.textContent='';};img.onerror=function(){sp.hidden=true;};img.src=url;savedToLib(item); })
-      .catch(function(e){fig.remove();showErr('DeepAI: '+(e.message||e));});
+    stat.textContent=label+'…';
+    window.studio[fn]({prompt:full,width:shape.w,height:shape.h,seed:seed}).then(function(url){
+      item.url=url;var ax=fig.querySelectorAll('a');ax[0].href=url;ax[1].href=url;
+      img.onload=function(){sp.hidden=true;stat.textContent='';};img.onerror=function(){sp.hidden=true;stat.textContent='';};img.src=url;savedToLib(item);
+    }).catch(function(e){fig.remove();showErr(label+': '+((e&&e.message)||e));});
   }
   function puterImage(base,seed){
     var full=base+(style?(', '+style):'');
@@ -181,7 +193,7 @@
       var seed;
       if(lock&&!fromVary&&$('#iseed').value.trim()!=='')seed=parseInt($('#iseed').value,10)||0;else seed=Math.floor(Math.random()*1e9);
       if(!lock&&n===1&&!fromVary)$('#iseed').value=seed;
-      if(engine()==='aihorde')hordeImage(base,seed);else if(engine()==='deepai')deepaiImage(base,seed);else if(engine()==='puter')puterImage(base,seed);else pollImage(base,seed);
+      if(engine()==='aihorde')hordeImage(base,seed);else if(KEYED_IMG[engine()])keyedImage(engine(),base,seed);else if(engine()==='puter')puterImage(base,seed);else pollImage(base,seed);
     }
     if(engine()==='pollinations')cool();
   }
@@ -354,10 +366,10 @@
     ['Duck.ai','https://duck.ai','Free anonymous chat — browser-only, no API.']
   ];
   var SVC_IMGAPI=[
-    ['Segmind','https://www.segmind.com/','Image & video API, but NOT OpenAI-style (per-model endpoints, returns raw bytes). I can add a small adapter — just ask.'],
-    ['fal.ai','https://fal.ai/','Fast image/video API; needs its own adapter. Ask and I’ll wire it.'],
-    ['Replicate','https://replicate.com/','Thousands of image/video/audio models; needs its own adapter.'],
-    ['Stability AI','https://platform.stability.ai/','Stable Diffusion/SD3 API; needs its own adapter.']
+    ['fal.ai','https://fal.ai/dashboard/keys','FLUX schnell — built in. Pick "fal.ai" in the Image tab, add your key in Keys.'],
+    ['Replicate','https://replicate.com/account/api-tokens','FLUX schnell — built in. Pick "Replicate" in the Image tab, add your token in Keys.'],
+    ['Stability AI','https://platform.stability.ai/account/keys','Stable Image Core (SD3) — built in. Pick "Stability" in the Image tab, add your key.'],
+    ['Segmind','https://www.segmind.com/','Fast FLUX — built in. Pick "Segmind" in the Image tab, add your key in Keys.']
   ];
   var SVC_NOAPI=['Inferium','Kavel','PeerLLM','BazaarLink','Numes AI','UncloseAI','deAPI','Dolphin Network','Aifreeforever-2api (reverse-proxy — against providers’ terms, unstable; not safe to ship)'];
 
@@ -406,12 +418,12 @@
         '<button class="btn ghost" data-addlocal="'+esc(s[0])+'|'+esc(s[1])+'">Add</button>'+
         '<a class="chip" href="'+esc(s[2])+'" target="_blank" rel="noopener">About ↗</a></div>';
     }).join('')+'</div>';
-    // Image APIs needing an adapter
-    h+=grp('Image / video APIs — need a small adapter','These have real APIs but not the OpenAI chat shape, so they need a bit of wiring. Say the word and I’ll build it.');
+    // Image clouds — now built in
+    h+=grp('Image clouds — built in','Real image generation with your key. Pick one in the Image tab; add the key in Keys. Each link opens its key page.');
     h+='<div style="display:grid;gap:8px">'+SVC_IMGAPI.map(function(s){
       return '<div class="keyrow" style="border-top:1px solid var(--line)"><span class="pn" style="min-width:150px">'+esc(s[0])+'</span>'+
         '<span class="hint" style="flex:1;min-width:160px">'+esc(s[2])+'</span>'+
-        '<a class="chip" href="'+esc(s[1])+'" target="_blank" rel="noopener">Site ↗</a></div>';
+        '<a class="chip" href="'+esc(s[1])+'" target="_blank" rel="noopener">Key ↗</a></div>';
     }).join('')+'</div>';
     // Browser-only
     h+=grp('Open in your browser — no API to connect','Great tools, but they offer no public API, so Open Studio links out instead of faking a connection.');

@@ -20,7 +20,14 @@
     moonshot:    { name: 'Moonshot (Kimi)',       base: 'https://api.moonshot.ai/v1',        keyUrl: 'https://platform.moonshot.ai/console/api-keys', defModel: 'kimi-latest', blurb: 'Kimi models — strong at coding and long documents.' },
     ovhcloud:    { name: 'OVHcloud (EU, no key)', base: 'https://oai.endpoints.kepler.ai.cloud.ovh.net/v1', keyUrl: 'https://endpoints.ai.cloud.ovh.net/', defModel: 'Meta-Llama-3_3-70B-Instruct', noKey: true, blurb: 'Open models hosted in Europe, usable anonymously (~2 req/min per IP).' },
     cohere:      { name: 'Cohere (Command)',      base: 'https://api.cohere.ai/compatibility/v1', keyUrl: 'https://dashboard.cohere.com/api-keys',     defModel: 'command-a-03-2025', blurb: 'Cohere Command models. Free trial key, ~1,000 calls a month, no card.' },
+    fal:         { name: 'fal.ai (images)',       base: '', keyUrl: 'https://fal.ai/dashboard/keys',              image: true, keyHint: 'fal API key', blurb: 'Very fast FLUX / SD image generation. Pay as you go; trial credit.' },
+    replicate:   { name: 'Replicate (images)',    base: '', keyUrl: 'https://replicate.com/account/api-tokens',   image: true, keyHint: 'Replicate token (r8_…)', blurb: 'Thousands of image models (FLUX, SDXL). Pay per run; trial credit.' },
+    stability:   { name: 'Stability AI (images)', base: '', keyUrl: 'https://platform.stability.ai/account/keys', image: true, keyHint: 'Stability key (sk-…)', blurb: 'Stable Diffusion / SD3 (Core). Credits; some free on sign-up.' },
+    segmind:     { name: 'Segmind (images)',      base: '', keyUrl: 'https://www.segmind.com/',                    image: true, keyHint: 'Segmind API key', blurb: 'FLUX / SDXL image API. Free credit allowance, then pay as you go.' },
   };
+  function aspectOf(w, h) { return w > h ? '16:9' : h > w ? '9:16' : '1:1'; }
+  function falSize(w, h) { return w > h ? 'landscape_16_9' : h > w ? 'portrait_16_9' : 'square_hd'; }
+  function toDataURL(blob) { return new Promise(function (res, rej) { var fr = new FileReader(); fr.onload = function () { res(fr.result); }; fr.onerror = function () { rej(new Error('could not read image data')); }; fr.readAsDataURL(blob); }); }
 
   var HORDE = 'https://aihorde.net/api/v2';
   var HAGENT = 'OpenStudio:0.1:android';
@@ -124,6 +131,35 @@
       var j = {}; try { j = await r.json(); } catch (e) {}
       if (!r.ok || !j.output_url) throw new Error(j.err || ('DeepAI HTTP ' + r.status));
       return j.output_url;
+    },
+    falImage: async function (o) {
+      var key = keyOf('fal'); if (!key) throw new Error('Add your fal.ai key first (Keys).');
+      var r = await fetch('https://fal.run/fal-ai/flux/schnell', { method: 'POST', headers: { Authorization: 'Key ' + key, 'Content-Type': 'application/json' }, body: JSON.stringify({ prompt: o.prompt, image_size: falSize(o.width, o.height) }) });
+      var j = {}; try { j = await r.json(); } catch (e) {}
+      if (!r.ok) throw new Error((j.detail && (j.detail[0] && j.detail[0].msg || j.detail)) || j.message || ('fal.ai HTTP ' + r.status));
+      var url = j.images && j.images[0] && j.images[0].url; if (!url) throw new Error('fal.ai returned no image.'); return url;
+    },
+    replicateImage: async function (o) {
+      var key = keyOf('replicate'); if (!key) throw new Error('Add your Replicate token first (Keys).');
+      var r = await fetch('https://api.replicate.com/v1/models/black-forest-labs/flux-schnell/predictions', { method: 'POST', headers: { Authorization: 'Bearer ' + key, 'Content-Type': 'application/json', Prefer: 'wait' }, body: JSON.stringify({ input: { prompt: o.prompt, aspect_ratio: aspectOf(o.width, o.height) } }) });
+      var j = {}; try { j = await r.json(); } catch (e) {}
+      if (!r.ok) throw new Error(j.detail || j.title || ('Replicate HTTP ' + r.status));
+      var out = j.output; if (Array.isArray(out)) out = out[0];
+      if (typeof out !== 'string') throw new Error('Replicate is still processing — try again in a moment.');
+      return out;
+    },
+    stabilityImage: async function (o) {
+      var key = keyOf('stability'); if (!key) throw new Error('Add your Stability key first (Keys).');
+      var fd = new FormData(); fd.append('prompt', o.prompt); fd.append('output_format', 'png'); fd.append('aspect_ratio', aspectOf(o.width, o.height));
+      var r = await fetch('https://api.stability.ai/v2beta/stable-image/generate/core', { method: 'POST', headers: { Authorization: 'Bearer ' + key, Accept: 'image/*' }, body: fd });
+      if (!r.ok) { var t = ''; try { t = await r.text(); } catch (e) {} throw new Error('Stability HTTP ' + r.status + (t ? ': ' + t.slice(0, 160) : '')); }
+      return toDataURL(await r.blob());
+    },
+    segmindImage: async function (o) {
+      var key = keyOf('segmind'); if (!key) throw new Error('Add your Segmind key first (Keys).');
+      var r = await fetch('https://api.segmind.com/v1/fast-flux-schnell', { method: 'POST', headers: { 'x-api-key': key, 'Content-Type': 'application/json' }, body: JSON.stringify({ prompt: o.prompt, samples: 1 }) });
+      if (!r.ok) { var t = ''; try { t = await r.text(); } catch (e) {} throw new Error('Segmind HTTP ' + r.status + (t ? ': ' + t.slice(0, 160) : '')); }
+      return toDataURL(await r.blob());
     },
     customList: function () { return P(customs().map(function (c) { return { id: c.id, name: c.name, base: c.base, connected: true }; })); },
     customAdd: function (o) {
