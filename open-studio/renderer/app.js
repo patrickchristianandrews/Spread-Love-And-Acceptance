@@ -371,79 +371,77 @@
   // Quicksilver's provider list or by lookup). Tap Add -> it pre-fills the Keys > Custom form and
   // opens the sign-up page; paste the key and Add service. Image-only / no-API tools are listed too,
   // with an honest note, so nothing you found is lost.
-  var SVC_ADD=[
-    ['OpenRouter','https://openrouter.ai/api/v1','https://openrouter.ai/keys','Hundreds of models; any model ending ":free" is free.'],
-    ['Together AI','https://api.together.xyz/v1','https://api.together.ai/settings/api-keys','Low-cost open models + a free FLUX image model.'],
-    ['DeepSeek','https://api.deepseek.com/v1','https://platform.deepseek.com/api_keys','Strong reasoning, very cheap. New accounts often get credit.'],
-    ['xAI (Grok)','https://api.x.ai/v1','https://console.x.ai','Grok models; trial credit on new accounts.'],
-    ['Perplexity (web answers)','https://api.perplexity.ai','https://www.perplexity.ai/settings/api','Answers with live web sources (Sonar).'],
-    ['Fireworks AI','https://api.fireworks.ai/inference/v1','https://fireworks.ai/account/api-keys','Fast hosting of the best open models; trial credit.'],
-    ['DeepInfra','https://api.deepinfra.com/v1/openai','https://deepinfra.com/dash/api_keys','Very low prices for big open models.'],
-    ['SambaNova (very fast)','https://api.sambanova.ai/v1','https://cloud.sambanova.ai/apis','Large open models at high speed; free tier.'],
-    ['Clarifai','https://api.clarifai.com/v2/ext/openai/v1','https://clarifai.com/settings/security','Many open models, one key; free tier.'],
-    ['Aion Labs','https://api.aionlabs.ai/v1','https://www.aionlabs.ai/app/api-keys/','Permanent free tier (no card), tuned for role-play/stories.'],
-    ['ModelScope (Alibaba)','https://api-inference.modelscope.cn/v1','https://modelscope.cn/my/myaccesstoken','Free inference for the latest Qwen and other open models.'],
-    ['SiliconFlow','https://api.siliconflow.cn/v1','https://cloud.siliconflow.cn/account/ak','100+ open models; several permanently free.'],
-    ['AI21 (Jamba)','https://api.ai21.com/studio/v1','https://studio.ai21.com/account/api-key','Very long documents (256K context); free trial.'],
-    ['Alibaba Qwen','https://dashscope-intl.aliyuncs.com/compatible-mode/v1','https://modelstudio.console.alibabacloud.com/','Qwen Max and friends in the cloud; free quota.'],
-    ['AI/ML API (200+ models)','https://api.aimlapi.com/v1','https://aimlapi.com/app/keys','200+ models behind one key; free allowance.'],
-    ['GitHub Models','https://models.github.ai/inference','https://github.com/settings/personal-access-tokens','GPT-4.1, Llama, DeepSeek free with a GitHub token.'],
-    ['OpenAI','https://api.openai.com/v1','https://platform.openai.com/api-keys','The official GPT models (pay as you go).'],
-    ['Venice AI (uncensored)','https://api.venice.ai/api/v1','https://venice.ai/settings/api','Private + uncensored; a limited free allowance.'],
-    ['Abliteration (uncensored)','https://api.abliteration.ai/v1','https://abliteration.ai/','Refusal-free models, zero-retention. Pay as you go.'],
-    ['MegaNova (uncensored, 100+)','https://api.meganova.ai/v1','https://meganova.ai/api-keys','100+ models incl. uncensored; some free, rest paid.'],
-    ['LibertAI (decentralized)','https://api.libertai.io/v1','https://libertai.io/api/','Open models on decentralized nodes; pay per token, no card to start.'],
-    ['AxForge','https://api.axforge.ai/v1','https://axforge.ai/','Free tier ~3M tokens / 30 days, no card (per its docs).'],
-    ['UncloseAI (free, no key)','https://hermes.ai.unturf.com/v1','https://uncloseai.com/','Free and keyless, OpenAI-compatible (Hermes on an RTX 4090).','nokey'],
-    ['BazaarLink','https://api.bazaarlink.ai/v1','https://bazaarlink.ai/free','Free gateway, no card; many models behind one key.'],
-    ['Kilo Code','https://ai-gateway.kilo.ai/api/v1','https://kilo.ai/','Free "Auto" tier (~200 requests/hour); OpenAI-compatible.']
-  ];
-  // Real API, but I won't guess a base URL — grab it from their page and paste into + Custom.
-  var SVC_DOCS=[
-    ['PeerLLM','https://www.peerllm.com/developers.html','Decentralized, free to try, OpenAI-compatible. Copy its base URL from the developer page into "+ Custom".'],
-    ['Dolphin LLM','https://dolphinllm.com/docs/','Uncensored, OpenAI-compatible, small trial credit. Copy the base URL from its docs into "+ Custom".'],
-    ['Numes AI','https://bazaarlink.ai/en/probe/relay/api.numes.ai','⚠ Works, but independent probes found it sometimes serves a different model than you ask for. Use "+ Custom" (base https://api.numes.ai) only if you accept that.']
-  ];
-  var SVC_LOCAL=[
-    ['Ollama (on this PC)','http://localhost:11434/v1','https://ollama.com','Runs models on your PC, no key. Start Ollama first.'],
-    ['LM Studio (on this PC)','http://localhost:1234/v1','https://lmstudio.ai','Runs models on your PC, no key. Start its local server.'],
-    ['LiteLLM proxy (your server)','http://localhost:4000/v1','https://docs.litellm.ai','Your own proxy that can route to any provider.']
-  ];
-  var SVC_BROWSER=[
-    ['Perchance','https://perchance.org/ai-text-to-image-generator','Free images — browser-only generator, no public API to connect.'],
-    ['Sogni','https://app.sogni.ai/','Free community image app — no documented public API.'],
-    ['Kobold Lite','https://lite.koboldai.net/','Free chat/story UI (can ride AI Horde) — browser-only.'],
-    ['Petals','https://github.com/bigscience-workshop/petals','Run big models split across volunteers — self-host, not a hosted API.'],
-    ['LMArena','https://lmarena.ai/','Free model "battles" — browser-only, no API.'],
-    ['NoteGPT','https://notegpt.io/','Summaries/notes tool — browser-only, no general API.'],
-    ['GPT4Free','https://github.com/xtekky/gpt4free','Self-host proxy to free sources — unstable and often against sites’ terms; use the Custom box only if you run it yourself.'],
-    ['Duck.ai','https://duck.ai','Free anonymous chat — browser-only, no API.']
-  ];
-  var SVC_IMGAPI=[
-    ['fal.ai','https://fal.ai/dashboard/keys','FLUX schnell — built in. Pick "fal.ai" in the Image tab, add your key in Keys.'],
-    ['Replicate','https://replicate.com/account/api-tokens','FLUX schnell — built in. Pick "Replicate" in the Image tab, add your token in Keys.'],
-    ['Stability AI','https://platform.stability.ai/account/keys','Stable Image Core (SD3) — built in. Pick "Stability" in the Image tab, add your key.'],
-    ['Segmind','https://www.segmind.com/','Fast FLUX — built in. Pick "Segmind" in the Image tab, add your key in Keys.']
-  ];
-  var SVC_NOAPI=['Inferium','Kavel','deAPI','Aifreeforever-2api (reverse-proxy — against providers’ terms, unstable; not safe to ship)'];
-
-  // Image + video engine comparison. Power = rough quality tier (1–5) for everyday prompts.
-  // Costs are APPROXIMATE and change — they come from each provider's public pricing and vary with
-  // size/length. Always treated as a guide, never exact.
-  var ENGINE_META=[
-    ['Image','Pollinations','Free','$0',3,'Fast everyday images, zero setup'],
-    ['Image','AI Horde','Free','$0 (queues 10–60s)',3,'Uncensored; many community models'],
-    ['Image','Puter','Free*','$0 to you — bills to your Puter account',4,'DALL·E / Flux with no key'],
-    ['Image','Segmind','Free credits, then paid','~$0.001–0.002 / image',4,'Cheapest FLUX; free allowance'],
-    ['Image','fal.ai','Paid (trial credit)','~$0.003–0.01 / image',5,'Very fast FLUX, top quality'],
-    ['Image','Replicate','Paid (trial credit)','~$0.003 / image (FLUX schnell)',5,'Huge model catalog'],
-    ['Image','Stability','Paid (some free credits)','~$0.03 / image (SD3 Core)',5,'Stable Diffusion 3, reliable'],
-    ['Image','DeepAI','Free credits, then paid','~$0.01 / image',2,'Simple and quick'],
-    ['Video','fal.ai (LTX)','Paid','~$0.05–0.20 / short clip',4,'Fast text-to-video'],
-    ['Video','Replicate (WAN 2.2)','Paid','~$0.10–0.50 / clip',4,'Higher-quality clips']
+  // One ranked catalog of every service. v = value score (free + capable first). p = power 1–5.
+  // key: none|signin|free|paid|local|browser|doc|noapi. a = action. Costs are approximate guides.
+  var CATALOG=[
+    {n:'Puter',k:['text','image'],key:'signin',p:4,c:'free (User-Pays)',v:95,note:'Keyless GPT / Claude / Gemini / DALL·E',a:'chat'},
+    {n:'Google Gemini',k:['text'],key:'free',p:5,c:'free tier',v:90,note:'Gemini Flash + Gemma, big free daily quota',a:'keys',url:'https://aistudio.google.com/apikey'},
+    {n:'Groq',k:['text'],key:'free',p:4,c:'free tier',v:88,note:'Ultra-fast open models (Llama, Mixtral)',a:'keys',url:'https://console.groq.com/keys'},
+    {n:'OpenRouter',k:['text'],key:'free',p:5,c:'free + paid',v:87,note:'Hundreds of models; any :free one is free',a:'add',base:'https://openrouter.ai/api/v1',url:'https://openrouter.ai/keys'},
+    {n:'Pollinations',k:['text','image'],key:'none',p:3,c:'$0',v:86,note:'Fast everyday images + chat, no key',a:'img'},
+    {n:'Cerebras',k:['text'],key:'free',p:4,c:'free tier',v:85,note:'The fastest big open models',a:'keys',url:'https://cloud.cerebras.ai'},
+    {n:'GitHub Models',k:['text'],key:'free',p:5,c:'free w/ GitHub token',v:83,note:'GPT-4.1, Llama, DeepSeek free',a:'add',base:'https://models.github.ai/inference',url:'https://github.com/settings/personal-access-tokens'},
+    {n:'AI Horde',k:['image'],key:'none',p:3,c:'$0 (queues 10–60s)',v:82,note:'Uncensored; many community models',a:'img'},
+    {n:'Mistral AI',k:['text'],key:'free',p:4,c:'free tier',v:80,note:'Mistral + Codestral',a:'keys',url:'https://console.mistral.ai/api-keys'},
+    {n:'NVIDIA NIM',k:['text'],key:'free',p:4,c:'free credits',v:79,note:'Llama, DeepSeek, Qwen, Nemotron',a:'keys',url:'https://build.nvidia.com'},
+    {n:'SambaNova',k:['text'],key:'free',p:4,c:'free tier',v:78,note:'Large open models, very fast',a:'add',base:'https://api.sambanova.ai/v1',url:'https://cloud.sambanova.ai/apis'},
+    {n:'UncloseAI',k:['text'],key:'none',p:3,c:'$0',v:77,note:'Free + keyless (Hermes)',a:'nok',base:'https://hermes.ai.unturf.com/v1',url:'https://uncloseai.com/'},
+    {n:'LLM7.io',k:['text'],key:'none',p:3,c:'$0',v:76,note:'Free gateway, no key; a token raises limits',a:'chat',url:'https://token.llm7.io'},
+    {n:'ModelScope',k:['text'],key:'free',p:4,c:'free',v:76,note:'Free inference for the latest Qwen',a:'add',base:'https://api-inference.modelscope.cn/v1',url:'https://modelscope.cn/my/myaccesstoken'},
+    {n:'OVHcloud (EU)',k:['text'],key:'none',p:3,c:'$0',v:75,note:'Open models in Europe, no sign-up',a:'chat',url:'https://endpoints.ai.cloud.ovh.net/'},
+    {n:'Venice AI',k:['text'],key:'free',p:4,c:'some free',v:74,note:'Private + uncensored',a:'add',base:'https://api.venice.ai/api/v1',url:'https://venice.ai/settings/api'},
+    {n:'Hugging Face',k:['text'],key:'free',p:3,c:'small free credit',v:74,note:'Thousands of open models',a:'keys',url:'https://huggingface.co/settings/tokens'},
+    {n:'SiliconFlow',k:['text'],key:'free',p:4,c:'some free',v:73,note:'100+ models, several permanently free',a:'add',base:'https://api.siliconflow.cn/v1',url:'https://cloud.siliconflow.cn/account/ak'},
+    {n:'Z.ai (GLM)',k:['text'],key:'free',p:3,c:'free Flash',v:73,note:'GLM Flash models permanently free',a:'keys',url:'https://z.ai/manage-apikey/apikey-list'},
+    {n:'fal.ai',k:['image','video'],key:'paid',p:5,c:'~$0.003–0.01/img · ~$0.05–0.20/clip',v:73,note:'Very fast FLUX; text-to-video',a:'img',url:'https://fal.ai/dashboard/keys'},
+    {n:'DeepSeek',k:['text'],key:'paid',p:5,c:'very cheap',v:72,note:'Strong reasoning; often credit on signup',a:'add',base:'https://api.deepseek.com/v1',url:'https://platform.deepseek.com/api_keys'},
+    {n:'Replicate',k:['image','video'],key:'paid',p:5,c:'~$0.003/img · ~$0.10–0.50/clip',v:72,note:'Huge model catalog',a:'img',url:'https://replicate.com/account/api-tokens'},
+    {n:'Aion Labs',k:['text'],key:'free',p:3,c:'free, no card',v:72,note:'Tuned for role-play / stories',a:'add',base:'https://api.aionlabs.ai/v1',url:'https://www.aionlabs.ai/app/api-keys/'},
+    {n:'Cloudflare Workers AI',k:['text'],key:'free',p:3,c:'free daily',v:72,note:'Open models on the edge',a:'keys',url:'https://dash.cloudflare.com/profile/api-tokens'},
+    {n:'Segmind',k:['image'],key:'free',p:4,c:'~$0.001–0.002/img',v:71,note:'Cheapest FLUX; free credits',a:'img',url:'https://www.segmind.com/'},
+    {n:'Gonka Broker',k:['text'],key:'free',p:3,c:'~1M free/mo',v:71,note:'GLM, DeepSeek, MiniMax',a:'keys',url:'https://app.gonkabroker.com/signup'},
+    {n:'Alibaba Qwen',k:['text'],key:'free',p:4,c:'free quota',v:71,note:'Qwen Max in the cloud',a:'add',base:'https://dashscope-intl.aliyuncs.com/compatible-mode/v1',url:'https://modelstudio.console.alibabacloud.com/'},
+    {n:'Ollama',k:['text'],key:'local',p:4,c:'$0',v:70,note:'Runs on your PC, no key',a:'local',base:'http://localhost:11434/v1',url:'https://ollama.com'},
+    {n:'Cohere',k:['text'],key:'free',p:3,c:'free trial',v:70,note:'Command models for documents',a:'keys',url:'https://dashboard.cohere.com/api-keys'},
+    {n:'BazaarLink',k:['text'],key:'free',p:3,c:'free, no card',v:70,note:'Many models behind one key',a:'add',base:'https://api.bazaarlink.ai/v1',url:'https://bazaarlink.ai/free'},
+    {n:'MegaNova',k:['text'],key:'free',p:4,c:'some free',v:70,note:'100+ models incl. uncensored',a:'add',base:'https://api.meganova.ai/v1',url:'https://meganova.ai/api-keys'},
+    {n:'Stability AI',k:['image'],key:'paid',p:5,c:'~$0.03/img',v:70,note:'Stable Diffusion 3 (Core) + upscale',a:'img',url:'https://platform.stability.ai/account/keys'},
+    {n:'LM Studio',k:['text'],key:'local',p:4,c:'$0',v:69,note:'Runs on your PC, no key',a:'local',base:'http://localhost:1234/v1',url:'https://lmstudio.ai'},
+    {n:'Kilo Code',k:['text'],key:'free',p:3,c:'free Auto tier',v:69,note:'~200 requests/hour free',a:'add',base:'https://ai-gateway.kilo.ai/api/v1',url:'https://kilo.ai/'},
+    {n:'AxForge',k:['text'],key:'free',p:3,c:'free ~3M tok/mo',v:69,note:'No card',a:'add',base:'https://api.axforge.ai/v1',url:'https://axforge.ai/'},
+    {n:'AI/ML API',k:['text'],key:'free',p:4,c:'free allowance',v:68,note:'200+ models, one key',a:'add',base:'https://api.aimlapi.com/v1',url:'https://aimlapi.com/app/keys'},
+    {n:'KoboldCpp',k:['text'],key:'local',p:3,c:'$0',v:68,note:'Runs on your PC (localhost:5001)',a:'keys',url:'https://github.com/LostRuins/koboldcpp'},
+    {n:'Together AI',k:['text','image'],key:'paid',p:4,c:'trial + free FLUX',v:67,note:'Low-cost open models',a:'add',base:'https://api.together.xyz/v1',url:'https://api.together.ai/settings/api-keys'},
+    {n:'Perplexity',k:['text'],key:'paid',p:4,c:'pay as you go',v:66,note:'Answers with live web sources',a:'add',base:'https://api.perplexity.ai',url:'https://www.perplexity.ai/settings/api'},
+    {n:'Clarifai',k:['text'],key:'free',p:3,c:'free tier',v:66,note:'Many open models, one key',a:'add',base:'https://api.clarifai.com/v2/ext/openai/v1',url:'https://clarifai.com/settings/security'},
+    {n:'Moonshot (Kimi)',k:['text'],key:'paid',p:4,c:'credit on signup',v:66,note:'Strong at coding + long docs',a:'keys',url:'https://platform.moonshot.ai/console/api-keys'},
+    {n:'DeepInfra',k:['text'],key:'paid',p:4,c:'very cheap',v:65,note:'Big open models, low price',a:'add',base:'https://api.deepinfra.com/v1/openai',url:'https://deepinfra.com/dash/api_keys'},
+    {n:'xAI (Grok)',k:['text'],key:'paid',p:4,c:'trial credit',v:64,note:'Grok models',a:'add',base:'https://api.x.ai/v1',url:'https://console.x.ai'},
+    {n:'Fireworks AI',k:['text'],key:'paid',p:4,c:'trial credit',v:64,note:'Fast hosting of open models',a:'add',base:'https://api.fireworks.ai/inference/v1',url:'https://fireworks.ai/account/api-keys'},
+    {n:'AI21 (Jamba)',k:['text'],key:'free',p:3,c:'free trial',v:63,note:'256K-token context',a:'add',base:'https://api.ai21.com/studio/v1',url:'https://studio.ai21.com/account/api-key'},
+    {n:'OpenAI',k:['text'],key:'paid',p:5,c:'pay as you go',v:60,note:'Official GPT models',a:'add',base:'https://api.openai.com/v1',url:'https://platform.openai.com/api-keys'},
+    {n:'LibertAI',k:['text'],key:'paid',p:4,c:'pay per token',v:60,note:'Decentralized nodes, no card to start',a:'add',base:'https://api.libertai.io/v1',url:'https://libertai.io/api/'},
+    {n:'LiteLLM proxy',k:['text'],key:'local',p:3,c:'$0',v:58,note:'Your own router to any provider',a:'local',base:'http://localhost:4000/v1',url:'https://docs.litellm.ai'},
+    {n:'Abliteration',k:['text'],key:'paid',p:4,c:'pay as you go',v:58,note:'Uncensored, refusal-free, zero-retention',a:'add',base:'https://api.abliteration.ai/v1',url:'https://abliteration.ai/'},
+    {n:'DeepAI',k:['image'],key:'free',p:2,c:'~$0.01/img',v:55,note:'Simple, quick images',a:'img',url:'https://deepai.org/dashboard/profile'},
+    {n:'PeerLLM',k:['text'],key:'doc',p:3,c:'free to try',v:50,note:'Decentralized; copy base URL from its docs',a:'doc',url:'https://www.peerllm.com/developers.html'},
+    {n:'Dolphin LLM',k:['text'],key:'doc',p:3,c:'trial credit',v:48,note:'Uncensored; copy base URL from its docs',a:'doc',url:'https://dolphinllm.com/docs/'},
+    {n:'Perchance',k:['image'],key:'browser',p:3,c:'$0',v:42,note:'Free images — browser only',a:'web',url:'https://perchance.org/ai-text-to-image-generator'},
+    {n:'Sogni',k:['image'],key:'browser',p:3,c:'$0',v:40,note:'Community image app — browser only',a:'web',url:'https://app.sogni.ai/'},
+    {n:'Kobold Lite',k:['text'],key:'browser',p:3,c:'$0',v:38,note:'Chat / story UI — browser only',a:'web',url:'https://lite.koboldai.net/'},
+    {n:'Petals',k:['text'],key:'browser',p:3,c:'$0',v:37,note:'Big models split across volunteers — self-host',a:'web',url:'https://github.com/bigscience-workshop/petals'},
+    {n:'LMArena',k:['text'],key:'browser',p:3,c:'$0',v:36,note:'Model battles — browser only',a:'web',url:'https://lmarena.ai/'},
+    {n:'Numes AI',k:['text'],key:'doc',p:3,c:'free',v:35,note:'⚠ may serve a different model than you ask for',a:'doc',url:'https://bazaarlink.ai/en/probe/relay/api.numes.ai'},
+    {n:'Duck.ai',k:['text'],key:'browser',p:3,c:'$0',v:34,note:'Anonymous chat — browser only',a:'web',url:'https://duck.ai'},
+    {n:'NoteGPT',k:['text'],key:'browser',p:2,c:'$0',v:30,note:'Summaries / notes — browser only',a:'web',url:'https://notegpt.io/'},
+    {n:'GPT4Free',k:['text'],key:'browser',p:2,c:'$0',v:28,note:'Self-host proxy; unstable, ToS risk',a:'web',url:'https://github.com/xtekky/gpt4free'},
+    {n:'Inferium',k:['text'],key:'noapi',p:0,c:'—',v:12,note:'No public API found',a:'no'},
+    {n:'Kavel',k:['text'],key:'noapi',p:0,c:'—',v:11,note:'No public API found',a:'no'},
+    {n:'deAPI',k:['text'],key:'noapi',p:0,c:'—',v:10,note:'No public API found',a:'no'},
+    {n:'Aifreeforever-2api',k:['text'],key:'noapi',p:0,c:'—',v:8,note:'Reverse-proxy, against providers’ terms — not safe to ship',a:'no'}
   ];
   function dots(n){ n=Math.max(0,Math.min(5,n)); return '●●●●●'.slice(0,n)+'○○○○○'.slice(0,5-n); }
-  function freeBadge(txt){ var free=/^free/i.test(txt); return '<span class="badge '+(free?'b-on':'b-off')+'">'+esc(txt)+'</span>'; }
+  function keyInfo(k){ return ({none:['No key','b-on'],signin:['No key · sign-in','b-on'],local:['On your PC','b-on'],free:['Key · free','b-off'],paid:['Key · paid','b-off'],browser:['Browser only','b-off'],doc:['Paste base URL','b-off'],noapi:['No API','b-off']})[k]||['','b-off']; }
 
   function svcMsg(t){ var m=$('#svc-msg'); if(!m)return; m.textContent=t; m.hidden=!t; if(t)clearTimeout(svcMsg._t),svcMsg._t=setTimeout(function(){m.hidden=true},4000); }
   function gotoCustom(name,base){
@@ -460,80 +458,56 @@
   }
   window.__osAdd=gotoCustom; window.__osAddLocal=addNoKey;
 
+  var svcQ='', svcF='all';
+  function svcRow(s){
+    var ki=keyInfo(s.key);
+    var types=s.k.map(function(t){return '<span class="badge b-off" style="text-transform:none;opacity:.8">'+t+'</span>';}).join(' ');
+    var power=s.p?('<span style="color:var(--accent);letter-spacing:1px" title="'+s.p+'/5 power">'+dots(s.p)+'</span>'):'';
+    var act='';
+    if(s.a==='add') act='<button class="btn ghost" data-add="'+esc(s.n)+'|'+esc(s.base)+'">Add</button><a class="chip" href="'+esc(s.url)+'" target="_blank" rel="noopener">Key ↗</a>';
+    else if(s.a==='nok') act='<button class="btn ghost" data-addnokey="'+esc(s.n)+'|'+esc(s.base)+'">Add (free)</button><a class="chip" href="'+esc(s.url)+'" target="_blank" rel="noopener">About ↗</a>';
+    else if(s.a==='local') act='<button class="btn ghost" data-addlocal="'+esc(s.n)+'|'+esc(s.base)+'">Add</button><a class="chip" href="'+esc(s.url)+'" target="_blank" rel="noopener">About ↗</a>';
+    else if(s.a==='img') act='<button class="btn ghost" data-gotab="image">Image tab</button>'+(s.url?'<a class="chip" href="'+esc(s.url)+'" target="_blank" rel="noopener">Key ↗</a>':'');
+    else if(s.a==='chat') act='<button class="btn ghost" data-gotab="text">Chat tab</button>'+(s.url?'<a class="chip" href="'+esc(s.url)+'" target="_blank" rel="noopener">Token ↗</a>':'');
+    else if(s.a==='keys') act='<button class="btn ghost" data-gokeys="1">Add key</button><a class="chip" href="'+esc(s.url)+'" target="_blank" rel="noopener">Key ↗</a>';
+    else if(s.a==='doc') act='<a class="chip" href="'+esc(s.url)+'" target="_blank" rel="noopener">Docs ↗</a>';
+    else if(s.a==='web') act='<a class="chip" href="'+esc(s.url)+'" target="_blank" rel="noopener">Open ↗</a>';
+    return '<div class="keyrow" style="border-top:1px solid var(--line);align-items:center;gap:8px">'+
+      '<span class="pn" style="min-width:140px">'+esc(s.n)+'</span>'+
+      '<span class="badge '+ki[1]+'">'+esc(ki[0])+'</span>'+
+      power+
+      '<span class="hint" style="flex:1;min-width:150px">'+(s.c&&s.c!=='—'?('<b style="color:var(--fg)">'+esc(s.c)+'</b> · '):'')+esc(s.note)+'</span>'+
+      types+act+'</div>';
+  }
+  function renderSvcList(){
+    var box=$('#svc-rows'); if(!box)return;
+    var q=svcQ.toLowerCase();
+    var items=CATALOG.filter(function(s){
+      if(svcF!=='all'){
+        if(svcF==='nokey'){ if(!(s.key==='none'||s.key==='signin'||s.key==='local'))return false; }
+        else if(svcF==='free'){ if(!(s.key==='none'||s.key==='signin'||s.key==='local'||s.key==='free'))return false; }
+        else if(s.k.indexOf(svcF)<0) return false;
+      }
+      if(q&&(s.n+' '+s.note+' '+s.k.join(' ')).toLowerCase().indexOf(q)<0) return false;
+      return true;
+    }).sort(function(a,b){return b.v-a.v;});
+    box.innerHTML=items.length?items.map(svcRow).join(''):'<p class="hint" style="padding:16px 0">No services match that search.</p>';
+    box.querySelectorAll('[data-add]').forEach(function(b){b.addEventListener('click',function(){var p=b.dataset.add.split('|');gotoCustom(p[0],p[1]);});});
+    box.querySelectorAll('[data-addnokey]').forEach(function(b){b.addEventListener('click',function(){var p=b.dataset.addnokey.split('|');addNoKey(p[0],p[1]);});});
+    box.querySelectorAll('[data-addlocal]').forEach(function(b){b.addEventListener('click',function(){var p=b.dataset.addlocal.split('|');addNoKey(p[0],p[1]);});});
+    box.querySelectorAll('[data-gotab]').forEach(function(b){b.addEventListener('click',function(){document.querySelector('.tab[data-tab="'+b.dataset.gotab+'"]').click();});});
+    box.querySelectorAll('[data-gokeys]').forEach(function(b){b.addEventListener('click',function(){document.querySelector('.tab[data-tab="keys"]').click();});});
+  }
   function renderServices(){
     var box=$('#svc-list'); if(!box)return;
-    var builtinIds={}; (keyedProviders||[]).forEach(function(p){builtinIds[p.name.toLowerCase().replace(/\s*\(.*$/,'')]=p;});
-    function grp(title,sub){ return '<h2 style="margin:18px 0 2px;font-size:15px">'+esc(title)+'</h2>'+(sub?'<p class="hint" style="margin:0 0 8px">'+esc(sub)+'</p>':''); }
-    var h='';
-    // Ready now
-    h+=grp('Ready now — no setup','Built into the Image and Chat tabs. Nothing to paste.');
-    h+='<div class="chips">'+
-      '<span class="chip on">Pollinations · free</span><span class="chip on">AI Horde · free</span>'+
-      '<span class="chip on">Puter · GPT/Claude/Gemini/DALL·E, free sign-in</span><span class="chip on">DeepAI · images (key)</span></div>';
-    // Engine comparison — free / power / cost
-    h+=grp('Image & video engines — free, power & cost','Power is a rough quality tier (●) for everyday prompts. Costs are approximate and change with size/length — a guide, not exact.');
-    h+='<div style="overflow:auto"><table style="width:100%;border-collapse:collapse;font-size:13px;min-width:560px">'+
-      '<thead><tr style="text-align:left;color:var(--muted)"><th style="padding:6px 8px">Type</th><th style="padding:6px 8px">Engine</th><th style="padding:6px 8px">Free?</th><th style="padding:6px 8px">Power</th><th style="padding:6px 8px">Cost / image or clip</th><th style="padding:6px 8px">Best for</th></tr></thead><tbody>'+
-      ENGINE_META.map(function(m){ return '<tr style="border-top:1px solid var(--line)">'+
-        '<td style="padding:6px 8px">'+esc(m[0])+'</td>'+
-        '<td style="padding:6px 8px;font-weight:700">'+esc(m[1])+'</td>'+
-        '<td style="padding:6px 8px">'+freeBadge(m[2])+'</td>'+
-        '<td style="padding:6px 8px;letter-spacing:1px;color:var(--accent)" title="'+m[4]+'/5">'+dots(m[4])+'</td>'+
-        '<td style="padding:6px 8px;white-space:nowrap">'+esc(m[3])+'</td>'+
-        '<td style="padding:6px 8px;color:var(--muted)">'+esc(m[5])+'</td></tr>'; }).join('')+
-      '</tbody></table></div>'+
-      '<p class="hint" style="margin:6px 0 0">* Puter is free to use — charges go to the visitor’s own free Puter account (their "User-Pays" model).</p>';
-    // Built-in keyed clouds
-    var bi=(keyedProviders||[]).filter(function(p){return !p.image;});
-    if(bi.length){ h+=grp('Built in — just add a key','Open the Keys tab and paste a key to switch these on.');
-      h+='<div class="chips">'+bi.map(function(p){return '<span class="chip'+(p.connected?' on':'')+'">'+esc(p.name.replace(/\s*\(.*$/,''))+(p.connected?' · set':'')+'</span>';}).join('')+'</div>'; }
-    // One-tap add
-    h+=grp('One-tap add — verified clouds (OpenAI-compatible)','Tap Add: it fills the Custom form and opens the key page. Paste the key, hit "Add service".');
-    h+='<div style="display:grid;gap:8px">'+SVC_ADD.filter(function(s){return !builtinIds[s[0].toLowerCase().replace(/\s*\(.*$/,'')];}).map(function(s){
-      var nk=s[4]==='nokey', isFree=nk||/free|no card|no key|permanently/i.test(s[3]);
-      return '<div class="keyrow" style="border-top:1px solid var(--line)"><span class="pn" style="min-width:150px">'+esc(s[0])+'</span>'+
-        '<span class="badge '+(isFree?'b-on':'b-off')+'">'+(isFree?'free tier':'your key')+'</span>'+
-        '<span class="hint" style="flex:1;min-width:150px">'+esc(s[3])+'</span>'+
-        '<button class="btn ghost" data-'+(nk?'addnokey':'add')+'="'+esc(s[0])+'|'+esc(s[1])+'">Add'+(nk?' (free)':'')+'</button>'+
-        '<a class="chip" href="'+esc(s[2])+'" target="_blank" rel="noopener">'+(nk?'About ↗':'Key ↗')+'</a></div>';
-    }).join('')+'</div>';
-    // Local
-    h+=grp('Runs on your PC — no key','Start the local server, then Add. Fully private, works offline.');
-    h+='<div style="display:grid;gap:8px">'+SVC_LOCAL.map(function(s){
-      return '<div class="keyrow" style="border-top:1px solid var(--line)"><span class="pn" style="min-width:150px">'+esc(s[0])+'</span>'+
-        '<span class="hint" style="flex:1;min-width:160px">'+esc(s[3])+'</span>'+
-        '<button class="btn ghost" data-addlocal="'+esc(s[0])+'|'+esc(s[1])+'">Add</button>'+
-        '<a class="chip" href="'+esc(s[2])+'" target="_blank" rel="noopener">About ↗</a></div>';
-    }).join('')+'</div>';
-    // Image clouds — now built in
-    h+=grp('Image clouds — built in','Real image generation with your key. Pick one in the Image tab; add the key in Keys. Each link opens its key page.');
-    h+='<div style="display:grid;gap:8px">'+SVC_IMGAPI.map(function(s){
-      return '<div class="keyrow" style="border-top:1px solid var(--line)"><span class="pn" style="min-width:150px">'+esc(s[0])+'</span>'+
-        '<span class="hint" style="flex:1;min-width:160px">'+esc(s[2])+'</span>'+
-        '<a class="chip" href="'+esc(s[1])+'" target="_blank" rel="noopener">Key ↗</a></div>';
-    }).join('')+'</div>';
-    // Browser-only
-    h+=grp('Open in your browser — no API to connect','Great tools, but they offer no public API, so Open Studio links out instead of faking a connection.');
-    h+='<div style="display:grid;gap:8px">'+SVC_BROWSER.map(function(s){
-      return '<div class="keyrow" style="border-top:1px solid var(--line)"><span class="pn" style="min-width:150px">'+esc(s[0])+'</span>'+
-        '<span class="hint" style="flex:1;min-width:160px">'+esc(s[2])+'</span>'+
-        '<a class="chip" href="'+esc(s[1])+'" target="_blank" rel="noopener">Open ↗</a></div>';
-    }).join('')+'</div>';
-    // Has an API, needs a base URL from their docs
-    h+=grp('Has an API — paste its base URL into "+ Custom"','These work, but I won’t guess a base URL. Open the link, copy the base URL, then use "+ Custom" in Keys.');
-    h+='<div style="display:grid;gap:8px">'+SVC_DOCS.map(function(s){
-      return '<div class="keyrow" style="border-top:1px solid var(--line)"><span class="pn" style="min-width:150px">'+esc(s[0])+'</span>'+
-        '<span class="hint" style="flex:1;min-width:160px">'+esc(s[2])+'</span>'+
-        '<a class="chip" href="'+esc(s[1])+'" target="_blank" rel="noopener">Docs ↗</a></div>';
-    }).join('')+'</div>';
-    // No verifiable API
-    h+=grp('Listed, but no public API found','Checked and couldn’t find a usable public API. If you have a base URL for any of these, use "+ Custom" in Keys and it’ll work instantly.');
-    h+='<div class="chips">'+SVC_NOAPI.map(function(s){return '<span class="chip">'+esc(s)+'</span>';}).join('')+'</div>';
-
-    box.innerHTML=h;
-    box.querySelectorAll('[data-add]').forEach(function(b){ b.addEventListener('click',function(){ var p=b.dataset.add.split('|'); gotoCustom(p[0],p[1]); }); });
-    box.querySelectorAll('[data-addnokey]').forEach(function(b){ b.addEventListener('click',function(){ var p=b.dataset.addnokey.split('|'); addNoKey(p[0],p[1]); }); });
-    box.querySelectorAll('[data-addlocal]').forEach(function(b){ b.addEventListener('click',function(){ var p=b.dataset.addlocal.split('|'); addNoKey(p[0],p[1]); }); });
+    var chips=[['all','All'],['text','Text'],['image','Image'],['video','Video'],['nokey','No key'],['free','Free to use']];
+    box.innerHTML='<input type="text" id="svc-q" placeholder="Search services…" value="'+esc(svcQ)+'" style="margin-bottom:10px">'+
+      '<div class="chips" id="svc-filters" style="margin-bottom:8px">'+chips.map(function(c){return '<button class="chip'+(svcF===c[0]?' on':'')+'" data-f="'+c[0]+'">'+c[1]+'</button>';}).join('')+'</div>'+
+      '<p class="hint" style="margin:0 0 8px">Ranked by value (free + capable first). <b>Key</b> badge shows if an API key is needed. Power ● is a rough quality tier; costs are approximate — a guide, not exact.</p>'+
+      '<div id="svc-rows"></div>';
+    var qi=$('#svc-q'); if(qi) qi.addEventListener('input',function(){svcQ=this.value;renderSvcList();});
+    $('#svc-filters').querySelectorAll('[data-f]').forEach(function(b){b.addEventListener('click',function(){svcF=b.dataset.f;$('#svc-filters').querySelectorAll('.chip').forEach(function(x){x.classList.toggle('on',x===b);});renderSvcList();});});
+    renderSvcList();
   }
 
   // Boot
