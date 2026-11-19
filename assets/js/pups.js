@@ -367,7 +367,8 @@
   function frame(dog, pose, ph) {
     var M = S.meta;
     if (pose === 'run' && S.moving[dog]) { var q = Math.floor((((ph % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2)) / (Math.PI / 2)) % 4; return { img: S.walk, f: M.walk[dog * 4 + q], fh: M.wh }; }
-    var ang = pose === 'lie' || pose === 'bow' ? 2 : 1;
+    // 'front': looking straight out at us (the books' title and calm pages); 'back': walking away
+    var ang = pose === 'front' ? 0 : pose === 'back' ? 4 : pose === 'lie' || pose === 'bow' ? 2 : 1;
     var f = M.poses.filter(function (x) { return x.dog === dog && x.ang === ang; })[0];
     return { img: S.poses, f: f, fh: M.fh };
   }
@@ -412,7 +413,7 @@
     if (fr.img === S.walk) { var nx = walkNext(dog, ph); if (nx.w > 0.01) { ctx.save(); ctx.globalAlpha *= 0.92 * nx.w; blit(ctx, nx.fr); ctx.restore(); } }
     if (B.from && B.from.fr && clk - B.from.at < 0.2) { var fa = 1 - (clk - B.from.at) / 0.2; ctx.save(); ctx.globalAlpha *= 0.95 * fa * fa * (3 - 2 * fa); blit(ctx, B.from.fr); ctx.restore(); }
     if (still && blink && S.shut) ctx.drawImage(S.shut, sx, sy0, fw, fr.fh, -p.cx, -p.fy, fw, fr.fh);   // eyes closed (poses-shut.webp)
-    if (o && o.talk > 0) { ctx.save(); ctx.translate(f.hx - p.cx, f.hy - p.fy); jaw(ctx, fr, dog, fr.img === S.walk ? 'w' : (pose === 'lie' || pose === 'bow' ? 'a2' : 'a1'), Math.min(1, (o.talk - 0.02) / 0.98)); ctx.restore(); }
+    if (o && o.talk > 0 && (f.ang === 1 || f.ang === 2 || fr.img === S.walk)) { ctx.save(); ctx.translate(f.hx - p.cx, f.hy - p.fy); jaw(ctx, fr, dog, fr.img === S.walk ? 'w' : (pose === 'lie' || pose === 'bow' ? 'a2' : 'a1'), Math.min(1, (o.talk - 0.02) / 0.98)); ctx.restore(); }
     // the outfit, at the head of this drawing
     if (!(o && o.noOutfit)) {
       var who = dog ? 'sugarfoot' : 'tidbit', wear = (o && o.outfit) || outfit(who, o);

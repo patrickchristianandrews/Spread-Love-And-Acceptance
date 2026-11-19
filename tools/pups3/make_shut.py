@@ -7,7 +7,7 @@ import numpy as np, cv2
 from PIL import Image, ImageDraw
 D = os.path.dirname(__file__)
 M = json.load(open(os.path.join(D, 'meta.json')))
-EYES = {(0, 1): [(-2.6, -3.0, 3.6), (11.8, -5.2, 3.0)], (0, 2): [(9.6, -4.6, 3.5)], (1, 1): [(-3.2, -5.4, 3.8), (12, -6.5, 3.1)], (1, 2): [(10.8, -6.2, 3.4)]}   # measured on the sheet, eye by eye
+EYES = {(0, 0): [(-7, -3.5, 3.5), (11, -3.5, 3.5)], (1, 0): [(-8.5, -6, 3.6), (9.5, -6, 3.6)], (0, 1): [(-2.6, -3.0, 3.6), (11.8, -5.2, 3.0)], (0, 2): [(9.6, -4.6, 3.5)], (1, 1): [(-3.2, -5.4, 3.8), (12, -6.5, 3.1)], (1, 2): [(10.8, -6.2, 3.4)]}   # measured on the sheet, eye by eye
 Z = 4
 im = Image.open(os.path.join(D, 'poses.webp')).convert('RGBA')
 big = im.resize((im.width * Z, im.height * Z), Image.LANCZOS)

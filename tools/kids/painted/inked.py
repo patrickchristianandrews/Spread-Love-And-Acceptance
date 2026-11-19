@@ -158,6 +158,8 @@ def lines():
     idx = json.load(open(os.path.join(D, 'index.json'))); os.makedirs(os.path.join(D, 'line'), exist_ok=True)
     for name, info in idx.items():
         who, pose, wear, eyes = name.split('-')
+        if pose == 'front':   # (no inking of the front view yet: the coloring books don't use it)
+            continue
         key = (0 if who == 'tidbit' else 1, 1 if pose == 'sit' else 2)
         U = info['unit']; k = 0.52 * U; hx, hy = info['head']
         if pose == 'run':   # the walk frames' head sits elsewhere: put the side view's paws on the render's paws

@@ -20,7 +20,7 @@ def outfit(who, key):
 
 
 def img(who, pose, mode='color', eyes='open', key=None, wear=None):
-    pose = {'stand': 'run', 'walk': 'run', 'run': 'run', 'jump': 'run', 'sit': 'sit', 'lie': 'lie', 'sleep': 'lie', 'wiggle': 'run'}.get(pose, 'sit')
+    pose = {'stand': 'sit', 'walk': 'run', 'run': 'run', 'jump': 'run', 'sit': 'sit', 'lie': 'lie', 'sleep': 'lie', 'wiggle': 'run', 'front': 'front'}.get(pose, 'sit')
     wear = wear or outfit(who, key)
     name = '%s-%s-%s-%s' % (who, pose, wear, 'shut' if eyes == 'shut' else 'open')
     ck = (name, mode)

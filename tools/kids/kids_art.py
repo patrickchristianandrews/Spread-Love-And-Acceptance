@@ -269,19 +269,21 @@ FRONT_CX = 850
 _MOUTHS = {'w': 'grin', 'grin': 'grin', 'smile': 'smile', 'o': 'o', 'blow': 'blow', 'frown': 'frown', 'yell': 'yell', 'flat': 'flat'}
 
 
-def _front(P, who, x, y, s, expr, mouth_, flip):
+def _front(P, who, x, y, s, expr, mouth_, flip, view='sit'):
+    """view: 'sit' (the three-quarter view, turned to the middle of the picture or, with flip, away) or 'front' (looking
+    straight out at the reader)"""
     left = (x > FRONT_CX) != bool(flip)
-    pup_side(P, who, x + (4 if left else -4) * s, y, s * 0.95, 'sit', expr, flip=left, mouth_=_MOUTHS.get(mouth_, 'grin'))
+    pup_side(P, who, x + (4 if left else -4) * s, y, s * 0.95, view, expr, flip=left, mouth_=_MOUTHS.get(mouth_, 'grin'))
 
 
-def sugarfoot_front(P, x, y, s, expr='happy', mouth_='grin', flip=False, tail=True, heart_=False, look=(0, 0)):
+def sugarfoot_front(P, x, y, s, expr='happy', mouth_='grin', flip=False, tail=True, heart_=False, look=(0, 0), view='sit'):
     """Sugarfoot sitting (the cartoon's own pose). Origin at the paws"""
-    _front(P, 'sugarfoot', x, y, s, expr, mouth_, flip)
+    _front(P, 'sugarfoot', x, y, s, expr, mouth_, flip, view)
 
 
-def tidbit_front(P, x, y, s, expr='happy', mouth_='w', flip=False, tail=True, look=(0, 0)):
+def tidbit_front(P, x, y, s, expr='happy', mouth_='w', flip=False, tail=True, look=(0, 0), view='sit'):
     """Tidbit sitting (the cartoon's own pose). Origin at the paws"""
-    _front(P, 'tidbit', x, y, s, expr, mouth_, flip)
+    _front(P, 'tidbit', x, y, s, expr, mouth_, flip, view)
 
 
 def _brows_drop(P, expr):
@@ -431,7 +433,7 @@ def _pup_side_painted(P, who, x, y, s, pose, expr, flip, carry):
     import os, sys
     sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), 'painted'))
     import pimg
-    eyes = 'shut' if pose == 'sleep' or expr == 'sleep' else 'open'
+    eyes = 'shut' if pose == 'sleep' or expr in ('sleep', 'happy-closed', 'calm-closed') else 'open'
     info = pimg.img(who, pose, P.mode if P.mode in ('color', 'line', 'ink') else 'color', eyes, key=('p', _PSCN.setdefault(id(P), len(_PSCN))))
     k = 1.0 / info['unit'] * 1.1
     P.at(x, y, s, flip)

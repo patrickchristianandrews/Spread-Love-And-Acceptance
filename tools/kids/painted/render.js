@@ -10,7 +10,7 @@ const SC = 26;   // pixels per pup unit: a standing pup is about 50 units, so ab
   await p.goto('http://127.0.0.1:8697/frequency-buddies-season-2.html', { waitUntil: 'load' });
   await p.waitForFunction(() => window.TOLPups && window.TOLPups.painted, null, { timeout: 60000 });
   const idx = {};
-  for (const who of ['tidbit', 'sugarfoot']) for (const pose of ['sit', 'lie', 'run']) for (const outfit of ['hat', 'cap', 'bow', 'bandana', 'necklace', 'none']) for (const eyes of ['open', 'shut']) {
+  for (const who of ['tidbit', 'sugarfoot']) for (const pose of ['sit', 'lie', 'run', 'front']) for (const outfit of ['hat', 'cap', 'bow', 'bandana', 'necklace', 'none']) for (const eyes of ['open', 'shut']) {
     const r = await p.evaluate(([who, pose, outfit, eyes, SC]) => {
       const P = window.TOLPups, L = P.looks[who === 'tidbit' ? 'collar' : 'drop'];
       const W = 100 * SC, H = 80 * SC, cv = document.createElement('canvas'); cv.width = W; cv.height = H;
@@ -19,8 +19,10 @@ const SC = 26;   // pixels per pup unit: a standing pup is about 50 units, so ab
       g.translate(ox, oy); g.scale(SC, SC);
       // a still pup (no breathing or sway: t 0, wag 0); walking uses a mid-stride frame
       P.clock = 0; P.quiet = true;
-      P.draw(g, L, pose, pose === 'run' ? 0.9 : 0, 0, eyes === 'shut', 0, 0, outfit === 'none' ? { noOutfit: true } : { outfit: outfit, moving: pose === 'run' });
-      const hp = P.headPos(L, pose, pose === 'run' ? 0.9 : 0);
+      // the walk frames only show while the stride is moving: draw once a step earlier (off screen) so it is
+      if (pose === 'run') { const sc = document.createElement('canvas').getContext('2d'); P.draw(sc, L, pose, 0.2, 0, false, 0, 0, { noOutfit: true }); }
+      P.draw(g, L, pose, pose === 'run' ? 1.575 : 0, 0, eyes === 'shut', 0, 0, outfit === 'none' ? { noOutfit: true } : { outfit: outfit, moving: pose === 'run' });
+      const hp = P.headPos(L, pose, pose === 'run' ? 1.575 : 0);
       // trim to the drawing
       const d = g.getImageData(0, 0, W, H).data; let x0 = W, y0 = H, x1 = 0, y1 = 0;
       for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) if (d[(y * W + x) * 4 + 3] > 8) { if (x < x0) x0 = x; if (x > x1) x1 = x; if (y < y0) y0 = y; if (y > y1) y1 = y; }
