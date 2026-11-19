@@ -166,7 +166,7 @@ def s_pack(P):
     for (x, y, s) in ((1010, 480, 2.4), (1090, 470, 2.2)):
         A.apple(P, x, y, s)
     A.pup_side(P, 'tidbit', 1430, 735, 5.2, 'stand', 'cross', flip=True, mouth_='frown', tilt=0)
-    sweat(P, 1325, 520, 2.2); sweat(P, 1370, 480, 1.8)
+    sweat(P, 1262, 405, 2.2); sweat(P, 1225, 445, 1.8)   # in the air by her forehead, clear of her face
     A.dust(P, 1130, 735, 1.4)
 
 
