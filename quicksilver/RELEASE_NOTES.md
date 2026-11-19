@@ -1,6 +1,6 @@
 ### Download
 
-**Quicksilver-Web-Setup-2.21.0.exe** (below, about 200 MB, with a matching `.sha256`) is the installer. It's small and quick to download. The first time Quicksilver opens, its setup screen downloads the whole Liquid Edition before the app starts — the three abliterated chat models (Qwen3.5 4B Brain, Gemma 3 12B Closer, Mistral Nemo 12B Muse), Lustify for pictures, Wan 2.2 for video, and the search models: about 38 GB in all — and the app opens once it's done. Keep about 45 GB free on the drive you install to. If the download stops, close and reopen Quicksilver and it picks up where it left off.
+**Quicksilver-Web-Setup-2.21.1.exe** (below, about 200 MB, with a matching `.sha256`) is the installer. It's small and quick to download. The first time Quicksilver opens, its setup screen downloads the whole Liquid Edition before the app starts — the three abliterated chat models (Qwen3.5 4B Brain, Gemma 3 12B Closer, Mistral Nemo 12B Muse), Lustify for pictures, Wan 2.2 for video, and the search models: about 38 GB in all — and the app opens once it's done. Keep about 45 GB free on the drive you install to. If the download stops, close and reopen Quicksilver and it picks up where it left off.
 
 (A full offline package — the installer with all ~38 GB of models already beside it, so it needs no internet from the first minute — is built for tagged releases and lives as the **Quicksilver-Windows-installer** build artifact on those build runs, for anyone who wants to install with no download.)
 
@@ -13,6 +13,10 @@ Updating from 2.18: the Liquid Edition now includes its Closer and its picture a
 - **Automations** (Explore → Automations): things Quicksilver does by itself on a schedule (every day, weekdays, once a week, every hour, every few minutes, or when it starts), with web search, plug-ins and your connected apps. Start from an idea (morning briefing, crypto and stock check, research digest, tech news, a website check, a price-drop watch, a weekly plan) or write your own. Each run goes to its own chat with a desktop notification; a run missed while Quicksilver was closed runs once when it opens.
 - **When the AI says it can't do something,** a button under the answer offers the fix: search the web, let it read your files, ask a model that sees pictures, connect the app, Full access to run commands, a picture or video model, Memory, or a search of the plug-in directory for the task.
 - **Meme battle always has pictures:** when a meme's picture can't be painted on this PC, Venice (or another picture service you connected) paints it; a meme format whose template picture can't be downloaded gets a painted picture instead; and if no picture can be made it says how to get one, instead of showing words alone.
+
+### New in 2.21.1
+
+- **Strata is now a one-click local AI.** [Strata](https://strata-ai.gitbook.io/strata-ai) runs very large models (up to ~125B) on a single consumer GPU by streaming the weights from disk, and serves an OpenAI-compatible API on your PC. Connect it under **Your PC / local AIs** like Ollama or LM Studio — no key, nothing leaves the machine. Start Strata first (it listens on `localhost:8080`; change the port in Quicksilver if yours differs), then pick it as a provider. Because it's a local, free endpoint, the "prefer fast/free" routing treats it like your own models.
 
 ### New in 2.21.0
 

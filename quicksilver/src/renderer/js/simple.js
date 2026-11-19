@@ -77,7 +77,7 @@ function cloudAutoOn() {
 // A connected endpoint that costs nothing per message: your own compute (Google Colab, Kaggle, a
 // home server) added as a Custom OpenAI-compatible API, a local server (Ollama, LM Studio, LiteLLM,
 // vLLM, llama.cpp, KoboldCpp, GPT4All, Jan, Giant models), or a no-key free service (Pollinations).
-const FREE_ENDPOINT_PRESETS = new Set(['custom', 'litellm', 'vllm', 'ollama', 'lmstudio', 'llamacpp', 'koboldcpp', 'gpt4all', 'jan', 'colibri']);
+const FREE_ENDPOINT_PRESETS = new Set(['custom', 'litellm', 'vllm', 'ollama', 'lmstudio', 'llamacpp', 'koboldcpp', 'gpt4all', 'jan', 'colibri', 'strata']);
 function isFreeEndpoint(target) {
   if (!String(target).startsWith('api:')) return false;
   const p = (S.providers || []).find((x) => x.id === target.split(':')[1]);

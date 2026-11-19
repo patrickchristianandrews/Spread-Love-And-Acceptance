@@ -54,6 +54,7 @@ const PRESETS = {
   ollama: { name: 'Ollama (on this PC)', baseUrl: 'http://localhost:11434/v1', noKey: true, vision: true, free: 'local', freeNote: 'Free: runs on this PC with no key.' },
   colibri: { name: 'Giant models (colibri, on this PC)', baseUrl: 'http://127.0.0.1:8000/v1', noKey: true, free: 'local', freeNote: 'Free: colibri runs models bigger than this PC\'s memory, streaming from the SSD. Set up from Your PC → Giant models.' },
   lmstudio: { name: 'LM Studio (on this PC)', baseUrl: 'http://localhost:1234/v1', noKey: true, vision: true, free: 'local', freeNote: 'Free: runs on this PC with no key.' },
+  strata: { name: 'Strata (on this PC)', baseUrl: 'http://localhost:8080/v1', noKey: true, free: 'local', freeNote: 'Free: Strata runs very large models (up to ~125B) on a single consumer GPU by streaming weights from disk — no key. Start Strata first; it serves an OpenAI-compatible API on localhost:8080 (change the port here if yours differs).', priceUrl: 'https://strata-ai.gitbook.io/strata-ai' },
   // ---------- more cloud AIs (all OpenAI-compatible) ----------
   perplexity: { name: 'Perplexity (answers with web sources)', baseUrl: 'https://api.perplexity.ai', keyUrl: 'https://www.perplexity.ai/settings/api', best: 'sonar-pro', bestWhy: 'Searches the web and cites sources in every answer.', models: ['sonar-pro', 'sonar', 'sonar-reasoning-pro'],
     free: 'paid', freeNote: 'Pay as you go: add credit first. Perplexity Pro subscribers get a small monthly API credit.', priceUrl: 'https://docs.perplexity.ai/guides/pricing' },

@@ -307,7 +307,7 @@ function dolphinOfferHTML(qst) {
 // says it doesn't store prompts; a filtered service may refuse some uncensored requests.
 // The switch and the connect buttons are right here.
 function cloudPartnerHTML() {
-  const conn = (S.providers || []).filter((p) => (p.hasKey || p.noKey) && !p.media && p.preset !== 'ollama' && p.preset !== 'lmstudio');
+  const conn = (S.providers || []).filter((p) => (p.hasKey || p.noKey) && !p.media && p.preset !== 'ollama' && p.preset !== 'lmstudio' && p.preset !== 'strata');
   const venice = conn.find((p) => p.preset === 'venice');
   const on = Boolean(S.data.prefs.cloudHard);
   const names = conn.map((p) => esc(p.name)).join(', ');
