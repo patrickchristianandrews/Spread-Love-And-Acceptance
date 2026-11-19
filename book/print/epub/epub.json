@@ -3,7 +3,7 @@
   "book-1-know-yourself-kindly": {
    "file": "book/print/epub/book-1-know-yourself-kindly.epub",
    "kind": "book",
-   "bytes": 1273509,
+   "bytes": 1273510,
    "mb": 1.21,
    "identifier": "urn:uuid:d00c2d3a-15af-5fff-88f2-45d53e666c2f",
    "chapters": 7,
@@ -48,7 +48,7 @@
   "book-4-share-the-load": {
    "file": "book/print/epub/book-4-share-the-load.epub",
    "kind": "book",
-   "bytes": 1117189,
+   "bytes": 1117190,
    "mb": 1.07,
    "identifier": "urn:uuid:7663a143-8376-5290-b9df-e8c52e039fa0",
    "chapters": 6,
@@ -78,7 +78,7 @@
   "boxset-complete-series": {
    "file": "book/print/epub/boxset-complete-series.epub",
    "kind": "boxset",
-   "bytes": 4027440,
+   "bytes": 4027442,
    "mb": 3.84,
    "identifier": "urn:uuid:53207083-e866-53c9-a95c-fc8c179971bd",
    "chapters": 36,

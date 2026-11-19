@@ -20,7 +20,7 @@
    "Fraunces-Bold",
    "Fraunces-ExtraBold"
   ],
-  "bytes": 36428396,
+  "bytes": 42236605,
   "cover": {
    "size_in": [
     17.347,
@@ -60,7 +60,7 @@
    "Lora-Regular",
    "Lora-SemiBold"
   ],
-  "bytes": 6432783,
+  "bytes": 6504905,
   "gray_only": true,
   "cover": {
    "size_in": [
@@ -98,7 +98,7 @@
    "Andika-Italic",
    "Fraunces-ExtraBold"
   ],
-  "bytes": 1912432,
+  "bytes": 3153562,
   "gray_only": true,
   "cover": {
    "size_in": [
@@ -137,7 +137,7 @@
    "Fraunces-ExtraBold",
    "Lora-Italic"
   ],
-  "bytes": 8181819,
+  "bytes": 9076469,
   "gray_only": true,
   "cover": {
    "size_in": [
