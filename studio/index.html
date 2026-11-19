@@ -1,0 +1,961 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0b0d12">
+<title>Open Studio</title>
+<!-- Puter.js: keyless access to GPT / Claude / Gemini / DALL·E / Flux. Runs fully in the page
+     (its own sign-in + "User-Pays" billing), so no key ever touches our vault. -->
+<script src="https://js.puter.com/v2/"></script>
+<style>
+  :root{
+    --bg:#0b0d12; --panel:#141821; --panel2:#1b2029; --line:#262c38;
+    --fg:#e8ecf3; --muted:#8b93a3; --accent:#6c7bff; --accent2:#a46bff;
+    --good:#3fd18b; --bad:#ff6b6b; --radius:14px;
+    --font:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%}
+  body{background:var(--bg);color:var(--fg);font-family:var(--font);-webkit-font-smoothing:antialiased;line-height:1.5}
+  a{color:var(--accent)}
+  .wrap{max-width:1100px;margin:0 auto;padding:18px 20px 56px}
+  header{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+  .logo{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,var(--accent),var(--accent2));flex:none}
+  h1{font-size:20px;margin:0}
+  .sub{color:var(--muted);font-size:13px;margin:2px 0 0}
+  .tabs{display:flex;gap:6px;margin-left:auto;background:var(--panel);padding:5px;border-radius:12px;border:1px solid var(--line)}
+  .tab{appearance:none;border:0;background:transparent;color:var(--muted);font:inherit;font-weight:600;font-size:13px;padding:8px 16px;border-radius:9px;cursor:pointer}
+  .tab.on{background:var(--panel2);color:var(--fg)}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:16px}
+  label{display:block;font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin:0 0 6px}
+  textarea,select,input[type=text],input[type=password]{width:100%;background:var(--panel2);color:var(--fg);border:1px solid var(--line);border-radius:10px;padding:11px 12px;font:inherit;font-size:14px;resize:vertical}
+  textarea{min-height:88px}
+  .row{display:flex;gap:10px;flex-wrap:wrap}
+  .row > .col{flex:1;min-width:140px}
+  .chips{display:flex;gap:8px;flex-wrap:wrap}
+  .chip{appearance:none;border:1px solid var(--line);background:var(--panel2);color:var(--muted);font:inherit;font-size:13px;font-weight:600;padding:8px 12px;border-radius:9px;cursor:pointer;text-decoration:none}
+  .chip.on{border-color:var(--accent);color:var(--fg);background:#1d2340}
+  .opts{display:flex;gap:14px;align-items:center;flex-wrap:wrap;margin-top:12px}
+  .check{display:flex;align-items:center;gap:7px;color:var(--muted);font-size:13px;font-weight:600;cursor:pointer}
+  .btn{appearance:none;border:0;border-radius:11px;font:inherit;font-weight:700;font-size:15px;padding:12px 22px;cursor:pointer;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff}
+  .btn:disabled{opacity:.55;cursor:default}
+  .btn.ghost{background:var(--panel2);color:var(--fg);border:1px solid var(--line);font-size:13px;padding:8px 14px;font-weight:600}
+  .bar{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:14px}
+  .spin{width:16px;height:16px;border:2px solid var(--line);border-top-color:var(--accent);border-radius:50%;animation:sp .7s linear infinite}
+  @keyframes sp{to{transform:rotate(360deg)}}
+  .hint{color:var(--muted);font-size:12px}
+  .lib-head{display:flex;align-items:center;gap:12px;margin:24px 0 10px}
+  .lib-head h2{font-size:15px;margin:0}
+  .lib-head .count{color:var(--muted);font-size:13px}
+  .gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px}
+  figure{margin:0;background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;display:flex;flex-direction:column}
+  figure .imgwrap{position:relative;aspect-ratio:var(--ar,1);background:var(--panel2)}
+  figure img{display:block;width:100%;height:100%;object-fit:cover}
+  figure .imgwrap .spin{position:absolute;top:50%;left:50%;margin:-8px 0 0 -8px}
+  .hstat{position:absolute;bottom:6px;left:8px;font-size:11px;background:rgba(0,0,0,.55);padding:2px 6px;border-radius:6px;color:#fff}
+  figcaption{padding:10px 12px;font-size:12px;color:var(--muted);display:flex;flex-direction:column;gap:8px;flex:1}
+  figcaption .p{color:var(--fg);max-height:3em;overflow:hidden}
+  .fig-acts{display:flex;gap:8px;margin-top:auto}
+  .fig-acts a,.fig-acts button{flex:1;text-align:center;text-decoration:none;font-weight:600;font-size:12px;padding:7px;border-radius:8px;border:1px solid var(--line);background:var(--panel2);color:var(--fg);cursor:pointer;font-family:inherit}
+  .empty{color:var(--muted);font-size:13px;border:1px dashed var(--line);border-radius:var(--radius);padding:26px;text-align:center}
+  .out{white-space:pre-wrap;word-break:break-word;background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:14px;margin-top:14px;min-height:80px;font-size:14px}
+  .err{color:var(--bad);font-size:13px;margin-top:10px}
+  .keyrow{display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:10px 0;border-top:1px solid var(--line)}
+  .keyrow:first-of-type{border-top:0}
+  .keyrow .pn{font-weight:700;min-width:110px}
+  .keyrow input{flex:1;min-width:180px}
+  .badge{font-size:11px;font-weight:700;padding:2px 8px;border-radius:20px}
+  .b-on{background:#113a2a;color:var(--good)} .b-off{background:#2a2f3a;color:var(--muted)}
+  .foot{color:var(--muted);font-size:12px;margin-top:28px;line-height:1.7}
+  .foot b{color:var(--fg)}
+  [hidden]{display:none!important}
+  /* Touch + safe areas + phone polish (shared by the desktop, Android and web builds) */
+  html{-webkit-text-size-adjust:100%}
+  .wrap{padding-left:max(16px,env(safe-area-inset-left));padding-right:max(16px,env(safe-area-inset-right));padding-top:max(18px,env(safe-area-inset-top))}
+  button,.chip,.tab{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+  @media (max-width:640px){
+    .wrap{padding-bottom:calc(40px + env(safe-area-inset-bottom))}
+    header{gap:10px}
+    .tabs{margin-left:0;width:100%;order:3}
+    .tab{flex:1;padding:11px 10px;font-size:14px}
+    h1{font-size:18px}
+    .card{padding:14px;border-radius:12px}
+    textarea,select,input[type=text],input[type=password]{font-size:16px;padding:12px}   /* 16px stops mobile zoom-on-focus */
+    .btn{padding:14px 20px;width:100%}
+    .bar .btn,.fig-acts .btn,.fig-acts a,.btn.ghost{width:auto}
+    .row>.col{min-width:100%}
+    .gallery{grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+    .keyrow{gap:10px}
+    .keyrow .pn{min-width:100%}
+    .keyrow input{min-width:0;width:100%}
+    .lib-head{flex-wrap:wrap}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="logo"></div>
+    <div><h1>Open Studio</h1><p class="sub">Your own image &amp; text studio — free engines built in, your keys kept private on this PC.</p></div>
+    <div class="tabs" role="tablist">
+      <button class="tab on" data-tab="text" role="tab">Chat</button>
+      <button class="tab" data-tab="image" role="tab">Image</button>
+      <button class="tab" data-tab="video" role="tab">Video</button>
+      <button class="tab" data-tab="services" role="tab">Services</button>
+      <button class="tab" data-tab="keys" role="tab">Keys</button>
+    </div>
+  </header>
+
+  <!-- IMAGE -->
+  <section id="panel-image" class="card" hidden>
+    <label for="iprompt">Describe the image</label>
+    <textarea id="iprompt" placeholder="A red fox in fresh snow at sunrise, soft light, close-up, highly detailed"></textarea>
+    <div style="margin-top:12px"><label>Style</label>
+      <div class="chips" id="istyle">
+        <button class="chip on" data-style="">None</button>
+        <button class="chip" data-style="photorealistic, 50mm photo, natural light, highly detailed">Photoreal</button>
+        <button class="chip" data-style="cinematic film still, dramatic lighting, shallow depth of field, 35mm">Cinematic</button>
+        <button class="chip" data-style="anime key visual, studio quality, vibrant, clean lineart">Anime</button>
+        <button class="chip" data-style="digital painting, concept art, intricate detail">Art</button>
+        <button class="chip" data-style="3D render, octane, soft studio lighting, product shot">3D</button>
+      </div>
+    </div>
+    <div class="row" style="margin-top:12px">
+      <div class="col" style="max-width:210px"><label for="iengine">Engine</label>
+        <select id="iengine"><option value="pollinations">Pollinations — fast, simple</option><option value="aihorde">AI Horde — more models, free</option><option value="puter">Puter — DALL·E / Flux (free, sign in)</option><option value="fal">fal.ai — FLUX (your key)</option><option value="replicate">Replicate — FLUX (your key)</option><option value="stability">Stability — SD3 Core (your key)</option><option value="segmind">Segmind — FLUX (your key)</option><option value="deepai">DeepAI — your key</option></select></div>
+      <div class="col"><label for="imodel">Model</label>
+        <select id="imodel"><option value="flux">Flux — highest quality</option><option value="turbo">Turbo — fast</option></select>
+        <select id="ihordemodel" hidden><option value="">Any (fastest free worker)</option></select></div>
+      <div class="col"><label>Shape</label>
+        <div class="chips" id="ishape">
+          <button class="chip on" data-w="1024" data-h="1024">Square</button>
+          <button class="chip" data-w="1280" data-h="720">Landscape</button>
+          <button class="chip" data-w="720" data-h="1280">Portrait</button>
+          <button class="chip" data-w="1280" data-h="960">4:3</button>
+        </div></div>
+      <div class="col" style="max-width:150px"><label for="ibatch">How many</label>
+        <select id="ibatch"><option value="1">1 image</option><option value="2">2 images</option><option value="4">4 images</option></select></div>
+    </div>
+    <div class="opts">
+      <label class="check"><input type="checkbox" id="ienhance" checked> Enhance prompt</label>
+      <label class="check"><input type="checkbox" id="inologo" checked> No watermark</label>
+      <label class="check"><input type="checkbox" id="iseedlock"> Lock seed</label>
+      <input type="text" id="iseed" style="width:120px" placeholder="seed (auto)" inputmode="numeric">
+    </div>
+    <div class="bar"><button class="btn" id="igen">Generate</button><span class="hint" id="ihint"></span></div>
+    <div class="err" id="ierr" hidden></div>
+    <div class="lib-head"><h2>Your library</h2><span class="count" id="libcount"></span>
+      <button class="btn ghost" id="libclear" style="margin-left:auto" hidden>Clear</button></div>
+    <div class="gallery" id="gallery"></div>
+    <div class="empty" id="libempty">Nothing yet. Generate an image and it is saved here — your library stays after you close the app.</div>
+  </section>
+
+  <!-- CHAT (TEXT) -->
+  <section id="panel-text" class="card">
+    <label for="tprompt">Ask or write a prompt</label>
+    <textarea id="tprompt" placeholder="Explain black holes to a 10-year-old in one paragraph."></textarea>
+    <div class="row" style="margin-top:12px">
+      <div class="col"><label for="tprovider">Service</label><select id="tprovider"></select></div>
+      <div class="col"><label for="tmodel">Model</label>
+        <div style="display:flex;gap:6px"><input type="text" id="tmodel" list="tmodels" placeholder="(default — tap ↻ to load all)" style="flex:1">
+        <button class="btn ghost" id="tmodels-load" title="Load every model this service offers" style="padding:8px 12px;flex:none">↻</button></div>
+        <datalist id="tmodels"></datalist></div>
+      <div class="col" style="max-width:170px;display:flex;align-items:flex-end;gap:10px">
+        <button class="btn" id="tgen" style="flex:1">Generate</button><span class="spin" id="tspin" hidden></span></div>
+    </div>
+    <div class="err" id="terr" hidden></div>
+    <div class="out" id="tout" aria-live="polite">The answer appears here.</div>
+    <div class="bar"><button class="btn ghost" id="tcopy" hidden>Copy</button></div>
+  </section>
+
+  <!-- VIDEO -->
+  <section id="panel-video" class="card" hidden>
+    <label for="vprompt">Describe the video</label>
+    <textarea id="vprompt" placeholder="A paper boat sailing down a rain gutter, cinematic, slow motion"></textarea>
+    <div class="row" style="margin-top:12px">
+      <div class="col" style="max-width:240px"><label for="vengine">Engine</label>
+        <select id="vengine"><option value="fal">fal.ai — LTX (your key)</option><option value="replicate">Replicate — WAN 2.2 (your key)</option></select></div>
+      <div class="col" style="max-width:190px;display:flex;align-items:flex-end;gap:10px">
+        <button class="btn" id="vgen" style="flex:1">Generate</button><span class="spin" id="vspin" hidden></span></div>
+    </div>
+    <p class="hint" style="margin:10px 0 0">Text‑to‑video runs on your fal.ai or Replicate key (add it under Keys). A clip costs real money and can take <b>1–5 minutes</b> — the app waits and shows it here when ready.</p>
+    <div class="err" id="verr" hidden></div>
+    <div class="lib-head"><h2>Your clips</h2><span class="count" id="vcount"></span>
+      <button class="btn ghost" id="vclear" style="margin-left:auto" hidden>Clear</button></div>
+    <div class="gallery" id="vgallery"></div>
+    <div class="empty" id="vempty">No clips yet. Generate one and it is saved here.</div>
+  </section>
+
+  <!-- SERVICES DIRECTORY -->
+  <section id="panel-services" class="card" hidden>
+    <h2 style="margin:0 0 4px;font-size:16px">Every service, in one place</h2>
+    <p class="hint" style="margin:0 0 12px">Every tool from your lists is here. <b>Ready now</b> works with no setup. <b>One-tap add</b> wires up a verified cloud — tap Add, paste the key it opens, done. <b>Browser</b> and <b>no API</b> entries are listed honestly so nothing is lost.</p>
+    <div id="svc-msg" class="hint" style="margin:0 0 10px;color:var(--good)" hidden></div>
+    <div id="svc-list"></div>
+  </section>
+
+  <!-- KEYS -->
+  <section id="panel-keys" class="card" hidden>
+    <h2 style="margin:0 0 4px;font-size:16px">API keys</h2>
+    <p class="hint" style="margin:0 0 10px">Optional. Add a key to unlock a free‑with‑key cloud for the Text tab (fast, generous free tiers). Keys are <b>encrypted and stored only on this PC</b> — they never leave the app and are never shown to the page.</p>
+    <div id="keylist"></div>
+    <p class="hint" style="margin:12px 0 0">The image engines (Pollinations, AI Horde) and Pollinations chat need no key at all.</p>
+    <h2 style="margin:20px 0 4px;font-size:16px">Puter — keyless GPT / Claude / Gemini / DALL·E</h2>
+    <p class="hint" style="margin:0 0 10px">Puter gives you the big-name models with <b>no API key</b>. On first use a one-time Puter sign-in popup appears; after that, usage is billed to <b>your own free Puter account</b> (their "User-Pays" model — a free allowance, then your choice to top up). Pick <b>Puter</b> in the Chat service list or the Image engine. Nothing to paste here.</p>
+    <div class="chips"><a class="chip" href="https://puter.com" target="_blank" rel="noopener">About Puter ↗</a><span class="badge b-on" style="align-self:center">free · no key</span></div>
+    <h2 style="margin:20px 0 4px;font-size:16px">Also available in your browser</h2>
+    <p class="hint" style="margin:0 0 10px">These have no public API to connect into an app, so Open Studio opens them in your browser instead.</p>
+    <div class="chips">
+      <a class="chip" href="https://perchance.org/ai-text-to-image-generator" target="_blank" rel="noopener">Perchance (free images) ↗</a>
+      <a class="chip" href="https://lite.koboldai.net/" target="_blank" rel="noopener">Kobold Lite ↗</a>
+      <a class="chip" href="https://app.sogni.ai/" target="_blank" rel="noopener">Sogni ↗</a>
+      <a class="chip" href="https://deepai.org/" target="_blank" rel="noopener">DeepAI site ↗</a>
+      <a class="chip" href="https://github.com/bigscience-workshop/petals" target="_blank" rel="noopener">Petals (self-host) ↗</a>
+    </div>
+  </section>
+
+  <p class="foot">
+    <b>Open Studio</b> is a standalone app. The free engines — <b>Pollinations</b>, <b>AI Horde</b> and <b>Puter</b> (GPT/Claude/Gemini/DALL·E, keyless) — need no account or paid key. Keyed clouds are called from inside the app so your key stays private.
+    Your library and settings live on this PC only. See the <b>Services</b> tab for every provider — ready now, one-tap add, or where to find it.<br>
+    This version does <b>text, images, video and upscaling</b>. In‑painting (paint‑over edits) is next — it needs a mask‑drawing canvas.<br>
+    <b>Uncensored:</b> for text, use the uncensored clouds (Venice, Abliteration, MegaNova, UncloseAI, Dolphin) in the Chat tab. For images, <b>AI Horde is fully uncensored</b> (no filter, pick an uncensored model) — note that Stability and DALL·E apply their own server‑side filter that no app can switch off, and Open Studio never adds any filter of its own.
+  </p>
+</div>
+
+<script>
+// Client-side "backend" for Open Studio on Android (and any hosted page). It gives the page the same
+// window.studio API the desktop app's main process provides, but implemented in the page using
+// fetch. On Android, Capacitor's CapacitorHttp patches fetch to go native, so there is no browser
+// CORS block. Keys live in this app's own storage (sandboxed per app on a phone).
+'use strict';
+(function () {
+  var PROVIDERS = {
+    groq:        { name: 'Groq',                 base: 'https://api.groq.com/openai/v1',     keyUrl: 'https://console.groq.com/keys',                 defModel: 'llama-3.3-70b-versatile', blurb: 'Ultra-fast open models (Llama, Mixtral). Free tier, generous limits, no card.' },
+    openrouter:  { name: 'OpenRouter',           base: 'https://openrouter.ai/api/v1',       keyUrl: 'https://openrouter.ai/keys',                    defModel: 'meta-llama/llama-3.3-70b-instruct:free', blurb: 'One key, hundreds of models. Anything ending in ":free" costs nothing.' },
+    cerebras:    { name: 'Cerebras',             base: 'https://api.cerebras.ai/v1',         keyUrl: 'https://cloud.cerebras.ai',                     defModel: 'llama-3.3-70b', blurb: 'The fastest big open models. Free daily token allowance, no card.' },
+    huggingface: { name: 'Hugging Face',         base: 'https://router.huggingface.co/v1',   keyUrl: 'https://huggingface.co/settings/tokens',        defModel: 'meta-llama/Llama-3.3-70B-Instruct', blurb: 'One token reaches thousands of open models. Small free monthly credit.' },
+    cloudflare:  { name: 'Cloudflare Workers AI', base: '',                                  keyUrl: 'https://dash.cloudflare.com/profile/api-tokens', defModel: '@cf/meta/llama-3.1-8b-instruct', cf: true, keyHint: 'ACCOUNT_ID:API_TOKEN', blurb: 'Open models on Cloudflare\'s edge. Free daily Neurons. Key = ACCOUNT_ID:API_TOKEN.' },
+    deepai:      { name: 'DeepAI (images)',       base: '',                                  keyUrl: 'https://deepai.org/dashboard/profile',          defModel: '', image: true, keyHint: 'DeepAI API key', blurb: 'Image generation via DeepAI. A limited amount is free, then pay as you go.' },
+    llm7:        { name: 'LLM7.io (no key)',      base: 'https://api.llm7.io/v1',            keyUrl: 'https://token.llm7.io',                         defModel: 'gpt-oss:20b', noKey: true, blurb: 'A free gateway that works with NO key or account. A free token raises the limits.' },
+    google:      { name: 'Google Gemini',         base: 'https://generativelanguage.googleapis.com/v1beta/openai', keyUrl: 'https://aistudio.google.com/apikey', defModel: 'gemini-2.5-flash', blurb: 'Gemini Flash and Gemma, free in Google AI Studio with a big daily quota.' },
+    mistral:     { name: 'Mistral AI',            base: 'https://api.mistral.ai/v1',         keyUrl: 'https://console.mistral.ai/api-keys',           defModel: 'mistral-large-latest', blurb: 'Mistral and Codestral. Free "Experiment" tier with a monthly quota.' },
+    nvidia:      { name: 'NVIDIA NIM',            base: 'https://integrate.api.nvidia.com/v1', keyUrl: 'https://build.nvidia.com',                     defModel: 'meta/llama-3.3-70b-instruct', blurb: 'A wide catalog of open models hosted by NVIDIA. Free developer credits.' },
+    zai:         { name: 'Z.ai (GLM)',            base: 'https://api.z.ai/api/paas/v4',       keyUrl: 'https://z.ai/manage-apikey/apikey-list',        defModel: 'glm-4.5-flash', blurb: 'Zhipu GLM models; the GLM Flash models are permanently free.' },
+    gonka:       { name: 'Gonka Broker',          base: 'https://proxy.gonkabroker.com/v1',   keyUrl: 'https://app.gonkabroker.com/signup',            defModel: 'zai-org/GLM-5.3-Flash', blurb: 'Decentralized nodes serving big open models. ~1M free tokens a month.' },
+    moonshot:    { name: 'Moonshot (Kimi)',       base: 'https://api.moonshot.ai/v1',        keyUrl: 'https://platform.moonshot.ai/console/api-keys', defModel: 'kimi-latest', blurb: 'Kimi models — strong at coding and long documents.' },
+    ovhcloud:    { name: 'OVHcloud (EU, no key)', base: 'https://oai.endpoints.kepler.ai.cloud.ovh.net/v1', keyUrl: 'https://endpoints.ai.cloud.ovh.net/', defModel: 'Meta-Llama-3_3-70B-Instruct', noKey: true, blurb: 'Open models hosted in Europe, usable anonymously (~2 req/min per IP).' },
+    cohere:      { name: 'Cohere (Command)',      base: 'https://api.cohere.ai/compatibility/v1', keyUrl: 'https://dashboard.cohere.com/api-keys',     defModel: 'command-a-03-2025', blurb: 'Cohere Command models. Free trial key, ~1,000 calls a month, no card.' },
+    fal:         { name: 'fal.ai (images)',       base: '', keyUrl: 'https://fal.ai/dashboard/keys',              image: true, keyHint: 'fal API key', blurb: 'Very fast FLUX / SD image generation. Pay as you go; trial credit.' },
+    replicate:   { name: 'Replicate (images)',    base: '', keyUrl: 'https://replicate.com/account/api-tokens',   image: true, keyHint: 'Replicate token (r8_…)', blurb: 'Thousands of image models (FLUX, SDXL). Pay per run; trial credit.' },
+    stability:   { name: 'Stability AI (images)', base: '', keyUrl: 'https://platform.stability.ai/account/keys', image: true, keyHint: 'Stability key (sk-…)', blurb: 'Stable Diffusion / SD3 (Core). Credits; some free on sign-up.' },
+    segmind:     { name: 'Segmind (images)',      base: '', keyUrl: 'https://www.segmind.com/',                    image: true, keyHint: 'Segmind API key', blurb: 'FLUX / SDXL image API. Free credit allowance, then pay as you go.' },
+  };
+  function aspectOf(w, h) { return w > h ? '16:9' : h > w ? '9:16' : '1:1'; }
+  function falSize(w, h) { return w > h ? 'landscape_16_9' : h > w ? 'portrait_16_9' : 'square_hd'; }
+  function toDataURL(blob) { return new Promise(function (res, rej) { var fr = new FileReader(); fr.onload = function () { res(fr.result); }; fr.onerror = function () { rej(new Error('could not read image data')); }; fr.readAsDataURL(blob); }); }
+
+  var HORDE = 'https://aihorde.net/api/v2';
+  var HAGENT = 'OpenStudio:0.1:android';
+  function lget(k, d) { try { var v = localStorage.getItem(k); return v === null ? d : v; } catch (e) { return d; } }
+  function lset(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+  function keyOf(id) { return lget('osk_' + id, ''); }
+  function customs() { try { return JSON.parse(lget('os_customs', '[]')) || []; } catch (e) { return []; } }
+  function saveCustoms(a) { lset('os_customs', JSON.stringify(a)); }
+  function P() { return Promise.resolve.apply(Promise, arguments); }
+  function sleep(ms) { return new Promise(function (r) { setTimeout(r, ms); }); }
+
+  async function chatCall(base, headers, model, prompt) {
+    var res;
+    try { res = await fetch(base + '/chat/completions', { method: 'POST', headers: headers, body: JSON.stringify({ model: model || '', messages: [{ role: 'user', content: prompt }], max_tokens: 1024 }) }); }
+    catch (e) { throw new Error('Could not reach the service: ' + e.message); }
+    var data = {}; try { data = await res.json(); } catch (e) {}
+    if (!res.ok) throw new Error((data.error && data.error.message) || ('HTTP ' + res.status) + (model ? '' : ' (type a model name)'));
+    return (data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content) || '(empty answer)';
+  }
+
+  window.studio = {
+    providers: function () {
+      return P(Object.keys(PROVIDERS).map(function (id) {
+        var p = PROVIDERS[id];
+        return { id: id, name: p.name, keyUrl: p.keyUrl, defModel: p.defModel, blurb: p.blurb || '', local: Boolean(p.local), noKey: Boolean(p.noKey), image: Boolean(p.image), keyHint: p.keyHint || '', connected: Boolean(p.noKey) || Boolean(keyOf(id)) };
+      }));
+    },
+    setKey: function (provider, key) { if (PROVIDERS[provider]) lset('osk_' + provider, (key || '').trim()); return P(Object.keys(PROVIDERS)); },
+    text: function (opts) {
+      var provider = opts.provider, model = opts.model, prompt = opts.prompt;
+      if (String(provider).indexOf('custom-') === 0) {
+        var c = customs().find(function (x) { return x.id === provider; });
+        if (!c) return Promise.reject(new Error('That custom service was removed.'));
+        var h = { 'Content-Type': 'application/json' }; if (c.key) h.Authorization = 'Bearer ' + c.key;
+        return chatCall(c.base, h, model, prompt);
+      }
+      var p = PROVIDERS[provider];
+      if (!p) return Promise.reject(new Error('Unknown provider.'));
+      var base = p.base, auth = keyOf(provider);
+      if (p.noKey || p.local) auth = '';
+      else if (!auth) return Promise.reject(new Error('Add your ' + p.name + ' key first (Keys).'));
+      if (p.cf) { var parts = String(auth).split(':'); if (!parts[0] || !parts[1]) return Promise.reject(new Error('Cloudflare key must be ACCOUNT_ID:API_TOKEN (Keys).')); base = 'https://api.cloudflare.com/client/v4/accounts/' + parts[0] + '/ai/v1'; auth = parts[1]; }
+      var headers = { 'Content-Type': 'application/json' };
+      if (auth) headers.Authorization = 'Bearer ' + auth;
+      if (provider === 'openrouter') { headers['HTTP-Referer'] = 'https://open-studio.app'; headers['X-Title'] = 'Open Studio'; }
+      return chatCall(base, headers, model || p.defModel, prompt);
+    },
+    providerModels: async function (provider) {
+      var base, auth;
+      if (String(provider).indexOf('custom-') === 0) {
+        var c = customs().find(function (x) { return x.id === provider; });
+        if (!c) throw new Error('That custom service was removed.');
+        base = c.base; auth = c.key;
+      } else {
+        var p = PROVIDERS[provider]; if (!p) throw new Error('Unknown provider.');
+        base = p.base; auth = keyOf(provider);
+        if (p.cf) { var pr = String(auth || '').split(':'); if (!pr[0] || !pr[1]) throw new Error('Cloudflare key must be ACCOUNT_ID:API_TOKEN.'); base = 'https://api.cloudflare.com/client/v4/accounts/' + pr[0] + '/ai/v1'; auth = pr[1]; }
+        if (!auth && !p.noKey && !p.local) throw new Error('Add your ' + p.name + ' key first (Keys).');
+      }
+      var headers = {}; if (auth) headers.Authorization = 'Bearer ' + auth;
+      var res = await fetch(base + '/models', { headers: headers });
+      var data = {}; try { data = await res.json(); } catch (e) {}
+      if (!res.ok) throw new Error((data.error && data.error.message) || ('HTTP ' + res.status));
+      var arr = data.data || data.models || (Array.isArray(data) ? data : []);
+      return (Array.isArray(arr) ? arr : []).map(function (m) { return typeof m === 'string' ? m : (m.id || m.name); }).filter(Boolean).sort();
+    },
+    ptext: function (opts) {
+      var url = 'https://text.pollinations.ai/' + encodeURIComponent(opts.prompt) + '?model=openai&referrer=open-studio' + (opts.token ? '&token=' + encodeURIComponent(opts.token) : '');
+      return fetch(url, opts.token ? { headers: { Authorization: 'Bearer ' + opts.token } } : {}).then(function (r) { if (!r.ok) throw new Error(r.status === 429 ? 'the free limit is cooling down — add a token in Keys' : 'HTTP ' + r.status); return r.text(); });
+    },
+    hordeModels: function () {
+      return fetch(HORDE + '/status/models?type=image', { headers: { 'Client-Agent': HAGENT } }).then(function (r) { return r.json(); }).then(function (list) {
+        return Array.isArray(list) ? list.filter(function (m) { return (m.count || 0) > 0; }).sort(function (a, b) { return (b.count || 0) - (a.count || 0); }).slice(0, 35).map(function (m) { return { name: m.name, count: m.count }; }) : [];
+      }).catch(function () { return []; });
+    },
+    hordeImage: async function (o) {
+      var body = { prompt: o.prompt, nsfw: true, censor_nsfw: false, trusted_workers: false, r2: true, params: { width: o.width, height: o.height, steps: o.steps, sampler_name: 'k_euler_a', cfg_scale: 7, n: 1, seed: String(o.seed) } };
+      if (o.model) body.models = [o.model];
+      var sub = await fetch(HORDE + '/generate/async', { method: 'POST', headers: { 'Content-Type': 'application/json', apikey: '0000000000', 'Client-Agent': HAGENT }, body: JSON.stringify(body) });
+      var sj = {}; try { sj = await sub.json(); } catch (e) {}
+      if (!sub.ok) throw new Error(sj.message || ('HTTP ' + sub.status));
+      if (!sj.id) throw new Error('AI Horde did not start the job.');
+      var deadline = Date.now() + 300000;
+      while (Date.now() < deadline) {
+        await sleep(2500);
+        var s = await (await fetch(HORDE + '/generate/check/' + sj.id, { headers: { 'Client-Agent': HAGENT } })).json();
+        if (s.faulted) throw new Error('a worker failed on this image');
+        if (s.done) {
+          var st = await (await fetch(HORDE + '/generate/status/' + sj.id, { headers: { 'Client-Agent': HAGENT } })).json();
+          var url = st.generations && st.generations[0] && st.generations[0].img;
+          if (!url) throw new Error('no image came back');
+          return url;
+        }
+      }
+      throw new Error('AI Horde took too long; try again or choose "Any".');
+    },
+    deepaiImage: async function (o) {
+      var key = keyOf('deepai');
+      if (!key) throw new Error('Add your DeepAI API key first (Keys).');
+      var r = await fetch('https://api.deepai.org/api/text2img', { method: 'POST', headers: { 'api-key': key }, body: new URLSearchParams({ text: o.prompt }) });
+      var j = {}; try { j = await r.json(); } catch (e) {}
+      if (!r.ok || !j.output_url) throw new Error(j.err || ('DeepAI HTTP ' + r.status));
+      return j.output_url;
+    },
+    falImage: async function (o) {
+      var key = keyOf('fal'); if (!key) throw new Error('Add your fal.ai key first (Keys).');
+      var r = await fetch('https://fal.run/fal-ai/flux/schnell', { method: 'POST', headers: { Authorization: 'Key ' + key, 'Content-Type': 'application/json' }, body: JSON.stringify({ prompt: o.prompt, image_size: falSize(o.width, o.height) }) });
+      var j = {}; try { j = await r.json(); } catch (e) {}
+      if (!r.ok) throw new Error((j.detail && (j.detail[0] && j.detail[0].msg || j.detail)) || j.message || ('fal.ai HTTP ' + r.status));
+      var url = j.images && j.images[0] && j.images[0].url; if (!url) throw new Error('fal.ai returned no image.'); return url;
+    },
+    replicateImage: async function (o) {
+      var key = keyOf('replicate'); if (!key) throw new Error('Add your Replicate token first (Keys).');
+      var r = await fetch('https://api.replicate.com/v1/models/black-forest-labs/flux-schnell/predictions', { method: 'POST', headers: { Authorization: 'Bearer ' + key, 'Content-Type': 'application/json', Prefer: 'wait' }, body: JSON.stringify({ input: { prompt: o.prompt, aspect_ratio: aspectOf(o.width, o.height) } }) });
+      var j = {}; try { j = await r.json(); } catch (e) {}
+      if (!r.ok) throw new Error(j.detail || j.title || ('Replicate HTTP ' + r.status));
+      var out = j.output; if (Array.isArray(out)) out = out[0];
+      if (typeof out !== 'string') throw new Error('Replicate is still processing — try again in a moment.');
+      return out;
+    },
+    stabilityImage: async function (o) {
+      var key = keyOf('stability'); if (!key) throw new Error('Add your Stability key first (Keys).');
+      var fd = new FormData(); fd.append('prompt', o.prompt); fd.append('output_format', 'png'); fd.append('aspect_ratio', aspectOf(o.width, o.height));
+      var r = await fetch('https://api.stability.ai/v2beta/stable-image/generate/core', { method: 'POST', headers: { Authorization: 'Bearer ' + key, Accept: 'image/*' }, body: fd });
+      if (!r.ok) { var t = ''; try { t = await r.text(); } catch (e) {} throw new Error('Stability HTTP ' + r.status + (t ? ': ' + t.slice(0, 160) : '')); }
+      return toDataURL(await r.blob());
+    },
+    segmindImage: async function (o) {
+      var key = keyOf('segmind'); if (!key) throw new Error('Add your Segmind key first (Keys).');
+      var r = await fetch('https://api.segmind.com/v1/fast-flux-schnell', { method: 'POST', headers: { 'x-api-key': key, 'Content-Type': 'application/json' }, body: JSON.stringify({ prompt: o.prompt, samples: 1 }) });
+      if (!r.ok) { var t = ''; try { t = await r.text(); } catch (e) {} throw new Error('Segmind HTTP ' + r.status + (t ? ': ' + t.slice(0, 160) : '')); }
+      return toDataURL(await r.blob());
+    },
+    upscale: async function (o) {
+      var key = keyOf('stability'); if (!key) throw new Error('Upscale uses your Stability key (add it in Keys).');
+      var src = await fetch(o.imageUrl); if (!src.ok) throw new Error('Could not load the source image.');
+      var blob = await src.blob();
+      var fd = new FormData(); fd.append('image', blob, 'image.png'); fd.append('output_format', 'png');
+      var r = await fetch('https://api.stability.ai/v2beta/stable-image/upscale/fast', { method: 'POST', headers: { Authorization: 'Bearer ' + key, Accept: 'image/*' }, body: fd });
+      if (!r.ok) { var t = ''; try { t = await r.text(); } catch (e) {} throw new Error('Stability upscale HTTP ' + r.status + (t ? ': ' + t.slice(0, 160) : '')); }
+      return toDataURL(await r.blob());
+    },
+    falVideo: async function (o) {
+      var key = keyOf('fal'); if (!key) throw new Error('Video uses your fal.ai key (add it in Keys).');
+      var sub = await fetch('https://queue.fal.run/fal-ai/ltx-video', { method: 'POST', headers: { Authorization: 'Key ' + key, 'Content-Type': 'application/json' }, body: JSON.stringify({ prompt: o.prompt }) });
+      var sj = {}; try { sj = await sub.json(); } catch (e) {}
+      if (!sub.ok) throw new Error((sj.detail && (sj.detail[0] && sj.detail[0].msg || sj.detail)) || sj.message || ('fal.ai HTTP ' + sub.status));
+      if (!sj.status_url || !sj.response_url) throw new Error('fal.ai did not queue the job.');
+      var deadline = Date.now() + 600000;
+      while (Date.now() < deadline) {
+        await sleep(3000);
+        var st = {}; try { st = await (await fetch(sj.status_url, { headers: { Authorization: 'Key ' + key } })).json(); } catch (e) {}
+        if (st.status === 'COMPLETED') break;
+        if (st.status === 'FAILED' || st.error) throw new Error('fal.ai could not make this video.');
+      }
+      var res = {}; try { res = await (await fetch(sj.response_url, { headers: { Authorization: 'Key ' + key } })).json(); } catch (e) {}
+      var url = res.video && res.video.url; if (!url) throw new Error('fal.ai took too long or returned no video.'); return url;
+    },
+    replicateVideo: async function (o) {
+      var key = keyOf('replicate'); if (!key) throw new Error('Video uses your Replicate token (add it in Keys).');
+      var r = await fetch('https://api.replicate.com/v1/models/wan-video/wan-2.2-t2v-fast/predictions', { method: 'POST', headers: { Authorization: 'Bearer ' + key, 'Content-Type': 'application/json', Prefer: 'wait' }, body: JSON.stringify({ input: { prompt: o.prompt } }) });
+      var j = {}; try { j = await r.json(); } catch (e) {}
+      if (!r.ok) throw new Error(j.detail || j.title || ('Replicate HTTP ' + r.status));
+      var getUrl = j.urls && j.urls.get, deadline = Date.now() + 600000;
+      while ((j.status === 'starting' || j.status === 'processing') && getUrl && Date.now() < deadline) {
+        await sleep(3000);
+        try { j = await (await fetch(getUrl, { headers: { Authorization: 'Bearer ' + key } })).json(); } catch (e) {}
+      }
+      if (j.status !== 'succeeded') throw new Error('Replicate is still processing the video — try again in a moment.');
+      var out = j.output; if (Array.isArray(out)) out = out[0];
+      if (typeof out !== 'string') throw new Error('Replicate returned no video.'); return out;
+    },
+    customList: function () { return P(customs().map(function (c) { return { id: c.id, name: c.name, base: c.base, connected: true }; })); },
+    customAdd: function (o) {
+      var base = (o.base || '').trim().replace(/\/+$/, '');
+      if (!/^https?:\/\//.test(base)) return Promise.reject(new Error('Base URL must start with http:// or https:// (e.g. https://api.example.com/v1).'));
+      var name = (o.name || '').trim() || base.replace(/^https?:\/\//, '').split('/')[0];
+      var a = customs(); a.push({ id: 'custom-' + Date.now().toString(36), name: name, base: base, key: (o.key || '').trim() }); saveCustoms(a);
+      return P(a.map(function (c) { return { id: c.id, name: c.name, base: c.base, connected: true }; }));
+    },
+    customRemove: function (id) { var a = customs().filter(function (c) { return c.id !== id; }); saveCustoms(a); return P(a.map(function (c) { return { id: c.id, name: c.name, base: c.base, connected: true }; })); },
+  };
+})();
+
+</script>
+<script>
+'use strict';
+(function(){
+  var $=function(s){return document.querySelector(s)};
+  var store={get:function(k,d){try{var v=localStorage.getItem('os_'+k);return v===null?d:v}catch(e){return d}},
+             set:function(k,v){try{localStorage.setItem('os_'+k,v)}catch(e){}}};
+  function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+
+  // Tabs
+  document.querySelectorAll('.tab').forEach(function(t){
+    t.addEventListener('click',function(){
+      document.querySelectorAll('.tab').forEach(function(x){x.classList.toggle('on',x===t)});
+      var tab=t.dataset.tab;
+      $('#panel-image').hidden=tab!=='image'; $('#panel-text').hidden=tab!=='text'; $('#panel-keys').hidden=tab!=='keys';
+      $('#panel-services').hidden=tab!=='services'; $('#panel-video').hidden=tab!=='video';
+      if(tab==='services')renderServices();
+      store.set('tab',tab);
+    });
+  });
+
+  // Pollinations token (free engine, optional — lifts the ~45s limit). Stored locally.
+  function ptoken(){ return store.get('ptoken',''); }
+  function withToken(url){ var t=ptoken(); return t?url+'&token='+encodeURIComponent(t):url; }
+
+  var HORDE_AGENT='OpenStudio:0.1:desktop';
+
+  // ---------- Puter (keyless GPT/Claude/Gemini/DALL·E; its own sign-in + billing, runs in-page) ----------
+  function puterReady(){ return typeof window!=='undefined' && window.puter && window.puter.ai; }
+  function puterText(resp){
+    try{
+      if(resp==null)return '';
+      if(typeof resp==='string')return resp;
+      var m=resp.message;
+      if(m){ var c=m.content;
+        if(typeof c==='string')return c;
+        if(Array.isArray(c))return c.map(function(p){return (p&&(p.text||p.content))||''}).join(''); }
+      if(typeof resp.text==='string')return resp.text;
+      if(typeof resp.toString==='function'){ var s=resp.toString(); if(s&&s!=='[object Object]')return s; }
+    }catch(e){}
+    return '';
+  }
+  function puterImgUrl(res){
+    if(!res)return '';
+    if(typeof res==='string')return res;
+    if(res.src)return res.src;                    // txt2img returns an <img> element
+    if(typeof res.toString==='function'){ var s=res.toString(); if(/^(data:|https?:|blob:)/.test(s))return s; }
+    return '';
+  }
+  var PUTER_HINT=' — a free Puter sign-in popup may need completing on first use.';
+
+  // ---------- Image ----------
+  var style=store.get('style','');
+  function selStyle(){ $('#istyle').querySelectorAll('.chip').forEach(function(x){x.classList.toggle('on',x.dataset.style===style)}); }
+  $('#istyle').addEventListener('click',function(e){var b=e.target.closest('.chip');if(!b)return;style=b.dataset.style;store.set('style',style);selStyle();});
+  selStyle();
+  var shape={w:1024,h:1024};
+  $('#ishape').addEventListener('click',function(e){var b=e.target.closest('.chip');if(!b)return;$('#ishape').querySelectorAll('.chip').forEach(function(x){x.classList.toggle('on',x===b)});shape={w:+b.dataset.w,h:+b.dataset.h};});
+  $('#iprompt').value=store.get('iprompt',''); $('#iprompt').addEventListener('input',function(){store.set('iprompt',this.value)});
+  $('#imodel').value=store.get('imodel','flux'); $('#imodel').addEventListener('change',function(){store.set('imodel',this.value)});
+  $('#ibatch').value=store.get('batch','1'); $('#ibatch').addEventListener('change',function(){store.set('batch',this.value)});
+
+  function engine(){return $('#iengine').value}
+  var hordeLoaded=false;
+  // Keyed image clouds: engine id -> {fn on window.studio, friendly hint}
+  var KEYED_IMG={
+    deepai:    {fn:'deepaiImage',    hint:'DeepAI: uses your DeepAI API key (add it under Keys). One image per request.'},
+    fal:       {fn:'falImage',       hint:'fal.ai: very fast FLUX, using your fal.ai key (Keys). Pay as you go; trial credit on new accounts.'},
+    replicate: {fn:'replicateImage', hint:'Replicate: FLUX schnell, using your Replicate token (Keys). Pay per run.'},
+    stability: {fn:'stabilityImage', hint:'Stability: Stable Image Core (SD3), using your Stability key (Keys). Uses credits.'},
+    segmind:   {fn:'segmindImage',   hint:'Segmind: fast FLUX, using your Segmind key (Keys). Free credit allowance, then pay as you go.'}
+  };
+  function applyEngine(){
+    var e=engine(),h=e==='aihorde',p=e==='puter',k=!!KEYED_IMG[e];
+    $('#imodel').hidden=h||p||k; $('#ihordemodel').hidden=!h;
+    $('#ihint').textContent=k?KEYED_IMG[e].hint:p?'Puter: free DALL·E / Flux with no key — a one-time Puter sign-in popup appears on first use, then usage bills to your own free Puter account.':h?'AI Horde: free, no account, dozens of models. A free job can queue 10–60s.':'Pollinations network. Free; about one image every 45s unless you add a token (Keys).';
+    if(h&&!hordeLoaded){hordeLoaded=true;loadHordeModels();}
+  }
+  function loadHordeModels(){
+    var fill=function(top){ var sel=$('#ihordemodel'),cur=sel.value; sel.innerHTML='<option value="">Any (fastest free worker)</option>'+top.map(function(m){return '<option value="'+esc(m.name)+'">'+esc(m.name)+' ('+m.count+')</option>'}).join(''); sel.value=cur; };
+    if(window.studio&&window.studio.hordeModels){ window.studio.hordeModels().then(fill).catch(function(){}); return; }
+    fetch('https://aihorde.net/api/v2/status/models?type=image',{headers:{'Client-Agent':HORDE_AGENT}})
+      .then(function(r){return r.json()}).then(function(list){ if(!Array.isArray(list))return;
+        fill(list.filter(function(m){return (m.count||0)>0}).sort(function(a,b){return (b.count||0)-(a.count||0)}).slice(0,35).map(function(m){return{name:m.name,count:m.count}})); }).catch(function(){});
+  }
+  $('#iengine').value=store.get('engine','pollinations');
+  $('#iengine').addEventListener('change',function(){store.set('engine',this.value);applyEngine();});
+  $('#ihordemodel').addEventListener('change',function(){store.set('hordemodel',this.value)});
+  applyEngine();
+
+  // Library (persists locally)
+  function loadLib(){try{return JSON.parse(store.get('lib','[]'))||[]}catch(e){return []}}
+  function saveLib(a){try{store.set('lib',JSON.stringify(a.slice(0,80)))}catch(e){}}
+  function savedToLib(item){var a=loadLib();a.unshift(item);saveLib(a);$('#libclear').hidden=false;$('#libcount').textContent='· '+loadLib().length+' saved';}
+  function showErr(m){var e=$('#ierr');e.textContent=m;e.hidden=false;}
+  function newTile(item){
+    var fig=document.createElement('figure');fig.style.setProperty('--ar',(item.w/item.h).toFixed(4));
+    fig.innerHTML='<div class="imgwrap"><span class="spin"></span><span class="hstat"></span><img alt=""></div>'+
+      '<figcaption><span class="p">'+esc(item.prompt)+'</span><div class="fig-acts"><a target="_blank" rel="noopener">Open</a><a download="open-studio.png">Save</a><button data-vary>More</button><button data-upscale>Upscale</button></div></figcaption>';
+    fig.querySelector('[data-vary]').addEventListener('click',function(){$('#iprompt').value=item.base||item.prompt;shape={w:item.w,h:item.h};runBatch(1,true);});
+    fig.querySelector('[data-upscale]').addEventListener('click',function(){upscaleImage(item);});
+    var g=$('#gallery');g.insertBefore(fig,g.firstChild);$('#libempty').hidden=true;return fig;
+  }
+  function renderLib(){
+    var a=loadLib(),g=$('#gallery');g.innerHTML='';
+    a.forEach(function(it){var fig=newTile(it);var im=fig.querySelector('img'),sp=fig.querySelector('.spin'),ax=fig.querySelectorAll('a');ax[0].href=it.url;ax[1].href=it.url;im.onload=function(){sp.hidden=true};im.onerror=function(){sp.hidden=true;fig.querySelector('.hstat').textContent='link expired'};im.src=it.url;});
+    $('#libempty').hidden=a.length>0;$('#libclear').hidden=a.length===0;$('#libcount').textContent=a.length?('· '+a.length+' saved'):'';
+  }
+  $('#libclear').addEventListener('click',function(){saveLib([]);renderLib();});
+  renderLib();
+
+  var COOLDOWN=45,coolTimer=null;
+  function cool(){ if(ptoken())return; var left=COOLDOWN,btn=$('#igen');btn.disabled=true;clearInterval(coolTimer);btn.textContent='Ready in '+left+'s';
+    coolTimer=setInterval(function(){left--;if(left<=0){clearInterval(coolTimer);btn.disabled=false;btn.textContent='Generate';}else btn.textContent='Ready in '+left+'s';},1000); }
+
+  function pollImage(base,seed){
+    var full=base+(style?(', '+style):'');
+    var nologo=$('#inologo').checked,enhance=$('#ienhance').checked;
+    var url=withToken('https://image.pollinations.ai/prompt/'+encodeURIComponent(full)+'?width='+shape.w+'&height='+shape.h+'&model='+encodeURIComponent($('#imodel').value)+'&seed='+seed+(nologo?'&nologo=true':'')+(enhance?'&enhance=true':'')+'&referrer=open-studio');
+    var item={url:url,prompt:full,base:base,w:shape.w,h:shape.h,model:$('#imodel').value,ts:Date.now()};
+    var fig=newTile(item),sp=fig.querySelector('.spin'),img=fig.querySelector('img'),ax=fig.querySelectorAll('a');ax[0].href=url;ax[1].href=url;
+    var probe=new Image();
+    probe.onload=function(){img.src=url;sp.hidden=true;savedToLib(item);};
+    probe.onerror=function(){fig.remove();showErr('An image could not be generated (busy, or the ~45s limit is cooling down). Add a token in Keys to skip the wait.');};
+    probe.src=url;
+  }
+  function hordeImage(base,seed){
+    var full=base+(style?(', '+style):'');var model=$('#ihordemodel').value;
+    var W=Math.max(64,Math.min(1024,Math.round(shape.w/64)*64)),H=Math.max(64,Math.min(1024,Math.round(shape.h/64)*64));
+    var item={url:'',prompt:full,base:base,w:W,h:H,model:model||'AI Horde',ts:Date.now()};
+    var fig=newTile(item),stat=fig.querySelector('.hstat'),sp=fig.querySelector('.spin'),img=fig.querySelector('img');
+    stat.textContent='generating via AI Horde…';
+    var steps=/flux/i.test(model)?8:25;
+    var onUrl=function(url){ item.url=url;var ax=fig.querySelectorAll('a');ax[0].href=url;ax[1].href=url;
+      img.onload=function(){sp.hidden=true;stat.textContent='';};img.onerror=function(){sp.hidden=true;stat.textContent='link expired — Save keepers';};img.src=url;savedToLib(item); };
+    // Desktop app: run it from the app's backend (no browser CORS / local-file block).
+    if(window.studio&&window.studio.hordeImage){
+      window.studio.hordeImage({prompt:full,model:model,width:W,height:H,steps:steps,seed:seed})
+        .then(onUrl).catch(function(e){fig.remove();showErr('AI Horde: '+(e.message||e));});
+      return;
+    }
+    // Hosted website: direct fetch + poll.
+    var body={prompt:full,nsfw:true,censor_nsfw:false,trusted_workers:false,r2:true,params:{width:W,height:H,steps:steps,sampler_name:'k_euler_a',cfg_scale:7,n:1,seed:String(seed)}};
+    if(model)body.models=[model];
+    var deadline=Date.now()+300000;
+    fetch('https://aihorde.net/api/v2/generate/async',{method:'POST',headers:{'Content-Type':'application/json',apikey:'0000000000','Client-Agent':HORDE_AGENT},body:JSON.stringify(body)})
+      .then(function(r){return r.json().then(function(j){if(!r.ok)throw new Error(j.message||('HTTP '+r.status));return j})})
+      .then(function(j){if(!j.id)throw new Error('no job id');poll(j.id);})
+      .catch(function(e){fig.remove();showErr('AI Horde: '+e.message);});
+    function poll(id){
+      if(Date.now()>deadline){fig.remove();showErr('AI Horde took too long; try again or choose "Any".');return;}
+      fetch('https://aihorde.net/api/v2/generate/check/'+id,{headers:{'Client-Agent':HORDE_AGENT}}).then(function(r){return r.json()}).then(function(s){
+        if(s.faulted){fig.remove();showErr('A worker failed; try again.');return;}
+        if(!s.done){stat.textContent=(s.queue_position>0?('#'+s.queue_position+' in queue'):'generating…')+(s.wait_time?(' ~'+s.wait_time+'s'):'');setTimeout(function(){poll(id)},2500);return;}
+        fetch('https://aihorde.net/api/v2/generate/status/'+id,{headers:{'Client-Agent':HORDE_AGENT}}).then(function(r){return r.json()}).then(function(st){
+          var gen=(st.generations&&st.generations[0])||{},url=gen.img;
+          if(!url){fig.remove();showErr('No image came back; try again.');return;}
+          item.url=url;var ax=fig.querySelectorAll('a');ax[0].href=url;ax[1].href=url;
+          img.onload=function(){sp.hidden=true;stat.textContent='';};img.onerror=function(){sp.hidden=true;stat.textContent='link expired — Save keepers';};img.src=url;savedToLib(item);
+        }).catch(function(e){fig.remove();showErr('AI Horde: '+e.message);});
+      }).catch(function(e){fig.remove();showErr('AI Horde: '+e.message);});
+    }
+  }
+  // Generic keyed image cloud (DeepAI, fal.ai, Replicate, Stability, Segmind) — the app/shim backend
+  // holds the key and returns a hosted URL or a data: URL.
+  function keyedImage(eng,base,seed){
+    var cfg=KEYED_IMG[eng],fn=cfg&&cfg.fn,label=$('#iengine').selectedOptions[0].text.split(' —')[0];
+    if(!(window.studio&&window.studio[fn])){showErr(label+' needs the desktop app or the HTML build.');return;}
+    var full=base+(style?(', '+style):'');
+    var item={url:'',prompt:full,base:base,w:shape.w,h:shape.h,model:label,ts:Date.now()};
+    var fig=newTile(item),stat=fig.querySelector('.hstat'),sp=fig.querySelector('.spin'),img=fig.querySelector('img');
+    stat.textContent=label+'…';
+    window.studio[fn]({prompt:full,width:shape.w,height:shape.h,seed:seed}).then(function(url){
+      item.url=url;var ax=fig.querySelectorAll('a');ax[0].href=url;ax[1].href=url;
+      img.onload=function(){sp.hidden=true;stat.textContent='';};img.onerror=function(){sp.hidden=true;stat.textContent='';};img.src=url;savedToLib(item);
+    }).catch(function(e){fig.remove();showErr(label+': '+((e&&e.message)||e));});
+  }
+  function puterImage(base,seed){
+    var full=base+(style?(', '+style):'');
+    var item={url:'',prompt:full,base:base,w:shape.w,h:shape.h,model:'Puter',ts:Date.now()};
+    var fig=newTile(item),stat=fig.querySelector('.hstat'),sp=fig.querySelector('.spin'),img=fig.querySelector('img');
+    stat.textContent='Puter…';
+    if(!puterReady()){fig.remove();showErr('Puter could not load — it needs an internet connection. Try Pollinations or AI Horde.');return;}
+    Promise.resolve(window.puter.ai.txt2img(full)).then(function(res){
+      var url=puterImgUrl(res);
+      if(!url){fig.remove();showErr('Puter returned no image. Try again.');return;}
+      item.url=url;var ax=fig.querySelectorAll('a');ax[0].href=url;ax[1].href=url;
+      img.onload=function(){sp.hidden=true;stat.textContent='';};img.onerror=function(){sp.hidden=true;stat.textContent='';};img.src=url;savedToLib(item);
+    }).catch(function(e){fig.remove();showErr('Puter: '+((e&&e.message)||e)+PUTER_HINT);});
+  }
+  function upscaleImage(item){
+    if(!(window.studio&&window.studio.upscale)){showErr('Upscale needs the desktop app or the HTML build.');return;}
+    var url=item.url; if(!url){showErr('Let the image finish first, then upscale.');return;}
+    var ni={url:'',prompt:'Upscaled — '+item.prompt,base:item.base,w:(item.w||1024)*2,h:(item.h||1024)*2,model:'Upscaled',ts:Date.now()};
+    var fig=newTile(ni),stat=fig.querySelector('.hstat'),sp=fig.querySelector('.spin'),img=fig.querySelector('img');
+    stat.textContent='Upscaling…';
+    window.studio.upscale({imageUrl:url}).then(function(u){ ni.url=u;var ax=fig.querySelectorAll('a');ax[0].href=u;ax[1].href=u;
+      img.onload=function(){sp.hidden=true;stat.textContent='';};img.onerror=function(){sp.hidden=true;stat.textContent='';};img.src=u;savedToLib(ni);
+    }).catch(function(e){fig.remove();showErr('Upscale: '+((e&&e.message)||e));});
+  }
+  function runBatch(n,fromVary){
+    var base=$('#iprompt').value.trim();$('#ierr').hidden=true;
+    if(!base){showErr('Type a description first.');return;}
+    var lock=$('#iseedlock').checked;
+    for(var i=0;i<n;i++){
+      var seed;
+      if(lock&&!fromVary&&$('#iseed').value.trim()!=='')seed=parseInt($('#iseed').value,10)||0;else seed=Math.floor(Math.random()*1e9);
+      if(!lock&&n===1&&!fromVary)$('#iseed').value=seed;
+      if(engine()==='aihorde')hordeImage(base,seed);else if(KEYED_IMG[engine()])keyedImage(engine(),base,seed);else if(engine()==='puter')puterImage(base,seed);else pollImage(base,seed);
+    }
+    if(engine()==='pollinations')cool();
+  }
+  $('#igen').addEventListener('click',function(){runBatch(parseInt($('#ibatch').value,10)||1,false)});
+  $('#iprompt').addEventListener('keydown',function(e){if((e.ctrlKey||e.metaKey)&&e.key==='Enter')$('#igen').click()});
+
+  // ---------- Text ----------
+  var keyedProviders=[];
+  var customProviders=[];
+  function buildTextProviders(){
+    var sel=$('#tprovider'),cur=sel.value;
+    var opts='<option value="pollinations">Pollinations (free, no key)</option>'+
+             '<option value="puter">Puter (free — GPT / Claude / Gemini, sign in)</option>';
+    keyedProviders.forEach(function(p){ if(p.connected&&!p.image) opts+='<option value="'+esc(p.id)+'">'+esc(p.name)+(p.local?' (on this PC)':p.noKey?' (free, no key)':' (your key)')+'</option>'; });
+    customProviders.forEach(function(c){ opts+='<option value="'+esc(c.id)+'">'+esc(c.name)+' (custom)</option>'; });
+    sel.innerHTML=opts; sel.value=cur&&[].some.call(sel.options,function(o){return o.value===cur})?cur:'pollinations';
+  }
+  $('#tprompt').value=store.get('tprompt','');$('#tprompt').addEventListener('input',function(){store.set('tprompt',this.value)});
+  function genText(){
+    var prompt=$('#tprompt').value.trim();$('#terr').hidden=true;
+    if(!prompt){$('#terr').textContent='Type a prompt first.';$('#terr').hidden=false;return;}
+    var provider=$('#tprovider').value,model=$('#tmodel').value.trim();
+    var out=$('#tout');out.textContent='…';$('#tcopy').hidden=true;$('#tspin').hidden=false;$('#tgen').disabled=true;
+    var done=function(txt){out.textContent=(txt||'').trim()||'(empty answer)';$('#tcopy').hidden=false;};
+    var fail=function(msg){out.textContent='The answer appears here.';$('#terr').textContent=msg;$('#terr').hidden=false;};
+    var fin=function(){$('#tspin').hidden=true;$('#tgen').disabled=false;};
+    if(provider==='puter'){
+      if(!puterReady()){fail('Puter could not load — it needs an internet connection.');fin();return;}
+      var popts={}; if(model)popts.model=model;
+      Promise.resolve(window.puter.ai.chat(prompt,popts)).then(function(r){
+        var t=puterText(r); if(!t)throw new Error('empty answer'); done(t);
+      }).catch(function(e){fail('Puter: '+((e&&e.message)||e)+PUTER_HINT)}).then(fin);
+      return;
+    }
+    if(provider==='pollinations'){
+      if(window.studio&&window.studio.ptext){
+        window.studio.ptext({prompt:prompt,token:ptoken()}).then(done).catch(function(e){fail('Could not generate ('+(e.message||e)+').')}).then(fin);
+      }else{
+        var url=withToken('https://text.pollinations.ai/'+encodeURIComponent(prompt)+'?model=openai&referrer=open-studio');
+        fetch(url).then(function(r){if(!r.ok)throw new Error(r.status===429?'the free limit is cooling down — add a token in Keys':'HTTP '+r.status);return r.text()})
+          .then(done).catch(function(e){fail('Could not generate ('+e.message+').')}).then(fin);
+      }
+    }else if(window.studio&&window.studio.text){
+      window.studio.text({provider:provider,model:model,prompt:prompt}).then(done).catch(function(e){fail(e.message||String(e))}).then(fin);
+    }else{fail('Keyed services need the desktop app.');fin();}
+  }
+  $('#tgen').addEventListener('click',genText);
+  function fillModels(list){ var dl=$('#tmodels'); if(!dl)return; dl.innerHTML=(list||[]).slice(0,500).map(function(m){return '<option value="'+esc(m)+'">';}).join(''); }
+  var tml=$('#tmodels-load');
+  if(tml) tml.addEventListener('click',function(){
+    var provider=$('#tprovider').value;
+    if(provider==='pollinations'){ fillModels(['openai','mistral','llama','searchgpt','deepseek-reasoning']); return; }
+    if(provider==='puter'){ fillModels(['gpt-5-nano','gpt-5','gpt-4o-mini','claude-sonnet-4','claude-opus-4','gemini-2.5-flash','gemini-2.5-pro','deepseek-chat','mistral-large-latest','meta-llama/llama-3.3-70b-instruct']); $('#terr').textContent='Tip: leave Model blank for Puter’s default. These are common IDs — if one errors, it has been renamed; clear the box to use the default.';$('#terr').hidden=false; return; }
+    if(!(window.studio&&window.studio.providerModels)){ $('#terr').textContent='Loading models needs the app.';$('#terr').hidden=false; return; }
+    tml.disabled=true;tml.textContent='…';
+    window.studio.providerModels(provider).then(function(list){ fillModels(list); if(!list||!list.length){$('#terr').textContent='No models returned — type a model name instead.';$('#terr').hidden=false;} })
+      .catch(function(e){$('#terr').textContent='Could not load models ('+(e.message||e)+').';$('#terr').hidden=false;})
+      .then(function(){ tml.disabled=false;tml.textContent='↻'; });
+  });
+  $('#tprovider').addEventListener('change',function(){ var dl=$('#tmodels'); if(dl)dl.innerHTML=''; $('#tmodel').value=''; });
+  $('#tprompt').addEventListener('keydown',function(e){if((e.ctrlKey||e.metaKey)&&e.key==='Enter')genText()});
+  $('#tcopy').addEventListener('click',function(){
+    var t=$('#tout').textContent;
+    if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(function(){var b=$('#tcopy');b.textContent='Copied';setTimeout(function(){b.textContent='Copy'},1200)}).catch(sel);}else sel();
+    function sel(){var r=document.createRange();r.selectNodeContents($('#tout'));var s=getSelection();s.removeAllRanges();s.addRange(r);}
+  });
+
+  // ---------- Keys ----------
+  function renderKeys(){
+    var box=$('#keylist');var rows='';
+    // Pollinations token (used by the free engine, stored locally in this app)
+    rows+='<div class="keyrow"><span class="pn">Pollinations</span>'+
+      '<input type="password" id="k-ptoken" placeholder="token (optional — removes the 45s image wait)" value="'+esc(ptoken())+'">'+
+      '<button class="btn ghost" data-savep>Save</button>'+
+      '<a class="chip" href="https://auth.pollinations.ai" target="_blank" rel="noopener">Get token ↗</a>'+
+      '<span class="badge '+(ptoken()?'b-on':'b-off')+'">'+(ptoken()?'set':'optional')+'</span>'+
+      '<span class="hint" style="flex-basis:100%;margin-top:2px">Free image + chat engine, no account needed. A token is optional and only removes the ~45-second limit between free images.</span></div>';
+    rows+='<div class="keyrow"><span class="pn">AI Horde</span>'+
+      '<span class="hint" style="flex:1">Free, volunteer-run network for images — no key, no account. Already on in the Image tab (pick "AI Horde"). A free job can queue 10–60s.</span>'+
+      '<a class="chip" href="https://aihorde.net" target="_blank" rel="noopener">About ↗</a><span class="badge b-on">free</span></div>';
+    keyedProviders.forEach(function(p){
+      if(p.local||p.noKey){
+        rows+='<div class="keyrow"><span class="pn">'+esc(p.name)+'</span>'+
+          '<span class="hint" style="flex:1">'+esc(p.blurb||(p.local?'Runs on this PC — no key.':'Free, no key or account.'))+'</span>'+
+          '<a class="chip" href="'+esc(p.keyUrl)+'" target="_blank" rel="noopener">'+(p.local?'Get KoboldCpp ↗':'Free token ↗')+'</a>'+
+          '<span class="badge b-on">'+(p.local?'local':'free')+'</span></div>';
+        return;
+      }
+      rows+='<div class="keyrow"><span class="pn">'+esc(p.name)+'</span>'+
+        '<input type="password" placeholder="'+(p.keyHint?esc(p.keyHint):('paste your '+esc(p.name)+' key'))+'" data-k="'+esc(p.id)+'">'+
+        '<button class="btn ghost" data-save="'+esc(p.id)+'">Save</button>'+
+        '<a class="chip" href="'+esc(p.keyUrl)+'" target="_blank" rel="noopener">Get key ↗</a>'+
+        '<span class="badge '+(p.connected?'b-on':'b-off')+'">'+(p.connected?'connected':'not set')+'</span></div>';
+    });
+    if(window.studio&&window.studio.customAdd){
+      rows+='<div class="keyrow" style="flex-direction:column;align-items:stretch;gap:8px">'+
+        '<span class="pn">+ Custom (OpenAI-compatible)</span>'+
+        '<span class="hint">Add ANY OpenAI-style service: paste its base URL (usually ending in /v1) and a key if it needs one. This covers every free API from live lists like awesome-free-llm-apis — no update needed.</span>'+
+        '<div class="row"><input type="text" id="cu-name" placeholder="Name (e.g. AxForge)" style="flex:1;min-width:120px"><input type="text" id="cu-base" placeholder="https://api.example.com/v1" style="flex:2;min-width:200px"></div>'+
+        '<div class="row"><input type="password" id="cu-key" placeholder="key — leave blank if the service needs none" style="flex:2;min-width:200px"><button class="btn ghost" data-cadd>Add service</button></div>'+
+        customProviders.map(function(c){return '<div class="row" style="align-items:center;gap:8px"><b style="flex:1;min-width:100px">'+esc(c.name)+'</b><span class="hint" style="flex:2;min-width:160px">'+esc(c.base)+'</span><button class="btn ghost" data-crem="'+esc(c.id)+'">Remove</button></div>';}).join('')+
+        '<div class="err" id="cu-err" hidden></div></div>';
+    }
+    box.innerHTML=rows;
+    box.querySelector('[data-savep]').addEventListener('click',function(){store.set('ptoken',box.querySelector('#k-ptoken').value.trim());renderKeys();});
+    var cadd=box.querySelector('[data-cadd]');
+    if(cadd) cadd.addEventListener('click',function(){
+      var name=box.querySelector('#cu-name').value,base=box.querySelector('#cu-base').value,key=box.querySelector('#cu-key').value;
+      cadd.disabled=true;cadd.textContent='…';
+      window.studio.customAdd({name:name,base:base,key:key}).then(function(list){customProviders=list;renderKeys();buildTextProviders();})
+        .catch(function(e){cadd.disabled=false;cadd.textContent='Add service';var er=box.querySelector('#cu-err');if(er){er.textContent=e.message||String(e);er.hidden=false;}});
+    });
+    box.querySelectorAll('[data-crem]').forEach(function(b){ b.addEventListener('click',function(){ window.studio.customRemove(b.dataset.crem).then(function(list){customProviders=list;renderKeys();buildTextProviders();}); }); });
+    box.querySelectorAll('[data-save]').forEach(function(btn){
+      btn.addEventListener('click',function(){
+        var id=btn.dataset.save,val=box.querySelector('[data-k="'+id+'"]').value;
+        if(!window.studio){return;}
+        btn.disabled=true;btn.textContent='…';
+        window.studio.setKey(id,val).then(function(){return refreshProviders()}).then(function(){renderKeys();buildTextProviders();});
+      });
+    });
+  }
+  function refreshProviders(){
+    if(!(window.studio&&window.studio.providers)){keyedProviders=[];customProviders=[];return Promise.resolve();}
+    return Promise.all([window.studio.providers(),window.studio.customList?window.studio.customList():Promise.resolve([])]).then(function(r){keyedProviders=r[0]||[];customProviders=r[1]||[];});
+  }
+
+  // ---------- Video ----------
+  $('#vprompt').value=store.get('vprompt','');$('#vprompt').addEventListener('input',function(){store.set('vprompt',this.value)});
+  $('#vengine').value=store.get('vengine','fal');$('#vengine').addEventListener('change',function(){store.set('vengine',this.value)});
+  function loadVids(){try{return JSON.parse(store.get('vids','[]'))||[]}catch(e){return[]}}
+  function saveVids(a){try{store.set('vids',JSON.stringify(a.slice(0,24)))}catch(e){}}
+  function vTile(item){
+    var fig=document.createElement('figure');fig.style.setProperty('--ar','1.6');
+    fig.innerHTML='<div class="imgwrap"><span class="spin"></span><span class="hstat"></span><video controls playsinline style="display:block;width:100%;height:100%;object-fit:cover;background:#000"></video></div>'+
+      '<figcaption><span class="p">'+esc(item.prompt)+'</span><div class="fig-acts"><a target="_blank" rel="noopener">Open</a><a download="open-studio.mp4">Save</a></div></figcaption>';
+    var g=$('#vgallery');g.insertBefore(fig,g.firstChild);$('#vempty').hidden=true;return fig;
+  }
+  function renderVids(){
+    var a=loadVids(),g=$('#vgallery');g.innerHTML='';
+    a.forEach(function(it){var fig=vTile(it),v=fig.querySelector('video'),sp=fig.querySelector('.spin'),ax=fig.querySelectorAll('a');ax[0].href=it.url;ax[1].href=it.url;v.src=it.url;sp.hidden=true;});
+    $('#vempty').hidden=a.length>0;$('#vclear').hidden=a.length===0;$('#vcount').textContent=a.length?('· '+a.length+' saved'):'';
+  }
+  $('#vclear').addEventListener('click',function(){saveVids([]);renderVids();});
+  function genVideo(){
+    var prompt=$('#vprompt').value.trim();$('#verr').hidden=true;
+    if(!prompt){$('#verr').textContent='Describe the video first.';$('#verr').hidden=false;return;}
+    var eng=$('#vengine').value,fn=eng==='replicate'?'replicateVideo':'falVideo',label=eng==='replicate'?'Replicate':'fal.ai';
+    if(!(window.studio&&window.studio[fn])){$('#verr').textContent='Video needs the desktop app or the HTML build.';$('#verr').hidden=false;return;}
+    var item={url:'',prompt:prompt,ts:Date.now()};
+    var fig=vTile(item),stat=fig.querySelector('.hstat'),sp=fig.querySelector('.spin'),v=fig.querySelector('video');
+    stat.textContent='Rendering… (1–5 min)';$('#vspin').hidden=false;$('#vgen').disabled=true;
+    window.studio[fn]({prompt:prompt}).then(function(url){ item.url=url;var ax=fig.querySelectorAll('a');ax[0].href=url;ax[1].href=url;
+      v.src=url;sp.hidden=true;stat.textContent='';
+      var a=loadVids();a.unshift(item);saveVids(a);$('#vclear').hidden=false;$('#vcount').textContent='· '+loadVids().length+' saved';
+    }).catch(function(e){fig.remove();$('#verr').textContent=label+': '+((e&&e.message)||e);$('#verr').hidden=false;})
+      .then(function(){$('#vspin').hidden=true;$('#vgen').disabled=false;});
+  }
+  $('#vgen').addEventListener('click',genVideo);
+  renderVids();
+
+  // ---------- Services directory (every tool from the lists, honestly accounted for) ----------
+  // One-tap "Add" entries are verified OpenAI-compatible TEXT endpoints (base URL confirmed in
+  // Quicksilver's provider list or by lookup). Tap Add -> it pre-fills the Keys > Custom form and
+  // opens the sign-up page; paste the key and Add service. Image-only / no-API tools are listed too,
+  // with an honest note, so nothing you found is lost.
+  var SVC_ADD=[
+    ['OpenRouter','https://openrouter.ai/api/v1','https://openrouter.ai/keys','Hundreds of models; any model ending ":free" is free.'],
+    ['Together AI','https://api.together.xyz/v1','https://api.together.ai/settings/api-keys','Low-cost open models + a free FLUX image model.'],
+    ['DeepSeek','https://api.deepseek.com/v1','https://platform.deepseek.com/api_keys','Strong reasoning, very cheap. New accounts often get credit.'],
+    ['xAI (Grok)','https://api.x.ai/v1','https://console.x.ai','Grok models; trial credit on new accounts.'],
+    ['Perplexity (web answers)','https://api.perplexity.ai','https://www.perplexity.ai/settings/api','Answers with live web sources (Sonar).'],
+    ['Fireworks AI','https://api.fireworks.ai/inference/v1','https://fireworks.ai/account/api-keys','Fast hosting of the best open models; trial credit.'],
+    ['DeepInfra','https://api.deepinfra.com/v1/openai','https://deepinfra.com/dash/api_keys','Very low prices for big open models.'],
+    ['SambaNova (very fast)','https://api.sambanova.ai/v1','https://cloud.sambanova.ai/apis','Large open models at high speed; free tier.'],
+    ['Clarifai','https://api.clarifai.com/v2/ext/openai/v1','https://clarifai.com/settings/security','Many open models, one key; free tier.'],
+    ['Aion Labs','https://api.aionlabs.ai/v1','https://www.aionlabs.ai/app/api-keys/','Permanent free tier (no card), tuned for role-play/stories.'],
+    ['ModelScope (Alibaba)','https://api-inference.modelscope.cn/v1','https://modelscope.cn/my/myaccesstoken','Free inference for the latest Qwen and other open models.'],
+    ['SiliconFlow','https://api.siliconflow.cn/v1','https://cloud.siliconflow.cn/account/ak','100+ open models; several permanently free.'],
+    ['AI21 (Jamba)','https://api.ai21.com/studio/v1','https://studio.ai21.com/account/api-key','Very long documents (256K context); free trial.'],
+    ['Alibaba Qwen','https://dashscope-intl.aliyuncs.com/compatible-mode/v1','https://modelstudio.console.alibabacloud.com/','Qwen Max and friends in the cloud; free quota.'],
+    ['AI/ML API (200+ models)','https://api.aimlapi.com/v1','https://aimlapi.com/app/keys','200+ models behind one key; free allowance.'],
+    ['GitHub Models','https://models.github.ai/inference','https://github.com/settings/personal-access-tokens','GPT-4.1, Llama, DeepSeek free with a GitHub token.'],
+    ['OpenAI','https://api.openai.com/v1','https://platform.openai.com/api-keys','The official GPT models (pay as you go).'],
+    ['Venice AI (uncensored)','https://api.venice.ai/api/v1','https://venice.ai/settings/api','Private + uncensored; a limited free allowance.'],
+    ['Abliteration (uncensored)','https://api.abliteration.ai/v1','https://abliteration.ai/','Refusal-free models, zero-retention. Pay as you go.'],
+    ['MegaNova (uncensored, 100+)','https://api.meganova.ai/v1','https://meganova.ai/api-keys','100+ models incl. uncensored; some free, rest paid.'],
+    ['LibertAI (decentralized)','https://api.libertai.io/v1','https://libertai.io/api/','Open models on decentralized nodes; pay per token, no card to start.'],
+    ['AxForge','https://api.axforge.ai/v1','https://axforge.ai/','Free tier ~3M tokens / 30 days, no card (per its docs).'],
+    ['UncloseAI (free, no key)','https://hermes.ai.unturf.com/v1','https://uncloseai.com/','Free and keyless, OpenAI-compatible (Hermes on an RTX 4090).','nokey'],
+    ['BazaarLink','https://api.bazaarlink.ai/v1','https://bazaarlink.ai/free','Free gateway, no card; many models behind one key.'],
+    ['Kilo Code','https://ai-gateway.kilo.ai/api/v1','https://kilo.ai/','Free "Auto" tier (~200 requests/hour); OpenAI-compatible.']
+  ];
+  // Real API, but I won't guess a base URL — grab it from their page and paste into + Custom.
+  var SVC_DOCS=[
+    ['PeerLLM','https://www.peerllm.com/developers.html','Decentralized, free to try, OpenAI-compatible. Copy its base URL from the developer page into "+ Custom".'],
+    ['Dolphin LLM','https://dolphinllm.com/docs/','Uncensored, OpenAI-compatible, small trial credit. Copy the base URL from its docs into "+ Custom".'],
+    ['Numes AI','https://bazaarlink.ai/en/probe/relay/api.numes.ai','⚠ Works, but independent probes found it sometimes serves a different model than you ask for. Use "+ Custom" (base https://api.numes.ai) only if you accept that.']
+  ];
+  var SVC_LOCAL=[
+    ['Ollama (on this PC)','http://localhost:11434/v1','https://ollama.com','Runs models on your PC, no key. Start Ollama first.'],
+    ['LM Studio (on this PC)','http://localhost:1234/v1','https://lmstudio.ai','Runs models on your PC, no key. Start its local server.'],
+    ['LiteLLM proxy (your server)','http://localhost:4000/v1','https://docs.litellm.ai','Your own proxy that can route to any provider.']
+  ];
+  var SVC_BROWSER=[
+    ['Perchance','https://perchance.org/ai-text-to-image-generator','Free images — browser-only generator, no public API to connect.'],
+    ['Sogni','https://app.sogni.ai/','Free community image app — no documented public API.'],
+    ['Kobold Lite','https://lite.koboldai.net/','Free chat/story UI (can ride AI Horde) — browser-only.'],
+    ['Petals','https://github.com/bigscience-workshop/petals','Run big models split across volunteers — self-host, not a hosted API.'],
+    ['LMArena','https://lmarena.ai/','Free model "battles" — browser-only, no API.'],
+    ['NoteGPT','https://notegpt.io/','Summaries/notes tool — browser-only, no general API.'],
+    ['GPT4Free','https://github.com/xtekky/gpt4free','Self-host proxy to free sources — unstable and often against sites’ terms; use the Custom box only if you run it yourself.'],
+    ['Duck.ai','https://duck.ai','Free anonymous chat — browser-only, no API.']
+  ];
+  var SVC_IMGAPI=[
+    ['fal.ai','https://fal.ai/dashboard/keys','FLUX schnell — built in. Pick "fal.ai" in the Image tab, add your key in Keys.'],
+    ['Replicate','https://replicate.com/account/api-tokens','FLUX schnell — built in. Pick "Replicate" in the Image tab, add your token in Keys.'],
+    ['Stability AI','https://platform.stability.ai/account/keys','Stable Image Core (SD3) — built in. Pick "Stability" in the Image tab, add your key.'],
+    ['Segmind','https://www.segmind.com/','Fast FLUX — built in. Pick "Segmind" in the Image tab, add your key in Keys.']
+  ];
+  var SVC_NOAPI=['Inferium','Kavel','deAPI','Aifreeforever-2api (reverse-proxy — against providers’ terms, unstable; not safe to ship)'];
+
+  function svcMsg(t){ var m=$('#svc-msg'); if(!m)return; m.textContent=t; m.hidden=!t; if(t)clearTimeout(svcMsg._t),svcMsg._t=setTimeout(function(){m.hidden=true},4000); }
+  function gotoCustom(name,base){
+    document.querySelector('.tab[data-tab="keys"]').click();
+    setTimeout(function(){ var n=$('#cu-name'),b=$('#cu-base'),k=$('#cu-key');
+      if(!b){svcMsg('Open the Keys tab, then use "+ Custom".');return;}
+      if(n)n.value=name; b.value=base; b.scrollIntoView({behavior:'smooth',block:'center'}); if(k)k.focus();
+    },40);
+  }
+  function addNoKey(name,base){
+    if(!(window.studio&&window.studio.customAdd)){svcMsg('Adding services needs the app or the HTML build.');return;}
+    window.studio.customAdd({name:name,base:base,key:''}).then(function(list){customProviders=list;buildTextProviders();svcMsg(name+' added — pick it in the Chat service list.');renderServices();})
+      .catch(function(e){svcMsg(e.message||String(e));});
+  }
+  window.__osAdd=gotoCustom; window.__osAddLocal=addNoKey;
+
+  function renderServices(){
+    var box=$('#svc-list'); if(!box)return;
+    var builtinIds={}; (keyedProviders||[]).forEach(function(p){builtinIds[p.name.toLowerCase().replace(/\s*\(.*$/,'')]=p;});
+    function grp(title,sub){ return '<h2 style="margin:18px 0 2px;font-size:15px">'+esc(title)+'</h2>'+(sub?'<p class="hint" style="margin:0 0 8px">'+esc(sub)+'</p>':''); }
+    var h='';
+    // Ready now
+    h+=grp('Ready now — no setup','Built into the Image and Chat tabs. Nothing to paste.');
+    h+='<div class="chips">'+
+      '<span class="chip on">Pollinations · free</span><span class="chip on">AI Horde · free</span>'+
+      '<span class="chip on">Puter · GPT/Claude/Gemini/DALL·E, free sign-in</span><span class="chip on">DeepAI · images (key)</span></div>';
+    // Built-in keyed clouds
+    var bi=(keyedProviders||[]).filter(function(p){return !p.image;});
+    if(bi.length){ h+=grp('Built in — just add a key','Open the Keys tab and paste a key to switch these on.');
+      h+='<div class="chips">'+bi.map(function(p){return '<span class="chip'+(p.connected?' on':'')+'">'+esc(p.name.replace(/\s*\(.*$/,''))+(p.connected?' · set':'')+'</span>';}).join('')+'</div>'; }
+    // One-tap add
+    h+=grp('One-tap add — verified clouds (OpenAI-compatible)','Tap Add: it fills the Custom form and opens the key page. Paste the key, hit "Add service".');
+    h+='<div style="display:grid;gap:8px">'+SVC_ADD.filter(function(s){return !builtinIds[s[0].toLowerCase().replace(/\s*\(.*$/,'')];}).map(function(s){
+      var nk=s[4]==='nokey';
+      return '<div class="keyrow" style="border-top:1px solid var(--line)"><span class="pn" style="min-width:150px">'+esc(s[0])+'</span>'+
+        '<span class="hint" style="flex:1;min-width:160px">'+esc(s[3])+'</span>'+
+        '<button class="btn ghost" data-'+(nk?'addnokey':'add')+'="'+esc(s[0])+'|'+esc(s[1])+'">Add'+(nk?' (free)':'')+'</button>'+
+        '<a class="chip" href="'+esc(s[2])+'" target="_blank" rel="noopener">'+(nk?'About ↗':'Key ↗')+'</a></div>';
+    }).join('')+'</div>';
+    // Local
+    h+=grp('Runs on your PC — no key','Start the local server, then Add. Fully private, works offline.');
+    h+='<div style="display:grid;gap:8px">'+SVC_LOCAL.map(function(s){
+      return '<div class="keyrow" style="border-top:1px solid var(--line)"><span class="pn" style="min-width:150px">'+esc(s[0])+'</span>'+
+        '<span class="hint" style="flex:1;min-width:160px">'+esc(s[3])+'</span>'+
+        '<button class="btn ghost" data-addlocal="'+esc(s[0])+'|'+esc(s[1])+'">Add</button>'+
+        '<a class="chip" href="'+esc(s[2])+'" target="_blank" rel="noopener">About ↗</a></div>';
+    }).join('')+'</div>';
+    // Image clouds — now built in
+    h+=grp('Image clouds — built in','Real image generation with your key. Pick one in the Image tab; add the key in Keys. Each link opens its key page.');
+    h+='<div style="display:grid;gap:8px">'+SVC_IMGAPI.map(function(s){
+      return '<div class="keyrow" style="border-top:1px solid var(--line)"><span class="pn" style="min-width:150px">'+esc(s[0])+'</span>'+
+        '<span class="hint" style="flex:1;min-width:160px">'+esc(s[2])+'</span>'+
+        '<a class="chip" href="'+esc(s[1])+'" target="_blank" rel="noopener">Key ↗</a></div>';
+    }).join('')+'</div>';
+    // Browser-only
+    h+=grp('Open in your browser — no API to connect','Great tools, but they offer no public API, so Open Studio links out instead of faking a connection.');
+    h+='<div style="display:grid;gap:8px">'+SVC_BROWSER.map(function(s){
+      return '<div class="keyrow" style="border-top:1px solid var(--line)"><span class="pn" style="min-width:150px">'+esc(s[0])+'</span>'+
+        '<span class="hint" style="flex:1;min-width:160px">'+esc(s[2])+'</span>'+
+        '<a class="chip" href="'+esc(s[1])+'" target="_blank" rel="noopener">Open ↗</a></div>';
+    }).join('')+'</div>';
+    // Has an API, needs a base URL from their docs
+    h+=grp('Has an API — paste its base URL into "+ Custom"','These work, but I won’t guess a base URL. Open the link, copy the base URL, then use "+ Custom" in Keys.');
+    h+='<div style="display:grid;gap:8px">'+SVC_DOCS.map(function(s){
+      return '<div class="keyrow" style="border-top:1px solid var(--line)"><span class="pn" style="min-width:150px">'+esc(s[0])+'</span>'+
+        '<span class="hint" style="flex:1;min-width:160px">'+esc(s[2])+'</span>'+
+        '<a class="chip" href="'+esc(s[1])+'" target="_blank" rel="noopener">Docs ↗</a></div>';
+    }).join('')+'</div>';
+    // No verifiable API
+    h+=grp('Listed, but no public API found','Checked and couldn’t find a usable public API. If you have a base URL for any of these, use "+ Custom" in Keys and it’ll work instantly.');
+    h+='<div class="chips">'+SVC_NOAPI.map(function(s){return '<span class="chip">'+esc(s)+'</span>';}).join('')+'</div>';
+
+    box.innerHTML=h;
+    box.querySelectorAll('[data-add]').forEach(function(b){ b.addEventListener('click',function(){ var p=b.dataset.add.split('|'); gotoCustom(p[0],p[1]); }); });
+    box.querySelectorAll('[data-addnokey]').forEach(function(b){ b.addEventListener('click',function(){ var p=b.dataset.addnokey.split('|'); addNoKey(p[0],p[1]); }); });
+    box.querySelectorAll('[data-addlocal]').forEach(function(b){ b.addEventListener('click',function(){ var p=b.dataset.addlocal.split('|'); addNoKey(p[0],p[1]); }); });
+  }
+
+  // Boot
+  refreshProviders().then(function(){ buildTextProviders(); renderKeys(); renderServices(); });
+  // Chat is the first tab and the default; restore Image/Keys only if that was last open.
+  var savedTab=store.get('tab','');
+  if(savedTab&&savedTab!=='text'){var st=document.querySelector('.tab[data-tab="'+savedTab+'"]');if(st)st.click();}
+
+  // expose for the "More like this" button scope
+  window.runBatch=runBatch;
+})();
+
+</script>
+</body>
+</html>

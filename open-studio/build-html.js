@@ -37,5 +37,14 @@ const outRepo = R('open-studio.html');
 fs.writeFileSync(outRepo, single);
 console.log('wrote', outRepo, '(' + single.length + ' bytes)');
 
+// Website copies served by GitHub Pages (spreadloveandacceptance.com):
+//   /studio/        -> studio/index.html  (clean URL)
+//   /open-studio.html (direct link)
+const studioDir = R('../studio');
+try { fs.mkdirSync(studioDir, { recursive: true }); } catch {}
+fs.writeFileSync(path.join(studioDir, 'index.html'), single);
+fs.writeFileSync(R('../open-studio.html'), single);
+console.log('wrote studio/index.html and open-studio.html (site copies)');
+
 const extra = process.argv[2];
 if (extra) { fs.writeFileSync(extra, single); console.log('wrote', extra); }

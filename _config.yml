@@ -49,6 +49,9 @@ exclude:
   - _manuscripts/
   # Quicksilver desktop app (Electron source), not part of the site.
   - quicksilver/
+  # Open Studio app source (Electron + Android). The web build is served at /studio/.
+  - open-studio/
+  - open-studio-android/
   - scripts/
   - tests/
   - package.json
