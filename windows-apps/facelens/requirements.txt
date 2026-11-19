@@ -1,0 +1,7 @@
+# FaceLens runtime dependencies. Python 3.10 - 3.12 (64-bit) recommended on Windows.
+deepface==0.0.105
+tensorflow>=2.16,<2.22
+tf-keras>=2.16,<2.22
+pandas
+PySide6>=6.6
+# OpenCV comes with DeepFace (opencv-contrib-python-headless). Do not add opencv-python: the two clash.

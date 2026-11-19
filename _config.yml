@@ -49,6 +49,8 @@ exclude:
   - _manuscripts/
   # Quicksilver desktop app (Electron source), not part of the site.
   - quicksilver/
+  # FaceLens Windows app (Python source), not part of the site.
+  - windows-apps/
   - scripts/
   - tests/
   - package.json

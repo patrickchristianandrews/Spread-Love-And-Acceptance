@@ -32,6 +32,7 @@ Source for the Spread Love & Acceptance site. The repo root is the site root: Gi
 | `assets/css`, `assets/js`, `assets/audio` | Shared styles, scripts and media |
 | `manuscript/`, `telemetry/` | Markdown sources and specs (`telemetry/calc01-solvency.md` is the current CALC-01 spec) |
 | `infrastructure/`, `notes/`, `samples/` | Internal notes and sample PDFs, not linked from the site |
+| `windows-apps/facelens/` | FaceLens, a Windows desktop app for DeepFace face analysis (Python source; built into an installer by `.github/workflows/facelens-windows.yml`). Not part of the site |
 
 ## Calm features
 

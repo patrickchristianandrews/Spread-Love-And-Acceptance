@@ -1,0 +1,5 @@
+.venv/
+build/
+dist/
+test-photos/
+*.spec.bak
