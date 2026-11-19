@@ -45,7 +45,9 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt pyinstaller
+          pip install -r requirements.txt -r requirements-insightface.txt pyinstaller
+          # --no-deps: InsightFace asks for opencv-python, which would replace DeepFace's OpenCV build.
+          pip install --no-deps insightface==2.1
           pip freeze
 
       - name: Test photos (from the DeepFace test set)
@@ -56,7 +58,10 @@ jobs:
           }
 
       - name: Self-test from source
-        run: python facelens.py --self-test test-photos/img1.jpg test-photos/img2.jpg
+        run: |
+          $out = python facelens.py --self-test test-photos/img1.jpg test-photos/img2.jpg | Select-Object -Last 1
+          $out
+          if ($out -notmatch '"insight_verified": true') { throw 'InsightFace engine check failed' }
 
       - name: Build FaceLens.exe
         run: python -m PyInstaller --noconfirm --clean facelens.spec
@@ -68,6 +73,7 @@ jobs:
           $p = Start-Process dist\FaceLens\FaceLens.exe -ArgumentList '--self-test', 'test-photos\img1.jpg', 'test-photos\img2.jpg' -Wait -PassThru
           if (Test-Path $log) { Get-Content $log -Tail 40 }
           if ($p.ExitCode -ne 0) { throw "FaceLens.exe self-test failed with exit code $($p.ExitCode)" }
+          if (-not (Select-String -Path $log -Pattern '"insight_verified": true' -Quiet)) { throw 'InsightFace engine missing from the built exe' }
           $size = (Get-ChildItem dist\FaceLens -Recurse | Measure-Object Length -Sum).Sum / 1MB
           "Build size: {0:N0} MB" -f $size
 

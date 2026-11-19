@@ -1,0 +1,10 @@
+# Optional InsightFace engine (non-commercial research licence for its models).
+# Install insightface itself with --no-deps: it asks for opencv-python, which would replace the
+# OpenCV build DeepFace needs (opencv-contrib-python-headless) and break the "opencv" detector.
+#   pip install -r requirements-insightface.txt
+#   pip install --no-deps insightface==2.1
+onnx
+scikit-image
+scipy
+requests
+tqdm

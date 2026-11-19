@@ -16,6 +16,9 @@ if not exist ".venv\Scripts\python.exe" (
     )
     ".venv\Scripts\python.exe" -m pip install --upgrade pip
     ".venv\Scripts\python.exe" -m pip install -r requirements.txt || (pause & exit /b 1)
+    rem Optional InsightFace engine: --no-deps keeps DeepFace's OpenCV build in place.
+    ".venv\Scripts\python.exe" -m pip install -r requirements-insightface.txt
+    ".venv\Scripts\python.exe" -m pip install --no-deps insightface==2.1
 )
 
 start "" ".venv\Scripts\pythonw.exe" facelens.py

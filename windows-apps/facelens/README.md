@@ -14,6 +14,17 @@ The **Settings** panel picks the recognition model (VGG-Face, Facenet, Facenet51
 
 Drag and drop photos onto any image area, or click one to browse. Results export as labelled images or JSON.
 
+### Optional engine: InsightFace (research use only)
+
+The first entry in **Recognition model** is **InsightFace buffalo_l**, from [deepinsight/insightface](https://github.com/deepinsight/insightface). It uses InsightFace's own face detector (SCRFD) and ArcFace recognition model, and it is the most accurate option in FaceLens. On DeepFace's test photos it kept same-person distances between 0.28 and 0.32 and put a different person at 1.01. It also matched two photos that Facenet512 missed.
+
+- It powers **Verify**, **Find** and **Embeddings**. Analyze and Live camera still use DeepFace.
+- Two people count as the same when the cosine distance is 0.65 or less (similarity 0.35 or more).
+- **Find** saves an index (`facelens_insightface_index.npz`) in the searched folder. Only new or changed photos are processed on later searches, and a search is a single matrix product, so it stays quick on large folders.
+- The first use downloads the models (about 280 MB) to `%USERPROFILE%\.insightface\models`.
+- **Licence:** InsightFace's code is MIT, but **its pretrained models are for non-commercial research only**. Commercial or operational use needs a licence from InsightFace. FaceLens shows this notice the first time you pick the engine.
+- Install it with `--no-deps` (`run.bat`, `build.bat` and the build workflow already do). Its package asks for `opencv-python`, which would replace the OpenCV build DeepFace needs and break DeepFace's `opencv` detector.
+
 ## Get the app
 
 **Easiest: download the build.** The GitHub Actions workflow `FaceLens Windows app` builds the app on Windows whenever this folder changes. Open the repository's **Actions** tab, choose the latest run, and download:
@@ -52,11 +63,12 @@ Age, gender, emotion and race are statistical guesses from a photo. They are oft
 |---|---|
 | `facelens.py` | The whole app (PySide6 / Qt user interface plus DeepFace) |
 | `requirements.txt` | Python packages |
+| `requirements-insightface.txt` | Packages for the optional InsightFace engine (then `pip install --no-deps insightface==2.1`) |
 | `run.bat` | Run from source |
 | `build.bat`, `facelens.spec`, `version_info.txt` | Build `FaceLens.exe` with PyInstaller |
 | `installer.iss`, `facelens.ico` | Inno Setup installer and app icon |
 | `../../.github/workflows/facelens-windows.yml` | Builds, self-tests and publishes the Windows app |
 
-`python facelens.py --self-test photoA.jpg photoB.jpg` runs a headless check (analyze and verify) and prints the result as JSON. The build pipeline uses it to test both the source and the finished `.exe`.
+`python facelens.py --self-test photoA.jpg photoB.jpg` runs a headless check (analyze and verify with DeepFace, plus verify with InsightFace) and prints the result as JSON. The build pipeline uses it to test both the source and the finished `.exe`.
 
 DeepFace is MIT-licensed, by Sefik Ilkin Serengil.

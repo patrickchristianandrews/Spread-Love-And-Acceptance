@@ -13,7 +13,9 @@ if not exist "%PY%" (
 )
 
 "%PY%" -m pip install --upgrade pip || exit /b 1
-"%PY%" -m pip install -r requirements.txt pyinstaller || exit /b 1
+"%PY%" -m pip install -r requirements.txt -r requirements-insightface.txt pyinstaller || exit /b 1
+rem --no-deps: InsightFace asks for opencv-python, which would replace DeepFace's OpenCV build.
+"%PY%" -m pip install --no-deps insightface==2.1 || exit /b 1
 "%PY%" -m PyInstaller --noconfirm --clean facelens.spec || exit /b 1
 echo.
 echo Built: %CD%\dist\FaceLens\FaceLens.exe

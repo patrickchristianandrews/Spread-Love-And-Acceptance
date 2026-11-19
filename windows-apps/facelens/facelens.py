@@ -69,7 +69,9 @@ from PySide6.QtWidgets import (
 APP_NAME = "FaceLens"
 APP_VERSION = "1.0.0"
 
+INSIGHT_MODEL = "InsightFace buffalo_l (research only)"
 MODELS = [
+    INSIGHT_MODEL,
     "VGG-Face",
     "Facenet",
     "Facenet512",
@@ -212,6 +214,160 @@ def jsonable(obj):
     if isinstance(obj, np.ndarray):
         return obj.tolist()
     return obj
+
+
+# --------------------------------------------------------------------------------------
+# InsightFace engine (optional, non-commercial research licence)
+# --------------------------------------------------------------------------------------
+
+INSIGHT_THRESHOLD = 0.65  # cosine distance; same person below this (= similarity above 0.35)
+INSIGHT_INDEX = "facelens_insightface_index.npz"
+INSIGHT_LICENCE = (
+    "InsightFace's pretrained models (buffalo_l) are licensed for non-commercial research only. "
+    "Commercial use needs a licence from InsightFace (insightface.ai). "
+    "The first use downloads about 280 MB to %USERPROFILE%\\.insightface\\models."
+)
+
+
+class InsightEngine:
+    """Face detection (SCRFD) and recognition (ArcFace ResNet50, 512-number vectors) from InsightFace."""
+
+    _app = None
+
+    @classmethod
+    def app(cls):
+        if cls._app is None:
+            try:
+                from insightface.app import FaceAnalysis  # noqa: WPS433 - optional dependency
+            except ImportError as exc:
+                raise ImportError(
+                    "No module named 'insightface' - install it with: pip install --no-deps insightface"
+                ) from exc
+            fa = FaceAnalysis(
+                name="buffalo_l", allowed_modules=["detection", "recognition"], providers=["CPUExecutionProvider"]
+            )
+            fa.prepare(ctx_id=-1, det_size=(640, 640))
+            cls._app = fa
+        return cls._app
+
+    @staticmethod
+    def _box(face) -> dict:
+        x1, y1, x2, y2 = (int(round(v)) for v in face.bbox)
+        return {"x": max(0, x1), "y": max(0, y1), "w": x2 - x1, "h": y2 - y1}
+
+    @classmethod
+    def faces(cls, img: np.ndarray, require: bool = True) -> list:
+        found = cls.app().get(img)
+        if not found and require:
+            raise ValueError("Face could not be detected in the image.")
+        # Largest face first.
+        return sorted(found, key=lambda f: -(f.bbox[2] - f.bbox[0]) * (f.bbox[3] - f.bbox[1]))
+
+    @classmethod
+    def represent(cls, img: np.ndarray) -> list[dict]:
+        return [
+            {
+                "embedding": f.normed_embedding.astype(float).tolist(),
+                "facial_area": cls._box(f),
+                "face_confidence": float(f.det_score),
+            }
+            for f in cls.faces(img)
+        ]
+
+    @classmethod
+    def verify(cls, a: np.ndarray, b: np.ndarray) -> dict:
+        t0 = time.time()
+        fa, fb = cls.faces(a)[0], cls.faces(b)[0]
+        distance = max(0.0, 1.0 - float(fa.normed_embedding @ fb.normed_embedding))
+        return {
+            "verified": distance <= INSIGHT_THRESHOLD,
+            "distance": distance,
+            "threshold": INSIGHT_THRESHOLD,
+            "model": "InsightFace buffalo_l",
+            "detector_backend": "scrfd",
+            "similarity_metric": "cosine",
+            "facial_areas": {"img1": cls._box(fa), "img2": cls._box(fb)},
+            "time": time.time() - t0,
+        }
+
+    @classmethod
+    def build_index(cls, db: str, rebuild: bool = False) -> dict:
+        """Embed every face in every photo under db, reusing the saved index for unchanged files."""
+        root = Path(db)
+        index_path = root / INSIGHT_INDEX
+        old: dict[str, tuple] = {}  # relative path -> (mtime, size, position in the old index)
+        old_faces = None
+        if index_path.exists() and not rebuild:
+            try:
+                with np.load(index_path, allow_pickle=False) as z:
+                    for i, rel in enumerate(z["files"]):
+                        old[str(rel)] = (float(z["mtimes"][i]), int(z["sizes"][i]), i)
+                    # Group the old faces by file once, so each unchanged file is a dictionary lookup.
+                    old_faces = {}
+                    for j, owner in enumerate(z["face_file"]):
+                        old_faces.setdefault(int(owner), []).append((z["boxes"][j], z["embs"][j]))
+            except Exception:  # noqa: BLE001 - a damaged index is simply rebuilt
+                old = {}
+        files, mtimes, sizes, face_file, boxes, embs = [], [], [], [], [], []
+        added = 0
+        for path in sorted(root.rglob("*")):
+            if path.suffix.lower() not in IMAGE_EXTS or not path.is_file():
+                continue
+            rel = path.relative_to(root).as_posix()
+            st = path.stat()
+            fi = len(files)
+            files.append(rel)
+            mtimes.append(st.st_mtime)
+            sizes.append(st.st_size)
+            prev = old.get(rel)
+            if prev and prev[:2] == (st.st_mtime, st.st_size) and old_faces is not None:
+                for box, emb in old_faces.get(prev[2], []):
+                    face_file.append(fi)
+                    boxes.append(box)
+                    embs.append(emb)
+                continue
+            added += 1
+            try:
+                img = read_image(str(path))
+            except ValueError:
+                continue
+            for f in cls.app().get(img):
+                b = cls._box(f)
+                face_file.append(fi)
+                boxes.append([b["x"], b["y"], b["w"], b["h"]])
+                embs.append(f.normed_embedding.astype(np.float32))
+        data = {
+            "files": np.array(files, dtype=str),
+            "mtimes": np.array(mtimes, dtype=np.float64),
+            "sizes": np.array(sizes, dtype=np.int64),
+            "face_file": np.array(face_file, dtype=np.int64),
+            "boxes": np.array(boxes, dtype=np.int64).reshape(-1, 4),
+            "embs": np.array(embs, dtype=np.float32).reshape(-1, 512),
+        }
+        if added or rebuild or not index_path.exists() or len(files) != len(old):
+            tmp = index_path.with_suffix(".tmp.npz")
+            np.savez(tmp, **data)
+            os.replace(tmp, index_path)
+        return data
+
+    @classmethod
+    def find(cls, img: np.ndarray, db: str, rebuild: bool = False) -> tuple[list[dict], int]:
+        query = cls.faces(img)
+        data = cls.build_index(db, rebuild)
+        rows = []
+        if len(data["embs"]):
+            for q in query:
+                dist = 1.0 - data["embs"] @ q.normed_embedding.astype(np.float32)
+                for j in np.nonzero(dist <= INSIGHT_THRESHOLD)[0]:
+                    rows.append(
+                        {
+                            "identity": str(Path(db) / data["files"][data["face_file"][j]]),
+                            "distance": max(0.0, float(dist[j])),
+                            "threshold": INSIGHT_THRESHOLD,
+                            "box": tuple(int(v) for v in data["boxes"][j]),
+                        }
+                    )
+        return rows, len(query)
 
 
 def friendly_error(exc: BaseException) -> str:
@@ -636,6 +792,8 @@ class VerifyTab(QWidget, BusyMixin):
         a, b = (img.copy() for img in self.images)
 
         def job():
+            if opts.model_name == INSIGHT_MODEL:
+                return InsightEngine.verify(a, b)
             return deepface().verify(
                 img1_path=a,
                 img2_path=b,
@@ -768,6 +926,11 @@ class FindTab(QWidget, BusyMixin):
         rebuild = self.rebuild.isChecked()
 
         def job():
+            if opts.model_name == INSIGHT_MODEL:
+                t0 = time.time()
+                rows, n_faces = InsightEngine.find(img, db, rebuild)
+                rows.sort(key=lambda r: r["distance"])
+                return {"rows": rows, "faces": n_faces, "seconds": time.time() - t0}
             if rebuild:
                 for index in list(Path(db).glob("ds_model_*.pkl")) + list(Path(db).glob("ds_model_*.npz")):
                     index.unlink()
@@ -1080,6 +1243,8 @@ class EmbedTab(QWidget, BusyMixin):
         img = self.image.copy()
 
         def job():
+            if opts.model_name == INSIGHT_MODEL:
+                return InsightEngine.represent(img)
             return deepface().represent(
                 img_path=img,
                 model_name=opts.model_name,
@@ -1169,7 +1334,29 @@ class SettingsPanel(QGroupBox):
         )
         self.weights_label.setObjectName("Note")
         self.weights_label.setWordWrap(True)
+        self.insight_note = QLabel(
+            "<b>InsightFace</b> uses its own detector (SCRFD) and cosine distance, so those settings "
+            "are greyed out. It powers Verify, Find and Embeddings; Analyze and Live camera still use DeepFace. "
+            "<b>Non-commercial research use only.</b>"
+        )
+        self.insight_note.setObjectName("Note")
+        self.insight_note.setWordWrap(True)
+        form.addRow(self.insight_note)
         form.addRow(self.weights_label)
+
+        self.model_box.currentTextChanged.connect(self._model_changed)
+        self._model_changed(self.model_box.currentText(), announce=False)
+
+    def _model_changed(self, name: str, announce: bool = True):
+        insight = name == INSIGHT_MODEL
+        self.detector_box.setEnabled(not insight)
+        self.metric_box.setEnabled(not insight)
+        self.align.setEnabled(not insight)
+        self.expand.setEnabled(not insight)
+        self.insight_note.setVisible(insight)
+        if insight and announce and self.settings.value("insight/licence_seen", "false") != "true":
+            QMessageBox.information(self, "InsightFace licence", INSIGHT_LICENCE)
+            self.settings.setValue("insight/licence_seen", "true")
 
     def options(self) -> Options:
         opts = Options(
@@ -1289,6 +1476,9 @@ class MainWindow(QMainWindow):
             "<p>A desktop front end for <a href='https://github.com/serengil/deepface'>DeepFace</a>, "
             "the open-source face recognition and facial attribute analysis library for Python "
             "(MIT licence, by Sefik Ilkin Serengil).</p>"
+            "<p>The optional InsightFace engine (<a href='https://github.com/deepinsight/insightface'>"
+            "deepinsight/insightface</a>) is MIT-licensed code, but its pretrained models are for "
+            "non-commercial research only.</p>"
             "<p>Everything runs locally. Age, gender, emotion and race are statistical estimates and "
             "can be wrong; please use them kindly and with consent.</p>",
         )
@@ -1347,6 +1537,12 @@ def self_test(image_a: str, image_b: str) -> int:
         "verified": bool(verdict["verified"]),
         "distance": float(verdict["distance"]),
     }
+    try:
+        insight = InsightEngine.verify(read_image(image_a), read_image(image_b))
+        out["insight_verified"] = bool(insight["verified"])
+        out["insight_distance"] = round(float(insight["distance"]), 4)
+    except ImportError:
+        out["insight_verified"] = "not installed"
     print(json.dumps(out), flush=True)
     return 0 if out["faces"] >= 1 else 1
 
