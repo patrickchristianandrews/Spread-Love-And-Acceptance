@@ -1,16 +1,26 @@
 """
 FaceLens Benchmark tab: measure how accurate each recognition engine is on a labelled photo set,
-and how much that accuracy drops when the probe photo is degraded (blur, noise, low resolution,
-occlusion, darkness, heavy JPEG) or altered by a tool such as Fawkes.
+how much that accuracy drops when the probe photo is degraded (blur, noise, low resolution,
+occlusion, darkness, heavy JPEG) or altered by a tool such as Fawkes, and whether errors are
+higher for some groups of people (age, gender, skin type) than others.
 
 Protocol
-  * Every photo is embedded once per engine (largest face) to form a clean "gallery".
+  * Every photo (or video frame) is embedded once per engine (largest face) to form a clean "gallery".
   * Genuine pairs = two photos of the same person; impostor pairs = two different people
     (capped and sampled with a fixed seed, so runs are repeatable).
   * For each perturbation, the first photo of every pair (the "probe") is altered and re-embedded;
     the second stays clean. Distance = cosine distance between unit-length embeddings.
   * A photo where no face is found counts as the largest possible distance (2.0): the system
     fails to match a genuine pair and correctly rejects an impostor pair.
+  * Group breakdown: a genuine pair belongs to its person's group; an impostor pair counts for a
+    group only when both photos are in that group.
+
+Dataset types
+  * Folder per person (sub-folder name = person), optional groups.csv mapping person -> labels.
+  * CSV with file and identity columns; any extra columns become group labels.
+  * DigiFace-1M (Microsoft, synthetic faces, no real people): numbered folder per identity.
+  * Casual Conversations (Meta, consented paid participants): a CSV or JSON annotation file mapping
+    file -> subject plus optional age / gender / skin-type labels. Videos are sampled into frames.
 """
 
 from __future__ import annotations
@@ -29,6 +39,7 @@ from PySide6.QtCore import QObject, QSettings, Qt, Signal
 from PySide6.QtWidgets import (
     QAbstractItemView,
     QCheckBox,
+    QComboBox,
     QFileDialog,
     QGridLayout,
     QGroupBox,
@@ -52,6 +63,7 @@ import facelens as fl
 
 NO_FACE_DISTANCE = 2.0
 ALTERED = "altered"
+VIDEO_EXTS = {".mp4", ".mov", ".avi", ".mkv", ".webm", ".m4v", ".mpg", ".mpeg"}
 PERTURBATIONS = [
     ("none", "None (clean)"),
     ("blur", "Blur"),
@@ -63,6 +75,16 @@ PERTURBATIONS = [
 ]
 PERTURBATION_NAMES = dict(PERTURBATIONS + [(ALTERED, "Altered copies")])
 ALTERED_SUFFIXES = ("_cloaked", "_low", "_mid", "_high", "")
+
+DS_FOLDER, DS_CSV, DS_DIGIFACE, DS_CASUAL = "folder", "csv", "digiface", "casual"
+DATASET_TYPES = [
+    (DS_FOLDER, "Folder per person"),
+    (DS_CSV, "CSV (file, identity)"),
+    (DS_DIGIFACE, "DigiFace-1M (synthetic, no real people)"),
+    (DS_CASUAL, "Casual Conversations (consented participants)"),
+]
+MIN_GROUP_GENUINE, MIN_GROUP_IMPOSTOR = 20, 50
+
 COLUMNS = [
     "Engine",
     "Probe",
@@ -79,6 +101,16 @@ COLUMNS = [
     "TAR @ FAR 0.1%",
     "Seconds",
 ]
+GROUP_COLUMNS = ["Label", "Group", "Genuine / impostor pairs", "False match rate", "False non-match rate", "EER", "Check"]
+
+DATA_SOURCES_HTML = (
+    "<b>Where to get consented test data</b> (FaceLens never downloads data by itself): "
+    "<a href='https://github.com/microsoft/DigiFace1M'>DigiFace-1M</a>: synthetic faces, no real people; "
+    "Microsoft research licence, non-commercial. "
+    "<a href='https://ai.meta.com/datasets/casual-conversations-dataset/'>Casual Conversations v1/v2</a>: "
+    "Meta's videos of paid participants who consented, with self-reported age and gender and annotated "
+    "skin type; licence terms on that page."
+)
 
 
 # --------------------------------------------------------------------------------------
@@ -86,45 +118,219 @@ COLUMNS = [
 # --------------------------------------------------------------------------------------
 
 
-def load_dataset(folder: str = "", csv_path: str = "") -> list[tuple[str, str]]:
-    """[(image path, identity)]. From a CSV (file,identity) if given, else from a folder with one
-    sub-folder per person (images directly in the root folder are ignored)."""
-    items: list[tuple[str, str]] = []
-    if csv_path:
-        base = Path(folder) if folder else Path(csv_path).parent
-        with open(csv_path, newline="", encoding="utf-8-sig") as fh:
-            reader = csv.DictReader(fh)
-            cols = {c.lower().strip(): c for c in (reader.fieldnames or [])}
-            fcol = next((cols[c] for c in ("file", "path", "image", "filename") if c in cols), None)
-            icol = next((cols[c] for c in ("identity", "person", "label", "name", "id") if c in cols), None)
-            if not fcol or not icol:
-                raise ValueError("The CSV needs a 'file' column and an 'identity' column.")
-            for row in reader:
-                f, ident = (row.get(fcol) or "").strip(), (row.get(icol) or "").strip()
-                if not f or not ident:
+@dataclasses.dataclass
+class Item:
+    """One photo (or one frame of a video) of one person, with optional group labels."""
+
+    path: str
+    identity: str
+    frame: int | None = None  # frame number when path is a video
+    groups: dict = dataclasses.field(default_factory=dict)
+
+    @property
+    def label(self) -> str:
+        return self.path if self.frame is None else f"{self.path}#frame{self.frame}"
+
+
+def _pick(cols: list[str], *needles: str, exclude: tuple[str, ...] = ()) -> str | None:
+    """First column whose lower-cased name contains a needle (needles tried in order)."""
+    low = [(c, c.lower().strip()) for c in cols]
+    for needle in needles:
+        for c, lc in low:
+            if needle in lc and c not in exclude:
+                return c
+    return None
+
+
+def _age_band(value: str) -> str:
+    try:
+        age = float(value)
+    except (TypeError, ValueError):
+        return str(value).strip()
+    for hi, band in ((18, "under 18"), (31, "18-30"), (46, "31-45"), (61, "46-60")):
+        if age < hi:
+            return band
+    return "61+"
+
+
+def _group_columns(cols: list[str], used: tuple[str, ...]) -> dict[str, str]:
+    """Map label name -> column for the group labels found among cols."""
+    out = {}
+    for name, needles in (("age", ("age",)), ("gender", ("gender", "sex")),
+                          ("skin", ("fitzpatrick", "monk", "skin", "tone"))):
+        c = _pick(cols, *needles, exclude=used)
+        if c:
+            out[name] = c
+    return out
+
+
+def _clean_groups(raw: dict) -> dict:
+    out = {}
+    for k, v in raw.items():
+        v = "" if v is None else str(v).strip()
+        if not v or v.lower() in ("nan", "none", "n/a", "unknown", "-"):
+            continue
+        out[k] = _age_band(v) if k == "age" else (v.capitalize() if k == "gender" else v)
+    return out
+
+
+def _flatten(rec: dict) -> dict:
+    """Lift nested label dicts (e.g. {"label": {"age": ...}}) to the top level."""
+    flat = {}
+    for k, v in rec.items():
+        if isinstance(v, dict):
+            flat.update({kk: vv for kk, vv in v.items() if not isinstance(vv, (dict, list))})
+        elif not isinstance(v, list):
+            flat[k] = v
+    return flat
+
+
+def _read_records(path: str) -> list[dict]:
+    """Rows from a CSV, or records from a JSON file in any of the common shapes:
+    a list of records; {file: record}; or {subject: {"files": [...], "label": {...}}}."""
+    if path.lower().endswith(".json"):
+        data = json.loads(Path(path).read_text(encoding="utf-8-sig"))
+        records = []
+        if isinstance(data, dict):
+            for key, rec in data.items():
+                if not isinstance(rec, dict):
                     continue
-                p = Path(f)
-                if not p.is_absolute():
-                    p = base / p
-                if p.is_file():
-                    items.append((str(p), ident))
-    else:
+                files = rec.get("files") or rec.get("videos") or rec.get("images")
+                if isinstance(files, list):  # subject -> files + labels
+                    base = _flatten(rec)
+                    base.setdefault("subject_id", key)
+                    for f in files:
+                        records.append({**base, "file": f})
+                else:  # file -> record
+                    r = _flatten(rec)
+                    r.setdefault("file", key)
+                    records.append(r)
+        elif isinstance(data, list):
+            records = [_flatten(r) for r in data if isinstance(r, dict)]
+        return records
+    with open(path, newline="", encoding="utf-8-sig") as fh:
+        return list(csv.DictReader(fh))
+
+
+def _video_frames(path: str, n: int) -> list[int]:
+    cap = cv2.VideoCapture(path)
+    try:
+        total = int(cap.get(cv2.CAP_PROP_FRAME_COUNT) or 0)
+    finally:
+        cap.release()
+    if total <= 0:
+        return []
+    n = max(1, min(n, total))
+    return sorted({int(round((k + 0.5) * total / n)) for k in range(n)} - {total})
+
+
+def load_records(records: list[dict], base: Path, frames: int) -> list[Item]:
+    """Turn annotation rows into Items using loose column-name matching."""
+    if not records:
+        raise ValueError("The annotation file has no rows.")
+    cols = list({k for r in records for k in r})
+    fcol = _pick(cols, "file", "path", "video", "image")
+    icol = _pick(cols, "subject", "participant", "identity", "person", "label", "name", "id", exclude=(fcol,))
+    if not fcol or not icol:
+        raise ValueError("The annotation file needs a file/path/video column and a subject/identity column.")
+    gcols = _group_columns(cols, (fcol, icol))
+    items: list[Item] = []
+    for r in records:
+        f, ident = str(r.get(fcol) or "").strip(), str(r.get(icol) or "").strip()
+        if not f or not ident:
+            continue
+        p = Path(f)
+        if not p.is_absolute():
+            p = base / p
+        if not p.is_file():
+            continue
+        groups = _clean_groups({name: r.get(col) for name, col in gcols.items()})
+        if p.suffix.lower() in VIDEO_EXTS:
+            for fr in _video_frames(str(p), frames):
+                items.append(Item(str(p), ident, fr, groups))
+        elif p.suffix.lower() in fl.IMAGE_EXTS:
+            items.append(Item(str(p), ident, None, groups))
+    return items
+
+
+def _folder_items(root: Path, frames: int) -> list[Item]:
+    items = []
+    subs = [d for d in root.iterdir() if d.is_dir()]
+    subs.sort(key=lambda d: (0, int(d.name), "") if d.name.isdigit() else (1, 0, d.name.lower()))
+    for sub in subs:
+        for p in sorted(sub.rglob("*")):
+            if not p.is_file():
+                continue
+            if p.suffix.lower() in fl.IMAGE_EXTS:
+                items.append(Item(str(p), sub.name))
+            elif p.suffix.lower() in VIDEO_EXTS:
+                items += [Item(str(p), sub.name, fr) for fr in _video_frames(str(p), frames)]
+    groups_csv = root / "groups.csv"
+    if groups_csv.is_file():
+        rows = _read_records(str(groups_csv))
+        cols = list({k for r in rows for k in r})
+        icol = _pick(cols, "identity", "person", "subject", "participant", "folder", "name", "id")
+        gcols = _group_columns(cols, (icol,)) if icol else {}
+        table = {str(r.get(icol, "")).strip(): _clean_groups({n: r.get(c) for n, c in gcols.items()}) for r in rows}
+        for it in items:
+            it.groups = table.get(it.identity, {})
+    return items
+
+
+def cap_items(items: list[Item], max_people: int, max_per_person: int) -> list[Item]:
+    if not max_people and not max_per_person:
+        return items
+    order, by_id = [], {}
+    for it in items:
+        if it.identity not in by_id:
+            by_id[it.identity] = []
+            order.append(it.identity)
+        by_id[it.identity].append(it)
+    if max_people:
+        order = order[:max_people]
+    out = []
+    for ident in order:
+        out += by_id[ident][: max_per_person or None]
+    return out
+
+
+def load_dataset(kind: str, folder: str = "", annotations: str = "", frames: int = 3,
+                 max_people: int = 0, max_per_person: int = 0) -> list[Item]:
+    if kind in (DS_FOLDER, DS_DIGIFACE):
         root = Path(folder)
         if not root.is_dir():
-            raise ValueError("Choose a dataset folder (one sub-folder per person) or a CSV.")
-        for sub in sorted(d for d in root.iterdir() if d.is_dir()):
-            for p in sorted(sub.rglob("*")):
-                if p.suffix.lower() in fl.IMAGE_EXTS and p.is_file():
-                    items.append((str(p), sub.name))
-    idents = {i for _, i in items}
+            raise ValueError("Choose the dataset folder (one sub-folder per person).")
+        items = _folder_items(root, frames)
+    else:
+        if not annotations or not Path(annotations).is_file():
+            raise ValueError("Choose the annotation file (CSV or JSON).")
+        base = Path(folder) if folder and Path(folder).is_dir() else Path(annotations).parent
+        items = load_records(_read_records(annotations), base, frames)
+    items = cap_items(items, max_people, max_per_person)
+    idents = {it.identity for it in items}
     if len(idents) < 2:
-        raise ValueError("The dataset needs at least two people.")
-    counts = {}
-    for _, i in items:
-        counts[i] = counts.get(i, 0) + 1
+        raise ValueError("The dataset needs at least two people (check the folder, file paths and columns).")
+    counts: dict[str, int] = {}
+    for it in items:
+        counts[it.identity] = counts.get(it.identity, 0) + 1
     if max(counts.values()) < 2:
         raise ValueError("At least one person needs two or more photos (otherwise there are no genuine pairs).")
     return items
+
+
+def load_image(item: Item) -> np.ndarray | None:
+    if item.frame is None:
+        try:
+            return fl.read_image(item.path)
+        except ValueError:
+            return None
+    cap = cv2.VideoCapture(item.path)
+    try:
+        cap.set(cv2.CAP_PROP_POS_FRAMES, item.frame)
+        ok, frame = cap.read()
+    finally:
+        cap.release()
+    return frame if ok else None
 
 
 def make_pairs(ids: list[str], cap: int, seed: int = 0) -> tuple[np.ndarray, np.ndarray]:
@@ -233,11 +439,13 @@ def compute_metrics(gen: np.ndarray, imp: np.ndarray, threshold: float) -> dict:
     g, im = np.sort(np.asarray(gen, float)), np.sort(np.asarray(imp, float))
     ng, ni = len(g), len(im)
     out = {"genuine_pairs": ng, "impostor_pairs": ni, "threshold": threshold}
+    if ng:
+        out["fnmr"] = float(np.mean(g > threshold))
+    if ni:
+        out["fmr"] = float(np.mean(im <= threshold))
     if not ng or not ni:
         return out
-    fmr = float(np.mean(im <= threshold))
-    fnmr = float(np.mean(g > threshold))
-    out.update(fmr=fmr, fnmr=fnmr, balanced_accuracy=1 - (fmr + fnmr) / 2)
+    out["balanced_accuracy"] = 1 - (out["fmr"] + out["fnmr"]) / 2
     ts = np.unique(np.concatenate([g, im, [threshold]]))
     fmr_t = np.searchsorted(im, ts, side="right") / ni
     fnmr_t = 1 - np.searchsorted(g, ts, side="right") / ng
@@ -252,6 +460,33 @@ def compute_metrics(gen: np.ndarray, imp: np.ndarray, threshold: float) -> dict:
         out[key] = float(np.mean(g <= t))
         out[key + "_reliable"] = ni * far >= 1
     return out
+
+
+def group_breakdown(items: list[Item], gen_pairs, imp_pairs, gd_by_pair: dict, id_by_pair: dict,
+                    threshold: float, overall: dict) -> list[dict]:
+    """Metrics per (label, group). gd_by_pair / id_by_pair map pair index -> distance (missing pairs absent)."""
+    labels = sorted({k for it in items for k in it.groups})
+    rows = []
+    for label in labels:
+        values = sorted({it.groups[label] for it in items if label in it.groups})
+        for value in values:
+            gd = [d for k, d in gd_by_pair.items() if items[gen_pairs[k][0]].groups.get(label) == value]
+            idd = [d for k, d in id_by_pair.items()
+                   if items[imp_pairs[k][0]].groups.get(label) == value
+                   and items[imp_pairs[k][1]].groups.get(label) == value]
+            m = compute_metrics(np.array(gd), np.array(idd), threshold)
+            enough = len(gd) >= MIN_GROUP_GENUINE and len(idd) >= MIN_GROUP_IMPOSTOR
+            flags = []
+            if enough:
+                for key, name in (("fmr", "false matches"), ("fnmr", "missed matches")):
+                    g, o = m.get(key), overall.get(key)
+                    if g is not None and o is not None and g > 0 and g > 2 * o:
+                        flags.append(f"{name} {g / o:.1f}x overall" if o > 0 else f"{name} (overall 0)")
+            check = "too few pairs" if not enough else ("; ".join(flags) if flags else "ok")
+            rows.append({"label": label, "group": value, "genuine_pairs": len(gd), "impostor_pairs": len(idd),
+                         "fmr": m.get("fmr"), "fnmr": m.get("fnmr"), "eer": m.get("eer"),
+                         "enough_pairs": enough, "flagged": bool(flags), "check": check})
+    return rows
 
 
 def histogram_image(gen: np.ndarray, imp: np.ndarray, threshold: float, title: str,
@@ -319,7 +554,7 @@ class BenchmarkRun:
 
     _active: set["BenchmarkRun"] = set()
 
-    def __init__(self, items, engines: list[fl.Options], perturbations: list[str], altered_root: str,
+    def __init__(self, items: list[Item], engines: list[fl.Options], perturbations: list[str], altered_root: str,
                  dataset_root: str, cap: int):
         self.items, self.engines, self.perturbations = items, engines, perturbations
         self.altered_root, self.dataset_root, self.cap = altered_root, dataset_root, cap
@@ -352,25 +587,23 @@ class BenchmarkRun:
             self.signals.failed.emit(fl.friendly_error(exc), traceback.format_exc())
 
     def run(self) -> dict:
-        paths = [p for p, _ in self.items]
-        ids = [i for _, i in self.items]
+        items = self.items
+        ids = [it.identity for it in items]
         gen_pairs, imp_pairs = make_pairs(ids, self.cap)
         resolver = AlteredResolver(self.altered_root, self.dataset_root) if ALTERED in self.perturbations else None
+        has_groups = any(it.groups for it in items)
         rows, hists = [], []
-        n = len(paths)
+        n = len(items)
         for opts in self.engines:
             name = fl.engine_name(opts)
             threshold = fl.match_threshold(opts)
             t_engine = time.time()
             images: list[np.ndarray | None] = []
             clean: list = []
-            for k, p in enumerate(paths):
+            for k, it in enumerate(items):
                 self._check()
                 self.signals.progress.emit(f"{name}: embedding photo {k + 1} of {n}")
-                try:
-                    img = fl.read_image(p)
-                except ValueError:
-                    img = None
+                img = load_image(it)
                 images.append(img)
                 clean.append(self._embed(img, opts) if img is not None else None)
             clean_seconds = time.time() - t_engine
@@ -386,14 +619,9 @@ class BenchmarkRun:
                         self._check()
                         self.signals.progress.emit(f"{name}: {PERTURBATION_NAMES[kind]} - photo {k + 1} of {n}")
                         if kind == ALTERED:
-                            alt = resolver.find(paths[k])
-                            if alt is None:
-                                missing.add(k)
-                                probes.append(None)
-                                continue
-                            try:
-                                pimg = fl.read_image(alt)
-                            except ValueError:
+                            alt = resolver.find(items[k].path) if items[k].frame is None else None
+                            pimg = fl.read_image(alt) if alt else None
+                            if pimg is None:
                                 missing.add(k)
                                 probes.append(None)
                                 continue
@@ -405,17 +633,18 @@ class BenchmarkRun:
                             pimg = perturb(img, kind, box, rng)
                         probes.append(self._embed(pimg, opts))
 
-                def distances(pairs):
-                    out = []
-                    for i, j in pairs:
+                def distances(pairs) -> dict[int, float]:
+                    out = {}
+                    for p, (i, j) in enumerate(pairs):
                         if i in missing:
                             continue
                         a, b = probes[i], clean[j]
-                        out.append(NO_FACE_DISTANCE if a is None or b is None else
-                                   float(np.clip(1.0 - float(a.emb @ b.emb), 0.0, 2.0)))
-                    return np.array(out, dtype=float)
+                        out[p] = (NO_FACE_DISTANCE if a is None or b is None else
+                                  float(np.clip(1.0 - float(a.emb @ b.emb), 0.0, 2.0)))
+                    return out
 
-                gd, idd = distances(gen_pairs), distances(imp_pairs)
+                g_map, i_map = distances(gen_pairs), distances(imp_pairs)
+                gd, idd = np.array(list(g_map.values())), np.array(list(i_map.values()))
                 no_face = sum(1 for k in range(n) if k not in missing and (probes[k] is None or clean[k] is None))
                 m = compute_metrics(gd, idd, threshold)
                 m.update(
@@ -427,6 +656,7 @@ class BenchmarkRun:
                     missing_altered=len(missing),
                     photos=n,
                     seconds=round(time.time() - t0 + (clean_seconds if kind == "none" else 0), 1),
+                    groups=group_breakdown(items, gen_pairs, imp_pairs, g_map, i_map, threshold, m) if has_groups else [],
                 )
                 rows.append(m)
                 hists.append((gd, idd))
@@ -435,8 +665,10 @@ class BenchmarkRun:
             "hists": hists,
             "photos": n,
             "people": len(set(ids)),
+            "videos": len({it.path for it in items if it.frame is not None}),
             "genuine_pairs": int(len(gen_pairs)),
             "impostor_pairs": int(len(imp_pairs)),
+            "group_labels": sorted({k for it in items for k in it.groups}),
         }
 
     def _check(self):
@@ -461,29 +693,66 @@ class BenchmarkTab(QWidget, fl.BusyMixin):
         self.run_obj: BenchmarkRun | None = None
         self.result: dict | None = None
         self.config: dict = {}
+        self.items: list[Item] = []
 
         # Dataset
+        self.type_box = QComboBox()
+        for key, label in DATASET_TYPES:
+            self.type_box.addItem(label, key)
+        saved = self.settings.value("bench/type", DS_FOLDER)
+        self.type_box.setCurrentIndex(max(0, [k for k, _ in DATASET_TYPES].index(saved) if saved in
+                                          [k for k, _ in DATASET_TYPES] else 0))
         self.folder_edit = QLineEdit(self.settings.value("bench/folder", ""))
-        self.folder_edit.setPlaceholderText("Folder with one sub-folder per person (sub-folder name = person)")
-        self.csv_edit = QLineEdit(self.settings.value("bench/csv", ""))
-        self.csv_edit.setPlaceholderText("Optional: CSV with columns file,identity (instead of sub-folders)")
+        self.ann_edit = QLineEdit(self.settings.value("bench/csv", ""))
         b1, b2 = QPushButton("Browse…"), QPushButton("Browse…")
         b1.clicked.connect(lambda: self._pick_dir(self.folder_edit, "Dataset folder"))
-        b2.clicked.connect(self._pick_csv)
+        b2.clicked.connect(self._pick_ann)
+        self.people_spin = QSpinBox()
+        self.people_spin.setRange(0, 1_000_000)
+        self.people_spin.setSpecialValueText("all")
+        self.people_spin.setToolTip("Use only the first N people (0 = all). Keeps big sets like DigiFace-1M quick.")
+        self.per_spin = QSpinBox()
+        self.per_spin.setRange(0, 10_000)
+        self.per_spin.setSpecialValueText("all")
+        self.per_spin.setToolTip("Use at most N photos (or video frames) per person (0 = all).")
+        self.frames_spin = QSpinBox()
+        self.frames_spin.setRange(1, 60)
+        self.frames_spin.setValue(3)
+        self.frames_spin.setToolTip("Evenly spaced frames taken from each video; each counts as one photo.")
+        self.type_hint = QLabel("")
+        self.type_hint.setObjectName("Note")
+        self.type_hint.setWordWrap(True)
         self.dataset_info = QLabel("")
         self.dataset_info.setObjectName("Note")
+        self.dataset_info.setWordWrap(True)
         check = QPushButton("Check dataset")
         check.clicked.connect(self.check_dataset)
         ds = QGroupBox("Labelled photos")
         g = QGridLayout(ds)
-        g.addWidget(QLabel("Folder"), 0, 0)
-        g.addWidget(self.folder_edit, 0, 1)
-        g.addWidget(b1, 0, 2)
-        g.addWidget(QLabel("CSV"), 1, 0)
-        g.addWidget(self.csv_edit, 1, 1)
-        g.addWidget(b2, 1, 2)
-        g.addWidget(check, 2, 2)
-        g.addWidget(self.dataset_info, 2, 0, 1, 2)
+        g.addWidget(QLabel("Type"), 0, 0)
+        g.addWidget(self.type_box, 0, 1, 1, 2)
+        self.folder_label = QLabel("Folder")
+        g.addWidget(self.folder_label, 1, 0)
+        g.addWidget(self.folder_edit, 1, 1)
+        g.addWidget(b1, 1, 2)
+        self.ann_label = QLabel("Annotations")
+        self.ann_browse = b2
+        g.addWidget(self.ann_label, 2, 0)
+        g.addWidget(self.ann_edit, 2, 1)
+        g.addWidget(b2, 2, 2)
+        caps = QHBoxLayout()
+        caps.addWidget(QLabel("People"))
+        caps.addWidget(self.people_spin)
+        caps.addWidget(QLabel("Photos each"))
+        caps.addWidget(self.per_spin)
+        caps.addWidget(QLabel("Frames per video"))
+        caps.addWidget(self.frames_spin)
+        caps.addStretch()
+        g.addLayout(caps, 3, 0, 1, 3)
+        g.addWidget(self.type_hint, 4, 0, 1, 3)
+        g.addWidget(self.dataset_info, 5, 0, 1, 2)
+        g.addWidget(check, 5, 2)
+        self.type_box.currentIndexChanged.connect(self._type_changed)
 
         # Engines
         self.engine_list = QListWidget()
@@ -513,7 +782,7 @@ class BenchmarkTab(QWidget, fl.BusyMixin):
         self.altered_check = QCheckBox("Altered copies folder")
         self.altered_check.setToolTip(
             "A folder mirroring the dataset whose photos were altered by another tool, e.g. Fawkes "
-            "(which saves <name>_cloaked.png). Matched by relative path or by file name."
+            "(which saves <name>_cloaked.png). Matched by relative path or by file name. Not used for video frames."
         )
         self.altered_edit = QLineEdit(self.settings.value("bench/altered", ""))
         self.altered_edit.setPlaceholderText("e.g. Fawkes output")
@@ -533,9 +802,15 @@ class BenchmarkTab(QWidget, fl.BusyMixin):
         pl.addWidget(self.cap_spin, row + 1, 1)
 
         top = QHBoxLayout()
-        top.addWidget(ds, 3)
+        top.addWidget(ds, 4)
         top.addWidget(eng, 2)
         top.addWidget(pert, 3)
+
+        sources = QLabel(DATA_SOURCES_HTML)
+        sources.setObjectName("Note")
+        sources.setWordWrap(True)
+        sources.setOpenExternalLinks(True)
+        sources.setTextFormat(Qt.TextFormat.RichText)
 
         # Buttons
         self.run_btn = QPushButton("Run benchmark")
@@ -557,23 +832,41 @@ class BenchmarkTab(QWidget, fl.BusyMixin):
         btns.addWidget(self.progress_label, 1)
 
         # Results
-        self.table = QTableWidget(0, len(COLUMNS))
-        self.table.setHorizontalHeaderLabels(COLUMNS)
-        self.table.verticalHeader().hide()
-        self.table.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)
-        self.table.setSelectionBehavior(QAbstractItemView.SelectionBehavior.SelectRows)
-        self.table.setSelectionMode(QAbstractItemView.SelectionMode.SingleSelection)
-        self.table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.ResizeToContents)
-        self.table.itemSelectionChanged.connect(self.show_hist)
+        self.table = self._table(COLUMNS)
+        self.table.itemSelectionChanged.connect(self.show_selected)
+        self.group_table = self._table(GROUP_COLUMNS)
+        self.group_title = QLabel("<b>By group</b>")
+        bias_note = QLabel(
+            "Face matching often works less well for some ages, genders or skin tones. This table shows each "
+            "group's error rates for the selected row so you can check; rows more than twice the overall rate "
+            "are highlighted."
+        )
+        bias_note.setObjectName("Note")
+        bias_note.setWordWrap(True)
+        self.group_empty = QLabel("No group labels in this dataset. Add age, gender or skin-type columns "
+                                  "(CSV / annotations) or a groups.csv next to the person folders.")
+        self.group_empty.setObjectName("Note")
+        self.group_empty.setWordWrap(True)
+        gbox = QWidget()
+        gl = QVBoxLayout(gbox)
+        gl.setContentsMargins(0, 0, 0, 0)
+        gl.addWidget(self.group_title)
+        gl.addWidget(bias_note)
+        gl.addWidget(self.group_table, 1)
+        gl.addWidget(self.group_empty)
         self.hist = QLabel("Run a benchmark, then select a row to see how the distances spread.")
         self.hist.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.hist.setMinimumHeight(200)
+        self.hist.setMinimumHeight(180)
         self.hist.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
         self._hist_img = None
+        lower = QSplitter(Qt.Orientation.Horizontal)
+        lower.addWidget(gbox)
+        lower.addWidget(self.hist)
+        lower.setSizes([620, 620])
         split = QSplitter(Qt.Orientation.Vertical)
         split.addWidget(self.table)
-        split.addWidget(self.hist)
-        split.setSizes([260, 300])
+        split.addWidget(lower)
+        split.setSizes([240, 320])
 
         note = QLabel(
             "<b>False match rate</b>: share of different-people pairs wrongly called the same person. "
@@ -588,36 +881,98 @@ class BenchmarkTab(QWidget, fl.BusyMixin):
 
         layout = QVBoxLayout(self)
         layout.addLayout(top)
+        layout.addWidget(sources)
         layout.addLayout(btns)
         layout.addWidget(self.make_busy_bar())
         layout.addWidget(split, 1)
         layout.addWidget(note)
+        self._type_changed()
 
     # ---- helpers -------------------------------------------------------------------
+    @staticmethod
+    def _table(columns: list[str]) -> QTableWidget:
+        t = QTableWidget(0, len(columns))
+        t.setHorizontalHeaderLabels(columns)
+        t.verticalHeader().hide()
+        t.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)
+        t.setSelectionBehavior(QAbstractItemView.SelectionBehavior.SelectRows)
+        t.setSelectionMode(QAbstractItemView.SelectionMode.SingleSelection)
+        t.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.ResizeToContents)
+        return t
+
+    def _kind(self) -> str:
+        return self.type_box.currentData()
+
+    def _type_changed(self, *_):
+        kind = self._kind()
+        uses_ann = kind in (DS_CSV, DS_CASUAL)
+        self.ann_label.setVisible(uses_ann)
+        self.ann_edit.setVisible(uses_ann)
+        self.ann_browse.setVisible(uses_ann)
+        self.folder_label.setText("Media folder" if uses_ann else "Folder")
+        hints = {
+            DS_FOLDER: ("One sub-folder per person; the sub-folder name is the person. Optional groups.csv in the "
+                        "folder (identity plus age / gender / skin columns) enables the group breakdown."),
+            DS_CSV: ("CSV with a file column and an identity column; paths are relative to the media folder (or "
+                     "the CSV's folder). Extra age / gender / skin columns enable the group breakdown."),
+            DS_DIGIFACE: ("Synthetic faces, no real people: numbered folders, one per made-up identity. Use the "
+                          "People and Photos each limits (e.g. 200 x 5) to keep runs short."),
+            DS_CASUAL: ("Consented, paid participants. Choose the annotation CSV or JSON (file / subject / age / "
+                        "gender / skin type) and the folder holding the videos. Each video gives the chosen number "
+                        "of frames."),
+        }
+        self.folder_edit.setPlaceholderText({
+            DS_FOLDER: "Folder with one sub-folder per person",
+            DS_CSV: "Optional: folder the CSV paths are relative to",
+            DS_DIGIFACE: "DigiFace-1M folder (numbered identity folders)",
+            DS_CASUAL: "Folder holding the videos (optional if paths in the file are absolute)",
+        }[kind])
+        self.ann_edit.setPlaceholderText("CSV with file,identity" if kind == DS_CSV else "Annotation CSV or JSON")
+        self.type_hint.setText(hints[kind])
+        # DigiFace-1M has 10,000+ identities: suggest 200 x 5, and undo that suggestion (only if unchanged)
+        # when switching to another dataset type.
+        auto = (200, 5)
+        caps = (self.people_spin.value(), self.per_spin.value())
+        if kind == DS_DIGIFACE and caps == (0, 0):
+            self.people_spin.setValue(auto[0])
+            self.per_spin.setValue(auto[1])
+        elif kind != DS_DIGIFACE and caps == auto and getattr(self, "_auto_caps", False):
+            self.people_spin.setValue(0)
+            self.per_spin.setValue(0)
+        self._auto_caps = kind == DS_DIGIFACE and (self.people_spin.value(), self.per_spin.value()) == auto
+
     def _pick_dir(self, edit: QLineEdit, title: str):
         d = QFileDialog.getExistingDirectory(self, title, edit.text())
         if d:
             edit.setText(d)
 
-    def _pick_csv(self):
-        f, _ = QFileDialog.getOpenFileName(self, "Labels CSV", self.csv_edit.text(), "CSV (*.csv)")
+    def _pick_ann(self):
+        f, _ = QFileDialog.getOpenFileName(self, "Annotations", self.ann_edit.text(), "CSV or JSON (*.csv *.json)")
         if f:
-            self.csv_edit.setText(f)
+            self.ann_edit.setText(f)
 
-    def _load(self):
-        return load_dataset(self.folder_edit.text().strip(), self.csv_edit.text().strip())
+    def _load(self) -> list[Item]:
+        return load_dataset(self._kind(), self.folder_edit.text().strip(), self.ann_edit.text().strip(),
+                            self.frames_spin.value(), self.people_spin.value(), self.per_spin.value())
 
     def check_dataset(self):
         try:
             items = self._load()
-        except (ValueError, OSError) as exc:
+        except (ValueError, OSError, json.JSONDecodeError) as exc:
             self.show_error(str(exc))
             return None
-        people = {i for _, i in items}
-        gen, imp = make_pairs([i for _, i in items], self.cap_spin.value())
-        self.dataset_info.setText(
-            f"{len(items)} photos of {len(people)} people → {len(gen)} same-person and {len(imp)} different-people pairs"
-        )
+        people = {it.identity for it in items}
+        videos = {it.path for it in items if it.frame is not None}
+        labels = sorted({k for it in items for k in it.groups})
+        gen, imp = make_pairs([it.identity for it in items], self.cap_spin.value())
+        text = (f"{len(items)} photos" + (f" (incl. frames from {len(videos)} videos)" if videos else "")
+                + f" of {len(people)} people → {len(gen)} same-person and {len(imp)} different-people pairs")
+        if labels:
+            text += ". Group labels: " + ", ".join(labels)
+        if self._kind() == DS_DIGIFACE:
+            text += ". Synthetic, no real people."
+        self.dataset_info.setText(text)
+        self.items = items
         return items
 
     # ---- run -----------------------------------------------------------------------
@@ -644,24 +999,30 @@ class BenchmarkTab(QWidget, fl.BusyMixin):
         if not perts:
             self.show_error("Tick at least one probe condition.")
             return
+        self.settings.setValue("bench/type", self._kind())
         self.settings.setValue("bench/folder", self.folder_edit.text().strip())
-        self.settings.setValue("bench/csv", self.csv_edit.text().strip())
+        self.settings.setValue("bench/csv", self.ann_edit.text().strip())
         self.settings.setValue("bench/altered", altered)
         self.config = {
+            "dataset_type": self._kind(),
             "dataset_folder": self.folder_edit.text().strip(),
-            "labels_csv": self.csv_edit.text().strip(),
+            "annotations": self.ann_edit.text().strip(),
+            "max_people": self.people_spin.value(),
+            "max_photos_per_person": self.per_spin.value(),
+            "frames_per_video": self.frames_spin.value(),
             "altered_folder": altered if ALTERED in perts else "",
             "engines": [fl.engine_name(e) for e in engines],
             "probe_conditions": perts,
             "max_pairs": self.cap_spin.value(),
             "started": time.strftime("%Y-%m-%d %H:%M:%S"),
         }
-        self.run_obj = BenchmarkRun(items, engines, perts, altered, self.folder_edit.text().strip(),
-                                    self.cap_spin.value())
+        root = self.folder_edit.text().strip()
+        self.run_obj = BenchmarkRun(items, engines, perts, altered, root, self.cap_spin.value())
         self.run_obj.signals.progress.connect(self.progress_label.setText)
         self.run_obj.signals.finished.connect(self.done)
         self.run_obj.signals.failed.connect(self.failed)
         self.table.setRowCount(0)
+        self.group_table.setRowCount(0)
         self.cancel_btn.setEnabled(True)
         self.set_busy(True, "Benchmark running… (first use of an engine downloads its model)")
         self.run_obj.start()
@@ -699,6 +1060,8 @@ class BenchmarkTab(QWidget, fl.BusyMixin):
                 f"{m['best_threshold']:.3f}" if "best_threshold" in m else "–", _pct(m.get("best_accuracy")),
                 _pct(m.get("eer")), _pct(m.get("tar_far_1")), far01, f"{m['seconds']:.1f}",
             ]
+            if any(gr["flagged"] for gr in m.get("groups", [])):
+                cells[1] += "  ⚑"
             for c, text in enumerate(cells):
                 item = QTableWidgetItem(text)
                 if c >= 2:
@@ -708,17 +1071,38 @@ class BenchmarkTab(QWidget, fl.BusyMixin):
             self.table.selectRow(0)
 
     # ---- output --------------------------------------------------------------------
-    def show_hist(self):
+    def show_selected(self):
         rows = {i.row() for i in self.table.selectedItems()}
         if not rows or not self.result:
             return
         r = min(rows)
         m = self.result["rows"][r]
+        self._fill_groups(m)
         gd, idd = self.result["hists"][r]
         if not len(gd) or not len(idd):
             return
         self._hist_img = histogram_image(gd, idd, m["threshold"], f"{m['engine']} - {m['probe_label']}")
         self._show_hist_pixmap()
+
+    def _fill_groups(self, m: dict):
+        groups = m.get("groups", [])
+        self.group_title.setText(f"<b>By group</b> - {m['engine']}, {m['probe_label']}")
+        self.group_empty.setVisible(not groups)
+        self.group_table.setVisible(bool(groups))
+        self.group_table.setRowCount(len(groups))
+        for r, gr in enumerate(groups):
+            cells = [gr["label"], gr["group"], f"{gr['genuine_pairs']} / {gr['impostor_pairs']}",
+                     _pct(gr["fmr"]), _pct(gr["fnmr"]), _pct(gr["eer"]), gr["check"]]
+            for c, text in enumerate(cells):
+                item = QTableWidgetItem(text)
+                if 2 <= c <= 5:
+                    item.setTextAlignment(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
+                if gr["flagged"]:
+                    item.setBackground(Qt.GlobalColor.yellow)
+                    item.setForeground(Qt.GlobalColor.black)
+                elif not gr["enough_pairs"]:
+                    item.setForeground(Qt.GlobalColor.gray)
+                self.group_table.setItem(r, c, item)
 
     def _show_hist_pixmap(self):
         if self._hist_img is not None:
@@ -730,11 +1114,25 @@ class BenchmarkTab(QWidget, fl.BusyMixin):
         super().resizeEvent(event)
         self._show_hist_pixmap()
 
+    METRIC_KEYS = ["threshold", "balanced_accuracy", "fmr", "fnmr", "best_threshold", "best_accuracy", "eer",
+                   "tar_far_1", "tar_far_01"]
+
     def _rows_for_export(self) -> list[dict]:
-        keys = ["engine", "probe", "photos", "genuine_pairs", "impostor_pairs", "no_face", "missing_altered",
-                "threshold", "balanced_accuracy", "fmr", "fnmr", "best_threshold", "best_accuracy", "eer",
-                "tar_far_1", "tar_far_01", "seconds"]
-        return [{k: m.get(k) for k in keys} for m in self.result["rows"]]
+        """One row per engine x probe (group fields blank), then one per engine x probe x group."""
+        out = []
+        for m in self.result["rows"]:
+            base = {"engine": m["engine"], "probe": m["probe"], "group_label": "", "group": "",
+                    "photos": m["photos"], "genuine_pairs": m["genuine_pairs"], "impostor_pairs": m["impostor_pairs"],
+                    "no_face": m["no_face"], "missing_altered": m["missing_altered"],
+                    **{k: m.get(k) for k in self.METRIC_KEYS}, "check": "", "seconds": m["seconds"]}
+            out.append(base)
+            for gr in m.get("groups", []):
+                row = {k: "" for k in base}
+                row.update(engine=m["engine"], probe=m["probe"], group_label=gr["label"], group=gr["group"],
+                           genuine_pairs=gr["genuine_pairs"], impostor_pairs=gr["impostor_pairs"],
+                           threshold=m["threshold"], fmr=gr["fmr"], fnmr=gr["fnmr"], eer=gr["eer"], check=gr["check"])
+                out.append(row)
+        return out
 
     def export_csv(self):
         if not self.result:
@@ -758,9 +1156,17 @@ class BenchmarkTab(QWidget, fl.BusyMixin):
         path, _ = QFileDialog.getSaveFileName(self, "Export results", "facelens-benchmark.json", "JSON (*.json)")
         if not path:
             return
-        data = {"config": self.config, "summary": {k: self.result[k] for k in
-                                                     ("photos", "people", "genuine_pairs", "impostor_pairs")},
-                "results": self._rows_for_export()}
+        results = []
+        for m in self.result["rows"]:
+            results.append({"engine": m["engine"], "probe": m["probe"], "photos": m["photos"],
+                            "genuine_pairs": m["genuine_pairs"], "impostor_pairs": m["impostor_pairs"],
+                            "no_face": m["no_face"], "missing_altered": m["missing_altered"],
+                            **{k: m.get(k) for k in self.METRIC_KEYS}, "seconds": m["seconds"],
+                            "by_group": m.get("groups", [])})
+        data = {"config": self.config,
+                "summary": {k: self.result[k] for k in ("photos", "people", "videos", "genuine_pairs",
+                                                         "impostor_pairs", "group_labels")},
+                "results": results}
         Path(path).write_text(json.dumps(fl.jsonable(data), indent=2), encoding="utf-8")
         if self.status:
             self.status(f"Saved {path}")
