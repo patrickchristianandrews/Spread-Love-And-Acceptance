@@ -101,6 +101,7 @@
     <div class="tabs" role="tablist">
       <button class="tab on" data-tab="text" role="tab">Chat</button>
       <button class="tab" data-tab="image" role="tab">Image</button>
+      <button class="tab" data-tab="services" role="tab">Services</button>
       <button class="tab" data-tab="keys" role="tab">Keys</button>
     </div>
   </header>
@@ -167,6 +168,14 @@
     <div class="bar"><button class="btn ghost" id="tcopy" hidden>Copy</button></div>
   </section>
 
+  <!-- SERVICES DIRECTORY -->
+  <section id="panel-services" class="card" hidden>
+    <h2 style="margin:0 0 4px;font-size:16px">Every service, in one place</h2>
+    <p class="hint" style="margin:0 0 12px">Every tool from your lists is here. <b>Ready now</b> works with no setup. <b>One-tap add</b> wires up a verified cloud — tap Add, paste the key it opens, done. <b>Browser</b> and <b>no API</b> entries are listed honestly so nothing is lost.</p>
+    <div id="svc-msg" class="hint" style="margin:0 0 10px;color:var(--good)" hidden></div>
+    <div id="svc-list"></div>
+  </section>
+
   <!-- KEYS -->
   <section id="panel-keys" class="card" hidden>
     <h2 style="margin:0 0 4px;font-size:16px">API keys</h2>
@@ -189,7 +198,7 @@
 
   <p class="foot">
     <b>Open Studio</b> is a standalone app. The free engines — <b>Pollinations</b>, <b>AI Horde</b> and <b>Puter</b> (GPT/Claude/Gemini/DALL·E, keyless) — need no account or paid key. Keyed clouds are called from inside the app so your key stays private.
-    Your library and settings live on this PC only.<br>
+    Your library and settings live on this PC only. See the <b>Services</b> tab for every provider — ready now, one-tap add, or where to find it.<br>
     This version does <b>images and text</b>. Video, in‑painting edits and upscaling are planned next (they need paid APIs or local engines).
   </p>
 </div>
