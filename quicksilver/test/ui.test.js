@@ -1308,19 +1308,15 @@ function redPng(size = 64) {
   }
   console.log('✓ better for your PC: a clearly better model of any family for the same job, matched to this PC');
   await win.evaluate(() => go({ view: 'apis' }));
-  await win.waitForSelector('text=Anthropic (Claude)');
-  await win.waitForSelector('#presets h3:has-text("Free to start, then paid")');
-  assert.equal(await win.locator('#presets h3:has-text("on this PC")').count(), 0, 'no "Free, on this PC" group');
-  await win.waitForSelector('#presets .card:has-text("Google Gemini") .badge:has-text("✓ Free")');
-  await win.waitForSelector('#presets .card:has-text("OpenAI") .badge:has-text("Paid")');
-  // Every cloud AI, free or paid, with the best model to link; Fusion to combine them.
-  assert.ok(await win.locator('#presets [data-preset]').count() >= 30, 'every OpenAI-compatible cloud AI is listed');
-  await win.waitForSelector('#presets .card:has-text("Venice AI") :text("Best to link")');
-  await win.waitForSelector('#presets .card:has-text("Groq") .badge:has-text("Dev plan")');
-  // A direct "Get your API key →" link to each provider's own key page.
-  await win.waitForSelector('#presets .card:has-text("Google Gemini") a:has-text("Get your API key")');
-  assert.ok(await win.locator('#presets .card a:has-text("Get your API key")').count() >= 20, 'most providers link straight to their key page');
-  assert.ok(await win.locator('#presets .card:has-text("Pollinations")').count(), 'the free no-key Pollinations text option is listed');
+  // Cloud AIs page: the inline "browse by task" directory (rows, a service per task it's good at).
+  await win.waitForSelector('#api-dir [data-dir-task="all"]', { timeout: 10000 });
+  await win.waitForSelector('#api-dir .ad-row:has-text("Google Gemini")');
+  await win.waitForSelector('#api-dir .ad-row:has-text("Pollinations")');
+  assert.ok(await win.locator('#api-dir [data-api-connect]').count() >= 10, 'providers can be connected straight from the directory');
+  // Pick a task → only its services show.
+  await win.click('#api-dir [data-dir-task="coding"]');
+  await win.waitForSelector('#api-dir h4:has-text("Coding")');
+  await win.click('#api-dir [data-dir-task="all"]');
   await win.waitForSelector('.fusion-card #fusion-open');
   await shot(win, '05b-api-free');
   await win.evaluate(() => { modelsTab = 'text'; go({ view: 'models' }); });
