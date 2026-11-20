@@ -425,7 +425,7 @@ function apiHTML() {
         <li><b>Images:</b> a handful to a few dozen a day on the free image services — <b>Pollinations</b> is keyless, <b>Together</b> has a free FLUX model, Cloudflare includes image models.</li>
         <li><b>Video:</b> essentially none free anywhere — video costs real money; connect a paid key (fal.ai, Replicate) when you want it.</li>
       </ul></div>
-    <div class="row small" id="api-filters" style="gap:6px;margin:0 0 10px;flex-wrap:wrap"><b class="small muted" style="align-self:center">Show:</b>${[['all', 'All'], ['free', '🆓 Free (no card)'], ['nokey', '🔑 No key at all'], ['generous', '🏆 Most generous']].map(([k, l]) => `<button class="btn small ${apiFilter === k ? 'primary' : ''}" data-api-filter="${k}">${l}</button>`).join('')}</div>
+    <div class="row small" id="api-filters" style="gap:6px;margin:0 0 10px;flex-wrap:wrap"><b class="small muted" style="align-self:center">Show:</b>${[['all', 'All'], ['free', '🆓 Free (no card)'], ['nokey', '🔑 No key at all'], ['generous', '🏆 Best free (generous + strong)']].map(([k, l]) => `<button class="btn small ${apiFilter === k ? 'primary' : ''}" data-api-filter="${k}">${l}</button>`).join('')}</div>
     <div id="presets"></div>`;
 }
 
@@ -449,10 +449,10 @@ async function bindApi() {
   const match = (p) => apiFilter === 'all' ? true : apiFilter === 'free' ? (p.free === 'free' || p.noKey) : apiFilter === 'nokey' ? Boolean(p.noKey) : apiFilter === 'generous' ? Boolean(p.generous) : true;
   const groups = [['Free', (p) => p.free === 'free'], ['Free to start, then paid', (p) => p.free === 'some'], ['Paid', (p) => p.free === 'paid'], ['Other', (p) => !p.free]];
   const shownAny = Object.entries(presets).some(([k, p]) => match(p) && k !== 'custom');
-  box.innerHTML = `<p class="small muted" style="margin:-4px 0 12px">${apiFilter === 'generous' ? '🏆 The most generous free tiers — big daily allowances for everyday use.' : apiFilter === 'nokey' ? '🔑 Work with no key or account at all.' : apiFilter === 'free' ? '🆓 A free tier with no credit card.' : 'Free plans have daily limits and can change; each card links to the current prices.'}</p>${shownAny ? '' : '<p class="empty">Nothing matches that filter.</p>'}` + groups.map(([title, test]) => {
+  box.innerHTML = `<p class="small muted" style="margin:-4px 0 12px">${apiFilter === 'generous' ? '🏆 The best free tiers: a big daily allowance <b>and</b> strong, high-rated models (check the ⭐ best model and tested scores on each card).' : apiFilter === 'nokey' ? '🔑 Work with no key or account at all.' : apiFilter === 'free' ? '🆓 A free tier with no credit card.' : 'Free plans have daily limits and can change; each card links to the current prices.'}</p>${shownAny ? '' : '<p class="empty">Nothing matches that filter.</p>'}` + groups.map(([title, test]) => {
     const list = Object.entries(presets).filter(([, p]) => test(p) && match(p));
     return list.length ? `<h3 class="small muted" style="margin:14px 0 8px;text-transform:uppercase;letter-spacing:.05em">${title}</h3><div class="cards" style="grid-template-columns:repeat(auto-fill,minmax(250px,1fr))">${list.map(([k, p]) => `<button class="card" data-preset="${k}" style="text-align:left">
-      <div class="row"><h3 class="grow">${esc(p.name)}</h3>${p.generous ? '<span class="badge b-lemon" title="One of the most generous free tiers">🏆</span> ' : ''}${FREE_BADGE[p.free] || ''}</div>
+      <div class="row"><h3 class="grow">${esc(p.name)}</h3>${p.generous ? '<span class="badge b-lemon" title="Generous free tier AND strong models">🏆</span> ' : ''}${FREE_BADGE[p.free] || ''}</div>
       ${devBadgeHTML(k) ? `<div style="margin-top:6px">${devBadgeHTML(k)}</div>` : ''}
       <div class="small muted" style="font-weight:600;margin-top:6px">${esc(p.freeNote || (k === 'custom' ? 'Any OpenAI-compatible endpoint' : 'Needs an API key'))}</div>
       ${p.keyUrl ? `<div class="small" style="margin-top:6px">🔑 <a href="${esc(p.keyUrl)}" title="Opens ${esc(p.keyUrl)}">Get your API key →</a></div>` : ''}
