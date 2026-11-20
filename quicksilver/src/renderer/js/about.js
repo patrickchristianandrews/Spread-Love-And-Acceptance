@@ -57,15 +57,14 @@ const FEATURE_GROUPS = [
 ];
 
 // This release's feature notes, pulled straight into Settings so "What's new" lives with the app.
-const RELEASE_NOTES_2_18 = [
-  ['Sounds like a person, not a chatbot', 'Natural, clean text you can send as your own — no "Certainly!", no sign-offs, no em dashes everywhere. Switch the structured style back on in Settings → General.'],
-  ['Answers correct themselves', 'When Double-check is on and the second model finds a clear mistake, the answer is rewritten once and marked "Corrected". A Fix it button does it on demand.'],
-  ['Faster everywhere', 'Reads ahead while you type, answers your likely next question in the background, gives instant repeats of answers you rated 👍, and makes better use of your graphics card.'],
-  ['Does more by itself', 'Checks the web for current questions, searches your Library when it clearly has the answer, and uses apps you have connected when you mention them.'],
-  ['Memory that finds by meaning', 'Remembers lasting facts about you across chats and, with Smarter search, recalls them the way Mem0 does — all on this PC.'],
-  ['Free cloud pictures built in', 'Pollinations makes pictures with no key or account, under Gallery & tools → Cloud, when your PC can\'t or would be slow.'],
-  ['New teams & skills', 'A vibe-hacking team (idea → runnable app), a GIF maker, CPA and CIA exam coaches, and a find-this-product-from-a-photo skill.'],
-  ['Clearer, calmer screen', 'Fewer buttons under each answer, the privacy state shown at the top, and upgrades that separate "faster" from "smarter" with real costs.'],
+const RELEASE_NOTES_2_23 = [
+  ['Weather comes back as a picture, instantly', 'Ask about the weather and chat shows a live card — current conditions, a 24-hour strip and a 7-day forecast with hi/lo bars and rain chance — from a real forecast (never the model guessing), in °C or °F to suit your country.'],
+  ['The web actually returns things in chat', 'Ask to see pictures or videos from the web and they appear under the answer, even on a small local model. Questions that need the live web — news, politics, prices, local events, "look it up" — are searched and cited automatically; simple facts stay instant and local.'],
+  ['One solid source for plain facts', 'For universally-understood questions, chat pulls a single trusted Wikipedia summary instead of scraping many sites — faster and cleaner.'],
+  ['The Polymath', 'A new crew member that connects economics, law, politics, history, science and philosophy, explains how society actually works in plain terms, pulls live cited news, and weighs every side fairly.'],
+  ['See the Other Side', 'A new crew member for understanding people across a political or belief divide — explained from the inside or in conversation, always the strongest and most charitable version, never mocking and never trying to convert you.'],
+  ['Check any laptop before you buy', 'The "models + your PC" buying calculator now includes the entry-level laptop graphics cards (RTX 4050, RTX 5050), so you can see what a budget gaming laptop will really run before buying.'],
+  ['🔬 Microscope — look inside a model', 'Run a prompt on a local model and see every token it produced, how sure it was, and the alternatives — or put two models side by side and see exactly where they first diverge.'],
 ];
 
 function aboutHTML() {
@@ -93,7 +92,7 @@ function aboutHTML() {
 
     <div class="card set-card">
       <h3 style="margin-top:0">🆕 What's new in this version</h3>
-      ${RELEASE_NOTES_2_18.map(([t, d]) => `<div class="ab-row"><span class="ab-ico">•</span><div><b>${esc(t)}.</b> <span class="small muted">${esc(d)}</span></div></div>`).join('')}
+      ${RELEASE_NOTES_2_23.map(([t, d]) => `<div class="ab-row"><span class="ab-ico">•</span><div><b>${esc(t)}.</b> <span class="small muted">${esc(d)}</span></div></div>`).join('')}
     </div>
   </div>`;
 }
