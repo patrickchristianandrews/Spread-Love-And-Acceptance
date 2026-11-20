@@ -388,6 +388,10 @@ handle('hfspace:run', async (id, req) => {
   return { ...r, saved };
 });
 handle('kb:dataset', (collectionId, id) => hfData.addDataset(knowledge, collectionId, id, { onProgress: (p) => emit('library:progress', p) }));
+// Big curated web knowledge (e.g. FineWeb-Edu): a bounded sample of rows → a knowledge base the
+// local models search by meaning, so a small model gains a large reference library. No big download.
+handle('kb:webSources', () => Object.entries(hfData.WEB_KNOWLEDGE).map(([id, s]) => ({ id, name: s.name, emoji: s.emoji, about: s.about })));
+handle('kb:webknowledge', (collectionId, opts) => hfData.addWebKnowledge(knowledge, collectionId, { ...(opts || {}), onProgress: (p) => emit('library:progress', p) }));
 handle('models:import', async () => {
   const r = await dialog.showOpenDialog(win, { title: 'Import a GGUF model', properties: ['openFile'], filters: [{ name: 'GGUF model', extensions: ['gguf'] }] });
   if (r.canceled || !r.filePaths[0]) return null;

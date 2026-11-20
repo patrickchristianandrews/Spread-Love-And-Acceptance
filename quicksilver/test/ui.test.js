@@ -1151,6 +1151,13 @@ function redPng(size = 64) {
   await win.click('text=PubMed (medical journals)');
   await win.waitForSelector('label.btn.on:has-text("PubMed")');
   console.log('✓ knowledge bases');
+  // Web knowledge: add a big educational web library (FineWeb-Edu) the local models can search.
+  await win.click('#kb-webk');
+  await win.waitForSelector('#wk-src');
+  assert.ok(await win.locator('#wk-src option:has-text("FineWeb-Edu")').count() >= 1, 'FineWeb-Edu is offered as web knowledge');
+  assert.equal(await win.locator('#wk-max option').count(), 3, 'three size choices');
+  await win.click('#modal [data-close]');
+  console.log('✓ web knowledge: FineWeb-Edu can be added to a base for small models to search');
   await win.click('#kb-save-model');
   await win.fill('#km-name', 'Clinical Reference');
   await win.check('#km-strict');

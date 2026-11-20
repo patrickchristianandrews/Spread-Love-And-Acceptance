@@ -186,6 +186,58 @@ async function trendingSpaces({ force = false } = {}) {
   } catch { return c?.list || []; }
 }
 
+// ---- Big curated web knowledge (FineWeb-Edu and friends) -------------------------------------
+// These datasets are far too big to download whole (terabytes). Instead we pull a bounded sample of
+// rows through the datasets-server /rows API (no big download) and put their text in a knowledge
+// base, which the local models then search by meaning — so a small model gains a large, clean
+// reference library. Semantic search means a misspelled, slangy or broken query still finds the
+// right passages. A one-off build; nothing updates by itself.
+const DS_ROWS = 'https://datasets-server.huggingface.co/rows';
+const WEB_KNOWLEDGE = {
+  'fineweb-edu': { dataset: 'HuggingFaceFW/fineweb-edu', config: 'sample-10BT', split: 'train', textField: 'text', scoreField: 'int_score', name: 'FineWeb-Edu (educational web)', emoji: '📚', about: 'Clean, high-quality educational web pages — a broad general-knowledge library for a small model.' },
+};
+const PER_ROW_CAP = 6000; // characters kept from one page, so the index stays searchable, not bloated
+
+// Pure: the readable text of one row, trimmed. Exposed for tests.
+function webRowText(row, textField = 'text') {
+  const t = String((row && row[textField]) ?? '').replace(/[ \t]+/g, ' ').replace(/\n{3,}/g, '\n\n').trim();
+  return t ? t.slice(0, PER_ROW_CAP) : '';
+}
+async function fetchServerRows(dataset, config, split, offset, length) {
+  const url = `${DS_ROWS}?dataset=${encodeURIComponent(dataset)}&config=${config}&split=${split}&offset=${offset}&length=${length}`;
+  const r = await fetch(url, { headers: headers(), signal: AbortSignal.timeout(60000) });
+  if (r.status === 401 || r.status === 403) throw new Error('This dataset is gated: accept its terms on huggingface.co and add a Hugging Face token in Settings → Accounts.');
+  if (!r.ok) throw new Error(`Hugging Face datasets-server returned HTTP ${r.status}.`);
+  const j = await r.json();
+  return (j.rows || []).map((x) => x.row);
+}
+// Build a bounded knowledge base from a big web dataset, by paging the rows API.
+async function addWebKnowledge(knowledge, collectionId, { source = 'fineweb-edu', max = 2000, minScore = 3, onProgress } = {}) {
+  const src = WEB_KNOWLEDGE[source];
+  if (!src) throw new Error('Unknown web-knowledge source.');
+  const pageSize = 100; const items = []; let offset = 0; let empty = 0; let pages = 0;
+  const pageBudget = Math.ceil((max / pageSize) * 4) + 10; // allow for rows filtered out by score
+  while (items.length < max && pages < pageBudget) {
+    pages++;
+    let rows;
+    try { rows = await fetchServerRows(src.dataset, src.config, src.split, offset, pageSize); }
+    catch (e) { if (items.length) break; throw e; }
+    if (!rows.length) { if (++empty > 1) break; offset += pageSize; continue; }
+    empty = 0; offset += rows.length;
+    for (const row of rows) {
+      if (items.length >= max) break;
+      if (minScore && Number((src.scoreField && row[src.scoreField]) ?? row.score ?? 5) < minScore) continue;
+      const t = webRowText(row, src.textField);
+      if (!t) continue;
+      items.push({ name: `${src.name}: ${String(row.url || 'web page').slice(0, 90)}`, path: row.url || `${HF}/datasets/${src.dataset}`, kind: 'web', text: t, size: t.length });
+    }
+    onProgress?.({ done: items.length, total: max, name: src.name });
+  }
+  if (!items.length) throw new Error('No rows could be fetched (the datasets server may be busy, or the dataset is gated). Try a smaller size or again later.');
+  knowledge.addTexts(collectionId, items);
+  return { added: items.length, source: src.dataset, name: src.name };
+}
+
 // Search/browse Spaces (sort by likes or trending). Returns enough to list and run them.
 async function searchSpaces({ query = '', sort = 'likes', limit = 40 } = {}) {
   const dir = sort === 'trending' ? 'trendingScore' : sort === 'modified' ? 'lastModified' : 'likes';
@@ -196,4 +248,4 @@ async function searchSpaces({ query = '', sort = 'likes', limit = 40 } = {}) {
   } catch (e) { throw new Error(`Could not reach Hugging Face (${e.message || e}).`); }
 }
 
-module.exports = { searchDatasets, datasetInfo, addDataset, trendingSpaces, searchSpaces, rowText, parseCSV, rowsOf, cleanId, MAX_ROWS, MAX_BYTES };
+module.exports = { searchDatasets, datasetInfo, addDataset, trendingSpaces, searchSpaces, addWebKnowledge, webRowText, fetchServerRows, WEB_KNOWLEDGE, rowText, parseCSV, rowsOf, cleanId, MAX_ROWS, MAX_BYTES };

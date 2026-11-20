@@ -29,7 +29,7 @@ views.library = {
       <div class="tabs">${kb.collections.map((x) => `<button class="tab ${x.id === kbSel ? 'active' : ''}" data-kb="${x.id}">${esc(x.emoji)} ${esc(x.name)} <span class="small muted">(${x.docs})</span></button>`).join('')}</div>
       ${c ? `
       <div class="row" style="margin-bottom:14px">
-        <button class="btn small" id="kb-files">📄 Add files</button><button class="btn small" id="kb-folder">📁 Add a folder</button><button class="btn small" id="kb-web">🌐 Add a website</button><button class="btn small" id="kb-gh">🐙 Add a GitHub repository</button><button class="btn small" id="kb-hf" title="Search the public datasets on Hugging Face and add one's text and tables">🤗 Add a Hugging Face dataset</button>
+        <button class="btn small" id="kb-files">📄 Add files</button><button class="btn small" id="kb-folder">📁 Add a folder</button><button class="btn small" id="kb-web">🌐 Add a website</button><button class="btn small" id="kb-gh">🐙 Add a GitHub repository</button><button class="btn small" id="kb-hf" title="Search the public datasets on Hugging Face and add one's text and tables">🤗 Add a Hugging Face dataset</button><button class="btn small" id="kb-webk" title="Add a big educational web library (FineWeb-Edu) your small local models can then search">📚 Add web knowledge</button>
         <span class="grow"></span><button class="btn small primary" id="kb-save-model" title="Save a model that always answers from this knowledge">💾 Save as a model</button><button class="btn small" id="kb-rename">Rename</button><button class="btn small danger" id="kb-del">Delete</button>
       </div>
       <div class="card" style="margin-bottom:16px"><h3>🔴 Live sources</h3><p class="small muted" style="font-weight:600;margin:4px 0 10px">Searched fresh for every question, so they're always current. Turn on as many as you like; your question is sent to each one you enable.</p>
@@ -99,6 +99,27 @@ views.library = {
       toast(`Added ${r.rows.toLocaleString()} rows from ${r.id}${r.license ? ` (license: ${r.license})` : ''}.${r.cut ? ' It is a large dataset: the first part was added, up to the limit.' : ''}`, 9000);
       return { errors: r.errors };
     })));
+    $('#kb-webk').addEventListener('click', async () => {
+      const sources = await qs.call('kb:webSources').catch(() => []);
+      if (!sources.length) { toast('Couldn’t reach Hugging Face. Check the internet and try again.'); return; }
+      const cName = kb.collections.find((x) => x.id === kbSel)?.name || 'this base';
+      const b = openModal(`<h2>📚 Add web knowledge</h2>
+        <p class="small muted">A bounded sample of a big, clean web dataset is added to <b>${esc(cName)}</b>. Your local models then search it by meaning — so even a small model can answer from a large library, and a misspelled or slangy question still finds the right pages. Only the text kept is downloaded, never the whole (terabyte-sized) dataset.</p>
+        <div class="stack-v">
+          <div class="field"><label for="wk-src">Source</label><select id="wk-src">${sources.map((s) => `<option value="${esc(s.id)}">${esc(s.emoji)} ${esc(s.name)}</option>`).join('')}</select><span class="help" id="wk-about">${esc(sources[0].about || '')}</span></div>
+          <div class="field"><label for="wk-max">How much</label><select id="wk-max"><option value="1000">Starter — ~1,000 pages (quick)</option><option value="5000" selected>Standard — ~5,000 pages</option><option value="15000">Large — ~15,000 pages (slower to index)</option></select></div>
+          <div class="field"><label for="wk-score">Quality</label><select id="wk-score"><option value="3" selected>Educational (recommended)</option><option value="4">Highly educational only</option><option value="0">Everything</option></select></div>
+        </div>
+        <div class="notice info small" style="margin:8px 0 0">Indexing runs on this PC and can take a while for larger sizes — you can keep using Quicksilver meanwhile.</div>
+        <div class="modal-actions"><button class="btn" data-close>Cancel</button><button class="btn primary" id="wk-go">Add</button></div>`);
+      const about = b.querySelector('#wk-about');
+      b.querySelector('#wk-src').addEventListener('change', (e) => { about.textContent = sources.find((s) => s.id === e.target.value)?.about || ''; });
+      b.querySelector('#wk-go').addEventListener('click', () => {
+        const source = b.querySelector('#wk-src').value, max = Number(b.querySelector('#wk-max').value), minScore = Number(b.querySelector('#wk-score').value);
+        closeModal();
+        busy(async () => { const r = await call('kb:webknowledge', kbSel, { source, max, minScore }); toast(`Added ${r.added.toLocaleString()} pages from ${r.name}. The index is building in the background.`, 9000); return {}; });
+      });
+    });
     $('#kb-rename').addEventListener('click', () => kbEdit(kb.collections.find((x) => x.id === kbSel)));
     $('#kb-del').addEventListener('click', async () => { if (!(await confirmBox('Delete this knowledge base? Your original files are not touched.'))) return; await call('kb:delete', kbSel); kbSel = null; await refreshKb(); render(); });
     $$('[data-live]').forEach((cb) => cb.addEventListener('change', async () => {
