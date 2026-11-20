@@ -311,20 +311,20 @@
     var FALLBACK_MODELS = ['meta-llama/Llama-3.3-70B-Instruct','Qwen/Qwen3-8B','mistralai/Mistral-Nemo-Instruct-2407','google/gemma-3-12b-it','black-forest-labs/FLUX.1-dev'];
     var FALLBACK_SPACES = ['black-forest-labs/FLUX.1-schnell','stabilityai/stable-diffusion','hexgrad/Kokoro-TTS'];
     function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
-    function render(el, items, icon, hrefBase){
+    function render(el, items, icon, hrefBase, scheme){
       el.innerHTML = items.slice(0,8).map(function(it){
         var id = typeof it==='string'?it:it.id; var likes = (it&&it.likes)||0;
-        return '<a class="chip" href="'+hrefBase+encodeURI(id)+'" rel="noopener" target="_blank">'+icon+' <b>'+esc(id.split('/').pop())+'</b> <span class="k">'+esc(id.split('/')[0])+(likes?(' · ♥ '+likes):'')+'</span></a>';
+        return '<span class="chip">'+icon+' <a href="'+hrefBase+encodeURI(id)+'" rel="noopener" target="_blank"><b>'+esc(id.split('/').pop())+'</b></a> <span class="k">'+esc(id.split('/')[0])+(likes?(' · ♥ '+likes):'')+'</span> <a href="'+scheme+encodeURI(id)+'" title="Open in Quicksilver (if installed)" style="font-weight:700">⇲</a></span>';
       }).join('');
     }
-    function load(url, el, icon, hrefBase, fallback){
+    function load(url, el, icon, hrefBase, scheme, fallback){
       fetch(url,{headers:{Accept:'application/json'}}).then(function(r){return r.ok?r.json():Promise.reject();}).then(function(list){
         if(!Array.isArray(list)||!list.length) throw 0;
-        render(el, list.filter(function(x){return x.id && !x.private;}), icon, hrefBase);
-      }).catch(function(){ render(el, fallback, icon, hrefBase); });
+        render(el, list.filter(function(x){return x.id && !x.private;}), icon, hrefBase, scheme);
+      }).catch(function(){ render(el, fallback, icon, hrefBase, scheme); });
     }
-    load('https://huggingface.co/api/models?sort=trendingScore&direction=-1&limit=8', document.getElementById('hf-models'), '🧠', 'https://huggingface.co/', FALLBACK_MODELS);
-    load('https://huggingface.co/api/spaces?sort=likes&direction=-1&limit=6', document.getElementById('hf-spaces'), '🚀', 'https://huggingface.co/spaces/', FALLBACK_SPACES);
+    load('https://huggingface.co/api/models?sort=trendingScore&direction=-1&limit=8', document.getElementById('hf-models'), '🧠', 'https://huggingface.co/', 'quicksilver://model/', FALLBACK_MODELS);
+    load('https://huggingface.co/api/spaces?sort=likes&direction=-1&limit=6', document.getElementById('hf-spaces'), '🚀', 'https://huggingface.co/spaces/', 'quicksilver://space/', FALLBACK_SPACES);
   })();
 </script>
 </body>

@@ -180,6 +180,14 @@ function welcomeCardHTML() {
   </div>`;
 }
 
+// Route an "Open in Quicksilver" deep link to the right in-app flow.
+function routeDeepLink(d) {
+  if (!d || !d.kind) return;
+  if (d.kind === 'model' && typeof chooseQuant === 'function') { go({ view: 'models' }); toast(`Opening ${d.id} from Hugging Face…`); setTimeout(() => { try { chooseQuant(d.id); } catch {} }, 250); }
+  else if (d.kind === 'space' && typeof runSpaceModal === 'function') { go({ view: 'spaces' }); setTimeout(() => { try { runSpaceModal(d.id); } catch {} }, 250); }
+  else go({ view: 'home' });
+}
+
 async function init() {
   S.catalog = await qs.call('catalog:get');
   mergeRemoteRecipes();
@@ -256,6 +264,10 @@ async function init() {
     render();
   });
   qs.onModelError(({ id, message, cancelled }) => { delete S.downloads[id]; paintDownloads(); if (document.getElementById('addon-list')) document.getElementById('addon-list').innerHTML = liquidAddonsHTML(); if (gateItems.some((m) => m.catalogId === id)) { gateFailed[id] = message; paintLiquidGate(); } if (!cancelled) toast(message, 8000); else toast(message); if (['models', 'stacks', 'studio'].includes(S.route.view)) render(); });
+
+  // "Open in Quicksilver" deep links (quicksilver://model/… or …/space/…): route to the add flow.
+  qs.onDeepLink?.(routeDeepLink);
+  qs.call('app:consumeDeepLink').then((d) => d && setTimeout(() => routeDeepLink(d), 400)).catch(() => {});
 
   go({ view: 'home' });
   // People updating get the short tour once too (new people see it after the name question).

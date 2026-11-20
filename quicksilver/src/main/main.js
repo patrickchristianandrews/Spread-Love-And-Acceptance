@@ -945,7 +945,23 @@ function createWindow() {
   win.webContents.on('will-navigate', (ev) => ev.preventDefault());
 }
 
-app.whenReady().then(() => { try { require('./guide').start(); require('./catalog-remote').start(() => emit('app:event', { kind: 'catalog' })); } catch {} }).then(() => {
+// ---------- deep links ----------
+// "Open in Quicksilver" from a web page: quicksilver://model/<owner>/<repo> adds that Hugging Face
+// model, quicksilver://space/<owner>/<repo> opens that Space's run panel — the desktop-app
+// integration Hugging Face model pages use. Safe: only two shapes, both owner/name, nothing else.
+const { parseDeepLink } = require('./deeplink');
+try { if (process.defaultApp && process.argv[1]) app.setAsDefaultProtocolClient('quicksilver', process.execPath, [path.resolve(process.argv[1])]); else app.setAsDefaultProtocolClient('quicksilver'); } catch {}
+let pendingDeepLink = parseDeepLink((process.argv || []).find((a) => String(a).startsWith('quicksilver://')) || '');
+const routeDeepLink = (urlOrObj) => { const d = typeof urlOrObj === 'string' ? parseDeepLink(urlOrObj) : urlOrObj; if (!d) return; if (win && !win.isDestroyed()) { if (win.isMinimized()) win.restore(); win.focus(); emit('app:deeplink', d); } else pendingDeepLink = d; };
+const gotLock = app.requestSingleInstanceLock();
+if (!gotLock) app.quit();
+else {
+  app.on('second-instance', (_e, argv) => { if (win) { if (win.isMinimized()) win.restore(); win.focus(); } const link = (argv || []).find((a) => String(a).startsWith('quicksilver://')); if (link) routeDeepLink(link); });
+  app.on('open-url', (e, url) => { e.preventDefault(); routeDeepLink(url); });
+}
+handle('app:consumeDeepLink', () => { const d = pendingDeepLink; pendingDeepLink = null; return d || null; });
+
+if (gotLock) app.whenReady().then(() => { try { require('./guide').start(); require('./catalog-remote').start(() => emit('app:event', { kind: 'catalog' })); } catch {} }).then(() => {
   // Gallery files are served to the interface by id only, never by arbitrary path.
   protocol.handle('qsmedia', (req) => {
     // Pictures from the web, downloaded by the picture search (qsmedia://w/<file>).
