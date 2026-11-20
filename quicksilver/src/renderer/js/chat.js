@@ -860,11 +860,13 @@ async function generate(chat, rerollMsg, withTarget, opts = {}) {
   if (skill) { alt.skillId = skill.id; alt.forceFact = Boolean(skill.tools?.factCheck); }
   // Tools that work straight on your files (and reading aloud) don't need a text model.
   if (skill && DIRECT_OUTPUTS.has(skill.output)) { runDirectSkill(chat, msg, alt, skill, lastUser); return; }
-  // Instant weather: a plain "what's the weather" shouldn't wait on a web search AND a model write.
-  // Fetch the live forecast and finish right away with the visual card + a one-line summary.
-  if (!skill && !opts.fix && lastUser?.text && !S.config?.offline && S.config?.web?.provider !== 'none'
-    && WEATHER_Q.test(lastUser.text) && lastUser.text.length <= 120
-    && !/\b(why|explain|history|climate change|global warming|compare|affect|average|record|dataset|trend|data)\b/i.test(lastUser.text)) {
+  // Weather is answered from LIVE data only — never the model, which would invent temperatures and
+  // conditions. Any weather-dominant question takes this path: show the card + a summary built from
+  // the real numbers, and if the live lookup fails, say so honestly rather than guessing.
+  const weatherAsk = !skill && !opts.fix && lastUser?.text && !S.config?.offline && S.config?.web?.provider !== 'none'
+    && WEATHER_Q.test(lastUser.text)
+    && !/\b(why|how does|how do|explain|history|historical|climate change|global warming|compare|caused?|average|record|dataset|trend|data set)\b/i.test(lastUser.text);
+  if (weatherAsk) {
     alt.status = 'Checking the forecast…'; paintStreaming(chat, msg);
     try {
       const wx = await qs.call('web:weather', lastUser.text, {});
@@ -872,7 +874,7 @@ async function generate(chat, rerollMsg, withTarget, opts = {}) {
       if (wx && wx.current) {
         (alt.toolCalls ||= []).push({ id: 'autowx', name: 'weather', source: 'Live weather', status: 'done', result: `Current forecast for ${wx.place}.\n[[weather:${JSON.stringify(wx)}]]` });
         const d0 = wx.days?.[0]; const ni = wxInfo(wx.current.code, wx.current.isDay);
-        let s = `Right now it's ${wx.current.temp}${wx.unit}, ${String(ni.label).toLowerCase()} in ${wx.place}`;
+        let s = `Right now it's ${wx.current.temp}${wx.unit}, ${String(ni.label).toLowerCase()} in ${wx.place} (feels like ${wx.current.feels}${wx.unit})`;
         if (d0) s += ` — today's high ${d0.max}°, low ${d0.min}°`;
         const wet = (wx.days || []).find((d) => d.pop != null && d.pop >= 50);
         if (wet) s += `${wet === d0 ? ', with a good chance of ' : `; later this week expect `}${wx.current.temp <= 1 ? 'snow' : 'rain'}`;
@@ -886,8 +888,20 @@ async function generate(chat, rerollMsg, withTarget, opts = {}) {
         return;
       }
       (alt.toolCalls || []).pop();
-    } catch { (alt.toolCalls || []).pop(); /* fall through to a normal answer */ }
-    delete alt.status;
+      alt.text = "I couldn't pull a live forecast just now. Tell me the city (e.g. “weather in Austin”) and I'll try again.";
+    } catch (e) {
+      (alt.toolCalls || []).pop();
+      const msgTxt = String(e?.message || e);
+      alt.text = /No location|find a place/i.test(msgTxt)
+        ? `I need a city for that — try “weather in <your city>”.`
+        : `I couldn't reach the live weather service just now (${msgTxt.slice(0, 80)}). Try again in a moment, or tell me the city.`;
+    }
+    alt.error = false; alt.autoWeb = false;
+    delete alt.status; if (alt.t0) { alt.ms = Date.now() - alt.t0; delete alt.t0; }
+    pending = null; chat.updated = now();
+    if (chat.title === 'New chat' && chat.messages[0]?.text) chat.title = chat.messages[0].text.replace(/\s+/g, ' ').slice(0, 60);
+    save(); if (S.route.view === 'chat') render(); else renderChatList();
+    return;
   }
   const force = skill?.tools || {};
   if ((chat.library ?? a.library) || webWanted(chat, a, lastUser?.text || '', force) || force.knowledge) { alt.status = 'Searching sources…'; paintStreaming(chat, msg); }
