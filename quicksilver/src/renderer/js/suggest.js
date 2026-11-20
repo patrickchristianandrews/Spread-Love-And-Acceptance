@@ -141,7 +141,7 @@ function bindSuggest(root = document) {
   root.querySelector('#sug-base')?.addEventListener('change', (e) => { sugState.base = e.target.value; redraw(); });
   box.querySelectorAll('[data-sug-task]').forEach((b) => b.addEventListener('click', () => { sugState.task = b.dataset.sugTask; redraw(); }));
   box.querySelectorAll('[data-sug-get]').forEach((b) => b.addEventListener('click', async () => { b.disabled = true; try { await download({ catalogId: b.dataset.sugGet }, b.dataset.sugName); toast(`Downloading ${b.dataset.sugName}. When it's done, add it here in one click.`, 6000); } catch (err) { b.disabled = false; toast(err.message); } }));
-  box.querySelectorAll('[data-sug-api]').forEach((b) => b.addEventListener('click', () => { closeModal(); modelsTab = 'api'; go({ view: 'models' }); toast(`Connect ${b.dataset.sugApi} here.`, 5000); }));
+  box.querySelectorAll('[data-sug-api]').forEach((b) => b.addEventListener('click', () => { closeModal(); go({ view: 'apis' }); toast(`Connect ${b.dataset.sugApi} here.`, 5000); }));
   box.querySelectorAll('[data-sug-join]').forEach((b) => b.addEventListener('click', async () => {
     const base = fixed || sugState.base;
     const s = S.stacks.find((x) => `stack:${x.id}` === base);

@@ -250,7 +250,7 @@ function needModel(chat) {
     else if (nm === 'teams') go({ view: 'stacks' });
     else if (nm === 'browse') { modelsTab = 'text'; go({ view: 'models' }); }
     else if (nm === 'found') { modelsTab = 'installed'; go({ view: 'models' }); setTimeout(() => (typeof foundModal === 'function' && (S.found || []).length ? foundModal() : $('#find-models')?.click()), 120); }
-    else if (nm === 'api') { modelsTab = 'api'; go({ view: 'models' }); }
+    else if (nm === 'api') { go({ view: 'apis' }); }
   });
 }
 
@@ -514,7 +514,7 @@ function bindChat() {
   $('#mic-btn').addEventListener('click', () => toggleVoice(chat));
   $('#improve-btn').addEventListener('click', () => improvePromptBox(chat));
   $('#opts-btn').addEventListener('click', (e) => composerOptions(chat, e.currentTarget));
-  $('#add-api-chip')?.addEventListener('click', () => { modelsTab = 'api'; go({ view: 'models' }); });
+  $('#add-api-chip')?.addEventListener('click', () => { go({ view: 'apis' }); });
   $('[data-chat-settings]')?.addEventListener('click', (e) => { e.preventDefault(); chatSettings(chat); });
   $('[data-use-uncensored]')?.addEventListener('click', (e) => { chat.target = e.currentTarget.dataset.useUncensored; chat.auto = false; save(); render(); toast('Switched to the uncensored model.'); });
   scrollDown(true);

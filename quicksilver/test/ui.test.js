@@ -584,7 +584,7 @@ function redPng(size = 64) {
   assert.equal(await win.locator('#skill-btn').count(), 0, 'no standalone skill icon');
   assert.equal(await win.locator('#file-in').count(), 1, 'the file input is still there for attachments');
   await win.click('.opts-menu [data-o="add-api"]');
-  await win.waitForFunction(() => S.route.view === 'models' && modelsTab === 'api', null, { timeout: 10000 });
+  await win.waitForFunction(() => S.route.view === 'apis', null, { timeout: 10000 });
   await win.evaluate((id) => { go({ view: 'chat', id }); }, backTo2);
   assert.equal(await win.locator('#add-api-chip').count(), 0, 'the message bar stays tidy: Cloud AI is in the ＋ menu');
   await win.evaluate(() => { S.data.prefs.simple = false; applySimple?.(); });
@@ -1307,7 +1307,7 @@ function redPng(size = 64) {
     assert.match(b.why, /out of 10/);
   }
   console.log('✓ better for your PC: a clearly better model of any family for the same job, matched to this PC');
-  await win.click('[data-tab="api"]');
+  await win.evaluate(() => go({ view: 'apis' }));
   await win.waitForSelector('text=Anthropic (Claude)');
   await win.waitForSelector('#presets h3:has-text("Free to start, then paid")');
   assert.equal(await win.locator('#presets h3:has-text("on this PC")').count(), 0, 'no "Free, on this PC" group');
@@ -1323,7 +1323,7 @@ function redPng(size = 64) {
   assert.ok(await win.locator('#presets .card:has-text("Pollinations")').count(), 'the free no-key Pollinations text option is listed');
   await win.waitForSelector('.fusion-card #fusion-open');
   await shot(win, '05b-api-free');
-  await win.evaluate(() => { modelsTab = 'text'; render(); });
+  await win.evaluate(() => { modelsTab = 'text'; go({ view: 'models' }); });
   await win.waitForSelector('.addon:has-text("Memory"):has-text("like Mem0")');
   assert.ok(await win.locator('.addon:has-text("local RAG")').count() === 1 && await win.locator('.addon .addon-effect').count() >= 8);
   await win.locator('.addon-grid').scrollIntoViewIfNeeded();

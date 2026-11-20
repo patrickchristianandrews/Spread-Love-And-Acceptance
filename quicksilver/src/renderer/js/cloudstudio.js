@@ -58,7 +58,7 @@ function cloudStudioHTML() {
 }
 
 function bindCloudStudio() {
-  $$('[data-cs-connect]').forEach((b) => b.addEventListener('click', (e) => { e.preventDefault(); const n = cloudModels[b.dataset.csConnect]?.name || b.dataset.csConnect; modelsTab = 'api'; go({ view: 'models' }); toast(`Add "${n}" with your key.`, 6000); }));
+  $$('[data-cs-connect]').forEach((b) => b.addEventListener('click', (e) => { e.preventDefault(); const n = cloudModels[b.dataset.csConnect]?.name || b.dataset.csConnect; go({ view: 'apis' }); toast(`Add "${n}" with your key.`, 6000); }));
   $('#cs-rep')?.addEventListener('change', (e) => { S.data.prefs[`cloud_rep_${cloudKind}`] = e.target.value.trim(); save(); });
   $$('[data-cs-kind]').forEach((b) => b.addEventListener('click', () => { cloudKind = b.dataset.csKind; render(); }));
   $$('input[name="cs-model"]').forEach((r) => r.addEventListener('change', () => { S.data.prefs[`cloud_${cloudKind}`] = r.value; save(); render(); }));

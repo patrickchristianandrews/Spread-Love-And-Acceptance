@@ -133,7 +133,7 @@ views.home = {
         ${tile('✨', 'AI teams', S.stacks.length, S.stacks[0] ? esc(S.stacks[0].name) : 'combine several AIs into one', 'stacks')}
         ${tile('🎨', 'Image & video models', media.length, media.length ? 'image & video ready' : 'create & edit photos and video', 'studio')}
         ${tile('🖥️', 'Hardware', h ? `${h.ramGB.toFixed(0)} GB` : '…', h ? esc(h.vramGB ? `${h.gpuName} · ${h.vramGB.toFixed(0)} GB video` : 'running on the processor') : 'checking…', 'pc')}
-        ${tile('☁️', 'Cloud APIs', cloud, cloud ? esc(S.providers.map((p) => p.name).join(', ')) : 'optional: Claude, GPT, Gemini…', 'models')}
+        ${tile('☁️', 'Cloud APIs', cloud, cloud ? esc(S.providers.map((p) => p.name).join(', ')) : 'optional: Claude, GPT, Gemini…', 'apis')}
         ${tile('🔌', 'API server', api?.running ? 'On' : 'Off', api?.running ? `127.0.0.1:${api.port}` : 'let other apps use your models', 'settings')}
       </div>
       <div class="section"><h2>Start something</h2></div>
@@ -156,7 +156,7 @@ views.home = {
     $('#wc-chat')?.addEventListener('click', () => { S.data.prefs.welcomed = true; save(); newChat(); });
     $('#wc-import')?.addEventListener('click', () => { setTab = 'general'; go({ view: 'settings' }); setTimeout(() => $('#imp-file')?.click(), 250); });
     $('#wc-setup')?.addEventListener('click', () => go({ view: 'stacks' }));
-    $('#wc-cloud')?.addEventListener('click', () => { S.data.prefs.welcomed = true; save(); modelsTab = 'api'; go({ view: 'models' }); });
+    $('#wc-cloud')?.addEventListener('click', () => { S.data.prefs.welcomed = true; save(); go({ view: 'apis' }); });
     bindNameAsk();
   },
 };

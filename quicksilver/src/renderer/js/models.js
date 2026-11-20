@@ -10,7 +10,7 @@ let fitsOnly = false;
 
 views.models = {
   html() {
-    const tabs = { installed: `On this PC (${S.installed.length})`, text: 'Text & vision', media: 'Images & video', trending: '🔥 Trending now', hf: 'Search Hugging Face', api: `Connect an API (${S.providers.length})` };
+    const tabs = { installed: `On this PC (${S.installed.length})`, text: 'Text & vision', media: 'Images & video', trending: '🔥 Trending now', hf: 'Search Hugging Face' };
     return `<div class="page">
       <div class="page-head"><h1>Models</h1>
         <button class="btn" id="find-models">Find models on this PC</button><button class="btn" id="import-gguf">Import a .gguf file</button><button class="btn ghost" id="open-folder">Open models folder</button></div>
@@ -18,7 +18,7 @@ views.models = {
       ${foundBanner()}
       ${shownUpgrades().length || shownStackUpdates().length ? modelUpdatesHTML() : ''}
       <div class="tabs" role="tablist">${Object.entries(tabs).map(([k, l]) => `<button class="tab ${modelsTab === k ? 'active' : ''}" data-tab="${k}" role="tab">${esc(l)}</button>`).join('')}</div>
-      ${({ installed: installedHTML, text: textHTML, media: mediaHTML, trending: trendingHTML, hf: hfHTML, api: apiHTML })[modelsTab]()}
+      ${({ installed: installedHTML, text: textHTML, media: mediaHTML, trending: trendingHTML, hf: hfHTML })[modelsTab]()}
       ${['installed', 'text'].includes(modelsTab) ? `<div class="section sf-new"><h2>Built into Quicksilver</h2><span class="small muted">The Liquid Edition that comes with the app, its optional add-ons and its cloud partner.</span></div>${builtinModelHTML()}${addonsHTML()}` : ''}
       ${!(shownUpgrades().length || shownStackUpdates().length) && modelsTab === 'installed' ? modelUpdatesHTML() : ''}
     </div>`;
@@ -72,7 +72,22 @@ views.models = {
     $('#fits-only')?.addEventListener('change', (e) => { fitsOnly = e.target.checked; render(); });
     bindHf();
     if (modelsTab === 'trending') bindTrending();
+  },
+};
+
+// Cloud AIs — its own page (was the "Connect an API" tab on Models). Keeps Models about the models
+// you run on this PC, and gives the cloud connections room of their own.
+views.apis = {
+  html() {
+    return `<div class="page">
+      <div class="page-head"><h1>Cloud AIs</h1></div>
+      ${apiHTML()}
+    </div>`;
+  },
+  bind() {
+    if (!S.est) refreshEstimates().then(() => S.route.view === 'apis' && render());
     bindApi();
+    if (S.providers?.length) runApiHealth();
   },
 };
 
@@ -355,14 +370,50 @@ const FREE_BADGE = {
   paid: '<span class="badge b-peach">$ Paid</span>',
 };
 
+// Per-provider connection status, so each card can say if it's working and, if not, how to fix it.
+// id -> { ok, why?, fix? }; set by the health check, a manual Test, or a save/refresh.
+const apiCheck = {};
+let apiHealthRun = false;
+function friendlyApiError(err, pre) {
+  const m = String((err && err.message) || err || '');
+  const key = pre?.keyUrl ? ` <a href="${esc(pre.keyUrl)}" title="Opens ${esc(pre.keyUrl)}">Get a fresh key →</a>` : '';
+  if (/401|403|unauthor|invalid.*key|forbidden|api key|no key/i.test(m)) return { why: 'The API key was rejected or missing. It may be wrong, expired, or out of free quota.', fix: 'Add or replace the key (Edit).' + key };
+  if (/enotfound|getaddrinfo|fetch failed|network|timed? ?out|econn|dns|reach/i.test(m)) return { why: `Couldn't reach ${esc(pre?.name || 'the service')}.`, fix: 'Check the address (base URL) and your internet.' };
+  if (/404|not found/i.test(m)) return { why: 'The address returned 404 — the base URL or model path looks wrong.', fix: 'Edit it and make sure the base URL ends in /v1 (or the right path).' };
+  if (/429|rate|quota|limit/i.test(m)) return { why: 'The free limit was hit (too many requests, or the daily quota is used up).', fix: 'Wait and try again, or check the plan.' + (pre?.priceUrl ? ` <a href="${esc(pre.priceUrl)}">Limits →</a>` : '') };
+  if (/no model/i.test(m)) return { why: 'No model is listed for this connection, so it can\'t be tested.', fix: 'Edit it and press "Load the live list".' };
+  return { why: m || 'The connection test failed.', fix: 'Edit it to check the key and address.' + key };
+}
+function setApiCheck(id, pre, err) { apiCheck[id] = err ? { ok: false, ...friendlyApiError(err, pre) } : { ok: true }; }
+function providerStatusBadge(p) {
+  const c = apiCheck[p.id];
+  if (c && c.ok) return '<span class="badge b-mint">✓ working</span>';
+  if (c && !c.ok) return '<span class="badge b-pink">⚠ not working</span>';
+  return p.hasKey || p.noKey ? '<span class="badge b-mint">✓ connected</span>' : '<span class="badge b-pink">needs key</span>';
+}
+function providerIssueHTML(p) {
+  const c = apiCheck[p.id];
+  if (!c || c.ok) return '';
+  return `<div class="notice" style="margin:8px 0;border-color:#e0416a;background:rgba(224,65,106,.1)"><b>⚠ Not working.</b> ${c.why} <span class="small"><b>Fix:</b> ${c.fix}</span></div>`;
+}
+// On opening the Cloud AIs page, quietly test every connected provider and show the result.
+async function runApiHealth(force) {
+  if (apiHealthRun && !force) return;
+  apiHealthRun = true;
+  let presets = {}; try { presets = await qs.call('providers:presets'); } catch {}
+  let res = []; try { res = await qs.call('providers:health'); } catch { return; }
+  res.forEach((r) => { const p = S.providers.find((x) => x.id === r.id); setApiCheck(r.id, presets[p?.preset], r.ok ? null : (r.error || 'not reachable')); });
+  if (S.route.view === 'apis') render();
+}
 function apiHTML() {
   return `<p class="muted">Optional. Connect cloud AI services to use their models next to your local ones, as the lead of a team, as your double-checker, or for image generation. Keys are encrypted on this PC and only sent to that service.</p>
     ${fusionHTML()}
     ${S.providers.length ? `<div class="section"><h2>Connected (${S.providers.length})</h2><span class="small muted">Connect as many as you like, even two accounts with the same service: each appears separately in every model menu.</span></div><div class="cards">${S.providers.map((p) => `<div class="card">
-      <div class="row"><h3 class="grow">${esc(p.name)}</h3>${p.hasKey || p.noKey ? '<span class="badge b-mint">✓ connected</span>' : '<span class="badge b-pink">needs key</span>'}</div>
+      <div class="row"><h3 class="grow">${esc(p.name)}</h3>${providerStatusBadge(p)}</div>
       <div class="meta" style="margin:4px 0 8px">${esc(p.baseUrl)}</div>
+      ${providerIssueHTML(p)}
       <div class="row small" style="margin-bottom:10px">${(p.models || []).slice(0, 8).map((m) => `<span class="badge b-lav">${esc(m)}</span>`).join('')}${(p.models || []).length > 8 ? `<span class="small muted">+${p.models.length - 8} more</span>` : ''}${(p.imageModels || []).map((m) => `<span class="badge b-peach">🎨 ${esc(m)}</span>`).join('')}</div>
-      <div class="row"><button class="btn small" data-api-refresh="${p.id}">Refresh models</button><button class="btn small" data-api-edit="${p.id}">Edit</button><button class="btn small danger" data-api-del="${p.id}">Remove</button></div>
+      <div class="row"><button class="btn small" data-api-test="${p.id}">Test</button><button class="btn small" data-api-refresh="${p.id}">Refresh models</button><button class="btn small" data-api-edit="${p.id}">Edit</button><button class="btn small danger" data-api-del="${p.id}">Remove</button></div>
     </div>`).join('')}</div>` : ''}
     ${S.providers.length > 1 ? '<div class="notice info" style="margin-bottom:12px">☁️ <b>Several cloud AIs connected.</b> On Automatic, Quicksilver picks the best one for each question — a strong coder for code, a research model for research, and so on — and your 👍/👎 refine the choice over time. Pick one by hand at the top of any chat to override it.</div>' : ''}
     <div class="section"><h2>Add a connection</h2><button class="btn small" data-api-dir="all" title="Every service in one list: by task, free or paid, what the free plan gives you, with a link to each">📒 API directory: by task, free vs paid</button><span class="small muted">Every cloud AI that works with Quicksilver, marked free or paid, with the best model to use. <a href="#" data-guide="apis">Which should I choose? What's a dev plan? Calculator: alone vs through Quicksilver</a></span></div>
@@ -382,10 +433,9 @@ document.addEventListener('click', (e) => {
 });
 
 async function bindApi() {
-  if (modelsTab !== 'api') return;
-  const presets = await qs.call('providers:presets');
   const box = $('#presets');
   if (!box) return;
+  const presets = await qs.call('providers:presets');
   // Free options first, so people can try cloud models without paying.
   const groups = [['Free', (p) => p.free === 'free'], ['Free to start, then paid', (p) => p.free === 'some'], ['Paid', (p) => p.free === 'paid'], ['Other', (p) => !p.free]];
   box.innerHTML = `<p class="small muted" style="margin:-4px 0 12px">Free plans have daily limits and can change; each card links to the current prices.</p>` + groups.map(([title, test]) => {
@@ -403,28 +453,73 @@ async function bindApi() {
   $$('[data-preset]').forEach((b) => b.addEventListener('click', () => editProvider({ preset: b.dataset.preset }, presets)));
   $$('[data-api-edit]').forEach((b) => b.addEventListener('click', () => editProvider(S.providers.find((p) => p.id === b.dataset.apiEdit), presets)));
   $$('[data-api-del]').forEach((b) => b.addEventListener('click', async () => { if (!(await confirmBox('Remove this connection and its saved key?'))) return; await call('providers:remove', b.dataset.apiDel); await refreshProviders(); render(); }));
-  $$('[data-api-refresh]').forEach((b) => b.addEventListener('click', async () => { b.disabled = true; try { await call('providers:refresh', b.dataset.apiRefresh); await refreshProviders(); render(); toast('Model list updated.'); } catch { b.disabled = false; } }));
+  $$('[data-api-refresh]').forEach((b) => b.addEventListener('click', async () => {
+    const id = b.dataset.apiRefresh; b.disabled = true;
+    try { await call('providers:refresh', id); setApiCheck(id, presets[S.providers.find((p) => p.id === id)?.preset], null); await refreshProviders(); render(); toast('Model list updated.'); }
+    catch (err) { const pre = presets[S.providers.find((p) => p.id === id)?.preset]; setApiCheck(id, pre, err); render(); const fe = friendlyApiError(err, pre); toastAction(`${S.providers.find((p) => p.id === id)?.name || 'This API'}: ${fe.why.replace(/<[^>]+>/g, '')}`, 'Fix it', () => editProvider(S.providers.find((p) => p.id === id), presets)); }
+  }));
+  $$('[data-api-test]').forEach((b) => b.addEventListener('click', async () => {
+    const id = b.dataset.apiTest, pre = presets[S.providers.find((p) => p.id === id)?.preset];
+    b.disabled = true; b.textContent = 'Testing…';
+    try { const r = await qs.call('providers:ping', id); setApiCheck(id, pre, r.ok ? null : (r.error || 'the test failed')); render(); toast(r.ok ? 'Working ✓' : 'Not working — see the card for how to fix it.', r.ok ? 3000 : 6000); }
+    catch (err) { setApiCheck(id, pre, err); render(); }
+  }));
 }
 
 function editProvider(p, presets) {
   const pre = presets[p.preset];
+  // The models we can offer as a pick-list: the ones already saved, else the preset's suggestions.
+  // "Load the live list" replaces them with whatever the service actually offers right now.
+  let shown = (p.models && p.models.length ? p.models : (pre.models || [])).slice();
+  const chosen = new Set(p.id ? (p.models || []) : shown); // a new connection pre-ticks the suggestions
+  const modelsListHTML = () => shown.length
+    ? shown.map((m) => `<label class="row" style="gap:8px;align-items:center;padding:3px 0"><input type="checkbox" data-m="${esc(m)}" ${chosen.has(m) ? 'checked' : ''}><code class="grow">${esc(m)}</code>${m === pre.best ? '<span class="badge b-lemon">⭐ best</span>' : ''}</label>`).join('')
+    : '<span class="small muted">No models listed yet — press "Load the live list" to pull them, or add one by name below.</span>';
   const b = openModal(`<h2>${p.id ? 'Edit' : 'Connect'} ${esc(pre.name)}</h2>
     <div class="stack-v">
       <div class="field"><label for="pv-name">Name</label><input id="pv-name" value="${esc(p.name || pre.name)}"></div>
       <div class="field"><label for="pv-url">Address (base URL)</label><input id="pv-url" value="${esc(p.baseUrl || pre.baseUrl)}" ${p.preset === 'custom' ? 'placeholder="https://…/v1"' : ''}></div>
       ${pre.freeNote ? `<div class="notice ${['free', 'some', 'local'].includes(pre.free) ? 'info' : ''}" style="margin:0">${FREE_BADGE[pre.free] || ''} ${esc(pre.freeNote)}${pre.priceUrl ? ` <a href="${esc(pre.priceUrl)}">Current prices and limits</a>` : ''}</div>` : ''}
       ${pre.noKey ? '' : `<div class="field"><label for="pv-key">API key</label><span class="help">${p.hasKey ? 'A key is saved. Paste a new one to replace it.' : (pre.keyUrl ? `🔑 <a href="${esc(pre.keyUrl)}" title="Opens ${esc(pre.keyUrl)}">Get your API key from ${esc(pre.name)} →</a> (opens in your browser), then paste it here.` : 'Paste your key from the provider\'s website.')}</span><input id="pv-key" type="password" autocomplete="off" placeholder="Paste key"></div>`}
-      <div class="field"><label for="pv-models">Models</label><span class="help">One per line. Leave empty and press "Save & load models" to fetch the list.</span><textarea id="pv-models" rows="4">${esc((p.models || pre.models || []).join('\n'))}</textarea></div>
+      <div class="field"><label>Models to use</label><span class="help">Tick the ones to use in chats. ${pre.noKey ? '' : 'Enter your key first, then '}<b>Load the live list</b> pulls every model ${esc(pre.name)} offers right now.</span>
+        <div class="row" style="gap:8px;margin:6px 0"><button type="button" class="btn small" id="pv-load">↻ Load the live list</button><span class="small muted" id="pv-load-msg"></span></div>
+        <div id="pv-models-list" class="stack-v" style="max-height:220px;overflow:auto;border:1px solid var(--line);border-radius:8px;padding:8px">${modelsListHTML()}</div>
+        <div class="row" style="gap:6px;margin-top:6px"><input id="pv-add-name" class="grow" placeholder="Add a model by exact name"><button type="button" class="btn small ghost" id="pv-add">Add</button></div></div>
       <div class="field"><label for="pv-img">Image models (optional)</label><input id="pv-img" value="${esc((p.imageModels || pre.imageModels || []).join(', '))}" placeholder="e.g. gpt-image-1"></div>
       <label class="row"><input type="checkbox" id="pv-vision" ${(p.vision ?? pre.vision) ? 'checked' : ''}> <b>Its models can see images</b></label>
     </div>
-    <div class="modal-actions"><button class="btn" data-close>Cancel</button><button class="btn primary" id="pv-save">Save & load models</button></div>`);
+    <div class="modal-actions"><button class="btn" data-close>Cancel</button><button class="btn primary" id="pv-save">Save</button></div>`);
+  const syncChosen = () => b.querySelectorAll('#pv-models-list [data-m]').forEach((cb) => { if (cb.checked) chosen.add(cb.dataset.m); else chosen.delete(cb.dataset.m); });
+  const redrawList = () => { b.querySelector('#pv-models-list').innerHTML = modelsListHTML(); };
+  const collect = () => ({ ...p, name: b.querySelector('#pv-name').value.trim(), baseUrl: b.querySelector('#pv-url').value.trim(), imageModels: b.querySelector('#pv-img').value.split(',').map((x) => x.trim()).filter(Boolean), vision: b.querySelector('#pv-vision').checked });
+  b.querySelector('#pv-add').addEventListener('click', () => { syncChosen(); const v = b.querySelector('#pv-add-name').value.trim(); if (!v) return; if (!shown.includes(v)) shown.push(v); chosen.add(v); b.querySelector('#pv-add-name').value = ''; redrawList(); });
+  b.querySelector('#pv-load').addEventListener('click', async () => {
+    syncChosen();
+    const entry = collect(); if (!entry.baseUrl) { toast('Enter the address first.'); return; }
+    const loadBtn = b.querySelector('#pv-load'), msg = b.querySelector('#pv-load-msg');
+    loadBtn.disabled = true; msg.textContent = 'Loading…';
+    try {
+      const saved = await call('providers:save', entry, b.querySelector('#pv-key')?.value || '');
+      p.id = saved.id;
+      const refreshed = await qs.call('providers:refresh', saved.id);
+      const live = (refreshed && refreshed.models) || [];
+      setApiCheck(saved.id, pre, null);
+      shown = live.slice(); live.forEach((m) => chosen.add(m));
+      await refreshProviders(); redrawList();
+      msg.textContent = `${live.length} model${live.length === 1 ? '' : 's'} loaded — tick the ones you want.`;
+    } catch (err) { const fe = friendlyApiError(err, pre); setApiCheck(p.id, pre, err); msg.innerHTML = `<span style="color:#e0416a">${fe.why} ${fe.fix}</span>`; }
+    finally { loadBtn.disabled = false; }
+  });
   b.querySelector('#pv-save').addEventListener('click', async () => {
-    const entry = { ...p, name: b.querySelector('#pv-name').value.trim(), baseUrl: b.querySelector('#pv-url').value.trim(), models: b.querySelector('#pv-models').value.split('\n').map((x) => x.trim()).filter(Boolean), imageModels: b.querySelector('#pv-img').value.split(',').map((x) => x.trim()).filter(Boolean), vision: b.querySelector('#pv-vision').checked };
+    syncChosen();
+    const entry = collect(); entry.models = shown.filter((m) => chosen.has(m));
     if (!entry.baseUrl) { toast('Enter the address.'); return; }
     const saved = await call('providers:save', entry, b.querySelector('#pv-key')?.value || '');
     closeModal();
-    try { await qs.call('providers:refresh', saved.id); toast('Connected. Model list loaded.'); } catch (err) { toast(`Saved, but loading models failed: ${err.message}`, 7000); }
+    if (!entry.models.length) {
+      try { await qs.call('providers:refresh', saved.id); setApiCheck(saved.id, pre, null); toast('Connected. Model list loaded.'); }
+      catch (err) { setApiCheck(saved.id, pre, err); const fe = friendlyApiError(err, pre); toastAction(`${pre.name}: ${fe.why.replace(/<[^>]+>/g, '')}`, 'Fix it', () => { const sp = S.providers.find((x) => x.id === saved.id); editProvider(sp || { preset: p.preset }, presets); }); }
+    } else { setApiCheck(saved.id, pre, null); toast('Saved.'); }
     await refreshProviders(); render();
   });
 }

@@ -97,7 +97,7 @@ function bindStacksMore(r) {
   $$('[data-tier]').forEach((b) => b.addEventListener('click', () => createTier(r, b.dataset.tier)));
   $$('[data-cloud-connect]').forEach((b) => b.addEventListener('click', async () => {
     const presets = await loadPresets();
-    modelsTab = 'api'; go({ view: 'models' });
+    go({ view: 'apis' });
     setTimeout(() => editProvider({ preset: b.dataset.cloudConnect }, presets), 60);
   }));
   $$('[data-cloud-add]').forEach((b) => b.addEventListener('click', () => addCloud(r, b.dataset.cloudAdd)));

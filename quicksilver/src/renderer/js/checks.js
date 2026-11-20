@@ -300,5 +300,5 @@ function speedNudge(chat, msg, alt) {
   const close = () => { box.hidden = true; S.speedNagged = true; };
   box.querySelector('.st-x').onclick = close;
   box.querySelectorAll('[data-st]').forEach((b) => b.addEventListener('click', () => { opts[Number(b.dataset.st)][2](); save(); toast(`${opts[Number(b.dataset.st)][0]} turned off.`); close(); render(); }));
-  box.querySelector('[data-st-api]')?.addEventListener('click', () => { close(); modelsTab = 'api'; go({ view: 'models' }); });
+  box.querySelector('[data-st-api]')?.addEventListener('click', () => { close(); go({ view: 'apis' }); });
 }

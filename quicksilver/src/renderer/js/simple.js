@@ -219,7 +219,7 @@ function composerOptions(chat, anchor) {
     if (o === 'settings') chatSettings(chat);
     else if (o === 'file-in') $('#file-in')?.click();
     else if (o === 'skill-pop') { const p = $('#skill-pop'); if (p) { p.innerHTML = skillPickerHTML(''); p.hidden = false; $('#input')?.focus(); } }
-    else if (o === 'add-api') { modelsTab = 'api'; go({ view: 'models' }); }
+    else if (o === 'add-api') { go({ view: 'apis' }); }
     else if (o === 'tog-tools') { chat.tools = !toolsOn(chat, assistantById(chat.assistantId)); save(); render(); if (chat.tools && !S.hasIntegrations) toast('Connect GitHub, Slack, Notion, Jira, Linear or an MCP server under Connectors first.', 6000); }
     else $(`#${o}`)?.click();
   });

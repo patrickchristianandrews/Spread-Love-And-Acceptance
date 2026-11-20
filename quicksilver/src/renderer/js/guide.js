@@ -233,7 +233,7 @@ function guidePageHTML() {
 function bindGuidePage() {
   $$('[data-guide-tab]').forEach((b) => b.addEventListener('click', () => { guideTab = b.dataset.guideTab; render(); }));
   $$('#main [data-goto]').forEach((b) => b.addEventListener('click', () => go({ view: b.dataset.goto })));
-  $('#guide-connect')?.addEventListener('click', () => { modelsTab = 'api'; go({ view: 'models' }); });
+  $('#guide-connect')?.addEventListener('click', () => { go({ view: 'apis' }); });
   bindCloudCalc();
   bindApiRank();
   bindApiDirectory();

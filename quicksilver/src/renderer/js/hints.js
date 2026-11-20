@@ -145,7 +145,7 @@ function applyHint(chat, h) {
   if (x.effort) { chat.effort = x.effort; save(); render(); return; }
   if (x.attach) { $('#file-in')?.click(); return; }
   if (x.connect) { hintConnectors = null; go({ view: 'integrations' }); return; }
-  if (x.api) { modelsTab = 'api'; go({ view: 'models' }); return; }
+  if (x.api) { go({ view: 'apis' }); return; }
   if (x.getOpen) { go({ view: 'stacks' }); runAdvisor('open'); }
 }
 

@@ -103,7 +103,7 @@ function apisSetHTML() {
   </div>`;
 }
 function bindApisSet() {
-  $('#set-api-add')?.addEventListener('click', () => { modelsTab = 'api'; go({ view: 'models' }); });
+  $('#set-api-add')?.addEventListener('click', () => { go({ view: 'apis' }); });
   $('#set-api-dir')?.addEventListener('click', () => apiDirectoryModal());
   // Each connected cloud AI answers a 1-token request: pass or fail, how long, and which key was used.
   $('#set-api-health')?.addEventListener('click', async (e) => {
@@ -334,5 +334,5 @@ function accountsHTML() {
 function bindAccounts() {
   $('#hf-save').addEventListener('click', async () => { await call('secret:set', 'huggingface', $('#hf-token').value.trim()); S.config = await call('config:get'); render(); toast('Saved.'); });
   $('#hf-del')?.addEventListener('click', async () => { await call('secret:set', 'huggingface', ''); S.config = await call('config:get'); render(); });
-  $('#to-apis').addEventListener('click', (e) => { e.preventDefault(); modelsTab = 'api'; go({ view: 'models' }); });
+  $('#to-apis').addEventListener('click', (e) => { e.preventDefault(); go({ view: 'apis' }); });
 }
