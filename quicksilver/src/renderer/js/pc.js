@@ -166,7 +166,7 @@ const PC_CARDS = [
   ['other', 'Another card (type its memory)', -1, 0, ''],
 ];
 const pcCards = () => PC_CARDS.flatMap((g) => (Array.isArray(g[1]) ? g[1].map(([id, name, vram, bw, lap]) => ({ id, name, vram, bw, laptop: Boolean(lap), amd: /Radeon|Arc/.test(name) })) : [{ id: g[0], name: g[1], vram: g[2], bw: 0 }]));
-S.pcCalc = S.pcCalc || { type: 'desktop', card: 'rtx5060ti16', vram: 16, ram: 32, ddr5: true, disk: 2000 };
+S.pcCalc = S.pcCalc || { type: 'desktop', card: 'rtx5060ti16', vram: 16, ram: 32, ddr5: true, disk: 2000, price: 0 };
 function pcCalcHTML() {
   const c = S.pcCalc;
   const opt = (v, label, sel) => `<option value="${esc(String(v))}" ${String(sel) === String(v) ? 'selected' : ''}>${esc(label)}</option>`;
@@ -180,6 +180,7 @@ function pcCalcHTML() {
       <label>Memory (RAM)<select id="pcc-ram">${[8, 16, 24, 32, 48, 64, 96, 128].map((g) => opt(g, `${g} GB`, c.ram)).join('')}</select></label>
       <label>Memory type<select id="pcc-ddr">${opt('5', 'DDR5 / LPDDR5', c.ddr5 ? '5' : '4')}${opt('4', 'DDR4 (older)', c.ddr5 ? '5' : '4')}</select></label>
       <label>Storage<select id="pcc-disk">${[256, 512, 1000, 2000, 4000, 8000].map((g) => opt(g, g >= 1000 ? `${g / 1000} TB` : `${g} GB`, c.disk)).join('')}</select></label>
+      <label>Price (USD, optional)<input id="pcc-price" type="number" min="0" step="50" placeholder="e.g. 900" value="${c.price ? esc(String(c.price)) : ''}"></label>
     </div>
     <div id="pcc-out" class="pc-calc-out"><div class="muted small">Working it out…</div></div></div>`;
 }
@@ -199,6 +200,22 @@ async function pcCalcRun() {
   const vsText = !vs ? '' : vs >= 1.25 ? `<b>${vs >= 10 ? Math.round(vs) : vs.toFixed(1)}× faster</b> than this PC` : vs < 0.8 ? `<b>${(1 / vs).toFixed(1)}× slower</b> than this PC` : 'about the same as this PC';
   const verdict = vram >= 16 && c.ram >= 32 ? '🚀 Excellent for local AI: big, smart models on the graphics card, pictures and video.' : vram >= 8 ? '✅ Good: fast everyday answers and pictures; the biggest models and video are slow.' : vram ? '🙂 Fine for chat; pictures are slow and video is out of reach.' : '🐢 Chat works on the processor, slowly; pictures and video are best done in the cloud.';
   const where = { gpu: 'graphics card', split: 'card + memory', cpu: 'processor' };
+  // Value: with a price, show how much local-AI speed and model size you get per dollar, and a
+  // plain verdict — so two machines can be compared ("which is the better deal").
+  const price = Number(c.price) || 0;
+  let valueHTML = '';
+  if (price > 0) {
+    const perK = r.wps ? Math.round(r.wps / (price / 1000)) : 0;
+    const dpv = vram ? Math.round(price / vram) : 0;
+    let band; let ic;
+    if (!vram) { band = "Poor value for local AI — you're paying for parts models barely use. A cheaper machine with a real graphics card would run AI far better."; ic = '🔴'; }
+    else if (dpv <= 100 && c.ram >= 32) { band = 'Excellent value for local AI.'; ic = '🟢'; }
+    else if (dpv <= 150) { band = 'Good value for local AI.'; ic = '🟢'; }
+    else if (dpv <= 230) { band = "Fair value — fine, but some of the price is non-AI extras (screen, brand, gaming)."; ic = '🟡'; }
+    else { band = "Pricey for what it runs locally — mostly paying for brand, screen or gaming, not AI power."; ic = '🔴'; }
+    valueHTML = `<div class="pcc-value"><b>${ic} Value:</b> ${esc(band)} <span class="small muted">· ~${perK} words/s per $1,000 · $${dpv}/GB graphics memory${c.ram < 32 ? ` · only ${c.ram} GB RAM caps model size` : ''}</span>
+      <div class="small muted" style="margin-top:2px">Comparing two machines? Enter each one's price: more <b>words/s per $1,000</b> and a lower <b>$/GB graphics memory</b> is the better AI deal.</div></div>`;
+  }
   out.innerHTML = `<div class="pcc-verdict"><b>${verdict}</b></div>
     <div class="pcc-grid">
       <div><div class="k">Tier</div><div class="v">${tier} · ${esc(t.name || '')}</div>${buy ? `<div class="small muted">A ${c.type} like this costs about <b>${esc(buy.cost)}</b></div>` : ''}</div>
@@ -206,6 +223,7 @@ async function pcCalcRun() {
       <div><div class="k">Pictures</div><div class="v">${r.image ? `~${fmtSec(r.image.sec)}` : 'Slow'}</div><div class="small muted">${r.image ? esc(r.image.name) : 'on the processor; use a cloud service'}</div></div>
       <div><div class="k">Video</div><div class="v">${r.video ? `~${fmtSec(r.video.sec)}` : 'Not really'}</div><div class="small muted">${r.video ? `a short clip with ${esc(r.video.name)}` : 'needs a graphics card with ~12 GB+'}</div></div>
     </div>
+    ${valueHTML}
     <div class="small" style="margin-top:8px"><b>Liquid Editions:</b> ${r.editions.map((e) => `<span class="badge ${e.ok ? 'b-mint' : ''}">${e.ok ? '✓' : '✗'} ${esc(e.name)}</span>`).join(' ')}</div>
     ${r.bestSetup ? `<div class="small" style="margin-top:6px"><b>Best setup:</b> ${esc(r.bestSetup.names.join(' + '))} ${starsHTML(r.bestSetup.stars)}</div>` : ''}
     ${r.runs.length ? `<div class="small" style="margin-top:6px"><b>Biggest chat models that run well:</b> ${r.runs.map((m) => `${esc(m.name)} <span class="muted">(~${m.wps} words/s, ${where[m.where] || m.where})</span>`).join(' · ')}</div>` : ''}
@@ -217,7 +235,7 @@ function bindPcCalc() {
   const f = document.getElementById('pc-calc'); if (!f) return;
   const c = S.pcCalc;
   const read = () => {
-    c.type = $('#pcc-type').value; c.card = $('#pcc-card').value; c.ram = Number($('#pcc-ram').value); c.ddr5 = $('#pcc-ddr').value === '5'; c.disk = Number($('#pcc-disk').value);
+    c.type = $('#pcc-type').value; c.card = $('#pcc-card').value; c.ram = Number($('#pcc-ram').value); c.ddr5 = $('#pcc-ddr').value === '5'; c.disk = Number($('#pcc-disk').value); c.price = Number($('#pcc-price')?.value) || 0;
     const card = pcCards().find((x) => x.id === c.card);
     if (card && card.id !== 'other') { c.vram = card.vram; if (card.laptop && c.type !== 'laptop') { c.type = 'laptop'; $('#pcc-type').value = 'laptop'; } }
     else c.vram = Number($('#pcc-vram').value) || 0;
@@ -226,6 +244,7 @@ function bindPcCalc() {
   };
   f.addEventListener('change', read);
   $('#pcc-vram')?.addEventListener('input', read);
+  $('#pcc-price')?.addEventListener('input', read);
   pcCalcRun();
 }
 

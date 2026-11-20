@@ -8,12 +8,6 @@ Updating from 2.19 or 2.20: nothing extra to download; your chats, settings and 
 
 Updating from 2.18: the Liquid Edition now includes its Closer and its picture and video makers, and Quicksilver does not open until all of them are installed. After the update the setup screen downloads what is missing (about 38 GB) before the app starts. Your chats, settings and the models you already have are kept.
 
-### Coming next
-
-- **Automations** (Explore → Automations): things Quicksilver does by itself on a schedule (every day, weekdays, once a week, every hour, every few minutes, or when it starts), with web search, plug-ins and your connected apps. Start from an idea (morning briefing, crypto and stock check, research digest, tech news, a website check, a price-drop watch, a weekly plan) or write your own. Each run goes to its own chat with a desktop notification; a run missed while Quicksilver was closed runs once when it opens.
-- **When the AI says it can't do something,** a button under the answer offers the fix: search the web, let it read your files, ask a model that sees pictures, connect the app, Full access to run commands, a picture or video model, Memory, or a search of the plug-in directory for the task.
-- **Meme battle always has pictures:** when a meme's picture can't be painted on this PC, Venice (or another picture service you connected) paints it; a meme format whose template picture can't be downloaded gets a painted picture instead; and if no picture can be made it says how to get one, instead of showing words alone.
-
 ### New in 2.23.0
 
 - **🌤️ Weather comes back as a visual card, instantly.** Ask about the weather in any chat and Quicksilver shows a live forecast card — current conditions (temperature, "feels like", a sun/cloud/rain icon), a 24-hour strip, and a 7-day outlook with hi/lo temperature bars and rain chance. It reads from a real forecast (Open-Meteo, keyless) rather than letting the model guess, so the numbers and conditions are correct, and it shows °C or °F to match your country. A plain weather question skips the web search and the model entirely, so the card appears right away; if the live lookup fails it says so and asks for the city instead of making something up.
