@@ -47,9 +47,16 @@ async function loadHintConnectors() {
   try {
     const [list, presets] = await Promise.all([qs.call('mcp:list'), qs.call('mcp:presets')]);
     hintMcp = list.filter((s) => s.enabled && s.preset && presets[s.preset]?.when).map((s) => ({ id: `mcp:${s.id}`, name: s.name, re: presets[s.preset].when }));
-  } catch { hintMcp = []; }
+    // Catalog tools NOT yet added, so a matching prompt can suggest adding the right one.
+    const added = new Set(list.map((s) => s.preset).filter(Boolean));
+    hintMcpCatalog = Object.entries(presets)
+      .filter(([k, p]) => p.when && !added.has(k))
+      .map(([k, p]) => { try { return { preset: k, name: p.name, note: p.note, data: p, re: new RegExp(p.when.source || p.when, p.when.flags || 'i') }; } catch { return null; } })
+      .filter(Boolean);
+  } catch { hintMcp = []; hintMcpCatalog = []; }
 }
 let hintMcp = [];
+let hintMcpCatalog = [];
 
 // Models and teams that follow instructions with few refusals (published community fine-tunes).
 function openTargets() {
@@ -107,6 +114,9 @@ function composerHints(chat, a, text, attachments = []) {
   if (FILE_Q.test(t) && !attachments.length && !/\b(write|draft|create|make) (me )?(a|an)\b/i.test(t)) add({ id: 'attach', icon: '📎', label: 'Attach the file', why: 'It sounds like this is about a file. Attach it (or drop it here) so the answer uses it.', act: { attach: true } });
   // Your own documents.
   if (LIB_Q.test(t) && !(chat.library ?? a.library)) add({ id: 'lib', icon: '📚', label: 'Search your Library', why: 'Answer from your own documents, with citations.', act: { library: true } });
+  // A tool/connector in the catalog that fits this prompt but isn't added yet — suggest adding it.
+  const mcpHit = hintMcpCatalog.find((m) => m.re instanceof RegExp && m.re.test(t));
+  if (mcpHit) add({ id: `addmcp-${mcpHit.preset}`, icon: '🧩', label: `Add ${mcpHit.name}`, why: `Your message looks like a job for ${mcpHit.name}. ${String(mcpHit.note || '').slice(0, 140)}`, act: { addMcp: mcpHit.preset, mcpData: mcpHit.data } });
   // Code on a model that isn't good at code (Automatic already handles this).
   const T = S.speed?.targets;
   if (!auto && T && CODE_RE.test(t)) {
@@ -145,6 +155,7 @@ function applyHint(chat, h) {
   if (x.effort) { chat.effort = x.effort; save(); render(); return; }
   if (x.attach) { $('#file-in')?.click(); return; }
   if (x.connect) { hintConnectors = null; go({ view: 'integrations' }); return; }
+  if (x.addMcp) { hintConnectors = null; go({ view: 'integrations' }); setTimeout(() => { try { editMcp({ preset: x.addMcp, ...(x.mcpData || {}) }); } catch {} }, 120); return; }
   if (x.api) { go({ view: 'apis' }); return; }
   if (x.getOpen) { go({ view: 'stacks' }); runAdvisor('open'); }
 }
