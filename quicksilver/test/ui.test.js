@@ -1366,6 +1366,21 @@ function redPng(size = 64) {
   await win.click('#modal [data-close]');
   await shot(win, '05d-spaces');
   console.log('✓ Spaces: browser page and in-app Gradio run panel');
+  // Usage dashboard: computed from the user's own chats — where answers ran, internet %, speed.
+  await win.evaluate(() => {
+    S.data.chats.push({ id: 'usage-probe', messages: [
+      { role: 'assistant', t: Date.now(), alts: [{ target: 'local:x', text: 'a local answer here', ms: 1500, rating: 'up' }] },
+      { role: 'assistant', t: Date.now(), alts: [{ target: 'api:openai', text: 'a web answer', ms: 900, toolCalls: [{ name: 'web_search' }] }] },
+    ] });
+    go({ view: 'usage' });
+  });
+  await win.waitForSelector('.page-head:has-text("Usage")');
+  assert.match(await win.locator('.page').innerText(), /Where your answers ran/);
+  assert.match(await win.locator('.page').innerText(), /Internet use/);
+  assert.ok(await win.locator('.page:has-text("fully private")').count() >= 1, 'privacy tile shows');
+  await shot(win, '05e-usage');
+  await win.evaluate(() => { S.data.chats = S.data.chats.filter((c) => c.id !== 'usage-probe'); });
+  console.log('✓ Usage dashboard: on-PC vs cloud vs team, internet %, speed, per-model');
   await win.evaluate(() => { modelsTab = 'text'; go({ view: 'models' }); });
   await win.waitForSelector('.addon:has-text("Memory"):has-text("like Mem0")');
   assert.ok(await win.locator('.addon:has-text("local RAG")').count() === 1 && await win.locator('.addon .addon-effect').count() >= 8);
