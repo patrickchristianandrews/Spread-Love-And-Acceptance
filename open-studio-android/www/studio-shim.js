@@ -200,6 +200,30 @@
       var out = j.output; if (Array.isArray(out)) out = out[0];
       if (typeof out !== 'string') throw new Error('Replicate returned no video.'); return out;
     },
+    hfVideo: async function (o) {
+      var sp = (o.space || 'JCisHERE/wan2-2-i2v-v3').trim();
+      var base = 'https://' + sp.toLowerCase().replace(/[^a-z0-9-]+/g, '-').replace(/^-+|-+$/g, '') + '.hf.space';
+      var headers = o.token ? { Authorization: 'Bearer ' + String(o.token).trim() } : {};
+      if (!o.imageBase64) throw new Error('Pick an image to animate first.');
+      var bin = atob(o.imageBase64), arr = new Uint8Array(bin.length); for (var i = 0; i < bin.length; i++) arr[i] = bin.charCodeAt(i);
+      var fd = new FormData(); fd.append('files', new Blob([arr], { type: o.imageType || 'image/png' }), 'image.png');
+      var up = await fetch(base + '/gradio_api/upload', { method: 'POST', headers: headers, body: fd });
+      if (!up.ok) throw new Error('Space upload failed (HTTP ' + up.status + ') — it may be sleeping, private, or the id is wrong.');
+      var paths = await up.json().catch(function () { return null; });
+      var filePath = Array.isArray(paths) ? paths[0] : paths; if (!filePath) throw new Error('Space did not accept the image.');
+      var data = [{ path: filePath, meta: { _type: 'gradio.FileData' } }, null, o.prompt || 'make this image come alive, cinematic motion, smooth animation', 6, '', Math.min(20, Math.max(2, Number(o.duration) || 5)), 1, 1, Math.floor(Math.random() * 2147483647), true, 6, 'UniPCMultistep', 3.0, 16, false, null, true, true];
+      var call = await fetch(base + '/gradio_api/call/generate_video', { method: 'POST', headers: Object.assign({ 'Content-Type': 'application/json' }, headers), body: JSON.stringify({ data: data }) });
+      var cj = await call.json().catch(function () { return {}; });
+      if (!call.ok || !cj.event_id) throw new Error('Space did not start the job (HTTP ' + call.status + ').');
+      var res = await fetch(base + '/gradio_api/call/generate_video/' + cj.event_id, { headers: headers });
+      var text = await res.text();
+      var done = text.match(/event:\s*complete\s*[\r\n]+data:\s*(.+)/);
+      if (!done) { var er = text.match(/event:\s*error\s*[\r\n]+data:\s*(.+)/); throw new Error(er ? ('Space error: ' + String(er[1]).slice(0, 160)) : 'Space returned no video (free GPU quota used up, or timed out). Try later, add an HF token, or use your own duplicated Space.'); }
+      var out; try { out = JSON.parse(done[1]); } catch (e) { throw new Error('Could not read the Space result.'); }
+      var v = Array.isArray(out) ? out[0] : out;
+      var url = v && (v.url || (v.video && v.video.url) || (v.path ? (base + '/gradio_api/file=' + v.path) : null));
+      if (!url) throw new Error('Space finished but returned no video URL.'); return url;
+    },
     customList: function () { return P(customs().map(function (c) { return { id: c.id, name: c.name, base: c.base, connected: true }; })); },
     customAdd: function (o) {
       var base = (o.base || '').trim().replace(/\/+$/, '');

@@ -383,7 +383,12 @@
 
   // ---------- Video ----------
   $('#vprompt').value=store.get('vprompt','');$('#vprompt').addEventListener('input',function(){store.set('vprompt',this.value)});
-  $('#vengine').value=store.get('vengine','fal');$('#vengine').addEventListener('change',function(){store.set('vengine',this.value)});
+  $('#vengine').value=store.get('vengine','fal');
+  function syncVhf(){ var el=$('#vhf'); if(el)el.hidden=$('#vengine').value!=='hfspace'; }
+  $('#vengine').addEventListener('change',function(){store.set('vengine',this.value);syncVhf();});
+  if($('#vspace')){ $('#vspace').value=store.get('vspace','JCisHERE/wan2-2-i2v-v3'); $('#vspace').addEventListener('input',function(){store.set('vspace',this.value)}); }
+  if($('#vhftoken')){ $('#vhftoken').value=store.get('vhftoken',''); $('#vhftoken').addEventListener('input',function(){store.set('vhftoken',this.value)}); }
+  syncVhf();
   function loadVids(){try{return JSON.parse(store.get('vids','[]'))||[]}catch(e){return[]}}
   function saveVids(a){try{store.set('vids',JSON.stringify(a.slice(0,24)))}catch(e){}}
   function vTile(item){
@@ -398,10 +403,32 @@
     $('#vempty').hidden=a.length>0;$('#vclear').hidden=a.length===0;$('#vcount').textContent=a.length?('· '+a.length+' saved'):'';
   }
   $('#vclear').addEventListener('click',function(){saveVids([]);renderVids();});
+  function genHfVideo(prompt){
+    $('#verr').hidden=true;
+    var file=$('#vimg')&&$('#vimg').files&&$('#vimg').files[0];
+    if(!file){$('#verr').textContent='Pick an image to animate first.';$('#verr').hidden=false;return;}
+    if(!(window.studio&&window.studio.hfVideo)){$('#verr').textContent='This needs the desktop app or the HTML build.';$('#verr').hidden=false;return;}
+    var item={url:'',prompt:prompt||'(animate image)',ts:Date.now()};
+    var fig=vTile(item),stat=fig.querySelector('.hstat'),sp=fig.querySelector('.spin'),v=fig.querySelector('video');
+    stat.textContent='Queuing on the free Space… (can take minutes)';$('#vspin').hidden=false;$('#vgen').disabled=true;
+    var fin=function(){$('#vspin').hidden=true;$('#vgen').disabled=false;};
+    var fr=new FileReader();
+    fr.onload=function(){
+      var du=String(fr.result),b64=du.split(',')[1],type=(du.match(/^data:([^;]+);/)||[])[1]||'image/png';
+      window.studio.hfVideo({imageBase64:b64,imageType:type,prompt:prompt,space:($('#vspace')||{}).value,token:($('#vhftoken')||{}).value,duration:5}).then(function(url){
+        item.url=url;var ax=fig.querySelectorAll('a');ax[0].href=url;ax[1].href=url;v.src=url;sp.hidden=true;stat.textContent='';
+        var a=loadVids();a.unshift(item);saveVids(a);$('#vclear').hidden=false;$('#vcount').textContent='· '+loadVids().length+' saved';
+      }).catch(function(e){fig.remove();$('#verr').textContent='HF Space: '+((e&&e.message)||e);$('#verr').hidden=false;}).then(fin);
+    };
+    fr.onerror=function(){fig.remove();$('#verr').textContent='Could not read the image.';$('#verr').hidden=false;fin();};
+    fr.readAsDataURL(file);
+  }
   function genVideo(){
     var prompt=$('#vprompt').value.trim();$('#verr').hidden=true;
+    var eng=$('#vengine').value;
+    if(eng==='hfspace'){ genHfVideo(prompt); return; }
     if(!prompt){$('#verr').textContent='Describe the video first.';$('#verr').hidden=false;return;}
-    var eng=$('#vengine').value,fn=eng==='replicate'?'replicateVideo':'falVideo',label=eng==='replicate'?'Replicate':'fal.ai';
+    var fn=eng==='replicate'?'replicateVideo':'falVideo',label=eng==='replicate'?'Replicate':'fal.ai';
     if(!(window.studio&&window.studio[fn])){$('#verr').textContent='Video needs the desktop app or the HTML build.';$('#verr').hidden=false;return;}
     var item={url:'',prompt:prompt,ts:Date.now()};
     var fig=vTile(item),stat=fig.querySelector('.hstat'),sp=fig.querySelector('.spin'),v=fig.querySelector('video');

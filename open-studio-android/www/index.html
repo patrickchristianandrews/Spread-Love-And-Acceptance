@@ -180,9 +180,15 @@
     <textarea id="vprompt" placeholder="A paper boat sailing down a rain gutter, cinematic, slow motion"></textarea>
     <div class="row" style="margin-top:12px">
       <div class="col" style="max-width:240px"><label for="vengine">Engine</label>
-        <select id="vengine"><option value="fal">fal.ai — LTX (your key)</option><option value="replicate">Replicate — WAN 2.2 (your key)</option></select></div>
+        <select id="vengine"><option value="fal">fal.ai — LTX (your key)</option><option value="replicate">Replicate — WAN 2.2 (your key)</option><option value="hfspace">Animate an image — free (HF Space)</option></select></div>
       <div class="col" style="max-width:190px;display:flex;align-items:flex-end;gap:10px">
         <button class="btn" id="vgen" style="flex:1">Generate</button><span class="spin" id="vspin" hidden></span></div>
+    </div>
+    <div id="vhf" hidden style="margin-top:10px;background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:12px">
+      <label for="vimg">Image to animate</label>
+      <input type="file" id="vimg" accept="image/*" style="margin-bottom:8px">
+      <div class="row" style="gap:8px"><input type="text" id="vspace" placeholder="HF Space (user/space)" style="flex:2;min-width:160px"><input type="password" id="vhftoken" placeholder="HF token (optional — better free quota)" style="flex:2;min-width:160px"></div>
+      <p class="hint" style="margin:6px 0 0">Free <b>image→video</b> on a public Hugging Face Space (WAN 2.2 Lightning, uncensored). It runs on free shared GPUs, so it <b>queues, has a daily quota, and can go offline</b>. For reliability, <b>duplicate the Space to your own HF account</b> (one click on its page) and put that <code>user/space</code> id here. Experimental.</p>
     </div>
     <p class="hint" style="margin:10px 0 0">Text‑to‑video runs on your fal.ai or Replicate key (add it under Keys). A clip costs real money and can take <b>1–5 minutes</b> — the app waits and shows it here when ready.</p>
     <div class="err" id="verr" hidden></div>

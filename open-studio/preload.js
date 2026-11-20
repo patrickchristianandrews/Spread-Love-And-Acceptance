@@ -18,6 +18,7 @@ contextBridge.exposeInMainWorld('studio', {
   upscale: (opts) => ipcRenderer.invoke('upscale', opts),
   falVideo: (opts) => ipcRenderer.invoke('fal:video', opts),
   replicateVideo: (opts) => ipcRenderer.invoke('replicate:video', opts),
+  hfVideo: (opts) => ipcRenderer.invoke('hf:video', opts),
   customList: () => ipcRenderer.invoke('custom:list'),
   customAdd: (opts) => ipcRenderer.invoke('custom:add', opts),
   customRemove: (id) => ipcRenderer.invoke('custom:remove', { id }),

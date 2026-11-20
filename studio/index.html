@@ -180,9 +180,15 @@
     <textarea id="vprompt" placeholder="A paper boat sailing down a rain gutter, cinematic, slow motion"></textarea>
     <div class="row" style="margin-top:12px">
       <div class="col" style="max-width:240px"><label for="vengine">Engine</label>
-        <select id="vengine"><option value="fal">fal.ai — LTX (your key)</option><option value="replicate">Replicate — WAN 2.2 (your key)</option></select></div>
+        <select id="vengine"><option value="fal">fal.ai — LTX (your key)</option><option value="replicate">Replicate — WAN 2.2 (your key)</option><option value="hfspace">Animate an image — free (HF Space)</option></select></div>
       <div class="col" style="max-width:190px;display:flex;align-items:flex-end;gap:10px">
         <button class="btn" id="vgen" style="flex:1">Generate</button><span class="spin" id="vspin" hidden></span></div>
+    </div>
+    <div id="vhf" hidden style="margin-top:10px;background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:12px">
+      <label for="vimg">Image to animate</label>
+      <input type="file" id="vimg" accept="image/*" style="margin-bottom:8px">
+      <div class="row" style="gap:8px"><input type="text" id="vspace" placeholder="HF Space (user/space)" style="flex:2;min-width:160px"><input type="password" id="vhftoken" placeholder="HF token (optional — better free quota)" style="flex:2;min-width:160px"></div>
+      <p class="hint" style="margin:6px 0 0">Free <b>image→video</b> on a public Hugging Face Space (WAN 2.2 Lightning, uncensored). It runs on free shared GPUs, so it <b>queues, has a daily quota, and can go offline</b>. For reliability, <b>duplicate the Space to your own HF account</b> (one click on its page) and put that <code>user/space</code> id here. Experimental.</p>
     </div>
     <p class="hint" style="margin:10px 0 0">Text‑to‑video runs on your fal.ai or Replicate key (add it under Keys). A clip costs real money and can take <b>1–5 minutes</b> — the app waits and shows it here when ready.</p>
     <div class="err" id="verr" hidden></div>
@@ -430,6 +436,30 @@
       if (j.status !== 'succeeded') throw new Error('Replicate is still processing the video — try again in a moment.');
       var out = j.output; if (Array.isArray(out)) out = out[0];
       if (typeof out !== 'string') throw new Error('Replicate returned no video.'); return out;
+    },
+    hfVideo: async function (o) {
+      var sp = (o.space || 'JCisHERE/wan2-2-i2v-v3').trim();
+      var base = 'https://' + sp.toLowerCase().replace(/[^a-z0-9-]+/g, '-').replace(/^-+|-+$/g, '') + '.hf.space';
+      var headers = o.token ? { Authorization: 'Bearer ' + String(o.token).trim() } : {};
+      if (!o.imageBase64) throw new Error('Pick an image to animate first.');
+      var bin = atob(o.imageBase64), arr = new Uint8Array(bin.length); for (var i = 0; i < bin.length; i++) arr[i] = bin.charCodeAt(i);
+      var fd = new FormData(); fd.append('files', new Blob([arr], { type: o.imageType || 'image/png' }), 'image.png');
+      var up = await fetch(base + '/gradio_api/upload', { method: 'POST', headers: headers, body: fd });
+      if (!up.ok) throw new Error('Space upload failed (HTTP ' + up.status + ') — it may be sleeping, private, or the id is wrong.');
+      var paths = await up.json().catch(function () { return null; });
+      var filePath = Array.isArray(paths) ? paths[0] : paths; if (!filePath) throw new Error('Space did not accept the image.');
+      var data = [{ path: filePath, meta: { _type: 'gradio.FileData' } }, null, o.prompt || 'make this image come alive, cinematic motion, smooth animation', 6, '', Math.min(20, Math.max(2, Number(o.duration) || 5)), 1, 1, Math.floor(Math.random() * 2147483647), true, 6, 'UniPCMultistep', 3.0, 16, false, null, true, true];
+      var call = await fetch(base + '/gradio_api/call/generate_video', { method: 'POST', headers: Object.assign({ 'Content-Type': 'application/json' }, headers), body: JSON.stringify({ data: data }) });
+      var cj = await call.json().catch(function () { return {}; });
+      if (!call.ok || !cj.event_id) throw new Error('Space did not start the job (HTTP ' + call.status + ').');
+      var res = await fetch(base + '/gradio_api/call/generate_video/' + cj.event_id, { headers: headers });
+      var text = await res.text();
+      var done = text.match(/event:\s*complete\s*[\r\n]+data:\s*(.+)/);
+      if (!done) { var er = text.match(/event:\s*error\s*[\r\n]+data:\s*(.+)/); throw new Error(er ? ('Space error: ' + String(er[1]).slice(0, 160)) : 'Space returned no video (free GPU quota used up, or timed out). Try later, add an HF token, or use your own duplicated Space.'); }
+      var out; try { out = JSON.parse(done[1]); } catch (e) { throw new Error('Could not read the Space result.'); }
+      var v = Array.isArray(out) ? out[0] : out;
+      var url = v && (v.url || (v.video && v.video.url) || (v.path ? (base + '/gradio_api/file=' + v.path) : null));
+      if (!url) throw new Error('Space finished but returned no video URL.'); return url;
     },
     customList: function () { return P(customs().map(function (c) { return { id: c.id, name: c.name, base: c.base, connected: true }; })); },
     customAdd: function (o) {
@@ -830,7 +860,12 @@
 
   // ---------- Video ----------
   $('#vprompt').value=store.get('vprompt','');$('#vprompt').addEventListener('input',function(){store.set('vprompt',this.value)});
-  $('#vengine').value=store.get('vengine','fal');$('#vengine').addEventListener('change',function(){store.set('vengine',this.value)});
+  $('#vengine').value=store.get('vengine','fal');
+  function syncVhf(){ var el=$('#vhf'); if(el)el.hidden=$('#vengine').value!=='hfspace'; }
+  $('#vengine').addEventListener('change',function(){store.set('vengine',this.value);syncVhf();});
+  if($('#vspace')){ $('#vspace').value=store.get('vspace','JCisHERE/wan2-2-i2v-v3'); $('#vspace').addEventListener('input',function(){store.set('vspace',this.value)}); }
+  if($('#vhftoken')){ $('#vhftoken').value=store.get('vhftoken',''); $('#vhftoken').addEventListener('input',function(){store.set('vhftoken',this.value)}); }
+  syncVhf();
   function loadVids(){try{return JSON.parse(store.get('vids','[]'))||[]}catch(e){return[]}}
   function saveVids(a){try{store.set('vids',JSON.stringify(a.slice(0,24)))}catch(e){}}
   function vTile(item){
@@ -845,10 +880,32 @@
     $('#vempty').hidden=a.length>0;$('#vclear').hidden=a.length===0;$('#vcount').textContent=a.length?('· '+a.length+' saved'):'';
   }
   $('#vclear').addEventListener('click',function(){saveVids([]);renderVids();});
+  function genHfVideo(prompt){
+    $('#verr').hidden=true;
+    var file=$('#vimg')&&$('#vimg').files&&$('#vimg').files[0];
+    if(!file){$('#verr').textContent='Pick an image to animate first.';$('#verr').hidden=false;return;}
+    if(!(window.studio&&window.studio.hfVideo)){$('#verr').textContent='This needs the desktop app or the HTML build.';$('#verr').hidden=false;return;}
+    var item={url:'',prompt:prompt||'(animate image)',ts:Date.now()};
+    var fig=vTile(item),stat=fig.querySelector('.hstat'),sp=fig.querySelector('.spin'),v=fig.querySelector('video');
+    stat.textContent='Queuing on the free Space… (can take minutes)';$('#vspin').hidden=false;$('#vgen').disabled=true;
+    var fin=function(){$('#vspin').hidden=true;$('#vgen').disabled=false;};
+    var fr=new FileReader();
+    fr.onload=function(){
+      var du=String(fr.result),b64=du.split(',')[1],type=(du.match(/^data:([^;]+);/)||[])[1]||'image/png';
+      window.studio.hfVideo({imageBase64:b64,imageType:type,prompt:prompt,space:($('#vspace')||{}).value,token:($('#vhftoken')||{}).value,duration:5}).then(function(url){
+        item.url=url;var ax=fig.querySelectorAll('a');ax[0].href=url;ax[1].href=url;v.src=url;sp.hidden=true;stat.textContent='';
+        var a=loadVids();a.unshift(item);saveVids(a);$('#vclear').hidden=false;$('#vcount').textContent='· '+loadVids().length+' saved';
+      }).catch(function(e){fig.remove();$('#verr').textContent='HF Space: '+((e&&e.message)||e);$('#verr').hidden=false;}).then(fin);
+    };
+    fr.onerror=function(){fig.remove();$('#verr').textContent='Could not read the image.';$('#verr').hidden=false;fin();};
+    fr.readAsDataURL(file);
+  }
   function genVideo(){
     var prompt=$('#vprompt').value.trim();$('#verr').hidden=true;
+    var eng=$('#vengine').value;
+    if(eng==='hfspace'){ genHfVideo(prompt); return; }
     if(!prompt){$('#verr').textContent='Describe the video first.';$('#verr').hidden=false;return;}
-    var eng=$('#vengine').value,fn=eng==='replicate'?'replicateVideo':'falVideo',label=eng==='replicate'?'Replicate':'fal.ai';
+    var fn=eng==='replicate'?'replicateVideo':'falVideo',label=eng==='replicate'?'Replicate':'fal.ai';
     if(!(window.studio&&window.studio[fn])){$('#verr').textContent='Video needs the desktop app or the HTML build.';$('#verr').hidden=false;return;}
     var item={url:'',prompt:prompt,ts:Date.now()};
     var fig=vTile(item),stat=fig.querySelector('.hstat'),sp=fig.querySelector('.spin'),v=fig.querySelector('video');

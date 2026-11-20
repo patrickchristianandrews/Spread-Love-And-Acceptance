@@ -231,6 +231,44 @@ ipcMain.handle('replicate:video', async (_e, { prompt }) => {
   if (typeof out !== 'string') throw new Error('Replicate returned no video.');
   return out;
 });
+// Free image->video via a public Hugging Face Gradio Space (WAN 2.2 I2V). Uploads the image, submits
+// the /gradio_api/call/generate_video job, streams the result, returns the mp4 URL. Experimental:
+// free ZeroGPU queues and has a daily quota.
+ipcMain.handle('hf:video', async (_e, { imageBase64, imageType, prompt, space, token, duration }) => {
+  const sp = (space || 'JCisHERE/wan2-2-i2v-v3').trim();
+  const sub = sp.toLowerCase().replace(/[^a-z0-9-]+/g, '-').replace(/^-+|-+$/g, '');
+  const base = `https://${sub}.hf.space`;
+  const headers = token ? { Authorization: `Bearer ${token.trim()}` } : {};
+  if (!imageBase64) throw new Error('Pick an image to animate first.');
+  // 1) upload the image
+  const fd = new FormData();
+  fd.append('files', new Blob([Buffer.from(imageBase64, 'base64')], { type: imageType || 'image/png' }), 'image.png');
+  const up = await fetch(`${base}/gradio_api/upload`, { method: 'POST', headers, body: fd, signal: AbortSignal.timeout(120000) });
+  if (!up.ok) throw new Error(`Space upload failed (HTTP ${up.status}) — it may be sleeping, private, or the id is wrong.`);
+  const paths = await up.json().catch(() => null);
+  const filePath = Array.isArray(paths) ? paths[0] : paths;
+  if (!filePath) throw new Error('Space did not accept the image.');
+  // 2) submit the job (18 inputs, in the Space's order; safe_mode=false for uncensored)
+  const data = [
+    { path: filePath, meta: { _type: 'gradio.FileData' } }, null,
+    prompt || 'make this image come alive, cinematic motion, smooth animation',
+    6, '', Math.min(20, Math.max(2, Number(duration) || 5)), 1, 1,
+    Math.floor(Math.random() * 2147483647), true, 6, 'UniPCMultistep', 3.0, 16, false, null, true, true,
+  ];
+  const call = await fetch(`${base}/gradio_api/call/generate_video`, { method: 'POST', headers: { ...headers, 'Content-Type': 'application/json' }, body: JSON.stringify({ data }), signal: AbortSignal.timeout(120000) });
+  const cj = await call.json().catch(() => ({}));
+  if (!call.ok || !cj.event_id) throw new Error(`Space did not start the job (HTTP ${call.status}).`);
+  // 3) stream the result (Gradio closes the stream after the 'complete' event)
+  const res = await fetch(`${base}/gradio_api/call/generate_video/${cj.event_id}`, { headers, signal: AbortSignal.timeout(600000) });
+  const text = await res.text();
+  const done = text.match(/event:\s*complete\s*[\r\n]+data:\s*(.+)/);
+  if (!done) { const er = text.match(/event:\s*error\s*[\r\n]+data:\s*(.+)/); throw new Error(er ? `Space error: ${String(er[1]).slice(0, 160)}` : 'Space returned no video (free GPU quota used up, or it timed out). Try later, add an HF token, or use your own duplicated Space.'); }
+  let out; try { out = JSON.parse(done[1]); } catch { throw new Error('Could not read the Space result.'); }
+  const v = Array.isArray(out) ? out[0] : out;
+  const url = v && (v.url || (v.video && v.video.url) || (v.path ? `${base}/gradio_api/file=${v.path}` : null));
+  if (!url) throw new Error('Space finished but returned no video URL.');
+  return url;
+});
 ipcMain.handle('keys:set', (_e, { provider, key }) => { if (PROVIDERS[provider]) { keys[provider] = (key || '').trim(); if (!keys[provider]) delete keys[provider]; saveKeys(); } return Object.keys(keys); });
 
 // Free engines, run from the app's backend so there is no browser CORS / local-file block.
