@@ -143,6 +143,7 @@ const PRO = [
   ['graphify my repo', 'graphify'], ['check my PHP app for web shells', 'php2shell-check'], ['help me reverse engineer my own minified bundle', 'reverse-engineer'],
   ['summarize this article', 'summarize'], ['write an email to my landlord', 'email'], ['translate this to Spanish', 'translate'], ['write a SQL query for top customers', 'sql'],
   ['rate my looks out of 10', 'look-style'], ['what hairstyle suits my face', 'look-style'], ['how do i look younger', 'look-style'],
+  ['do deep research on the best budget mirrorless cameras', 'deep-research'], ['find out exactly which laptop has the best battery life', 'deep-research'],
 ];
 const proOff = PRO.map(([t, want]) => [t, ctx.suggestSkill(t)?.id || null, want]).filter(([, got, want]) => got !== want);
 assert.deepEqual(proOff, [], `specialist skills wrong: ${proOff.map(([t, got, want]) => `"${t}" → ${got} (wanted ${want})`).join('; ')}`);
