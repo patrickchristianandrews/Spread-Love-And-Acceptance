@@ -499,6 +499,7 @@ async function generateNow(jobId, req, { onProgress, onStatus } = {}) {
   const d = spec.defaults;
   const seconds = (Date.now() - started) / 1000;
   const meta = { prompt: req.prompt, model: spec.name, modelId: spec.id, seed: req.seed, seconds, mode: req.mode, width: used.width || d.width, height: used.height || d.height };
+  require('./usage').record({ source: 'local', kind: isVideo ? 'video' : 'image', key: `media:${spec.id}`, name: spec.name, ms: seconds * 1000 });
   if (isVideo) {
     // Convert to an MP4 that plays everywhere.
     const file = path.join(mediaDir(), `${jobId}.mp4`);

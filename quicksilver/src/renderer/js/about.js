@@ -61,6 +61,7 @@ const RELEASE_NOTES_2_18 = [
   ['Answers correct themselves', 'When Double-check is on and the second model finds a clear mistake, the answer is rewritten once and marked "Corrected". A Fix it button does it on demand.'],
   ['Faster everywhere', 'Reads ahead while you type, answers your likely next question in the background, gives instant repeats of answers you rated 👍, and makes better use of your graphics card.'],
   ['Does more by itself', 'Checks the web for current questions, searches your Library when it clearly has the answer, and uses apps you have connected when you mention them.'],
+  ['Usage statistics', 'Settings → Usage shows what did the work (your own models, cloud AIs or the web), the hours it took, and the time answers took against the time they should take on this PC. Counts and timings only, kept on this PC.'],
   ['Memory that finds by meaning', 'Remembers lasting facts about you across chats and, with Smarter search, recalls them the way Mem0 does — all on this PC.'],
   ['Free cloud pictures built in', 'Pollinations makes pictures with no key or account, under Gallery & tools → Cloud, when your PC can\'t or would be slow.'],
   ['New teams & skills', 'A vibe-hacking team (idea → runnable app), a GIF maker, CPA and CIA exam coaches, and a find-this-product-from-a-photo skill.'],

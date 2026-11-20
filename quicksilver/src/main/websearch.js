@@ -59,7 +59,7 @@ async function wikipedia(query) {
   return (j.query?.search || []).map((r) => ({ title: r.title, url: `https://en.wikipedia.org/wiki/${encodeURIComponent(r.title.replace(/ /g, '_'))}`, snippet: decode(r.snippet) }));
 }
 
-async function search(query, { pages = 3 } = {}) {
+async function searchNow(query, { pages = 3 } = {}) {
   const cfg = store.config().web;
   let results = [];
   if (cfg.provider === 'free') {
@@ -127,5 +127,15 @@ function bestPassages(text, query, budget = 1800) {
   return keep.sort((a, b) => a.i - b.i).map((x) => x.p.trim()).join(' … ');
 }
 const STOP = new Set('the and for are but not you all any can had her was one our out day get has him his how man new now old see two way who boy did its let put say she too use what when where which with this that from they will would there their about into than then them these some your have more also just like been were what does'.split(' '));
+
+// A search that worked is counted in the usage statistics (how many, and how long they took:
+// never what was searched for). See usage.js.
+async function search(query, opts) {
+  const t0 = Date.now();
+  const results = await searchNow(query, opts);
+  const provider = store.config().web?.provider || 'free';
+  require('./usage').record({ source: 'web', kind: 'search', key: `web:${provider}`, name: { free: 'Web search (free)', brave: 'Web search (Brave)', tavily: 'Web search (Tavily)', searxng: 'Web search (SearXNG)' }[provider] || 'Web search', ms: Date.now() - t0 });
+  return results;
+}
 
 module.exports = { search, duckduckgo, mojeek, wikipedia, bestPassages };

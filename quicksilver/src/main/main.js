@@ -278,7 +278,7 @@ handle('bench:run', async () => {
   emit('bench:status', `Loading ${m.name}…`);
   let tokens = 0;
   let tps = 0;
-  for await (const ev of llama.chat({ id: m.id, name: m.name, file: m.files.model }, { messages: [{ role: 'user', content: 'Write a 200-word paragraph about the history of mapmaking.' }], temperature: 0.7, maxTokens: 200, contextSize: 4096, onStatus: (s) => emit('bench:status', s) })) {
+  for await (const ev of llama.chat({ id: m.id, name: m.name, file: m.files.model }, { messages: [{ role: 'user', content: 'Write a 200-word paragraph about the history of mapmaking.' }], temperature: 0.7, maxTokens: 200, contextSize: 4096, bench: true, onStatus: (s) => emit('bench:status', s) })) {
     if (ev.type === 'text' || ev.type === 'reasoning') { tokens++; if (tokens % 10 === 0) emit('bench:status', `Writing… ${tokens} words`); }
     if (ev.type === 'stats') tps = ev.tps;
   }
@@ -422,6 +422,7 @@ ipcMain.on('chat:send', async (_e, p) => {
   const controller = new AbortController();
   chats.set(p.requestId, controller);
   const send = (ev) => emit('chat:event', { requestId: p.requestId, ev });
+  const asked = Date.now();
   try {
     const cfg = store.config();
     for await (const ev of complete.run(p.target, {
@@ -432,6 +433,7 @@ ipcMain.on('chat:send', async (_e, p) => {
       onStep: (step) => send({ type: 'step', step: { ...step } }),
       calib: cfg.calib,
     })) send(ev);
+    if (!controller.signal.aborted) require('./usage').recordChat(Date.now() - asked);
     send({ type: 'done', aborted: controller.signal.aborted });
   } catch (err) {
     send({ type: controller.signal.aborted ? 'done' : 'error', aborted: controller.signal.aborted, message: String(err?.message || err) });
@@ -527,6 +529,11 @@ handle('kb:add', async (collectionId, kind) => {
 handle('kb:website', (collectionId, url, maxPages) => knowledge.addWebsite(collectionId, url, { maxPages, onProgress: (p) => emit('library:progress', p) }));
 handle('kb:search', async (q, k, ids) => { const r = await knowledge.search(q, { k, collectionIds: ids }); return { results: [...r], failures: r.failures || [] }; });
 handle('web:search', (q) => websearch.search(q));
+// ---------- usage statistics (Settings → Usage; kept on this PC only) ----------
+const usage = require('./usage');
+handle('usage:summary', (days) => usage.summary(days));
+handle('usage:clear', () => usage.clear());
+handle('usage:enable', (on) => usage.setEnabled(on));
 handle('kb:peek', (q) => knowledge.peek(q));
 // Paste text straight into a knowledge base (notes, a policy, an email).
 handle('kb:addText', (collectionId, name, text) => knowledge.addTexts(collectionId, [{ name: String(name || 'Note').slice(0, 120), text: String(text || '') }]));
@@ -568,7 +575,9 @@ handle('media:stop', (jobId) => media.stop(jobId));
 handle('media:apiImage', async (providerId, model, req) => {
   const g = media.gallery();
   const input = req.imageId ? `data:image/png;base64,${fs.readFileSync(g.find((x) => x.id === req.imageId).file).toString('base64')}` : undefined;
+  const t0 = Date.now();
   const buf = await providers.image(providerId, model, { ...req, image: input, mask: req.maskDataUrl });
+  require('./usage').record({ source: 'cloud', kind: 'image', key: `cloudmedia:${providerId}:${model}`, name: `${model} (${providers.get(providerId)?.name || 'API'})`, ms: Date.now() - t0 });
   const item = media.saveBuffer(buf, 'png', { prompt: req.prompt, model, mode: input ? 'edit' : 'generate' });
   return { ...item, url: `qsmedia://g/${item.id}` };
 });

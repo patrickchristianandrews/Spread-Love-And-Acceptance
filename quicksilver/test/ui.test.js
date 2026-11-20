@@ -1333,6 +1333,30 @@ function redPng(size = 64) {
   await shot(win, '11c-quick-fixes');
   console.log('✓ studio: music, voice, quick fixes');
 
+  // Settings → Usage: what did the work (this PC, cloud, web), the hours, and the time answers
+  // took against the time they should take. By now the chats above have been counted.
+  await win.click('[data-nav="settings"]');
+  await win.click('[data-set-tab="usage"]');
+  await win.waitForSelector('#usage-share .u-seg');
+  assert.match(await win.locator('.u-tiles').innerText(), /Time spent working[\s\S]*Questions answered[\s\S]*Words written[\s\S]*Web searches/);
+  assert.match(await win.locator('#usage-share').innerText(), /By time spent[\s\S]*On this PC\s+\d+%[\s\S]*By words written[\s\S]*By number of requests/);
+  assert.match(await win.locator('#usage-expected').innerText(), /Time it took[\s\S]*Time it should take/);
+  assert.ok(await win.locator('.u-table tbody tr').count() >= 1, 'each model that worked has a row');
+  assert.ok(await win.locator('.u-col').count() >= 28, 'a column for every day of the last 30');
+  await win.click('[data-usage-days="7"]');
+  await win.waitForFunction(() => document.querySelectorAll('.u-col').length === 7);
+  await win.hover('.u-col:last-child');
+  await win.waitForSelector('#u-tip:not([hidden])');
+  // Turning it off stops the counting and says so; turning it back on restores the page.
+  await win.uncheck('#usage-on');
+  await win.waitForSelector('text=Usage statistics are off. Nothing new is counted.');
+  await win.waitForFunction(() => document.querySelector('#usage-on') && !document.querySelector('#usage-on').checked);
+  await win.check('#usage-on');
+  await win.waitForFunction(() => document.querySelector('#usage-on')?.checked);
+  await shot(win, 'usage');
+  console.log('✓ Settings → Usage: shares by time, words and requests; time taken against time expected; by day and by model; on/off');
+  await win.evaluate(() => { const t = document.querySelector('#toast'); if (t) t.hidden = true; });
+
   // Settings → Features: every feature on or off, with what you gain or lose.
   await win.click('[data-nav="settings"]');
   await win.click('[data-set-tab="features"]');

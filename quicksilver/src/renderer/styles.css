@@ -1584,3 +1584,59 @@ code.sel { user-select: all; background: var(--soft); padding: 1px 6px; border-r
 .meme-t.top { top: 3%; }
 .meme-t.bottom { bottom: 3%; }
 .meme-busy { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); background: rgba(0,0,0,.6); color: #fff; padding: 6px 10px; border-radius: 8px; }
+
+/* Settings → Usage: what did the work, the hours, and the time taken against the time expected.
+   Three fixed colors name the three sources everywhere on the page (blue = this PC, orange =
+   cloud, green = web); each is always shown with its name, never by color alone. */
+.usage { --u-local: #2a78d6; --u-cloud: #eb6834; --u-web: #1baf7a; --u-plain: #8a94a8; display: flex; flex-direction: column; gap: 16px; }
+:root[data-theme="dark"] .usage { --u-local: #3987e5; --u-cloud: #d95926; --u-web: #199e70; --u-plain: #6b7896; }
+.usage .lede { margin-bottom: 0; }
+.usage .u-local { background: var(--u-local); } .usage .u-cloud { background: var(--u-cloud); } .usage .u-web { background: var(--u-web); } .usage .u-plain { background: var(--u-plain); }
+.u-tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; }
+.u-tile { display: flex; flex-direction: column; gap: 2px; background: var(--panel); border: 1px solid var(--line-soft); border-radius: var(--r); padding: 14px 16px; box-shadow: var(--sh-1); }
+.u-tile-label { font-size: .85rem; font-weight: 650; color: var(--muted); }
+.u-tile-value { font-size: 1.9rem; font-weight: 760; line-height: 1.15; color: var(--text); }
+.u-tile-sub { font-size: .82rem; color: var(--muted); }
+.u-card { display: flex; flex-direction: column; gap: 12px; }
+.u-card:hover { transform: none; }
+.u-card h3 { margin: 0 0 2px; }
+.u-card .help { margin: 0; }
+.u-split { display: flex; flex-direction: column; gap: 6px; }
+.u-split-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+.u-seg { display: flex; gap: 2px; height: 18px; }
+.u-seg > i { display: block; min-width: 3px; border-radius: 4px; }
+.u-key { display: flex; gap: 6px 18px; flex-wrap: wrap; align-items: center; font-size: .87rem; color: var(--muted); }
+.u-key > span { display: inline-flex; align-items: center; gap: 6px; }
+.u-key b { color: var(--text); }
+.u-dot { display: inline-block; width: 10px; height: 10px; border-radius: 3px; flex: none; }
+.u-table .u-dot { margin-right: 8px; }
+.u-bars { display: flex; flex-direction: column; gap: 8px; }
+.u-bar-row { display: grid; grid-template-columns: minmax(130px, 210px) 1fr auto; gap: 12px; align-items: center; }
+.u-bar-name { font-size: .9rem; color: var(--muted); font-weight: 600; }
+.u-bar-track { display: block; height: 14px; }
+.u-bar-track > i { display: block; height: 100%; border-radius: 0 4px 4px 0; min-width: 3px; }
+.u-bar-val { font-variant-numeric: tabular-nums; min-width: 84px; text-align: right; }
+.u-verdict { margin: 0; }
+.u-facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; }
+.u-facts > div { display: flex; flex-direction: column; gap: 2px; padding: 10px 12px; background: var(--soft); border-radius: 10px; font-size: .88rem; }
+.u-facts b { font-size: 1.15rem; }
+.u-chart { display: grid; grid-template-columns: auto 1fr; gap: 8px; height: 190px; padding-bottom: 20px; }
+.u-axis { display: flex; flex-direction: column; justify-content: space-between; font-size: .76rem; color: var(--faint); text-align: right; font-variant-numeric: tabular-nums; }
+.u-plot { position: relative; }
+.u-grid { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: space-between; pointer-events: none; }
+.u-grid > i { display: block; border-top: 1px solid var(--line-soft); }
+.u-cols { position: absolute; inset: 0; display: flex; gap: 2px; align-items: stretch; }
+.u-col { position: relative; flex: 1; min-width: 0; display: flex; flex-direction: column; justify-content: flex-end; border-radius: 4px; outline-offset: 1px; }
+.u-col:hover, .u-col:focus-visible { background: var(--soft-2); }
+.u-stack { display: flex; flex-direction: column; gap: 2px; width: min(72%, 26px); margin: 0 auto; min-height: 0; }
+.u-stack > i { display: block; min-height: 2px; }
+.u-stack > i:first-child { border-radius: 4px 4px 0 0; }
+.u-tick { position: absolute; top: calc(100% + 4px); left: 50%; transform: translateX(-50%); font-size: .74rem; color: var(--faint); white-space: nowrap; }
+.u-table-wrap { overflow-x: auto; }
+.u-table { width: 100%; border-collapse: collapse; font-size: .9rem; }
+.u-table th { text-align: left; font-size: .8rem; color: var(--muted); font-weight: 700; padding: 6px 10px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+.u-table td { padding: 8px 10px; border-bottom: 1px solid var(--line-soft); }
+.u-table tr:last-child td { border-bottom: none; }
+.u-table .num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.u-controls { display: flex; flex-direction: column; gap: 10px; }
+.u-tip { position: fixed; z-index: 1000; max-width: 300px; padding: 7px 10px; border-radius: 9px; background: var(--toast-bg); color: var(--toast-ink); font-size: .82rem; line-height: 1.45; white-space: pre-line; pointer-events: none; box-shadow: var(--sh-2); }

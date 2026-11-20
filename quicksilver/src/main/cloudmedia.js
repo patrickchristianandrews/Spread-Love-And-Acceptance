@@ -156,7 +156,7 @@ async function replicate(provider, key, kind, model, opts, onStatus) {
   return saveResult(r.buf, url, r.type, kind, model, opts, provider);
 }
 
-async function generate(provider, key, kind, model, opts, onStatus = () => {}) {
+async function generateNow(provider, key, kind, model, opts, onStatus = () => {}) {
   if (store.config().offline) throw new Error('Quicksilver is offline. Go online to create in the cloud.');
   if (provider.preset === 'pollinations') return pollinations(model, opts, onStatus);
   if (!key) throw new Error(`Add your ${provider.name} key first (Models → Connect an API).`);
@@ -191,6 +191,14 @@ async function generate(provider, key, kind, model, opts, onStatus = () => {}) {
   onStatus('Downloading the result…');
   const r = await download(url);
   return saveResult(r.buf, url, r.type, kind, model, opts, provider);
+}
+
+// What was made in the cloud is counted in the usage statistics (see usage.js).
+async function generate(provider, key, kind, model, opts, onStatus) {
+  const t0 = Date.now();
+  const item = await generateNow(provider, key, kind, model, opts, onStatus);
+  require('./usage').record({ source: 'cloud', kind: ['image', 'video', 'audio'].includes(item?.kind) ? item.kind : kind === 'music' ? 'audio' : kind === 'video' ? 'video' : 'image', key: `cloudmedia:${provider.id}:${model}`, name: `${model} (${provider.name})`, ms: Date.now() - t0 });
+  return item;
 }
 
 module.exports = { FAL_MODELS, SERVICES, generate, inputFor, findUrl, extOf };

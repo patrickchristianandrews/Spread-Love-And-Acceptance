@@ -200,7 +200,7 @@ function toAnthropic(messages) {
 
 const EFFORT = { quick: 'low', balanced: 'medium', thorough: 'high', max: 'max' };
 
-async function* chat(providerId, model, { messages, temperature, maxTokens, signal, effort, level, tools }) {
+async function* chatNow(providerId, model, { messages, temperature, maxTokens, signal, effort, level, tools }) {
   effort = EFFORT[level] || effort;
   const p = get(providerId);
   if (!p) throw new Error('That API connection was removed. Pick another model.');
@@ -246,6 +246,15 @@ async function* chat(providerId, model, { messages, temperature, maxTokens, sign
     if (/fetch failed|ECONNREFUSED/i.test(String(err.message))) throw new Error(`Could not reach ${p.name}. ${PRESETS[p.preset]?.noKey ? 'Is it running?' : 'Check your internet connection.'}`);
     const e2 = new Error(`${p.name}: ${err.message}`); e2.status = err.status; throw e2;
   }
+}
+
+// A connection to an app on this PC (LM Studio, Ollama…) is not the cloud: nothing leaves the PC.
+const ON_THIS_PC = /^(localhost|127(\.\d{1,3}){3}|\[?::1\]?|0\.0\.0\.0)$/i;
+function onThisPc(p) { try { return ON_THIS_PC.test(new URL(p?.baseUrl || '').hostname); } catch { return false; } }
+// Every answer from a connected AI is timed for the usage statistics (see usage.js).
+function chat(providerId, model, req) {
+  const p = get(providerId);
+  return require('./usage').metered({ source: onThisPc(p) ? 'local' : 'cloud', kind: 'text', key: `api:${providerId}:${model}`, name: `${model} (${p?.name || 'API'})` }, chatNow(providerId, model, req));
 }
 
 // Image generation or editing through an API (OpenAI-compatible /images endpoints).

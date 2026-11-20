@@ -460,6 +460,8 @@ async function* chat(model, opts) {
   const useGpu = cpuOnly.has(model.file) ? 0 : gpu;
   let produced = false;
   let srv = null;
+  const began = Date.now();
+  let firstAt = 0;
   try {
     const s = await untilStopped(ensure(model, { contextSize: contextFor(messages, maxTokens, contextSize || 16384), limit: contextSize || 16384, gpu: useGpu, onStatus }), signal);
     srv = s;
@@ -475,9 +477,16 @@ async function* chat(model, opts) {
       signal,
     })) {
       produced = true;
+      if (!firstAt && (ev.type === 'text' || ev.type === 'reasoning') && ev.text) firstAt = Date.now();
       if (ev.type === 'stats' && model.id) {
-        // A real measurement of this model on this PC (see speeds.js).
-        try { const hw = await hardware.detect(); const reg = require('./models').get(model.id); if (reg) speeds.record(model.id, ev.tps, ev.tokens, speeds.estimateFor(reg, hw)); } catch {}
+        // A real measurement of this model on this PC (see speeds.js), and a line in the usage
+        // statistics (see usage.js). The speed test is a test, not use, so it isn't counted there.
+        try {
+          const hw = await hardware.detect(); const reg = require('./models').get(model.id);
+          const est = reg ? speeds.estimateFor(reg, hw) : 0;
+          if (reg) speeds.record(model.id, ev.tps, ev.tokens, est);
+          if (!opts.bench) require('./usage').record({ source: 'local', kind: 'text', key: `local:${model.id}`, name: reg?.name || model.name, ms: Date.now() - began, tokens: ev.tokens, tps: ev.tps, waitMs: firstAt ? firstAt - began : 0, expTps: est });
+        } catch {}
       }
       s.lastUsed = Date.now();
       yield ev;
