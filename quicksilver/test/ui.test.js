@@ -1158,6 +1158,15 @@ function redPng(size = 64) {
   assert.equal(await win.locator('#wk-max option').count(), 3, 'three size choices');
   await win.click('#modal [data-close]');
   console.log('✓ web knowledge: FineWeb-Edu can be added to a base for small models to search');
+  // Hugging Face dataset browser: searchable, sortable, multi-select, add-many into one bank.
+  await win.click('#kb-hf');
+  await win.waitForSelector('#hd-addsel');
+  assert.equal(await win.locator('#hd-sort option').count(), 4, 'sort by downloads/likes/trending/recent');
+  assert.equal(await win.locator('#hd-size option').count(), 3, 'rows-per-dataset choices');
+  assert.match(await win.locator('#hd-count').innerText(), /None selected/);
+  assert.equal(await win.locator('#hd-addsel[disabled]').count(), 1, 'Add selected is disabled until something is ticked');
+  await win.click('#modal [data-close]');
+  console.log('✓ HF dataset browser: sortable, multi-select, add-many');
   await win.click('#kb-save-model');
   await win.fill('#km-name', 'Clinical Reference');
   await win.check('#km-strict');

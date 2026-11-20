@@ -96,8 +96,8 @@ views.library = {
     });
     $('#kb-hf').addEventListener('click', () => hfDatasetModal((id) => busy(async () => {
       const r = await call('kb:dataset', kbSel, id);
-      toast(`Added ${r.rows.toLocaleString()} rows from ${r.id}${r.license ? ` (license: ${r.license})` : ''}.${r.cut ? ' It is a large dataset: the first part was added, up to the limit.' : ''}`, 9000);
-      return { errors: r.errors };
+      toast(`Added ${(r.rows || r.added || 0).toLocaleString()} ${r.sampled ? 'sample rows' : 'rows'} from ${r.id}${r.license ? ` (license: ${r.license})` : ''}.${r.cut ? ' It is a large dataset: the first part was added, up to the limit.' : ''}`, 9000);
+      return { errors: r.errors || [] };
     })));
     $('#kb-webk').addEventListener('click', async () => {
       const sources = await qs.call('kb:webSources').catch(() => []);
@@ -309,21 +309,33 @@ qs.onModelDone?.(({ model }) => { if (model?.kind === 'embed') { S.kbSemantic = 
 // the open knowledge base. Nothing is downloaded until "Add" is pressed.
 const mb = (n) => (n >= 1024 ** 3 ? `${(n / 1024 ** 3).toFixed(1)} GB` : n >= 1024 ** 2 ? `${Math.round(n / 1024 ** 2)} MB` : n ? `${Math.max(1, Math.round(n / 1024))} KB` : 'size not given');
 function hfDatasetModal(onAdd) {
-  const b = openModal(`<h2>🤗 Add a Hugging Face dataset</h2>
-    <p class="help">Hugging Face hosts public collections of text and tables: question-and-answer sets, legal and medical texts, recipes, catalogs. Pick one and its text is downloaded into this knowledge base, so answers can be searched and cited from it. After the download it stays on this PC.</p>
-    <div class="row"><input id="hd-q" class="grow" placeholder="Search, for example: recipes, legal contracts, medical questions" autofocus><button class="btn primary" id="hd-go">Search</button></div>
-    <p class="small muted" style="margin:6px 0 10px">Or paste a dataset's name (owner/name). Only datasets with text or tables are listed. Anyone can publish one, so check the license and the quality before relying on it.</p>
-    <div id="hd-out"><div class="empty">Loading what is trending…</div></div>
-    <div class="modal-actions"><button class="btn" data-close>Close</button></div>`, { wide: true });
+  const selected = new Set();
+  const b = openModal(`<h2>🤗 Add Hugging Face datasets</h2>
+    <p class="help">Public collections of text and tables — Q&amp;A sets, legal and medical texts, recipes, code, catalogs. Search, tick as many as you want, and add them all to this knowledge base at once; each is downloaded as a searchable, citable sample and kept on this PC. Anyone can publish a dataset, so check the licence and quality.</p>
+    <div class="row" style="gap:6px;flex-wrap:wrap"><input id="hd-q" class="grow" style="min-width:200px" placeholder="Search: recipes, legal, medical Q&A, code…" autofocus>
+      <select id="hd-sort"><option value="downloads">Most downloaded</option><option value="likes">Most liked</option><option value="trendingScore">Trending</option><option value="lastModified">Recently updated</option></select>
+      <button class="btn primary" id="hd-go">Search</button></div>
+    <p class="small muted" style="margin:6px 0 8px">Or paste a dataset id (owner/name). Only text/table datasets are listed.</p>
+    <div id="hd-out" style="max-height:48vh;overflow:auto"><div class="empty">Loading the most downloaded…</div></div>
+    <div class="row" style="position:sticky;bottom:0;background:var(--panel,#fff);padding:10px 0 2px;gap:8px;align-items:center;border-top:1px solid var(--line)">
+      <span class="grow small" id="hd-count">None selected</span>
+      <label class="small">Each: <select id="hd-size"><option value="500">~500 rows</option><option value="1000" selected>~1,000 rows</option><option value="3000">~3,000 rows</option></select></label>
+      <button class="btn primary" id="hd-addsel" disabled>Add selected</button>
+      <button class="btn" data-close>Close</button></div>`, { wide: true });
   const out = b.querySelector('#hd-out');
-  const listHTML = (list) => (list.length ? list.map((d) => `<div class="ad-row"><span class="grow"><span><b>${esc(d.id)}</b> ${d.gated ? '<span class="badge b-lav" title="You must accept its terms on huggingface.co and add a Hugging Face token">gated</span>' : ''}</span>
+  const bar = () => { const n = selected.size; b.querySelector('#hd-count').textContent = n ? `${n} dataset${n > 1 ? 's' : ''} selected` : 'None selected'; b.querySelector('#hd-addsel').disabled = !n; };
+  const listHTML = (list) => (list.length ? list.map((d) => `<div class="ad-row"><label class="row grow" style="gap:8px;align-items:flex-start"><input type="checkbox" data-hd-sel="${esc(d.id)}" ${selected.has(d.id) ? 'checked' : ''} style="margin-top:3px"><span class="grow"><span><b>${esc(d.id)}</b> ${d.gated ? '<span class="badge b-lav" title="You must accept its terms on huggingface.co and add a Hugging Face token">gated</span>' : ''}</span>
       ${d.about ? `<span class="small">${esc(d.about)}</span>` : ''}
-      <span class="small muted"><b>License:</b> ${esc(d.license || 'not stated')}${d.rows ? ` · ${esc(d.rows)}` : ''} · ⬇ ${d.downloads.toLocaleString()} · ❤ ${d.likes.toLocaleString()}</span></span>
+      <span class="small muted"><b>License:</b> ${esc(d.license || 'not stated')}${d.rows ? ` · ${esc(d.rows)}` : ''} · ⬇ ${d.downloads.toLocaleString()} · ❤ ${d.likes.toLocaleString()}</span></span></label>
       <button class="btn small" data-hd="${esc(d.id)}">Look…</button></div>`).join('') : '<div class="empty">No text or table datasets found for that.</div>');
+  const wire = () => {
+    out.querySelectorAll('[data-hd]').forEach((x) => x.addEventListener('click', () => look(x.dataset.hd)));
+    out.querySelectorAll('[data-hd-sel]').forEach((x) => x.addEventListener('change', () => { if (x.checked) selected.add(x.dataset.hdSel); else selected.delete(x.dataset.hdSel); bar(); }));
+  };
   const show = async (fn) => {
     out.innerHTML = '<div class="empty">Searching Hugging Face…</div>';
     try { out.innerHTML = listHTML(await fn()); } catch (err) { out.innerHTML = `<div class="notice">${esc(err.message)}</div>`; }
-    out.querySelectorAll('[data-hd]').forEach((x) => x.addEventListener('click', () => look(x.dataset.hd)));
+    wire();
   };
   // One dataset: what would come down, how big, under which license. Then the choice.
   const look = async (id) => {
@@ -343,10 +355,24 @@ function hfDatasetModal(onAdd) {
   };
   const run = () => {
     const q = b.querySelector('#hd-q').value.trim();
+    const sort = b.querySelector('#hd-sort').value;
     if (/^(https?:\/\/huggingface\.co\/datasets\/)?[\w.-]+\/[\w.-]+\/?$/.test(q)) return look(q);
-    return show(() => qs.call('hf:datasets', q));
+    return show(() => qs.call('hf:datasets', q, sort));
   };
   b.querySelector('#hd-go').addEventListener('click', run);
+  b.querySelector('#hd-sort').addEventListener('change', run);
   b.querySelector('#hd-q').addEventListener('keydown', (e) => { if (e.key === 'Enter') run(); });
+  b.querySelector('#hd-addsel').addEventListener('click', () => {
+    const ids = [...selected]; if (!ids.length) return;
+    const max = Number(b.querySelector('#hd-size').value);
+    closeModal();
+    busy(async () => {
+      const r = await call('kb:datasetsAdd', kbSel, ids, max);
+      const passages = r.done.reduce((t, d) => t + (d.added || 0), 0);
+      toast(`Added ${r.done.length} dataset${r.done.length !== 1 ? 's' : ''} (${passages.toLocaleString()} passages)${r.failed.length ? `; ${r.failed.length} couldn’t be read` : ''}.`, 9000);
+      return { errors: r.failed.map((f) => `${f.id} (${f.error})`) };
+    });
+  });
+  bar();
   run();
 }

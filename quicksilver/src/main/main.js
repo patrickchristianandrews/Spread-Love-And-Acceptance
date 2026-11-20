@@ -372,7 +372,7 @@ handle('system:load', () => {
 });
 handle('models:trending', async (force) => ({ ...(await models.trending({ force, hw: await hardware.detect() })), spaces: await hfData.trendingSpaces({ force }) }));
 // Hugging Face datasets as knowledge: search, look at what would come down, then add it.
-handle('hf:datasets', (q) => hfData.searchDatasets(q));
+handle('hf:datasets', (q, sort) => hfData.searchDatasets(q, sort));
 handle('hf:dataset', (id) => hfData.datasetInfo(id));
 // Hugging Face Spaces: browse (by likes/trending) and run a Gradio Space from inside the app.
 handle('hf:spaces', (opts) => hfData.searchSpaces(opts || {}));
@@ -387,7 +387,19 @@ handle('hfspace:run', async (id, req) => {
   }
   return { ...r, saved };
 });
-handle('kb:dataset', (collectionId, id) => hfData.addDataset(knowledge, collectionId, id, { onProgress: (p) => emit('library:progress', p) }));
+handle('kb:dataset', (collectionId, id, max) => hfData.addDatasetSmart(knowledge, collectionId, id, { max: Math.min(20000, Math.max(100, Number(max) || 1000)), onProgress: (p) => emit('library:progress', p) }));
+// Add many datasets into one knowledge bank in one go (each a bounded, instant sample).
+handle('kb:datasetsAdd', async (collectionId, ids, max) => {
+  const cap = Math.min(20000, Math.max(100, Number(max) || 1000));
+  const done = []; const failed = [];
+  for (let i = 0; i < (ids || []).length; i++) {
+    const id = ids[i];
+    emit('library:progress', { done: i, total: ids.length, name: `${id} (${i + 1} of ${ids.length})` });
+    try { const r = await hfData.addDatasetSmart(knowledge, collectionId, id, { max: cap, onProgress: (p) => emit('library:progress', { ...p, name: `${id}: ${p.done} rows (${i + 1} of ${ids.length})` }) }); done.push({ id, added: r.added }); }
+    catch (e) { failed.push({ id, error: String(e.message || e).slice(0, 120) }); }
+  }
+  return { done, failed, total: (ids || []).length };
+});
 // Big curated web knowledge (e.g. FineWeb-Edu): a bounded sample of rows → a knowledge base the
 // local models search by meaning, so a small model gains a large reference library. No big download.
 handle('kb:webSources', () => Object.entries(hfData.WEB_KNOWLEDGE).map(([id, s]) => ({ id, name: s.name, emoji: s.emoji, about: s.about })));

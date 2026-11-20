@@ -46,11 +46,12 @@ function summary(m) {
   };
 }
 
-async function searchDatasets(query) {
+async function searchDatasets(query, sort = 'downloads') {
   const q = String(query || '').trim();
-  const url = q ? `${HF}/api/datasets?search=${encodeURIComponent(q)}&sort=downloads&direction=-1&limit=30` : `${HF}/api/datasets?sort=trendingScore&direction=-1&limit=30`;
-  const list = await hf(url);
-  return list.filter((m) => m.id && !m.disabled && !m.private).map(summary).filter((m) => m.readable).slice(0, 20);
+  const dir = ['downloads', 'likes', 'trendingScore', 'lastModified'].includes(sort) ? sort : 'downloads';
+  const base = `${HF}/api/datasets?sort=${q ? dir : 'trendingScore'}&direction=-1&limit=40`;
+  const list = await hf(q ? `${base}&search=${encodeURIComponent(q)}` : base);
+  return list.filter((m) => m.id && !m.disabled && !m.private).map(summary).filter((m) => m.readable).slice(0, 30);
 }
 
 // What would be downloaded: the dataset's text and table files, biggest split first.
@@ -238,6 +239,49 @@ async function addWebKnowledge(knowledge, collectionId, { source = 'fineweb-edu'
   return { added: items.length, source: src.dataset, name: src.name };
 }
 
+// The first usable config/split of a dataset, from the datasets-server (needed to page its rows).
+async function firstSplit(id) {
+  const r = await fetch(`${DS_ROWS.replace('/rows', '/splits')}?dataset=${encodeURIComponent(id)}`, { headers: headers(), signal: AbortSignal.timeout(30000) }).catch(() => null);
+  if (!r || !r.ok) return null;
+  const j = await r.json().catch(() => null);
+  const splits = (j && j.splits) || [];
+  if (!splits.length) return null;
+  return splits.find((s) => /train/i.test(s.split)) || splits[0];
+}
+// Add a bounded sample of ANY dataset by paging the rows API — fast, "instant use", and works even
+// for huge datasets (no multi-GB shard download). Each row becomes a searchable passage.
+async function addDatasetSample(knowledge, collectionId, id, { max = 1000, onProgress } = {}) {
+  id = cleanId(id);
+  const sp = await firstSplit(id);
+  if (!sp) { const e = new Error('no-rows-api'); e.code = 'no-rows-api'; throw e; }
+  const pageSize = 100; const items = []; let offset = 0; let empty = 0; let pages = 0;
+  const budget = Math.ceil(max / pageSize) + 6;
+  while (items.length < max && pages < budget) {
+    pages++;
+    let rows;
+    try { rows = await fetchServerRows(id, sp.config, sp.split, offset, pageSize); }
+    catch (e) { if (items.length) break; if (/HTTP 4/.test(e.message)) { const err = new Error('no-rows-api'); err.code = 'no-rows-api'; throw err; } throw e; }
+    if (!rows.length) { if (++empty > 1) break; offset += pageSize; continue; }
+    empty = 0; offset += rows.length;
+    for (const r of rows) {
+      if (items.length >= max) break;
+      const t = rowText(r);
+      if (!t) continue;
+      items.push({ name: `${id}: ${sp.split} row ${items.length + 1}`, path: `${HF}/datasets/${id}`, kind: 'dataset', text: t.slice(0, PER_ROW_CAP), size: Math.min(t.length, PER_ROW_CAP) });
+    }
+    onProgress?.({ done: items.length, total: max, name: id });
+  }
+  if (!items.length) { const e = new Error('no-rows-api'); e.code = 'no-rows-api'; throw e; }
+  knowledge.addTexts(collectionId, items);
+  return { added: items.length, rows: items.length, id, sampled: true };
+}
+// "Instant use" add: try the rows sample first (fast, big-dataset-safe); fall back to downloading
+// the dataset's files when the rows API isn't available for it.
+async function addDatasetSmart(knowledge, collectionId, id, { max = 1000, onProgress } = {}) {
+  try { return await addDatasetSample(knowledge, collectionId, id, { max, onProgress }); }
+  catch (e) { if (e.code === 'no-rows-api') return addDataset(knowledge, collectionId, id, { onProgress }); throw e; }
+}
+
 // Search/browse Spaces (sort by likes or trending). Returns enough to list and run them.
 async function searchSpaces({ query = '', sort = 'likes', limit = 40 } = {}) {
   const dir = sort === 'trending' ? 'trendingScore' : sort === 'modified' ? 'lastModified' : 'likes';
@@ -248,4 +292,4 @@ async function searchSpaces({ query = '', sort = 'likes', limit = 40 } = {}) {
   } catch (e) { throw new Error(`Could not reach Hugging Face (${e.message || e}).`); }
 }
 
-module.exports = { searchDatasets, datasetInfo, addDataset, trendingSpaces, searchSpaces, addWebKnowledge, webRowText, fetchServerRows, WEB_KNOWLEDGE, rowText, parseCSV, rowsOf, cleanId, MAX_ROWS, MAX_BYTES };
+module.exports = { searchDatasets, datasetInfo, addDataset, addDatasetSample, addDatasetSmart, firstSplit, trendingSpaces, searchSpaces, addWebKnowledge, webRowText, fetchServerRows, WEB_KNOWLEDGE, rowText, parseCSV, rowsOf, cleanId, MAX_ROWS, MAX_BYTES };
