@@ -57,7 +57,7 @@ const JUST_ASKING = /^\s*(how|what|why|when|where|who|which|is|are|was|were|does
 const ABOUT_WORDS = /\b(prompt for|describe|explain|caption|what(?:'s| is) (in|on)|analy[sz]e|read the text|review of|write a review|summar)\w*/i;
 // A request to FIND an existing picture on the web (not generate one) — handled by the web image
 // search tool, so skill routing must not hand it to the picture maker.
-const WEB_IMAGE = /\b(photos?|pictures?|images?|pics)\b[^.?!\n]{0,20}\b(from|on|off|across) (the )?(web|internet|online|google)\b|\b(find|search|look ?up|look for|pull up|google)\b[^.?!\n]{0,30}\b(photos?|pictures?|pics|images?)\b|\b(real|actual|genuine) (life )?(photos?|pictures?|images?)\b|\bwhat (does|do|did|would) .{1,40} (really )?look like\b/i;
+const WEB_IMAGE = /\b(photos?|pictures?|images?|pics)\b[^.?!\n]{0,24}\b(online|on\s+the\s+(web|internet)|from\s+the\s+(web|internet)|off\s+(the\s+)?(web|internet)|on\s+google)\b|\b(online|on\s+the\s+web|on\s+the\s+internet|from\s+the\s+web|from\s+the\s+internet|google\s+image)\b[^.?!\n]{0,24}\b(photos?|pictures?|images?|pics)\b|\b(find|search|look\s?up|look\s+for|pull\s+up|google)\b[^.?!\n]{0,30}\b(photos?|pictures?|pics|images?)\b|\b(real|actual|genuine|existing)\s+(life\s+)?(photos?|pictures?|images?|pics)\b|\bwhat\s+(does|do|did|would)\s+.{1,40}\s+(really\s+)?look\s+like\b/i;
 // Is the thing a skill makes really what is being asked for? Its own words (the trigger) must
 // either start with the making verb ("write a report", "make a chart"), or follow one closely
 // with "a / an / my…" in between ("I need a business plan", "create a presentation"). So "I need

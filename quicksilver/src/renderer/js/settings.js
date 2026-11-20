@@ -103,7 +103,8 @@ function apisSetHTML() {
   </div>`;
 }
 function bindApisSet() {
-  $('#set-api-add')?.addEventListener('click', () => { go({ view: 'apis' }); });
+  // Connect = browse every service by task and connect; also wire the inline directory if present.
+  $('#set-api-add')?.addEventListener('click', () => apiDirectoryModal());
   $('#set-api-dir')?.addEventListener('click', () => apiDirectoryModal());
   // Each connected cloud AI answers a 1-token request: pass or fail, how long, and which key was used.
   $('#set-api-health')?.addEventListener('click', async (e) => {

@@ -584,7 +584,8 @@ function redPng(size = 64) {
   assert.equal(await win.locator('#skill-btn').count(), 0, 'no standalone skill icon');
   assert.equal(await win.locator('#file-in').count(), 1, 'the file input is still there for attachments');
   await win.click('.opts-menu [data-o="add-api"]');
-  await win.waitForFunction(() => S.route.view === 'apis', null, { timeout: 10000 });
+  await win.waitForSelector('.tab.active:has-text("API connections")', { timeout: 10000 });
+  assert.equal(await win.evaluate(() => S.route.view), 'settings', 'connect-a-cloud-AI opens Settings → API connections');
   await win.evaluate((id) => { go({ view: 'chat', id }); }, backTo2);
   assert.equal(await win.locator('#add-api-chip').count(), 0, 'the message bar stays tidy: Cloud AI is in the ＋ menu');
   await win.evaluate(() => { S.data.prefs.simple = false; applySimple?.(); });
@@ -616,7 +617,7 @@ function redPng(size = 64) {
   assert.equal(await unlockP, true, 'the right PIN unlocks');
   assert.ok(!(await win.evaluate(() => uncensoredBlocked('stack:unf-test'))), 'unlocked for the session');
   // Settings shows the lock as on, with a way to turn it off.
-  await win.evaluate(() => go({ view: 'settings' }));
+  await win.evaluate(() => { setTab = 'general'; go({ view: 'settings' }); });
   await win.waitForSelector('#pl-box:has-text("On.")');
   await win.evaluate(() => { clearLockPin(); S.stacks = S.stacks.filter((x) => x.id !== 'unf-test'); S.targets = S.targets.filter((t) => t.target !== 'stack:unf-test'); });
   console.log('✓ parental lock: PIN gates uncensored models/teams only, wrong PIN blocks, right PIN unlocks for the session');
@@ -1323,17 +1324,19 @@ function redPng(size = 64) {
     assert.match(b.why, /out of 10/);
   }
   console.log('✓ better for your PC: a clearly better model of any family for the same job, matched to this PC');
+  // API connections live under Settings now: the old "apis" route redirects there.
   await win.evaluate(() => go({ view: 'apis' }));
-  // Cloud AIs page: the inline "browse by task" directory (rows, a service per task it's good at).
-  await win.waitForSelector('#api-dir [data-dir-task="all"]', { timeout: 10000 });
-  await win.waitForSelector('#api-dir .ad-row:has-text("Google Gemini")');
-  await win.waitForSelector('#api-dir .ad-row:has-text("Pollinations")');
-  assert.ok(await win.locator('#api-dir [data-api-connect]').count() >= 10, 'providers can be connected straight from the directory');
-  // Pick a task → only its services show.
-  await win.click('#api-dir [data-dir-task="coding"]');
-  await win.waitForSelector('#api-dir h4:has-text("Coding")');
-  await win.click('#api-dir [data-dir-task="all"]');
-  await win.waitForSelector('.fusion-card #fusion-open');
+  await win.waitForSelector('.tab.active:has-text("API connections")');
+  assert.equal(await win.locator('.sidebar [data-nav="apis"]').count(), 0, 'no separate Cloud AIs nav item — it is under Settings');
+  // The by-task API directory opens from Settings and sorts by task.
+  await win.click('#set-api-dir');
+  await win.waitForSelector('#modal #api-dir [data-dir-task="all"]', { timeout: 10000 });
+  await win.waitForSelector('#modal #api-dir .ad-row:has-text("Google Gemini")');
+  await win.waitForSelector('#modal #api-dir .ad-row:has-text("Pollinations")');
+  assert.ok(await win.locator('#modal #api-dir [data-api-connect]').count() >= 10, 'providers can be connected straight from the directory');
+  await win.click('#modal #api-dir [data-dir-task="coding"]');
+  await win.waitForSelector('#modal #api-dir h4:has-text("Coding")');
+  await win.click('#modal [data-close]');
   await shot(win, '05b-api-free');
   // Web Finder: plain-language dork builder + OSINT knowledge base and tools.
   await win.evaluate(() => go({ view: 'finder' }));

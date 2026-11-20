@@ -369,7 +369,12 @@ document.addEventListener('click', (e) => {
 
 // ---------- routing ----------
 
-function go(r) { S.route = r; render(); }
+function go(r) {
+  // API connections live under Settings now (one place, no duplicate): any "connect an API" link
+  // or old Cloud AIs route lands on Settings → API connections.
+  if (r && r.view === 'apis') { try { setTab = 'apis'; } catch {} r = { view: 'settings' }; }
+  S.route = r; render();
+}
 
 function render() {
   renderChatList();
