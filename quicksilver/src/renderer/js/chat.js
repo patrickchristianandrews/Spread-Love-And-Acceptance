@@ -358,6 +358,7 @@ function messageHTML(chat, a, m, i) {
     <div class="bubble md ${streaming ? 'streaming' : ''} ${alt.error ? 'error' : ''}">${body}</div>
     ${webImagesHTML(alt, m)}
     ${webVideosHTML(alt)}
+    ${weatherHTML(alt)}
     ${downloadHTML(m, alt, streaming)}
     ${appButtonsHTML(m, alt, streaming)}
     ${skillMediaHTML(m, alt, streaming)}
@@ -675,6 +676,10 @@ function userContent(m, docBudget) {
 // of questions a local model answers better on its own (a pricing calculation, "my exam tomorrow",
 // a website's opening hours), so they don't count on their own.
 const FRESH_Q = /\b(latest|most recent|newest|up[- ]to[- ]date|right now|at the moment|this (week|month|year)|news|headlines?|breaking|stock (price|market)|share price|exchange rate|crypto|bitcoin|weather|forecast|who won|final score|release dates?|out yet|released yet|as of 20\d\d|in 20(2[6-9]|[3-9]\d))\b/i;
+// A clear request to SEE videos from the web (so they are fetched and shown, not just explained).
+const WEB_VIDEO_Q = /\b(show|find|search(\s+for)?|look\s?up|look\s+for|pull\s+up|get|give|watch)\b(\s+me)?[^.?!\n]{0,30}\b(videos?|clips?|footage|trailers?)\b|\b(videos?|clips?)\b[^.?!\n]{0,20}\b(from|on|off)\s+(the\s+)?(web|internet|online|youtube)\b/i;
+// A question about the weather / forecast (so a live, visual forecast card is shown).
+const WEATHER_Q = /\b(weather|forecast|temperature|temp|how (hot|cold|warm)|will it (rain|snow)|is it (going to|gonna) (rain|snow)|rain(ing|fall)?|snow(ing)?|humidity|wind speed|uv index|chance of rain)\b/i;
 // A calculation, a creative or build request, or a how-to is about the user's own work, not the news.
 const NOT_FRESH = /\d\s*[-+*/^×÷%]\s*\d|\b(write|draft|create|build|make|design|generate|code|refactor|debug|explain|summar|translate|rewrite|compose|story|poem|lyrics|essay|email|script|app|website|function)\b/i;
 // The composer's web status: read-only. Web search is controlled by the Online/Offline switch at the
@@ -855,6 +860,35 @@ async function generate(chat, rerollMsg, withTarget, opts = {}) {
   if (skill) { alt.skillId = skill.id; alt.forceFact = Boolean(skill.tools?.factCheck); }
   // Tools that work straight on your files (and reading aloud) don't need a text model.
   if (skill && DIRECT_OUTPUTS.has(skill.output)) { runDirectSkill(chat, msg, alt, skill, lastUser); return; }
+  // Instant weather: a plain "what's the weather" shouldn't wait on a web search AND a model write.
+  // Fetch the live forecast and finish right away with the visual card + a one-line summary.
+  if (!skill && !opts.fix && lastUser?.text && !S.config?.offline && S.config?.web?.provider !== 'none'
+    && WEATHER_Q.test(lastUser.text) && lastUser.text.length <= 120
+    && !/\b(why|explain|history|climate change|global warming|compare|affect|average|record|dataset|trend|data)\b/i.test(lastUser.text)) {
+    alt.status = 'Checking the forecast…'; paintStreaming(chat, msg);
+    try {
+      const wx = await qs.call('web:weather', lastUser.text, {});
+      if (pending?.requestId !== requestId) return;
+      if (wx && wx.current) {
+        (alt.toolCalls ||= []).push({ id: 'autowx', name: 'weather', source: 'Live weather', status: 'done', result: `Current forecast for ${wx.place}.\n[[weather:${JSON.stringify(wx)}]]` });
+        const d0 = wx.days?.[0]; const ni = wxInfo(wx.current.code, wx.current.isDay);
+        let s = `Right now it's ${wx.current.temp}${wx.unit}, ${String(ni.label).toLowerCase()} in ${wx.place}`;
+        if (d0) s += ` — today's high ${d0.max}°, low ${d0.min}°`;
+        const wet = (wx.days || []).find((d) => d.pop != null && d.pop >= 50);
+        if (wet) s += `${wet === d0 ? ', with a good chance of ' : `; later this week expect `}${wx.current.temp <= 1 ? 'snow' : 'rain'}`;
+        alt.text = `${s}.`;
+        alt.autoWeb = true;
+        delete alt.status; if (alt.t0) { alt.ms = Date.now() - alt.t0; delete alt.t0; }
+        pending = null; chat.updated = now();
+        if (chat.title === 'New chat' && chat.messages[0]?.text) chat.title = chat.messages[0].text.replace(/\s+/g, ' ').slice(0, 60);
+        save(); if (S.route.view === 'chat') render(); else renderChatList();
+        if (S.data.prefs.smartFollowups !== false) { alt.fuPending = true; render(); writeFollowups(chat, msg, alt); }
+        return;
+      }
+      (alt.toolCalls || []).pop();
+    } catch { (alt.toolCalls || []).pop(); /* fall through to a normal answer */ }
+    delete alt.status;
+  }
   const force = skill?.tools || {};
   if ((chat.library ?? a.library) || webWanted(chat, a, lastUser?.text || '', force) || force.knowledge) { alt.status = 'Searching sources…'; paintStreaming(chat, msg); }
   // Load the model at the same time as the search runs, instead of one after the other.
@@ -891,6 +925,55 @@ async function generate(chat, rerollMsg, withTarget, opts = {}) {
   // found nothing stays silent (the user didn't ask for it) — just answer from what you know.
   if (sources.webEmpty && !sources.autoWeb) memNote = `${memNote ? `${memNote}\n` : ''}The user turned on web search, but the search found nothing for this question. Say in one short sentence at the start that you couldn't check the web this time, then answer from what you know. Don't claim anything is the "latest" or give publication dates or links you haven't seen.`;
   else if (sources.webEmpty) memNote = `${memNote ? `${memNote}\n` : ''}Answer from your own knowledge. Don't claim anything is the "latest" and don't give publication dates or links.`;
+  // Pictures from the web: when the message clearly asks to SEE real pictures of something, fetch
+  // them here and show them, so they actually appear even on a model that wouldn't call the tool
+  // itself (which just explains how to find them). The model then introduces them in one line.
+  const wantPics = !skill && lastUser?.text && !S.config?.offline && S.config?.web?.provider !== 'none'
+    && typeof WEB_IMAGE !== 'undefined' && WEB_IMAGE.test(lastUser.text)
+    && !/\b(make|create|generate|draw|paint|render|design|imagine|cartoon|anime)\b/i.test(lastUser.text);
+  if (wantPics) {
+    try {
+      alt.status = 'Finding pictures…'; paintStreaming(chat, msg);
+      const imgs = await qs.call('web:images', lastUser.text, { safeSearch: safeSearchValue(), count: 8 });
+      if (pending?.requestId !== requestId) return;
+      if (imgs && imgs.length) {
+        (alt.toolCalls ||= []).push({ id: 'autoimg', name: 'image_search', source: 'Pictures from the web', status: 'done', result: `Showing ${imgs.length} pictures from the web.\n[[web-images:${JSON.stringify(imgs)}]]` });
+        memNote = `${memNote ? `${memNote}\n` : ''}Pictures from the web are ALREADY shown to the user directly below your answer. Introduce them in ONE short, friendly sentence and stop. Do NOT explain how to find or search for pictures, do NOT give links or search tips, and never say you cannot show images — they are already there.`;
+      }
+    } catch { /* fall through to an ordinary answer */ }
+  }
+  // Videos from the web: same idea — fetch and show them so they actually appear.
+  const wantVids = !skill && !wantPics && lastUser?.text && !S.config?.offline && S.config?.web?.provider !== 'none'
+    && WEB_VIDEO_Q.test(lastUser.text)
+    && !/\b(make|create|generate|animate)\b/i.test(lastUser.text);
+  if (wantVids) {
+    try {
+      alt.status = 'Finding videos…'; paintStreaming(chat, msg);
+      const vids = await qs.call('web:videos', lastUser.text, { safeSearch: safeSearchValue(), count: 8 });
+      if (pending?.requestId !== requestId) return;
+      if (vids && vids.length) {
+        (alt.toolCalls ||= []).push({ id: 'autovid', name: 'video_search', source: 'Videos from the web', status: 'done', result: `Showing ${vids.length} videos from the web.\n[[web-videos:${JSON.stringify(vids)}]]` });
+        memNote = `${memNote ? `${memNote}\n` : ''}Videos from the web are ALREADY shown to the user directly below your answer, each with a watch link. Introduce them in ONE short sentence and stop. Do NOT explain how to find videos or give search tips, and never say you cannot show videos.`;
+      }
+    } catch { /* fall through */ }
+  }
+  // Weather: when the message asks about the weather/forecast, fetch a live forecast and show it as
+  // a visual card (current conditions, an hourly strip and a 7-day row) instead of a wall of text.
+  const wantWx = !skill && !wantPics && !wantVids && lastUser?.text && !S.config?.offline
+    && S.config?.web?.provider !== 'none' && WEATHER_Q.test(lastUser.text);
+  if (wantWx) {
+    try {
+      alt.status = 'Checking the forecast…'; paintStreaming(chat, msg);
+      const wx = await qs.call('web:weather', lastUser.text, {});
+      if (pending?.requestId !== requestId) return;
+      if (wx && wx.current) {
+        (alt.toolCalls ||= []).push({ id: 'autowx', name: 'weather', source: 'Live weather', status: 'done', result: `Current forecast for ${wx.place}.\n[[weather:${JSON.stringify(wx)}]]` });
+        memNote = `${memNote ? `${memNote}\n` : ''}A live weather forecast for ${wx.place} is ALREADY shown to the user as a visual card directly below your answer (current ${wx.current.temp}${wx.unit}, feels ${wx.current.feels}${wx.unit}, and a 7-day outlook). Give ONE short, friendly sentence summarising the gist (e.g. today's high/low and anything notable like rain) and stop. Do NOT list every day or repeat all the numbers — the card already shows them.`;
+      }
+    } catch (e) {
+      memNote = `${memNote ? `${memNote}\n` : ''}A live weather lookup was attempted but failed (${String(e?.message || e).slice(0, 120)}). If a city wasn't clear, ask the user which place they mean.`;
+    }
+  }
   const { strict, messages } = H;
   if (messages.at(-1).role !== 'user') messages.push({ role: 'user', content: 'Please continue.' });
   messages[messages.length - 1] = { ...messages.at(-1), content: withContext(messages.at(-1).content, turnContext(chat, sources, strict, lastUser?.text || '', ctx, memNote, skill ? skillPrompt(skill) + mediaSourceNote(lastUser, skill) : '')) };
@@ -1474,6 +1557,48 @@ function webVideosHTML(alt) {
   if (!list.length) return '';
   return `<div class="web-images web-videos">${list.map((x) => `<a class="web-img web-vid" href="${esc(x.page || '#')}" title="${esc(`${x.title}${x.author ? ` · ${x.author}` : ''} · ${x.source}`)}">${x.src ? `<img src="${esc(x.src)}" alt="${esc(x.title)}" loading="lazy">` : `<span class="web-vid-noimg">${esc(x.source)}</span>`}<span class="web-vid-play">▶</span>${x.duration ? `<span class="web-vid-dur">${esc(x.duration)}</span>` : ''}<span class="small">${esc(String(x.title).slice(0, 60))}</span></a>`).join('')}</div>
     <div class="row small" style="gap:8px;margin:2px 0 6px"><span class="muted">🎬 ${list.length} videos from the web · safe search on · click one to watch</span></div>`;
+}
+// Live weather, shown as a visual card: current conditions big, a 24-hour strip, then 7 days.
+const WMO = {
+  0: ['Clear', '☀️', '🌙'], 1: ['Mainly clear', '🌤️', '🌙'], 2: ['Partly cloudy', '⛅', '☁️'], 3: ['Overcast', '☁️', '☁️'],
+  45: ['Fog', '🌫️', '🌫️'], 48: ['Rime fog', '🌫️', '🌫️'],
+  51: ['Light drizzle', '🌦️', '🌧️'], 53: ['Drizzle', '🌦️', '🌧️'], 55: ['Heavy drizzle', '🌧️', '🌧️'],
+  56: ['Freezing drizzle', '🌨️', '🌨️'], 57: ['Freezing drizzle', '🌨️', '🌨️'],
+  61: ['Light rain', '🌦️', '🌧️'], 63: ['Rain', '🌧️', '🌧️'], 65: ['Heavy rain', '🌧️', '🌧️'],
+  66: ['Freezing rain', '🌨️', '🌨️'], 67: ['Freezing rain', '🌨️', '🌨️'],
+  71: ['Light snow', '🌨️', '🌨️'], 73: ['Snow', '❄️', '❄️'], 75: ['Heavy snow', '❄️', '❄️'], 77: ['Snow grains', '🌨️', '🌨️'],
+  80: ['Light showers', '🌦️', '🌧️'], 81: ['Showers', '🌧️', '🌧️'], 82: ['Violent showers', '⛈️', '⛈️'],
+  85: ['Snow showers', '🌨️', '🌨️'], 86: ['Snow showers', '❄️', '❄️'],
+  95: ['Thunderstorm', '⛈️', '⛈️'], 96: ['Thunderstorm, hail', '⛈️', '⛈️'], 99: ['Thunderstorm, hail', '⛈️', '⛈️'],
+};
+const wxInfo = (code, isDay = true) => { const e = WMO[code] || ['—', '🌡️', '🌡️']; return { label: e[0], emoji: isDay ? e[1] : e[2] }; };
+const weatherOf = (alt) => { for (const t of (alt.toolCalls || [])) { const m = String(t.result || '').match(/\[\[weather:(\{[\s\S]*\})\]\]/); if (m) { try { return JSON.parse(m[1]); } catch { /* ignore */ } } } return null; };
+function weatherHTML(alt) {
+  const wx = weatherOf(alt); if (!wx || !wx.current) return '';
+  const u = esc(wx.unit || '°');
+  const now = wxInfo(wx.current.code, wx.current.isDay);
+  const dayName = (iso, i) => (i === 0 ? 'Today' : new Date(iso).toLocaleDateString(undefined, { weekday: 'short' }));
+  const hourLabel = (iso) => new Date(iso).toLocaleTimeString(undefined, { hour: 'numeric' }).replace(/\s/g, '');
+  const temps = (wx.days || []).flatMap((d) => [d.min, d.max]);
+  const lo = Math.min(...temps); const hi = Math.max(...temps); const span = Math.max(1, hi - lo);
+  const hours = (wx.hours || []).slice(0, 12);
+  return `<div class="wx-card">
+    <div class="wx-now">
+      <div class="wx-now-emoji">${now.emoji}</div>
+      <div class="wx-now-main">
+        <div class="wx-now-temp">${wx.current.temp}${u}</div>
+        <div class="wx-now-desc">${esc(now.label)} · feels ${wx.current.feels}${u}</div>
+        <div class="wx-now-place">📍 ${esc(wx.place || '')}</div>
+      </div>
+      <div class="wx-now-stats">
+        <span title="Humidity">💧 ${wx.current.humidity}%</span>
+        <span title="Wind">🌬️ ${wx.current.wind} ${esc(wx.windUnit || '')}</span>
+      </div>
+    </div>
+    ${hours.length ? `<div class="wx-hours">${hours.map((h) => { const hi2 = wxInfo(h.code); return `<div class="wx-hour"><span class="wx-h-t">${hourLabel(h.time)}</span><span class="wx-h-e">${hi2.emoji}</span><span class="wx-h-d">${h.temp}${u}</span>${h.pop != null && h.pop > 0 ? `<span class="wx-h-p">💧${h.pop}%</span>` : '<span class="wx-h-p"></span>'}</div>`; }).join('')}</div>` : ''}
+    <div class="wx-days">${(wx.days || []).map((d, i) => { const di = wxInfo(d.code); const l = Math.round(((d.min - lo) / span) * 100); const r = Math.round(((hi - d.max) / span) * 100); return `<div class="wx-day"><span class="wx-d-name">${esc(dayName(d.date, i))}</span><span class="wx-d-e" title="${esc(di.label)}">${di.emoji}</span><span class="wx-d-lo">${d.min}°</span><span class="wx-d-bar"><span class="wx-d-fill" style="left:${l}%;right:${r}%"></span></span><span class="wx-d-hi">${d.max}°</span>${d.pop != null && d.pop > 0 ? `<span class="wx-d-p">💧${d.pop}%</span>` : '<span class="wx-d-p"></span>'}</div>`; }).join('')}</div>
+    <div class="row small muted" style="margin:4px 2px 2px">🌤️ Live forecast · Open-Meteo</div>
+  </div>`;
 }
 function toolsHTML(alt) {
   const list = alt.toolCalls || [];

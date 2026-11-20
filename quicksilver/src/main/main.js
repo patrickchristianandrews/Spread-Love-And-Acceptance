@@ -621,7 +621,39 @@ handle('kb:search', async (q, k, ids) => { const r = await knowledge.search(q, {
 // resolved parameters come back with the results.
 handle('web:search', async (q, opts = {}) => { const r = await websearch.search(q, { safe: opts?.safeSearch }); return { results: [...r], meta: r.meta }; });
 handle('web:images', async (q, opts = {}) => { const list = await websearch.images(String(q || ''), { count: Math.max(1, Math.min(12, Number(opts?.count) || 6)), safe: opts?.safeSearch || 'on' }); return list.map((x) => ({ title: x.title, source: x.source, page: x.page, full: x.full, src: `qsmedia://w/${x.file}` })); });
-handle('web:videos', async (q, opts = {}) => { const list = await websearch.videos(String(q || ''), { count: Math.max(1, Math.min(12, Number(opts?.count) || 6)), safe: opts?.safeSearch || 'on' }); return list.map((x) => ({ title: x.title, source: x.source, page: x.page, duration: x.duration })); });
+handle('web:videos', async (q, opts = {}) => { const list = await websearch.videos(String(q || ''), { count: Math.max(1, Math.min(12, Number(opts?.count) || 6)), safe: opts?.safeSearch || 'on' }); return list.map((x) => ({ title: x.title, source: x.source, page: x.page, duration: x.duration, author: x.author, src: x.src, embed: x.embed })); });
+// Live weather — Open-Meteo (keyless, free, no sign-up). Returns a structured forecast
+// the chat renders as a visual card: current conditions, an hourly strip and a 7-day row.
+handle('web:weather', async (q, opts = {}) => {
+  const fetchJson = async (url, ms = 6000) => { const r = await fetch(url, { headers: { 'User-Agent': 'Quicksilver' }, signal: AbortSignal.timeout(ms) }); if (!r.ok) throw new Error(`HTTP ${r.status}`); return r.json(); };
+  // Work out the place: an explicit one, a "weather in X" phrase, or (for "local") this device's rough location.
+  let place = String(opts?.place || '').trim();
+  if (!place) { const m = String(q || '').match(/\b(?:weather|forecast|temperature|temp|rain|snow|humidity|wind|climate)\b[^.?!\n]*?\b(?:in|at|for|near|around)\s+([A-Za-z0-9 .,'’\-]{2,60})/i) || String(q || '').match(/\b(?:in|at|for)\s+([A-Za-z0-9 .,'’\-]{2,60})\b.*\b(?:weather|forecast|temperature)\b/i); if (m) place = m[1].replace(/\b(today|tonight|tomorrow|this (week|weekend)|right now|now|please)\b.*$/i, '').trim(); }
+  let lat; let lon; let name; let country; let admin;
+  if (!place || /\b(local|here|my (area|location|city|town)|current location|where i am|outside)\b/i.test(place || q || '')) {
+    try { const ip = await fetchJson('https://ipapi.co/json/', 4000); if (ip && ip.latitude != null) { lat = ip.latitude; lon = ip.longitude; name = ip.city; admin = ip.region; country = ip.country_name; } } catch { /* fall through to named place */ }
+  }
+  if (lat == null && place) {
+    const g = await fetchJson(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(place)}&count=1&language=en&format=json`);
+    const hit = g?.results?.[0]; if (!hit) throw new Error(`Could not find a place called “${place}”.`);
+    lat = hit.latitude; lon = hit.longitude; name = hit.name; admin = hit.admin1; country = hit.country;
+  }
+  if (lat == null) throw new Error('No location given. Try “weather in <city>”.');
+  const units = (opts?.units === 'f' || /\b(fahrenheit|°f|imperial)\b/i.test(q || '')) ? { t: 'fahrenheit', w: 'mph', p: 'inch', sym: '°F' } : { t: 'celsius', w: 'kmh', p: 'mm', sym: '°C' };
+  const u = `temperature_unit=${units.t}&wind_speed_unit=${units.w}&precipitation_unit=${units.p}`;
+  const f = await fetchJson(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&${u}&timezone=auto&forecast_days=7&current=temperature_2m,relative_humidity_2m,apparent_temperature,is_day,weather_code,wind_speed_10m,precipitation&hourly=temperature_2m,weather_code,precipitation_probability&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,sunrise,sunset,wind_speed_10m_max`);
+  const nowIso = f.current?.time;
+  const hStart = Math.max(0, (f.hourly?.time || []).findIndex((t) => t >= nowIso));
+  const hours = [];
+  for (let i = hStart; i < Math.min(hStart + 24, (f.hourly?.time || []).length); i += 1) hours.push({ time: f.hourly.time[i], temp: Math.round(f.hourly.temperature_2m[i]), code: f.hourly.weather_code[i], pop: f.hourly.precipitation_probability?.[i] ?? null });
+  const days = (f.daily?.time || []).map((d, i) => ({ date: d, code: f.daily.weather_code[i], max: Math.round(f.daily.temperature_2m_max[i]), min: Math.round(f.daily.temperature_2m_min[i]), pop: f.daily.precipitation_probability_max?.[i] ?? null, sunrise: f.daily.sunrise?.[i], sunset: f.daily.sunset?.[i], wind: Math.round(f.daily.wind_speed_10m_max?.[i] ?? 0) }));
+  return {
+    place: [name, admin && admin !== name ? admin : null, country].filter(Boolean).join(', '),
+    unit: units.sym, windUnit: units.w === 'mph' ? 'mph' : 'km/h',
+    current: { temp: Math.round(f.current.temperature_2m), feels: Math.round(f.current.apparent_temperature), code: f.current.weather_code, humidity: f.current.relative_humidity_2m, wind: Math.round(f.current.wind_speed_10m), isDay: !!f.current.is_day, precip: f.current.precipitation },
+    hours, days,
+  };
+});
 handle('kb:peek', (q) => knowledge.peek(q));
 // Paste text straight into a knowledge base (notes, a policy, an email).
 handle('kb:addText', (collectionId, name, text) => knowledge.addTexts(collectionId, [{ name: String(name || 'Note').slice(0, 120), text: String(text || '') }]));
