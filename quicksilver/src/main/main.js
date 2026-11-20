@@ -458,6 +458,9 @@ handle('netlog:recent', () => require('./netlog').recent.slice(-50));
 handle('targets:list', () => complete.targets());
 handle('models:warm', (target, opts) => complete.warm(target, opts).catch(() => false));
 handle('models:prefill', (target, messages, opts) => complete.prefill(target, messages, opts).catch(() => false));
+// Microscope: the token-by-token output of one local model (with per-token probabilities), used to
+// observe a model and to compare two (e.g. two quantizations) and see where they first diverge.
+handle('microscope:tokens', (modelId, prompt, opts) => require('./microscope').tokens(modelId, prompt, { ...(opts || {}), onStatus: (text) => emit('microscope:status', { modelId, text }) }));
 // Code in answers is compiled, never run: syntax errors are found without any risk.
 handle('code:check', (blocks) => {
   const vm = require('node:vm');

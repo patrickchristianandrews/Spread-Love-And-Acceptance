@@ -1392,6 +1392,16 @@ function redPng(size = 64) {
   await shot(win, '05e-usage');
   await win.evaluate(() => { S.data.chats = S.data.chats.filter((c) => c.id !== 'usage-probe'); });
   console.log('✓ Usage dashboard: on-PC vs cloud vs team, internet %, speed, per-model');
+  // Microscope: look inside a model token by token, and compare two models for divergence.
+  await win.evaluate(() => go({ view: 'microscope' }));
+  await win.waitForSelector('.page-head:has-text("Microscope")');
+  if (await win.locator('#mi-run').count()) {
+    assert.ok(await win.locator('#mi-a option').count() >= 1, 'model A can be chosen');
+    assert.equal(await win.locator('#mi-b').count(), 1, 'an optional second model to compare');
+    assert.match(await win.locator('.page').innerText(), /token by token/i);
+  }
+  await shot(win, '05f-microscope');
+  console.log('✓ Microscope: token-by-token inside / two-model divergence view');
   await win.evaluate(() => { modelsTab = 'text'; go({ view: 'models' }); });
   await win.waitForSelector('.addon:has-text("Memory"):has-text("like Mem0")');
   assert.ok(await win.locator('.addon:has-text("local RAG")').count() === 1 && await win.locator('.addon .addon-effect').count() >= 8);

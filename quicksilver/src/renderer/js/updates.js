@@ -128,7 +128,7 @@ async function loadModelUpgrades() {
 
 // The left menu stays short: the Explore pages fold into one section (open it when you need it;
 // it opens by itself on those pages). Your stacks are on the Stacks page.
-const EXPLORE_VIEWS = ['stacks', 'models', 'assistants', 'skills', 'integrations', 'finder', 'spaces', 'arena', 'benchmark', 'usage'];
+const EXPLORE_VIEWS = ['stacks', 'models', 'assistants', 'skills', 'integrations', 'finder', 'spaces', 'arena', 'benchmark', 'usage', 'microscope'];
 const exploreOpen = () => { const p = S.data?.prefs?.exploreOpen; return p === true || (p !== false && EXPLORE_VIEWS.includes(S.route?.view)); };
 function paintExplore() {
   const list = document.getElementById('nav-explore-list');

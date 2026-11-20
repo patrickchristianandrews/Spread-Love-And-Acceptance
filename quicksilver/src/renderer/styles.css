@@ -1653,3 +1653,20 @@ code.sel { user-select: all; background: var(--soft); padding: 1px 6px; border-r
 
 /* Your Crew → Downloads */
 .torrent-row { margin-bottom: 8px; }
+
+/* Microscope: token-by-token inside/compare view */
+.micro-stream { display: flex; flex-wrap: wrap; gap: 3px; line-height: 1.9; margin: 8px 0 14px; }
+.micro-tok { font-family: ui-monospace, Consolas, monospace; font-size: .85rem; border: 1px solid var(--line); background: var(--panel-2, rgba(127,127,127,.08)); color: var(--ink, inherit); border-radius: 6px; padding: 2px 6px; cursor: pointer; position: relative; }
+.micro-tok:hover { border-color: var(--accent, #5ee0ec); }
+.micro-tok.on { outline: 2px solid var(--accent, #5ee0ec); }
+.micro-tok.same { opacity: .6; }
+.micro-tok.diverge { background: rgba(224,65,106,.18); border-color: #e0416a; font-weight: 700; }
+.micro-tok .micro-p { font-size: .62rem; opacity: .6; margin-left: 4px; }
+.micro-bar { display: inline-block; flex: 1; height: 8px; background: var(--panel-2, rgba(127,127,127,.15)); border-radius: 4px; overflow: hidden; min-width: 60px; }
+.micro-bar i { display: block; height: 100%; border-radius: 4px; }
+.micro-grid { display: grid; grid-template-columns: minmax(260px, 1.1fr) 1fr; gap: 14px; align-items: start; }
+@media (max-width: 820px) { .micro-grid { grid-template-columns: 1fr; } }
+.micro-table td { vertical-align: top; }
+.micro-table tr.micro-diverge-row td { background: rgba(224,65,106,.08); }
+.micro-side { position: sticky; top: 12px; }
+.micro-detail { border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; background: var(--panel, rgba(127,127,127,.04)); }
