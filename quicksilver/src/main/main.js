@@ -374,6 +374,19 @@ handle('models:trending', async (force) => ({ ...(await models.trending({ force,
 // Hugging Face datasets as knowledge: search, look at what would come down, then add it.
 handle('hf:datasets', (q) => hfData.searchDatasets(q));
 handle('hf:dataset', (id) => hfData.datasetInfo(id));
+// Hugging Face Spaces: browse (by likes/trending) and run a Gradio Space from inside the app.
+handle('hf:spaces', (opts) => hfData.searchSpaces(opts || {}));
+handle('hfspace:info', (id, token) => require('./hfspace').info(id, token || providers.secretOf?.('hf') || store.getSecret('hf:token') || ''));
+handle('hfspace:run', async (id, req) => {
+  const hfs = require('./hfspace');
+  const token = (req && req.token) || store.getSecret('hf:token') || '';
+  const r = await hfs.run(id, req || {}, token, (text) => emit('hfspace:status', { id, text }));
+  const saved = [];
+  for (const m of r.media.slice(0, 8)) {
+    try { const { buf, ext } = await hfs.fetchToBuffer(m.url, token); const g = media.saveBuffer(buf, ext, { source: `Space: ${id}`, prompt: req?.prompt || '', kind: m.kind }); saved.push({ ...g, kind: m.kind, url: `qsmedia://g/${g.id}` }); } catch (e) { /* keep the link even if download failed */ saved.push({ kind: m.kind, url: m.url, remote: true }); }
+  }
+  return { ...r, saved };
+});
 handle('kb:dataset', (collectionId, id) => hfData.addDataset(knowledge, collectionId, id, { onProgress: (p) => emit('library:progress', p) }));
 handle('models:import', async () => {
   const r = await dialog.showOpenDialog(win, { title: 'Import a GGUF model', properties: ['openFile'], filters: [{ name: 'GGUF model', extensions: ['gguf'] }] });

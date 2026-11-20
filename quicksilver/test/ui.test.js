@@ -1338,6 +1338,18 @@ function redPng(size = 64) {
   assert.match(await win.locator('.page:has-text("cheat sheet")').innerText(), /filetype:/);
   await shot(win, '05c-web-finder');
   console.log('✓ Web Finder: dork builder fills queries; OSINT tools, playbooks and operator cheat sheet');
+  // Spaces: the browser page renders, and the in-app run panel opens for a Gradio Space.
+  // (The live Hugging Face list needs network; the search box and run panel do not, so we assert those.)
+  await win.evaluate(() => go({ view: 'spaces' }));
+  await win.waitForSelector('#sp-q');
+  assert.equal(await win.locator('#sp-sort option').count(), 3, 'sort by likes / trending / recent');
+  await win.evaluate(() => runSpaceModal('black-forest-labs/FLUX.1-schnell'));
+  await win.waitForSelector('#modal #sp-run');
+  assert.equal(await win.locator('#modal #sp-prompt').count(), 1, 'the run panel asks for a prompt');
+  assert.match(await win.locator('#modal').innerText(), /Run black-forest-labs\/FLUX\.1-schnell/);
+  await win.click('#modal [data-close]');
+  await shot(win, '05d-spaces');
+  console.log('✓ Spaces: browser page and in-app Gradio run panel');
   await win.evaluate(() => { modelsTab = 'text'; go({ view: 'models' }); });
   await win.waitForSelector('.addon:has-text("Memory"):has-text("like Mem0")');
   assert.ok(await win.locator('.addon:has-text("local RAG")').count() === 1 && await win.locator('.addon .addon-effect').count() >= 8);

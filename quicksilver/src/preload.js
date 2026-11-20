@@ -24,6 +24,7 @@ contextBridge.exposeInMainWorld('qs', {
   onEngine: on('engines:progress'),
   onBench: on('bench:status'),
   onQuality: on('quality:status'),
+  onSpace: on('hfspace:status'),
   onApp: on('app:event'), // voice set-up, phone sync, updates
   pathForFile: (file) => { try { return webUtils.getPathForFile(file); } catch { return ''; } },
 });

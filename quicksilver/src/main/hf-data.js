@@ -186,4 +186,14 @@ async function trendingSpaces({ force = false } = {}) {
   } catch { return c?.list || []; }
 }
 
-module.exports = { searchDatasets, datasetInfo, addDataset, trendingSpaces, rowText, parseCSV, rowsOf, cleanId, MAX_ROWS, MAX_BYTES };
+// Search/browse Spaces (sort by likes or trending). Returns enough to list and run them.
+async function searchSpaces({ query = '', sort = 'likes', limit = 40 } = {}) {
+  const dir = sort === 'trending' ? 'trendingScore' : sort === 'modified' ? 'lastModified' : 'likes';
+  const u = `${HF}/api/spaces?sort=${dir}&direction=-1&limit=${Math.min(100, Math.max(1, limit))}${query ? `&search=${encodeURIComponent(query)}` : ''}`;
+  try {
+    const raw = await hf(u);
+    return (raw || []).filter((s) => s.id && !s.private).map((s) => ({ id: s.id, likes: s.likes || 0, sdk: s.sdk || '', title: s.cardData?.title || s.id.split('/')[1] || s.id, emoji: s.cardData?.emoji || '', runnable: /gradio/i.test(s.sdk || '') }));
+  } catch (e) { throw new Error(`Could not reach Hugging Face (${e.message || e}).`); }
+}
+
+module.exports = { searchDatasets, datasetInfo, addDataset, trendingSpaces, searchSpaces, rowText, parseCSV, rowsOf, cleanId, MAX_ROWS, MAX_BYTES };
