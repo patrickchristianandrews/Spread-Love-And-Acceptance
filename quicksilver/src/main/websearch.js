@@ -227,44 +227,45 @@ const EXPLICIT = /\b(nude|nudes|naked|nsfw|porn\w*|xxx|sex|sexy|hentai|boobs?|ti
 // tracked here. The change would be getSafeSearchParam on the Brave/SearXNG/DuckDuckGo picture calls.
 // The top image results from a general search engine (DuckDuckGo's image index — a broad web
 // crawl, Bing-powered, no key). This is what "find a picture on the web" should return first.
-async function ddgImages(q, count = 8) {
+async function ddgImages(q, count = 8, safe = 'on') {
   const home = await fetch(`https://duckduckgo.com/?q=${encodeURIComponent(q)}&iar=images&iax=images&ia=images`, { headers: { 'User-Agent': UA, Accept: 'text/html' }, signal: AbortSignal.timeout(12000) });
   const html = await home.text();
   const m = html.match(/vqd=["']([\d-]+)["']/) || html.match(/vqd=([\d-]+)&/) || html.match(/"vqd":"([^"]+)"/);
   if (!m) throw new Error('DuckDuckGo token not found');
-  const r = await fetch(`https://duckduckgo.com/i.js?l=us-en&o=json&q=${encodeURIComponent(q)}&vqd=${encodeURIComponent(m[1])}&f=,,,&p=1`, { headers: { 'User-Agent': UA, Accept: 'application/json', Referer: 'https://duckduckgo.com/' }, signal: AbortSignal.timeout(12000) });
+  const r = await fetch(`https://duckduckgo.com/i.js?l=us-en&o=json&q=${encodeURIComponent(q)}&vqd=${encodeURIComponent(m[1])}&f=,,,&p=${safe === 'off' ? -1 : 1}`, { headers: { 'User-Agent': UA, Accept: 'application/json', Referer: 'https://duckduckgo.com/' }, signal: AbortSignal.timeout(12000) });
   if (!r.ok) throw new Error(`DuckDuckGo returned HTTP ${r.status}`);
   const j = await r.json();
   const host = (u) => { try { return new URL(u).hostname.replace(/^www\./, ''); } catch { return 'web'; } };
   return (j.results || []).slice(0, count * 3).map((x) => ({ title: x.title || q, thumb: x.thumbnail, full: x.image, page: x.url, source: host(x.url), license: '', creator: '', width: Number(x.width) || undefined, height: Number(x.height) || undefined }));
 }
 
-async function images(query, { count = 8 } = {}) {
+async function images(query, { count = 8, safe = 'on' } = {}) {
   const q = String(query || '').trim();
   if (!q) throw new Error('Say what pictures to look for.');
-  if (EXPLICIT.test(q)) throw new Error('Picture search keeps safe search on, so it can\'t look for that.');
+  const on = safe !== 'off'; // follow the chat / Settings safe-search setting (default on for pictures)
+  if (on && EXPLICIT.test(q)) throw new Error('Picture search has safe search on, so it can\'t look for that. Turn safe search off in Settings → Web search to allow it.');
   const cfg = store.config().web || {};
   const found = [];
-  const add = (list) => { for (const x of list) if (x?.thumb && !EXPLICIT.test(`${x.title} ${x.page || ''}`) && !found.some((y) => y.thumb === x.thumb)) found.push(x); };
+  const add = (list) => { for (const x of list) if (x?.thumb && (!on || !EXPLICIT.test(`${x.title} ${x.page || ''}`)) && !found.some((y) => y.thumb === x.thumb)) found.push(x); };
   // Real search-engine top results first (keyless), then the open libraries fill in behind them.
-  try { add(await ddgImages(q, count)); } catch {}
+  try { add(await ddgImages(q, count, safe)); } catch {}
   const jobs = [
     (async () => {
-      const r = await fetch(`https://api.openverse.org/v1/images/?q=${encodeURIComponent(q)}&page_size=${Math.min(20, count * 2)}&mature=false`, { headers: { 'User-Agent': 'Quicksilver/2 (local AI app)', Accept: 'application/json' }, signal: AbortSignal.timeout(15000) });
+      const r = await fetch(`https://api.openverse.org/v1/images/?q=${encodeURIComponent(q)}&page_size=${Math.min(20, count * 2)}&mature=${on ? 'false' : 'true'}`, { headers: { 'User-Agent': 'Quicksilver/2 (local AI app)', Accept: 'application/json' }, signal: AbortSignal.timeout(15000) });
       if (!r.ok) throw new Error(`Openverse returned HTTP ${r.status}`);
       const j = await r.json();
-      add((j.results || []).filter((x) => !x.mature).map((x) => ({ title: x.title || q, thumb: x.thumbnail || x.url, full: x.url, page: x.foreign_landing_url || x.url, source: x.source || x.provider || 'Openverse', license: [x.license, x.license_version].filter(Boolean).join(' ').toUpperCase(), creator: x.creator || '', width: x.width, height: x.height })));
+      add((j.results || []).filter((x) => (on ? !x.mature : true)).map((x) => ({ title: x.title || q, thumb: x.thumbnail || x.url, full: x.url, page: x.foreign_landing_url || x.url, source: x.source || x.provider || 'Openverse', license: [x.license, x.license_version].filter(Boolean).join(' ').toUpperCase(), creator: x.creator || '', width: x.width, height: x.height })));
     })(),
   ];
   const key = store.getSecret('web:brave');
   if (cfg.provider === 'brave' && key) jobs.push((async () => {
-    const r = await fetch(`https://api.search.brave.com/res/v1/images/search?safesearch=strict&count=${Math.min(20, count * 2)}&q=${encodeURIComponent(q)}`, { headers: { Accept: 'application/json', 'X-Subscription-Token': key }, signal: AbortSignal.timeout(15000) });
+    const r = await fetch(`https://api.search.brave.com/res/v1/images/search?safesearch=${on ? 'strict' : 'off'}&count=${Math.min(20, count * 2)}&q=${encodeURIComponent(q)}`, { headers: { Accept: 'application/json', 'X-Subscription-Token': key }, signal: AbortSignal.timeout(15000) });
     if (!r.ok) throw new Error(`Brave returned HTTP ${r.status}`);
     const j = await r.json();
     add((j.results || []).map((x) => ({ title: x.title || q, thumb: x.thumbnail?.src, full: x.properties?.url || x.url, page: x.url, source: x.source || 'Brave', license: '' })));
   })());
   if (cfg.provider === 'searxng' && cfg.searxngUrl) jobs.push((async () => {
-    const r = await fetch(`${cfg.searxngUrl.replace(/\/+$/, '')}/search?format=json&categories=images&safesearch=2&q=${encodeURIComponent(q)}`, { signal: AbortSignal.timeout(15000) });
+    const r = await fetch(`${cfg.searxngUrl.replace(/\/+$/, '')}/search?format=json&categories=images&safesearch=${on ? 2 : 0}&q=${encodeURIComponent(q)}`, { signal: AbortSignal.timeout(15000) });
     if (!r.ok) throw new Error(`SearXNG returned HTTP ${r.status}`);
     const j = await r.json();
     add((j.results || []).map((x) => ({ title: x.title || q, thumb: x.thumbnail_src || x.img_src, full: x.img_src, page: x.url, source: x.engine || 'SearXNG', license: '' })));

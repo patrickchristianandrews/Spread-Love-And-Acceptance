@@ -247,9 +247,9 @@ function webHTML() {
     <div class="field" data-w="searxng"><label for="w-sx">SearXNG address</label>
       <span class="help"><b>SearXNG</b> is a free, open metasearch engine — it asks Google, Bing, DuckDuckGo, Brave, Yandex and 70+ others at once. It's the one plug-in that covers everything: Quicksilver routes <b>web search, pictures and video</b> through it. Run your own (the <a href="https://github.com/searxng/searxng-docker">searxng-docker</a> project) with the JSON format turned on in <code>settings.yml</code> (<code>search: { formats: [html, json] }</code>), then enter its address below — e.g. <code>http://localhost:8888</code>. Or pick a public instance that allows JSON from <a href="https://searx.space">searx.space</a>. Use <b>Test a search</b> below to check it.</span>
       <input id="w-sx" value="${esc(w.searxngUrl)}" placeholder="http://localhost:8888"></div>
-    <div class="row perm-row"><div class="grow"><b>Safe search</b><div class="help">Asks the search service to filter adult results, using its own setting (Brave safesearch, DuckDuckGo kp, SearXNG safesearch, Tavily safe_search, Mojeek safe). Off by default; off sends the service's "off" value. Pictures from the web in chat always keep safe search on.</div></div><label class="switch"><input type="checkbox" id="w-safe" ${safeSearchValue() === 'on' ? 'checked' : ''}><span></span></label></div>
+    <div class="row perm-row"><div class="grow"><b>Safe search</b><div class="help">Asks the search service to filter adult results, using its own setting (Brave safesearch, DuckDuckGo kp/p, SearXNG safesearch, Tavily safe_search, Mojeek safe). Off by default. This applies to <b>pictures from the web too</b> — turn it off and picture search returns unfiltered results, on your own machine.</div></div><label class="switch"><input type="checkbox" id="w-safe" ${safeSearchValue() === 'on' ? 'checked' : ''}><span></span></label></div>
     <div class="small muted" id="w-safe-debug"></div>
-    <div class="row"><button class="btn primary" id="w-save">Save</button><button class="btn" id="w-test">Test a search</button></div>
+    <div class="row" style="gap:8px;flex-wrap:wrap"><button class="btn primary" id="w-save">Save</button><button class="btn" id="w-test">Test a search</button><button class="btn" id="w-test-img">Test pictures</button></div>
   </div>`;
 }
 function bindWeb() {
@@ -264,6 +264,14 @@ function bindWeb() {
   $('#w-save').addEventListener('click', async () => { await saveWeb(); toast('Saved.'); render(); });
   $('#w-safe').addEventListener('change', (e) => { setSafeSearch(e.target.checked); toast(`Safe search ${e.target.checked ? 'on' : 'off'} for web search.`); });
   $('#w-test').addEventListener('click', async () => { await saveWeb(); const ws = await webSearch('latest news about renewable energy').catch((err) => { toast(err.message, 8000); throw err; }); const r = ws.results; if (qsDev) $('#w-safe-debug').textContent = `${(ws.meta?.params || []).join(' · ')}${ws.meta?.warnings?.length ? ` · ⚠️ ${ws.meta.warnings.join(' ')}` : ''}`; toast(`Found ${r.length} results. First: ${r[0]?.title || 'none'}`, 6000); });
+  $('#w-test-img').addEventListener('click', async () => {
+    await saveWeb();
+    const safe = safeSearchValue();
+    const btn = $('#w-test-img'); btn.disabled = true; btn.textContent = 'Testing…';
+    try { const imgs = await qs.call('web:images', 'a mountain landscape at sunset', { safeSearch: safe }); toast(`Found ${imgs.length} pictures (safe search ${safe}). Sources: ${[...new Set(imgs.map((x) => x.source))].slice(0, 4).join(', ') || 'none'}`, 7000); }
+    catch (err) { toast(err.message, 8000); }
+    finally { btn.disabled = false; btn.textContent = 'Test pictures'; }
+  });
 }
 
 function apiSrvHTML() {
