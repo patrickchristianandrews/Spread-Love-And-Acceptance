@@ -4,7 +4,7 @@
 // research, auditing your own footprint, and authorised testing.
 'use strict';
 
-const finderState = { tab: 'find', goal: '', site: '', term: '', built: false, engine: 'google', open: {} };
+const finderState = { tab: 'find', goal: '', site: '', term: '', built: false, engine: 'google', open: {}, imgUrl: '' };
 
 function wfBanner() {
   return `<div class="notice" style="margin:0 0 12px;border-color:#caa33a;background:rgba(202,163,58,.1)">
@@ -92,10 +92,36 @@ function wfOperatorsTab() {
       <div class="stack-v" style="gap:6px">${DORK_OPERATORS.map(([op, ex, what]) => `<div class="row" style="align-items:baseline;gap:10px"><code style="min-width:120px"><b>${esc(op)}</b></code><div class="grow small"><code class="muted">${esc(ex)}</code> — ${esc(what)}</div></div>`).join('')}</div></section>`;
 }
 
-const WF_TABS = { find: '🔎 Find', investigate: '🧭 Investigate', tools: '🧰 Tools', operators: '🔧 Operators' };
+// ---- Reverse image tab ----
+function wfReverseTab() {
+  const u = finderState.imgUrl.trim();
+  const ok = isImageUrl(u);
+  return `${wfBanner()}
+    <section class="card" style="margin:0 0 14px">
+      <h2 style="margin:0 0 4px">🔍 Reverse image search</h2>
+      <p class="small muted" style="margin:0 0 10px">Find where a picture came from, who's in it, where it was taken, or the same product cheaper. Paste the picture's <b>web address</b> below, then search it across every big engine at once.</p>
+      <div class="row" style="gap:8px;flex-wrap:wrap">
+        <input id="wf-img-url" class="grow" style="min-width:220px" placeholder="https://… (right-click a picture on the web → Copy image address)" value="${esc(u)}">
+        <button class="btn primary" id="wf-img-all" ${ok ? '' : 'disabled'}>Search all engines ↗</button>
+      </div>
+      ${u && !ok ? '<p class="small" style="color:#e0a24a;margin:8px 0 0">That doesn’t look like a web address — it should start with http(s):// and point straight at the image.</p>' : ''}
+      ${ok ? `<p class="small muted" style="margin:10px 0 0">Ready: <code style="word-break:break-all">${esc(u)}</code> — pick an engine below, or search them all.</p>` : ''}
+    </section>
+    <section class="card og-sec" style="margin:0 0 12px"><h3 style="margin:0 0 10px">Engines</h3>
+      <div class="stack-v" style="gap:8px">${REVERSE_ENGINES.map(([name, fn, what], i) => `<div class="ad-row"><span class="grow"><b>${esc(name)}</b><span class="small muted">${esc(what)}</span></span><button class="btn small ${ok ? 'primary' : ''}" data-wf-rev="${i}" ${ok ? '' : 'disabled'}>Search ↗</button></div>`).join('')}</div></section>
+    <details class="card" style="padding:14px 18px"><summary class="small" style="cursor:pointer;font-weight:700">Searching a photo that's only on my PC?</summary>
+      <p class="small muted" style="margin:10px 0 0">Reverse‑search engines need a picture that's already on the web, so they can't read a file straight off your computer. Three ways around it:</p>
+      <ul class="small muted" style="margin:6px 0 0;padding-left:18px;line-height:1.6">
+        <li><b>It came from the web?</b> Use its original address — in a chat, the picture finder shows each result's source; right‑click → Copy image address, and paste it above.</li>
+        <li><b>Drag &amp; drop:</b> open an engine (e.g. Google Lens or Yandex) and drag your file onto its search box.</li>
+        <li><b>Put it online first</b> (only if you're OK with that) — upload to an image host you trust to get a link, then paste it here. Don't do this with private or sensitive photos.</li>
+      </ul></details>`;
+}
+
+const WF_TABS = { find: '🔎 Find', reverse: '🔍 Reverse image', investigate: '🧭 Investigate', tools: '🧰 Tools', operators: '🔧 Operators' };
 views.finder = {
   html() {
-    const body = { find: wfFindTab, investigate: wfInvestigateTab, tools: wfToolsTab, operators: wfOperatorsTab }[finderState.tab] || wfFindTab;
+    const body = { find: wfFindTab, reverse: wfReverseTab, investigate: wfInvestigateTab, tools: wfToolsTab, operators: wfOperatorsTab }[finderState.tab] || wfFindTab;
     return `<div class="page">
       <div class="page-head"><h1>Web Finder <span class="small muted">dorks &amp; OSINT</span></h1></div>
       <div class="row sf-tabs" style="gap:4px;flex-wrap:wrap;margin-bottom:14px">${Object.entries(WF_TABS).map(([k, l]) => `<button class="chip-tog ${finderState.tab === k ? 'on' : ''}" data-wf-tab="${k}">${l}</button>`).join('')}</div>
@@ -119,5 +145,12 @@ views.finder = {
       newChat(); const c = chatById(S.route.id);
       if (c) { c.draft = `Run this advanced web search and summarise what you find, with the links:\n\n${b.dataset.wfAsk}`; save(); render(); }
     }));
+    // Reverse image tab
+    const imgInput = root.querySelector('#wf-img-url');
+    if (imgInput) {
+      let t; imgInput.addEventListener('input', () => { finderState.imgUrl = imgInput.value; clearTimeout(t); t = setTimeout(() => finderState.tab === 'reverse' && render(), 500); });
+    }
+    root.querySelectorAll('[data-wf-rev]').forEach((b) => b.addEventListener('click', () => { const u = finderState.imgUrl.trim(); if (!isImageUrl(u)) return; qs.call('shell:open', REVERSE_ENGINES[Number(b.dataset.wfRev)][1](u)); }));
+    root.querySelector('#wf-img-all')?.addEventListener('click', () => { const u = finderState.imgUrl.trim(); if (!isImageUrl(u)) return; REVERSE_ENGINES.forEach(([, fn]) => qs.call('shell:open', fn(u))); });
   },
 };

@@ -253,6 +253,18 @@ const DORK_ENGINES = {
 };
 function dorkUrl(q, engine = 'google') { return (DORK_ENGINES[engine] || DORK_ENGINES.google)[1](q); }
 
+// Reverse image search: given a public image URL, search it across the big engines. Each is a
+// function that builds the engine's "search by this image URL" link.
+const REVERSE_ENGINES = [
+  ['🔍 Google Lens', (u) => `https://lens.google.com/uploadbyurl?url=${encodeURIComponent(u)}`, 'Best all-round — objects, places, products, and reading text in the image.'],
+  ['🟡 Yandex', (u) => `https://yandex.com/images/search?rpt=imageview&url=${encodeURIComponent(u)}`, 'Often the strongest for faces and for pinning down a location.'],
+  ['🔵 Bing Visual', (u) => `https://www.bing.com/images/searchbyimage?cbir=sbi&imgurl=${encodeURIComponent(u)}`, 'Good for products and visually similar images.'],
+  ['🧿 TinEye', (u) => `https://tineye.com/search?url=${encodeURIComponent(u)}`, 'Finds exact copies and the first time an image appeared online.'],
+  ['🎨 SauceNAO', (u) => `https://saucenao.com/search.php?url=${encodeURIComponent(u)}`, 'For artwork, illustrations and anime — finds the original source.'],
+  ['🖼️ Google Images', (u) => `https://www.google.com/searchbyimage?image_url=${encodeURIComponent(u)}&safe=off`, 'The classic reverse search as a fallback.'],
+];
+const isImageUrl = (u) => /^https?:\/\/\S+$/i.test(String(u || '').trim());
+
 // Suggest the categories that best fit a plain-language goal (the "what are you searching for?" box).
 const DORK_INTENTS = [
   [/\b(file|backup|config|\.env|database|dump|folder|directory|hidden|exposed|leak)\b/i, ['files', 'secrets']],

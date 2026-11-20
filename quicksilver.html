@@ -49,6 +49,14 @@
   .hero{position:relative;padding:76px 0 60px;text-align:center;overflow:hidden}
   .hero .glow{position:absolute;inset:-20% 0 auto 0;height:620px;background:radial-gradient(60% 60% at 50% 30%,rgba(94,224,236,.18),transparent 70%);pointer-events:none}
   .hero .droplet{width:112px;height:112px;margin:0 auto 22px;filter:drop-shadow(0 12px 40px rgba(94,224,236,.45))}
+  /* A living flame flickering inside the droplet */
+  .flame-a,.flame-b{transform-origin:256px 340px}
+  .flame-a{animation:flameFlickA 1.7s steps(1,end) infinite, flameSway 2.6s ease-in-out infinite}
+  .flame-b{animation:flameFlickB 1.15s steps(1,end) infinite}
+  @keyframes flameFlickA{0%{opacity:.5}8%{opacity:.78}16%{opacity:.46}24%{opacity:.88}32%{opacity:.58}40%{opacity:.8}48%{opacity:.5}56%{opacity:.84}64%{opacity:.56}72%{opacity:.9}80%{opacity:.52}88%{opacity:.74}100%{opacity:.6}}
+  @keyframes flameFlickB{0%{opacity:.35}12%{opacity:.6}23%{opacity:.3}37%{opacity:.68}50%{opacity:.4}61%{opacity:.62}74%{opacity:.32}86%{opacity:.56}100%{opacity:.42}}
+  @keyframes flameSway{0%,100%{transform:translateY(0) scaleY(1) scaleX(1)}30%{transform:translateY(-5px) scaleY(1.06) scaleX(.97)}60%{transform:translateY(-2px) scaleY(1.03) scaleX(1.02)}}
+  @media(prefers-reduced-motion:reduce){.flame-a,.flame-b{animation:none;opacity:.6}}
   .hero .tagline{display:inline-block;padding:6px 14px;border:1px solid var(--line);border-radius:999px;font-size:.82rem;color:var(--muted);margin-bottom:22px;background:rgba(255,255,255,.03)}
   .hero p.lede{max-width:640px;margin:0 auto 28px;font-size:1.18rem;color:#c7d4ec}
   .cta{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
@@ -147,9 +155,16 @@
     <div class="wrap">
       <svg class="droplet" viewBox="0 0 512 512" aria-hidden="true"><defs>
         <linearGradient id="hc" x1=".15" y1="0" x2=".85" y2="1"><stop offset="0" stop-color="#fff"/><stop offset=".35" stop-color="#cfd8e6"/><stop offset=".55" stop-color="#7d8ca6"/><stop offset=".72" stop-color="#d9e2ee"/><stop offset="1" stop-color="#4fdbe8"/></linearGradient>
-        <radialGradient id="hg" cx=".5" cy=".62" r=".5"><stop offset="0" stop-color="#5ee7f0" stop-opacity=".45"/><stop offset="1" stop-color="#5ee7f0" stop-opacity="0"/></radialGradient></defs>
+        <radialGradient id="hg" cx=".5" cy=".62" r=".5"><stop offset="0" stop-color="#5ee7f0" stop-opacity=".45"/><stop offset="1" stop-color="#5ee7f0" stop-opacity="0"/></radialGradient>
+        <radialGradient id="flameA" cx=".5" cy=".82" r=".55"><stop offset="0" stop-color="#fff2c2"/><stop offset=".35" stop-color="#ffb648"/><stop offset=".7" stop-color="#ff7a3c" stop-opacity=".7"/><stop offset="1" stop-color="#ff7a3c" stop-opacity="0"/></radialGradient>
+        <radialGradient id="flameB" cx=".5" cy=".86" r=".42"><stop offset="0" stop-color="#eafcff"/><stop offset=".45" stop-color="#5ee7f0"/><stop offset="1" stop-color="#5ee7f0" stop-opacity="0"/></radialGradient>
+        <clipPath id="dropClip"><path d="M256 70C256 70 108 236 108 330a148 148 0 0 0 296 0C404 236 256 70 256 70z"/></clipPath></defs>
         <circle cx="256" cy="300" r="200" fill="url(#hg)"/>
         <path d="M256 70C256 70 108 236 108 330a148 148 0 0 0 296 0C404 236 256 70 256 70z" fill="url(#hc)"/>
+        <g clip-path="url(#dropClip)" style="mix-blend-mode:screen">
+          <ellipse class="flame-a" cx="256" cy="348" rx="96" ry="140" fill="url(#flameA)"/>
+          <ellipse class="flame-b" cx="256" cy="360" rx="58" ry="104" fill="url(#flameB)"/>
+        </g>
         <path d="M182 336a74 74 0 0 0 74 74" stroke="#fff" stroke-opacity=".85" stroke-width="22" fill="none" stroke-linecap="round"/>
         <ellipse cx="300" cy="230" rx="22" ry="40" fill="#fff" fill-opacity=".55" transform="rotate(28 300 230)"/></svg>
       <span class="tagline">● Free · Private · Runs on your own machine</span>

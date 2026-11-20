@@ -1352,8 +1352,16 @@ function redPng(size = 64) {
   await win.click('[data-wf-tab="operators"]');
   await win.waitForSelector('.card:has-text("Search-operator cheat sheet")');
   assert.match(await win.locator('.page:has-text("cheat sheet")').innerText(), /filetype:/);
+  // Reverse image search tab: engines enable once a valid image URL is entered.
+  await win.click('[data-wf-tab="reverse"]');
+  await win.waitForSelector('#wf-img-url');
+  assert.ok(await win.locator('[data-wf-rev]').count() >= 5, 'several reverse-image engines');
+  assert.equal(await win.locator('#wf-img-all[disabled]').count(), 1, 'search disabled until a URL is given');
+  await win.fill('#wf-img-url', 'https://example.com/photo.jpg');
+  await win.waitForSelector('#wf-img-all:not([disabled])');
+  assert.ok(await win.locator('.ad-row:has-text("Google Lens")').count() === 1 && await win.locator('.ad-row:has-text("Yandex")').count() === 1);
   await shot(win, '05c-web-finder');
-  console.log('✓ Web Finder: dork builder fills queries; OSINT tools, playbooks and operator cheat sheet');
+  console.log('✓ Web Finder: dork builder, reverse image search, OSINT tools and cheat sheet');
   // Spaces: the browser page renders, and the in-app run panel opens for a Gradio Space.
   // (The live Hugging Face list needs network; the search box and run panel do not, so we assert those.)
   await win.evaluate(() => go({ view: 'spaces' }));
