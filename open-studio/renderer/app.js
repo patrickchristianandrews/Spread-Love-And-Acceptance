@@ -71,7 +71,7 @@
   function applyEngine(){
     var e=engine(),h=e==='aihorde',p=e==='puter',k=!!KEYED_IMG[e];
     $('#imodel').hidden=h||p||k; $('#ihordemodel').hidden=!h;
-    $('#ihint').textContent=k?KEYED_IMG[e].hint:p?'Puter: free DALL·E / Flux with no key — a one-time Puter sign-in popup appears on first use, then usage bills to your own free Puter account.':h?'AI Horde: free, no account, dozens of models. A free job can queue 10–60s.':'Pollinations network. Free; about one image every 45s unless you add a token (Keys).';
+    $('#ihint').textContent=k?KEYED_IMG[e].hint:p?'Puter: free DALL·E / Flux with no key — a one-time Puter sign-in popup appears on first use, then usage bills to your own free Puter account.':h?'AI Horde: free, no account, dozens of models. Free images are made at about 512×512 so they need no kudos. A free job can queue 10–60s.':'Pollinations network. Free; about one image every 45s unless you add a token (Keys).';
     if(h&&!hordeLoaded){hordeLoaded=true;loadHordeModels();}
   }
   function loadHordeModels(){
@@ -124,7 +124,9 @@
   }
   function hordeImage(base,seed){
     var full=base+(style?(', '+style):'');var model=$('#ihordemodel').value;
-    var W=Math.max(64,Math.min(1024,Math.round(shape.w/64)*64)),H=Math.max(64,Math.min(1024,Math.round(shape.h/64)*64));
+    // Free (anonymous) AI Horde jobs over 576x576 need kudos when the Horde is busy, so keep the
+    // picture at about 512x512 pixels in the chosen shape: 512x512, 704x384, 384x704, 576x448.
+    var ar=shape.w/shape.h,H=Math.max(64,Math.round(Math.sqrt(262144/ar)/64)*64),W=Math.max(64,Math.round(H*ar/64)*64);
     var item={url:'',prompt:full,base:base,w:W,h:H,model:model||'AI Horde',ts:Date.now()};
     var fig=newTile(item),stat=fig.querySelector('.hstat'),sp=fig.querySelector('.spin'),img=fig.querySelector('img');
     stat.textContent='generating via AI Horde…';
