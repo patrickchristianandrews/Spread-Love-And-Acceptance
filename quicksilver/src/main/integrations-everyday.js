@@ -143,6 +143,8 @@ module.exports = ({ cfg }) => {
     webtools: [
       { name: 'web_search', description: 'Search the web. Returns titles, links and the matching passages of the top pages.', parameters: { type: 'object', properties: { query: { type: 'string' } }, required: ['query'] },
         run: async ({ query }, ctx = {}) => { if (isOffline()) throw new Error('Quicksilver is offline.'); const r = await require('./websearch').search(String(query || ''), { pages: 3, safe: ctx.safeSearch || 'off' }); return r.map((x, i) => `[${i + 1}] ${x.title}\n${x.url}\n${(x.text || x.snippet || '').slice(0, 1200)}`).join('\n\n') || 'No results.'; } },
+      { name: 'reverse_image_search', description: 'Build reverse-image-search links for a picture that is already online (a public image URL). Use when the user wants to find where an image came from, who or what is in it, where it was taken, or the same product cheaper. Returns ready-to-open links for Google Lens, Yandex, Bing, TinEye and SauceNAO; the user clicks one to see the results.', parameters: { type: 'object', properties: { image_url: { type: 'string', description: 'A public https URL that points straight at the image' } }, required: ['image_url'] },
+        run: async ({ image_url }) => { const u = String(image_url || '').trim(); if (!/^https?:\/\//.test(u)) throw new Error('Give a public https URL that points straight at the image.'); const e = encodeURIComponent(u); return `Reverse-image-search links for that picture — open one:\n- Google Lens: https://lens.google.com/uploadbyurl?url=${e}\n- Yandex (best for faces/places): https://yandex.com/images/search?rpt=imageview&url=${e}\n- Bing Visual: https://www.bing.com/images/searchbyimage?cbir=sbi&imgurl=${e}\n- TinEye (exact copies, first seen): https://tineye.com/search?url=${e}\n- SauceNAO (art/anime): https://saucenao.com/search.php?url=${e}`; } },
       { name: 'read_page', description: 'Read a web page as clean text (articles, docs, product pages).', parameters: { type: 'object', properties: { url: { type: 'string' }, focus: { type: 'string', description: 'Optional: what to look for on the page' } }, required: ['url'] },
         run: async ({ url, focus }) => { const u = /^https?:\/\//.test(url) ? url : `https://${url}`; const text = pageText(await getText(u)); return focus ? require('./websearch').bestPassages(text, String(focus), 6000) : text.slice(0, 12000); } },
     ],
@@ -293,7 +295,7 @@ module.exports = ({ cfg }) => {
           if (isOffline()) throw new Error('Quicksilver is offline.');
           const list = await require('./websearch').images(String(query || ''), { count: Math.max(1, Math.min(12, Number(count) || 8)) });
           if (!list.length) return 'No pictures could be downloaded for that search.';
-          const shown = list.map(({ title, src, page, source, license, creator, width, height }) => ({ title: String(title).slice(0, 120), src, page, source, license, creator: String(creator || '').slice(0, 60), width, height }));
+          const shown = list.map(({ title, src, page, source, license, creator, width, height, full }) => ({ title: String(title).slice(0, 120), src, page, source, license, creator: String(creator || '').slice(0, 60), width, height, full: /^https?:\/\//.test(full || '') ? full : '' }));
           return `Showing ${shown.length} pictures from the web for "${query}" (safe search on):\n${shown.map((x, i) => `${i + 1}. ${x.title} (${x.source}${x.license ? `, ${x.license}` : ''})`).join('\n')}\n[[web-images:${JSON.stringify(shown)}]]`;
         } },
     ],

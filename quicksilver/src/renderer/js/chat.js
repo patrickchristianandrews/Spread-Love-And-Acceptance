@@ -1464,8 +1464,8 @@ const webImagesOf = (alt) => (alt.toolCalls || []).flatMap((t) => { const m = St
 function webImagesHTML(alt, m) {
   const list = webImagesOf(alt).filter((x) => /^qsmedia:\/\/w\//.test(x.src || ''));
   if (!list.length) return '';
-  return `<div class="web-images">${list.map((x) => `<a class="web-img" href="${esc(x.page || '#')}" title="${esc(`${x.title}${x.creator ? ` by ${x.creator}` : ''} · ${x.source}${x.license ? ` · ${x.license}` : ''}`)}"><img src="${esc(x.src)}" alt="${esc(x.title)}" loading="lazy"><span class="small">${esc(x.source)}${x.license ? ` · ${esc(x.license)}` : ''}</span></a>`).join('')}</div>
-    <div class="row small" style="gap:8px;margin:2px 0 6px"><span class="muted">🖼️ ${list.length} pictures from the web · safe search on · click one for its page</span><button class="btn small ghost" data-webimg-describe="${m.id}">👁 Describe these</button></div>`;
+  return `<div class="web-images">${list.map((x) => `<span class="web-img-wrap">${x.full ? `<button class="web-img-rev" data-rev-img="${esc(x.full)}" title="Reverse image search — find where this came from">🔍</button>` : ''}<a class="web-img" href="${esc(x.page || '#')}" title="${esc(`${x.title}${x.creator ? ` by ${x.creator}` : ''} · ${x.source}${x.license ? ` · ${x.license}` : ''}`)}"><img src="${esc(x.src)}" alt="${esc(x.title)}" loading="lazy"><span class="small">${esc(x.source)}${x.license ? ` · ${esc(x.license)}` : ''}</span></a></span>`).join('')}</div>
+    <div class="row small" style="gap:8px;margin:2px 0 6px"><span class="muted">🖼️ ${list.length} pictures from the web · safe search on · click one for its page, 🔍 to reverse-search it</span><button class="btn small ghost" data-webimg-describe="${m.id}">👁 Describe these</button></div>`;
 }
 // Videos from the web (the video_search plug-in), shown as thumbnail cards that open the watch page.
 const webVideosOf = (alt) => (alt.toolCalls || []).flatMap((t) => { const m = String(t.result || '').match(/\[\[web-videos:(\[[\s\S]*\])\]\]/); if (!m) return []; try { return JSON.parse(m[1]); } catch { return []; } });
@@ -1528,6 +1528,14 @@ document.addEventListener('click', (e) => {
   qs.call('chat:answerNow', pending.requestId).catch(() => {});
 });
 
+// Reverse-search a web picture: open the Web Finder's Reverse image tab prefilled with its URL.
+document.addEventListener('click', (e) => {
+  const r = e.target.closest('[data-rev-img]');
+  if (!r) return;
+  e.preventDefault();
+  if (typeof finderState !== 'undefined') { finderState.imgUrl = r.dataset.revImg; finderState.tab = 'reverse'; }
+  go({ view: 'finder' });
+});
 // "Describe these": the pictures from the web are attached to a new message for a model that sees.
 document.addEventListener('click', async (e) => {
   const b = e.target.closest('[data-webimg-describe]');
