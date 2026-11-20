@@ -15,6 +15,11 @@ ctx.isCodeChat = (a) => a?.id === 'as-code';
 ctx.assistantById = (id) => ({ id });
 const CASES = [
   // pictures
+  ['find a picture of a cat on the web', [], null],
+  ['find me a picture on the web', [], null],
+  ['search the web for photos of the Eiffel Tower', [], null],
+  ['find a real photo of a red panda', [], null],
+  ['what does a quokka look like', [], null],
   ['make me a picture of a red fox in the snow', [], 'make-image'],
   ['a photo of a woman in a red dress', [], 'make-image'],
   ['generate an image of a castle at dusk', [], 'make-image'],

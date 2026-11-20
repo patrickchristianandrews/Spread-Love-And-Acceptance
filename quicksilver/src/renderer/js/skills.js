@@ -55,6 +55,9 @@ const SUMS = /\b(probabilit|chance|odds|calculate|how many|how much|expected val
 // A question about how to do something is answered, not carried out ("how do I make a logo?").
 const JUST_ASKING = /^\s*(how|what|why|when|where|who|which|is|are|was|were|does|do|did|should|would it|can i|could i|may i|am i)\b/i;
 const ABOUT_WORDS = /\b(prompt for|describe|explain|caption|what(?:'s| is) (in|on)|analy[sz]e|read the text|review of|write a review|summar)\w*/i;
+// A request to FIND an existing picture on the web (not generate one) — handled by the web image
+// search tool, so skill routing must not hand it to the picture maker.
+const WEB_IMAGE = /\b(photos?|pictures?|images?|pics)\b[^.?!\n]{0,20}\b(from|on|off|across) (the )?(web|internet|online|google)\b|\b(find|search|look ?up|look for|pull up|google)\b[^.?!\n]{0,30}\b(photos?|pictures?|pics|images?)\b|\b(real|actual|genuine) (life )?(photos?|pictures?|images?)\b|\bwhat (does|do|did|would) .{1,40} (really )?look like\b/i;
 // Is the thing a skill makes really what is being asked for? Its own words (the trigger) must
 // either start with the making verb ("write a report", "make a chart"), or follow one closely
 // with "a / an / my…" in between ("I need a business plan", "create a presentation"). So "I need
@@ -105,6 +108,9 @@ function autoSkillFor(text, atts = [], chat = null) {
     if (animateAsk(t)) return pick(skillById('animate-photo'));
     if (changeAsk(t)) return pick(skillById('edit-photo'));
   }
+  // "Find a picture of X on the web" (or a real photo, or "what does X look like") is a web image
+  // search, not a generation — leave it to the picture-finder tool instead of making one up.
+  if (!has('image') && WEB_IMAGE.test(t) && !/\b(make|create|generate|draw|paint|render|design|imagine|cartoon|anime|logo|poster|sticker|avatar|wallpaper)\b/i.test(t)) return null;
   // A plain request for a picture or a video comes first: "make me a picture of my memory of
   // the beach" is a picture, whatever other skill's words turn up in the description. A specific
   // picture skill (logo, poster, GIF…) when it is what is asked for; otherwise the general one.
