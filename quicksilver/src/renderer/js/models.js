@@ -374,6 +374,7 @@ const FREE_BADGE = {
 // id -> { ok, why?, fix? }; set by the health check, a manual Test, or a save/refresh.
 const apiCheck = {};
 let apiHealthRun = false;
+let apiFilter = 'all';
 function friendlyApiError(err, pre) {
   const m = String((err && err.message) || err || '');
   const key = pre?.keyUrl ? ` <a href="${esc(pre.keyUrl)}" title="Opens ${esc(pre.keyUrl)}">Get a fresh key →</a>` : '';
@@ -417,6 +418,14 @@ function apiHTML() {
     </div>`).join('')}</div>` : ''}
     ${S.providers.length > 1 ? '<div class="notice info" style="margin-bottom:12px">☁️ <b>Several cloud AIs connected.</b> On Automatic, Quicksilver picks the best one for each question — a strong coder for code, a research model for research, and so on — and your 👍/👎 refine the choice over time. Pick one by hand at the top of any chat to override it.</div>' : ''}
     <div class="section"><h2>Add a connection</h2><button class="btn small" data-api-dir="all" title="Every service in one list: by task, free or paid, what the free plan gives you, with a link to each">📒 API directory: by task, free vs paid</button><span class="small muted">Every cloud AI that works with Quicksilver, marked free or paid, with the best model to use. <a href="#" data-guide="apis">Which should I choose? What's a dev plan? Calculator: alone vs through Quicksilver</a></span></div>
+    <div class="notice info" style="margin:0 0 10px"><b>What a free tier gets you</b> <span class="small">— a rough guide; each service sets its own limits (see its card), and they change often.</span>
+      <ul class="small" style="margin:6px 0 0;padding-left:18px;line-height:1.5">
+        <li><b>Text &amp; chat:</b> plenty for everyday use — the generous ones (Gemini, Groq, Cerebras) handle thousands of words a day free.</li>
+        <li><b>Coding:</b> fine for help and snippets. Heavy agent coding (an AI editing your repo for hours) burns a free tier fast — connect two or three and let Quicksilver switch, or use a local model.</li>
+        <li><b>Images:</b> a handful to a few dozen a day on the free image services — <b>Pollinations</b> is keyless, <b>Together</b> has a free FLUX model, Cloudflare includes image models.</li>
+        <li><b>Video:</b> essentially none free anywhere — video costs real money; connect a paid key (fal.ai, Replicate) when you want it.</li>
+      </ul></div>
+    <div class="row small" id="api-filters" style="gap:6px;margin:0 0 10px;flex-wrap:wrap"><b class="small muted" style="align-self:center">Show:</b>${[['all', 'All'], ['free', '🆓 Free (no card)'], ['nokey', '🔑 No key at all'], ['generous', '🏆 Most generous']].map(([k, l]) => `<button class="btn small ${apiFilter === k ? 'primary' : ''}" data-api-filter="${k}">${l}</button>`).join('')}</div>
     <div id="presets"></div>`;
 }
 
@@ -437,11 +446,13 @@ async function bindApi() {
   if (!box) return;
   const presets = await qs.call('providers:presets');
   // Free options first, so people can try cloud models without paying.
+  const match = (p) => apiFilter === 'all' ? true : apiFilter === 'free' ? (p.free === 'free' || p.noKey) : apiFilter === 'nokey' ? Boolean(p.noKey) : apiFilter === 'generous' ? Boolean(p.generous) : true;
   const groups = [['Free', (p) => p.free === 'free'], ['Free to start, then paid', (p) => p.free === 'some'], ['Paid', (p) => p.free === 'paid'], ['Other', (p) => !p.free]];
-  box.innerHTML = `<p class="small muted" style="margin:-4px 0 12px">Free plans have daily limits and can change; each card links to the current prices.</p>` + groups.map(([title, test]) => {
-    const list = Object.entries(presets).filter(([, p]) => test(p));
+  const shownAny = Object.entries(presets).some(([k, p]) => match(p) && k !== 'custom');
+  box.innerHTML = `<p class="small muted" style="margin:-4px 0 12px">${apiFilter === 'generous' ? '🏆 The most generous free tiers — big daily allowances for everyday use.' : apiFilter === 'nokey' ? '🔑 Work with no key or account at all.' : apiFilter === 'free' ? '🆓 A free tier with no credit card.' : 'Free plans have daily limits and can change; each card links to the current prices.'}</p>${shownAny ? '' : '<p class="empty">Nothing matches that filter.</p>'}` + groups.map(([title, test]) => {
+    const list = Object.entries(presets).filter(([, p]) => test(p) && match(p));
     return list.length ? `<h3 class="small muted" style="margin:14px 0 8px;text-transform:uppercase;letter-spacing:.05em">${title}</h3><div class="cards" style="grid-template-columns:repeat(auto-fill,minmax(250px,1fr))">${list.map(([k, p]) => `<button class="card" data-preset="${k}" style="text-align:left">
-      <div class="row"><h3 class="grow">${esc(p.name)}</h3>${FREE_BADGE[p.free] || ''}</div>
+      <div class="row"><h3 class="grow">${esc(p.name)}</h3>${p.generous ? '<span class="badge b-lemon" title="One of the most generous free tiers">🏆</span> ' : ''}${FREE_BADGE[p.free] || ''}</div>
       ${devBadgeHTML(k) ? `<div style="margin-top:6px">${devBadgeHTML(k)}</div>` : ''}
       <div class="small muted" style="font-weight:600;margin-top:6px">${esc(p.freeNote || (k === 'custom' ? 'Any OpenAI-compatible endpoint' : 'Needs an API key'))}</div>
       ${p.keyUrl ? `<div class="small" style="margin-top:6px">🔑 <a href="${esc(p.keyUrl)}" title="Opens ${esc(p.keyUrl)}">Get your API key →</a></div>` : ''}
@@ -450,6 +461,7 @@ async function bindApi() {
       ${(p.imageModels || []).length ? createRowHTML(createRatings(p.imageModels.map((x) => ({ cloudImage: x })))) : ''}
       ${S.providers.some((x) => x.preset === k) ? '<div class="small" style="margin-top:4px"><span class="badge b-mint">✓ connected</span> · click to connect another account</div>' : ''}</button>`).join('')}</div>` : '';
   }).join('');
+  $$('[data-api-filter]').forEach((b) => b.addEventListener('click', () => { apiFilter = b.dataset.apiFilter; render(); }));
   $$('[data-preset]').forEach((b) => b.addEventListener('click', () => editProvider({ preset: b.dataset.preset }, presets)));
   $$('[data-api-edit]').forEach((b) => b.addEventListener('click', () => editProvider(S.providers.find((p) => p.id === b.dataset.apiEdit), presets)));
   $$('[data-api-del]').forEach((b) => b.addEventListener('click', async () => { if (!(await confirmBox('Remove this connection and its saved key?'))) return; await call('providers:remove', b.dataset.apiDel); await refreshProviders(); render(); }));
