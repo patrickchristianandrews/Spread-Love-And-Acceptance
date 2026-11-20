@@ -17,6 +17,7 @@ Updating from 2.18: the Liquid Edition now includes its Closer and its picture a
 ### New in 2.21.1
 
 - **Strata is now a one-click local AI.** [Strata](https://strata-ai.gitbook.io/strata-ai) runs very large models (up to ~125B) on a single consumer GPU by streaming the weights from disk, and serves an OpenAI-compatible API on your PC. Connect it under **Your PC / local AIs** like Ollama or LM Studio — no key, nothing leaves the machine. Start Strata first (it listens on `localhost:8080`; change the port in Quicksilver if yours differs), then pick it as a provider. Because it's a local, free endpoint, the "prefer fast/free" routing treats it like your own models.
+- **More free clouds you can connect.** Added **Kilo Code**, **glhf.chat**, **OpenCode Zen**, **Agnes AI** and **Ollama Cloud** to the provider list — all OpenAI-compatible with free tiers (no card), from the community *awesome-free-llm-apis* directory. They join the ones already built in (NVIDIA, Cloudflare, Gemini, Groq, Cerebras, Mistral, Z.ai, Gonka, LLM7, OVHcloud, Cohere, SiliconFlow, ModelScope, Aion Labs, Chutes and more).
 
 ### New in 2.21.0
 
