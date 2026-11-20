@@ -373,7 +373,7 @@ const FREE_BADGE = {
 // Per-provider connection status, so each card can say if it's working and, if not, how to fix it.
 // id -> { ok, why?, fix? }; set by the health check, a manual Test, or a save/refresh.
 const apiCheck = {};
-let apiHealthRun = false;
+let apiHealthSig = null;
 let apiFilter = 'all';
 function friendlyApiError(err, pre) {
   const m = String((err && err.message) || err || '');
@@ -399,8 +399,9 @@ function providerIssueHTML(p) {
 }
 // On opening the Cloud AIs page, quietly test every connected provider and show the result.
 async function runApiHealth(force) {
-  if (apiHealthRun && !force) return;
-  apiHealthRun = true;
+  const sig = (S.providers || []).map((p) => p.id).sort().join(','); // re-check when the connected set changes
+  if (!force && sig === apiHealthSig) return;
+  apiHealthSig = sig;
   let presets = {}; try { presets = await qs.call('providers:presets'); } catch {}
   let res = []; try { res = await qs.call('providers:health'); } catch { return; }
   res.forEach((r) => { const p = S.providers.find((x) => x.id === r.id); setApiCheck(r.id, presets[p?.preset], r.ok ? null : (r.error || 'not reachable')); });
@@ -448,7 +449,7 @@ async function bindApi() {
   // Free options first, so people can try cloud models without paying.
   const match = (p) => apiFilter === 'all' ? true : apiFilter === 'free' ? (p.free === 'free' || p.noKey) : apiFilter === 'nokey' ? Boolean(p.noKey) : apiFilter === 'generous' ? Boolean(p.generous) : true;
   const groups = [['Free', (p) => p.free === 'free'], ['Free to start, then paid', (p) => p.free === 'some'], ['Paid', (p) => p.free === 'paid'], ['Other', (p) => !p.free]];
-  const shownAny = Object.entries(presets).some(([k, p]) => match(p) && k !== 'custom');
+  const shownAny = apiFilter === 'generous' ? Object.values(presets).some((p) => p.generous) : Object.entries(presets).some(([k, p]) => k !== 'custom' && match(p) && p.free !== 'local');
   const presetCard = ([k, p]) => `<button class="card" data-preset="${k}" style="text-align:left">
       <div class="row"><h3 class="grow">${esc(p.name)}</h3>${p.generous ? '<span class="badge b-lemon" title="Generous free tier AND strong models">🏆</span> ' : ''}${FREE_BADGE[p.free] || ''}</div>
       ${p.generous && (p.quality || p.freeAmount) ? `<div class="small" style="margin-top:5px">${p.quality ? `⭐ <b>Quality ${p.quality}/10</b>` : ''}${p.quality && p.freeAmount ? ' · ' : ''}${p.freeAmount ? `🎁 <b>${esc(p.freeAmount)}</b>` : ''} <span class="muted">(approx)</span></div>` : ''}
@@ -487,7 +488,7 @@ async function bindApi() {
 }
 
 function editProvider(p, presets) {
-  const pre = presets[p.preset];
+  const pre = presets[p.preset] || presets.custom || {}; // orphaned connection (preset removed) falls back
   // The models we can offer as a pick-list: the ones already saved, else the preset's suggestions.
   // "Load the live list" replaces them with whatever the service actually offers right now.
   let shown = (p.models && p.models.length ? p.models : (pre.models || [])).slice();
