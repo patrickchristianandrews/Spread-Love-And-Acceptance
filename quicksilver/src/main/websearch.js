@@ -278,4 +278,80 @@ async function images(query, { count = 8 } = {}) {
   return out.sort((a, b) => order.get(a.thumb) - order.get(b.thumb)).slice(0, count);
 }
 
-module.exports = { search, duckduckgo, mojeek, wikipedia, bestPassages, images, mergeResults, EXPLICIT, getSafeSearchParam, SAFE_VALUES };
+// Find videos on the web (keyless by default via open YouTube front-ends; SearXNG/Brave when set).
+// Returns metadata only — no large downloads — with a watch link, an embed URL and a thumbnail.
+const INVIDIOUS = ['https://invidious.jing.rocks', 'https://inv.nadeko.net', 'https://invidious.nerdvpn.de', 'https://yewtu.be'];
+const PIPED = ['https://pipedapi.kavin.rocks', 'https://pipedapi.adminforge.de'];
+async function videos(query, { count = 8 } = {}) {
+  const q = String(query || '').trim();
+  if (!q) throw new Error('Say what videos to look for.');
+  if (EXPLICIT.test(q)) throw new Error('Video search keeps safe search on, so it can\'t look for that.');
+  const cfg = store.config().web || {};
+  const found = [];
+  const add = (list) => { for (const x of list) if (x?.page && !EXPLICIT.test(`${x.title} ${x.page}`) && !found.some((y) => y.page === x.page)) found.push(x); };
+  const dur = (s) => { s = Number(s) || 0; if (!s) return ''; const m = Math.floor(s / 60); return `${m}:${String(s % 60).padStart(2, '0')}`; };
+  const jobs = [];
+  // Keyless: open YouTube front-ends (community-run; tried in order, best-effort).
+  jobs.push((async () => {
+    for (const base of INVIDIOUS) {
+      try {
+        const r = await fetch(`${base}/api/v1/search?type=video&q=${encodeURIComponent(q)}`, { headers: { Accept: 'application/json', 'User-Agent': UA }, signal: AbortSignal.timeout(9000) });
+        if (!r.ok) continue;
+        const j = await r.json();
+        const list = (Array.isArray(j) ? j : []).filter((x) => x.type === 'video' && x.videoId).slice(0, count * 2)
+          .map((x) => ({ title: x.title || q, page: `https://www.youtube.com/watch?v=${x.videoId}`, embed: `https://www.youtube-nocookie.com/embed/${x.videoId}`, thumb: (x.videoThumbnails || []).sort((a, b) => (b.width || 0) - (a.width || 0))[0]?.url, source: 'YouTube', author: x.author || '', duration: dur(x.lengthSeconds) }));
+        if (list.length) { add(list); return; }
+      } catch {}
+    }
+    for (const base of PIPED) {
+      try {
+        const r = await fetch(`${base}/search?filter=videos&q=${encodeURIComponent(q)}`, { headers: { Accept: 'application/json', 'User-Agent': UA }, signal: AbortSignal.timeout(9000) });
+        if (!r.ok) continue;
+        const j = await r.json();
+        const list = (j.items || []).filter((x) => x.url).slice(0, count * 2)
+          .map((x) => { const id = String(x.url).split('v=')[1] || ''; return { title: x.title || q, page: `https://www.youtube.com${x.url}`, embed: id ? `https://www.youtube-nocookie.com/embed/${id}` : '', thumb: x.thumbnail, source: 'YouTube', author: x.uploaderName || '', duration: dur(x.duration) }; });
+        if (list.length) { add(list); return; }
+      } catch {}
+    }
+  })());
+  const key = store.getSecret('web:brave');
+  if (cfg.provider === 'brave' && key) jobs.push((async () => {
+    const r = await fetch(`https://api.search.brave.com/res/v1/videos/search?count=${Math.min(20, count * 2)}&q=${encodeURIComponent(q)}`, { headers: { Accept: 'application/json', 'X-Subscription-Token': key }, signal: AbortSignal.timeout(12000) });
+    if (!r.ok) throw new Error(`Brave returned HTTP ${r.status}`);
+    const j = await r.json();
+    add((j.results || []).map((x) => ({ title: x.title || q, page: x.url, embed: '', thumb: x.thumbnail?.src, source: x.meta_url?.hostname || 'web', author: x.video?.creator || '', duration: x.video?.duration || '' })));
+  })());
+  if (cfg.provider === 'searxng' && cfg.searxngUrl) jobs.push((async () => {
+    const r = await fetch(`${cfg.searxngUrl.replace(/\/+$/, '')}/search?format=json&categories=videos&safesearch=2&q=${encodeURIComponent(q)}`, { signal: AbortSignal.timeout(12000) });
+    if (!r.ok) throw new Error(`SearXNG returned HTTP ${r.status}`);
+    const j = await r.json();
+    add((j.results || []).map((x) => ({ title: x.title || q, page: x.url, embed: '', thumb: x.thumbnail || x.img_src, source: x.engine || 'SearXNG', author: x.author || '', duration: x.length || '' })));
+  })());
+  const settled = await Promise.allSettled(jobs);
+  if (!found.length) { const why = settled.find((x) => x.status === 'rejected')?.reason?.message; throw new Error(why ? `No videos came back (${why}).` : 'No videos found for that (the open video sources may be busy — try again).'); }
+  // Download small thumbnails so they show inline, like the picture finder.
+  const fs = require('node:fs'); const path = require('node:path'); const crypto = require('node:crypto');
+  const dir = path.join(store.dir('tmp'), 'web-images'); fs.mkdirSync(dir, { recursive: true });
+  const out = [];
+  await Promise.all(found.slice(0, count + 4).map(async (x) => {
+    let src = '';
+    try {
+      if (/^https:\/\//.test(x.thumb || '')) {
+        const r = await fetch(x.thumb, { headers: { 'User-Agent': UA }, signal: AbortSignal.timeout(10000), redirect: 'follow' });
+        const type = r.headers.get('content-type') || '';
+        if (r.ok && /^image\/(jpeg|png|webp)/.test(type)) {
+          const buf = Buffer.from(await r.arrayBuffer());
+          if (buf.length <= 2 * 1024 * 1024 && buf.length > 300) {
+            const name = `${crypto.createHash('sha1').update(x.thumb).digest('hex').slice(0, 20)}.${type.split('/')[1].replace('jpeg', 'jpg')}`;
+            fs.writeFileSync(path.join(dir, name), buf); src = `qsmedia://w/${name}`;
+          }
+        }
+      }
+    } catch {}
+    out.push({ title: String(x.title).slice(0, 140), page: x.page, embed: x.embed || '', src, source: x.source, author: String(x.author || '').slice(0, 60), duration: x.duration || '' });
+  }));
+  const order = new Map(found.map((x, i) => [x.page, i]));
+  return out.sort((a, b) => order.get(a.page) - order.get(b.page)).slice(0, count);
+}
+
+module.exports = { search, duckduckgo, mojeek, wikipedia, bestPassages, images, videos, mergeResults, EXPLICIT, getSafeSearchParam, SAFE_VALUES };

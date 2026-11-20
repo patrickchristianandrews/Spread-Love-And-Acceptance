@@ -1631,6 +1631,10 @@ code.sel { user-select: all; background: var(--soft); padding: 1px 6px; border-r
 .web-img { display: flex; flex-direction: column; gap: 3px; text-decoration: none; color: var(--muted, #999); }
 .web-img img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 10px; background: var(--panel-2, rgba(127,127,127,.12)); }
 .web-img:hover img { outline: 2px solid var(--accent, #6cf); }
+.web-vid { position: relative; }
+.web-vid-noimg { display: flex; align-items: center; justify-content: center; width: 100%; aspect-ratio: 4 / 3; border-radius: 10px; background: var(--panel-2, rgba(127,127,127,.12)); font-size: 12px; }
+.web-vid-play { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -60%); width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 50%; background: rgba(0,0,0,.55); color: #fff; font-size: 16px; pointer-events: none; }
+.web-vid-dur { position: absolute; right: 6px; top: calc(75% - 18px); background: rgba(0,0,0,.75); color: #fff; font-size: 11px; padding: 1px 5px; border-radius: 5px; pointer-events: none; }
 
 /* Settings: writing style and permissions rows */
 .style-row, .perm-row { padding: 12px 4px; border-bottom: 1px solid var(--line); gap: 16px; align-items: center; }

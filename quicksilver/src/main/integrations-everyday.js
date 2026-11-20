@@ -131,6 +131,9 @@ module.exports = ({ cfg }) => {
     webimages: { name: 'Pictures from the web', icon: '🖼️', group: 'Everyday', defaultOn: true, noToken: true, builtIn: true,
       when: /\b(show|find|search( for)?|look up|pull up|get|give)( me)?\b[^.?!\n]{0,30}\b(photos?|pictures?|pics|images?)\b|\b(photos?|pictures?|images?|pics)\b[^.?!\n]{0,15}\b(from|on) (the )?(web|internet|online)\b|\bwhat (does|do|did) .{1,40} look like\b/i,
       blurb: 'Finds real pictures on the web and shows them in the chat, with where each came from and its license. Safe search is always on. Free, no account (Openverse; your Brave or SearXNG search too when set up).', fields: [] },
+    webvideo: { name: 'Videos from the web', icon: '🎬', group: 'Everyday', defaultOn: true, noToken: true, builtIn: true,
+      when: /\b(show|find|search( for)?|look up|pull up|get|give)( me)?\b[^.?!\n]{0,30}\b(videos?|clips?|footage|trailers?)\b|\b(video|clip)s?\b[^.?!\n]{0,15}\b(from|on) (the )?(web|internet|online|youtube)\b|\bwatch .{1,40}\bvideo\b/i,
+      blurb: 'Finds real videos on the web and shows them in the chat with a watch link. Safe search is always on. Free, no account (open YouTube front-ends; your Brave or SearXNG search too when set up).', fields: [] },
     webshot: { name: 'Website screenshots', icon: '📸', group: 'Build & ship', defaultOn: true, noToken: true, builtIn: true,
       when: /\b(screenshot|screen shot|capture|what does .{1,40} look like|show me (the )?(site|page|website))\b/i,
       blurb: 'Takes a picture of any web page (or an app on this PC), on a computer or phone-sized screen, and saves it.', fields: [] },
@@ -292,6 +295,15 @@ module.exports = ({ cfg }) => {
           if (!list.length) return 'No pictures could be downloaded for that search.';
           const shown = list.map(({ title, src, page, source, license, creator, width, height }) => ({ title: String(title).slice(0, 120), src, page, source, license, creator: String(creator || '').slice(0, 60), width, height }));
           return `Showing ${shown.length} pictures from the web for "${query}" (safe search on):\n${shown.map((x, i) => `${i + 1}. ${x.title} (${x.source}${x.license ? `, ${x.license}` : ''})`).join('\n')}\n[[web-images:${JSON.stringify(shown)}]]`;
+        } },
+    ],
+    webvideo: [
+      { name: 'video_search', description: 'Find real videos on the web (safe search on) and show them to the user in the chat with a watch link and a thumbnail. Use when the user wants to see, watch or find videos, clips, footage or trailers of something. Returns the videos shown with titles, sources and links; describe them only if the user asks.', parameters: { type: 'object', properties: { query: { type: 'string', description: 'What video to look for, e.g. how to tie a tie, SpaceX launch' }, count: { type: 'number', description: 'How many (1-12, default 8)' } }, required: ['query'] },
+        run: async ({ query, count }) => {
+          if (isOffline()) throw new Error('Quicksilver is offline.');
+          const list = await require('./websearch').videos(String(query || ''), { count: Math.max(1, Math.min(12, Number(count) || 8)) });
+          if (!list.length) return 'No videos could be found for that search.';
+          return `Showing ${list.length} videos from the web for "${query}" (safe search on):\n${list.map((x, i) => `${i + 1}. ${x.title}${x.duration ? ` (${x.duration})` : ''} — ${x.source}\n${x.page}`).join('\n')}\n[[web-videos:${JSON.stringify(list)}]]`;
         } },
     ],
     webshot: [

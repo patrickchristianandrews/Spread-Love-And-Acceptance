@@ -357,6 +357,7 @@ function messageHTML(chat, a, m, i) {
     ${metaRow(councilBadgeHTML(alt) + stepsHTML(alt, streaming) + toolsHTML(alt) + memoryChipHTML(alt) + (alt.reasoning ? `<details class="think chip-d"><summary>${streaming && !alt.text ? '<span class="pulse"></span>Thinking…' : '💭 Thought it through'}</summary><div>${esc(alt.reasoning)}</div></details>` : ''))}
     <div class="bubble md ${streaming ? 'streaming' : ''} ${alt.error ? 'error' : ''}">${body}</div>
     ${webImagesHTML(alt, m)}
+    ${webVideosHTML(alt)}
     ${downloadHTML(m, alt, streaming)}
     ${appButtonsHTML(m, alt, streaming)}
     ${skillMediaHTML(m, alt, streaming)}
@@ -1466,13 +1467,21 @@ function webImagesHTML(alt, m) {
   return `<div class="web-images">${list.map((x) => `<a class="web-img" href="${esc(x.page || '#')}" title="${esc(`${x.title}${x.creator ? ` by ${x.creator}` : ''} · ${x.source}${x.license ? ` · ${x.license}` : ''}`)}"><img src="${esc(x.src)}" alt="${esc(x.title)}" loading="lazy"><span class="small">${esc(x.source)}${x.license ? ` · ${esc(x.license)}` : ''}</span></a>`).join('')}</div>
     <div class="row small" style="gap:8px;margin:2px 0 6px"><span class="muted">🖼️ ${list.length} pictures from the web · safe search on · click one for its page</span><button class="btn small ghost" data-webimg-describe="${m.id}">👁 Describe these</button></div>`;
 }
+// Videos from the web (the video_search plug-in), shown as thumbnail cards that open the watch page.
+const webVideosOf = (alt) => (alt.toolCalls || []).flatMap((t) => { const m = String(t.result || '').match(/\[\[web-videos:(\[[\s\S]*\])\]\]/); if (!m) return []; try { return JSON.parse(m[1]); } catch { return []; } });
+function webVideosHTML(alt) {
+  const list = webVideosOf(alt);
+  if (!list.length) return '';
+  return `<div class="web-images web-videos">${list.map((x) => `<a class="web-img web-vid" href="${esc(x.page || '#')}" title="${esc(`${x.title}${x.author ? ` · ${x.author}` : ''} · ${x.source}`)}">${x.src ? `<img src="${esc(x.src)}" alt="${esc(x.title)}" loading="lazy">` : `<span class="web-vid-noimg">${esc(x.source)}</span>`}<span class="web-vid-play">▶</span>${x.duration ? `<span class="web-vid-dur">${esc(x.duration)}</span>` : ''}<span class="small">${esc(String(x.title).slice(0, 60))}</span></a>`).join('')}</div>
+    <div class="row small" style="gap:8px;margin:2px 0 6px"><span class="muted">🎬 ${list.length} videos from the web · safe search on · click one to watch</span></div>`;
+}
 function toolsHTML(alt) {
   const list = alt.toolCalls || [];
   if (!list.length) return '';
   const icon = { running: '⏳', done: '✅', error: '⚠️', denied: '🚫' };
   return `<details class="steps"><summary>🔌 Used ${list.length} tool${list.length > 1 ? 's' : ''}: ${[...new Set(list.map((t) => t.source))].map(esc).join(', ')}</summary>
     ${list.map((t) => `<div class="step"><span>${icon[t.status] || '•'}</span><div class="grow"><b>${esc(t.source)}</b> <code>${esc(t.name)}</code> <span class="small muted">${esc(JSON.stringify(t.args || {}).slice(0, 140))}</span>
-      ${t.result ? `<details><summary class="small">Result</summary><pre>${esc(String(t.result).replace(/\n?\[\[web-images:[\s\S]*\]\]/, ''))}</pre></details>` : ''}</div></div>`).join('')}
+      ${t.result ? `<details><summary class="small">Result</summary><pre>${esc(String(t.result).replace(/\n?\[\[web-(images|videos):[\s\S]*\]\]/, ''))}</pre></details>` : ''}</div></div>`).join('')}
   </details>`;
 }
 

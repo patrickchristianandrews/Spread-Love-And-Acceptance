@@ -65,6 +65,15 @@ const ROOT = path.join(__dirname, '..');
     assert.deepEqual([shown.n, shown.w, shown.describe], [1, 1, true], `the picture shows: ${JSON.stringify(shown)}`);
     assert.match(shown.text, /flickr · BY 2\.0[\s\S]*1 pictures from the web · safe search on/);
     console.log('✓ pictures from the web show under the answer, from this PC, with source, license and Describe these');
+    // Videos from the web show as cards that link to the watch page.
+    const vid = await win.evaluate(() => {
+      const alt = { text: 'Here are some.', toolCalls: [{ name: 'video_search', source: 'Videos from the web', status: 'done', result: `Showing 1\n[[web-videos:${JSON.stringify([{ title: 'Moon landing', src: 'qsmedia://w/abcdef0123456789abcd.png', page: 'https://www.youtube.com/watch?v=abc', source: 'YouTube', author: 'NASA', duration: '3:14' }])}]]` }] };
+      const box = document.createElement('div'); box.innerHTML = webVideosHTML(alt); document.body.appendChild(box);
+      const a = box.querySelector('.web-vid'); const res = { n: box.querySelectorAll('.web-vid').length, href: a?.getAttribute('href'), text: box.innerText }; box.remove(); return res;
+    });
+    assert.equal(vid.n, 1); assert.equal(vid.href, 'https://www.youtube.com/watch?v=abc');
+    assert.match(vid.text, /3:14[\s\S]*1 videos from the web · safe search on/);
+    console.log('✓ videos from the web show under the answer as cards linking to the watch page');
     // Your Crew → Downloads: the torrent page, and the torrent engine starts inside the app.
     await win.evaluate(() => { document.querySelector('#wc-close')?.click(); go({ view: 'assistants' }); });
     await win.click('[data-crew-tab="downloads"]');
