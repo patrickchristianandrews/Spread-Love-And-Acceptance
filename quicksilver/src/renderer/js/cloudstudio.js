@@ -43,7 +43,9 @@ function cloudStudioHTML() {
   return `<div class="notice info" style="margin-bottom:12px"><b>☁️ Photos, video and music from the cloud.</b> <b>Free:</b> Pollinations makes pictures with no key or account. <b>With a key:</b> fal.ai reaches Google's Nano Banana and Veo 3.1, Kling 3 and full-song music (ElevenLabs, MiniMax, Mureka); Replicate ($5 free credits) and Stability AI (25 free credits a month) add more picture models. Your PC's own models stay free. ${missing.length ? missing.map((m) => `<button class="btn small" data-cs-connect="${m}">Connect ${esc(cloudModels[m].name)}</button>`).join(' ') : ''}</div>
     <div class="tabs cc-kinds">${Object.entries(CLOUD_KINDS).map(([k, [ic, l]]) => `<button class="tab ${cloudKind === k ? 'active' : ''}" data-cs-kind="${k}">${ic} ${l}</button>`).join('')}</div>
     <div class="cs-models">${list.map((o) => `<label class="cs-model ${o.key === pick ? 'now' : ''} ${o.conn ? '' : 'off'}"><input type="radio" name="cs-model" value="${esc(o.key)}" ${o.key === pick ? 'checked' : ''} ${o.conn ? '' : 'disabled'}><span class="grow"><b>${esc(o.name)}</b> ${o.free ? '<span class="badge b-mint">Free</span>' : ''}<span class="small muted">${esc(o.best)} · ${esc(o.price)}${o.conn ? '' : ` · <a href="#" data-cs-connect="${o.svc}">connect ${esc(o.svcName)}</a>`}</span></span>${tenStarsHTML(o.rating)}</label>`).join('')}
+      ${cloudModels.fal ? `<div class="cs-model ${serviceConn('fal') ? '' : 'off'}"><span class="grow"><b>Any fal.ai model</b><span class="small muted">Paste a model id from <a href="https://fal.ai/models" title="Opens fal.ai/models">fal.ai/models</a> — e.g. a Luma, MiniMax Hailuo, Runway, Pika, LTX, Hunyuan, Seedance or WAN ${cloudKind === 'music' ? 'music' : 'video'} model (fal-ai/…)</span></span><input id="cs-fal" placeholder="fal-ai/…" style="max-width:220px" value="${esc(S.data.prefs[`cloud_fal_${cloudKind}`] || '')}" ${serviceConn('fal') ? '' : 'disabled'}></div>` : ''}
       ${cloudModels.replicate && cloudKind !== 'edit' ? `<div class="cs-model ${serviceConn('replicate') ? '' : 'off'}"><span class="grow"><b>Any Replicate model</b><span class="small muted">Type its name (owner/name) from replicate.com, for example a video or music model</span></span><input id="cs-rep" placeholder="owner/name" style="max-width:220px" value="${esc(S.data.prefs[`cloud_rep_${cloudKind}`] || '')}" ${serviceConn('replicate') ? '' : 'disabled'}></div>` : ''}
+      ${['video', 'animate'].includes(cloudKind) ? '<div class="cs-model"><span class="grow"><b>🤗 Free video, no key</b><span class="small muted">Run a WAN (or other) video Space on Hugging Face — open <a href="#" data-cs-spaces>Explore → Spaces</a>, search "video", and run it here.</span></span></div>' : ''}
       <div class="cs-model local"><span class="grow"><b>💻 On this PC</b><span class="small muted">${loc ? `${esc(loc.who)} · free, private` : 'No model for this yet (see the other tabs here)'}</span></span>${loc ? tenStarsHTML(Math.round(loc.v * 2) / 2) : '<span class="muted small">–</span>'}</div></div>
     <div class="grid2" style="margin-top:12px;align-items:start"><div class="stack-v">
       <div class="field"><label for="cs-prompt">${cloudKind === 'music' ? 'Describe the song (style, mood, instruments, tempo)' : cloudKind === 'edit' ? 'What to change' : 'Describe it'}</label><textarea id="cs-prompt" rows="4" placeholder="${cloudKind === 'music' ? 'Upbeat indie pop, female vocals, bright guitars, 120 bpm' : cloudKind === 'edit' ? 'Make it golden hour and remove the people in the background' : 'A red fox in fresh snow at sunrise, soft light, close-up'}">${esc(S.data.prefs.lastPrompt || '')}</textarea>${cloudKind === 'music' ? '' : improveBtn('cs-prompt', cloudKind === 'edit' ? 'edit' : ['video', 'animate'].includes(cloudKind) ? 'video' : 'image')}</div>
@@ -60,6 +62,8 @@ function cloudStudioHTML() {
 function bindCloudStudio() {
   $$('[data-cs-connect]').forEach((b) => b.addEventListener('click', (e) => { e.preventDefault(); const n = cloudModels[b.dataset.csConnect]?.name || b.dataset.csConnect; go({ view: 'apis' }); toast(`Add "${n}" with your key.`, 6000); }));
   $('#cs-rep')?.addEventListener('change', (e) => { S.data.prefs[`cloud_rep_${cloudKind}`] = e.target.value.trim(); save(); });
+  $('#cs-fal')?.addEventListener('change', (e) => { S.data.prefs[`cloud_fal_${cloudKind}`] = e.target.value.trim(); save(); });
+  $('[data-cs-spaces]')?.addEventListener('click', (e) => { e.preventDefault(); go({ view: 'spaces' }); });
   $$('[data-cs-kind]').forEach((b) => b.addEventListener('click', () => { cloudKind = b.dataset.csKind; render(); }));
   $$('input[name="cs-model"]').forEach((r) => r.addEventListener('change', () => { S.data.prefs[`cloud_${cloudKind}`] = r.value; save(); render(); }));
   $('#cs-secs')?.addEventListener('input', (e) => { S.data.prefs.cloudSecs = Number(e.target.value); $('#cs-secs-v').textContent = fmtSongLen(Number(e.target.value)); save(); });
@@ -75,8 +79,10 @@ function bindCloudStudio() {
   $('#cs-go')?.addEventListener('click', async () => {
     const key = document.querySelector('input[name="cs-model"]:checked')?.value || '';
     let [svc, model] = key.split('|');
+    const fal = $('#cs-fal')?.value.trim();
     const rep = $('#cs-rep')?.value.trim();
-    if (rep && serviceConn('replicate')) { svc = 'replicate'; model = rep; }
+    if (fal && serviceConn('fal')) { svc = 'fal'; model = fal.replace(/^https?:\/\/(www\.)?fal\.ai\/models\//, ''); }
+    else if (rep && serviceConn('replicate')) { svc = 'replicate'; model = rep; }
     const p = serviceConn(svc);
     const prompt = $('#cs-prompt').value.trim();
     if (!p) { toast(`Connect ${cloudModels[svc]?.name || 'the service'} first.`); return; }

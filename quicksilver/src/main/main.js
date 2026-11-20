@@ -618,6 +618,7 @@ handle('kb:search', async (q, k, ids) => { const r = await knowledge.search(q, {
 // resolved parameters come back with the results.
 handle('web:search', async (q, opts = {}) => { const r = await websearch.search(q, { safe: opts?.safeSearch }); return { results: [...r], meta: r.meta }; });
 handle('web:images', async (q, opts = {}) => { const list = await websearch.images(String(q || ''), { count: Math.max(1, Math.min(12, Number(opts?.count) || 6)), safe: opts?.safeSearch || 'on' }); return list.map((x) => ({ title: x.title, source: x.source, page: x.page, full: x.full, src: `qsmedia://w/${x.file}` })); });
+handle('web:videos', async (q, opts = {}) => { const list = await websearch.videos(String(q || ''), { count: Math.max(1, Math.min(12, Number(opts?.count) || 6)), safe: opts?.safeSearch || 'on' }); return list.map((x) => ({ title: x.title, source: x.source, page: x.page, duration: x.duration })); });
 handle('kb:peek', (q) => knowledge.peek(q));
 // Paste text straight into a knowledge base (notes, a policy, an email).
 handle('kb:addText', (collectionId, name, text) => knowledge.addTexts(collectionId, [{ name: String(name || 'Note').slice(0, 120), text: String(text || '') }]));

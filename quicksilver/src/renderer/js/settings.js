@@ -249,7 +249,7 @@ function webHTML() {
       <input id="w-sx" value="${esc(w.searxngUrl)}" placeholder="http://localhost:8888"></div>
     <div class="row perm-row"><div class="grow"><b>Safe search</b><div class="help">Asks the search service to filter adult results, using its own setting (Brave safesearch, DuckDuckGo kp/p, SearXNG safesearch, Tavily safe_search, Mojeek safe). Off by default. This applies to <b>pictures from the web too</b> — turn it off and picture search returns unfiltered results, on your own machine.</div></div><label class="switch"><input type="checkbox" id="w-safe" ${safeSearchValue() === 'on' ? 'checked' : ''}><span></span></label></div>
     <div class="small muted" id="w-safe-debug"></div>
-    <div class="row" style="gap:8px;flex-wrap:wrap"><button class="btn primary" id="w-save">Save</button><button class="btn" id="w-test">Test a search</button><button class="btn" id="w-test-img">Test pictures</button></div>
+    <div class="row" style="gap:8px;flex-wrap:wrap"><button class="btn primary" id="w-save">Save</button><button class="btn" id="w-test">Test a search</button><button class="btn" id="w-test-img">Test pictures</button><button class="btn" id="w-test-vid">Test videos</button></div>
   </div>`;
 }
 function bindWeb() {
@@ -271,6 +271,14 @@ function bindWeb() {
     try { const imgs = await qs.call('web:images', 'a mountain landscape at sunset', { safeSearch: safe }); toast(`Found ${imgs.length} pictures (safe search ${safe}). Sources: ${[...new Set(imgs.map((x) => x.source))].slice(0, 4).join(', ') || 'none'}`, 7000); }
     catch (err) { toast(err.message, 8000); }
     finally { btn.disabled = false; btn.textContent = 'Test pictures'; }
+  });
+  $('#w-test-vid').addEventListener('click', async () => {
+    await saveWeb();
+    const safe = safeSearchValue();
+    const btn = $('#w-test-vid'); btn.disabled = true; btn.textContent = 'Testing…';
+    try { const vids = await qs.call('web:videos', 'how to make bread', { safeSearch: safe }); toast(`Found ${vids.length} videos (safe search ${safe}). First: ${vids[0]?.title || 'none'}`, 7000); }
+    catch (err) { toast(err.message, 8000); }
+    finally { btn.disabled = false; btn.textContent = 'Test videos'; }
   });
 }
 

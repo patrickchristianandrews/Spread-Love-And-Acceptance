@@ -216,15 +216,12 @@ function bestPassages(text, query, budget = 1800) {
 const STOP = new Set('the and for are but not you all any can had her was one our out day get has him his how man new now old see two way who boy did its let put say she too use what when where which with this that from they will would there their about into than then them these some your have more also just like been were what does'.split(' '));
 
 // ---------- pictures from the web ----------
-// Safe search is always on: openly licensed pictures from Openverse (Wikimedia Commons, Flickr and
-// more; mature-flagged pictures excluded), plus your Brave Search (safesearch=strict) or SearXNG
-// (safesearch=2) when set up. Explicit searches are refused, and results whose titles are explicit
-// are dropped. Thumbnails are downloaded by Quicksilver and kept briefly on this PC, so the chat
-// shows them without the page reaching out to other sites.
+// Picture and video search follow the web Safe search switch (on by default): with it on, mature
+// results are excluded (Openverse mature=false, Brave safesearch=strict, SearXNG safesearch=2,
+// DuckDuckGo p=1), explicit searches are refused and results with explicit titles are dropped; with
+// it off, those filters are lifted (your own machine). Thumbnails are downloaded by Quicksilver and
+// kept briefly on this PC, so the chat shows them without the page reaching out to other sites.
 const EXPLICIT = /\b(nude|nudes|naked|nsfw|porn\w*|xxx|sex|sexy|hentai|boobs?|tits|pussy|dick|cock|penis|vagina|genitals?|topless|lingerie|erotic\w*|fetish|onlyfans|strip(per|ping)?|explicit|gore|beheading|corpse)\b/i;
-// TODO(safesearch): picture search is always strict (Openverse mature=false, Brave safesearch=strict,
-// SearXNG safesearch=2): the web Safe search switch does not apply here. A deliberate decision,
-// tracked here. The change would be getSafeSearchParam on the Brave/SearXNG/DuckDuckGo picture calls.
 // The top image results from a general search engine (DuckDuckGo's image index — a broad web
 // crawl, Bing-powered, no key). This is what "find a picture on the web" should return first.
 async function ddgImages(q, count = 8, safe = 'on') {
@@ -299,13 +296,14 @@ async function images(query, { count = 8, safe = 'on' } = {}) {
 // Returns metadata only — no large downloads — with a watch link, an embed URL and a thumbnail.
 const INVIDIOUS = ['https://invidious.jing.rocks', 'https://inv.nadeko.net', 'https://invidious.nerdvpn.de', 'https://yewtu.be'];
 const PIPED = ['https://pipedapi.kavin.rocks', 'https://pipedapi.adminforge.de'];
-async function videos(query, { count = 8 } = {}) {
+async function videos(query, { count = 8, safe = 'on' } = {}) {
   const q = String(query || '').trim();
   if (!q) throw new Error('Say what videos to look for.');
-  if (EXPLICIT.test(q)) throw new Error('Video search keeps safe search on, so it can\'t look for that.');
+  const on = safe !== 'off'; // follow the chat / Settings safe-search setting (default on)
+  if (on && EXPLICIT.test(q)) throw new Error('Video search has safe search on, so it can\'t look for that. Turn safe search off in Settings → Web search to allow it.');
   const cfg = store.config().web || {};
   const found = [];
-  const add = (list) => { for (const x of list) if (x?.page && !EXPLICIT.test(`${x.title} ${x.page}`) && !found.some((y) => y.page === x.page)) found.push(x); };
+  const add = (list) => { for (const x of list) if (x?.page && (!on || !EXPLICIT.test(`${x.title} ${x.page}`)) && !found.some((y) => y.page === x.page)) found.push(x); };
   const dur = (s) => { s = Number(s) || 0; if (!s) return ''; const m = Math.floor(s / 60); return `${m}:${String(s % 60).padStart(2, '0')}`; };
   const jobs = [];
   // Keyless: open YouTube front-ends (community-run; tried in order, best-effort).
@@ -333,13 +331,13 @@ async function videos(query, { count = 8 } = {}) {
   })());
   const key = store.getSecret('web:brave');
   if (cfg.provider === 'brave' && key) jobs.push((async () => {
-    const r = await fetch(`https://api.search.brave.com/res/v1/videos/search?count=${Math.min(20, count * 2)}&q=${encodeURIComponent(q)}`, { headers: { Accept: 'application/json', 'X-Subscription-Token': key }, signal: AbortSignal.timeout(12000) });
+    const r = await fetch(`https://api.search.brave.com/res/v1/videos/search?safesearch=${on ? 'strict' : 'off'}&count=${Math.min(20, count * 2)}&q=${encodeURIComponent(q)}`, { headers: { Accept: 'application/json', 'X-Subscription-Token': key }, signal: AbortSignal.timeout(12000) });
     if (!r.ok) throw new Error(`Brave returned HTTP ${r.status}`);
     const j = await r.json();
     add((j.results || []).map((x) => ({ title: x.title || q, page: x.url, embed: '', thumb: x.thumbnail?.src, source: x.meta_url?.hostname || 'web', author: x.video?.creator || '', duration: x.video?.duration || '' })));
   })());
   if (cfg.provider === 'searxng' && cfg.searxngUrl) jobs.push((async () => {
-    const r = await fetch(`${cfg.searxngUrl.replace(/\/+$/, '')}/search?format=json&categories=videos&safesearch=2&q=${encodeURIComponent(q)}`, { signal: AbortSignal.timeout(12000) });
+    const r = await fetch(`${cfg.searxngUrl.replace(/\/+$/, '')}/search?format=json&categories=videos&safesearch=${on ? 2 : 0}&q=${encodeURIComponent(q)}`, { signal: AbortSignal.timeout(12000) });
     if (!r.ok) throw new Error(`SearXNG returned HTTP ${r.status}`);
     const j = await r.json();
     add((j.results || []).map((x) => ({ title: x.title || q, page: x.url, embed: '', thumb: x.thumbnail || x.img_src, source: x.engine || 'SearXNG', author: x.author || '', duration: x.length || '' })));
