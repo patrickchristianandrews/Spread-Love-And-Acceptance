@@ -48,8 +48,10 @@ function summary(m) {
 
 async function searchDatasets(query, sort = 'downloads') {
   const q = String(query || '').trim();
+  // Always sort by what the user picked (most downloaded by default), whether browsing or searching,
+  // so the list matches the chosen order instead of silently falling back to trending.
   const dir = ['downloads', 'likes', 'trendingScore', 'lastModified'].includes(sort) ? sort : 'downloads';
-  const base = `${HF}/api/datasets?sort=${q ? dir : 'trendingScore'}&direction=-1&limit=40`;
+  const base = `${HF}/api/datasets?sort=${dir}&direction=-1&limit=40`;
   const list = await hf(q ? `${base}&search=${encodeURIComponent(q)}` : base);
   return list.filter((m) => m.id && !m.disabled && !m.private).map(summary).filter((m) => m.readable).slice(0, 30);
 }
