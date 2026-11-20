@@ -39,6 +39,7 @@ Tasks: 💬 Everyday chat · 🧠 Hard reasoning & maths · 💻 Coding · ✍�
 | Service | Best for | What free gets you | After that | Links |
 |---|---|---|---|---|
 | **AI/ML API** (8.5/10) | 200+ models (GPT, Claude, Gemini) with one key | Small free tier | Pay as you go | [Get a key](https://aimlapi.com/app/keys) · [Prices](https://aimlapi.com/ai-ml-api-pricing) |
+| **Fireworks AI** (8.5/10) | Fast serving of the top open models (Llama, Qwen, DeepSeek) with tool calling and vision | Small free credit when you sign up | Pay as you go, competitive per-token | [Get a key](https://fireworks.ai/account/api-keys) · [Prices](https://fireworks.ai/pricing) |
 | **OpenRouter** (8.5/10) | Hundreds of models with one key; switch any time | ":free" models: 50 requests a day (1,000 with $10 credit) | Each model's own price | [Get a key](https://openrouter.ai/keys) · [Prices](https://openrouter.ai/models?max_price=0) |
 | **MegaNova** (8/10) | 100+ models with one key (DeepSeek, Qwen, Kimi, GLM, MiniMax), including some uncensored builds | A free tier with some free models | Pay as you go | [Get a key](https://meganova.ai/api-keys) · [Prices](https://meganova.ai/) |
 | **Hugging Face** (7.5/10) | Thousands of open models | Small monthly credits | Pay as you go | [Get a key](https://huggingface.co/settings/tokens) · [Prices](https://huggingface.co/docs/inference-providers/pricing) |
@@ -49,7 +50,6 @@ Tasks: 💬 Everyday chat · 🧠 Hard reasoning & maths · 💻 Coding · ✍�
 | **AI21 (Jamba)** | Very long documents (256K context). | Free trial credit for new accounts, then pay as you go. | See its price page | [Get a key](https://studio.ai21.com/account/api-key) · [Prices](https://www.ai21.com/pricing) |
 | **Alibaba Qwen (Model Studio)** | Alibaba's strongest Qwen model in the cloud. | A free token allowance for new users, then pay as you go. | See its price page | [Get a key](https://modelstudio.console.alibabacloud.com/) · [Prices](https://www.alibabacloud.com/help/en/model-studio/models) |
 | **Chutes** | Big open models on a decentralized network. | Some free models with daily limits; others are paid. | See its price page | [Get a key](https://chutes.ai/app/api) · [Prices](https://chutes.ai/) |
-| **Fireworks AI** | Fast hosting of the best open models. | A small free credit when you sign up, then pay as you go. | See its price page | [Get a key](https://fireworks.ai/account/api-keys) · [Prices](https://fireworks.ai/pricing) |
 | **Hyperbolic** | Low-cost open models, including base models. | Trial credit for new accounts, then pay as you go. | See its price page | [Get a key](https://app.hyperbolic.xyz/settings) · [Prices](https://hyperbolic.xyz/pricing) |
 | **Inception (Mercury, very fast)** | A diffusion model that writes extremely fast. | Free credit for new accounts, then pay as you go. | See its price page | [Get a key](https://platform.inceptionlabs.ai/) |
 | **Nebius AI Studio** | Low-cost open models hosted in Europe. | Trial credit for new accounts, then pay as you go. | See its price page | [Get a key](https://studio.nebius.com/settings/api-keys) · [Prices](https://studio.nebius.com/) |
@@ -86,6 +86,7 @@ Tasks: 💬 Everyday chat · 🧠 Hard reasoning & maths · 💻 Coding · ✍�
 
 | Service | Best for | What free gets you | After that | Links |
 |---|---|---|---|---|
+| **Fireworks AI** (8.5/10) | Fast serving of the top open models (Llama, Qwen, DeepSeek) with tool calling and vision | Small free credit when you sign up | Pay as you go, competitive per-token | [Get a key](https://fireworks.ai/account/api-keys) · [Prices](https://fireworks.ai/pricing) |
 | **OpenRouter** (8.5/10) | Hundreds of models with one key; switch any time | ":free" models: 50 requests a day (1,000 with $10 credit) | Each model's own price | [Get a key](https://openrouter.ai/keys) · [Prices](https://openrouter.ai/models?max_price=0) |
 
 ### Paid
@@ -112,6 +113,7 @@ Tasks: 💬 Everyday chat · 🧠 Hard reasoning & maths · 💻 Coding · ✍�
 | Service | Best for | What free gets you | After that | Links |
 |---|---|---|---|---|
 | **AI/ML API** (8.5/10) | 200+ models (GPT, Claude, Gemini) with one key | Small free tier | Pay as you go | [Get a key](https://aimlapi.com/app/keys) · [Prices](https://aimlapi.com/ai-ml-api-pricing) |
+| **Fireworks AI** (8.5/10) | Fast serving of the top open models (Llama, Qwen, DeepSeek) with tool calling and vision | Small free credit when you sign up | Pay as you go, competitive per-token | [Get a key](https://fireworks.ai/account/api-keys) · [Prices](https://fireworks.ai/pricing) |
 | **OpenRouter** (8.5/10) | Hundreds of models with one key; switch any time | ":free" models: 50 requests a day (1,000 with $10 credit) | Each model's own price | [Get a key](https://openrouter.ai/keys) · [Prices](https://openrouter.ai/models?max_price=0) |
 | **MegaNova** (8/10) | 100+ models with one key (DeepSeek, Qwen, Kimi, GLM, MiniMax), including some uncensored builds | A free tier with some free models | Pay as you go | [Get a key](https://meganova.ai/api-keys) · [Prices](https://meganova.ai/) |
 | **NVIDIA NIM** (7.5/10) | Many open models (DeepSeek, Qwen, Nemotron) | Free developer credits, rate limited | Paid plans | [Get a key](https://build.nvidia.com) · [Prices](https://build.nvidia.com/explore/discover) |
@@ -176,11 +178,11 @@ Tasks: 💬 Everyday chat · 🧠 Hard reasoning & maths · 💻 Coding · ✍�
 | Service | Best for | What free gets you | After that | Links |
 |---|---|---|---|---|
 | **AI/ML API** (8.5/10) | 200+ models (GPT, Claude, Gemini) with one key | Small free tier | Pay as you go | [Get a key](https://aimlapi.com/app/keys) · [Prices](https://aimlapi.com/ai-ml-api-pricing) |
+| **Fireworks AI** (8.5/10) | Fast serving of the top open models (Llama, Qwen, DeepSeek) with tool calling and vision | Small free credit when you sign up | Pay as you go, competitive per-token | [Get a key](https://fireworks.ai/account/api-keys) · [Prices](https://fireworks.ai/pricing) |
 | **OpenRouter** (8.5/10) | Hundreds of models with one key; switch any time | ":free" models: 50 requests a day (1,000 with $10 credit) | Each model's own price | [Get a key](https://openrouter.ai/keys) · [Prices](https://openrouter.ai/models?max_price=0) |
 | **MegaNova** (8/10) | 100+ models with one key (DeepSeek, Qwen, Kimi, GLM, MiniMax), including some uncensored builds | A free tier with some free models | Pay as you go | [Get a key](https://meganova.ai/api-keys) · [Prices](https://meganova.ai/) |
 | **Hugging Face** (7.5/10) | Thousands of open models | Small monthly credits | Pay as you go | [Get a key](https://huggingface.co/settings/tokens) · [Prices](https://huggingface.co/docs/inference-providers/pricing) |
 | **Alibaba Qwen (Model Studio)** | Alibaba's strongest Qwen model in the cloud. | A free token allowance for new users, then pay as you go. | See its price page | [Get a key](https://modelstudio.console.alibabacloud.com/) · [Prices](https://www.alibabacloud.com/help/en/model-studio/models) |
-| **Fireworks AI** | Fast hosting of the best open models. | A small free credit when you sign up, then pay as you go. | See its price page | [Get a key](https://fireworks.ai/account/api-keys) · [Prices](https://fireworks.ai/pricing) |
 
 ### Paid
 

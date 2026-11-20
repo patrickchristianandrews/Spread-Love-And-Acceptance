@@ -9,6 +9,7 @@ const API_RANK = [
   ['google', 'Google Gemini', ['chat', 'reasoning', 'coding', 'photos-in'], 'All-round best free: hard questions, reading photos, long documents', 'Free plan with daily limits, no card', 'Gemini 4 Argon about $4 in / $20 out per million tokens', 9.5, 9, 7, 'app'],
   ['groq', 'Groq', ['chat', 'coding'], 'Very fast answers and coding (gpt-oss-120b, 88% on a coding test)', 'Free plan: about 1,000 requests a day', 'Low: well under $1 per million tokens', 8.5, 8.5, 9, 'app'],
   ['cerebras', 'Cerebras', ['chat', 'reasoning'], 'The fastest big model (Qwen3 235B)', 'Free: about 1 million tokens a day', 'Developer tier, pay as you go', 8, 9, 8.5, 'app'],
+  ['fireworks', 'Fireworks AI', ['chat', 'coding', 'reasoning', 'photos-in'], 'Fast serving of the top open models (Llama, Qwen, DeepSeek) with tool calling and vision', 'Small free credit when you sign up', 'Pay as you go, competitive per-token', 8.5, 4, 7, 'app'],
   ['openrouter', 'OpenRouter', ['chat', 'coding', 'reasoning'], 'Hundreds of models with one key; switch any time', '":free" models: 50 requests a day (1,000 with $10 credit)', 'Each model\'s own price', 8.5, 6.5, 8, 'app'],
   ['mistral', 'Mistral AI', ['chat', 'translation'], 'European, good at languages and writing', 'Free Experiment plan with a daily quota (phone check)', 'Pay as you go, mid-priced', 8, 7.5, 7.5, 'app'],
   ['github', 'GitHub Models', ['chat', 'coding'], 'Trying top models (GPT-4.1) with a GitHub account', 'Free with low daily limits', 'Pay as you go through GitHub', 8.5, 5.5, 7, 'app'],
