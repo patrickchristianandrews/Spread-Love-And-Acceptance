@@ -1,0 +1,331 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Quicksilver — Your own AI, on your own machine</title>
+<meta name="description" content="Quicksilver is a private AI that runs on your own PC: local chat, multi-model stacks, a photo &amp; video studio, an OpenAI-compatible API, knowledge bases and one-click Hugging Face models. Free. No account. Nothing leaves your computer.">
+<meta property="og:title" content="Quicksilver — Your own AI, on your own machine">
+<meta property="og:description" content="Private, local AI for Windows, Mac and Linux. Free and open models. Nothing leaves your PC.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='112' fill='%23070b14'/%3E%3Cpath d='M256 70C256 70 108 236 108 330a148 148 0 0 0 296 0C404 236 256 70 256 70z' fill='%23cfd8e6'/%3E%3C/svg%3E">
+<style>
+  :root{
+    --bg:#070b14; --bg2:#0b1020; --panel:#111a2c; --panel2:#15203a; --line:#263455;
+    --ink:#eaf1ff; --muted:#9fb0cf; --chrome1:#ffffff; --chrome2:#cfd8e6; --chrome3:#7d8ca6;
+    --cyan:#5ee0ec; --cyan2:#8ff0f6; --indigo:#7b7bf0; --mint:#9cebc9;
+    --radius:18px; --max:1120px;
+    --font:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font);line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  a{color:var(--cyan);text-decoration:none}
+  a:hover{color:var(--cyan2)}
+  .wrap{max-width:var(--max);margin:0 auto;padding:0 20px}
+  h1,h2,h3{line-height:1.15;margin:0 0 .4em;font-weight:800;letter-spacing:-.02em}
+  h1{font-size:clamp(2.1rem,6vw,3.9rem)}
+  h2{font-size:clamp(1.6rem,4vw,2.5rem)}
+  p{margin:0 0 1em}
+  .muted{color:var(--muted)}
+  .chrome-text{background:linear-gradient(120deg,var(--chrome1),var(--chrome2) 35%,var(--chrome3) 55%,#e6edf7 72%,var(--cyan));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .btn{display:inline-flex;align-items:center;gap:10px;padding:14px 22px;border-radius:14px;font-weight:700;font-size:1rem;border:1px solid transparent;cursor:pointer;transition:transform .12s ease,box-shadow .2s ease,background .2s}
+  .btn:hover{transform:translateY(-2px)}
+  .btn-primary{background:linear-gradient(135deg,#eaf6f8,#bfe9ee 40%,var(--cyan));color:#06141c;box-shadow:0 10px 30px -8px rgba(94,224,236,.5)}
+  .btn-ghost{background:rgba(255,255,255,.04);border-color:var(--line);color:var(--ink)}
+  .btn-ghost:hover{background:rgba(255,255,255,.08);color:var(--ink)}
+  .btn small{display:block;font-weight:500;font-size:.72rem;opacity:.75;margin-top:-2px}
+  /* nav */
+  header.nav{position:sticky;top:0;z-index:50;backdrop-filter:blur(14px);background:rgba(7,11,20,.72);border-bottom:1px solid var(--line)}
+  .nav .wrap{display:flex;align-items:center;gap:18px;height:64px}
+  .brand{display:flex;align-items:center;gap:11px;font-weight:800;font-size:1.15rem;letter-spacing:-.02em}
+  .brand svg{width:34px;height:34px;filter:drop-shadow(0 2px 8px rgba(94,224,236,.35))}
+  .nav nav{margin-left:auto;display:flex;gap:22px;align-items:center}
+  .nav nav a{color:var(--muted);font-weight:600;font-size:.95rem}
+  .nav nav a:hover{color:var(--ink)}
+  .nav .btn{padding:9px 16px;font-size:.9rem}
+  @media(max-width:760px){.nav nav a.hide-sm{display:none}}
+  /* hero */
+  .hero{position:relative;padding:76px 0 60px;text-align:center;overflow:hidden}
+  .hero .glow{position:absolute;inset:-20% 0 auto 0;height:620px;background:radial-gradient(60% 60% at 50% 30%,rgba(94,224,236,.18),transparent 70%);pointer-events:none}
+  .hero .droplet{width:112px;height:112px;margin:0 auto 22px;filter:drop-shadow(0 12px 40px rgba(94,224,236,.45))}
+  .hero .tagline{display:inline-block;padding:6px 14px;border:1px solid var(--line);border-radius:999px;font-size:.82rem;color:var(--muted);margin-bottom:22px;background:rgba(255,255,255,.03)}
+  .hero p.lede{max-width:640px;margin:0 auto 28px;font-size:1.18rem;color:#c7d4ec}
+  .cta{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+  .trust{display:flex;gap:10px 26px;justify-content:center;flex-wrap:wrap;margin-top:30px;color:var(--muted);font-size:.9rem;font-weight:600}
+  .trust span{display:inline-flex;align-items:center;gap:7px}
+  .trust b{color:var(--cyan)}
+  /* sections */
+  section{padding:66px 0}
+  .section-head{max-width:620px;margin:0 auto 40px;text-align:center}
+  .section-head p{color:var(--muted);font-size:1.05rem}
+  .kicker{text-transform:uppercase;letter-spacing:.16em;font-size:.76rem;font-weight:800;color:var(--cyan);margin-bottom:10px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:16px}
+  .card{background:linear-gradient(180deg,var(--panel),var(--bg2));border:1px solid var(--line);border-radius:var(--radius);padding:22px}
+  .card:hover{border-color:#39548a}
+  .card .ic{font-size:1.7rem;display:block;margin-bottom:12px}
+  .card h3{font-size:1.14rem;margin-bottom:6px}
+  .card p{color:var(--muted);font-size:.95rem;margin:0}
+  .alt{background:linear-gradient(180deg,#0a1222,#070b14)}
+  /* HF strip */
+  .hf-live{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:8px}
+  .chip{display:inline-flex;align-items:center;gap:8px;padding:8px 13px;border:1px solid var(--line);border-radius:999px;background:rgba(255,255,255,.03);font-size:.86rem;color:#cdd8ee;font-weight:600}
+  .chip b{color:var(--cyan);font-weight:700}
+  .chip .k{color:var(--muted);font-weight:500}
+  /* split */
+  .split{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center}
+  @media(max-width:860px){.split{grid-template-columns:1fr;gap:26px}}
+  .liquid-list{list-style:none;padding:0;margin:14px 0 0}
+  .liquid-list li{padding:10px 0;border-bottom:1px solid var(--line);display:flex;gap:12px;align-items:flex-start}
+  .liquid-list li:last-child{border-bottom:0}
+  .liquid-list .tag{flex:0 0 auto;font-weight:800;color:var(--cyan)}
+  .mock{background:linear-gradient(145deg,#0d1627,#0a0f1c);border:1px solid var(--line);border-radius:var(--radius);padding:18px;box-shadow:0 30px 80px -30px rgba(0,0,0,.8)}
+  .mock .bar{display:flex;gap:6px;margin-bottom:14px}
+  .mock .bar i{width:11px;height:11px;border-radius:50%;background:#2a3a5c}
+  .mock .msg{border-radius:12px;padding:11px 14px;margin:8px 0;font-size:.9rem}
+  .mock .me{background:rgba(94,224,236,.12);border:1px solid #244b63;margin-left:28px}
+  .mock .ai{background:rgba(255,255,255,.04);border:1px solid var(--line)}
+  .mock .ai b{color:var(--mint)}
+  /* phone */
+  .phone-wrap{display:flex;justify-content:center}
+  .phone{width:230px;height:470px;border-radius:38px;border:1px solid var(--line);background:linear-gradient(160deg,#0e1830,#070b14);padding:14px;position:relative;box-shadow:0 40px 90px -30px rgba(94,224,236,.25)}
+  .phone .notch{width:90px;height:20px;background:#070b14;border-radius:0 0 14px 14px;margin:0 auto 10px}
+  .phone .screen{height:calc(100% - 30px);border-radius:24px;background:radial-gradient(70% 50% at 50% 0%,rgba(94,224,236,.14),transparent),linear-gradient(180deg,#0b1427,#0a0f1c);border:1px solid var(--line);padding:16px;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px}
+  .phone .screen svg{width:54px;height:54px}
+  .store{display:inline-flex;align-items:center;gap:11px;padding:11px 18px;border-radius:13px;background:#0a0f1c;border:1px solid var(--line);color:var(--ink);font-weight:700}
+  .store:hover{border-color:var(--cyan);color:var(--ink)}
+  .store svg{width:26px;height:26px;flex:0 0 auto}
+  .store small{display:block;font-size:.68rem;font-weight:600;color:var(--muted)}
+  .badge-soon{font-size:.68rem;background:var(--cyan);color:#06141c;padding:2px 8px;border-radius:999px;font-weight:800;vertical-align:middle;margin-left:8px}
+  /* download */
+  .dl-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:16px;max-width:860px;margin:0 auto}
+  .dl{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:24px;text-align:center}
+  .dl .os{font-size:2rem}
+  .dl h3{margin:8px 0 2px}
+  .dl p{color:var(--muted);font-size:.86rem;min-height:38px}
+  /* faq */
+  .faq{max-width:760px;margin:0 auto}
+  details{border:1px solid var(--line);border-radius:14px;padding:4px 18px;margin-bottom:12px;background:var(--panel)}
+  details summary{cursor:pointer;font-weight:700;padding:14px 0;list-style:none;display:flex;justify-content:space-between;align-items:center}
+  details summary::-webkit-details-marker{display:none}
+  details summary::after{content:"+";color:var(--cyan);font-size:1.4rem;font-weight:400}
+  details[open] summary::after{content:"\2212"}
+  details p{color:var(--muted);margin:0 0 14px}
+  /* footer */
+  footer{border-top:1px solid var(--line);padding:40px 0;color:var(--muted);font-size:.9rem}
+  footer .wrap{display:flex;gap:16px;flex-wrap:wrap;align-items:center;justify-content:space-between}
+  footer a{color:var(--muted)}footer a:hover{color:var(--cyan)}
+  .disclaimer{font-size:.8rem;color:#6d7c9c;max-width:var(--max);margin:22px auto 0;padding:0 20px;text-align:center}
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="Quicksilver home">
+      <svg viewBox="0 0 512 512" aria-hidden="true"><defs>
+        <linearGradient id="c" x1=".15" y1="0" x2=".85" y2="1"><stop offset="0" stop-color="#fff"/><stop offset=".35" stop-color="#cfd8e6"/><stop offset=".55" stop-color="#7d8ca6"/><stop offset=".72" stop-color="#d9e2ee"/><stop offset="1" stop-color="#4fdbe8"/></linearGradient></defs>
+        <rect x="16" y="16" width="480" height="480" rx="112" fill="#0b1020"/>
+        <path d="M256 70C256 70 108 236 108 330a148 148 0 0 0 296 0C404 236 256 70 256 70z" fill="url(#c)"/>
+        <path d="M182 336a74 74 0 0 0 74 74" stroke="#fff" stroke-opacity=".85" stroke-width="22" fill="none" stroke-linecap="round"/></svg>
+      Quicksilver
+    </a>
+    <nav>
+      <a href="#features" class="hide-sm">Features</a>
+      <a href="#models" class="hide-sm">Models</a>
+      <a href="#phone" class="hide-sm">Phone</a>
+      <a href="#faq" class="hide-sm">FAQ</a>
+      <a href="#download" class="btn btn-primary">Download</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <!-- HERO -->
+  <section class="hero">
+    <div class="glow"></div>
+    <div class="wrap">
+      <svg class="droplet" viewBox="0 0 512 512" aria-hidden="true"><defs>
+        <linearGradient id="hc" x1=".15" y1="0" x2=".85" y2="1"><stop offset="0" stop-color="#fff"/><stop offset=".35" stop-color="#cfd8e6"/><stop offset=".55" stop-color="#7d8ca6"/><stop offset=".72" stop-color="#d9e2ee"/><stop offset="1" stop-color="#4fdbe8"/></linearGradient>
+        <radialGradient id="hg" cx=".5" cy=".62" r=".5"><stop offset="0" stop-color="#5ee7f0" stop-opacity=".45"/><stop offset="1" stop-color="#5ee7f0" stop-opacity="0"/></radialGradient></defs>
+        <circle cx="256" cy="300" r="200" fill="url(#hg)"/>
+        <path d="M256 70C256 70 108 236 108 330a148 148 0 0 0 296 0C404 236 256 70 256 70z" fill="url(#hc)"/>
+        <path d="M182 336a74 74 0 0 0 74 74" stroke="#fff" stroke-opacity=".85" stroke-width="22" fill="none" stroke-linecap="round"/>
+        <ellipse cx="300" cy="230" rx="22" ry="40" fill="#fff" fill-opacity=".55" transform="rotate(28 300 230)"/></svg>
+      <span class="tagline">● Free · Private · Runs on your own machine</span>
+      <h1>Your own AI.<br><span class="chrome-text">On your own machine.</span></h1>
+      <p class="lede">Quicksilver is a complete AI studio that runs on your PC — chat, images, video, voice, an OpenAI‑compatible API and your own knowledge bases. Free and open models. No account. Nothing you type or make ever leaves your computer.</p>
+      <div class="cta">
+        <a class="btn btn-primary" href="#download">⬇ Download for Windows <small>Free · Mac &amp; Linux too</small></a>
+        <a class="btn btn-ghost" href="#phone">📱 Get Pocket Pals <small>Quicksilver for Android</small></a>
+      </div>
+      <div class="trust">
+        <span>🔒 <b>100%</b> on your PC</span>
+        <span>🆓 <b>No</b> account, no subscription</span>
+        <span>🤗 Open models from <b>Hugging&nbsp;Face</b></span>
+        <span>🔓 Uncensored‑capable</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section id="features">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="kicker">Everything, in one app</div>
+        <h2>A whole AI toolkit — and it's yours</h2>
+        <p>The things people pay a monthly fee for, running privately on hardware you already own.</p>
+      </div>
+      <div class="grid">
+        <div class="card"><span class="ic">💬</span><h3>Private local chat</h3><p>Chat with powerful open models offline. Pick one, or let Quicksilver pick the best for each question automatically.</p></div>
+        <div class="card"><span class="ic">⚗️</span><h3>Stacks &amp; Fusion</h3><p>Combine several models into one smarter AI — a lead, a fact‑checker, a critic — that answer as a team.</p></div>
+        <div class="card"><span class="ic">🎨</span><h3>Photo &amp; video studio</h3><p>Make and edit images, animate photos into video, upscale, remove backgrounds, music and voice — on your PC.</p></div>
+        <div class="card"><span class="ic">📚</span><h3>Your knowledge</h3><p>Feed it your files, folders and whole datasets (including a FineWeb‑Edu web library) and get answers with citations.</p></div>
+        <div class="card"><span class="ic">🔌</span><h3>OpenAI‑compatible API</h3><p>A local server your other apps and coding tools can point at — your models, your machine, no keys.</p></div>
+        <div class="card"><span class="ic">🤗</span><h3>Run Hugging Face Spaces</h3><p>Browse thousands of free AI apps and run Gradio Spaces right inside Quicksilver — pictures, video, audio.</p></div>
+        <div class="card"><span class="ic">🔎</span><h3>Web Finder &amp; deep research</h3><p>Advanced‑search &amp; OSINT tools, and a research mode that gathers across sources and structures cited answers.</p></div>
+        <div class="card"><span class="ic">📊</span><h3>Benchmark &amp; Usage</h3><p>Measure a model's real quality on public tests, and see exactly where your answers run and how long they take.</p></div>
+        <div class="card"><span class="ic">☁️</span><h3>Cloud AIs (optional)</h3><p>Prefer ChatGPT, Claude or Gemini for a task? Connect 60+ services and mix them with your local models. Keys stay on your PC.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HUGGING FACE -->
+  <section id="models" class="alt">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="kicker">Powered by open models</div>
+        <h2>🤗 Built on Hugging Face</h2>
+        <p>Quicksilver runs the open models and apps the community publishes on Hugging Face — rate them for your PC, download in a click, and run them offline. Here's what's trending right now:</p>
+      </div>
+      <div class="hf-live" id="hf-models"><span class="chip"><span class="k">Loading trending models…</span></span></div>
+      <div class="hf-live" id="hf-spaces" style="margin-top:14px"></div>
+      <p class="muted" style="text-align:center;margin-top:22px;font-size:.9rem">GGUF chat models, image &amp; video models, and Gradio Spaces — all addable from inside the app. <a href="https://huggingface.co/models" rel="noopener">Explore Hugging Face →</a></p>
+    </div>
+  </section>
+
+  <!-- LIQUID EDITION -->
+  <section>
+    <div class="wrap split">
+      <div>
+        <div class="kicker">The Liquid Edition</div>
+        <h2>Ships ready to go</h2>
+        <p class="muted">One installer sets up a complete, uncensored crew that works together as a single AI — no model‑hunting, no setup. About 38&nbsp;GB, downloaded once, then fully offline.</p>
+        <ul class="liquid-list">
+          <li><span class="tag">Brain</span><span>Qwen3.5 4B — fast everyday reasoning and chat</span></li>
+          <li><span class="tag">Closer</span><span>Gemma 3 12B — depth, nuance and long documents</span></li>
+          <li><span class="tag">Muse</span><span>Mistral Nemo 12B — creative, open‑ended writing</span></li>
+          <li><span class="tag">Picture</span><span>Lustify — photoreal image generation on your GPU</span></li>
+          <li><span class="tag">Video</span><span>Wan 2.2 — bring a picture to life as a clip</span></li>
+        </ul>
+      </div>
+      <div class="mock" aria-hidden="true">
+        <div class="bar"><i></i><i></i><i></i></div>
+        <div class="msg me">Plan a 3‑day trip to Lisbon and make a picture of the view.</div>
+        <div class="msg ai"><b>Quicksilver ▸ team</b><br>Here's your itinerary with a morning in Alfama, plus a generated sunset over the Tagus 🎨 — all made on this PC.</div>
+        <div class="msg me">Now turn that picture into a short video.</div>
+        <div class="msg ai"><b>Quicksilver ▸ Wan 2.2</b><br>Animating… 🎬 saved to your gallery.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PHONE / POCKET PALS -->
+  <section id="phone" class="alt">
+    <div class="wrap split">
+      <div class="phone-wrap">
+        <div class="phone"><div class="notch"></div><div class="screen">
+          <svg viewBox="0 0 512 512" aria-hidden="true"><defs><linearGradient id="pc" x1=".15" y1="0" x2=".85" y2="1"><stop offset="0" stop-color="#fff"/><stop offset=".5" stop-color="#9fb0cf"/><stop offset="1" stop-color="#4fdbe8"/></linearGradient></defs><path d="M256 70C256 70 108 236 108 330a148 148 0 0 0 296 0C404 236 256 70 256 70z" fill="url(#pc)"/></svg>
+          <div style="font-weight:800;font-size:1.1rem">Pocket Pals</div>
+          <div class="muted" style="font-size:.82rem">Quicksilver, in your pocket</div>
+        </div></div>
+      </div>
+      <div>
+        <div class="kicker">On your phone</div>
+        <h2>Pocket Pals <span class="badge-soon">Coming soon</span></h2>
+        <p class="muted">Pocket Pals is the Quicksilver companion for Android: private AI chat, your characters and your studio tools on the go. Pair it with Quicksilver on your PC, or run small models right on the phone — your conversations stay yours.</p>
+        <p style="margin:18px 0 10px">
+          <a class="store" href="https://github.com/patrickchristianandrews/Spread-Love-And-Acceptance/releases" rel="noopener" aria-label="Get Pocket Pals on Google Play — coming soon">
+            <svg viewBox="0 0 512 512" aria-hidden="true"><path d="M48 59v394c0 14 15 23 27 16l200-115L75 43C62 36 48 45 48 59z" fill="#5ee0ec"/><path d="M275 354l73-42 83-48c14-8 14-29 0-37l-83-48-73-42 0 257z" fill="#9fb0cf"/><path d="M275 256L75 43c-2-1-4-2-6-2l206 215z" fill="#fff" opacity=".7"/></svg>
+            <span>Get it on<br><b style="font-size:1.05rem">Google Play</b></span>
+          </a>
+        </p>
+        <p class="muted" style="font-size:.86rem">Not on the Play Store yet — tap above to follow progress, and this page will link straight to the listing the moment it's live.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRIVACY -->
+  <section>
+    <div class="wrap section-head" style="max-width:720px">
+      <div class="kicker">Private by design</div>
+      <h2>Your data never leaves the room</h2>
+      <p>There's no account and no cloud in the middle. Your chats, files and creations live on your disk. The only time anything goes out is when <em>you</em> choose to connect a cloud AI — and even then your keys are stored encrypted on your PC. The Usage dashboard shows you, honestly, exactly how much ran on your machine versus anywhere else.</p>
+    </div>
+  </section>
+
+  <!-- DOWNLOAD -->
+  <section id="download" class="alt">
+    <div class="wrap">
+      <div class="section-head"><div class="kicker">Get Quicksilver</div><h2>Download — it's free</h2><p>No sign‑up. Install, and the first launch sets up your models.</p></div>
+      <div class="dl-grid">
+        <div class="dl"><div class="os">🪟</div><h3>Windows</h3><p>Windows 10/11, 64‑bit. ~200&nbsp;MB installer; models download on first run.</p><a class="btn btn-primary" href="https://github.com/patrickchristianandrews/Spread-Love-And-Acceptance/releases/latest" rel="noopener">Download for Windows</a></div>
+        <div class="dl"><div class="os">🍎</div><h3>macOS</h3><p>Apple Silicon &amp; Intel. Built from the same source.</p><a class="btn btn-ghost" href="https://github.com/patrickchristianandrews/Spread-Love-And-Acceptance/releases/latest" rel="noopener">Download for Mac</a></div>
+        <div class="dl"><div class="os">🐧</div><h3>Linux</h3><p>AppImage — runs on most distributions.</p><a class="btn btn-ghost" href="https://github.com/patrickchristianandrews/Spread-Love-And-Acceptance/releases/latest" rel="noopener">Download for Linux</a></div>
+        <div class="dl"><div class="os">📱</div><h3>Android</h3><p>Pocket Pals — the Quicksilver phone companion.</p><a class="btn btn-ghost" href="#phone">Coming soon →</a></div>
+      </div>
+      <p class="muted" style="text-align:center;margin-top:24px;font-size:.9rem">Prefer to build it yourself? It's all on <a href="https://github.com/patrickchristianandrews/Spread-Love-And-Acceptance" rel="noopener">GitHub</a>.</p>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq">
+    <div class="wrap">
+      <div class="section-head"><div class="kicker">Questions</div><h2>Good to know</h2></div>
+      <div class="faq">
+        <details open><summary>Is it really free?</summary><p>Yes. Quicksilver is free and runs on open models. There's no account, no subscription and no usage meter. You only pay if you choose to plug in a paid cloud AI with your own key.</p></details>
+        <details><summary>Does anything I type leave my computer?</summary><p>No, not unless you turn on a web search or connect a cloud service yourself. Local chat, images, video and your knowledge bases all run on your machine. The built‑in Usage dashboard shows the real split.</p></details>
+        <details><summary>What do I need to run it?</summary><p>Any modern PC works for chat; a graphics card makes images, video and bigger models much faster. The installer is small — models download on first launch (about 38&nbsp;GB for the full Liquid Edition; you can start lighter).</p></details>
+        <details><summary>How does Hugging Face fit in?</summary><p>Quicksilver runs open models and apps from Hugging Face. You can rate models for your exact PC, download GGUF chat models and image/video models in a click, and even run Gradio Spaces without leaving the app.</p></details>
+        <details><summary>What's Pocket Pals?</summary><p>The Android companion app — private AI chat and your studio tools on your phone, pairing with Quicksilver on your PC. It's coming soon to Google Play; this page will link to it as soon as it's live.</p></details>
+        <details><summary>Can it do uncensored / unfiltered models?</summary><p>Yes — Quicksilver supports open, uncensored and abliterated models for adults, run entirely on your own hardware. You're in control of what you install.</p></details>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="brand" style="font-size:1rem">
+      <svg viewBox="0 0 512 512" aria-hidden="true" style="width:26px;height:26px"><rect x="16" y="16" width="480" height="480" rx="112" fill="#0b1020"/><path d="M256 70C256 70 108 236 108 330a148 148 0 0 0 296 0C404 236 256 70 256 70z" fill="#cfd8e6"/></svg>
+      Quicksilver
+    </div>
+    <div>© <span id="yr"></span> · Private AI on your own machine · <a href="https://spreadloveandacceptance.com/">spreadloveandacceptance.com</a> · <a href="https://github.com/patrickchristianandrews/Spread-Love-And-Acceptance" rel="noopener">GitHub</a></div>
+  </div>
+  <p class="disclaimer">Quicksilver runs third‑party open‑source models; their licenses and outputs are their authors' responsibility. "Hugging Face" and "Google Play" are trademarks of their respective owners and are referenced here for compatibility only.</p>
+</footer>
+
+<script>
+  document.getElementById('yr').textContent = new Date().getFullYear();
+  // Live Hugging Face integration: show what's trending, fetched client-side (falls back quietly).
+  (function () {
+    var FALLBACK_MODELS = ['meta-llama/Llama-3.3-70B-Instruct','Qwen/Qwen3-8B','mistralai/Mistral-Nemo-Instruct-2407','google/gemma-3-12b-it','black-forest-labs/FLUX.1-dev'];
+    var FALLBACK_SPACES = ['black-forest-labs/FLUX.1-schnell','stabilityai/stable-diffusion','hexgrad/Kokoro-TTS'];
+    function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+    function render(el, items, icon, hrefBase){
+      el.innerHTML = items.slice(0,8).map(function(it){
+        var id = typeof it==='string'?it:it.id; var likes = (it&&it.likes)||0;
+        return '<a class="chip" href="'+hrefBase+encodeURI(id)+'" rel="noopener" target="_blank">'+icon+' <b>'+esc(id.split('/').pop())+'</b> <span class="k">'+esc(id.split('/')[0])+(likes?(' · ♥ '+likes):'')+'</span></a>';
+      }).join('');
+    }
+    function load(url, el, icon, hrefBase, fallback){
+      fetch(url,{headers:{Accept:'application/json'}}).then(function(r){return r.ok?r.json():Promise.reject();}).then(function(list){
+        if(!Array.isArray(list)||!list.length) throw 0;
+        render(el, list.filter(function(x){return x.id && !x.private;}), icon, hrefBase);
+      }).catch(function(){ render(el, fallback, icon, hrefBase); });
+    }
+    load('https://huggingface.co/api/models?sort=trendingScore&direction=-1&limit=8', document.getElementById('hf-models'), '🧠', 'https://huggingface.co/', FALLBACK_MODELS);
+    load('https://huggingface.co/api/spaces?sort=likes&direction=-1&limit=6', document.getElementById('hf-spaces'), '🚀', 'https://huggingface.co/spaces/', FALLBACK_SPACES);
+  })();
+</script>
+</body>
+</html>
