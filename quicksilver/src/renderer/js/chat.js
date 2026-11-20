@@ -682,6 +682,17 @@ const WEB_VIDEO_Q = /\b(show|find|search(\s+for)?|look\s?up|look\s+for|pull\s+up
 const WEATHER_Q = /\b(weather|forecast|temperature|temp|how (hot|cold|warm)|will it (rain|snow)|is it (going to|gonna) (rain|snow)|rain(ing|fall)?|snow(ing)?|humidity|wind speed|uv index|chance of rain)\b/i;
 // A calculation, a creative or build request, or a how-to is about the user's own work, not the news.
 const NOT_FRESH = /\d\s*[-+*/^×÷%]\s*\d|\b(write|draft|create|build|make|design|generate|code|refactor|debug|explain|summar|translate|rewrite|compose|story|poem|lyrics|essay|email|script|app|website|function)\b/i;
+// A question that genuinely needs the LIVE web — current events, local listings, prices, news,
+// politics, recommendations, or an explicit "look it up". Encyclopedic facts the model already knows
+// stay local and fast; the user can still force a search ("search the web for…") or use an assistant
+// with web on. This broadens auto-search well beyond strictly "latest" questions without searching
+// every trivia question.
+const INFO_Q = /\b(look ?up|search (for|the web|online)|on the (web|internet)|google (it|the|me|for)|find (me |out )?(where|who|what|the best|a good|the cheapest|the nearest|current|the latest)|current|currently|nowadays|these days|today'?s|this (week|weekend|month)|near me|nearby|nearest|closest|open now|opening hours|phone number|directions|reviews?|ratings?|best|top \d+|cheapest|price|prices|how much (is|are|does|do|will|would)|cost of|where (can|to) (i|we|you) (buy|get|find)|events?|concerts?|festivals?|things to do|what'?s (on|happening|new)|showtimes?|who won|final score|scores?|standings|election|politics|news|stock price|share price|exchange rate|release dates?)\b/i;
+// Greetings, opinions about Quicksilver itself, and role-play don't need the web.
+const NOT_SEARCH = /^\s*(hi|hey|hello|yo|sup|thanks|thank you|ok|okay|cool|nice|lol)\b|\b(how are you|what'?s up|who are you|what are you|what can you do|your (opinion|thoughts)|do you (think|feel)|tell me a (joke|story)|role-?play|pretend|imagine (you|that you))\b/i;
+// Universally-understood, encyclopedic questions: when a search does run for these, one solid
+// Wikipedia source is better (and faster) than fanning out across many sites.
+const ENCYCLOPEDIC_Q = /\b(who|what|what'?s|whats) (is|was|are|were)\b|\b(define|definition of|meaning of|history of|capital of|population of|tell me about|overview of|facts about|biography of|what does .{1,40} mean)\b/i;
 // The composer's web status: read-only. Web search is controlled by the Online/Offline switch at the
 // top of the chat, so this just says what that switch is doing right now.
 function webStateHTML() {
@@ -692,7 +703,11 @@ function webStateHTML() {
 function webWanted(chat, a, query, force = {}) {
   if (!query || S.config?.web?.provider === 'none' || S.config?.offline) return '';
   if (force.web || a.web) return 'on';
-  return S.data.prefs.autoWeb !== false && FRESH_Q.test(query) && !NOT_FRESH.test(query) ? 'auto' : '';
+  // Automatic: current questions AND general information-seeking questions pull from the web, so
+  // anything factual can be retrieved; creative, coding, maths and small talk stay local.
+  const auto = S.data.prefs.autoWeb !== false && !NOT_FRESH.test(query) && !NOT_SEARCH.test(query)
+    && (FRESH_Q.test(query) || INFO_Q.test(query));
+  return auto ? 'auto' : '';
 }
 
 async function gatherSources(chat, a, query, force = {}) {
@@ -714,7 +729,14 @@ async function gatherSources(chat, a, query, force = {}) {
   if (web) {
     const before = out.length;
     if (web === 'auto') out.autoWeb = true;
-    try { const ws = await webSearch(query); for (const r of ws.results) out.push({ title: r.title, url: r.url, text: r.text || r.snippet }); out.webMeta = ws.meta; for (const w of ws.meta?.warnings || []) toast(`Web search: ${w}`, 9000); } catch (err) { toast(`Web search: ${err.message}`, 6000); }
+    // Universally-understood facts: pull a single solid Wikipedia source instead of a noisy fan-out.
+    let solid = false;
+    if (ENCYCLOPEDIC_Q.test(query) && !FRESH_Q.test(query)) {
+      try { const w = await qs.call('web:wiki', query); if (w && w.text) { out.push({ title: w.title, url: w.url, text: w.text }); out.wiki = true; solid = true; } } catch {}
+    }
+    if (!solid) {
+      try { const ws = await webSearch(query); for (const r of ws.results) out.push({ title: r.title, url: r.url, text: r.text || r.snippet }); out.webMeta = ws.meta; for (const w of ws.meta?.warnings || []) toast(`Web search: ${w}`, 9000); } catch (err) { toast(`Web search: ${err.message}`, 6000); }
+    }
     if (out.length === before) out.webEmpty = true; // searched, found nothing: the answer must say so
   }
   return out;

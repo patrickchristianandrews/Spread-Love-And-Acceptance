@@ -658,6 +658,19 @@ handle('web:weather', async (q, opts = {}) => {
     hours, days,
   };
 });
+// One solid source for universally-understood information — a Wikipedia summary (keyless). Used
+// instead of a broad multi-engine search when the question is encyclopedic, so simple facts come
+// from a single trusted place quickly rather than a noisy fan-out across many sites.
+handle('web:wiki', async (q) => {
+  const term = String(q || '').trim(); if (!term) return null;
+  const r = await fetch(`https://en.wikipedia.org/w/api.php?action=query&format=json&redirects=1&generator=search&gsrlimit=1&gsrsearch=${encodeURIComponent(term)}&prop=extracts|info&inprop=url&exintro=1&explaintext=1&exchars=1500&origin=*`, { headers: { 'User-Agent': 'Quicksilver' }, signal: AbortSignal.timeout(6000) });
+  if (!r.ok) throw new Error(`HTTP ${r.status}`);
+  const j = await r.json();
+  const pages = j?.query?.pages; if (!pages) return null;
+  const p = Object.values(pages).sort((a, b) => (a.index || 0) - (b.index || 0))[0];
+  if (!p || !p.extract) return null;
+  return { title: p.title, text: p.extract, url: p.fullurl || `https://en.wikipedia.org/wiki/${encodeURIComponent(String(p.title).replace(/ /g, '_'))}` };
+});
 handle('kb:peek', (q) => knowledge.peek(q));
 // Paste text straight into a knowledge base (notes, a policy, an email).
 handle('kb:addText', (collectionId, name, text) => knowledge.addTexts(collectionId, [{ name: String(name || 'Note').slice(0, 120), text: String(text || '') }]));
