@@ -629,17 +629,21 @@ handle('web:weather', async (q, opts = {}) => {
   // Work out the place: an explicit one, a "weather in X" phrase, or (for "local") this device's rough location.
   let place = String(opts?.place || '').trim();
   if (!place) { const m = String(q || '').match(/\b(?:weather|forecast|temperature|temp|rain|snow|humidity|wind|climate)\b[^.?!\n]*?\b(?:in|at|for|near|around)\s+([A-Za-z0-9 .,'’\-]{2,60})/i) || String(q || '').match(/\b(?:in|at|for)\s+([A-Za-z0-9 .,'’\-]{2,60})\b.*\b(?:weather|forecast|temperature)\b/i); if (m) place = m[1].replace(/\b(today|tonight|tomorrow|this (week|weekend)|right now|now|please)\b.*$/i, '').trim(); }
-  let lat; let lon; let name; let country; let admin;
+  let lat; let lon; let name; let country; let admin; let cc = '';
   if (!place || /\b(local|here|my (area|location|city|town)|current location|where i am|outside)\b/i.test(place || q || '')) {
-    try { const ip = await fetchJson('https://ipapi.co/json/', 4000); if (ip && ip.latitude != null) { lat = ip.latitude; lon = ip.longitude; name = ip.city; admin = ip.region; country = ip.country_name; } } catch { /* fall through to named place */ }
+    try { const ip = await fetchJson('https://ipapi.co/json/', 4000); if (ip && ip.latitude != null) { lat = ip.latitude; lon = ip.longitude; name = ip.city; admin = ip.region; country = ip.country_name; cc = String(ip.country_code || ip.country || '').toUpperCase(); } } catch { /* fall through to named place */ }
   }
   if (lat == null && place) {
     const g = await fetchJson(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(place)}&count=1&language=en&format=json`);
     const hit = g?.results?.[0]; if (!hit) throw new Error(`Could not find a place called “${place}”.`);
-    lat = hit.latitude; lon = hit.longitude; name = hit.name; admin = hit.admin1; country = hit.country;
+    lat = hit.latitude; lon = hit.longitude; name = hit.name; admin = hit.admin1; country = hit.country; cc = String(hit.country_code || '').toUpperCase();
   }
   if (lat == null) throw new Error('No location given. Try “weather in <city>”.');
-  const units = (opts?.units === 'f' || /\b(fahrenheit|°f|imperial)\b/i.test(q || '')) ? { t: 'fahrenheit', w: 'mph', p: 'inch', sym: '°F' } : { t: 'celsius', w: 'kmh', p: 'mm', sym: '°C' };
+  // Units: honour an explicit request, otherwise follow the country (the US and a few others use °F/mph).
+  const wantF = /\b(fahrenheit|°f|imperial)\b/i.test(q || '') || opts?.units === 'f';
+  const wantC = /\b(celsius|°c|centigrade|metric)\b/i.test(q || '') || opts?.units === 'c';
+  const useF = wantF || (!wantC && ['US', 'USA', 'BS', 'BZ', 'KY', 'PW', 'FM', 'MH', 'LR'].includes(cc));
+  const units = useF ? { t: 'fahrenheit', w: 'mph', p: 'inch', sym: '°F' } : { t: 'celsius', w: 'kmh', p: 'mm', sym: '°C' };
   const u = `temperature_unit=${units.t}&wind_speed_unit=${units.w}&precipitation_unit=${units.p}`;
   const f = await fetchJson(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&${u}&timezone=auto&forecast_days=7&current=temperature_2m,relative_humidity_2m,apparent_temperature,is_day,weather_code,wind_speed_10m,precipitation&hourly=temperature_2m,weather_code,precipitation_probability&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,sunrise,sunset,wind_speed_10m_max`);
   const nowIso = f.current?.time;

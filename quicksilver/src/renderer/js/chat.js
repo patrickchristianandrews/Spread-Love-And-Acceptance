@@ -1577,8 +1577,10 @@ function weatherHTML(alt) {
   const wx = weatherOf(alt); if (!wx || !wx.current) return '';
   const u = esc(wx.unit || '°');
   const now = wxInfo(wx.current.code, wx.current.isDay);
-  const dayName = (iso, i) => (i === 0 ? 'Today' : new Date(iso).toLocaleDateString(undefined, { weekday: 'short' }));
-  const hourLabel = (iso) => new Date(iso).toLocaleTimeString(undefined, { hour: 'numeric' }).replace(/\s/g, '');
+  // Open-Meteo returns times already local to the place (no offset), so read the clock fields
+  // straight from the string — don't let the browser reinterpret them in the user's own timezone.
+  const dayName = (iso, i) => (i === 0 ? 'Today' : new Date(`${String(iso).slice(0, 10)}T12:00`).toLocaleDateString(undefined, { weekday: 'short' }));
+  const hourLabel = (iso) => { const h = +String(iso).slice(11, 13); const h12 = (h % 12) || 12; return `${h12}${h < 12 ? 'am' : 'pm'}`; };
   const temps = (wx.days || []).flatMap((d) => [d.min, d.max]);
   const lo = Math.min(...temps); const hi = Math.max(...temps); const span = Math.max(1, hi - lo);
   const hours = (wx.hours || []).slice(0, 12);
