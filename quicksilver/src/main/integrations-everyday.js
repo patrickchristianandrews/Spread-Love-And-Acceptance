@@ -130,7 +130,7 @@ module.exports = ({ cfg }) => {
       fields: [{ key: 'folders', label: 'More folders (optional)', placeholder: 'D:\\Projects; E:\\Photos', help: 'Separate with ; — Documents, Desktop and Downloads are always included.' }] },
     webimages: { name: 'Pictures from the web', icon: '🖼️', group: 'Everyday', defaultOn: true, noToken: true, builtIn: true,
       when: /\b(show|find|search( for)?|look up|pull up|get|give)( me)?\b[^.?!\n]{0,30}\b(photos?|pictures?|pics|images?)\b|\b(photos?|pictures?|images?|pics)\b[^.?!\n]{0,15}\b(from|on) (the )?(web|internet|online)\b|\bwhat (does|do|did) .{1,40} look like\b/i,
-      blurb: 'Finds real pictures on the web and shows them in the chat, with where each came from and its license. Safe search is always on. Free, no account (Openverse; your Brave or SearXNG search too when set up).', fields: [] },
+      blurb: 'Finds real pictures on the web — the top results from a search engine (DuckDuckGo) first, then free image libraries — and shows them in the chat with where each came from. Safe search is always on. Free, no account (your Brave or SearXNG search too when set up).', fields: [] },
     webvideo: { name: 'Videos from the web', icon: '🎬', group: 'Everyday', defaultOn: true, noToken: true, builtIn: true,
       when: /\b(show|find|search( for)?|look up|pull up|get|give)( me)?\b[^.?!\n]{0,30}\b(videos?|clips?|footage|trailers?)\b|\b(video|clip)s?\b[^.?!\n]{0,15}\b(from|on) (the )?(web|internet|online|youtube)\b|\bwatch .{1,40}\bvideo\b/i,
       blurb: 'Finds real videos on the web and shows them in the chat with a watch link. Safe search is always on. Free, no account (open YouTube front-ends; your Brave or SearXNG search too when set up).', fields: [] },
