@@ -449,18 +449,26 @@ async function bindApi() {
   const match = (p) => apiFilter === 'all' ? true : apiFilter === 'free' ? (p.free === 'free' || p.noKey) : apiFilter === 'nokey' ? Boolean(p.noKey) : apiFilter === 'generous' ? Boolean(p.generous) : true;
   const groups = [['Free', (p) => p.free === 'free'], ['Free to start, then paid', (p) => p.free === 'some'], ['Paid', (p) => p.free === 'paid'], ['Other', (p) => !p.free]];
   const shownAny = Object.entries(presets).some(([k, p]) => match(p) && k !== 'custom');
-  box.innerHTML = `<p class="small muted" style="margin:-4px 0 12px">${apiFilter === 'generous' ? '🏆 The best free tiers: a big daily allowance <b>and</b> strong, high-rated models (check the ⭐ best model and tested scores on each card).' : apiFilter === 'nokey' ? '🔑 Work with no key or account at all.' : apiFilter === 'free' ? '🆓 A free tier with no credit card.' : 'Free plans have daily limits and can change; each card links to the current prices.'}</p>${shownAny ? '' : '<p class="empty">Nothing matches that filter.</p>'}` + groups.map(([title, test]) => {
-    const list = Object.entries(presets).filter(([, p]) => test(p) && match(p));
-    return list.length ? `<h3 class="small muted" style="margin:14px 0 8px;text-transform:uppercase;letter-spacing:.05em">${title}</h3><div class="cards" style="grid-template-columns:repeat(auto-fill,minmax(250px,1fr))">${list.map(([k, p]) => `<button class="card" data-preset="${k}" style="text-align:left">
+  const presetCard = ([k, p]) => `<button class="card" data-preset="${k}" style="text-align:left">
       <div class="row"><h3 class="grow">${esc(p.name)}</h3>${p.generous ? '<span class="badge b-lemon" title="Generous free tier AND strong models">🏆</span> ' : ''}${FREE_BADGE[p.free] || ''}</div>
+      ${p.generous && (p.quality || p.freeAmount) ? `<div class="small" style="margin-top:5px">${p.quality ? `⭐ <b>Quality ${p.quality}/10</b>` : ''}${p.quality && p.freeAmount ? ' · ' : ''}${p.freeAmount ? `🎁 <b>${esc(p.freeAmount)}</b>` : ''} <span class="muted">(approx)</span></div>` : ''}
       ${devBadgeHTML(k) ? `<div style="margin-top:6px">${devBadgeHTML(k)}</div>` : ''}
       <div class="small muted" style="font-weight:600;margin-top:6px">${esc(p.freeNote || (k === 'custom' ? 'Any OpenAI-compatible endpoint' : 'Needs an API key'))}</div>
       ${p.keyUrl ? `<div class="small" style="margin-top:6px">🔑 <a href="${esc(p.keyUrl)}" title="Opens ${esc(p.keyUrl)}">Get your API key →</a></div>` : ''}
       ${p.best ? `<div class="small" style="margin-top:6px">⭐ <b>Best to link:</b> <code>${esc(p.best)}</code>${p.bestWhy ? ` <span class="muted">· ${esc(p.bestWhy)}</span>` : ''}</div>` : ''}
       ${scoreChipsHTML(cloudScoresFor(k), { label: 'Tested', note: cloudScoresFor(k)?.model ? `Scores of ${cloudScoresFor(k).model}.` : '' })}
       ${(p.imageModels || []).length ? createRowHTML(createRatings(p.imageModels.map((x) => ({ cloudImage: x })))) : ''}
-      ${S.providers.some((x) => x.preset === k) ? '<div class="small" style="margin-top:4px"><span class="badge b-mint">✓ connected</span> · click to connect another account</div>' : ''}</button>`).join('')}</div>` : '';
-  }).join('');
+      ${S.providers.some((x) => x.preset === k) ? '<div class="small" style="margin-top:4px"><span class="badge b-mint">✓ connected</span> · click to connect another account</div>' : ''}</button>`;
+  const intro = `<p class="small muted" style="margin:-4px 0 12px">${apiFilter === 'generous' ? '🏆 The best free tiers — a big allowance AND strong, high-rated models, best first. Numbers are approximate and change; each card links to the live limits.' : apiFilter === 'nokey' ? '🔑 Work with no key or account at all.' : apiFilter === 'free' ? '🆓 A free tier with no credit card.' : 'Free plans have daily limits and can change; each card links to the current prices.'}</p>${shownAny ? '' : '<p class="empty">Nothing matches that filter.</p>'}`;
+  if (apiFilter === 'generous') {
+    const list = Object.entries(presets).filter(([, p]) => p.generous).sort(([, a], [, b]) => (b.quality || 0) - (a.quality || 0) || String(a.name).localeCompare(b.name));
+    box.innerHTML = intro + `<div class="cards" style="grid-template-columns:repeat(auto-fill,minmax(250px,1fr))">${list.map(presetCard).join('')}</div>`;
+  } else {
+    box.innerHTML = intro + groups.map(([title, test]) => {
+      const list = Object.entries(presets).filter(([, p]) => test(p) && match(p));
+      return list.length ? `<h3 class="small muted" style="margin:14px 0 8px;text-transform:uppercase;letter-spacing:.05em">${title}</h3><div class="cards" style="grid-template-columns:repeat(auto-fill,minmax(250px,1fr))">${list.map(presetCard).join('')}</div>` : '';
+    }).join('');
+  }
   $$('[data-api-filter]').forEach((b) => b.addEventListener('click', () => { apiFilter = b.dataset.apiFilter; render(); }));
   $$('[data-preset]').forEach((b) => b.addEventListener('click', () => editProvider({ preset: b.dataset.preset }, presets)));
   $$('[data-api-edit]').forEach((b) => b.addEventListener('click', () => editProvider(S.providers.find((p) => p.id === b.dataset.apiEdit), presets)));
