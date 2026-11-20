@@ -1319,6 +1319,25 @@ function redPng(size = 64) {
   await win.click('#api-dir [data-dir-task="all"]');
   await win.waitForSelector('.fusion-card #fusion-open');
   await shot(win, '05b-api-free');
+  // Web Finder: plain-language dork builder + OSINT knowledge base and tools.
+  await win.evaluate(() => go({ view: 'finder' }));
+  await win.waitForSelector('#wf-build');
+  await win.fill('#wf-goal', 'cheapest place to buy a camera');
+  await win.fill('#wf-term', 'Sony A7IV');
+  await win.click('#wf-build');
+  await win.waitForSelector('.wf-row:has-text("retailers")');
+  assert.ok(await win.locator('.wf-q:has-text("Sony A7IV")').count() >= 1, 'built queries fill in the product');
+  assert.ok(await win.locator('.wf-cat:has-text("Hidden & exposed files")').count() >= 1, 'the file-finding category is present');
+  await win.click('[data-wf-tab="tools"]');
+  await win.waitForSelector('.wf-tool:has-text("MarineTraffic")');
+  assert.ok(await win.locator('.wf-tool:has-text("Shodan")').count() >= 1 && await win.locator('.wf-tool:has-text("EarthCam")').count() >= 1 && await win.locator('.wf-tool:has-text("Sherlock")').count() >= 1, 'OSINT tools incl. trackers, cameras and username tools are listed');
+  await win.click('[data-wf-tab="investigate"]');
+  await win.waitForSelector('.card:has-text("How an OSINT investigation works")');
+  await win.click('[data-wf-tab="operators"]');
+  await win.waitForSelector('.card:has-text("Search-operator cheat sheet")');
+  assert.match(await win.locator('.page:has-text("cheat sheet")').innerText(), /filetype:/);
+  await shot(win, '05c-web-finder');
+  console.log('✓ Web Finder: dork builder fills queries; OSINT tools, playbooks and operator cheat sheet');
   await win.evaluate(() => { modelsTab = 'text'; go({ view: 'models' }); });
   await win.waitForSelector('.addon:has-text("Memory"):has-text("like Mem0")');
   assert.ok(await win.locator('.addon:has-text("local RAG")').count() === 1 && await win.locator('.addon .addon-effect').count() >= 8);
