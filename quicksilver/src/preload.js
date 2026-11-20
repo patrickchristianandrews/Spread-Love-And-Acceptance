@@ -23,6 +23,7 @@ contextBridge.exposeInMainWorld('qs', {
   onLibrary: on('library:progress'),
   onEngine: on('engines:progress'),
   onBench: on('bench:status'),
+  onQuality: on('quality:status'),
   onApp: on('app:event'), // voice set-up, phone sync, updates
   pathForFile: (file) => { try { return webUtils.getPathForFile(file); } catch { return ''; } },
 });

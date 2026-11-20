@@ -13,6 +13,7 @@ const models = require('./models');
 const llama = require('./llama');
 const providers = require('./providers');
 const complete = require('./complete');
+const quality = require('./quality');
 const docs = require('./docs');
 const knowledge = require('./knowledge');
 const hfData = require('./hf-data');
@@ -318,6 +319,21 @@ handle('bench:run', async () => {
   require('./speeds').record(m.id, tps, Math.max(tokens, 24), expected);
   return { model: m.name, tps, expected, factor };
 });
+
+// Objective quality benchmark: run a model on public eval sets with verifiable answers and score it.
+handle('quality:run', async (_e, { target, sets, n }) => {
+  if (!target) throw new Error('Pick a model to benchmark.');
+  sets = (sets || ['gsm8k']).filter((s) => quality.SETS[s]);
+  if (!sets.length) sets = ['gsm8k'];
+  n = Math.max(3, Math.min(40, Number(n) || 15));
+  const results = await quality.run({ single: complete.single, target, sets, n, onProgress: (p) => emit('quality:status', p) });
+  const qb = { ...(store.config().qbench || {}) };
+  qb[target] = { at: Date.now(), n, results };
+  store.saveConfig({ qbench: qb });
+  return { target, n, results };
+});
+handle('quality:get', () => store.config().qbench || {});
+handle('quality:sets', () => Object.fromEntries(Object.entries(quality.SETS).map(([k, v]) => [k, { label: v.label, needsPython: v.needsPython, total: v.total, hasPython: !v.needsPython || Boolean(quality.python()) }])));
 
 // ---------- models ----------
 handle('models:list', () => ({ installed: models.list().map((m) => ({ ...m, inUse: models.inUse(m) })), downloading: models.active(), running: llama.status() }));
