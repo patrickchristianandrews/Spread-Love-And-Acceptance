@@ -161,6 +161,11 @@ function preferredUnits() {
   return '';
 }
 function setPreferredUnits(v) { try { if (v === 'f' || v === 'c') localStorage.setItem(UNITS_KEY, v); else localStorage.removeItem(UNITS_KEY); } catch {} }
+// Home location for "local" weather — a city the user types once, so the forecast never depends on
+// unreliable IP geolocation. A city named in the question still overrides it.
+const HOME_KEY = 'home-location.v1';
+function homeLocation() { try { return (localStorage.getItem(HOME_KEY) || '').trim(); } catch { return ''; } }
+function setHomeLocation(v) { try { const s = String(v || '').trim(); if (s) localStorage.setItem(HOME_KEY, s); else localStorage.removeItem(HOME_KEY); } catch {} }
 // Dev builds show the resolved parameters under answers.
 let qsDev = false; qs.call('app:dev').then((v) => { qsDev = Boolean(v); }).catch(() => {});
 async function webSearch(query) {

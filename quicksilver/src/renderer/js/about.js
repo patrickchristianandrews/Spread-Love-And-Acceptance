@@ -58,7 +58,8 @@ const FEATURE_GROUPS = [
 
 // This release's feature notes, pulled straight into Settings so "What's new" lives with the app.
 const RELEASE_NOTES_2_23 = [
-  ['Weather comes back as a picture, instantly', 'Ask about the weather and chat shows a live card — current conditions, a 24-hour strip and a 7-day forecast with hi/lo bars and rain chance — from a real forecast (never the model guessing), in °C or °F to suit your country.'],
+  ['Weather comes back as a picture, instantly', 'Ask about the weather and chat shows a live card — current conditions, a 24-hour strip and a 7-day forecast with hi/lo bars and rain chance — from a real forecast, never the model guessing.'],
+  ['Weather in your units and your place', 'Temperatures follow your region (°F in the US) or a setting you pick, and saying "in fahrenheit/celsius" always wins. A Home location box (Settings → Web) makes "local" weather use your city instead of guessing from your internet address.'],
   ['The web actually returns things in chat', 'Ask to see pictures or videos from the web and they appear under the answer, even on a small local model. Questions that need the live web — news, politics, prices, local events, "look it up" — are searched and cited automatically; simple facts stay instant and local.'],
   ['One solid source for plain facts', 'For universally-understood questions, chat pulls a single trusted Wikipedia summary instead of scraping many sites — faster and cleaner.'],
   ['The Polymath', 'A new crew member that connects economics, law, politics, history, science and philosophy, explains how society actually works in plain terms, pulls live cited news, and weighs every side fairly.'],

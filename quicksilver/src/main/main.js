@@ -626,19 +626,24 @@ handle('web:videos', async (q, opts = {}) => { const list = await websearch.vide
 // the chat renders as a visual card: current conditions, an hourly strip and a 7-day row.
 handle('web:weather', async (q, opts = {}) => {
   const fetchJson = async (url, ms = 6000) => { const r = await fetch(url, { headers: { 'User-Agent': 'Quicksilver' }, signal: AbortSignal.timeout(ms) }); if (!r.ok) throw new Error(`HTTP ${r.status}`); return r.json(); };
-  // Work out the place: an explicit one, a "weather in X" phrase, or (for "local") this device's rough location.
-  let place = String(opts?.place || '').trim();
-  if (!place) { const m = String(q || '').match(/\b(?:weather|forecast|temperature|temp|rain|snow|humidity|wind|climate)\b[^.?!\n]*?\b(?:in|at|for|near|around)\s+([A-Za-z0-9 .,'’\-]{2,60})/i) || String(q || '').match(/\b(?:in|at|for)\s+([A-Za-z0-9 .,'’\-]{2,60})\b.*\b(?:weather|forecast|temperature)\b/i); if (m) place = m[1].replace(/\b(today|tonight|tomorrow|this (week|weekend)|right now|now|please)\b.*$/i, '').trim(); }
+  // Work out the place, most specific first: (1) a city named in the question always wins, then
+  // (2) the user's saved home location (Settings → Web), then (3) only as a last resort this
+  // device's rough IP location. IP geolocation is unreliable (VPN, ISP hub), so it's the fallback.
+  let place = '';
+  { const m = String(q || '').match(/\b(?:weather|forecast|temperature|temp|rain|snow|humidity|wind|climate)\b[^.?!\n]*?\b(?:in|at|for|near|around)\s+([A-Za-z0-9 .,'’\-]{2,60})/i) || String(q || '').match(/\b(?:in|at|for)\s+([A-Za-z0-9 .,'’\-]{2,60})\b.*\b(?:weather|forecast|temperature)\b/i); if (m) place = m[1].replace(/\b(today|tonight|tomorrow|this (week|weekend)|right now|now|please)\b.*$/i, '').trim(); }
+  const saidLocal = /\b(local|here|my (area|location|city|town)|current location|where i am|outside|around me|near me)\b/i.test(q || '');
+  if (!place && opts?.place) place = String(opts.place).trim(); // the user's saved home location
   let lat; let lon; let name; let country; let admin; let cc = '';
-  if (!place || /\b(local|here|my (area|location|city|town)|current location|where i am|outside)\b/i.test(place || q || '')) {
-    try { const ip = await fetchJson('https://ipapi.co/json/', 4000); if (ip && ip.latitude != null) { lat = ip.latitude; lon = ip.longitude; name = ip.city; admin = ip.region; country = ip.country_name; cc = String(ip.country_code || ip.country || '').toUpperCase(); } } catch { /* fall through to named place */ }
+  if (!place) {
+    // No city in the question and no home location saved: fall back to rough IP location.
+    try { const ip = await fetchJson('https://ipapi.co/json/', 4000); if (ip && ip.latitude != null) { lat = ip.latitude; lon = ip.longitude; name = ip.city; admin = ip.region; country = ip.country_name; cc = String(ip.country_code || ip.country || '').toUpperCase(); } } catch { /* fall through */ }
   }
   if (lat == null && place) {
     const g = await fetchJson(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(place)}&count=1&language=en&format=json`);
-    const hit = g?.results?.[0]; if (!hit) throw new Error(`Could not find a place called “${place}”.`);
+    const hit = g?.results?.[0]; if (!hit) throw new Error(`Could not find a place called “${place}”. Set your home location in Settings → Web, or say “weather in <your city>”.`);
     lat = hit.latitude; lon = hit.longitude; name = hit.name; admin = hit.admin1; country = hit.country; cc = String(hit.country_code || '').toUpperCase();
   }
-  if (lat == null) throw new Error('No location given. Try “weather in <city>”.');
+  if (lat == null) throw new Error(saidLocal ? 'I don\'t know where you are. Set your home location in Settings → Web, or say “weather in <your city>”.' : 'No location given. Set your home location in Settings → Web, or try “weather in <city>”.');
   // Units precedence: what the question says wins; then the caller's preference (the user's locale
   // or setting); then the country of the place (the US and a few others use °F/mph).
   const qF = /\b(fahrenheit|°f|imperial)\b/i.test(q || '');
