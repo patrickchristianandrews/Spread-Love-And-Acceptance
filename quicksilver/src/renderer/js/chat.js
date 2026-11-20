@@ -891,7 +891,7 @@ async function generate(chat, rerollMsg, withTarget, opts = {}) {
   if (weatherAsk) {
     alt.status = 'Checking the forecast…'; paintStreaming(chat, msg);
     try {
-      const wx = await qs.call('web:weather', lastUser.text, {});
+      const wx = await qs.call('web:weather', lastUser.text, { units: preferredUnits() });
       if (pending?.requestId !== requestId) return;
       if (wx && wx.current) {
         (alt.toolCalls ||= []).push({ id: 'autowx', name: 'weather', source: 'Live weather', status: 'done', result: `Current forecast for ${wx.place}.\n[[weather:${JSON.stringify(wx)}]]` });
@@ -1000,7 +1000,7 @@ async function generate(chat, rerollMsg, withTarget, opts = {}) {
   if (wantWx) {
     try {
       alt.status = 'Checking the forecast…'; paintStreaming(chat, msg);
-      const wx = await qs.call('web:weather', lastUser.text, {});
+      const wx = await qs.call('web:weather', lastUser.text, { units: preferredUnits() });
       if (pending?.requestId !== requestId) return;
       if (wx && wx.current) {
         (alt.toolCalls ||= []).push({ id: 'autowx', name: 'weather', source: 'Live weather', status: 'done', result: `Current forecast for ${wx.place}.\n[[weather:${JSON.stringify(wx)}]]` });

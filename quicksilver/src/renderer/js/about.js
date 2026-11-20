@@ -63,7 +63,7 @@ const RELEASE_NOTES_2_23 = [
   ['One solid source for plain facts', 'For universally-understood questions, chat pulls a single trusted Wikipedia summary instead of scraping many sites — faster and cleaner.'],
   ['The Polymath', 'A new crew member that connects economics, law, politics, history, science and philosophy, explains how society actually works in plain terms, pulls live cited news, and weighs every side fairly.'],
   ['See the Other Side', 'A new crew member for understanding people across a political or belief divide — explained from the inside or in conversation, always the strongest and most charitable version, never mocking and never trying to convert you.'],
-  ['Check any laptop before you buy', 'The "models + your PC" buying calculator now includes the entry-level laptop graphics cards (RTX 4050, RTX 5050), so you can see what a budget gaming laptop will really run before buying.'],
+  ['Check any laptop — and whether it\'s a good deal', 'The "models + your PC" buying calculator now includes the entry-level laptop graphics cards (RTX 4050, RTX 5050) and takes a price: it shows a value verdict with words/s per $1,000 and $/GB of graphics memory, so you can compare two machines and see which is the better buy for local AI.'],
   ['🔬 Microscope — look inside a model', 'Run a prompt on a local model and see every token it produced, how sure it was, and the alternatives — or put two models side by side and see exactly where they first diverge.'],
 ];
 

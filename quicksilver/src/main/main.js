@@ -639,10 +639,14 @@ handle('web:weather', async (q, opts = {}) => {
     lat = hit.latitude; lon = hit.longitude; name = hit.name; admin = hit.admin1; country = hit.country; cc = String(hit.country_code || '').toUpperCase();
   }
   if (lat == null) throw new Error('No location given. Try “weather in <city>”.');
-  // Units: honour an explicit request, otherwise follow the country (the US and a few others use °F/mph).
-  const wantF = /\b(fahrenheit|°f|imperial)\b/i.test(q || '') || opts?.units === 'f';
-  const wantC = /\b(celsius|°c|centigrade|metric)\b/i.test(q || '') || opts?.units === 'c';
-  const useF = wantF || (!wantC && ['US', 'USA', 'BS', 'BZ', 'KY', 'PW', 'FM', 'MH', 'LR'].includes(cc));
+  // Units precedence: what the question says wins; then the caller's preference (the user's locale
+  // or setting); then the country of the place (the US and a few others use °F/mph).
+  const qF = /\b(fahrenheit|°f|imperial)\b/i.test(q || '');
+  const qC = /\b(celsius|°c|centigrade|metric)\b/i.test(q || '');
+  let useF;
+  if (qF || qC) useF = qF;
+  else if (opts?.units === 'f' || opts?.units === 'c') useF = opts.units === 'f';
+  else useF = ['US', 'USA', 'BS', 'BZ', 'KY', 'PW', 'FM', 'MH', 'LR'].includes(cc);
   const units = useF ? { t: 'fahrenheit', w: 'mph', p: 'inch', sym: '°F' } : { t: 'celsius', w: 'kmh', p: 'mm', sym: '°C' };
   const u = `temperature_unit=${units.t}&wind_speed_unit=${units.w}&precipitation_unit=${units.p}`;
   const f = await fetchJson(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&${u}&timezone=auto&forecast_days=7&current=temperature_2m,relative_humidity_2m,apparent_temperature,is_day,weather_code,wind_speed_10m,precipitation&hourly=temperature_2m,weather_code,precipitation_probability&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,sunrise,sunset,wind_speed_10m_max`);

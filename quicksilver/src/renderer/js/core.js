@@ -144,6 +144,23 @@ const cloudAnswers = () => Boolean(S.data?.prefs?.cloudAll) && !S.config?.offlin
 const SAFE_KEY = 'safesearch.v1';
 function safeSearchValue() { try { const v = localStorage.getItem(SAFE_KEY); return v === 'on' ? 'on' : 'off'; } catch { return 'off'; } }
 function setSafeSearch(on) { try { localStorage.setItem(SAFE_KEY, on ? 'on' : 'off'); } catch {} }
+// Weather (and other) units: 'f', 'c', or '' (auto). A saved choice wins; otherwise infer from the
+// machine's own locale region — reliable on the user's PC, unlike IP location. US (and a handful of
+// other countries) use Fahrenheit. '' lets the backend fall back to the place's own country.
+const UNITS_KEY = 'units.v1';
+const FAHRENHEIT_REGIONS = ['US', 'BS', 'BZ', 'KY', 'PW', 'FM', 'MH', 'LR'];
+function preferredUnits() {
+  try { const v = localStorage.getItem(UNITS_KEY); if (v === 'f' || v === 'c') return v; } catch {}
+  try {
+    const lang = (navigator.languages && navigator.languages[0]) || navigator.language || 'en-US';
+    let region = '';
+    try { region = new Intl.Locale(lang).region || ''; } catch { region = (lang.split('-')[1] || ''); }
+    if (FAHRENHEIT_REGIONS.includes(String(region).toUpperCase())) return 'f';
+    if (region) return 'c';
+  } catch {}
+  return '';
+}
+function setPreferredUnits(v) { try { if (v === 'f' || v === 'c') localStorage.setItem(UNITS_KEY, v); else localStorage.removeItem(UNITS_KEY); } catch {} }
 // Dev builds show the resolved parameters under answers.
 let qsDev = false; qs.call('app:dev').then((v) => { qsDev = Boolean(v); }).catch(() => {});
 async function webSearch(query) {
