@@ -147,7 +147,8 @@
     if (!P.quiet) { B.fr = fr; B.T = clk; B.shot = P.shot; }
     // no blending between walk frames or poses: two drawings on top of each other read as a double face and extra legs
     if (still && blink) { ctx.save(); ctx.translate(f.hx - p.cx, f.hy - p.fy); blinkLids(ctx, fr, dog, f.ang, 1); ctx.restore(); }
-    if (o && o.talk > 0) { ctx.save(); ctx.translate(f.hx - p.cx, f.hy - p.fy); jaw(ctx, fr, dog, fr.img === S.walk ? 'w' : (pose === 'lie' || pose === 'bow' ? 'a2' : 'a1'), Math.min(1, (o.talk - 0.02) / 0.98)); ctx.restore(); }
+    // no moving jaw while talking: redrawing part of the painted muzzle smeared and doubled the face. The speech bubble and
+    // the little bounce on the stressed syllables show who is talking.
     // the outfit, at the head of this drawing
     if (!(o && o.noOutfit)) {
       var who = dog ? 'sugarfoot' : 'tidbit', wear = (o && o.outfit) || outfit(who, o);
