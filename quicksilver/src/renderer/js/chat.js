@@ -968,15 +968,18 @@ async function generate(chat, rerollMsg, withTarget, opts = {}) {
     && typeof WEB_IMAGE !== 'undefined' && WEB_IMAGE.test(lastUser.text)
     && !/\b(make|create|generate|draw|paint|render|design|imagine|cartoon|anime)\b/i.test(lastUser.text);
   if (wantPics) {
+    let shown = false;
     try {
       alt.status = 'Finding pictures…'; paintStreaming(chat, msg);
       const imgs = await qs.call('web:images', lastUser.text, { safeSearch: safeSearchValue(), count: 8 });
       if (pending?.requestId !== requestId) return;
       if (imgs && imgs.length) {
+        shown = true;
         (alt.toolCalls ||= []).push({ id: 'autoimg', name: 'image_search', source: 'Pictures from the web', status: 'done', result: `Showing ${imgs.length} pictures from the web.\n[[web-images:${JSON.stringify(imgs)}]]` });
         memNote = `${memNote ? `${memNote}\n` : ''}Pictures from the web are ALREADY shown to the user directly below your answer. Introduce them in ONE short, friendly sentence and stop. Do NOT explain how to find or search for pictures, do NOT give links or search tips, and never say you cannot show images — they are already there.`;
       }
-    } catch { /* fall through to an ordinary answer */ }
+    } catch { /* fall through */ }
+    if (!shown) memNote = `${memNote ? `${memNote}\n` : ''}A picture search was attempted but no pictures could be fetched this time. Say in ONE short sentence that you couldn't pull up pictures right now and suggest trying again in a moment or rephrasing. Do NOT paste a list of links or URLs, and do NOT explain how to search for pictures yourself.`;
   }
   // Videos from the web: same idea — fetch and show them so they actually appear.
   const wantVids = !skill && !wantPics && lastUser?.text && !S.config?.offline && S.config?.web?.provider !== 'none'

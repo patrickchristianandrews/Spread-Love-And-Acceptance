@@ -277,11 +277,20 @@ async function images(query, { count = 8, safe = 'on' } = {}) {
     try {
       if (!/^https:\/\//.test(x.thumb)) return;
       const r = await fetch(x.thumb, { headers: { 'User-Agent': UA }, signal: AbortSignal.timeout(12000), redirect: 'follow' });
-      const type = r.headers.get('content-type') || '';
-      if (!r.ok || !/^image\/(jpeg|png|webp|gif)/.test(type)) return;
+      if (!r.ok) return;
       const buf = Buffer.from(await r.arrayBuffer());
       if (buf.length > 2 * 1024 * 1024 || buf.length < 500) return;
-      const name = `${crypto.createHash('sha1').update(x.thumb).digest('hex').slice(0, 20)}.${type.split('/')[1].replace('jpeg', 'jpg')}`;
+      // Decide the extension from the file's own magic bytes (reliable), then the content-type as a
+      // fallback — never straight from the header, which can carry a charset and corrupt the name
+      // (then the qsmedia:// handler 404s it and the picture shows as a broken link).
+      const b = buf; let ext = '';
+      if (b[0] === 0xff && b[1] === 0xd8) ext = 'jpg';
+      else if (b[0] === 0x89 && b[1] === 0x50 && b[2] === 0x4e && b[3] === 0x47) ext = 'png';
+      else if (b[0] === 0x47 && b[1] === 0x49 && b[2] === 0x46) ext = 'gif';
+      else if (b.subarray(0, 4).toString('latin1') === 'RIFF' && b.subarray(8, 12).toString('latin1') === 'WEBP') ext = 'webp';
+      else { const tm = /^image\/(jpe?g|png|webp|gif)/i.exec(r.headers.get('content-type') || ''); if (tm) ext = /^jp/i.test(tm[1]) ? 'jpg' : tm[1].toLowerCase(); }
+      if (!ext) return;
+      const name = `${crypto.createHash('sha1').update(x.thumb).digest('hex').slice(0, 20)}.${ext}`;
       fs.writeFileSync(path.join(dir, name), buf);
       out.push({ ...x, file: name, src: `qsmedia://w/${name}` });
     } catch {}
@@ -353,12 +362,16 @@ async function videos(query, { count = 8, safe = 'on' } = {}) {
     try {
       if (/^https:\/\//.test(x.thumb || '')) {
         const r = await fetch(x.thumb, { headers: { 'User-Agent': UA }, signal: AbortSignal.timeout(10000), redirect: 'follow' });
-        const type = r.headers.get('content-type') || '';
-        if (r.ok && /^image\/(jpeg|png|webp)/.test(type)) {
-          const buf = Buffer.from(await r.arrayBuffer());
-          if (buf.length <= 2 * 1024 * 1024 && buf.length > 300) {
-            const name = `${crypto.createHash('sha1').update(x.thumb).digest('hex').slice(0, 20)}.${type.split('/')[1].replace('jpeg', 'jpg')}`;
-            fs.writeFileSync(path.join(dir, name), buf); src = `qsmedia://w/${name}`;
+        if (r.ok) {
+          const b = Buffer.from(await r.arrayBuffer());
+          if (b.length <= 2 * 1024 * 1024 && b.length > 300) {
+            let ext = '';
+            if (b[0] === 0xff && b[1] === 0xd8) ext = 'jpg';
+            else if (b[0] === 0x89 && b[1] === 0x50 && b[2] === 0x4e && b[3] === 0x47) ext = 'png';
+            else if (b[0] === 0x47 && b[1] === 0x49 && b[2] === 0x46) ext = 'gif';
+            else if (b.subarray(0, 4).toString('latin1') === 'RIFF' && b.subarray(8, 12).toString('latin1') === 'WEBP') ext = 'webp';
+            else { const tm = /^image\/(jpe?g|png|webp|gif)/i.exec(r.headers.get('content-type') || ''); if (tm) ext = /^jp/i.test(tm[1]) ? 'jpg' : tm[1].toLowerCase(); }
+            if (ext) { const name = `${crypto.createHash('sha1').update(x.thumb).digest('hex').slice(0, 20)}.${ext}`; fs.writeFileSync(path.join(dir, name), b); src = `qsmedia://w/${name}`; }
           }
         }
       }

@@ -1,6 +1,6 @@
 ### Download
 
-**Quicksilver-Web-Setup-2.23.2.exe** (below, about 200 MB, with a matching `.sha256`) is the installer. It's small and quick to download. The first time Quicksilver opens, its setup screen downloads the whole Liquid Edition before the app starts — the three abliterated chat models (Qwen3.5 4B Brain, Gemma 3 12B Closer, Mistral Nemo 12B Muse), Lustify for pictures, Wan 2.2 for video, and the search models: about 38 GB in all — and the app opens once it's done. Keep about 45 GB free on the drive you install to. If the download stops, close and reopen Quicksilver and it picks up where it left off.
+**Quicksilver-Web-Setup-2.23.3.exe** (below, about 200 MB, with a matching `.sha256`) is the installer. It's small and quick to download. The first time Quicksilver opens, its setup screen downloads the whole Liquid Edition before the app starts — the three abliterated chat models (Qwen3.5 4B Brain, Gemma 3 12B Closer, Mistral Nemo 12B Muse), Lustify for pictures, Wan 2.2 for video, and the search models: about 38 GB in all — and the app opens once it's done. Keep about 45 GB free on the drive you install to. If the download stops, close and reopen Quicksilver and it picks up where it left off.
 
 (A full offline package — the installer with all ~38 GB of models already beside it, so it needs no internet from the first minute — is built for tagged releases and lives as the **Quicksilver-Windows-installer** build artifact on those build runs, for anyone who wants to install with no download.)
 
@@ -11,6 +11,10 @@ Updating from 2.18: the Liquid Edition now includes its Closer and its picture a
 ### New in 2.23.2
 
 - **Weather in the right units and the right place.** Temperatures now follow a reliable order: what you say in the question ("in fahrenheit/celsius") wins, then your preference in **Settings → Web → Temperature units** (which defaults to this computer's region — °F in the US), and only last the location's own country. And a new **Home location** box there means "local" weather uses your city directly instead of guessing from your internet address (which can land on the wrong city); naming a city in the question still overrides it. Fixes US machines showing °C and "local" weather for the wrong place.
+
+### New in 2.23.3
+
+- **Pictures from the web show up properly again.** Web image results are downloaded and served to the chat over a private address; the saved file's type is now read from the image's own data instead of the server's (sometimes wrong or missing) content-type header, which was causing some pictures to come back as broken links instead of images. Same fix for video thumbnails. If a picture search genuinely finds nothing, the answer now says so in one line instead of listing links.
 
 ### New in 2.23.1
 
