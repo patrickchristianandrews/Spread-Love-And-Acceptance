@@ -17,8 +17,15 @@ console.log('✓ spaceHost: owner/name, full URL and bare subdomain all map to t
 assert.deepEqual(hf.parseSse('event: complete\ndata: [{"url":"https://x/y.png"}]').data, [{ url: 'https://x/y.png' }]);
 assert.equal(hf.parseSse('event: complete\ndata: [{"url":"https://x/y.png"}]').status, 'complete');
 assert.equal(hf.parseSse('event: error\ndata: GPU quota exceeded').status, 'error');
+assert.equal(hf.parseSse('event: error\ndata: GPU quota exceeded').message, 'GPU quota exceeded');
 assert.equal(hf.parseSse('event: heartbeat\ndata: null').status, 'none');
-console.log('✓ parseSse: reads the complete payload, surfaces errors, ignores heartbeats');
+// An error with no detail (Gradio sends data: null) is still an error, but with an empty message so
+// the caller can show a helpful note instead of the literal word "null".
+assert.equal(hf.parseSse('event: error\ndata: null').status, 'error');
+assert.equal(hf.parseSse('event: error\ndata: null').message, '');
+assert.equal(hf.parseSse('event: error\ndata: None').message, '');
+assert.equal(hf.parseSse('event: error').message, '');
+console.log('✓ parseSse: reads the complete payload, surfaces errors (detail or none), ignores heartbeats');
 
 // --- extractMedia ---
 const base = 'https://s.hf.space';

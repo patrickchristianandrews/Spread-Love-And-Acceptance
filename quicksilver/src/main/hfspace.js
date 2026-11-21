@@ -57,8 +57,13 @@ function parseSse(text) {
   const t = String(text || '');
   const c = t.match(/event:\s*complete\s*[\r\n]+data:\s*(.+)/);
   if (c) { try { return { status: 'complete', data: JSON.parse(c[1]) }; } catch { return { status: 'complete', data: null, raw: c[1] }; } }
-  const e = t.match(/event:\s*error\s*[\r\n]+data:\s*(.+)/);
-  if (e) return { status: 'error', message: String(e[1] || '').slice(0, 200) };
+  if (/event:\s*error/.test(t)) {
+    const e = t.match(/event:\s*error\s*[\r\n]+data:\s*(.+)/);
+    let m = e ? String(e[1] || '').trim() : '';
+    // Gradio often sends an error with no detail (data is literally null/None): treat as "no message".
+    if (/^(null|none|undefined|false|"")$/i.test(m)) m = '';
+    return { status: 'error', message: m.slice(0, 200) };
+  }
   return { status: 'none' };
 }
 
@@ -141,7 +146,9 @@ async function callEndpoint(base, apiName, data, token, onStatus = () => {}) {
   const res = await fetch(`${base}/gradio_api/call${apiName}/${sj.event_id}`, { headers: { Accept: 'text/event-stream', 'User-Agent': UA, ...(token ? { Authorization: `Bearer ${token.trim()}` } : {}) }, signal: AbortSignal.timeout(600000) });
   const text = await res.text();
   const ev = parseSse(text);
-  if (ev.status === 'error') throw new Error(`The Space reported an error: ${ev.message}`);
+  if (ev.status === 'error') throw new Error(ev.message
+    ? `The Space reported an error: ${ev.message}`
+    : 'The Space hit an error but gave no details. This usually means its free GPU quota is used up, the inputs weren\'t what it expected (some Spaces need an image, or a specific kind of prompt), or a ZeroGPU run timed out. Try again in a minute, add a free Hugging Face token under Advanced, or duplicate the Space to your own account.');
   if (ev.status !== 'complete') throw new Error('The Space returned no result (its free GPU quota may be used up, or it timed out). Try later, add a Hugging Face token, or duplicate the Space to your account.');
   return ev.data;
 }
