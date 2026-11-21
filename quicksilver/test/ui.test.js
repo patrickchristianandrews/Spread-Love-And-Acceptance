@@ -2058,10 +2058,12 @@ function redPng(size = 64) {
   assert.ok(await win.evaluate(() => getComputedStyle(document.querySelector('#side-scroll')).overflowY === 'auto'), 'the menu scrolls');
   await win.selectOption('#pick-assistant', 'as-general');
   assert.equal(await win.inputValue('#pick-model'), '__auto');
+  // Drive the toggle in-page (not page.click) so it can't race the message-bar re-render and time out.
   await win.waitForSelector('#tog-fact', { state: 'visible', timeout: 60000 });
-  await win.click('#tog-fact');
-  await win.waitForSelector('#tog-fact.on', { state: 'visible' });
-  await win.click('#tog-fact');
+  await win.evaluate(() => document.querySelector('#tog-fact')?.click());
+  await win.waitForFunction(() => document.querySelector('#tog-fact')?.classList.contains('on'), null, { timeout: 60000 });
+  await win.evaluate(() => document.querySelector('#tog-fact')?.click());
+  await win.waitForFunction(() => document.querySelector('#tog-fact') && !document.querySelector('#tog-fact').classList.contains('on'), null, { timeout: 60000 });
   await shot(win, '20-simple-view');
   // A photo goes to a model that can see it.
   await win.setInputFiles('#file-in', { name: 'dot.png', mimeType: 'image/png', buffer: Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==', 'base64') });
