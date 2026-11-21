@@ -82,7 +82,7 @@
       ['The weekly handoff', ['WP-13'], A('checkins'), 'A short weekly check-in between homes: load, one thanks, one ask.'],
       ['See the load', ['WP-01', 'WP-02'], A('calc', 'weather'), 'Each of you logs a week, and checks your own load before handoffs.'],
       ['Calm under pressure', ['WP-11'], A('decoder'), 'Decide in advance what settles you before a hard conversation.'],
-      ['What keeps coming back?', ['WP-04'], A('report', 'ch5'), 'The monthly look-back: sort what slipped into real gaps or one-offs, and adjust the owners.']
+      ['What keeps coming back?', ['WP-04'], A('report', 'ch5'), 'The monthly look-back: sort what slipped into real gaps or one-time misses, and adjust the owners.']
     ],
     friends: [
       ['Name what went unseen', ['WP-09'], A('preface', 'signal'), 'Write the unseen thing as one fact, one feeling, one ask. You don’t have to send it yet.'],
@@ -133,7 +133,7 @@
       together: ['How to read it together', 'Pick a calm evening when neither of you is carrying a heavy load. Each read the at-a-glance page on your own first, then share one thing that surprised you and one thing you appreciated. One topic per sitting.'],
       look: ['Jobs that appear in one log but not the other: the unseen work.', 'Recurring jobs with no clear owner, or an owner who isn’t the one doing it.', 'Weeks when one load stayed high while the other eased.', 'Things that came up again in the monthly look-back.'],
       talk: ['What did you do this month that I didn’t see?', 'Which job would you most like to hand over, and to whom?', 'When you’re carrying a lot, what helps most from me?', 'What is one small thing we could change this week?'],
-      ask: { 'WP-01': 'What surprised each of you in the other’s log?', 'WP-03': 'Which owner would you like to swap, and what would make that fair?', 'WP-13': 'Which appreciation meant the most this week?', 'WP-02': 'Whose load needs protecting this week, and how?', 'WP-09': 'Did the ask land the way it was meant?', 'WP-11': 'Do you both recognize each other’s pause line?', 'WP-04': 'Which repeat problem is a real gap, and which was a one-off?' },
+      ask: { 'WP-01': 'What surprised each of you in the other’s log?', 'WP-03': 'Which owner would you like to swap, and what would make that fair?', 'WP-13': 'Which appreciation meant the most this week?', 'WP-02': 'Whose load needs protecting this week, and how?', 'WP-09': 'Did the ask land the way it was meant?', 'WP-11': 'Do you both recognize each other’s pause line?', 'WP-04': 'Which repeat problem is a real gap, and which was a one-time?' },
       keep: 'Kind words between the two of you',
       close: 'The numbers describe the arrangement. The two of you decide what to do with it, together.'
     },
@@ -247,7 +247,7 @@
           { wp: 'WP-11', why: 'A plan for settling when a talk heats up. If either of you starts using the numbers to win, pause and come back here.' }
         ] },
         { along: A('ch5','report','toward'), title: 'Once a month', note: 'Catch what keeps coming back.', stops: [
-          { wp: 'WP-04', why: 'Sort repeat problems into real gaps and one-offs.', again: 'Another month' }
+          { wp: 'WP-04', why: 'Sort repeat problems into real gaps and one-time misses.', again: 'Another month' }
         ] }
       ],
       next: 'Start the 90-second daily check-in one evening this week, and each begin a Who did what log.',
@@ -273,7 +273,7 @@
               { wp: 'WP-01', why: 'A week of who did what: arranging calls, planning visits, the time-zone juggling. Each of you logs your own side.', again: 'Another week' }
             ] },
             { along: A('ch5', 'toward'), title: 'Once a month', note: 'Catch what keeps slipping between two places.', stops: [
-              { wp: 'WP-04', why: 'Sort repeat problems (missed calls, a visit nobody booked) into real gaps and one-offs.', again: 'Another month' }
+              { wp: 'WP-04', why: 'Sort repeat problems (missed calls, a visit nobody booked) into real gaps and one-time misses.', again: 'Another month' }
             ] }
           ],
           next: 'Agree who starts tomorrow’s call, and try the 90-second check-in on it.'
@@ -299,7 +299,7 @@
               { wp: 'WP-03', why: 'Optional. One owner for every regular job, so you stop re-deciding it every week.', optional: true }
             ] },
             { along: A('ch5', 'toward'), title: 'Once a month', note: 'Notice what brought you closer, and what keeps coming back.', stops: [
-              { wp: 'WP-04', why: 'Sort repeat problems into real gaps and one-offs.', again: 'Another month' }
+              { wp: 'WP-04', why: 'Sort repeat problems into real gaps and one-time misses.', again: 'Another month' }
             ] }
           ],
           weeks: [
@@ -350,7 +350,7 @@
           { wp: 'WP-11', why: 'A pause line that is never mistaken for walking out.' }
         ] },
         { along: A('ch5','report'), title: 'Once a month', note: 'Catch what keeps slipping between homes.', stops: [
-          { wp: 'WP-04', why: 'Once a month, sort what keeps slipping into a real gap or a one-off.', again: 'Another month' }
+          { wp: 'WP-04', why: 'Once a month, sort what keeps slipping into a real gap or a one-time.', again: 'Another month' }
         ] }
       ],
       next: 'List every recurring kid task this week and give each one owner.',

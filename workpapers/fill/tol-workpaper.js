@@ -2694,7 +2694,7 @@
       },
       ill: {
         h1: 'One owner per job, with a bad-day backup', title: 'One owner per job, with a bad-day backup',
-        lede: 'Share the load by energy, not hours. Give each job an owner for good days and, if you like, a backup for bad days. Jobs done from bed or the sofa count: phoning, booking, paying, planning. Being ill isn\u2019t being a burden.',
+        lede: 'Share the load by energy, not hours. Give each job an owner for good days and, if you like, a backup for bad days. Jobs done from bed or the couch count: phoning, booking, paying, planning. Being ill isn\u2019t being a burden.',
         note: 'Give each job one owner for good days. The backup column is for bad days: who covers it then, or write \u201ccan wait\u201d in Notes for the things that are allowed to wait. The starter jobs are examples: they don\u2019t count until you give one an owner or change it.',
         help: 'Bad-day backup (optional)', helpWord: 'bad-day backup', tap: true, hrsCol: true,
         rows: [['Pay the bills', Mo], ['Book appointments', AN], ['Pick up prescriptions', AN], ['Plan the week', Wk], ['Groceries', Wk], ['Cook dinner', D], ['Dishes', D], ['Laundry', Wk]]

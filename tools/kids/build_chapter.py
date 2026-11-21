@@ -286,15 +286,15 @@ ILLS = {'door': ill_door, 'phone': ill_phone, 'boxes': ill_boxes, 'slip': ill_sl
 ALT = {
     'door': 'A bedroom door with a KNOCK FIRST sign, and the two dogs, Tidbit and Sugarfoot, on either side',
     'phone': 'A phone showing the word fine, with the gray cloud Grumble above it',
-    'boxes': 'Moving boxes, a record player, a plant and Tidbit sitting by the pile',
+    'boxes': 'Moving boxes, a record player, a plant and Tidbit standing by the pile',
     'slip': 'A bag of dog food with a permission slip stuck under it, and Tidbit grinning',
     'cloud': 'The gray cloud Grumble with a bolt of lightning under it',
-    'moon': 'The Moon over a bed, with Tidbit asleep and a rain sound machine',
-    'stairs': 'A staircase with Sugarfoot lying on the bottom step, a mug of tea and a pair of slippers',
+    'moon': 'The Moon over a bed, with Tidbit tucked in asleep and a rain sound machine',
+    'stairs': 'A staircase with Sugarfoot stretched out on the bottom step, eyes closed, and a mug of tea',
     'cards': 'A fan of index cards with the four Static clouds drawn on them',
-    'call': 'A phone on a step with a k, a worried k and a heart, and Sugarfoot sitting beside it',
+    'call': 'A phone on a step with a k, a worried k and a heart, and Sugarfoot standing beside it',
     'storm': 'A thundercloud holding four friendly Static clouds, with a tiny paper house below',
-    'star': 'A crooked star, a rain sound machine, a barometer and Tidbit asleep',
+    'star': 'A crooked star, a rain sound machine, a barometer and Tidbit, wide awake and smiling',
     'ladder': 'Three rungs of a ladder: calm and connected, revved up and running on empty, each with a pup',
 }
 
@@ -443,7 +443,7 @@ def front_html():
     copy = ('<section class="front copy"><p><em>%s</em>, Book %d: <em>%s</em>.<br>By %s. Independently published.</p>'
             '<p>Copyright © 2026 %s. Text and pictures by the author. First print edition, %s. Printed on demand, with a black-and-white interior.</p>'
             '<p><strong>Free online, always.</strong> The characters in this book live at %s, where everything is free to read and use, with no account and no paid version. The print book is optional. You may copy pages of this book for personal use and for non-commercial teaching, with credit to “%s.”</p>'
-            '<p><strong>Made up.</strong> Wren, Theo and their family and friends are made up. Nobody in this book is a real person, and none of it is a testimonial. The story and characters are original to this site.</p>'
+            '<p><strong>Made up.</strong> Wren, Theo and their family and friends are made up. Nobody in this book is a real person. The story and characters are original to this book.</p>'
             '<p>This is a story. It is general education about feelings and getting along, not a diagnosis or treatment, and it cannot know your family.</p>'
             '<p>Set in Lora, Fraunces and Andika (SIL Open Font License).</p></section>') % (
         C.esc(BOOK['series']), BOOK['series_no'], C.esc(t), C.esc(C.AUTHOR), C.esc(C.AUTHOR), C.UPDATED, C.SITE, C.SITE)
@@ -513,10 +513,10 @@ def make_cover(pages):
     A.puddles(P, bx + 120, 800, 1.4, 'smile')
     bg = C.svg_wrap(P, wu, hu, 'bg')
     front = ('<div style="position:absolute;left:.4in;right:.4in;top:.45in;text-align:center">'
-             '<div style="font:700 10pt Andika;letter-spacing:.16em;color:#FFF4DC">%s &middot; BOOK %d</div>'
+             '<div style="font:700 10pt Andika;letter-spacing:.16em;color:#FFF4DC">%s &middot; CHAPTER BOOK</div>'
              '<div style="font:800 46pt/0.95 Fraunces,serif;color:#FFFDF5;margin-top:.12in;text-shadow:0 3px 0 rgba(31,26,70,.55)">Turn Down the Static</div>'
              '<div style="font:600 11pt/1.3 Andika;color:#FFF4DC;margin:.14in auto 0;width:4.6in">%s</div></div>'
-             ) % (C.esc(BOOK['ages'].upper()), BOOK['series_no'], C.esc(BOOK['subtitle']))
+             ) % (C.esc(BOOK['ages'].upper()), C.esc(BOOK['subtitle']))
     back = ('<div style="position:absolute;left:.5in;right:.5in;top:.55in;color:#FFFDF5;font-size:10.4pt;line-height:1.45">'
             '<div style="font:800 15pt Fraunces,serif;margin-bottom:.1in;color:#FFF4DC">One word. One very crowded house.</div>%s'
             '<p style="margin:.12in 0 0;font-size:9.5pt;color:#FFF4DC">%s &middot; Free to read online at %s</p></div>') % (

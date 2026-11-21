@@ -114,9 +114,9 @@ def drum(ink, x, y, s=1.0):
         for i in range(5):
             xx = -40 + i * 20
             g.line(Path().M(xx, -42).L(xx + 10 * (1 if i % 2 else -1), 12), w=ink.dw * 0.8)
-        for sgn in (-1, 1):
-            g.line(Path().M(sgn * 30, -70).L(sgn * 52, -102), w=ink.dw * 1.3)
-            g.part(circ(sgn * 54, -106, 7), c='#FFE08A', w=ink.dw * 0.9)
+        for sgn in (-1, 1):   # the two sticks resting crossed on the drumhead (nobody is holding them)
+            g.line(Path().M(sgn * 40, -62).L(-sgn * 28, -46), w=ink.dw * 1.3)
+            g.part(circ(-sgn * 31, -45, 6), c='#FFE08A', w=ink.dw * 0.9)
     return g
 
 

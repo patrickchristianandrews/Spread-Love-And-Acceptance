@@ -61,7 +61,7 @@ That was a nice thing to say. It was a perfectly reasonable thing to say. But Wr
 
 "Fine," she said.
 
-It came out flat and fast. She pushed back her chair, and it scraped, and Theo flinched. She stepped over Sugarfoot without saying "Excuse me." She went upstairs and shut her door, and she did not knock first, because it was her own door.
+It came out flat and fast. She pushed back her chair, and it scraped, and Theo flinched. She stepped over Sugarfoot without saying "Excuse me." She went down the hall to her room and shut the door, and she did not knock first, because it was her own door.
 
 She sat on her bed with her back against the wall and looked at the room that was about to stop being hers.
 
@@ -117,7 +117,7 @@ Wren laughed, a short surprised laugh, and some of the heat went out of her ears
 
 "Cumulus. Stratus. Nimbus." Theo smiled, and it was the smile he gave only to facts he was really fond of. "He told me on the phone. He says there are ten kinds."
 
-Downstairs, a pan clattered. Somebody turned off the radio. Through the floor came the low sound of their parents talking, and Wren thought: *they are probably worried about me.* The knot in her chest stayed the same size. It felt a little less lonely, though.
+In the kitchen, a pan clattered. Somebody turned off the radio. Through the wall came the low sound of their parents talking, and Wren thought: *they are probably worried about me.* The knot in her chest stayed the same size. It felt a little less lonely, though.
 
 She tacked Theo's drawing to her corkboard. Grumble frowned down at her, gray and ridiculous.
 

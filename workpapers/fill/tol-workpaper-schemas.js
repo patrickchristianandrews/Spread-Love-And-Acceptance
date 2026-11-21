@@ -159,13 +159,13 @@
           });
           out.push({ label: 'Workload balance score', value: fmt(balance, 2), note: 'Enter this as the workload balance number in CALC-01. It describes how the logged work was split this week, not anyone in it.' + (tgt ? ' It is read against ' + tgt.label + ', the same way the Lemonade Stand reads it.' : people.length > 2 ? ' With more than two people, it is 1 minus the share of the week\'s time that would have to change hands for an even split, divided by the most that could ever be.' : '') });
           if (tgt) {
-            // against the split you agreed (or the nights each person is here), as the Lemonade Stand says it
+            // against the split you agreed on (or the nights each person is here), as the Lemonade Stand says it
             var gaps = people.map(function (p, i) { return pct[p] - tgt.t[i] * 100; }), big = 0;
             gaps.forEach(function (g, i) { if (Math.abs(g) > Math.abs(gaps[big])) big = i; });
             var gp = Math.round(Math.abs(gaps[big]));
             // the same words as the Lemonade Stand: within 5 points (or 10 while the balance holds) reads as close
             var held = balance != null && balance >= 0.70, off = ctx.name(people[big]) + ' is about ' + gp + ' points ' + (gaps[big] > 0 ? 'over' : 'under');
-            out.push({ label: tgt.mode === 'agreed' ? 'Against the split you agreed' : 'Against each person\u2019s share', value: gp < 5 || (gp < 10 && held) ? 'Close to ' + tgt.label + ' this week.' : held ? 'Near ' + tgt.label + ' this week. ' + off + ', and the balance score still reads as holding.' : 'Further from ' + tgt.label + ' this week. ' + off + '.', note: 'A fact about how this week fell, not about effort or care.' });
+            out.push({ label: tgt.mode === 'agreed' ? 'Against the split you agreed on' : 'Against each person\u2019s share', value: gp < 5 || (gp < 10 && held) ? 'Close to ' + tgt.label + ' this week.' : held ? 'Near ' + tgt.label + ' this week. ' + off + ', and the balance score still reads as holding.' : 'Further from ' + tgt.label + ' this week. ' + off + '.', note: 'A fact about how this week fell, not about effort or care.' });
             if (left) out.push(left);
             return out;
           }
@@ -396,11 +396,11 @@
     var notScore = ' Counting jobs isn’t counting the work: a daily job comes round far more often than a monthly one. It’s a starting point for a talk, not a scorecard.';
     var weighNote = weighLine ? (homes ? '' : 'Counting how often each job comes round changes the picture: a few daily jobs can outweigh many monthly ones. ') + 'Give a job a size, or the hours it takes each time, and this counts a big one for more than a quick one.' : 'Some jobs come round more often, or are bigger, than others. Give each job how often it comes round (and a size, if you like), and this counts a daily job for more than a monthly one.';
     var agreed = String(ctx.value('split') || '').trim(), tgt = ctx.target ? ctx.target() : null;
-    var ask = agreed ? 'You wrote down the split you agreed: “' + agreed + '”. Does this match it?' : 'Does this match what you agreed? An even split isn’t always the goal: two homes, weekdays and weekends, or very different hours can make another split fair.';
+    var ask = agreed ? 'You wrote down the split you agreed on: “' + agreed + '”. Does this match it?' : 'Does this match what you agreed on? An even split isn’t always the goal: two homes, weekdays and weekends, or very different hours can make another split fair.';
     // who carries more: by the weighed jobs once how often is given, otherwise by the count
     var cw = anyFreq || sized || anyLen ? concentrationOf(wper, 0) : c;
     if (cw.flag && named < 3) cw = { flag: false };
-    if (tgt && cw.top != null) ask += ' The split you agreed elsewhere on this site gives ' + ctx.name(people[cw.top]) + ' about ' + fmt(tgt.t[cw.top] * 100, 0) + '%.';
+    if (tgt && cw.top != null) ask += ' The split you agreed on elsewhere on this site gives ' + ctx.name(people[cw.top]) + ' about ' + fmt(tgt.t[cw.top] * 100, 0) + '%.';
     // two homes: the jobs as they sit across the homes, never a score for one parent
     if (homes && people.length >= 2 && named + together >= 1) { out.push({ label: 'How the jobs sit across the homes', value: (weighLine || spread) + rulesNote, note: (weighLine ? spread + ' ' : '') + (agreed ? ask + ' ' : '') + 'Two homes rarely split evenly, and that can be fair: weekdays and weekends, distance and work all play a part.' }); return out; }
     if (cw.flag) { var tf = often(people[cw.top]); out.push({ label: 'Who’s carrying more right now', value: (weighLine ? weighLine + ' ' + ctx.name(people[cw.top]) + ' owns ' + byR[cw.top] + ' of the ' + named + ' jobs with one owner' : ctx.name(people[cw.top]) + ' owns ' + cw.count + ' of the ' + named + ' jobs with one owner') + (tf ? ' (' + tf + ')' : '') + '.' + (together ? ' ' + together + ' decided together.' : '') + rulesNote, note: ask + ' If it doesn’t match, ask which job could move first. ' + weighNote + notScore }); }
@@ -447,7 +447,7 @@
     people: true,
     meta: [
       { id: 'reviewDate', label: 'Date of this list', type: 'date' },
-      { id: 'split', label: 'The split you agreed (optional)', type: 'text', placeholder: 'e.g. weekdays here, weekends there' }
+      { id: 'split', label: 'The split you agreed on (optional)', type: 'text', placeholder: 'e.g. weekdays here, weekends there' }
     ],
     sections: [
       {
@@ -525,7 +525,7 @@
       },
       {
         id: 'classify', type: 'table', title: 'Part B: Sort each gap',
-        intro: 'Sort every task flagged twice or more. A structural gap has no clear owner, or the named owner isn\'t the one who actually handles it (fix One owner per job, WP-03, in this session). A capacity issue has an owner who can\'t keep up (set a time for an honest conversation). A one-off has a temporary cause (note it and move on).',
+        intro: 'Sort every task flagged twice or more. A structural gap has no clear owner, or the named owner isn\'t the one who actually handles it (fix One owner per job, WP-03, in this session). A capacity issue has an owner who can\'t keep up (set a time for an honest conversation). A one-time has a temporary cause (note it and move on).',
         addLabel: 'Add a task',
         pull: {
           label: 'Bring in tasks flagged twice or more from Part A',
@@ -537,7 +537,7 @@
         columns: [
           { id: 'task', label: 'Task', type: 'text', w: 2.2 },
           { id: 'owner', label: 'Named owner on the job list?', type: 'select', options: ['Yes', 'No'], w: 1 },
-          { id: 'kind', label: 'Classification', type: 'select', options: ['Structural gap', 'Capacity issue', 'One-off, no action'], w: 1.5 },
+          { id: 'kind', label: 'Classification', type: 'select', options: ['Structural gap', 'Capacity issue', 'One-time, no action'], w: 1.5 },
           { id: 'action', label: 'Action', type: 'text', w: 2.3 }
         ],
         defaultRows: [{}]
@@ -545,12 +545,12 @@
       {
         id: 'close', type: 'computed', title: 'Part C: Wrap up the audit',
         compute: function (ctx) {
-          var c = { 'Structural gap': 0, 'Capacity issue': 0, 'One-off, no action': 0 };
+          var c = { 'Structural gap': 0, 'Capacity issue': 0, 'One-time, no action': 0 };
           ctx.rows('classify').forEach(function (r) { if (r.task && c.hasOwnProperty(r.kind)) c[r.kind]++; });
           return [
             { label: 'Structural gaps found', value: String(c['Structural gap']), note: c['Structural gap'] ? 'Update One owner per job (WP-03) for each of these in this session.' : '' },
             { label: 'Capacity issues found', value: String(c['Capacity issue']), note: c['Capacity issue'] ? 'Set a time for the conversation. This audit brings it to light, but it doesn\'t replace it.' : '' },
-            { label: 'One-offs', value: String(c['One-off, no action']) },
+            { label: 'One-time misses', value: String(c['One-time, no action']) },
             { label: 'Reading the count', value: 'A number of structural gaps that falls month after month is the clearest sign the program is working. A rising number means something bigger changed.' }
           ];
         }
@@ -754,7 +754,7 @@
         ]
       },
       {
-        id: 'plan', type: 'fields', title: 'Our pause plan (agree it together, and share it)',
+        id: 'plan', type: 'fields', title: 'Our pause plan (agree on it together, and share it)',
         intro: 'Unlike the rest of the plan, this part is meant to be agreed together, on a calm day, and shared, so a pause is never mistaken for walking out. A few words in each box is plenty.',
         fields: [
           { id: 'planWord', label: 'Our pause word or signal', type: 'text', placeholder: 'e.g. Timeout, or a hand on the table' },

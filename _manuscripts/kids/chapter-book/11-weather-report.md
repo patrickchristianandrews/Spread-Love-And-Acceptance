@@ -61,7 +61,7 @@ It was too quiet.
 
 There was no rain sound. No tiny creak of Theo's bed. No small breaths. She lay there for ten minutes, staring at the ceiling, hearing the house tick, and she thought, *This is what I wanted. This is my room. I have my door.* And she did. And it was fine. And it was also, in some small way, not.
 
-She picked up her phone. It was 8:12, which meant technically it was already in the wrong place. She took it to the hall drawer and put it in. Then she stood, in the dark hallway, and looked at the closed door of Theo's room.
+She picked up her phone. It was 8:12, which meant technically it was already in the wrong place. She took it to the hall drawer and put it in. Then she climbed the stairs in the dark and stood outside the closed door of Theo's room.
 
 *Rough day,* she had typed to the group chat earlier. *Not about you. Need an hour.* And Imani had written back: *k (worried k, but also fine k). want cobbler after?* And Wren had laughed so hard she'd had to sit down on the stairs.
 
@@ -97,7 +97,7 @@ She did not trust her voice for a second.
 
 "Noted," said Wren.
 
-She went back to her room and plugged in the machine and pressed the button. The soft pattering of rain filled the dark. Above her, the old star glowed green and faint and a little crooked, and below it the barometer on her wall, which Grandpa Lou had left behind on purpose with a note that said *FOR THE WEATHER GIRL,* clicked once in its sleep.
+She went back downstairs to her room and plugged in the machine and pressed the button. The soft pattering of rain filled the dark. Above her, the old star glowed green and faint and a little crooked, and below it the barometer on her wall, which Grandpa Lou had moved in from the hall and left behind on purpose with a note that said *FOR THE WEATHER GIRL,* clicked once in its sleep.
 
 Outside, it had started to rain for real.
 

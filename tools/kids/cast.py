@@ -785,8 +785,12 @@ def _pt_fig(ink, who, x, y, s, left, pose, expr='happy', peek=None, hat=None):
                '<feMorphology in="sh" operator="erode" radius="%.2f" result="in"/>'
                '<feFlood flood-color="#111" result="k"/><feComposite in="k" in2="sh" operator="in" result="edge"/>'
                '<feFlood flood-color="#fff" result="w"/><feComposite in="w" in2="in" operator="in" result="fill"/>'
-               '<feMerge><feMergeNode in="edge"/><feMergeNode in="fill"/></feMerge></filter>'
-               '<g filter="url(#%s)">%s</g>%s') % (fid, max(1.5, ow * 0.9), max(0.8, ow * 0.55), fid, _pi.svg_image(ci, PK * s * 12.0 / ci['unit'], left), img)
+               '<feMerge>%s<feMergeNode in="fill"/></feMerge></filter>'
+               '<g filter="url(#%s)">%s</g>%s') % (fid, max(1.5, ow * 0.9),
+                                                  # bold books (ow 4 and up): an inked edge round the white body. Fine-line books: the
+                                                  # white body alone, set a little inside the drawing, so no second outline shows
+                                                  max(0.8, ow * 0.55) if ow >= 4 else max(2.0, ow * 1.4),
+                                                  '<feMergeNode in="edge"/>' if ow >= 4 else '', fid, _pi.svg_image(ci, PK * s * 12.0 / ci['unit'], left), img)
     if peek is None:
         mk = '<g transform="translate(%.2f %.2f)">%s</g>' % (x, y, img)
     else:

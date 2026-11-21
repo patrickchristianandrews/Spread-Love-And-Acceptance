@@ -34,7 +34,7 @@ COSTS = {
 AUTHOR = 'Patrick Christian Andrews'   # owner, Nov 17 2026: the full name inside the books (title and copyright pages), none on the covers
 SITE = 'spreadloveandacceptance.com'
 SERIES = 'The Frequency Buddies Books'
-UPDATED = 'October 2026'
+UPDATED = 'November 2026'
 
 FONT_CSS = '''
 @font-face{font-family:"Andika";src:url("/tools/kids/fonts/Andika-Regular.ttf");font-weight:400;font-style:normal}

@@ -5,14 +5,14 @@ Captions and calm prompts live next to their pictures in coloring_younger.py and
 YOUNGER = dict(
     title='Color with Tidbit and Sugarfoot',
     title_lines=('Color with', 'Tidbit and Sugarfoot'),
-    subtitle='A big, bright coloring book of two best friends, for ages 3 to 7',
+    subtitle='32 big pictures to color, with find-it games and a blank page behind each one',   # the same words as on the cover (KDP matches them)
     ages='Ages 3 to 7',
     series_no=3,
-    cover_subtitle='32 big pictures to color, with find-it games and a blank page behind every one',
+    cover_subtitle='32 big pictures to color, with find-it games and a blank page behind each one',
     back_heading='Pick up a crayon.',
     back_cover=[
         'Thirty-two big, bright pictures of Tidbit and Sugarfoot, the two best friends from the Frequency Buddies books: zooming, hugging, splashing in puddles, flying a kite, blasting off in a rocket and tucking in for the night.',
-        'Inside: a meet-the-friends page, a color-test page, find-it games (find the hearts, the bones, the ball), a short joke from the pups on every page and a Great job certificate at the end.',
+        'Inside: a meet-the-friends page, a color-test page, find-it games (find the hearts, the bones, the ball), a short line from the pups on every page and a “Great job!” certificate at the end.',
         'Every picture is on its own page with a blank page behind it, so markers will not soak through. Lines are thick and clear, with plenty of room for crayons.',
     ],
     meet=dict(
@@ -31,7 +31,7 @@ YOUNGER = dict(
 OLDER = dict(
     title='Color and Calm with Tidbit and Sugarfoot',
     title_lines=('Color and Calm with', 'Tidbit and Sugarfoot'),
-    subtitle='Detailed, calming scenes with patterns to color, for ages 8 to 12',
+    subtitle='32 detailed scenes, patterns to fill and a calm prompt on every page',   # the same words as on the cover
     ages='Ages 8 to 12',
     series_no=4,
     cover_subtitle='32 detailed scenes, patterns to fill and a calm prompt on every page',
@@ -58,5 +58,5 @@ COPYRIGHT = ('<p><em>{series}</em>, Book {n}: <em>{name}</em>.<br>By {author}. I
              '<p>Copyright © 2026 {author}. Pictures by the author. First print edition, {updated}. Printed on demand, with a black-and-white interior.</p>'
              '<p><strong>The back of every picture is blank</strong>, so markers will not soak through to the next one. Slide a sheet of paper under the page you are coloring.</p>'
              '<p><strong>Free online, always.</strong> Tidbit and Sugarfoot live at {site}, where everything is free to read and use, with no account and no paid version. This print book is optional. You may copy pages for personal use and for non-commercial teaching, with credit to “{site}.”</p>'
-             '<p><strong>Original.</strong> The characters and the pictures are original to this site.</p>'
+             '<p><strong>Original.</strong> The characters and the pictures are original to this book.</p>'
              '<p>Set in Fraunces, Andika and Lora (SIL Open Font License).</p>')

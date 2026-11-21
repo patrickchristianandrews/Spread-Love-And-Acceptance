@@ -75,7 +75,7 @@ ORDER = [
      [('Six-week program, week 3: notice how much each of you is carrying', '/prog-01.html#week-3'), ('How much are you carrying?', '/workpapers/wp-02-how-much-are-you-carrying.html')]),
     ('chapter-4', 2, 'Chapter IV', 'Agreeing on what fair means to you both, and letting words land before you react',
      [('Six-week program, week 4: talk about it kindly', '/prog-01.html#week-4'), ('Before you reply: say it so it lands', '/workpapers/wp-09-say-it-so-it-lands.html')]),
-    ('chapter-5', 2, 'Chapter V', 'A gentle monthly look back that catches what weekly check-ins miss',
+    ('chapter-5', 2, 'Chapter V', 'A gentle monthly look-back that catches what weekly check-ins miss',
      [('Six-week program, week 6: make it last', '/prog-01.html#week-6'), ('What keeps coming back? A monthly look-back', '/workpapers/wp-04-what-keeps-coming-back.html')]),
 ] + [
     ('understanding-%d-%s' % (n, s), 3, 'Chapter %d' % n, note, [])

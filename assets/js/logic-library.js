@@ -34,7 +34,7 @@
     { id: 'family', name: 'Family and partners', blurb: 'Love shown in deeds, going quiet, chasing, reassurance and advice.' },
     { id: 'feelings', name: 'Feelings and shutdowns', blurb: 'Meltdowns, shutdowns, a flat face, big reactions and needing space.' },
     { id: 'routines', name: 'Routines and special interests', blurb: 'Same food, my mug, long talks about an interest, stopping a task.' },
-    { id: 'rulebooks', name: 'Different rulebooks', blurb: 'Driving, tipping, “on time,” loud families, plain feedback and texting: habits learned in different places.' }
+    { id: 'rulebooks', name: 'Different rulebooks', blurb: '“On time,” loud families, plain feedback, texting and more: habits learned in different places.' }
   ];
   var SIDES = {
     nd: 'Neurodivergent logic, explained',

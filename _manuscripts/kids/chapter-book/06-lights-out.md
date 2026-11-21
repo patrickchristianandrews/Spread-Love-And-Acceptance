@@ -111,7 +111,7 @@ She wanted to say sorry. Right then. She had her mouth open to say it, and the w
 
 So she lay down in the dark, under a ceiling with no star, and listened to the rain. It sounded like a tiny sky, weeping politely to itself. After a long time, her eyes closed.
 
-Down the hall, in the room that had once been hers, Grandpa Lou was awake. He heard the shouting. He heard the quiet that came after. He lay there, thinking, with his hands folded on his chest, and he did not go in.
+Downstairs, in the room that had once been hers, Grandpa Lou was awake. He heard the shouting. He heard the quiet that came after. He lay there, thinking, with his hands folded on his chest, and he did not go in.
 
 Because he knew something Wren was about to find out. The worst moment of the night was over. The most important moment was still to come, and it was going to be on the stairs.
 

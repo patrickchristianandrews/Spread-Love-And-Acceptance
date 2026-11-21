@@ -7,7 +7,7 @@ SUBTITLE = 'An Adult Coloring Book of Mandalas, Gardens and Quiet Scenes for Cal
 SERIES = 'Spread Love & Acceptance'
 AUTHOR = 'Patrick Christian Andrews'   # owner, Nov 17 2026: the full name inside the book, none on the cover
 SITE = 'spreadloveandacceptance.com'
-UPDATED = 'October 2026'
+UPDATED = 'November 2026'
 PAGE_TARGET = '/pause-and-play'          # the Calm games page (pause-and-play.html), the QR code on the last page
 PAGE_TARGET_NAME = 'Calm games and a place to relax'
 
@@ -16,7 +16,7 @@ BELONGS = 'This book belongs to'
 HOWTO_HEAD = 'How to use this book'
 HOWTO = [
     'Color in any order, with any colors you like. There is no wrong color, and nobody is checking.',
-    'Stop whenever you want. A page can take ten minutes or sit half finished for a month. There is no timer.',
+    'Stop whenever you want. A page can take ten minutes or sit half-finished for a month. There is no timer.',
     'Every design has a blank page behind it, so markers will not bleed into the next one. A sheet of paper under the page helps with the wettest pens.',
     'Pens, pencils and gel pens all work here. Try them on the next page first.',
     'This book is a pastime. It is not therapy and not a diagnosis.',
@@ -28,7 +28,7 @@ TEST_NOTE = 'Try your pens, pencils and markers here. Blend two colors where the
 THANKS_HEAD = 'Your pages'
 THANKS = [
     'If you finished a page, or only one corner of a page, that counts. Tape your favorite where you will see it.',
-    'There is more free at the website, with no account and nothing to buy: calm games, slow colors and a quiet place to relax.',
+    'The website has more, all free, with no account and nothing to buy: calm games, more pages to color and a quiet place to relax.',
 ]
 THANKS_PROMPTS = ['The page I liked coloring most', 'Colors I want to try next']
 THANKS_QR_LABEL = 'Calm games and a place to relax'
@@ -39,7 +39,7 @@ COPYRIGHT = ('<p><em>{series}</em>: <em>{name}</em>. A companion to the series.<
              '<p>Copyright © 2026 {author}. Pictures by the author. First print edition, {updated}. Printed on demand, with a black-and-white interior.</p>'
              '<p><strong>The back of every picture is blank</strong>, so markers will not soak through to the next one. Slide a sheet of paper under the page you are coloring.</p>'
              '<p><strong>Free online, always.</strong> {series} lives at {site}, where everything is free to read and use, with no account and no paid version. This print book is optional. You may copy pages for personal use and for non-commercial teaching, with credit to “{site}.”</p>'
-             '<p><strong>Original.</strong> The pictures, and the two pups who appear in a few of them, are original to this site.</p>'
+             '<p><strong>Original.</strong> The pictures, and the two pups who appear in a few of them, are original to this book.</p>'
              '<p>Set in Fraunces, Andika and Lora (SIL Open Font License).</p>')
 
 BACK_HEAD = 'Take a quiet hour.'
@@ -52,5 +52,5 @@ BACK_BULLETS = [
     '40 original designs on single-sided pages',
     'Mandalas, botanicals, patterns, quiet scenes and calm words',
     'A color test page and a short note on how to use the book',
-    '8.5 x 11 inches, black and white interior',
+    '8.5 × 11 inches, black-and-white interior',
 ]

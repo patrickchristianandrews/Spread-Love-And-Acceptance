@@ -6,7 +6,7 @@ The text came in at 7:12 on Monday morning, while Wren was standing in the hallw
 ::: chat
 Imani: sleepover friday?? my place. grandma is making peach cobbler
 Josie: YES
-Mateo: obviously. i will bring the good controller
+Mateo: obviously. bringing the good controller. we're doing a tournament, no movies
 :::
 
 She looked at it for a while. A sleepover at Imani's was one of the best things a person could be invited to. Imani's grandma made cobbler with a crust like a cloud, and Imani's dad let them stay up until the second movie ended. Wren would normally have typed three exclamation points before the toothbrush was even in her mouth.
@@ -128,7 +128,7 @@ Wren's magnet was lying on the counter. She picked it up.
 
 "Fine isn't a rung," Mom said, and for a second Wren almost smiled, because it was true, and because Mom said it so seriously.
 
-She put her magnet on the gray one. Then she didn't wait to be asked anything else. She went upstairs and lay down on the bed that was almost not hers anymore, and Sugarfoot came in at her own pace, climbed up and lay with her warm side against Wren's legs.
+She put her magnet on the gray one. Then she didn't wait to be asked anything else. She went to her room and lay down on the bed that was almost not hers anymore, and Sugarfoot came in at her own pace, climbed up and lay with her warm side against Wren's legs.
 
 Nobody said anything. That was exactly right.
 

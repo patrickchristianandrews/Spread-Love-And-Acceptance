@@ -40,8 +40,10 @@ def m_hammock(pg):
     sag = 118
     ytop = top_y + sag * 0.96
     # asleep in the hammock: their heads and paws over the cloth's edge (the cloth, drawn next, hides the rest)
-    draw_pup(pg, cast.pup_peek, 'sugarfoot', cx - 78, ytop + 14, 0.62, 'sleep', lvl=1, paws=True)
-    draw_pup(pg, cast.pup_peek, 'tidbit', cx + 78, ytop + 14, 0.62, 'sleep', lvl=1, paws=True)
+    # (the cloth's top edge is higher out at the pups than in the middle: set them on it there, so it never crosses a face)
+    yp = top_y + sag * 0.80 + 14
+    draw_pup(pg, cast.pup_peek, 'sugarfoot', cx - 78, yp, 0.62, 'sleep', lvl=1, paws=True)
+    draw_pup(pg, cast.pup_peek, 'tidbit', cx + 78, yp, 0.62, 'sleep', lvl=1, paws=True)
     cloth = Path().M(lx + 8, top_y + 6).C(lx + 80, top_y + sag * 1.55, rx - 80, top_y + sag * 1.55, rx - 8, top_y + 6).C(rx - 80, top_y + sag * 1.27, lx + 80, top_y + sag * 1.27, lx + 8, top_y + 6).Z()
     pg.shape(cloth, W2)
     pg.line(Path().M(lx + 22, top_y + 12).C(lx + 92, top_y + sag * 1.42, rx - 92, top_y + sag * 1.42, rx - 22, top_y + 12), W3, dash='1 9')

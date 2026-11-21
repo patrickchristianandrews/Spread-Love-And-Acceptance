@@ -71,12 +71,12 @@ def pb_pages():
     t[1] = '%s. Half title, with Tidbit and Sugarfoot under a heart.' % B['title']
     t[2] = 'This book belongs to. A line to write your name. Professor Puddles and Tidbit wave from a green hill.'
     t[3] = '%s. %s. By %s. Tidbit and Sugarfoot with a picnic basket.' % (B['title'], B['subtitle'], B['author'])
-    t[4] = 'Copyright © 2026 %s. Independently published. The characters and the story are original to this site.' % C.AUTHOR
+    t[4] = 'Copyright © 2026 %s. Independently published. The characters and the story are original to this book.' % C.AUTHOR
     t[5] = 'Who is in this story: Tidbit, Sugarfoot, Professor Puddles, Ollie, Dot, Hopper, Nutmeg, Lumi, Beep, the ducklings, the Moon and the Static clouds.'
     for i, sp in enumerate(B['spreads']):
         n = 6 + 2 * i
-        t[n] = '%s %s' % (sp['left'].replace('\n', ' '), ART_ALT[sp['id']])
-        t[n + 1] = sp['right'].replace('\n', ' ')
+        t[n] = '%s The picture across this page and the next: %s' % (sp['left'].replace('\n', ' '), ART_ALT[sp['id']])
+        t[n + 1] = '%s (The picture continues from the page before.)' % sp['right'].replace('\n', ' ')
     t[32] = '%s. %s' % (B['calm_title'], ' '.join('%d. %s: %s' % (i + 1, a, b) for i, (a, b) in enumerate(B['calm_steps'][:2])))
     t[33] = ' '.join('%d. %s: %s' % (i + 3, a, b) for i, (a, b) in enumerate(B['calm_steps'][2:]))
     t[34] = B['grownups']['title'] + '. ' + ' '.join(B['grownups']['paras'])
@@ -223,7 +223,7 @@ def build_chapter_epub():
     copy = xhtml('Copyright', '<div class="small"><p><em>%s</em>, Book %d: <em>%s</em>. By %s. Independently published.</p>'
                  '<p>Text and pictures &#169; 2026 %s. First edition, %s.</p>'
                  '<p><strong>Free online, always.</strong> The characters in this book live at %s, where everything is free to read and use, with no account and no paid version. You may copy pages for personal use and for non-commercial teaching, with credit to &#8220;%s.&#8221;</p>'
-                 '<p><strong>Made up.</strong> Wren, Theo and their family and friends are made up. Nobody in this book is a real person, and none of it is a testimonial. The story and characters are original to this site.</p>'
+                 '<p><strong>Made up.</strong> Wren, Theo and their family and friends are made up. Nobody in this book is a real person. The story and characters are original to this book.</p>'
                  '<p>This is a story. It is general education about feelings and getting along, not a diagnosis or treatment, and it cannot know your family.</p></div>' % (
                      xesc(B['series']), B['series_no'], xesc(B['title']), xesc(C.AUTHOR), xesc(C.AUTHOR), C.UPDATED, C.SITE, C.SITE))
     docs.append(('copyright', 'copyright.xhtml', 'Copyright', copy))

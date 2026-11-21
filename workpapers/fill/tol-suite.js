@@ -776,7 +776,7 @@
     return { people: people.filter(Boolean), jobs: jobs, own: own, by: '', kids: kids, nights: nights, agreed: agreed };
   }
 
-  /* the split a week is compared with: from the stand (the split you agreed, or the nights each person is
+  /* the split a week is compared with: from the stand (the split you agreed on, or the nights each person is
      here), kept by name so it follows people whatever order they are in. Shown under the names. */
   function splitOf() {
     var sp = S.split; if (!sp) return null;
@@ -784,7 +784,7 @@
     function byName(o) { var out = names.map(function () { return null; }); Object.keys(o || {}).forEach(function (k) { var i = names.indexOf(SP.fold(k)); if (i >= 0) out[i] = o[k]; }); return out; }
     var ag = byName(sp.agreed), ni = byName(sp.nights);
     var agOk = ag.every(function (x) { return x != null; }) && Math.abs(ag.reduce(function (a, b) { return a + b; }, 0) - 100) <= 0.5;
-    if (agOk) return { t: ag.map(function (x) { return x / 100; }), mode: 'agreed', label: 'the split you agreed (' + S.names.map(function (nm, i) { return whoLabel(i) + ' ' + Math.round(ag[i]) + '%'; }).join(', ') + ')' };
+    if (agOk) return { t: ag.map(function (x) { return x / 100; }), mode: 'agreed', label: 'the split you agreed on (' + S.names.map(function (nm, i) { return whoLabel(i) + ' ' + Math.round(ag[i]) + '%'; }).join(', ') + ')' };
     var w = ni.map(function (x) { return x == null ? 1 : x / 14; });
     if (n < 2 || w.every(function (x) { return x === 1; })) return null;
     var ws = w.reduce(function (a, b) { return a + b; }, 0), t = w.map(function (x) { return x / ws; });
@@ -971,7 +971,7 @@
     });
     function codeOf(name) { var i = here().indexOf(SP.fold(name)); return i >= 0 ? WPK.CODES[i] : ''; }
     var made = [], extra = [];
-    // who is a child, the nights each person is here, the split you agreed: carried over by name
+    // who is a child, the nights each person is here, the split you agreed on: carried over by name
     var kidsNow = [];
     if (kidsOn()) { kidsFit(); d.kids.forEach(function (k) { var i = here().indexOf(SP.fold(k)); if (i >= 0 && !S.kids[i]) { S.kids[i] = true; kidsNow.push(k); } }); }
     if (kidsNow.length) extra.push(andList(kidsNow) + ' marked as ' + (kidsNow.length === 1 ? 'a child' : 'children'));

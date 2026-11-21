@@ -1244,7 +1244,7 @@ WB_NOTE = {
     'wp02': 'Two minutes, about yourself and nobody else. You may be surprised by your own number. A score of 0.65 on a Tuesday tells you something about Tuesday and nothing whatsoever about your character.',
     'wp11': 'Make this on a dull, ordinary day, ideally with a cup of tea. Trying to write a calm-down plan in the middle of a fight is like reading the instructions on a fire extinguisher while the pan is still burning.',
     'wp09': 'For one thing that actually stung, not a list of grievances. It’s a check on your side of the conversation. Most people find the first draft of their reply is about twice as long as it needs to be.',
-    'wp13': 'Ninety seconds, once a day, both of you. It’s meant to be almost too small to bother with, which is exactly why it keeps going. If you miss a day, write nothing and carry on tomorrow.',
+    'wp13': 'Ninety seconds, once a day, both of you. It’s meant to be almost too small to bother with, which is exactly why it keeps going. If you miss a day, write nothing and pick it up tomorrow.',
     'wp12': 'Fill in your own rows first, before you look at theirs. Often one moment stands out, bedtime, say, or the first ten minutes after someone gets home.',
     'wp14': 'A line each evening, about your own day. At the end of the week, the question is simple. Was it us, or was it everything else? Quite often it was everything else.',
     'wp01': 'One ordinary week. Write only what you did or saw yourself, including the thinking jobs, the remembering and the booking. Nobody fills in anybody else’s side, however sure they are.',
@@ -1394,7 +1394,7 @@ def build_workbook(where, bw=False):
     front += ('<section class="wb-how pe-only" id="wb-how">%s<h1>How to use this workbook</h1>'
               '<p class="wb-lede">Every workpaper from the books, on big pages with room to write. Pencil is fine. Crossing out is fine. There are no right answers, '
               'and nothing here is marked.</p><ul class="wb-how-list">'
-              '<li><strong>One sheet, one go.</strong> Each workpaper opens with a short page that says when to use it, how long it takes, who fills it in and which book '
+              '<li><strong>One sheet, one sitting.</strong> Each workpaper opens with a short page that says when to use it, how long it takes, who fills it in and which book '
               'explains it. The blank copies follow, one after another.</li>'
               '<li><strong>On your own, or together.</strong> Some sheets are only about you, so fill those in for yourself and never for anyone else. On shared sheets, '
               'each person writes only their own rows, even when it’s very tempting to help.</li>'
@@ -1503,8 +1503,9 @@ def cover_html(item, trim, pages_hint=0, workbook=False, pocket=False, boxset=Fa
     spine_t = '%s · %s' % (SERIES_TITLE, ('Book %d: %s' % (item['n'], item['title'])) if not (workbook or pocket or boxset) else item['title'])
     title = item.get('short_title') or item['title']
     hook, rest = (item['hook'], item.get('blurb', '')) if item.get('hook') else back_hook(item.get('blurb', ''))
-    free_url, free_t, free_l = ('%s%s' % (SITE, LOGIC_PAGE), 'Every situation, free online', 'More than seventy, at spreadloveandacceptance.<wbr>com/<wbr>the-logic-behind-it') if pocket else (
-        go_url('/book/'), 'Free to read online', 'Every chapter, plus its expanded version, at spreadloveandacceptance.com/go/read')
+    free_url, free_t, free_l = ('%s%s' % (SITE, LOGIC_PAGE), 'Every situation, free online', 'The 38 in this book and more, at spreadloveandacceptance.com/<wbr>the-logic-behind-it') if pocket else (
+        ('%s/workpapers/fill/' % SITE, 'Fill them in online, free', 'Every workpaper, ready to fill in on screen, at spreadloveandacceptance.com') if workbook else
+        (go_url('/book/'), 'Free to read online', 'Every chapter, plus its expanded version, at spreadloveandacceptance.com/go/read'))
     extra_css = ('.cv-text { top: .92in; left: .64in; right: .38in; } .cv-sub { font-size: 10.6pt; max-width: 3.9in; } .cv-art { left: .64in; right: .38in; } '
                  '.cv-foot { left: .64in; right: .38in; bottom: .42in; } .cv-line { font-size: 8.6pt; } .cv-by { font-size: 11pt; } .cv-back-in { left: .42in; right: .45in; top: .5in; } '
                  '.cv-bk { margin-bottom: .14in; } .cv-q { font-size: 9.4pt; margin-bottom: .14in; } .cv-series { font-size: 7.6pt; line-height: 1.46; } '
@@ -1543,8 +1544,8 @@ html, body { margin: 0; padding: 0; background: #fff; }
 .cv-blurb { font-family: "Fraunces", serif; font-size: %(bsize)spt; line-height: 1.5; margin: 0 0 0.2in; }
 .cv-q { font-style: italic; font-size: 10.5pt; margin: 0 0 0.2in; }
 .cv-series { list-style: none; padding: 0; margin: 0; font-size: 8.6pt; line-height: 1.55; max-width: 3.2in; }
-.cv-series li span { display: inline-block; min-width: 0.78in; font-family: "IBM Plex Mono", monospace; font-size: 7pt; letter-spacing: .06em; opacity: .9; }
-.cv-free { position: absolute; left: 0; bottom: 0; display: flex; gap: 0.12in; align-items: center; max-width: 3.1in; font-size: 8.6pt; line-height: 1.4; }
+.cv-series li span { display: inline-block; min-width: 0.98in; font-family: "IBM Plex Mono", monospace; font-size: 7pt; letter-spacing: .06em; opacity: .9; }
+.cv-free { position: absolute; left: 0; bottom: 0; display: flex; gap: 0.12in; align-items: center; max-width: 2.85in; font-size: 8.6pt; line-height: 1.4; }
 .cv-free .pe-qr { flex: 0 0 0.88in; width: 0.88in; height: 0.88in; background: #fff; padding: 0.04in; border-radius: 0.04in; }
 .cv-free .pe-qr svg { width: 100%%; height: 100%%; display: block; }
 .cv-free strong { display: block; font-weight: 600; }
@@ -1554,6 +1555,7 @@ html, body { margin: 0; padding: 0; background: #fff; }
 .cv-spine-t { position: absolute; left: 50%%; top: 50%%; transform: translate(-50%%, -50%%) rotate(90deg); white-space: nowrap; font-family: "Fraunces", serif; font-weight: 600; font-size: min(9pt, calc((var(--spine) - 0.125in) * 0.9)); line-height: 1; margin: 0; letter-spacing: .02em; display: none; }
 .cv-spine-t em { font-family: "Lora", serif; font-weight: 400; font-style: italic; margin-left: 0.18in; }
 .has-spine-text .cv-spine-t { display: block; }
+.cv-badge { position: absolute; right: 0.45in; bottom: 1.15in; background: #2B2620; color: #FFFDF8; font-family: "Fraunces", serif; font-weight: 600; font-size: 15pt; line-height: 1.1; text-align: center; padding: 0.12in 0.22in; border-radius: 0.14in; transform: rotate(-4deg); box-shadow: 0 2px 0 rgba(0,0,0,.18); }
 %(extra_css)s
 </style></head>
 <body><div class="cv" id="cover">
@@ -1569,7 +1571,7 @@ html, body { margin: 0; padding: 0; background: #fff; }
 <div class="cv-band"><span>spreadloveandacceptance.com</span><span>See it fairly. Say it kindly.</span></div>
 <div class="cv-text"><p class="cv-k">%(kicker)s</p><p class="cv-title">%(title)s</p><p class="cv-sub">%(sub)s</p></div>
 <div class="cv-art">%(art)s</div>
-<div class="cv-foot"><p class="cv-line">%(line)s</p></div>
+<div class="cv-foot"><p class="cv-line">%(line)s</p></div>%(badge)s
 </div></div>
 </div>
 %(qrscript)s
@@ -1581,6 +1583,7 @@ html, body { margin: 0; padding: 0; background: #fff; }
         'circ': 4.4 if workbook else (2.8 if pocket else 3.5), 'artw': 5.2 if workbook else (3.25 if pocket else 4.1),
         'free_url': free_url, 'free_t': free_t, 'free_l': free_l, 'extra_css': extra_css,
         'rules_b': '', 'rules_f': book_art.ledger_rules(round(w * 25.4), round(h * 25.4), '#E8DDBE', item['color'], top=22, step=7.5, left=12).replace('class="pe-rules"', 'class="cv-rules"'),
+        'badge': '<div class="cv-badge">Black &amp; White<br>Edition</div>' if bw else '',
         'kicker': esc(kicker), 'hook': ('<p class="cv-hook">%s</p>' % esc(hook)) if hook else '', 'blurb': esc(rest), 'others': others,
         'hsize': 15 if pocket else (22 if workbook else 19), 'site': SITE, 'author': B.AUTHOR,
         'spine_t': esc(spine_t), 'sub': esc(item['sub']), 'art': series_site.art(item['art']), 'line': esc(item['line']), 'qrscript': QR_SCRIPT,

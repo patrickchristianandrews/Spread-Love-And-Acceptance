@@ -358,14 +358,14 @@
       raw.push({ fields: [f(p + 'task', 'Task that slipped', 'text', { w: 3.4 }), f(p + 'w1', 'Week 1', 'check', { w: 0.7 }), f(p + 'w2', 'Week 2', 'check', { w: 0.7 }), f(p + 'w3', 'Week 3', 'check', { w: 0.7 }), f(p + 'w4', 'Week 4', 'check', { w: 0.7 })] });
     }
     blocks.push({ kind: 'grid', title: section(sc, 'raw').title, intro: section(sc, 'raw').intro, rows: raw });
-    var owner = opts(['Yes', 'No']), kind = opts(['Structural gap', 'Capacity issue', 'One-off, no action'], ['Structural', 'Capacity', 'One-off']);
+    var owner = opts(['Yes', 'No']), kind = opts(['Structural gap', 'Capacity issue', 'One-time, no action'], ['Structural', 'Capacity', 'One-time']);
     var cl = [];
     for (i = 0; i < Math.max(6, ctx.sizes.classify || 0); i++) {
       var q = 'wp04.classify.r' + (i + 1) + '.';
       cl.push({ fields: [f(q + 'task', 'Task', 'text', { w: 1.8 }), f(q + 'owner', 'Named owner?', 'radio', { options: owner, w: 1.1 }), f(q + 'kind', 'What kind of gap', 'radio', { options: kind, w: 2.4 }), f(q + 'action', 'Action', 'text', { w: 1.7 })] });
     }
     blocks.push({ kind: 'grid', title: section(sc, 'classify').title, intro: section(sc, 'classify').intro, rows: cl });
-    blocks.push({ kind: 'derived', title: 'Worked out for you', lines: ['Times each task was flagged (3 or 4 weeks is a real pattern, not a fluke), and the count of structural gaps, capacity issues and one-offs.'] });
+    blocks.push({ kind: 'derived', title: 'Worked out for you', lines: ['Times each task was flagged (3 or 4 weeks is a real pattern, not a fluke), and the count of structural gaps, capacity issues and one-time misses.'] });
     blocks.push(closing(ctx, 'wp04'));
     return { id: 'wp04', code: 'WP-04', title: sc.title, blocks: blocks };
   }
@@ -406,7 +406,7 @@
       var p = 'wp11.reentry.r' + (i + 1) + '.';
       re.push({ fields: [f(p + 'time', 'Time', 'text', { w: 1 }), f(p + 'tactic', 'What I did (1 to 6 from the list, or its name)', 'text', { w: 2.6 }), f(p + 'before', 'Stress tank score before (0 to 1)', 'number', { min: 0, max: 1, w: 1.1 }), f(p + 'after', 'Stress tank score after (0 to 1)', 'number', { min: 0, max: 1, w: 1.1 })] });
     }
-    blocks.push({ kind: 'fields', title: ctx.road.solo ? 'My pause plan (yours to share, if you like)' : 'Our pause plan (agree it together, and share it)', intro: (ctx.road.solo ? 'This part is made to be shared with someone close, if you want to.' : 'Unlike the rest of the plan, this part is meant to be agreed together and shared, so a pause is never mistaken for walking out.') + ' A few words in each box is plenty.', fields: [
+    blocks.push({ kind: 'fields', title: ctx.road.solo ? 'My pause plan (yours to share, if you like)' : 'Our pause plan (agree on it together, and share it)', intro: (ctx.road.solo ? 'This part is made to be shared with someone close, if you want to.' : 'Unlike the rest of the plan, this part is meant to be agreed together and shared, so a pause is never mistaken for walking out.') + ' A few words in each box is plenty.', fields: [
       f('wp11.plan.word', ctx.road.solo ? 'My pause word or signal' : 'Our pause word or signal', 'text', { half: true, optional: true, placeholder: 'e.g. Timeout, or a hand on the table' }),
       f('wp11.plan.min', 'The shortest break we take', 'text', { half: true, optional: true, placeholder: 'e.g. 20 minutes' }),
       f('wp11.plan.back', 'How we set the time to come back', 'text', { optional: true, placeholder: 'e.g. Whoever pauses names a time, within the day' }),
@@ -1202,7 +1202,7 @@
     for (var i = 0; i < n; i++) { if (ag[i] == null) all = false; else sum += ag[i]; }
     if (all && Math.abs(sum - 100) <= 0.5) {
       var ta = P.list.map(function (p) { return ag[p.i] / sum; });
-      return { t: ta, mode: 'agreed', label: 'the split you agreed (' + P.list.map(function (p) { return p.label + ' ' + Math.round(ta[p.i] * 100) + '%'; }).join(', ') + ')' };
+      return { t: ta, mode: 'agreed', label: 'the split you agreed on (' + P.list.map(function (p) { return p.label + ' ' + Math.round(ta[p.i] * 100) + '%'; }).join(', ') + ')' };
     }
     var ni = sp.nights || [], w = P.list.map(function (p) { return ni[p.i] != null ? ni[p.i] / 14 : 1; });
     if (w.every(function (x) { return x === 1; })) return null;
@@ -1363,10 +1363,10 @@
         return { task: trim(r.task), times: ['w1', 'w2', 'w3', 'w4'].filter(function (w) { return r[w] === true; }).length };
       });
       var cl = rowsOf(data, 'wp04.classify', ['task', 'owner', 'kind', 'action'], sizeOf(data, 'classify')).filter(function (r) { return trim(r.task); });
-      var count = { 'Structural gap': 0, 'Capacity issue': 0, 'One-off, no action': 0 };
+      var count = { 'Structural gap': 0, 'Capacity issue': 0, 'One-time, no action': 0 };
       cl.forEach(function (r) { if (count.hasOwnProperty(r.kind)) count[r.kind]++; });
       out.wp04 = { filled: raw.length > 0 || cl.length > 0 || has(data, 'wp04.month'), raw: raw, patterns: raw.filter(function (r) { return r.times >= 3; }), twice: raw.filter(function (r) { return r.times === 2; }),
-        classified: cl, structural: count['Structural gap'], capacity: count['Capacity issue'], oneoff: count['One-off, no action'],
+        classified: cl, structural: count['Structural gap'], capacity: count['Capacity issue'], oneoff: count['One-time, no action'],
         actions: cl.filter(function (r) { return trim(r.action); }).map(function (r) { return trim(r.task) + ': ' + trim(r.action); }) };
     }
 
@@ -1801,7 +1801,7 @@
       if (!d.filled) { s.next = 'At the end of the month, list what slipped in each week and tick the weeks it came up.'; return s; }
       s.status = 'filled';
       s.entered.push(['Tasks listed', String(d.raw.length)]);
-      s.entered.push(['Sorted', d.classified.length ? d.structural + ' structural, ' + d.capacity + ' capacity, ' + d.oneoff + ' one-off' : 'Not filled in']);
+      s.entered.push(['Sorted', d.classified.length ? d.structural + ' structural, ' + d.capacity + ' capacity, ' + d.oneoff + ' one-time' : 'Not filled in']);
       d.raw.forEach(function (r) { s.entered.push([r.task, 'flagged ' + r.times + (r.times === 1 ? ' week' : ' weeks')]); });
       s.shows.push(d.patterns.length ? 'A real pattern (3 or 4 weeks): ' + list(d.patterns.map(function (p) { return p.task; })) + '.' : 'Nothing came up 3 or 4 weeks out of 4.');
       if (d.twice.length) s.shows.push('Came up twice, worth watching: ' + list(d.twice.map(function (p) { return p.task; })) + '.');
@@ -2288,7 +2288,7 @@
       var cl = c.wp04.classified.map(function (r) { return { task: trim(r.task), owner: r.owner || '', kind: r.kind || '', action: trim(r.action) }; });
       F.w4 = { raw: raw4, cl: cl, weekTotals: [0, 1, 2, 3].map(function (k) { return raw4.filter(function (r) { return r.weeks[k]; }).length; }),
         unsorted: c.wp04.patterns.filter(function (p) { return !cl.some(function (x) { return sameTask(x.task, p.task); }); }),
-        oneoffRepeat: cl.filter(function (x) { return x.kind === 'One-off, no action' && raw4.some(function (r) { return sameTask(r.task, x.task) && r.times >= 3; }); }),
+        oneoffRepeat: cl.filter(function (x) { return x.kind === 'One-time, no action' && raw4.some(function (r) { return sameTask(r.task, x.task) && r.times >= 3; }); }),
         noTicks: raw4.filter(function (r) { return r.times === 0; }),
         noAction: cl.filter(function (x) { return (x.kind === 'Structural gap' || x.kind === 'Capacity issue') && !x.action; }),
         noKind: cl.filter(function (x) { return !x.kind; }) };
@@ -2505,7 +2505,7 @@
       why: 'A lean in one ordinary week is a fact about how the work fell, not about effort or care. Left alone, a lean tends to settle into a default.',
       rec: function (d, F, v) { var ho = d.ho; return { h: 'week', title: 'One handoff, not a rebuild', first: ho ? 'Move about ' + C1().f1(ho.hours) + ' hour' + (ho.hours === 1 ? '' : 's') + ' a week from ' + ho.from + ' to ' + ho.to + '. Balance would go from ' + fmt(d.wb) + ' to ' + fmt(ho.after) + '.' : 'Pick one ' + v.task + ' that the busiest adult would most like to hand over' + (F.c.kids && F.c.kids.some(Boolean) ? ' to another adult' : '') + '.', script: '“Which of these would you most like to hand over, and what would make that fair?”', link: linkOf('WP-01'), working: 'Next week’s log reads 0.70 or above, and nobody had to be reminded.', plan: { title: 'Hand over one ' + v.task, wp: 'WP-01, WP-03', do: ho ? 'Move about ' + C1().f1(ho.hours) + ' hour' + (ho.hours === 1 ? '' : 's') + ' a week from ' + ho.from + ' to ' + ho.to + ', write it on WP-03, and log the week again.' : 'Hand one ' + v.task + ' from the busiest person to someone else, write it on WP-03, and log the week again.', pillar: 'I' } }; },
       q: function (d) { return d.top.label + ' carried ' + pc(d.top.share) + ' of the logged time. Is that what everyone expected before seeing the number?'; } },
-    { id: 'load-even', pillar: 'I', src: ['WP-01'], pri: 3, strength: true, title: function (w, F) { return F.c.target ? (F.c.target.mode === 'agreed' ? 'The logged time is close to the split you agreed' : 'The logged time is close to each person\u2019s fair share') : 'The logged time is shared evenly'; },
+    { id: 'load-even', pillar: 'I', src: ['WP-01'], pri: 3, strength: true, title: function (w, F) { return F.c.target ? (F.c.target.mode === 'agreed' ? 'The logged time is close to the split you agreed on' : 'The logged time is close to each person\u2019s fair share') : 'The logged time is shared evenly'; },
       when: function (F) { var w = F.c.wp01; return F.n >= 2 && w && w.wb != null && w.wb >= 0.8 ? w : null; },
       find: function (w, F) { return 'Workload balance reads ' + fmt(w.wb) + ': the logged minutes were close to ' + (F.c.target ? F.c.target.label : 'an even split') + '.'; },
       why: 'An even split in hours is the base everything else stands on. The next thing to check is the planning and remembering, which minutes don’t show.' },
@@ -2597,7 +2597,7 @@
         return share >= 0.6 && share >= 1 / F.n + 0.2 ? { top: top, share: share, tot: tot } : null;
       },
       find: function (d, F, v) { return d.top.label + ' owns ' + d.top.recurR + ' of the ' + d.tot + ' daily or weekly ' + v.tasks + '. Recurring work is the kind that never lets up.'; },
-      why: 'One-off jobs end; recurring ones come back every day or week. A fair split of recurring jobs matters more than a fair count of jobs.',
+      why: 'One-time jobs end; recurring ones come back every day or week. A fair split of recurring jobs matters more than a fair count of jobs.',
       rec: function (d, F, v) { return isApart(F) ? { h: 'now', title: d.top.label + ' owns ' + d.top.recurR + ' of the ' + d.tot + ' daily or weekly jobs: trade one this week', first: 'On your next call, pick one daily or weekly ' + v.task + ' (a call to arrange, a visit to plan) that moves from ' + d.top.label + ' to the other of you this week.', script: '“You set up most of our calls and visits. Which one shall I take this week?”', link: linkOf('WP-03'), working: 'The daily and weekly jobs are closer to even on WP-03.' } : { h: 'month', title: 'Share the recurring jobs', first: 'Trade one daily or weekly ' + v.task + ' from ' + d.top.label + ' for one occasional job.', script: '“Could we swap one of the every-week ones for one of the now-and-then ones?”', link: linkOf('WP-03'), working: 'Recurring jobs are split closer to evenly on WP-03.' }; } },
     { id: 'battery-owns-most', pillar: 'V', src: ['WP-02', 'WP-03'], pri: 8, title: 'The highest load also owns the most',
       when: function (F) {
@@ -3049,7 +3049,7 @@
       fix: 'Clear the task box on any row that doesn’t apply.' },
     { id: 'wp04-oneoff-repeats', where: 'WP-04', level: 'check',
       when: function (F) { return F.w4 && F.w4.oneoffRepeat.length ? F.w4.oneoffRepeat : null; },
-      text: function (r) { return q(r[0].task) + ' is sorted as a one-off, but it was ticked 3 or more weeks out of 4. Something that comes back most weeks is probably a pattern.'; },
+      text: function (r) { return q(r[0].task) + ' is sorted as a one-time, but it was ticked 3 or more weeks out of 4. Something that comes back most weeks is probably a pattern.'; },
       fix: 'Re-sort it as a structural gap or a capacity issue.' },
     { id: 'wp04-unsorted', where: 'WP-04', level: 'note',
       when: function (F) { return F.w4 && F.w4.unsorted.length && F.w4.cl.length ? F.w4.unsorted : null; },
@@ -3221,7 +3221,7 @@
       var w4 = F.w4;
       if (w4.raw.length) s.tables.push(tbl('Week by week', ['Task', 'Wk 1', 'Wk 2', 'Wk 3', 'Wk 4', 'Times'], w4.raw.map(function (r) { return [r.task].concat(r.weeks.map(function (x) { return x ? '•' : ''; })).concat([String(r.times)]); }), [2.6, 0.6, 0.6, 0.6, 0.6, 0.7], '• = it slipped that week. 3 or 4 weeks is a pattern.'));
       if (w4.raw.length) s.bars.push(bars('Slips per week', w4.weekTotals.map(function (t, i) { return { label: 'Week ' + (i + 1), value: t, max: Math.max(1, w4.raw.length), text: plural(t, 'slip') }; })));
-      if (w4.cl.length) s.tables.push(tbl('The three kinds of gap', ['Kind of gap', 'Count', 'Jobs'], [['Structural gap', 'Structural gap'], ['Capacity issue', 'Capacity issue'], ['One-off, no action', 'One-off']].map(function (k) { var j = w4.cl.filter(function (x) { return x.kind === k[0]; }); return [k[1], String(j.length), j.length ? j.map(function (x) { return x.task; }).join(', ') : '—']; }), [1.4, 0.7, 2.6]));
+      if (w4.cl.length) s.tables.push(tbl('The three kinds of gap', ['Kind of gap', 'Count', 'Jobs'], [['Structural gap', 'Structural gap'], ['Capacity issue', 'Capacity issue'], ['One-time, no action', 'One-time']].map(function (k) { var j = w4.cl.filter(function (x) { return x.kind === k[0]; }); return [k[1], String(j.length), j.length ? j.map(function (x) { return x.task; }).join(', ') : '—']; }), [1.4, 0.7, 2.6]));
       var wt = w4.weekTotals, trend = wt[3] - wt[0];
       if (w4.raw.length) s.more.push('Slips per week: ' + wt.join(', ') + (trend >= 2 ? ' (rising through the month).' : trend <= -2 ? ' (falling through the month).' : '.'));
       s.more.push(plural(c.wp04.patterns.length, 'pattern') + ' (3 or 4 weeks), ' + c.wp04.twice.length + ' twice, ' + w4.raw.filter(function (r) { return r.times === 1; }).length + ' once.');

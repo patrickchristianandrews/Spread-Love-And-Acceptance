@@ -5,7 +5,7 @@ Mrs. Okafor loved weather almost as much as Grandpa Lou did, which was unfortuna
 
 "Groups of four," Mrs. Okafor said on Friday morning, tapping the board. "You will build a model of a weather system, make a poster that explains it, and give a five-minute talk. Due next Friday. Choose your groups. Quickly."
 
-Wren's stomach dropped. She hadn't really talked to the Four Corners since Monday. Imani had waved on Tuesday, a small unsure wave. Josie had saved her a seat on Wednesday and Wren had pretended not to see. Mateo had sent three memes, which she'd left on read. The group chat sat muted on her phone like a sleeping animal.
+Wren's stomach dropped. She hadn't really talked to the Four Corners in almost two weeks. Imani had waved on Tuesday, a small unsure wave. Josie had saved her a seat on Wednesday and Wren had pretended not to see. Mateo had sent three memes, which she'd left on read. The group chat sat muted on her phone like a sleeping animal.
 
 Now it came across the room at her, in the form of three people with their chairs already moving.
 
@@ -83,7 +83,7 @@ She looked at the first thought. *Mateo is a bully.*
 
 Was he? A bully, she knew, is someone who hurts people on purpose, over and over, and keeps going when you ask them to stop. She thought about Mateo. Mateo, who had once handed her his own umbrella in the rain and walked home soaked. Mateo, who made a plan for everything because plans made him feel safe. Mateo, whose knee bounced when he was scared. When he took over, did he stop if someone said stop? She actually did not know, because she had never said it. She had yelled it, after months of letting it pile up, with a "you always" on the front.
 
-Was it true he *always* did it? She tried to remember an example besides the sleepover. She found two. That was not always. That was twice, and a feeling.
+Was it true he *always* did it? She tried to remember the real times. She found the sleepover and the game. That was not always. That was twice, and a feeling.
 
 She looked at the second thought. *He thinks I'm nothing.* Nobody had said that. Mateo had given her a small job because it was the last one left. He had probably not thought about it. Which was its own kind of thing, but a different kind of thing.
 

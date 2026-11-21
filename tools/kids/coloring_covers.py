@@ -90,7 +90,9 @@ def make_cover(kind, pages):
         pr.rainbow(P, fx + 425, 800, 360, 5, 40, c=('#F2877E', '#F7D56A', '#8FCB7C', '#8FCBF0', '#B79CEB'))
         pr.puff(P, fx + 110, 620, 1.0, n=4)
         pr.puff(P, fx + 745, 580, 1.0, n=4)
-        P.raw('<path d="M%s %s C%s %s %s %s %s %s V%s H%s Z" fill="#A9DB84" stroke="%s" stroke-width="5.2" stroke-linejoin="round"/>' % (fx - 20, 900, fx + 200, 840, fx + 560, 940, fx + 870, 870, hu, fx - 20, INKC))
+        # the hill: filled from the spine across, inked only along its top (no ink line down the spine edge)
+        P.raw('<path d="M%s %s C%s %s %s %s %s %s V%s H%s Z" fill="#A9DB84"/>' % (fx, 902, fx + 200, 840, fx + 560, 940, fx + 870, 870, hu, fx))
+        P.raw('<path d="M%s %s C%s %s %s %s %s %s" fill="none" stroke="%s" stroke-width="5.2" stroke-linecap="round"/>' % (fx, 902, fx + 200, 840, fx + 560, 940, fx + 870, 870, INKC))
         fit(P, lambda i, x, y, s: cast.pup_hug(i, x, y, s, 'happy', 'happy'), (fx + 90, 420, fx + 760, 1020), 'bottom')
         for (x, y, r, rot) in ((70, 420, 26, -12), (780, 400, 28, 14), (200, 360, 18, 8), (650, 350, 20, -6)):
             pr.heart(P, fx + x, y, r, rot)
@@ -124,11 +126,11 @@ def make_cover(kind, pages):
     t1, t2 = X['title_lines']
     ts = 46 if younger else 40
     front = ('<div style="position:absolute;left:.4in;right:.4in;top:.45in;text-align:center">'
-             '<div style="font:700 12pt Andika;letter-spacing:.12em;color:#3A3350">%s &middot; BOOK %d</div>'
+             '<div style="font:700 12pt Andika;letter-spacing:.12em;color:%s">%s &middot; COLORING BOOK</div>'
              '<div style="font:800 %dpt/1.0 Fraunces,serif;color:#FFFDF5;-webkit-text-stroke:2.8px #2F3566;paint-order:stroke fill;margin-top:.1in">%s<br>%s</div>'
              '<div style="font:700 14pt/1.3 Andika;color:#2F3566;margin:.16in auto 0;width:6.9in;background:rgba(255,253,245,.9);border-radius:.22in;padding:.07in .2in">%s</div></div>'
-             ) % (C.esc(X['ages'].upper()), X['series_no'], ts, C.esc(t1), C.esc(t2), C.esc(X['cover_subtitle']))
-    back = ('<div style="position:absolute;left:.7in;right:.7in;top:.7in;font-size:13.5pt;line-height:1.42;background:rgba(255,253,245,.93);border-radius:.25in;padding:.26in .34in;border:2.5px solid #E8D5A2">'
+             ) % ('#3A3350' if younger else '#FFF4DC', C.esc(X['ages'].upper()), ts, C.esc(t1), C.esc(t2), C.esc(X['cover_subtitle']))
+    back = ('<div style="position:absolute;left:.7in;right:.7in;top:.7in;font-size:13.5pt;line-height:1.42;background:#FFFDF5;border-radius:.25in;padding:.26in .34in;border:2.5px solid #E8D5A2">'
             '<div style="font:800 20pt Fraunces,serif;margin-bottom:.1in;color:#3A3350">%s</div>%s'
             '<p style="margin:.12in 0 0;font-size:11.5pt;color:#4A4033">%s &middot; Free to read online at %s</p></div>') % (
         C.esc(X['back_heading']), ''.join('<p style="margin:0 0 .1in">%s</p>' % C.esc(x) for x in X['back_cover']), C.esc(X['ages']), C.SITE)

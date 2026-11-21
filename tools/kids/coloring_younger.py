@@ -227,10 +227,10 @@ def s_dig(ink):
 
 
 # 7 -------------------------------------------------------------------------------------------
-@scene('Next stop: the Moon! Pack snacks.', game='Find 4 stars!', alt='Tidbit and Sugarfoot looking out of the windows of a rocket')
+@scene('Next stop: the Moon! Wave to the stars.', game='Find 4 stars!', alt='Tidbit and Sugarfoot looking out of the windows of a rocket')
 def s_rocket(ink):
     frame_begin(ink)
-    p2.sprinkles(ink, 7, 14, (90, 100, 760, 800), avoid=[(200, 100, 650, 800)], kinds=('sparkle', 'dot'), size=(12, 24), minsep=80)   # no five-point stars: those are the four to find
+    p2.sprinkles(ink, 7, 14, (90, 100, 760, 800), avoid=[(200, 100, 650, 800)], kinds=('dot',), size=(12, 24), minsep=80)   # dots only: the four stars are the only stars
     p2.planet(ink, 140, 300, 56)
     p2.planet(ink, 700, 600, 40, ring=False, c='#B79CEB')
     with ink.fig(0, 0) as g:
@@ -297,7 +297,7 @@ def s_bed(ink):
         p2.quilt_patch(g, -320, -70, 320, 90, 8, 3)
     p3.lamp(ink, 110, 810, 1.0)
     hide(ink, 'star', [(130, 330), (730, 380), (230, 920)], 1.0)
-    p2.sprinkles(ink, 9, 4, (100, 130, 760, 300), avoid=[(250, 140, 600, 480)], kinds=('sparkle', 'dot'), size=(12, 18), minsep=80)
+    p2.sprinkles(ink, 9, 4, (100, 130, 760, 300), avoid=[(250, 140, 600, 480)], kinds=('dot',), size=(12, 18), minsep=80)   # dots only: the three stars are the only stars
     frame_end(ink)
 
 
@@ -326,7 +326,7 @@ def s_splash(ink):
     frame_begin(ink)
     pr.puff(ink, 200, 200, 1.1, n=4)
     pr.puff(ink, 620, 170, 1.0, n=4)
-    for (x, y) in ((140, 330), (260, 400), (360, 330), (500, 390), (590, 340), (690, 410), (130, 480), (740, 520), (80, 620), (430, 280)):
+    for (x, y) in ((140, 300), (260, 350), (370, 290), (480, 270), (600, 300), (720, 330)):   # rain in the sky only, never beside her head
         pr.raindrop(ink, x, y, 1.0)
     hills(ink, 800, 860, '#BFE3A0', '#A9D98C')
     pr.puddle(ink, 425, 890, 340, 52)
@@ -402,7 +402,7 @@ def s_tea(ink):
 
 
 # 16 ------------------------------------------------------------------------------------------
-@scene('No grown-ups. Snacks allowed.', alt='Tidbit and Sugarfoot peeking out of a pillow fort')
+@scene('Our fort. Knock three times.', alt='Tidbit and Sugarfoot peeking out of a pillow fort')
 def s_fort(ink):
     frame_begin(ink)
     p2.lights(ink, [(62, 130), (250, 210), (425, 160), (610, 210), (788, 130)], 9)
@@ -498,7 +498,7 @@ def s_sled(ink):
 
 
 # 21 ------------------------------------------------------------------------------------------
-@scene('Taxi! Next stop: snacks.', alt='Sugarfoot riding in a wagon pulled by Tidbit')
+@scene('Beep, beep! Wagon taxi coming through.', alt='Sugarfoot riding in a wagon, with Tidbit walking alongside')
 def s_wagon(ink):
     frame_begin(ink)
     pr.sun(ink, 150, 170, 54)
@@ -520,7 +520,7 @@ def s_rain(ink):
     frame_begin(ink)
     pr.puff(ink, 200, 150, 1.0, n=4)
     pr.puff(ink, 620, 130, 1.0, n=4)
-    for (x, y) in ((120, 280), (230, 340), (360, 260), (500, 310), (640, 270), (730, 360), (160, 450), (700, 500), (90, 620), (380, 420)):
+    for (x, y) in ((95, 215), (125, 175), (300, 115), (520, 100), (720, 170), (755, 215)):   # rain above the umbrella only: none under it, none by a face
         pr.raindrop(ink, x, y, 1.0)
     hills(ink, 800, 860, '#BFE3A0', '#A9D98C')
     pr.puddle(ink, 200, 910, 150, 20)
@@ -640,7 +640,7 @@ def s_sand(ink):
 
 
 # 28 ------------------------------------------------------------------------------------------
-@scene('Abracadabra! Snacks, appear!', alt='Tidbit in a wizard hat and Sugarfoot in a crown')
+@scene('Abracadabra! Make it sparkle!', alt='Tidbit in a wizard hat and Sugarfoot in a crown')
 def s_dress(ink):
     frame_begin(ink)
     p2.sprinkles(ink, 28, 18, (90, 100, 760, 840), avoid=[(110, 220, 730, 900)], kinds=('star', 'sparkle', 'dot', 'heart'), size=(14, 26), minsep=70)
@@ -668,8 +668,6 @@ def s_camp(ink):
     F(ink, lambda i, x, y, s: cast.pup_front(i, 'sugarfoot', x, y, s, 'happy', arms='down'), (62, 460, 380, 910), 'bottom')
     F(ink, lambda i, x, y, s: cast.pup_front(i, 'tidbit', x, y, s, 'happy', arms='down'), (470, 460, 788, 910), 'bottom')
     p3.campfire(ink, 425, 910, 1.4)
-    p3.marshmallow_stick(ink, 330, 780, 370, 740)
-    p3.marshmallow_stick(ink, 520, 780, 480, 740)
     frame_end(ink)
 
 
@@ -720,7 +718,7 @@ def s_goodnight(ink):
     frame_end(ink)
 
 # 32 ------------------------------------------------------------------------------------------
-@scene('Home is where the snacks are.', alt='Tidbit and Sugarfoot in front of their cottage')
+@scene('Home is where your best friend is.', alt='Tidbit and Sugarfoot in front of their cottage')
 def s_home(ink):
     frame_begin(ink)
     pr.sun(ink, 700, 140, 52)

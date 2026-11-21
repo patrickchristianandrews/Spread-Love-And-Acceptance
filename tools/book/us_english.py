@@ -307,7 +307,7 @@ P = [
     (r'\buntil the bell goes\b', 'until the bell rings'), (r'\bby the railings\b', 'by the fence'), (r'\b([Ww])ardrobes?\b', lambda m: m.group(1).replace('W', 'D').replace('w', 'd') + 'resser'),
     (r'\byou cut someone up\b', 'you cut someone off'), (r'\ba lime and soda\b', 'a club soda with lime'), (r'\bgoes home exhausted\b', 'goes home wiped out'), (r'\bon the bypass\b', 'on the highway'),
     (r'\bIdeas, or just a (moan|vent)\?', 'Ideas, or do you just need to vent?'), (r'\ba hospital rounds\b', 'hospital rounds'), (r'\bsoccer annual\b', 'soccer book'), (r'\bPost and home email\b', 'Mail and home email'),
-    (r'\bI can’t do tonight x\.', 'I can’t do tonight.'), (r'\bon the sofa\b', 'on the couch'), (r'\bcould you just pop that in an email\b', 'could you put that in an email'), (r'\bpop (it|that|this) in\b', r'put \1 in'),
+    (r'\bI can’t do tonight x\.', 'I can’t do tonight.'), (r'\bon the couch\b', 'on the couch'), (r'\bcould you just pop that in an email\b', 'could you put that in an email'), (r'\bpop (it|that|this) in\b', r'put \1 in'),
     (r'\bleft on the side\b', 'left on the counter'), (r'\bOn a train out of Sheffield\b', 'On a train out of Philadelphia'), (r'\bdown the carriage\b', 'down the car'), (r'“Hiya!', '“Hi!'),
     (r'\bFetching a member of staff\b', 'Getting a staff member'), (r'\bThen came the fundraiser\b', 'Then came the fundraiser'),
     (r'\bFish fingers\b', 'Fish sticks'), (r'\bcome and find you at half past\.', 'come and find you in half an hour.'), (r'\bat half past\.', 'in half an hour.'),

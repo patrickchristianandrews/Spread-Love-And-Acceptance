@@ -64,8 +64,8 @@ def make_cover(pages):
             '<p style="margin:.1in 0 0;font:700 10.5pt Andika;color:%s">%s</p></div>'
             '<div style="position:absolute;left:.75in;bottom:.5in;font:700 11pt Andika;color:%s">%s</div>') % (
         INK, C.esc(T.BACK_HEAD), ''.join('<p style="margin:0 0 .12in;font:12.5pt/1.5 Lora,serif">%s</p>' % C.esc(x) for x in T.BACK),
-        ''.join('<li>%s</li>' % C.esc(x) for x in T.BACK_BULLETS), TEAL, 'Free to read and print online at ' + T.SITE, INK, T.SITE)
-    spine = '<div class="cv-spine-t" style="font:700 6.5pt Fraunces,serif">Color and Breathe</div>' if pages > 79 else ''
+        ''.join('<li>%s</li>' % C.esc(x) for x in T.BACK_BULLETS), TEAL, 'More free pages to print at ' + T.SITE, INK, T.SITE)
+    spine = '<div class="cv-spine-t" style="font:700 6pt Fraunces,serif">Color and Breathe</div>' if pages > 79 else ''
     html, info = C.cover_doc(T.TITLE, (w, h), pages, 'white', bg, front, back, spine, css)
     C.write(os.path.join(SRC, 'cover-coloring-adult.html'), html)
     meta = json.load(open(os.path.join(OUT, 'adult.json')))

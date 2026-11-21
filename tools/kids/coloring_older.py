@@ -140,6 +140,8 @@ def s_rainwin(ink):
     rnd = random.Random(2)
     for k in range(34):
         x, y = rnd.uniform(150, 700), rnd.uniform(300, 620)
+        if 170 < x < 690 and y > 400:   # no drop anywhere near a pup's head (it would read as a sweat drop)
+            continue
         pr.raindrop(ink, x, y, 0.55)
     ink.clip_end()
     with ink.fig(0, 0, outline=False) as g:
@@ -554,7 +556,6 @@ def s_camp_o(ink):
     p3.campfire(ink, 425, 880, 1.5)
     F(ink, lambda i, x, y, s: cast.pup_front(i, 'sugarfoot', x, y, s, 'calm', lvl=1, arms='down'), (100, 560, 330, 890), 'bottom')
     F(ink, lambda i, x, y, s: cast.pup_front(i, 'tidbit', x, y, s, 'happy', lvl=1, arms='down'), (520, 600, 740, 890), 'bottom')
-    p3.marshmallow_stick(ink, 330, 740, 380, 700)
     tiny(ink, 'heart', [(300, 300), (560, 420), (430, 900)])
     tiny(ink, 'paw', [(180, 520)])
     end(ink)

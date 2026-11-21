@@ -31,7 +31,7 @@ KEYWORDS = [
     'single sided pages blank back no bleed through',
     'botanical flowers leaves nature coloring',
     'cozy cottage lighthouse tea table pictures',
-    'zentangle pattern doodle art for beginners',
+    'tangle pattern doodle art for beginners',
     'colored pencils gel pens fine markers',
     'gift for moms dads grandparents hobby',
 ]
@@ -66,8 +66,8 @@ def description(pages):
         '</ul>'
         '<p><b>Made for your pens</b></p>'
         '<p>Clean, fine lines with plenty of open areas, for colored pencils, gel pens and fine markers. Every design is printed on one side of the page only, with a blank page behind it, so markers will not bleed through to the next one.</p>'
-        '<p>%d pages, 8.5 x 11 inches, black and white interior. This book is a pastime. It is not therapy and not a diagnosis.</p>'
-        '<p>Part of Spread Love &amp; Acceptance, a free website of calm tools, games and books. Everything on it is free to read and use at spreadloveandacceptance.com.</p>'
+        '<p>%d pages, 8.5 × 11 inches, black-and-white interior. This book is a pastime. It is not therapy and not a diagnosis.</p>'
+        '<p>Part of the Spread Love &amp; Acceptance series of calm, kind books.</p>'
     ) % (c['mandala'], c['botanical'], c['scene'], c['pattern'], c['word'], pages)
 
 
@@ -92,6 +92,9 @@ def listing(info):
     a('- **Print only.** There is no Kindle edition and no EPUB: a coloring book is made to be colored on paper. A Kindle-shaped cover picture is in the package for ads and previews only.')
     a('- **The text is American English** and follows the site\'s language rules (no dashes as punctuation, no semicolons, no hotline or emergency wording, no medical advice lines). The how-to page says in one plain sentence that the book is a pastime and not therapy or a diagnosis.')
     a('\n---\n')
+    a('- **KDP\'s AI questions (every title asks them, on the Content screen).** KDP asks whether AI-based tools were used to create the texts, the images and any translations, and you answer each one. "AI-generated" means an AI tool made the actual words or pictures, even if you edited them afterward, and it must be disclosed. "AI-assisted" means you made the work yourself and used AI only to brainstorm, edit or check it, and it does not need disclosing. Only you know how each book was made, so answer truthfully for each title, and choose the editing level that is true. The answer goes to Amazon only; it is not shown on the store page.')
+    a("- **The same pages are free on your website.** KDP can ask a publisher to prove they own the rights to content that is freely available online. If it asks, reply from an email address at your website's domain, point to the copyright page in the book (your name and the year), and to the website itself. Keep that ready before you publish.")
+    a('')
     a('## Launch steps (first-time publisher)\n')
     a('1. Sign in to KDP (kdp.amazon.com) and choose **Create**, then **Paperback**.')
     a('2. **Paperback Details:** language English; title and subtitle as in the table below; series: type **%s** only if you want it linked (no number: this title is a companion, not a numbered book); author **%s**; paste the description (the HTML block); the 7 keywords; the 3 categories; answer the audience questions as shown.' % (T.SERIES, T.AUTHOR))
@@ -155,7 +158,7 @@ def listing(info):
     a('| Publication date | Leave blank |')
     a('| Print options | Ink and paper: **Black and white, white paper**. Trim: **8.5 x 11 in (21.59 x 27.94 cm)**. Bleed: **No bleed**. Cover finish: **Matte** (calmer, less glare). |')
     a('| Page count | **%d** (KDP reads it from the file; even, as KDP prints in sheets) |' % pages)
-    a('| Spine width | **%.4f in** (%.2f mm) = %d pages x 0.002252 in. Spine text is allowed above 79 pages, so the title and the author are printed on the spine (6.5 pt, white on teal). |' % (sp, sp * 25.4, pages))
+    a('| Spine width | **%.4f in** (%.2f mm) = %d pages x 0.002252 in. Spine text is allowed above 79 pages, so the title is printed on the spine (6 pt, white on teal; no author name, as on the front). |' % (sp, sp * 25.4, pages))
     a('| Manuscript file (upload this) | `%s-interior.pdf` (page size 8.5 x 11.0 in, no bleed) |' % PFX)
     a('| Cover file (upload this, "I have a print-ready PDF cover") | `%s-cover-wrap.pdf` (full wrap %.4f x 11.25 in: 0.125 in bleed on all four sides, back, %.4f in spine, front; the 2 x 1.2 in barcode area at the bottom right of the back is left clear) |' % (PFX, W, sp))
     a('| Front cover picture | `%s-cover-front.jpg` |' % PFX)
