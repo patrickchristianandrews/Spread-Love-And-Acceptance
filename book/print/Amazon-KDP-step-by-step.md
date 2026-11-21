@@ -58,7 +58,7 @@ From your Bookshelf click “+ Create,” then “Paperback.”
 | Language | English |
 | Book Title | Know Yourself Kindly |
 | Subtitle | Where your lens came from, who you are now, and who you are becoming |
-| Series | Spread Love & Acceptance, number 1. Use the series button (“Add series details” in the guides; the name was not confirmed), type the series name exactly as here, and give the number. The other books join the same series. |
+| Series | Spread Love & Acceptance, number 1. Use the series button (“Add series details” in the guides; the name was not confirmed), type the series name exactly as here, and give the number if this row shows one (a companion with no number gets none). The other books join the same series. |
 | Edition Number | 1 |
 | Author (Primary Author or Contributor) | First name: Patrick Christian. Last name: Andrews. It must match the title page and be the same on every edition, so Amazon links the paperback and the Kindle edition. |
 | Contributors | None. (How the words and pictures were made is answered on the Content screen, not here.) |
@@ -125,7 +125,7 @@ On your Bookshelf, next to this book’s paperback, use the link to create the K
 | Language | English |
 | Book Title | Know Yourself Kindly |
 | Subtitle | Where your lens came from, who you are now, and who you are becoming |
-| Series | Spread Love & Acceptance, number 1. Use the series button (“Add series details” in the guides; the name was not confirmed), type the series name exactly as here, and give the number. The other books join the same series. |
+| Series | Spread Love & Acceptance, number 1. Use the series button (“Add series details” in the guides; the name was not confirmed), type the series name exactly as here, and give the number if this row shows one (a companion with no number gets none). The other books join the same series. |
 | Edition Number | 1 |
 | Author (Primary Author or Contributor) | First name: Patrick Christian. Last name: Andrews. It must match the title page and be the same on every edition, so Amazon links the paperback and the Kindle edition. |
 | Contributors | None. (How the words and pictures were made is answered on the Content screen, not here.) |
@@ -191,7 +191,7 @@ From your Bookshelf click “+ Create,” then “Paperback.”
 | Language | English |
 | Book Title | Heal and Steady |
 | Subtitle | Stress, anger, worry, loss and repair, and finding your footing again |
-| Series | Spread Love & Acceptance, number 2. Use the series button (“Add series details” in the guides; the name was not confirmed), type the series name exactly as here, and give the number. The other books join the same series. |
+| Series | Spread Love & Acceptance, number 2. Use the series button (“Add series details” in the guides; the name was not confirmed), type the series name exactly as here, and give the number if this row shows one (a companion with no number gets none). The other books join the same series. |
 | Edition Number | 1 |
 | Author (Primary Author or Contributor) | First name: Patrick Christian. Last name: Andrews. It must match the title page and be the same on every edition, so Amazon links the paperback and the Kindle edition. |
 | Contributors | None. (How the words and pictures were made is answered on the Content screen, not here.) |
@@ -258,7 +258,7 @@ On your Bookshelf, next to this book’s paperback, use the link to create the K
 | Language | English |
 | Book Title | Heal and Steady |
 | Subtitle | Stress, anger, worry, loss and repair, and finding your footing again |
-| Series | Spread Love & Acceptance, number 2. Use the series button (“Add series details” in the guides; the name was not confirmed), type the series name exactly as here, and give the number. The other books join the same series. |
+| Series | Spread Love & Acceptance, number 2. Use the series button (“Add series details” in the guides; the name was not confirmed), type the series name exactly as here, and give the number if this row shows one (a companion with no number gets none). The other books join the same series. |
 | Edition Number | 1 |
 | Author (Primary Author or Contributor) | First name: Patrick Christian. Last name: Andrews. It must match the title page and be the same on every edition, so Amazon links the paperback and the Kindle edition. |
 | Contributors | None. (How the words and pictures were made is answered on the Content screen, not here.) |
@@ -324,7 +324,7 @@ From your Bookshelf click “+ Create,” then “Paperback.”
 | Language | English |
 | Book Title | Understanding Each Other |
 | Subtitle | How we hear, see and belong to each other, at home and in every group |
-| Series | Spread Love & Acceptance, number 3. Use the series button (“Add series details” in the guides; the name was not confirmed), type the series name exactly as here, and give the number. The other books join the same series. |
+| Series | Spread Love & Acceptance, number 3. Use the series button (“Add series details” in the guides; the name was not confirmed), type the series name exactly as here, and give the number if this row shows one (a companion with no number gets none). The other books join the same series. |
 | Edition Number | 1 |
 | Author (Primary Author or Contributor) | First name: Patrick Christian. Last name: Andrews. It must match the title page and be the same on every edition, so Amazon links the paperback and the Kindle edition. |
 | Contributors | None. (How the words and pictures were made is answered on the Content screen, not here.) |
@@ -391,7 +391,7 @@ On your Bookshelf, next to this book’s paperback, use the link to create the K
 | Language | English |
 | Book Title | Understanding Each Other |
 | Subtitle | How we hear, see and belong to each other, at home and in every group |
-| Series | Spread Love & Acceptance, number 3. Use the series button (“Add series details” in the guides; the name was not confirmed), type the series name exactly as here, and give the number. The other books join the same series. |
+| Series | Spread Love & Acceptance, number 3. Use the series button (“Add series details” in the guides; the name was not confirmed), type the series name exactly as here, and give the number if this row shows one (a companion with no number gets none). The other books join the same series. |
 | Edition Number | 1 |
 | Author (Primary Author or Contributor) | First name: Patrick Christian. Last name: Andrews. It must match the title page and be the same on every edition, so Amazon links the paperback and the Kindle edition. |
 | Contributors | None. (How the words and pictures were made is answered on the Content screen, not here.) |
@@ -457,7 +457,7 @@ From your Bookshelf click “+ Create,” then “Paperback.”
 | Language | English |
 | Book Title | Share the Load |
 | Subtitle | The work nobody sees, and a fair, kind way to share it |
-| Series | Spread Love & Acceptance, number 4. Use the series button (“Add series details” in the guides; the name was not confirmed), type the series name exactly as here, and give the number. The other books join the same series. |
+| Series | Spread Love & Acceptance, number 4. Use the series button (“Add series details” in the guides; the name was not confirmed), type the series name exactly as here, and give the number if this row shows one (a companion with no number gets none). The other books join the same series. |
 | Edition Number | 1 |
 | Author (Primary Author or Contributor) | First name: Patrick Christian. Last name: Andrews. It must match the title page and be the same on every edition, so Amazon links the paperback and the Kindle edition. |
 | Contributors | None. (How the words and pictures were made is answered on the Content screen, not here.) |
@@ -524,7 +524,7 @@ On your Bookshelf, next to this book’s paperback, use the link to create the K
 | Language | English |
 | Book Title | Share the Load |
 | Subtitle | The work nobody sees, and a fair, kind way to share it |
-| Series | Spread Love & Acceptance, number 4. Use the series button (“Add series details” in the guides; the name was not confirmed), type the series name exactly as here, and give the number. The other books join the same series. |
+| Series | Spread Love & Acceptance, number 4. Use the series button (“Add series details” in the guides; the name was not confirmed), type the series name exactly as here, and give the number if this row shows one (a companion with no number gets none). The other books join the same series. |
 | Edition Number | 1 |
 | Author (Primary Author or Contributor) | First name: Patrick Christian. Last name: Andrews. It must match the title page and be the same on every edition, so Amazon links the paperback and the Kindle edition. |
 | Contributors | None. (How the words and pictures were made is answered on the Content screen, not here.) |
@@ -590,7 +590,7 @@ From your Bookshelf click “+ Create,” then “Paperback.”
 | Language | English |
 | Book Title | The Logic Behind It |
 | Subtitle | A Pocket Guide to Why People React the Way They Do |
-| Series | Spread Love & Acceptance, as a companion with no number: add it as related (unnumbered) content if KDP offers that; otherwise leave the series box empty [OWNER: check the series page in KDP]. Use the series button (“Add series details” in the guides; the name was not confirmed), type the series name exactly as here, and give the number. The other books join the same series. |
+| Series | Spread Love & Acceptance, as a companion with no number: add it as related (unnumbered) content if KDP offers that; otherwise leave the series box empty [OWNER: check the series page in KDP]. Use the series button (“Add series details” in the guides; the name was not confirmed), type the series name exactly as here, and give the number if this row shows one (a companion with no number gets none). The other books join the same series. |
 | Edition Number | 1 |
 | Author (Primary Author or Contributor) | First name: Patrick Christian. Last name: Andrews. It must match the title page and be the same on every edition, so Amazon links the paperback and the Kindle edition. |
 | Contributors | None. (How the words and pictures were made is answered on the Content screen, not here.) |
@@ -657,7 +657,7 @@ On your Bookshelf, next to this book’s paperback, use the link to create the K
 | Language | English |
 | Book Title | The Logic Behind It |
 | Subtitle | A Pocket Guide to Why People React the Way They Do |
-| Series | Spread Love & Acceptance, as a companion with no number: add it as related (unnumbered) content if KDP offers that; otherwise leave the series box empty [OWNER: check the series page in KDP]. Use the series button (“Add series details” in the guides; the name was not confirmed), type the series name exactly as here, and give the number. The other books join the same series. |
+| Series | Spread Love & Acceptance, as a companion with no number: add it as related (unnumbered) content if KDP offers that; otherwise leave the series box empty [OWNER: check the series page in KDP]. Use the series button (“Add series details” in the guides; the name was not confirmed), type the series name exactly as here, and give the number if this row shows one (a companion with no number gets none). The other books join the same series. |
 | Edition Number | 1 |
 | Author (Primary Author or Contributor) | First name: Patrick Christian. Last name: Andrews. It must match the title page and be the same on every edition, so Amazon links the paperback and the Kindle edition. |
 | Contributors | None. (How the words and pictures were made is answered on the Content screen, not here.) |
@@ -721,7 +721,7 @@ From your Bookshelf click “+ Create,” then “Paperback.”
 | Language | English |
 | Book Title | The Workpapers: The Bound Edition |
 | Subtitle | Every form from the series in one book, on big pages, with room to write |
-| Series | Spread Love & Acceptance, as a companion with no number: add it as related (unnumbered) content if KDP offers that; otherwise leave the series box empty [OWNER: check the series page in KDP]. Use the series button (“Add series details” in the guides; the name was not confirmed), type the series name exactly as here, and give the number. The other books join the same series. |
+| Series | Spread Love & Acceptance, as a companion with no number: add it as related (unnumbered) content if KDP offers that; otherwise leave the series box empty [OWNER: check the series page in KDP]. Use the series button (“Add series details” in the guides; the name was not confirmed), type the series name exactly as here, and give the number if this row shows one (a companion with no number gets none). The other books join the same series. |
 | Edition Number | 1 |
 | Author (Primary Author or Contributor) | First name: Patrick Christian. Last name: Andrews. It must match the title page and be the same on every edition, so Amazon links the paperback and the Kindle edition. |
 | Contributors | None. (How the words and pictures were made is answered on the Content screen, not here.) |
