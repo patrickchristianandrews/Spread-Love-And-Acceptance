@@ -1336,6 +1336,13 @@ function redPng(size = 64) {
   assert.ok(await win.locator('#modal #api-dir [data-api-connect]').count() >= 10, 'providers can be connected straight from the directory');
   await win.click('#modal #api-dir [data-dir-task="coding"]');
   await win.waitForSelector('#modal #api-dir h4:has-text("Coding")');
+  // Search box filters the services by name / what they do.
+  await win.click('#modal #api-dir [data-dir-task="all"]');
+  await win.fill('#modal #api-dir #ad-search', 'groq');
+  await win.waitForSelector('#modal #api-dir h4:has-text("Results")');
+  await win.waitForFunction(() => { const t = document.querySelector('#modal #api-dir').innerText; return /Groq/.test(t) && !/Google Gemini/.test(t); }, null, { timeout: 8000 });
+  await win.fill('#modal #api-dir #ad-search', '');
+  await win.waitForSelector('#modal #api-dir .ad-row:has-text("Google Gemini")');
   await win.click('#modal [data-close]');
   await shot(win, '05b-api-free');
   // Web Finder: plain-language dork builder + OSINT knowledge base and tools.
