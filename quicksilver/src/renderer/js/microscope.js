@@ -19,33 +19,59 @@ function microDiff(a, b) {
 }
 const microEsc = (s) => String(s).replace(/ /g, '␣').replace(/\n/g, '⏎');
 const pPct = (p) => (p == null ? '' : `${Math.round(p * 100)}%`);
-function microBar(p, cls = 'b-mint') { if (p == null) return ''; return `<span class="micro-bar"><i class="badge ${cls}" style="width:${Math.max(3, Math.round(p * 100))}%"></i></span>`; }
+// Colour by confidence: red (unsure) → amber → green (sure). hsl's slash-alpha gives a soft fill.
+const microHue = (p) => Math.round(Math.max(0, Math.min(1, p == null ? 0.5 : p)) * 125);
+const microFG = (p) => `hsl(${microHue(p)} 80% 52%)`;
+const microBG = (p) => `hsl(${microHue(p)} 70% 50% / .16)`;
+function microBar(p, strong = true) { if (p == null) return ''; const w = Math.max(3, Math.round(p * 100)); return `<span class="micro-bar"><i style="width:${w}%;background:${strong ? microFG(p) : 'rgba(136,136,136,.5)'}"></i></span>`; }
+const microLegend = '<div class="micro-legend small muted"><span>How sure the model was at each word:</span><span class="micro-scale" title="red = unsure, green = sure"></span><span>unsure → sure</span></div>';
 
-// The per-token detail for a token object: its probability and top alternatives.
+// The generated text, each word tinted and underlined by how confident the model was there.
+function microStreamHTML(tokens) {
+  return `<div class="micro-stream">${tokens.map((t, i) => `<button class="micro-tok ${microState.pick === i ? 'on' : ''}" data-micro-tok="${i}" title="${pPct(t.p)} sure" style="background:${microBG(t.p)};border-bottom:3px solid ${microFG(t.p)}">${esc(microEsc(t.token))}${t.p != null ? `<span class="micro-p">${pPct(t.p)}</span>` : ''}</button>`).join('')}</div>`;
+}
+// A bar chart of confidence across the whole answer: taller + greener = surer. Click a bar to inspect.
+function microConfChart(tokens) {
+  return `<div class="micro-chart" title="Confidence per word — taller and greener = surer; click a bar">${tokens.map((t, i) => `<span class="micro-cbar ${microState.pick === i ? 'on' : ''}" data-micro-tok="${i}" title="Word ${i + 1} “${esc(microEsc(t.token))}” · ${pPct(t.p)}" style="height:${Math.max(4, Math.round((t.p ?? 0) * 100))}%;background:${microFG(t.p)}"></span>`).join('')}</div>`;
+}
+// The handful of least-confident words — the moments the model nearly went another way.
+function microLows(tokens) {
+  const lows = tokens.map((t, i) => ({ i, p: t.p ?? 1, token: t.token })).filter((x) => x.p < 0.85).sort((a, b) => a.p - b.p).slice(0, 6);
+  if (!lows.length) return '';
+  return `<div class="micro-lows"><span class="small muted">⚠️ Where it was least sure (the forks in the road):</span> ${lows.map((x) => `<button class="micro-lowchip" data-micro-tok="${x.i}" style="border-color:${microFG(x.p)}">“${esc(microEsc(x.token))}” <b>${pPct(x.p)}</b></button>`).join('')}</div>`;
+}
+// The per-token detail: what the model wrote and the runners-up it weighed, as bars.
 function microDetail(tok) {
   if (!tok) return '';
-  return `<div class="micro-detail"><div class="small"><b>“${esc(microEsc(tok.token))}”</b> ${tok.p != null ? `· the model gave this ${pPct(tok.p)}` : ''}</div>
-    ${(tok.top || []).length ? `<div class="stack-v" style="gap:3px;margin-top:6px">${tok.top.map((c) => `<div class="row small" style="gap:8px;align-items:center"><code style="min-width:90px">${esc(microEsc(c.token))}</code>${microBar(c.p, c.token === tok.token ? 'b-mint' : 'b-lav')}<span class="muted" style="min-width:42px;text-align:right">${pPct(c.p)}</span></div>`).join('')}</div>` : '<div class="small muted">No alternatives reported.</div>'}</div>`;
+  return `<div class="micro-detail"><div class="small" style="margin-bottom:6px">It wrote <b style="color:${microFG(tok.p)}">“${esc(microEsc(tok.token))}”</b>${tok.p != null ? ` and was <b>${pPct(tok.p)}</b> sure` : ''}. The words it weighed:</div>
+    ${(tok.top || []).length ? `<div class="micro-alts">${tok.top.map((c) => `<div class="micro-alt ${c.token === tok.token ? 'chosen' : ''}"><code>${esc(microEsc(c.token))}</code>${microBar(c.p, c.token === tok.token)}<span class="micro-alt-p">${pPct(c.p)}</span></div>`).join('')}</div>` : '<div class="small muted">No alternatives reported.</div>'}</div>`;
 }
 
 function microCompareHTML(res) {
   const a = res.a, b = res.b;
   if (!b) {
-    // Single-model: observe inside.
-    return `<div class="micro-stream">${a.tokens.map((t, i) => `<button class="micro-tok ${microState.pick === i ? 'on' : ''}" data-micro-tok="${i}" title="${pPct(t.p)}">${esc(microEsc(t.token))}${t.p != null ? `<span class="micro-p">${pPct(t.p)}</span>` : ''}</button>`).join('')}</div>
-      ${microState.pick != null && a.tokens[microState.pick] ? microDetail(a.tokens[microState.pick]) : '<p class="small muted">Click a token to see the alternatives the model weighed.</p>'}`;
+    const sel = microState.pick;
+    return `${microLegend}
+      ${microStreamHTML(a.tokens)}
+      <h4 class="small micro-h">Confidence as it wrote <span class="muted">· taller &amp; greener = surer · click a bar</span></h4>
+      ${microConfChart(a.tokens)}
+      ${microLows(a.tokens)}
+      <div class="micro-detail-wrap">${sel != null && a.tokens[sel] ? microDetail(a.tokens[sel]) : '<p class="small muted">Click a word above, a bar in the chart, or a “least sure” chip to see the alternatives the model weighed at that step.</p>'}</div>`;
   }
   const d = microDiff(a.tokens, b.tokens);
   const n = Math.max(a.tokens.length, b.tokens.length);
-  const cell = (tok, i, side, diverge) => `<button class="micro-tok ${microState.pick === i ? 'on' : ''} ${i < d.same ? 'same' : i === d.divergeAt ? 'diverge' : 'after'}" data-micro-tok="${i}" data-micro-side="${side}" title="${tok ? pPct(tok.p) : ''}">${tok ? esc(microEsc(tok.token)) : '—'}</button>`;
+  const agreePct = Math.round((d.same / Math.max(1, n)) * 100);
+  const cell = (tok, i, side) => `<button class="micro-tok ${microState.pick === i ? 'on' : ''} ${i < d.same ? 'same' : i === d.divergeAt ? 'diverge' : 'after'}" data-micro-tok="${i}" data-micro-side="${side}" title="${tok ? `${pPct(tok.p)} sure` : ''}" style="${tok ? `background:${i === d.divergeAt ? 'rgba(224,65,106,.18)' : microBG(tok.p)};border-bottom:3px solid ${i === d.divergeAt ? '#e0416a' : microFG(tok.p)}` : ''}">${tok ? esc(microEsc(tok.token)) : '—'}</button>`;
   const rows = [];
   for (let i = 0; i < n; i++) rows.push(`<tr class="${i === d.divergeAt ? 'micro-diverge-row' : ''}"><td class="small muted">${i + 1}</td><td>${cell(a.tokens[i], i, 'a')}</td><td>${cell(b.tokens[i], i, 'b')}</td></tr>`);
-  const summary = d.identical ? `✅ Identical — both models produced the same ${d.aLen} tokens.`
-    : `🔀 Agree for the first <b>${d.same}</b> token${d.same === 1 ? '' : 's'}, then diverge at token <b>${d.divergeAt + 1}</b>: <b>${esc(a.model)}</b> chose “${esc(microEsc(a.tokens[d.divergeAt]?.token ?? ''))}”, <b>${esc(b.model)}</b> chose “${esc(microEsc(b.tokens[d.divergeAt]?.token ?? ''))}”.`;
+  const summary = d.identical ? `✅ Identical — both models produced the same ${d.aLen} words, letter for letter.`
+    : `🔀 They agree for the first <b>${d.same}</b> word${d.same === 1 ? '' : 's'}, then split at word <b>${d.divergeAt + 1}</b>.`;
   const sel = microState.pick;
-  return `<div class="notice ${d.identical ? 'info' : ''}" style="margin:0 0 12px">${summary}</div>
+  return `<div class="notice ${d.identical ? 'info' : ''}" style="margin:0 0 10px">${summary}</div>
+    ${!d.identical ? `<div class="micro-agree" title="How far the two models agreed before they split"><div class="micro-agree-fill" style="width:${agreePct}%"></div><span class="micro-agree-label">agree for ${agreePct}%, then split</span></div>
+    <div class="micro-split">${['a', 'b'].map((s) => { const m = s === 'a' ? a : b; const tk = m.tokens[d.divergeAt]; return `<div class="micro-split-side"><span class="micro-split-tag ${s}">${s.toUpperCase()}</span> <b>${esc(m.model)}</b> chose <b style="color:${microFG(tk?.p)}">“${esc(microEsc(tk?.token ?? ''))}”</b> <span class="muted">(${pPct(tk?.p)})</span></div>`; }).join('')}</div>` : ''}
     <div class="micro-grid"><table class="list micro-table"><thead><tr><th>#</th><th>${esc(a.model)} (A)</th><th>${esc(b.model)} (B)</th></tr></thead><tbody>${rows.join('')}</tbody></table>
-    <div class="micro-side">${sel != null ? `<div class="grid2" style="gap:10px"><div><div class="small muted" style="margin-bottom:4px">A · ${esc(a.model)}</div>${microDetail(a.tokens[sel])}</div><div><div class="small muted" style="margin-bottom:4px">B · ${esc(b.model)}</div>${microDetail(b.tokens[sel])}</div></div>` : '<p class="small muted">Click a token row to compare what each model weighed at that step.</p>'}</div></div>`;
+    <div class="micro-side">${sel != null ? `<div class="stack-v" style="gap:10px"><div><div class="small muted" style="margin-bottom:4px">A · ${esc(a.model)}</div>${microDetail(a.tokens[sel])}</div><div><div class="small muted" style="margin-bottom:4px">B · ${esc(b.model)}</div>${microDetail(b.tokens[sel])}</div></div>` : '<p class="small muted">Click a token row to compare what each model weighed at that step.</p>'}</div></div>`;
 }
 
 function microOptions(exclude) {

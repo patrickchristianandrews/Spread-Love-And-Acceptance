@@ -16,16 +16,34 @@ async function loadSpaces() {
   if (S.route.view === 'spaces') render();
 }
 
+// A Space is worth offering a Run button for only if it's a Gradio app that is actually up.
+const STATE_BADGE = {
+  running: ['● running', 'b-mint', 'This Space is awake and should run right now'],
+  sleeping: ['💤 asleep', 'b-peach', 'Asleep to save GPU — the first run wakes it, which takes ~30–60s'],
+  starting: ['⏳ starting', 'b-sky', 'Building or starting up — give it a minute'],
+  error: ['⚠ not working', '', 'This Space is in an error state on Hugging Face right now'],
+};
 function spaceCard(s) {
-  return `<div class="card space-card" style="padding:12px">
+  const badge = STATE_BADGE[s.state];
+  const canRun = s.runnable && s.state !== 'error';
+  return `<div class="card space-card ${s.state === 'error' ? 'space-dead' : ''}" style="padding:12px">
     <div class="row" style="align-items:flex-start;gap:8px">
       <span style="font-size:22px">${esc(s.emoji || '🤗')}</span>
       <div class="grow"><b>${esc(s.title || s.id)}</b><div class="small muted">${esc(s.id)}</div></div>
       <span class="badge b-lav" title="❤ likes on Hugging Face">❤ ${s.likes}</span></div>
-    <div class="row" style="gap:6px;margin-top:10px;align-items:center">
-      ${s.runnable ? `<button class="btn small primary" data-space-run="${esc(s.id)}">▶ Run here</button>` : `<span class="badge b-peach" title="Only Gradio Spaces can be driven automatically for now">${esc(s.sdk || 'other')} — can’t run here yet</span>`}
+    <div class="row" style="gap:6px;margin-top:8px;align-items:center;flex-wrap:wrap">
+      ${badge ? `<span class="badge ${badge[1]}" title="${esc(badge[2])}" ${!badge[1] ? 'style="background:rgba(224,65,106,.15);color:#e0416a"' : ''}>${badge[0]}</span>` : ''}
+      ${s.hardware && s.state === 'running' ? `<span class="small muted" title="The GPU/CPU this Space is running on">${esc(s.hardware)}</span>` : ''}</div>
+    <div class="row" style="gap:6px;margin-top:8px;align-items:center">
+      ${canRun ? `<button class="btn small primary" data-space-run="${esc(s.id)}">▶ ${s.state === 'sleeping' || s.state === 'starting' ? 'Wake &amp; run' : 'Run here'}</button>` : s.runnable ? '<span class="badge b-peach" title="This Space is in an error state on Hugging Face; open it there to check">can’t run right now</span>' : `<span class="badge b-peach" title="Only Gradio Spaces can be driven automatically">${esc(s.sdk || 'other')} — can’t run here</span>`}
       <a class="btn small ghost" href="https://huggingface.co/spaces/${esc(s.id)}">Open on HF ↗</a></div>
   </div>`;
+}
+// Put the Spaces that will actually work first: runnable + running, then runnable, then the rest;
+// drop ones Hugging Face reports as in an error state.
+function spacesRanked(list) {
+  const score = (s) => (s.runnable && s.state === 'running' ? 0 : s.runnable && (s.state === 'sleeping' || s.state === 'starting' || !s.state) ? 1 : s.runnable ? 2 : 3);
+  return [...list].filter((s) => s.state !== 'error').sort((a, b) => score(a) - score(b));
 }
 
 views.spaces = {
@@ -40,7 +58,7 @@ views.spaces = {
         <button class="btn primary" id="sp-search">Search</button></div>
       ${spacesState.error ? `<div class="notice" style="border-color:#e0416a;background:rgba(224,65,106,.1)"><b>⚠</b> ${esc(spacesState.error)}</div>` : ''}
       ${spacesState.loading ? '<p class="small muted">Loading Spaces…</p>' : ''}
-      ${list && !spacesState.loading ? (list.length ? `<div class="cards" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px">${list.map(spaceCard).join('')}</div>` : '<p class="small muted">No Spaces matched. Try another word.</p>') : ''}
+      ${(() => { const ranked = list && !spacesState.loading ? spacesRanked(list) : null; if (!ranked) return ''; if (!ranked.length) return '<p class="small muted">No Spaces matched (any that are currently in an error state are hidden). Try another word.</p>'; const live = ranked.filter((s) => s.runnable && s.state === 'running').length; return `<p class="small muted" style="margin:0 0 8px">${live ? `✅ ${live} shown are awake and ready to run now. ` : ''}Spaces marked 💤 asleep wake on the first run (~30–60s). Only Gradio Spaces can be driven here.</p><div class="cards" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px">${ranked.map(spaceCard).join('')}</div>`; })()}
     </div>`;
   },
   bind() {

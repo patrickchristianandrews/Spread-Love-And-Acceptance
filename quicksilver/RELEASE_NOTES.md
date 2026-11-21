@@ -17,6 +17,8 @@ Updating from 2.18: the Liquid Edition now includes its Closer and its picture a
 - **Search the API directory.** The "every service, by task" directory now has a search box — filter all 63 cloud services by name or by what they're good at ("groq", "uncensored", "cheap coding"), on its own or combined with a task.
 - **Clearer Space errors.** When a Hugging Face Space fails without giving a reason (it used to show "error: null"), the run panel now explains the likely cause — used-up free GPU quota, inputs the Space didn't expect, or a ZeroGPU timeout — and what to try (wait a minute, add a free token, or duplicate the Space).
 - **Fixed: Benchmark a model crashed on Run.** Pressing Run benchmark showed "Cannot destructure property 'target'…" and did nothing; the benchmark now runs.
+- **The Microscope is now graphical.** Looking inside a model shows a confidence heatmap over the words (red→green by how sure it was), a confidence bar-chart across the whole answer you can click into, "least sure moments" chips for the forks in the road, and — when comparing two models — an agreement meter and a colour-coded view of exactly what each one chose where they split.
+- **Spaces show which ones actually work.** Each Hugging Face Space now shows its live status — ● running (works now), 💤 asleep (wakes on the first run), ⏳ starting — and the ones you can run are listed first, with any that Hugging Face reports as errored hidden. A sleeping Space's button says "Wake & run" so the wait is no surprise.
 
 ### New in 2.23.3
 
