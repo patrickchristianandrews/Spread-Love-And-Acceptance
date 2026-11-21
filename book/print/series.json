@@ -12,7 +12,7 @@
    ],
    "pages": 152,
    "blank_pages": 4,
-   "bytes": 2168253,
+   "bytes": 2168470,
    "pdf": "book-1-know-yourself-kindly.pdf",
    "cover_pdf": "cover-book-1-know-yourself-kindly.pdf",
    "front_jpg": "cover-book-1-know-yourself-kindly-front.jpg",
@@ -143,7 +143,7 @@
    ],
    "pages": 148,
    "blank_pages": 6,
-   "bytes": 1991545,
+   "bytes": 1991732,
    "pdf": "book-3-understanding-each-other.pdf",
    "cover_pdf": "cover-book-3-understanding-each-other.pdf",
    "front_jpg": "cover-book-3-understanding-each-other-front.jpg",
@@ -497,7 +497,7 @@
    }
   }
  },
- "generated": "2026-11-19",
+ "generated": "2026-11-21",
  "paper_in": 0.002252,
  "paper_note": "KDP standard color (white paper): 0.002252 in a page (kdp.amazon.com/help/topic/G201953020)",
  "cost_notes": {

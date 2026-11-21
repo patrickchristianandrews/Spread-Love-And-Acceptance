@@ -372,8 +372,8 @@
     var f = M.poses.filter(function (x) { return x.dog === dog && x.ang === ang; })[0];
     return { img: S.poses, f: f, fh: M.fh };
   }
-  // fluid motion: the walk has only four painted frames a stride, so each frame melts into the next as the stride
-  // turns; and when a pup changes pose (sitting down, getting up to run) the old drawing fades out over the new one
+  // the walk has four painted frames a stride, shown one at a time (no blending: two drawings at once read as a double
+  // face); a pose change (sitting down, getting up to run) is a clean cut to the new drawing
   function walkNext(dog, ph) {
     var M = S.meta, a = (((ph % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2)) / (Math.PI / 2), q = Math.floor(a) % 4, fr = a - Math.floor(a);
     var w = Math.max(0, Math.min(1, (fr - 0.35) / 0.65)); w = w * w * (3 - 2 * w);
@@ -410,8 +410,7 @@
     if (P.quiet || B.shot !== P.shot || clk < B.T || clk - B.T > 0.3) { B.kind = kind; B.from = null; }
     else if (kind !== B.kind) { B.from = { fr: B.fr, at: clk }; B.kind = kind; }
     if (!P.quiet) { B.fr = fr; B.T = clk; B.shot = P.shot; }
-    if (fr.img === S.walk) { var nx = walkNext(dog, ph); if (nx.w > 0.01) { ctx.save(); ctx.globalAlpha *= 0.92 * nx.w; blit(ctx, nx.fr); ctx.restore(); } }
-    if (B.from && B.from.fr && clk - B.from.at < 0.2) { var fa = 1 - (clk - B.from.at) / 0.2; ctx.save(); ctx.globalAlpha *= 0.95 * fa * fa * (3 - 2 * fa); blit(ctx, B.from.fr); ctx.restore(); }
+    // no blending between walk frames or poses: two drawings on top of each other read as a double face and extra legs
     if (still && blink && S.shut) ctx.drawImage(S.shut, sx, sy0, fw, fr.fh, -p.cx, -p.fy, fw, fr.fh);   // eyes closed (poses-shut.webp)
     if (o && o.talk > 0 && (f.ang === 1 || f.ang === 2 || fr.img === S.walk)) { ctx.save(); ctx.translate(f.hx - p.cx, f.hy - p.fy); jaw(ctx, fr, dog, fr.img === S.walk ? 'w' : (pose === 'lie' || pose === 'bow' ? 'a2' : 'a1'), Math.min(1, (o.talk - 0.02) / 0.98)); ctx.restore(); }
     // the outfit, at the head of this drawing
