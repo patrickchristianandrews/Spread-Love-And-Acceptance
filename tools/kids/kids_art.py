@@ -319,8 +319,6 @@ def _pup_eye(P, x, y, r, expr, look=(0, 0), col='#3A2418'):
         ly = max(ly, 0.35)
     P.circ(x + lx, y + ly, rr, col, kind='dark')
     P.circ(x + lx + rr * 0.38, y + ly - rr * 0.38, rr * 0.38, '#fff', kind='detail' if P.mode == 'line' else 'flat')
-    if expr == 'sad':
-        P.path('M%s %s q-1.2 2.4 0 3.4 q1.2 -1 0 -3.4Z' % (f(x + 2.2), f(y + 2.4)), '#9ED3FF', kind='flat' if P.mode == 'color' else 'shape')
 
 
 def _pup_mouth(P, style, x, y, who):
@@ -412,8 +410,6 @@ def _pup_side_organic(P, who, x, y, s, pose, expr, ph, flip, tilt, carry, mouth_
         dy = 0.4 if expr == 'sad' else 0
         P.circ(4.2, -1.6 + dy, 2.1 * (1.2 if expr == 'surprised' else 1), '#3A2418', kind='dark')
         P.circ(4.9, -2.4 + dy, 0.75, '#fff', kind='detail' if P.mode == 'line' else 'flat')
-        if expr == 'sad':
-            P.path('M5.6 1.6q-1.1 2.2 0 3.1q1.1 -0.9 0 -3.1Z', '#9ED3FF', kind='flat' if P.mode == 'color' else 'shape')
     P.ell(7, 4.5, 2.2, 1.2, '#F7A5B9', kind='detail', op=0.5)
     P.close()
     if pose == 'sleep':
@@ -590,8 +586,6 @@ def pup_side(P, who, x, y, s, pose='stand', expr='happy', ph=0.0, wag=0.0, flip=
         dy = 0.4 if expr == 'sad' else 0
         P.circ(4.2, -1.6 + dy, 2.1 * (1.2 if expr == 'surprised' else 1), '#3A2418', kind='dark')
         P.circ(4.9, -2.4 + dy, 0.75, '#fff', kind='detail' if P.mode == 'line' else 'flat')
-        if expr == 'sad':
-            P.path('M5.6 1.6q-1.1 2.2 0 3.1q1.1 -0.9 0 -3.1Z', '#9ED3FF', kind='flat' if P.mode == 'color' else 'shape')
     P.ell(7, 4.5, 2.2, 1.2, '#F7A5B9', kind='detail', op=0.5)
     if L['ear'] == 'drop':
         P.open('translate(-3 -6.5) rotate(%s)' % f(math.degrees(0.35)))

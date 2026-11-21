@@ -97,12 +97,6 @@ def wagon(P, x, y, s=1.0):
     P.close()
 
 
-def sweat(P, x, y, s=1.0):
-    P.at(x, y, s)
-    P.path('M0 -7 Q5 0 0 5 Q-5 0 0 -7Z', '#9ED3FF')
-    P.close()
-
-
 def label(P, x, y, text, size=26, anchor='middle', col='#3A3350', weight=700, bg=True, family='Andika'):
     if bg:
         wd = max(70, len(text) * size * 0.56 + 26)

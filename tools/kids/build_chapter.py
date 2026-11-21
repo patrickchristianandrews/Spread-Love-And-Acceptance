@@ -522,8 +522,8 @@ def make_cover(pages):
             '<p style="margin:.12in 0 0;font-size:9.5pt;color:#FFF4DC">%s &middot; Free to read online at %s</p></div>') % (
         ''.join('<p style="margin:0 0 .09in">%s</p>' % C.esc(x) for x in BOOK['back_cover']), C.esc(BOOK['ages']), C.SITE)
     spine = ''
-    if sp >= 0.25:
-        spine = '<p class="cv-spine-t">Turn Down the Static</p>'
+    if pages > 79:   # KDP allows spine text above 79 pages; small enough to keep 1/16 in clear on each side of a thin spine
+        spine = '<p class="cv-spine-t" style="font-size:%spt">Turn Down the Static</p>' % ('6.5' if sp < 0.25 else '9')
     html, info = C.cover_doc(BOOK['title'], TRIM, pages, 'white', bg, front, back, spine)
     C.write(os.path.join(C.SRC, 'cover-chapter-book.html'), html)
     meta = C.load_json(os.path.join(C.OUT, 'kids.json'), {}) or {}

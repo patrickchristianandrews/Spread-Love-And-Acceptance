@@ -84,6 +84,7 @@ def make_cover(kind, pages):
         gid = gradient(P, [(0, '#5A4690'), (0.5, '#B79CE0'), (1, '#FFE0C0')])
     P.raw('<rect width="%s" height="%s" fill="url(#%s)"/>' % (wu, hu, gid))
     fr = (fx + 62, 330, 726, 760)   # not used as a frame; art area on the front
+    cast.WEAR.update(sugarfoot='bow', tidbit='necklace')   # covers: nothing over an eye, no brim reaching across the other pup
     if younger:
         # the front: a big rainbow, clouds, hills, the two pups close together, hearts and crayons
         pr.rainbow(P, fx + 425, 800, 360, 5, 40, c=('#F2877E', '#F7D56A', '#8FCB7C', '#8FCBF0', '#B79CEB'))
@@ -118,6 +119,7 @@ def make_cover(kind, pages):
             pr.sparkle(P, bx + x, y, r)
         fit(P, lambda i, x, y, s: cast.pup_peek(i, 'sugarfoot', x, y, s, 'calm', lvl=0), (bx + 60, 940, bx + 260, 1080), 'bottom')
         fit(P, lambda i, x, y, s: cast.pup_peek(i, 'tidbit', x, y, s, 'happy', lvl=0), (bx + 280, 940, bx + 480, 1080), 'bottom')
+    cast.WEAR.clear()
     bg = C.svg_wrap(P, wu, hu, 'bg')
     t1, t2 = X['title_lines']
     ts = 46 if younger else 40

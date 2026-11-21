@@ -1474,6 +1474,22 @@ def font_faces():
     return '\n'.join(re.findall(r'@font-face\s*\{[^}]*\}', css))
 
 
+def back_hook(blurb):
+    """The back cover opens with one short line in bold, like a shelf book: the blurb's first sentence (or the part before
+    its first colon), when that is short. The rest of the blurb follows in the body type."""
+    m = re.match(r'(.+?[.?!])\s+(.*)$', blurb, re.S)
+    if not m:
+        return '', blurb
+    first, rest = m.group(1), m.group(2)
+    if len(first) > 90 and ':' in first:
+        head, tail = first.split(':', 1)
+        tail = tail.strip()
+        return head.strip() + '.', tail[:1].upper() + tail[1:] + ' ' + rest
+    if len(first) > 90:
+        return '', blurb
+    return first, rest
+
+
 def cover_html(item, trim, pages_hint=0, workbook=False, pocket=False, boxset=False, bw=False):
     """A full-wrap cover: bleed, back, spine, front, bleed. build_pdfs.js sets --spine (inches) from the final page
     count, the @page size, and turns the spine text on above 79 pages. logicbook14: pocket=True is the 5 x 8 in pocket
@@ -1486,6 +1502,7 @@ def cover_html(item, trim, pages_hint=0, workbook=False, pocket=False, boxset=Fa
     others = ''.join('<li style="--bc:%s"><span>%s</span> %s</li>' % (b['color'], label(b), esc(b['title'])) for b in series_items())
     spine_t = '%s · %s' % (SERIES_TITLE, ('Book %d: %s' % (item['n'], item['title'])) if not (workbook or pocket or boxset) else item['title'])
     title = item.get('short_title') or item['title']
+    hook, rest = (item['hook'], item.get('blurb', '')) if item.get('hook') else back_hook(item.get('blurb', ''))
     free_url, free_t, free_l = ('%s%s' % (SITE, LOGIC_PAGE), 'Every situation, free online', 'More than seventy, at spreadloveandacceptance.<wbr>com/<wbr>the-logic-behind-it') if pocket else (
         go_url('/book/'), 'Free to read online', 'Every chapter, plus its expanded version, at spreadloveandacceptance.com/go/read')
     extra_css = ('.cv-text { top: .92in; left: .64in; right: .38in; } .cv-sub { font-size: 10.6pt; max-width: 3.9in; } .cv-art { left: .64in; right: .38in; } '
@@ -1522,7 +1539,8 @@ html, body { margin: 0; padding: 0; background: #fff; }
 .cv-by { font-family: "Lora", Georgia, serif; font-style: italic; font-weight: 500; font-size: 12pt; letter-spacing: .02em; margin: 0.16in 0 0; color: var(--ink); }
 .cv-back-in { position: absolute; left: 0.5in; right: 0.55in; top: 0.6in; bottom: 0.45in; }
 .cv-bk { font-family: "IBM Plex Mono", monospace; font-size: 7.4pt; letter-spacing: .2em; text-transform: uppercase; margin: 0 0 0.2in; opacity: .92; }
-.cv-blurb { font-family: "Fraunces", serif; font-size: %(bsize)spt; line-height: 1.42; margin: 0 0 0.18in; }
+.cv-hook { font-family: "Fraunces", serif; font-weight: 600; font-size: %(hsize)spt; line-height: 1.16; margin: 0 0 0.16in; text-wrap: balance; }
+.cv-blurb { font-family: "Fraunces", serif; font-size: %(bsize)spt; line-height: 1.5; margin: 0 0 0.2in; }
 .cv-q { font-style: italic; font-size: 10.5pt; margin: 0 0 0.2in; }
 .cv-series { list-style: none; padding: 0; margin: 0; font-size: 8.6pt; line-height: 1.55; max-width: 3.2in; }
 .cv-series li span { display: inline-block; min-width: 0.78in; font-family: "IBM Plex Mono", monospace; font-size: 7pt; letter-spacing: .06em; opacity: .9; }
@@ -1541,7 +1559,7 @@ html, body { margin: 0; padding: 0; background: #fff; }
 <body><div class="cv" id="cover">
 <div class="cv-back"><div class="cv-back-trim">%(rules_b)s<div class="cv-back-in">
 <p class="cv-bk">%(kicker)s</p>
-<p class="cv-blurb">%(blurb)s</p>
+%(hook)s<p class="cv-blurb">%(blurb)s</p>
 <p class="cv-q">“See it fairly. Say it kindly.”</p>
 <ul class="cv-series">%(others)s</ul>
 <div class="cv-free"><span class="pe-qr" data-qr="%(free_url)s"></span><span><strong>%(free_t)s</strong>%(free_l)s</span></div>
@@ -1558,12 +1576,13 @@ html, body { margin: 0; padding: 0; background: #fff; }
 </body></html>
 ''' % {
         'title': esc(title), 'fonts': font_faces(), 'gfonts': google_fonts(), 'acc': item['color'], 'tint': item['tint'], 'w': w, 'h': h,
-        'tsize': 54 if workbook else (36 if pocket else 44), 'bsize': 13.5 if workbook else (9.4 if pocket else 11.6),
+        'tsize': 54 if workbook else (36 if pocket else 44), 'bsize': 13.5 if workbook else (9.4 if pocket else 12.2),
         'arttop': 4.1 if workbook else (3.0 if pocket else 3.35), 'arth': 4.6 if workbook else (3.0 if pocket else 3.7),
         'circ': 4.4 if workbook else (2.8 if pocket else 3.5), 'artw': 5.2 if workbook else (3.25 if pocket else 4.1),
         'free_url': free_url, 'free_t': free_t, 'free_l': free_l, 'extra_css': extra_css,
         'rules_b': '', 'rules_f': book_art.ledger_rules(round(w * 25.4), round(h * 25.4), '#E8DDBE', item['color'], top=22, step=7.5, left=12).replace('class="pe-rules"', 'class="cv-rules"'),
-        'kicker': esc(kicker), 'blurb': esc(item.get('blurb', '')), 'others': others, 'site': SITE, 'author': B.AUTHOR,
+        'kicker': esc(kicker), 'hook': ('<p class="cv-hook">%s</p>' % esc(hook)) if hook else '', 'blurb': esc(rest), 'others': others,
+        'hsize': 15 if pocket else (22 if workbook else 19), 'site': SITE, 'author': B.AUTHOR,
         'spine_t': esc(spine_t), 'sub': esc(item['sub']), 'art': series_site.art(item['art']), 'line': esc(item['line']), 'qrscript': QR_SCRIPT,
     }
 
