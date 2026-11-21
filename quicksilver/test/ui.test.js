@@ -288,7 +288,7 @@ function redPng(size = 64) {
   await win.click('#inf-suggest [data-sug-task="coding"]');
   await win.waitForFunction(() => /Now for Coding/.test(document.querySelector('#inf-suggest .sug-now')?.textContent || ''));
   assert.match(await win.locator('#inf-suggest').innerText(), /Suggested additions[\s\S]*Best model to join[\s\S]*Best API to add/);
-  await win.locator('#inf-suggest').scrollIntoViewIfNeeded();
+  await win.evaluate((__s) => document.querySelector(__s)?.scrollIntoView({ block: 'center' }), '#inf-suggest');
   await shot(win, '13a-infuse-suggestions');
   await win.click('#inf-go');
   await win.waitForFunction(() => document.querySelector('#pick-model option:checked')?.textContent.includes('Analyst Supreme'));
@@ -835,7 +835,7 @@ function redPng(size = 64) {
   await win.waitForSelector('#vpn-box .pv-plan:has-text("Your Proton account")');
   assert.equal((await win.locator('#net-toggle').innerText()).trim(), 'Online', 'the switch just says Online or Offline');
   assert.match(await win.locator('#net-toggle').getAttribute('title'), /waiting for a VPN/);
-  await win.locator('#vpn-box').scrollIntoViewIfNeeded();
+  await win.evaluate((__s) => document.querySelector(__s)?.scrollIntoView({ block: 'center' }), '#vpn-box');
   await shot(win, '15-privacy-vpn');
   const vpnLabel = await win.evaluate(() => sessionPrivacy('local:qwen3-8b').label);
   assert.match(vpnLabel, /Private session · VPN paused/);
@@ -1014,7 +1014,7 @@ function redPng(size = 64) {
   assert.match(await win.locator('#cc-list').innerText(), /10\/10/);
   await win.locator('#cc-list [data-cc-pick]').first().click();
   await win.waitForSelector('#cc-out .ten-stars');
-  await win.locator('#cloud-calc').scrollIntoViewIfNeeded();
+  await win.evaluate((__s) => document.querySelector(__s)?.scrollIntoView({ block: 'center' }), '#cloud-calc');
   await shot(win, '17d3-price-list');
   // API rankings: best use, free credits and cost, sortable and filtered by use.
   await win.waitForSelector('#api-rank .ar-r');
@@ -1026,13 +1026,13 @@ function redPng(size = 64) {
   assert.equal(await win.locator('#api-rank .ar-r:has-text("Groq")').count(), 0);
   await win.click('[data-rank-use="all"]');
   await win.click('[data-rank-sort="value"]');
-  await win.locator('#api-rank').scrollIntoViewIfNeeded();
+  await win.evaluate((__s) => document.querySelector(__s)?.scrollIntoView({ block: 'center' }), '#api-rank');
   await shot(win, '17d0-api-rankings');
   // Free vs paid: every job, what's possible at no cost and what paying adds, rated out of 10.
   await win.waitForSelector('#free-paid .fp-r');
   assert.ok(await win.locator('#free-paid .fp-r').count() >= 10);
   assert.match(await win.locator('#free-paid').innerText(), /Free[\s\S]*Paid[\s\S]*Music \(full songs\)[\s\S]*Paying adds/);
-  await win.locator("#free-paid").scrollIntoViewIfNeeded();
+  await win.evaluate((__s) => document.querySelector(__s)?.scrollIntoView({ block: 'center' }), '#free-paid');
   await shot(win, "17d1-free-vs-paid");
   // Music in the calculator and its rated price list.
   await win.click('[data-cc-kind="music"]');
@@ -1040,7 +1040,7 @@ function redPng(size = 64) {
   assert.match(await win.locator('#cc-list').innerText(), /ElevenLabs Music[\s\S]*Built-in synth/);
   await win.click('[data-cc-kind="chat"]');
   assert.ok(await win.locator('.og-sec h3:has-text("Developer (dev) plans")').count() === 1);
-  await win.locator('#cloud-calc').scrollIntoViewIfNeeded();
+  await win.evaluate((__s) => document.querySelector(__s)?.scrollIntoView({ block: 'center' }), '#cloud-calc');
   await shot(win, '17d2-cloud-calculator');
   await shot(win, '17d-guide-apis');
   await win.click('[data-guide-tab="tips"]');
@@ -1412,7 +1412,7 @@ function redPng(size = 64) {
   await win.evaluate(() => { modelsTab = 'text'; go({ view: 'models' }); });
   await win.waitForSelector('.addon:has-text("Memory"):has-text("like Mem0")');
   assert.ok(await win.locator('.addon:has-text("local RAG")').count() === 1 && await win.locator('.addon .addon-effect').count() >= 8);
-  await win.locator('.addon-grid').scrollIntoViewIfNeeded();
+  await win.evaluate((__s) => document.querySelector(__s)?.scrollIntoView({ block: 'center' }), '.addon-grid');
   await shot(win, '05d-addons');
   await win.click('[data-nav="pc"]');
   await win.waitForSelector('text=Speed test');
@@ -1432,7 +1432,7 @@ function redPng(size = 64) {
   await win.waitForFunction(() => /Tier 1/.test(document.querySelector('.tier-ability')?.innerText || ''));
   assert.notEqual(t4, await win.locator('.tier-ability').innerText(), 'the abilities change with the chosen computer');
   // Picking a computer keeps the page where it was (it used to jump back to the top).
-  await win.locator('.tier[data-tier-pick="3"]').scrollIntoViewIfNeeded();
+  await win.evaluate((__s) => document.querySelector(__s)?.scrollIntoView({ block: 'center' }), '.tier[data-tier-pick="3"]');
   const topBefore = await win.evaluate(() => document.querySelector('#main .page').scrollTop);
   assert.ok(topBefore > 100, 'scrolled down to the computers');
   await win.click('.tier[data-tier-pick="3"]');
@@ -1463,17 +1463,17 @@ function redPng(size = 64) {
   // Giant models (optional): what this PC could run with colibri, and one button to get it.
   await win.waitForSelector('#giant h2:has-text("Giant models")', { timeout: 15000 });
   assert.match(await win.locator('#giant').innerText(), /DeepSeek V4 Flash[\s\S]*(Get colibri|Start colibri)/);
-  await win.locator('#pc-calc').scrollIntoViewIfNeeded();
+  await win.evaluate((__s) => document.querySelector(__s)?.scrollIntoView({ block: 'center' }), '#pc-calc');
   await shot(win, '06d-pc-calculator');
   // Upgrades: faster (same models) vs smarter (a bigger model), with cost and cheaper alternatives.
   await win.waitForSelector('.upg-grid .upg', { timeout: 20000 });
-  await win.locator('#upgrades').scrollIntoViewIfNeeded();
+  await win.evaluate((__s) => document.querySelector(__s)?.scrollIntoView({ block: 'center' }), '#upgrades');
   const upg = await win.locator('.upg-grid').innerText();
   assert.match(upg, /Faster|Smarter|More room for models/);
   assert.ok(await win.locator('.upg-cheaper').count() >= 1, 'cheaper alternatives offered');
   assert.ok(await win.locator('.upg').count() >= 5, 'several upgrade options');
   await shot(win, '06c-upgrades');
-  await win.locator('#new-pc').scrollIntoViewIfNeeded();
+  await win.evaluate((__s) => document.querySelector(__s)?.scrollIntoView({ block: 'center' }), '#new-pc');
   await shot(win, '06b-new-pc-speeds');
   console.log('✓ models + your PC (buying guide changes model abilities without moving the page; desktop and laptop prices; the computer calculator; clearer upgrades with costs)');
 
