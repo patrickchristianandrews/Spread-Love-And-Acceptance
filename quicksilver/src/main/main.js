@@ -321,7 +321,7 @@ handle('bench:run', async () => {
 });
 
 // Objective quality benchmark: run a model on public eval sets with verifiable answers and score it.
-handle('quality:run', async (_e, { target, sets, n }) => {
+handle('quality:run', async ({ target, sets, n }) => {
   if (!target) throw new Error('Pick a model to benchmark.');
   sets = (sets || ['gsm8k']).filter((s) => quality.SETS[s]);
   if (!sets.length) sets = ['gsm8k'];

@@ -16,6 +16,7 @@ Updating from 2.18: the Liquid Edition now includes its Closer and its picture a
 
 - **Search the API directory.** The "every service, by task" directory now has a search box — filter all 63 cloud services by name or by what they're good at ("groq", "uncensored", "cheap coding"), on its own or combined with a task.
 - **Clearer Space errors.** When a Hugging Face Space fails without giving a reason (it used to show "error: null"), the run panel now explains the likely cause — used-up free GPU quota, inputs the Space didn't expect, or a ZeroGPU timeout — and what to try (wait a minute, add a free token, or duplicate the Space).
+- **Fixed: Benchmark a model crashed on Run.** Pressing Run benchmark showed "Cannot destructure property 'target'…" and did nothing; the benchmark now runs.
 
 ### New in 2.23.3
 
