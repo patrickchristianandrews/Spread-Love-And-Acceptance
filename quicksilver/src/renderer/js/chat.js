@@ -925,6 +925,46 @@ async function generate(chat, rerollMsg, withTarget, opts = {}) {
     save(); if (S.route.view === 'chat') render(); else renderChatList();
     return;
   }
+  // Pictures and videos from the web are shown INSTANTLY: fetched and captioned right here, with no
+  // web search and no model answer afterwards — the model "thinking" to write an intro was the delay.
+  // The model is only used if the search comes back empty, so it can say so briefly.
+  const picsAsk = !skill && !opts.fix && lastUser?.text && !S.config?.offline && S.config?.web?.provider !== 'none'
+    && typeof WEB_IMAGE !== 'undefined' && WEB_IMAGE.test(lastUser.text)
+    && !/\b(make|create|generate|draw|paint|render|design|imagine|cartoon|anime)\b/i.test(lastUser.text);
+  const vidsAsk = !picsAsk && !skill && !opts.fix && lastUser?.text && !S.config?.offline && S.config?.web?.provider !== 'none'
+    && WEB_VIDEO_Q.test(lastUser.text) && !/\b(make|create|generate|animate)\b/i.test(lastUser.text);
+  if (picsAsk || vidsAsk) {
+    alt.status = picsAsk ? 'Finding pictures…' : 'Finding videos…'; paintStreaming(chat, msg);
+    const subject = (lastUser.text.match(/\b(?:of|for|showing|about|with)\s+([^.?!\n]{2,60})/i)?.[1] || '')
+      .replace(/\b(on|from|off|across|in)\s+(the\s+)?(web|internet|online|google|youtube)\b[\s\S]*$/i, '')
+      .replace(/\b(please|right now|now)\b[\s\S]*$/i, '').replace(/[,.;:]+$/, '').trim();
+    try {
+      const items = picsAsk
+        ? await qs.call('web:images', lastUser.text, { safeSearch: safeSearchValue(), count: 8 })
+        : await qs.call('web:videos', lastUser.text, { safeSearch: safeSearchValue(), count: 8 });
+      if (pending?.requestId !== requestId) return;
+      if (items && items.length) {
+        (alt.toolCalls ||= []).push(picsAsk
+          ? { id: 'autoimg', name: 'image_search', source: 'Pictures from the web', status: 'done', result: `Showing ${items.length} pictures from the web.\n[[web-images:${JSON.stringify(items)}]]` }
+          : { id: 'autovid', name: 'video_search', source: 'Videos from the web', status: 'done', result: `Showing ${items.length} videos from the web.\n[[web-videos:${JSON.stringify(items)}]]` });
+        alt.text = picsAsk
+          ? `Here ${items.length === 1 ? 'is a picture' : `are ${items.length} pictures`} from the web${subject ? ` of ${subject}` : ''}:`
+          : `Here ${items.length === 1 ? 'is a video' : `are ${items.length} videos`} from the web${subject ? ` about ${subject}` : ''} — click one to watch:`;
+        alt.autoWeb = true;
+      } else {
+        alt.text = picsAsk ? "I couldn't pull up any pictures for that just now. Try again in a moment, or reword it." : "I couldn't pull up any videos for that just now. Try again in a moment, or reword it.";
+      }
+    } catch {
+      alt.text = `I couldn't reach the ${picsAsk ? 'picture' : 'video'} search just now. Try again in a moment.`;
+    }
+    alt.error = false;
+    delete alt.status; if (alt.t0) { alt.ms = Date.now() - alt.t0; delete alt.t0; }
+    pending = null; chat.updated = now();
+    if (chat.title === 'New chat' && chat.messages[0]?.text) chat.title = chat.messages[0].text.replace(/\s+/g, ' ').slice(0, 60);
+    save(); if (S.route.view === 'chat') render(); else renderChatList();
+    if (S.data.prefs.smartFollowups !== false) { alt.fuPending = true; render(); writeFollowups(chat, msg, alt); }
+    return;
+  }
   const force = skill?.tools || {};
   if ((chat.library ?? a.library) || webWanted(chat, a, lastUser?.text || '', force) || force.knowledge) { alt.status = 'Searching sources…'; paintStreaming(chat, msg); }
   // Load the model at the same time as the search runs, instead of one after the other.
@@ -961,44 +1001,11 @@ async function generate(chat, rerollMsg, withTarget, opts = {}) {
   // found nothing stays silent (the user didn't ask for it) — just answer from what you know.
   if (sources.webEmpty && !sources.autoWeb) memNote = `${memNote ? `${memNote}\n` : ''}The user turned on web search, but the search found nothing for this question. Say in one short sentence at the start that you couldn't check the web this time, then answer from what you know. Don't claim anything is the "latest" or give publication dates or links you haven't seen.`;
   else if (sources.webEmpty) memNote = `${memNote ? `${memNote}\n` : ''}Answer from your own knowledge. Don't claim anything is the "latest" and don't give publication dates or links.`;
-  // Pictures from the web: when the message clearly asks to SEE real pictures of something, fetch
-  // them here and show them, so they actually appear even on a model that wouldn't call the tool
-  // itself (which just explains how to find them). The model then introduces them in one line.
-  const wantPics = !skill && lastUser?.text && !S.config?.offline && S.config?.web?.provider !== 'none'
-    && typeof WEB_IMAGE !== 'undefined' && WEB_IMAGE.test(lastUser.text)
-    && !/\b(make|create|generate|draw|paint|render|design|imagine|cartoon|anime)\b/i.test(lastUser.text);
-  if (wantPics) {
-    let shown = false;
-    try {
-      alt.status = 'Finding pictures…'; paintStreaming(chat, msg);
-      const imgs = await qs.call('web:images', lastUser.text, { safeSearch: safeSearchValue(), count: 8 });
-      if (pending?.requestId !== requestId) return;
-      if (imgs && imgs.length) {
-        shown = true;
-        (alt.toolCalls ||= []).push({ id: 'autoimg', name: 'image_search', source: 'Pictures from the web', status: 'done', result: `Showing ${imgs.length} pictures from the web.\n[[web-images:${JSON.stringify(imgs)}]]` });
-        memNote = `${memNote ? `${memNote}\n` : ''}Pictures from the web are ALREADY shown to the user directly below your answer. Introduce them in ONE short, friendly sentence and stop. Do NOT explain how to find or search for pictures, do NOT give links or search tips, and never say you cannot show images — they are already there.`;
-      }
-    } catch { /* fall through */ }
-    if (!shown) memNote = `${memNote ? `${memNote}\n` : ''}A picture search was attempted but no pictures could be fetched this time. Say in ONE short sentence that you couldn't pull up pictures right now and suggest trying again in a moment or rephrasing. Do NOT paste a list of links or URLs, and do NOT explain how to search for pictures yourself.`;
-  }
-  // Videos from the web: same idea — fetch and show them so they actually appear.
-  const wantVids = !skill && !wantPics && lastUser?.text && !S.config?.offline && S.config?.web?.provider !== 'none'
-    && WEB_VIDEO_Q.test(lastUser.text)
-    && !/\b(make|create|generate|animate)\b/i.test(lastUser.text);
-  if (wantVids) {
-    try {
-      alt.status = 'Finding videos…'; paintStreaming(chat, msg);
-      const vids = await qs.call('web:videos', lastUser.text, { safeSearch: safeSearchValue(), count: 8 });
-      if (pending?.requestId !== requestId) return;
-      if (vids && vids.length) {
-        (alt.toolCalls ||= []).push({ id: 'autovid', name: 'video_search', source: 'Videos from the web', status: 'done', result: `Showing ${vids.length} videos from the web.\n[[web-videos:${JSON.stringify(vids)}]]` });
-        memNote = `${memNote ? `${memNote}\n` : ''}Videos from the web are ALREADY shown to the user directly below your answer, each with a watch link. Introduce them in ONE short sentence and stop. Do NOT explain how to find videos or give search tips, and never say you cannot show videos.`;
-      }
-    } catch { /* fall through */ }
-  }
-  // Weather: when the message asks about the weather/forecast, fetch a live forecast and show it as
-  // a visual card (current conditions, an hourly strip and a 7-day row) instead of a wall of text.
-  const wantWx = !skill && !wantPics && !wantVids && lastUser?.text && !S.config?.offline
+  // Pictures and videos from the web are handled by the instant fast-path above (before the web
+  // search and the model), so there's nothing to do here for them.
+  // Weather that slipped past the fast-path (an analytical "why/history" weather question) still gets
+  // its live card here so the model can discuss it with the real numbers in hand.
+  const wantWx = !skill && lastUser?.text && !S.config?.offline
     && S.config?.web?.provider !== 'none' && WEATHER_Q.test(lastUser.text);
   if (wantWx) {
     try {
