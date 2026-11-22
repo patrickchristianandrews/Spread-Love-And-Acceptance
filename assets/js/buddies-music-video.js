@@ -276,8 +276,32 @@
       else { g.ellipse(0, b.BY, b.RX, b.RY, 0, 0, TAU); g.ellipse(12, b.BY - 5, 7, 8, -0.5, 0, TAU); }
       g.clip(); return b;
     }
+    // painted pups: the garment is painted big and plain, then P.fitBody keeps it only on her torso, inside her own
+    // outline in every frame, and shades it like cloth, so it moves and bends with her
+    function paintGarment(g, c, L, pose, t) {
+      var P = window.TOLPups, fit = c.fit, id = c.id, hp = P.headPos(L, pose, c.ph || 0), fx = hp.x >= 0 ? 1 : -1;
+      var R = Math.max(40, Math.abs(hp.y) * 1.6), chestX = hp.x * 0.62, chestY = hp.y * 0.55, bellyY = hp.y * 0.28;
+      var col = fit === 'sparkle' ? FITCOL.sparkle[id] : fit === 'band' ? FITCOL.band[id] : fit === 'astro' ? '#F2F4F8' : null;
+      if (col) { g.fillStyle = col; g.fillRect(-R * 1.5, hp.y * 2, R * 3, R * 2.2); }
+      if (fit === 'sparkle') {
+        for (var k = 0; k < 40; k++) { var sx0 = -R + (k % 8) * R / 4 + (Math.floor(k / 8) % 2) * R / 8, sy0 = hp.y * 1.1 + Math.floor(k / 8) * R / 6, a = t * 3 + k * 1.7; star(g, sx0, sy0, 1.3 + 0.8 * Math.max(0, Math.sin(a)), '#FFF6C9', a * 0.3); }
+        line(g, chestX - fx * 3, hp.y, chestX - fx * 3, R, '#F6CB4C', 1.8);   // the gold edge of the vest
+      } else if (fit === 'band') {
+        for (var j = 0; j < 3; j++) line(g, chestX - fx * 14, chestY + j * 5, chestX + fx * 2, chestY + j * 5, '#F6CB4C', 1.5);
+        for (var j2 = 0; j2 < 3; j2++) circ(g, chestX - fx * 14, chestY + j2 * 5, 1.5, '#F6CB4C');
+        line(g, -R * 1.5, bellyY, R * 1.5, bellyY, '#FFFDF4', 2.4);   // the white belt
+      } else if (fit === 'pirate') {
+        for (var s2 = -12; s2 < 14; s2++) { g.fillStyle = s2 % 2 ? '#FFFDF4' : (id === 'tidbit' ? '#8A5CD0' : '#F0739F'); g.fillRect(-R * 1.5, hp.y * 1.2 + s2 * 4.2, R * 3, 4.2); }
+        line(g, chestX - fx * 26, hp.y * 0.95, chestX + fx * 4, bellyY, '#F6CB4C', 2.6);   // the sash
+      } else if (fit === 'astro') {
+        line(g, chestX - fx * 20, hp.y, chestX - fx * 20, R, '#C9D3E0', 1.1);
+        rr(g, chestX - fx * 10 - 5, chestY, 10, 7, 1.5, id === 'tidbit' ? '#8A5CD0' : '#F0739F'); heart(g, chestX - fx * 10, chestY + 3.4, 2.1, '#FFFFFF');
+      }
+    }
     function bodyFit(g, c, L, pose, t) {
       var fit = c.fit, id = c.id, tilt = pose === 'sit' ? -0.42 : pose === 'bow' ? 0.3 : 0;
+      var PP = window.TOLPups || {};
+      if (PP.painted && PP.fitBody && (fit === 'sparkle' || fit === 'band' || fit === 'pirate' || fit === 'astro')) { PP.fitBody(g, L, function (o) { paintGarment(o, c, L, pose, t); }); return; }
       if (fit === 'astro') { // the air pack, on the back
         g.save(); g.rotate(tilt);
         if (fit === 'astro') { var b0 = bodyGeo(L); rr(g, -17, b0.BY - 15, 13, 13, 3, '#E9EEF6'); rr(g, -15, b0.BY - 12, 9, 3, 1, c.id === 'tidbit' ? '#8A5CD0' : '#F0739F'); circ(g, -8, b0.BY - 4, 1.5, '#F28AA8'); }

@@ -406,6 +406,8 @@
     if (rot) { ctx.translate(0, -18); ctx.rotate(rot); ctx.translate(0, 18); }
     ctx.scale(K, K * sy);
     ctx.drawImage(fr.img, sx, sy0, fw, fr.fh, -p.cx, -p.fy, fw, fr.fh);
+    // remember exactly how this drawing went on the page, so clothes can be fitted to her body shape (fitBody below)
+    S.last[dog] = { m: ctx.getTransform(), img: fr.img, sx: sx, sy: sy0, fw: fw, fh: fr.fh, dx: -p.cx, dy: -p.fy, f: f };
     var P = window.TOLPups || {}, clk = P.clock || 0, B = S.blend[dog] || (S.blend[dog] = {}), kind = fr.img === S.walk ? 'w' : 'p' + f.ang;
     if (P.quiet || B.shot !== P.shot || clk < B.T || clk - B.T > 0.3) { B.kind = kind; B.from = null; }
     else if (kind !== B.kind) { B.from = { fr: B.fr, at: clk }; B.kind = kind; }
@@ -424,12 +426,49 @@
     ctx.restore();
   }
 
+  // clothes that follow the body: the caller paints the garment (in its own pup space) into a spare canvas; it is kept
+  // only where this pup's painted body is, between her neck and her hind legs, so its edges are her outline in every
+  // frame; then it is shaded like cloth over a rounded body and laid on the page.
+  var FIT = null;
+  function fitBody(ctx, L, paint) {
+    var dog = L.collar ? 0 : 1, d = S.last[dog]; if (!d || typeof document === 'undefined') { paint(ctx); return; }
+    var cv = ctx.canvas, W = cv.width, H = cv.height;
+    if (!FIT) FIT = document.createElement('canvas');
+    if (FIT.width !== W || FIT.height !== H) { FIT.width = W; FIT.height = H; }
+    var o = FIT.getContext('2d'), m0 = ctx.getTransform(), f = d.f;
+    o.setTransform(1, 0, 0, 1, 0, 0); o.globalCompositeOperation = 'source-over'; o.globalAlpha = 1; o.clearRect(0, 0, W, H);
+    o.setTransform(m0); paint(o);
+    // the garment covers the torso only: from just behind the neck back to the hips, from the back down to the belly
+    o.globalCompositeOperation = 'destination-in';
+    o.setTransform(d.m);
+    var x0 = f.x0 + d.dx, x1 = f.x1 + d.dx, y0 = f.y0 + d.dy, y1 = f.y1 + d.dy, w = x1 - x0, h = y1 - y0, hx = f.hx + d.dx;
+    var front = hx > (x0 + x1) / 2, neck = front ? hx - w * 0.13 : hx + w * 0.13, rear = front ? x0 + w * 0.2 : x1 - w * 0.2;
+    var top = y0 + h * 0.18, belly = y0 + h * 0.74;
+    o.drawImage(d.img, d.sx, d.sy, d.fw, d.fh, d.dx, d.dy, d.fw, d.fh);   // her own shape, frame by frame
+    o.beginPath(); o.moveTo(rear, y0 - 20); o.lineTo(neck, y0 - 20); o.lineTo(neck + (front ? 4 : -4), belly - h * 0.06);   // and only her torso
+    o.quadraticCurveTo((rear + neck) / 2, belly + h * 0.05, rear, belly - h * 0.02); o.closePath(); o.fillStyle = '#000'; o.fill();
+    o.globalCompositeOperation = 'destination-out';   // never over her head or ears
+    o.beginPath(); o.arc(hx, f.hy + d.dy, h * 0.27, 0, Math.PI * 2); o.fill();
+    // nothing above her chin: a garment ends at the neckline (in a face-on view the neck is lower, so it ends lower)
+    var faceOn = f.ang === 0 || f.ang === 4, cut = f.hy + d.dy + h * (faceOn ? 0.27 : 0.12);
+    o.fillRect(x0 - 40, y0 - 60, w + 80, cut - (y0 - 60));
+    var tx = front ? x0 + w * 0.02 : x1 - w * 0.02;   // never over her tail, which rises from the rump above the back
+    o.beginPath(); o.ellipse(tx, y0 + h * 0.16, w * 0.24, h * 0.3, 0, 0, Math.PI * 2); o.fill();
+    // shading like cloth over a rounded body: light on the back, a soft shadow under the belly, and her fur's own light
+    o.globalCompositeOperation = 'source-atop';
+    var gr = o.createLinearGradient(0, top, 0, belly + h * 0.04);
+    gr.addColorStop(0, 'rgba(255,255,255,0.22)'); gr.addColorStop(0.35, 'rgba(255,255,255,0)'); gr.addColorStop(0.75, 'rgba(0,0,0,0.10)'); gr.addColorStop(1, 'rgba(0,0,0,0.30)');
+    o.fillStyle = gr; o.fillRect(x0 - 10, y0 - 10, w + 20, h + 20);
+    o.globalAlpha = 0.28; o.globalCompositeOperation = 'soft-light'; o.drawImage(d.img, d.sx, d.sy, d.fw, d.fh, d.dx, d.dy, d.fw, d.fh);
+    o.globalAlpha = 1; o.globalCompositeOperation = 'source-over';
+    ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.drawImage(FIT, 0, 0); ctx.restore();
+  }
   function head(whoName, pose, opts) { var L = P.looks[whoName === 'sugarfoot' || whoName === 'sf' ? 'drop' : 'collar']; var h = headPos(L, pose === 'stand' ? 'run' : pose, 0); return { x: h.x, y: h.y }; }
   function install(walk, poses) {
-    S = { walk: walk, poses: poses, meta: META, moving: [false, false], lastPh: {}, blend: {} };
+    S = { walk: walk, poses: poses, meta: META, moving: [false, false], lastPh: {}, blend: {}, last: {} };
     P.draw = function (c, L, pose, ph, wag, blink, t, tilt, opts) { draw(c, L, pose === 'stand' ? 'run' : pose, ph, wag, blink, t, tilt, opts); };
     P.headPos = function (L, pose, ph) { return headPos(L, pose === 'stand' ? 'run' : pose, ph); };
-    P.head = head; P.cape = function () {}; P.lowerFace = function () {}; P.sprites = true; P.painted = true;
+    P.head = head; P.fitBody = fitBody; P.cape = function () {}; P.lowerFace = function () {}; P.sprites = true; P.painted = true;
   }
   function load(name) {
     if (typeof document !== 'undefined') return new Promise(function (res, rej) { var im = new Image(); im.onload = function () { res(im); }; im.onerror = rej; im.src = BASE + name; });
