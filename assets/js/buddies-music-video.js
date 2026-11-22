@@ -260,13 +260,15 @@
 
     // ---------- a pal, with her outfit, singing ----------
     var LOOK = { tidbit: 'collar', sugarfoot: 'drop' };
+    // Tidbit always wears purple and Sugarfoot always wears pink, in every costume
     var FITCOL = {
-      tophat: { tidbit: ['#2C2638', '#E4566E'], sugarfoot: ['#5B3F8C', '#7FB8F0'] },
-      rock: { tidbit: '#F8D76A', sugarfoot: '#F7A8C2' },
-      sparkle: { tidbit: '#E4566E', sugarfoot: '#4F8FE0' },
-      royal: { tidbit: '#7C97E8', sugarfoot: '#E4566E' },
-      band: { tidbit: '#C93F57', sugarfoot: '#3E5BB0' }
+      tophat: { tidbit: ['#2C2638', '#8A5CD0'], sugarfoot: ['#2C2638', '#F0739F'] },
+      rock: { tidbit: '#A57BE6', sugarfoot: '#F7A8C2' },
+      sparkle: { tidbit: '#7C4FC0', sugarfoot: '#F0739F' },
+      royal: { tidbit: '#7C4FC0', sugarfoot: '#F0739F' },
+      band: { tidbit: '#6A3FB0', sugarfoot: '#E25A8E' }
     };
+    var FLOWERS = { tidbit: ['#B79CEB', '#8A5CD0', '#FFFFFF'], sugarfoot: ['#F7A8C2', '#F0739F', '#FFFFFF'] };
     function bodyGeo(L) { var lean = L.build === 'lean'; return { BY: lean ? -21 : -18.5, RX: lean ? 18.5 : 18, RY: lean ? 8.8 : 10.2 }; }
     function clipBody(g, L, pose) {
       var b = bodyGeo(L); g.beginPath();
@@ -278,7 +280,7 @@
       var fit = c.fit, id = c.id, tilt = pose === 'sit' ? -0.42 : pose === 'bow' ? 0.3 : 0;
       if (fit === 'astro') { // the air pack, on the back
         g.save(); g.rotate(tilt);
-        if (fit === 'astro') { var b0 = bodyGeo(L); rr(g, -17, b0.BY - 15, 13, 13, 3, '#E9EEF6'); rr(g, -15, b0.BY - 12, 9, 3, 1, '#7FB8F0'); circ(g, -8, b0.BY - 4, 1.5, '#F28AA8'); }
+        if (fit === 'astro') { var b0 = bodyGeo(L); rr(g, -17, b0.BY - 15, 13, 13, 3, '#E9EEF6'); rr(g, -15, b0.BY - 12, 9, 3, 1, c.id === 'tidbit' ? '#8A5CD0' : '#F0739F'); circ(g, -8, b0.BY - 4, 1.5, '#F28AA8'); }
         g.restore();
       }
       if (fit !== 'sparkle' && fit !== 'band' && fit !== 'pirate' && fit !== 'astro' && fit !== 'flowers') return;
@@ -295,25 +297,25 @@
         circ(g, 5, y0 + 7, 1.3, '#F6CB4C'); circ(g, 5, y0 + 11.5, 1.3, '#F6CB4C'); circ(g, 5, y0 + 16, 1.3, '#F6CB4C');
         line(g, -24, y0 + 22, 18, y0 + 22, '#FFFDF4', 2);
       } else if (fit === 'pirate') {
-        for (var s2 = 0; s2 < 6; s2++) { g.fillStyle = s2 % 2 ? '#FFFDF4' : '#E4566E'; g.fillRect(-8, y0 + s2 * 4, 32, 4); }
+        for (var s2 = 0; s2 < 6; s2++) { g.fillStyle = s2 % 2 ? '#FFFDF4' : (id === 'tidbit' ? '#8A5CD0' : '#F0739F'); g.fillRect(-8, y0 + s2 * 4, 32, 4); }
         line(g, -4, y0, 18, y0 + 20, '#F6CB4C', 2.4);
       } else if (fit === 'astro') {
-        g.fillStyle = '#F2F4F8'; g.fillRect(-30, y0 - 6, 60, h + 12); line(g, -2, y0, -2, y0 + h, '#C9D3E0', 1); rr(g, 4, y0 + 8, 9, 6, 1.5, '#7FB8F0'); heart(g, 8.5, y0 + 11.2, 2, '#F28AA8');
+        g.fillStyle = '#F2F4F8'; g.fillRect(-30, y0 - 6, 60, h + 12); line(g, -2, y0, -2, y0 + h, '#C9D3E0', 1); rr(g, 4, y0 + 8, 9, 6, 1.5, id === 'tidbit' ? '#8A5CD0' : '#F0739F'); heart(g, 8.5, y0 + 11.2, 2, '#FFFFFF');
       } else if (fit === 'flowers') { // a flower necklace
         g.restore(); g.save(); g.rotate(tilt);
         var nb = bodyGeo(L), nx = pose === 'lie' ? 12 : 13, ny = pose === 'lie' ? -10 : nb.BY - 6;
-        var fc = id === 'tidbit' ? ['#F7A8C2', '#F8D76A', '#FFFFFF'] : ['#B79CEB', '#7FB8F0', '#FFFFFF'];
+        var fc = FLOWERS[id] || FLOWERS.tidbit;
         for (var f = 0; f < 5; f++) { var fx = nx - 4 + f * 2.4, fy = ny - 6 + f * 3.4; circ(g, fx, fy, 2.3, fc[f % 3]); circ(g, fx, fy, 0.8, '#F8D76A'); }
       }
       g.restore();
     }
     function headFit(g, c, t) {
       var fit = c.fit, id = c.id;
-      if (fit === 'tophat') { var tc = FITCOL.tophat[id]; topHat(g, -1, -8, 0.62, tc[0], tc[1]); bowTie(g, -5, 13, tc[1]); }
+      if (fit === 'tophat') { var tc = FITCOL.tophat[id]; topHat(g, -1, -8, 0.62, tc[0], tc[1]); if (!(window.TOLPups || {}).painted) bowTie(g, -5, 13, tc[1]); }
       else if (fit === 'rock') { shades(g); starBand(g, t, FITCOL.rock[id]); }
-      else if (fit === 'flowers') flowerCrown(g, -1, -10, 0.95, id === 'tidbit' ? ['#F7A8C2', '#F7DC6F', '#FFFFFF'] : ['#B79CEB', '#7FB8F0', '#FFFFFF']);
+      else if (fit === 'flowers') flowerCrown(g, -1, -10, 0.95, FLOWERS[id] || FLOWERS.tidbit);
       else if (fit === 'royal') crown(g, -1, -9, 0.78);
-      else if (fit === 'sparkle') bowTie(g, -5, 13, '#F6CB4C');
+      else if (fit === 'sparkle') bowTie(g, -5, (window.TOLPups || {}).painted ? HEADTOP + 17 : 13, '#F6CB4C');
       else if (fit === 'astro') bubble(g, 4, 1, 18.5);
       else if (fit === 'pirate') pirateHat(g, -1, -9, 0.7);
       else if (fit === 'band') shako(g, -1, -8, 0.78, FITCOL.band[id]);
@@ -354,6 +356,8 @@
       a.x -= dir * push / (V.SP * mix(1, 0.84, za)); b.x += dir * push / (V.SP * mix(1, 0.84, zb));
       if (w < 1 && Math.abs(za - zb) < 0.18) { var front = za <= zb ? a : b; front.z = Math.max(0, (front.z || 0) - 0.12 * (1 - w)); }
     }
+    var HEADTOP = 2;   // from the painted head's center up to where a hat sits
+    var HEADFITS = { tophat: 1, rock: 1, flowers: 1, royal: 1, astro: 1, pirate: 1, band: 1 };   // costumes worn on the head
     function drawPup(g, c, t) {
       var P = window.TOLPups; if (!P || !c.on) return;
       var L = P.looks[LOOK[c.id]], s = PS * zs(c.z) * (c.sc || 1), X = sx(c.x, c.z) + (c.dx || 0), base = zy(c.z) + (c.dy || 0), Y = base - c.lift;
@@ -368,12 +372,14 @@
       var pose = c.pose || 'run', ph = c.ph || 0, wag = (c.tailBase || 0) + Math.sin(t * 11 * (c.wagS || 1) + (c.id === 'tidbit' ? 0 : 2)) * (c.wagA == null ? 0.6 : c.wagA);
       if (c.sy) g.scale(1, c.sy);
       if (c.fit === 'royal' && P.cape) { g.save(); g.rotate(pose === 'sit' ? -0.42 : pose === 'bow' ? 0.3 : 0); g.translate(0, pose === 'lie' ? 10 : 0); P.cape(g, L, t * 1000, FITCOL.royal[c.id], true); g.restore(); }
-      P.draw(g, L, pose, ph, wag, !!c.blink, t * 1000, c.tilt || 0, {});
+      P.draw(g, L, pose, ph, wag, !!c.blink, t * 1000, c.tilt || 0, HEADFITS[c.fit] ? { hat: true } : {});   // a head costume: her own purple or pink item moves to her neck
       bodyFit(g, c, L, pose, t);
       var lean = L.build === 'lean', BY = lean ? -21 : -18.5;
       var hx = pose === 'lie' ? 19 : pose === 'sit' ? 18 : pose === 'bow' ? 22 : 21, hy = pose === 'lie' ? -19 : pose === 'sit' ? -38 : pose === 'bow' ? -14 : BY - 12;
+      if (P.painted && P.headPos) { var hp = P.headPos(L, pose, ph); hx = hp.x; hy = hp.y - HEADTOP; }   // the painted pup's own head: hats sit on top of it
       g.translate(hx, hy); g.rotate((pose === 'run' ? Math.sin(ph) * 0.05 : pose === 'bow' ? -0.15 : pose === 'lie' ? 0.05 : 0) + (c.tilt || 0));
-      pupFace(g, c, t); headFit(g, c, t);
+      if (!P.painted) pupFace(g, c, t);   // the painted pups keep their own painted faces: no drawn mouth on top
+      headFit(g, c, t);
       var m = g.getTransform(); c.head = { x: m.e / V.k, y: m.f / V.k, k: Math.hypot(m.a, m.b) / V.k };
       g.restore();
     }
