@@ -242,7 +242,7 @@ def md_title(t):
             A('| Manuscript (ebook) file | **%s** (EPUB 3, reflowable, %.2f MB, 11 chapters, spot pictures as PNG; EPUBCheck: 0 fatals, 0 errors, 0 warnings, 0 infos). |' % (N['epub'], epub_mb))
             A('| Kindle cover file (upload this) | `%s` (1600 x 2560 px, the 1.6:1 shape KDP prefers; also inside the EPUB) |' % N['kindle'])
         A('| ISBN | Leave blank. Amazon gives the Kindle edition an ASIN. |')
-        A('| Kindle price | **$%.2f**, 70%% royalty (the 70%% band is $2.99 to $12.99 as of July 2026, so check KDP's current band; a price outside it earns 35%%, so both Kindle prices stay inside it): 70%% x $%.2f = $%.2f, minus delivery (%.2f MB x $0.15 = $%.2f) = **$%.2f** a copy. [OWNER] |' % (kp, kp, round(0.7 * kp, 2), epub_mb, deliv, round(0.7 * kp - deliv, 2)))
+        A('| Kindle price | **$%.2f**, 70%% royalty (the 70%% band is $2.99 to $12.99 as of July 2026, so check the current band in KDP; a price outside it earns 35%%, so both Kindle prices stay inside it): 70%% x $%.2f = $%.2f, minus delivery (%.2f MB x $0.15 = $%.2f) = **$%.2f** a copy. [OWNER] |' % (kp, kp, round(0.7 * kp, 2), epub_mb, deliv, round(0.7 * kp - deliv, 2)))
         A('| KDP Select | **No.** Select needs the ebook to be exclusive to Amazon in digital form, and the story\'s characters and the books\' ideas are free on the website. |')
         A('| DRM | **No DRM.** |')
         A('| Categories and keywords | The same as the paperback |')

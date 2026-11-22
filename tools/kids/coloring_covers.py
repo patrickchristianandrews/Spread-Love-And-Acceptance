@@ -128,7 +128,7 @@ def make_cover(kind, pages):
     front = ('<div style="position:absolute;left:.4in;right:.4in;top:.45in;text-align:center">'
              '<div style="font:700 12pt Andika;letter-spacing:.12em;color:%s">%s &middot; COLORING BOOK</div>'
              '<div style="font:800 %dpt/1.0 Fraunces,serif;color:#FFFDF5;-webkit-text-stroke:2.8px #2F3566;paint-order:stroke fill;margin-top:.1in">%s<br>%s</div>'
-             '<div style="font:700 14pt/1.3 Andika;color:#2F3566;margin:.16in auto 0;width:6.9in;background:rgba(255,253,245,.9);border-radius:.22in;padding:.07in .2in">%s</div></div>'
+             '<div style="font:700 13pt/1.3 Andika;color:#2F3566;margin:.16in auto 0;width:fit-content;max-width:7.7in;background:rgba(255,253,245,.9);border-radius:.22in;padding:.07in .2in">%s</div></div>'
              ) % ('#3A3350' if younger else '#FFF4DC', C.esc(X['ages'].upper()), ts, C.esc(t1), C.esc(t2), C.esc(X['cover_subtitle']))
     back = ('<div style="position:absolute;left:.7in;right:.7in;top:.7in;font-size:13.5pt;line-height:1.42;background:#FFFDF5;border-radius:.25in;padding:.26in .34in;border:2.5px solid #E8D5A2">'
             '<div style="font:800 20pt Fraunces,serif;margin-bottom:.1in;color:#3A3350">%s</div>%s'
