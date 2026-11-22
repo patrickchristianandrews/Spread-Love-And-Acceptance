@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated": "2026-11-21",
+  "updated": "2026-11-22",
   "note": "Model picks that update Quicksilver when online: add new models (same fields as the built-in catalog), mark featured picks, map an older model to the newer one that replaces it, and set the ladders stack recipes choose from (strongest first). \"liquid\" names the Liquid Edition's core models (uncensored): set brain/eyes to a newer catalog or added model and every Quicksilver updates its built-in model to it. \"recipes\" adds new ready-made stacks: {id, name, icon, group, mode (blend/debate/consensus/auto/vote/redteam/plan/panel), parts: [{model, role, ladder}], lead, instructions, why, added (YYYY-MM-DD), uncensored}.",
   "models": [
     {
@@ -408,32 +408,6 @@
       "license": "apache-2.0"
     },
     {
-      "id": "gemma-4-26b-a4b-it",
-      "name": "gemma 4 26B A4B it",
-      "maker": "unsloth",
-      "params": "26B",
-      "category": "vision",
-      "repo": "unsloth/gemma-4-26B-A4B-it-GGUF",
-      "quant": "Q4_K_M",
-      "sizeGB": 16.95,
-      "jobs": {
-        "general": 8,
-        "office": 7,
-        "research": 7,
-        "coding": 7,
-        "vision": 7,
-        "fast": 4
-      },
-      "judge": 7,
-      "blurb": "New on Hugging Face, added automatically on 2026-11-12 (apache-2.0 licence). Not tested by Quicksilver yet: its ratings are estimates from its size.",
-      "vision": true,
-      "mmprojGB": 1.19,
-      "activeGB": 2.4,
-      "auto": true,
-      "added": "2026-11-12",
-      "license": "apache-2.0"
-    },
-    {
       "id": "qwen3.6-35b-a3b",
       "name": "Qwen3.6 35B A3B",
       "maker": "unsloth",
@@ -482,6 +456,32 @@
       "mmprojGB": 0.93,
       "auto": true,
       "added": "2026-11-19",
+      "license": "apache-2.0"
+    },
+    {
+      "id": "gemma-4-26b-a4b-it",
+      "name": "gemma 4 26B A4B it",
+      "maker": "unsloth",
+      "params": "26B",
+      "category": "vision",
+      "repo": "unsloth/gemma-4-26B-A4B-it-GGUF",
+      "quant": "Q4_K_M",
+      "sizeGB": 16.95,
+      "jobs": {
+        "general": 8,
+        "office": 7,
+        "research": 7,
+        "coding": 7,
+        "vision": 7,
+        "fast": 4
+      },
+      "judge": 7,
+      "blurb": "New on Hugging Face, added automatically on 2026-11-12 (apache-2.0 licence). Not tested by Quicksilver yet: its ratings are estimates from its size.",
+      "vision": true,
+      "mmprojGB": 1.19,
+      "activeGB": 2.4,
+      "auto": true,
+      "added": "2026-11-12",
       "license": "apache-2.0"
     },
     {
@@ -611,25 +611,26 @@
       "license": "apache-2.0"
     },
     {
-      "id": "qwen3-next-80b-a3b-instruct",
-      "name": "Qwen3 Next 80B A3B Instruct",
-      "maker": "unsloth",
-      "params": "80B",
-      "category": "large",
-      "repo": "unsloth/Qwen3-Next-80B-A3B-Instruct-GGUF",
+      "id": "qwen3.5-4b",
+      "name": "Qwen3.5 4B",
+      "maker": "bartowski",
+      "params": "4B",
+      "category": "vision",
+      "repo": "bartowski/Qwen_Qwen3.5-4B-GGUF",
       "quant": "Q4_K_M",
-      "sizeGB": 48.51,
+      "sizeGB": 3.01,
       "jobs": {
-        "general": 8.5,
-        "office": 7.5,
-        "research": 7.5,
-        "coding": 7.5,
-        "vision": 0,
-        "fast": 4
+        "general": 5,
+        "office": 4,
+        "research": 4,
+        "coding": 4,
+        "vision": 4,
+        "fast": 8
       },
-      "judge": 7.5,
+      "judge": 4,
       "blurb": "Found on Hugging Face, added automatically on 2026-11-12 (apache-2.0 license). Not tested by Quicksilver yet: its ratings are estimates from its size.",
-      "activeGB": 1.8,
+      "vision": true,
+      "mmprojGB": 0.67,
       "auto": true,
       "added": "2026-11-12",
       "license": "apache-2.0"
@@ -655,31 +656,6 @@
       "blurb": "Found on Hugging Face, added automatically on 2026-11-12 (apache-2.0 license). Not tested by Quicksilver yet: its ratings are estimates from its size.",
       "vision": true,
       "mmprojGB": 0.93,
-      "auto": true,
-      "added": "2026-11-12",
-      "license": "apache-2.0"
-    },
-    {
-      "id": "qwen3.5-4b",
-      "name": "Qwen3.5 4B",
-      "maker": "bartowski",
-      "params": "4B",
-      "category": "vision",
-      "repo": "bartowski/Qwen_Qwen3.5-4B-GGUF",
-      "quant": "Q4_K_M",
-      "sizeGB": 3.01,
-      "jobs": {
-        "general": 5,
-        "office": 4,
-        "research": 4,
-        "coding": 4,
-        "vision": 4,
-        "fast": 8
-      },
-      "judge": 4,
-      "blurb": "Found on Hugging Face, added automatically on 2026-11-12 (apache-2.0 license). Not tested by Quicksilver yet: its ratings are estimates from its size.",
-      "vision": true,
-      "mmprojGB": 0.67,
       "auto": true,
       "added": "2026-11-12",
       "license": "apache-2.0"
@@ -731,29 +707,6 @@
       "blurb": "Found on Hugging Face, added automatically on 2026-11-12 (apache-2.0 license). Not tested by Quicksilver yet: its ratings are estimates from its size.",
       "vision": true,
       "mmprojGB": 0.84,
-      "auto": true,
-      "added": "2026-11-12",
-      "license": "apache-2.0"
-    },
-    {
-      "id": "whiterabbitneo-v3-7b",
-      "name": "WhiteRabbitNeo V3 7B",
-      "maker": "bartowski",
-      "params": "7B",
-      "category": "general",
-      "repo": "bartowski/WhiteRabbitNeo_WhiteRabbitNeo-V3-7B-GGUF",
-      "quant": "Q4_K_M",
-      "sizeGB": 4.68,
-      "jobs": {
-        "general": 6,
-        "office": 5,
-        "research": 5,
-        "coding": 5,
-        "vision": 0,
-        "fast": 6
-      },
-      "judge": 5,
-      "blurb": "Found on Hugging Face, added automatically on 2026-11-12 (apache-2.0 license). Not tested by Quicksilver yet: its ratings are estimates from its size.",
       "auto": true,
       "added": "2026-11-12",
       "license": "apache-2.0"
@@ -836,31 +789,6 @@
       "license": "apache-2.0"
     },
     {
-      "id": "ministral-3-8b-instruct-2512",
-      "name": "Ministral 3 8B Instruct 2512",
-      "maker": "mistralai",
-      "params": "8B",
-      "category": "vision",
-      "repo": "mistralai/Ministral-3-8B-Instruct-2512-GGUF",
-      "quant": "Q4_K_M",
-      "sizeGB": 5.2,
-      "jobs": {
-        "general": 6,
-        "office": 5,
-        "research": 5,
-        "coding": 5,
-        "vision": 5,
-        "fast": 6
-      },
-      "judge": 5,
-      "blurb": "Found on Hugging Face, added automatically on 2026-11-12 (apache-2.0 license). Not tested by Quicksilver yet: its ratings are estimates from its size.",
-      "vision": true,
-      "mmprojGB": 0.86,
-      "auto": true,
-      "added": "2026-11-12",
-      "license": "apache-2.0"
-    },
-    {
       "id": "kimi-linear-48b-a3b-instruct",
       "name": "Kimi Linear 48B A3B Instruct",
       "maker": "bartowski",
@@ -883,6 +811,32 @@
       "auto": true,
       "added": "2026-11-12",
       "license": "mit"
+    },
+    {
+      "id": "ornith-1.5-9b-uncensored",
+      "name": "Ornith 1.5 9B uncensored",
+      "maker": "mradermacher",
+      "params": "9B",
+      "category": "open",
+      "repo": "mradermacher/Ornith-1.5-9B-uncensored-GGUF",
+      "quant": "Q4_K_M",
+      "sizeGB": 5.63,
+      "jobs": {
+        "general": 6,
+        "office": 5,
+        "research": 5,
+        "coding": 5,
+        "vision": 5,
+        "fast": 6
+      },
+      "judge": 5,
+      "blurb": "New on Hugging Face, added automatically on 2026-11-12 (apache-2.0 licence). Not tested by Quicksilver yet: its ratings are estimates from its size.",
+      "vision": true,
+      "mmprojGB": 0.62,
+      "open": true,
+      "auto": true,
+      "added": "2026-11-12",
+      "license": "apache-2.0"
     },
     {
       "id": "nanbeige4.2-3b",
@@ -908,6 +862,30 @@
       "license": "apache-2.0"
     },
     {
+      "id": "glm-4.7-flash-reap-23b-a3b",
+      "name": "GLM 4.7 Flash REAP 23B A3B",
+      "maker": "unsloth",
+      "params": "23B",
+      "category": "general",
+      "repo": "unsloth/GLM-4.7-Flash-REAP-23B-A3B-GGUF",
+      "quant": "Q4_K_M",
+      "sizeGB": 14.11,
+      "jobs": {
+        "general": 8,
+        "office": 7,
+        "research": 7,
+        "coding": 7,
+        "vision": 0,
+        "fast": 4
+      },
+      "judge": 7,
+      "blurb": "Found on Hugging Face, added automatically on 2026-11-12 (mit license). Not tested by Quicksilver yet: its ratings are estimates from its size.",
+      "activeGB": 1.8,
+      "auto": true,
+      "added": "2026-11-12",
+      "license": "mit"
+    },
+    {
       "id": "frognano-4b-2609",
       "name": "FrogNano 4B 2609",
       "maker": "bartowski",
@@ -928,56 +906,6 @@
       "blurb": "Found on Hugging Face, added automatically on 2026-11-12 (mit license). Not tested by Quicksilver yet: its ratings are estimates from its size.",
       "vision": true,
       "mmprojGB": 0.67,
-      "auto": true,
-      "added": "2026-11-12",
-      "license": "mit"
-    },
-    {
-      "id": "groot-19b-a3b-261023",
-      "name": "Groot 19B A3B 261023",
-      "maker": "bartowski",
-      "params": "19B",
-      "category": "vision",
-      "repo": "bartowski/GrootTeam_Groot-19B-A3B-261023-GGUF",
-      "quant": "Q4_K_M",
-      "sizeGB": 12.48,
-      "jobs": {
-        "general": 8,
-        "office": 7,
-        "research": 7,
-        "coding": 7,
-        "vision": 7,
-        "fast": 4
-      },
-      "judge": 7,
-      "blurb": "Found on Hugging Face, added automatically on 2026-11-12 (apache-2.0 license). Not tested by Quicksilver yet: its ratings are estimates from its size.",
-      "vision": true,
-      "mmprojGB": 0.9,
-      "activeGB": 1.8,
-      "auto": true,
-      "added": "2026-11-12",
-      "license": "apache-2.0"
-    },
-    {
-      "id": "glm-4.7-flash-reap-23b-a3b",
-      "name": "GLM 4.7 Flash REAP 23B A3B",
-      "maker": "unsloth",
-      "params": "23B",
-      "category": "general",
-      "repo": "unsloth/GLM-4.7-Flash-REAP-23B-A3B-GGUF",
-      "quant": "Q4_K_M",
-      "sizeGB": 14.11,
-      "jobs": {
-        "general": 8,
-        "office": 7,
-        "research": 7,
-        "coding": 7,
-        "vision": 0,
-        "fast": 4
-      },
-      "judge": 7,
-      "blurb": "Found on Hugging Face, added automatically on 2026-11-12 (mit license). Not tested by Quicksilver yet: its ratings are estimates from its size.",
-      "activeGB": 1.8,
       "auto": true,
       "added": "2026-11-12",
       "license": "mit"
@@ -1007,31 +935,6 @@
       "license": "apache-2.0"
     },
     {
-      "id": "gemma-4-26b-a4b-it-heretic",
-      "name": "gemma 4 26B A4B it heretic",
-      "maker": "mradermacher",
-      "params": "26B",
-      "category": "open",
-      "repo": "mradermacher/gemma-4-26B-A4B-it-heretic-GGUF",
-      "quant": "Q4_K_M",
-      "sizeGB": 16.8,
-      "jobs": {
-        "general": 8,
-        "office": 7,
-        "research": 7,
-        "coding": 7,
-        "vision": 0,
-        "fast": 4
-      },
-      "judge": 7,
-      "blurb": "Found on Hugging Face, added automatically on 2026-11-13 (apache-2.0 license). Not tested by Quicksilver yet: its ratings are estimates from its size.",
-      "activeGB": 2.4,
-      "open": true,
-      "auto": true,
-      "added": "2026-11-13",
-      "license": "apache-2.0"
-    },
-    {
       "id": "huihui-gemma-4-12b-it-abliterated",
       "name": "Huihui gemma 4 12B it abliterated",
       "maker": "mradermacher",
@@ -1055,6 +958,55 @@
       "open": true,
       "auto": true,
       "added": "2026-11-19",
+      "license": "apache-2.0"
+    },
+    {
+      "id": "qwen3-next-80b-a3b-instruct",
+      "name": "Qwen3 Next 80B A3B Instruct",
+      "maker": "unsloth",
+      "params": "80B",
+      "category": "large",
+      "repo": "unsloth/Qwen3-Next-80B-A3B-Instruct-GGUF",
+      "quant": "Q4_K_M",
+      "sizeGB": 48.51,
+      "jobs": {
+        "general": 8.5,
+        "office": 7.5,
+        "research": 7.5,
+        "coding": 7.5,
+        "vision": 0,
+        "fast": 4
+      },
+      "judge": 7.5,
+      "blurb": "Found on Hugging Face, added automatically on 2026-11-12 (apache-2.0 license). Not tested by Quicksilver yet: its ratings are estimates from its size.",
+      "activeGB": 1.8,
+      "auto": true,
+      "added": "2026-11-12",
+      "license": "apache-2.0"
+    },
+    {
+      "id": "ministral-3-8b-instruct-2512",
+      "name": "Ministral 3 8B Instruct 2512",
+      "maker": "mistralai",
+      "params": "8B",
+      "category": "vision",
+      "repo": "mistralai/Ministral-3-8B-Instruct-2512-GGUF",
+      "quant": "Q4_K_M",
+      "sizeGB": 5.2,
+      "jobs": {
+        "general": 6,
+        "office": 5,
+        "research": 5,
+        "coding": 5,
+        "vision": 5,
+        "fast": 6
+      },
+      "judge": 5,
+      "blurb": "Found on Hugging Face, added automatically on 2026-11-12 (apache-2.0 license). Not tested by Quicksilver yet: its ratings are estimates from its size.",
+      "vision": true,
+      "mmprojGB": 0.86,
+      "auto": true,
+      "added": "2026-11-12",
       "license": "apache-2.0"
     },
     {
@@ -1104,6 +1056,32 @@
       "vision": true,
       "mmprojGB": 0.88,
       "reasoning": true,
+      "auto": true,
+      "added": "2026-11-12",
+      "license": "apache-2.0"
+    },
+    {
+      "id": "groot-19b-a3b-261023",
+      "name": "Groot 19B A3B 261023",
+      "maker": "bartowski",
+      "params": "19B",
+      "category": "vision",
+      "repo": "bartowski/GrootTeam_Groot-19B-A3B-261023-GGUF",
+      "quant": "Q4_K_M",
+      "sizeGB": 12.48,
+      "jobs": {
+        "general": 8,
+        "office": 7,
+        "research": 7,
+        "coding": 7,
+        "vision": 7,
+        "fast": 4
+      },
+      "judge": 7,
+      "blurb": "Found on Hugging Face, added automatically on 2026-11-12 (apache-2.0 license). Not tested by Quicksilver yet: its ratings are estimates from its size.",
+      "vision": true,
+      "mmprojGB": 0.9,
+      "activeGB": 1.8,
       "auto": true,
       "added": "2026-11-12",
       "license": "apache-2.0"
@@ -1183,31 +1161,6 @@
       "license": "apache-2.0"
     },
     {
-      "id": "tess-4.5-27b",
-      "name": "Tess 4.5 27B",
-      "maker": "bartowski",
-      "params": "27B",
-      "category": "vision",
-      "repo": "bartowski/migtissera_Tess-4.5-27B-GGUF",
-      "quant": "Q4_K_M",
-      "sizeGB": 17.44,
-      "jobs": {
-        "general": 8,
-        "office": 7,
-        "research": 7,
-        "coding": 7,
-        "vision": 7,
-        "fast": 4
-      },
-      "judge": 7,
-      "blurb": "Found on Hugging Face, added automatically on 2026-11-12 (apache-2.0 license). Not tested by Quicksilver yet: its ratings are estimates from its size.",
-      "vision": true,
-      "mmprojGB": 0.93,
-      "auto": true,
-      "added": "2026-11-12",
-      "license": "apache-2.0"
-    },
-    {
       "id": "apex-35b-v1.0",
       "name": "Apex 35B V1.0",
       "maker": "bartowski",
@@ -1228,6 +1181,30 @@
       "blurb": "Found on Hugging Face, added automatically on 2026-11-12 (apache-2.0 license). Not tested by Quicksilver yet: its ratings are estimates from its size.",
       "vision": true,
       "mmprojGB": 0.9,
+      "auto": true,
+      "added": "2026-11-12",
+      "license": "apache-2.0"
+    },
+    {
+      "id": "clover-35b-a3b-preview",
+      "name": "Clover 35B A3B Preview",
+      "maker": "bartowski",
+      "params": "35B",
+      "category": "large",
+      "repo": "bartowski/Diffuspace_Clover-35B-A3B-Preview-GGUF",
+      "quant": "Q4_K_M",
+      "sizeGB": 22.32,
+      "jobs": {
+        "general": 8,
+        "office": 7,
+        "research": 7,
+        "coding": 7,
+        "vision": 0,
+        "fast": 4
+      },
+      "judge": 7,
+      "blurb": "Found on Hugging Face, added automatically on 2026-11-12 (apache-2.0 license). Not tested by Quicksilver yet: its ratings are estimates from its size.",
+      "activeGB": 1.8,
       "auto": true,
       "added": "2026-11-12",
       "license": "apache-2.0"
@@ -1358,14 +1335,14 @@
       "license": "apache-2.0"
     },
     {
-      "id": "nanbeige4.3-33b",
-      "name": "Nanbeige4.3 33B",
+      "id": "pantheon-reasoning-27b",
+      "name": "Pantheon Reasoning 27B",
       "maker": "bartowski",
-      "params": "33B",
-      "category": "large",
-      "repo": "bartowski/Nanbeige_Nanbeige4.3-33B-GGUF",
+      "params": "27B",
+      "category": "reasoning",
+      "repo": "bartowski/Gryphe_Pantheon-Reasoning-27B-GGUF",
       "quant": "Q4_K_M",
-      "sizeGB": 20.79,
+      "sizeGB": 17.98,
       "jobs": {
         "general": 8,
         "office": 7,
@@ -1375,9 +1352,10 @@
         "fast": 4
       },
       "judge": 7,
-      "blurb": "Found on Hugging Face, added automatically on 2026-11-12 (apache-2.0 license). Not tested by Quicksilver yet: its ratings are estimates from its size.",
+      "blurb": "Found on Hugging Face, added automatically on 2026-11-22 (apache-2.0 license). Not tested by Quicksilver yet: its ratings are estimates from its size.",
+      "reasoning": true,
       "auto": true,
-      "added": "2026-11-12",
+      "added": "2026-11-22",
       "license": "apache-2.0"
     },
     {
@@ -1404,52 +1382,50 @@
       "license": "apache-2.0"
     },
     {
-      "id": "ornith-1.5-9b-uncensored",
-      "name": "Ornith 1.5 9B uncensored",
-      "maker": "mradermacher",
-      "params": "9B",
-      "category": "open",
-      "repo": "mradermacher/Ornith-1.5-9B-uncensored-GGUF",
+      "id": "axonmed-32b-thinking",
+      "name": "AxonMed 32B Thinking",
+      "maker": "bartowski",
+      "params": "32B",
+      "category": "reasoning",
+      "repo": "bartowski/Saathimed_AxonMed-32B-Thinking-GGUF",
       "quant": "Q4_K_M",
-      "sizeGB": 5.63,
+      "sizeGB": 20.32,
+      "jobs": {
+        "general": 8,
+        "office": 7,
+        "research": 7,
+        "coding": 7,
+        "vision": 0,
+        "fast": 4
+      },
+      "judge": 7,
+      "blurb": "Found on Hugging Face, added automatically on 2026-11-22 (apache-2.0 license). Not tested by Quicksilver yet: its ratings are estimates from its size.",
+      "reasoning": true,
+      "auto": true,
+      "added": "2026-11-22",
+      "license": "apache-2.0"
+    },
+    {
+      "id": "axonmed-7b-flash",
+      "name": "AxonMed 7B Flash",
+      "maker": "bartowski",
+      "params": "7B",
+      "category": "general",
+      "repo": "bartowski/Saathimed_AxonMed-7B-Flash-GGUF",
+      "quant": "Q4_K_M",
+      "sizeGB": 4.78,
       "jobs": {
         "general": 6,
         "office": 5,
         "research": 5,
         "coding": 5,
-        "vision": 5,
+        "vision": 0,
         "fast": 6
       },
       "judge": 5,
-      "blurb": "New on Hugging Face, added automatically on 2026-11-12 (apache-2.0 licence). Not tested by Quicksilver yet: its ratings are estimates from its size.",
-      "vision": true,
-      "mmprojGB": 0.62,
-      "open": true,
+      "blurb": "Found on Hugging Face, added automatically on 2026-11-22 (apache-2.0 license). Not tested by Quicksilver yet: its ratings are estimates from its size.",
       "auto": true,
-      "added": "2026-11-12",
-      "license": "apache-2.0"
-    },
-    {
-      "id": "minicpm5-2b",
-      "name": "MiniCPM5 2B",
-      "maker": "bartowski",
-      "params": "2B",
-      "category": "small",
-      "repo": "bartowski/MiniCPM5-2B-GGUF",
-      "quant": "Q4_K_M",
-      "sizeGB": 1.62,
-      "jobs": {
-        "general": 4,
-        "office": 3,
-        "research": 3,
-        "coding": 3,
-        "vision": 0,
-        "fast": 8
-      },
-      "judge": 3,
-      "blurb": "Found on Hugging Face, added automatically on 2026-11-21 (apache-2.0 license). Not tested by Quicksilver yet: its ratings are estimates from its size.",
-      "auto": true,
-      "added": "2026-11-21",
+      "added": "2026-11-22",
       "license": "apache-2.0"
     },
     {
@@ -1526,6 +1502,29 @@
       "open": true,
       "auto": true,
       "added": "2026-11-13",
+      "license": "apache-2.0"
+    },
+    {
+      "id": "nanbeige4.3-33b",
+      "name": "Nanbeige4.3 33B",
+      "maker": "bartowski",
+      "params": "33B",
+      "category": "large",
+      "repo": "bartowski/Nanbeige_Nanbeige4.3-33B-GGUF",
+      "quant": "Q4_K_M",
+      "sizeGB": 20.79,
+      "jobs": {
+        "general": 8,
+        "office": 7,
+        "research": 7,
+        "coding": 7,
+        "vision": 0,
+        "fast": 4
+      },
+      "judge": 7,
+      "blurb": "Found on Hugging Face, added automatically on 2026-11-12 (apache-2.0 license). Not tested by Quicksilver yet: its ratings are estimates from its size.",
+      "auto": true,
+      "added": "2026-11-12",
       "license": "apache-2.0"
     },
     {
@@ -1877,6 +1876,31 @@
       "license": "apache-2.0"
     },
     {
+      "id": "gemma-4-26b-a4b-it-heretic",
+      "name": "gemma 4 26B A4B it heretic",
+      "maker": "mradermacher",
+      "params": "26B",
+      "category": "open",
+      "repo": "mradermacher/gemma-4-26B-A4B-it-heretic-GGUF",
+      "quant": "Q4_K_M",
+      "sizeGB": 16.8,
+      "jobs": {
+        "general": 8,
+        "office": 7,
+        "research": 7,
+        "coding": 7,
+        "vision": 0,
+        "fast": 4
+      },
+      "judge": 7,
+      "blurb": "Found on Hugging Face, added automatically on 2026-11-13 (apache-2.0 license). Not tested by Quicksilver yet: its ratings are estimates from its size.",
+      "activeGB": 2.4,
+      "open": true,
+      "auto": true,
+      "added": "2026-11-13",
+      "license": "apache-2.0"
+    },
+    {
       "id": "qwen3.8-9b-heretic-uncensored",
       "name": "Qwen3.8 9B heretic uncensored",
       "maker": "mradermacher",
@@ -2051,30 +2075,6 @@
       "license": "apache-2.0"
     },
     {
-      "id": "clover-35b-a3b-preview",
-      "name": "Clover 35B A3B Preview",
-      "maker": "bartowski",
-      "params": "35B",
-      "category": "large",
-      "repo": "bartowski/Diffuspace_Clover-35B-A3B-Preview-GGUF",
-      "quant": "Q4_K_M",
-      "sizeGB": 22.32,
-      "jobs": {
-        "general": 8,
-        "office": 7,
-        "research": 7,
-        "coding": 7,
-        "vision": 0,
-        "fast": 4
-      },
-      "judge": 7,
-      "blurb": "Found on Hugging Face, added automatically on 2026-11-12 (apache-2.0 license). Not tested by Quicksilver yet: its ratings are estimates from its size.",
-      "activeGB": 1.8,
-      "auto": true,
-      "added": "2026-11-12",
-      "license": "apache-2.0"
-    },
-    {
       "id": "logics-swe-qwen3.6-35b-a3b",
       "name": "Logics SWE Qwen3.6 35B A3B",
       "maker": "bartowski",
@@ -2119,6 +2119,31 @@
       },
       "judge": 4,
       "blurb": "Found on Hugging Face, added automatically on 2026-11-12 (apache-2.0 license). Not tested by Quicksilver yet: its ratings are estimates from its size.",
+      "auto": true,
+      "added": "2026-11-12",
+      "license": "apache-2.0"
+    },
+    {
+      "id": "tess-4.5-27b",
+      "name": "Tess 4.5 27B",
+      "maker": "bartowski",
+      "params": "27B",
+      "category": "vision",
+      "repo": "bartowski/migtissera_Tess-4.5-27B-GGUF",
+      "quant": "Q4_K_M",
+      "sizeGB": 17.44,
+      "jobs": {
+        "general": 8,
+        "office": 7,
+        "research": 7,
+        "coding": 7,
+        "vision": 7,
+        "fast": 4
+      },
+      "judge": 7,
+      "blurb": "Found on Hugging Face, added automatically on 2026-11-12 (apache-2.0 license). Not tested by Quicksilver yet: its ratings are estimates from its size.",
+      "vision": true,
+      "mmprojGB": 0.93,
       "auto": true,
       "added": "2026-11-12",
       "license": "apache-2.0"
@@ -2446,150 +2471,6 @@
       "license": "apache-2.0"
     },
     {
-      "id": "aescode-32b",
-      "name": "AesCode 32B",
-      "maker": "bartowski",
-      "params": "32B",
-      "category": "coding",
-      "repo": "bartowski/AesCode-32B-GGUF",
-      "quant": "Q4_K_M",
-      "sizeGB": 20.49,
-      "jobs": {
-        "general": 8,
-        "office": 7,
-        "research": 7,
-        "coding": 9,
-        "vision": 7,
-        "fast": 4
-      },
-      "judge": 7,
-      "blurb": "Found on Hugging Face, added automatically on 2026-11-12 (apache-2.0 license). Not tested by Quicksilver yet: its ratings are estimates from its size.",
-      "vision": true,
-      "mmprojGB": 1.2,
-      "auto": true,
-      "added": "2026-11-12",
-      "license": "apache-2.0"
-    },
-    {
-      "id": "aescode-8b",
-      "name": "AesCode 8B",
-      "maker": "bartowski",
-      "params": "8B",
-      "category": "coding",
-      "repo": "bartowski/AesCode-8B-GGUF",
-      "quant": "Q4_K_M",
-      "sizeGB": 5.21,
-      "jobs": {
-        "general": 6,
-        "office": 5,
-        "research": 5,
-        "coding": 7,
-        "vision": 5,
-        "fast": 6
-      },
-      "judge": 5,
-      "blurb": "Found on Hugging Face, added automatically on 2026-11-12 (apache-2.0 license). Not tested by Quicksilver yet: its ratings are estimates from its size.",
-      "vision": true,
-      "mmprojGB": 1.16,
-      "auto": true,
-      "added": "2026-11-12",
-      "license": "apache-2.0"
-    },
-    {
-      "id": "goetia-26b-a4b-v1.7",
-      "name": "Goetia 26B A4B v1.7",
-      "maker": "bartowski",
-      "params": "26B",
-      "category": "general",
-      "repo": "bartowski/Naphula_Goetia-26B-A4B-v1.7-GGUF",
-      "quant": "Q4_K_M",
-      "sizeGB": 18.75,
-      "jobs": {
-        "general": 8,
-        "office": 7,
-        "research": 7,
-        "coding": 7,
-        "vision": 0,
-        "fast": 4
-      },
-      "judge": 7,
-      "blurb": "Found on Hugging Face, added automatically on 2026-11-12 (apache-2.0 license). Not tested by Quicksilver yet: its ratings are estimates from its size.",
-      "activeGB": 2.4,
-      "auto": true,
-      "added": "2026-11-12",
-      "license": "apache-2.0"
-    },
-    {
-      "id": "k2-horizon-mova-36b-a4b",
-      "name": "K2 Horizon MoVA 36B A4B",
-      "maker": "bartowski",
-      "params": "36B",
-      "category": "large",
-      "repo": "bartowski/K2-Horizon-MoVA-36B-A4B-GGUF",
-      "quant": "Q4_K_M",
-      "sizeGB": 22.7,
-      "jobs": {
-        "general": 8,
-        "office": 7,
-        "research": 7,
-        "coding": 7,
-        "vision": 0,
-        "fast": 4
-      },
-      "judge": 7,
-      "blurb": "Found on Hugging Face, added automatically on 2026-11-12 (apache-2.0 license). Not tested by Quicksilver yet: its ratings are estimates from its size.",
-      "activeGB": 2.4,
-      "auto": true,
-      "added": "2026-11-12",
-      "license": "apache-2.0"
-    },
-    {
-      "id": "k2-horizon-32b",
-      "name": "K2 Horizon 32B",
-      "maker": "bartowski",
-      "params": "32B",
-      "category": "large",
-      "repo": "bartowski/K2-Horizon-32B-GGUF",
-      "quant": "Q4_K_M",
-      "sizeGB": 22.04,
-      "jobs": {
-        "general": 8,
-        "office": 7,
-        "research": 7,
-        "coding": 7,
-        "vision": 0,
-        "fast": 4
-      },
-      "judge": 7,
-      "blurb": "Found on Hugging Face, added automatically on 2026-11-12 (apache-2.0 license). Not tested by Quicksilver yet: its ratings are estimates from its size.",
-      "auto": true,
-      "added": "2026-11-12",
-      "license": "apache-2.0"
-    },
-    {
-      "id": "k2-horizon-7b",
-      "name": "K2 Horizon 7B",
-      "maker": "bartowski",
-      "params": "7B",
-      "category": "general",
-      "repo": "bartowski/K2-Horizon-7B-GGUF",
-      "quant": "Q4_K_M",
-      "sizeGB": 5.78,
-      "jobs": {
-        "general": 6,
-        "office": 5,
-        "research": 5,
-        "coding": 5,
-        "vision": 0,
-        "fast": 6
-      },
-      "judge": 5,
-      "blurb": "Found on Hugging Face, added automatically on 2026-11-12 (apache-2.0 license). Not tested by Quicksilver yet: its ratings are estimates from its size.",
-      "auto": true,
-      "added": "2026-11-12",
-      "license": "apache-2.0"
-    },
-    {
       "id": "darwin-36b-opus",
       "name": "Darwin 36B Opus",
       "maker": "bartowski",
@@ -2903,31 +2784,6 @@
       "license": "mit"
     },
     {
-      "id": "jebadiah-27b-v2-1",
-      "name": "jebadiah 27b v2 1",
-      "maker": "bartowski",
-      "params": "27B",
-      "category": "vision",
-      "repo": "bartowski/frontier-infra_jebadiah-27b-v2-1-GGUF",
-      "quant": "Q4_K_M",
-      "sizeGB": 17.44,
-      "jobs": {
-        "general": 8,
-        "office": 7,
-        "research": 7,
-        "coding": 7,
-        "vision": 7,
-        "fast": 4
-      },
-      "judge": 7,
-      "blurb": "Found on Hugging Face, added automatically on 2026-11-12 (apache-2.0 license). Not tested by Quicksilver yet: its ratings are estimates from its size.",
-      "vision": true,
-      "mmprojGB": 0.93,
-      "auto": true,
-      "added": "2026-11-12",
-      "license": "apache-2.0"
-    },
-    {
       "id": "terminalhorizon-27b",
       "name": "TerminalHorizon 27B",
       "maker": "bartowski",
@@ -2948,29 +2804,6 @@
       "blurb": "Found on Hugging Face, added automatically on 2026-11-12 (apache-2.0 license). Not tested by Quicksilver yet: its ratings are estimates from its size.",
       "vision": true,
       "mmprojGB": 0.93,
-      "auto": true,
-      "added": "2026-11-12",
-      "license": "apache-2.0"
-    },
-    {
-      "id": "dwight-4b",
-      "name": "dwight 4b",
-      "maker": "bartowski",
-      "params": "4B",
-      "category": "small",
-      "repo": "bartowski/zime-ai_dwight-4b-GGUF",
-      "quant": "Q4_K_M",
-      "sizeGB": 2.59,
-      "jobs": {
-        "general": 5,
-        "office": 4,
-        "research": 4,
-        "coding": 4,
-        "vision": 0,
-        "fast": 8
-      },
-      "judge": 4,
-      "blurb": "Found on Hugging Face, added automatically on 2026-11-12 (apache-2.0 license). Not tested by Quicksilver yet: its ratings are estimates from its size.",
       "auto": true,
       "added": "2026-11-12",
       "license": "apache-2.0"
@@ -3100,6 +2933,31 @@
       "license": "apache-2.0"
     },
     {
+      "id": "jebadiah-27b-v2-1",
+      "name": "jebadiah 27b v2 1",
+      "maker": "bartowski",
+      "params": "27B",
+      "category": "vision",
+      "repo": "bartowski/frontier-infra_jebadiah-27b-v2-1-GGUF",
+      "quant": "Q4_K_M",
+      "sizeGB": 17.44,
+      "jobs": {
+        "general": 8,
+        "office": 7,
+        "research": 7,
+        "coding": 7,
+        "vision": 7,
+        "fast": 4
+      },
+      "judge": 7,
+      "blurb": "Found on Hugging Face, added automatically on 2026-11-12 (apache-2.0 license). Not tested by Quicksilver yet: its ratings are estimates from its size.",
+      "vision": true,
+      "mmprojGB": 0.93,
+      "auto": true,
+      "added": "2026-11-12",
+      "license": "apache-2.0"
+    },
+    {
       "id": "jebadiah-9b-v2-1",
       "name": "jebadiah 9b v2 1",
       "maker": "bartowski",
@@ -3168,6 +3026,80 @@
       "blurb": "Found on Hugging Face, added automatically on 2026-11-12 (apache-2.0 license). Not tested by Quicksilver yet: its ratings are estimates from its size.",
       "auto": true,
       "added": "2026-11-12",
+      "license": "apache-2.0"
+    },
+    {
+      "id": "phai-a1-35b-1m",
+      "name": "Phai A1 35B 1M",
+      "maker": "bartowski",
+      "params": "35B",
+      "category": "vision",
+      "repo": "bartowski/PhaiModelLab_Phai-A1-35B-1M-GGUF",
+      "quant": "Q4_K_M",
+      "sizeGB": 22.32,
+      "jobs": {
+        "general": 8,
+        "office": 7,
+        "research": 7,
+        "coding": 7,
+        "vision": 7,
+        "fast": 4
+      },
+      "judge": 7,
+      "blurb": "Found on Hugging Face, added automatically on 2026-11-22 (apache-2.0 license). Not tested by Quicksilver yet: its ratings are estimates from its size.",
+      "vision": true,
+      "mmprojGB": 0.9,
+      "auto": true,
+      "added": "2026-11-22",
+      "license": "apache-2.0"
+    },
+    {
+      "id": "axonmed-7b-thinking",
+      "name": "AxonMed 7B Thinking",
+      "maker": "bartowski",
+      "params": "7B",
+      "category": "reasoning",
+      "repo": "bartowski/Saathimed_AxonMed-7B-Thinking-GGUF",
+      "quant": "Q4_K_M",
+      "sizeGB": 4.78,
+      "jobs": {
+        "general": 6,
+        "office": 5,
+        "research": 5,
+        "coding": 5,
+        "vision": 0,
+        "fast": 6
+      },
+      "judge": 5,
+      "blurb": "Found on Hugging Face, added automatically on 2026-11-22 (apache-2.0 license). Not tested by Quicksilver yet: its ratings are estimates from its size.",
+      "reasoning": true,
+      "auto": true,
+      "added": "2026-11-22",
+      "license": "apache-2.0"
+    },
+    {
+      "id": "kormo-web-9b",
+      "name": "KORMo Web 9B",
+      "maker": "bartowski",
+      "params": "9B",
+      "category": "vision",
+      "repo": "bartowski/KORMo-VL_KORMo-Web-9B-GGUF",
+      "quant": "Q4_K_M",
+      "sizeGB": 5.84,
+      "jobs": {
+        "general": 6,
+        "office": 5,
+        "research": 5,
+        "coding": 5,
+        "vision": 5,
+        "fast": 6
+      },
+      "judge": 5,
+      "blurb": "Found on Hugging Face, added automatically on 2026-11-22 (apache-2.0 license). Not tested by Quicksilver yet: its ratings are estimates from its size.",
+      "vision": true,
+      "mmprojGB": 0.92,
+      "auto": true,
+      "added": "2026-11-22",
       "license": "apache-2.0"
     },
     {
