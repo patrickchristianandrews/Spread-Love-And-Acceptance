@@ -7,9 +7,25 @@ const os = require('node:os');
 const crypto = require('node:crypto');
 const store = require('./store');
 const catalog = require('../shared/catalog');
+const hardware = require('./hardware');
 
 const HF = 'https://huggingface.co';
 const QUANT_ORDER = ['Q4_K_M', 'Q4_K_S', 'Q4_K_XL', 'Q4_0', 'Q5_K_M', 'IQ4_XS', 'Q5_K_S', 'Q6_K', 'Q3_K_M', 'Q8_0', 'MXFP4', 'F16', 'BF16'];
+// Adaptive quantization: when a model is downloaded, if this PC has graphics-memory headroom we pick
+// a higher-quality quant (more bits per weight) that still fits ENTIRELY on the GPU, so it stays
+// fast. If nothing better fits the GPU, we keep the balanced Q4_K_M default (never a downgrade).
+const QUANT_UPGRADE = ['Q8_0', 'Q6_K', 'Q5_K_M', 'Q5_K_S', 'Q4_K_XL']; // best → just-above-Q4_K_M
+const cleanQuant = (q) => String(q || '').replace(/^UD-/, '').toUpperCase();
+function pickAdaptiveQuant(options, hw, mode = 'adaptive') {
+  if (mode !== 'adaptive') return null; // user turned it off (balanced)
+  const vram = Math.max(Number(hw?.vramFreeGB ?? hw?.vramGB ?? 0) || 0, 0);
+  if (vram < 4) return null; // no real GPU headroom: the balanced default is the right call
+  const budget = vram - 1.5; // leave room for the context / KV cache on the card
+  const cand = (options || []).filter((o) => QUANT_UPGRADE.includes(cleanQuant(o.quant)) && (o.size || 0) / 1e9 <= budget);
+  if (!cand.length) return null;
+  cand.sort((a, b) => QUANT_UPGRADE.indexOf(cleanQuant(a.quant)) - QUANT_UPGRADE.indexOf(cleanQuant(b.quant)));
+  return cand[0];
+}
 
 function hfHeaders() {
   const token = store.getSecret('huggingface');
@@ -302,7 +318,15 @@ async function planCatalog(catalogId) {
 async function planGguf(repo, { id, name, quant, catalogId, vision } = {}) {
   const { options, mmproj } = await ggufOptions(repo);
   if (!options.length) throw new Error('No GGUF model files in that repository.');
-  const pick = (quant && options.find((o) => o.quant.replace(/^UD-/, '') === quant.toUpperCase())) || options[0];
+  const requested = quant && options.find((o) => o.quant.replace(/^UD-/, '') === quant.toUpperCase());
+  let pick = requested || options[0];
+  // Adaptive: for catalog / Liquid-Edition models (and any download where the user didn't hand-pick a
+  // quant), upgrade to a higher-quality quant if this PC can run it fully on the GPU. A quant the
+  // user explicitly chose for a plain Hugging Face import is left exactly as chosen.
+  const userChose = quant && !catalogId;
+  if (!userChose) {
+    try { const hw = await hardware.detect().catch(() => ({})); const better = pickAdaptiveQuant(options, hw, store.config().quantFit || 'adaptive'); if (better) pick = better; } catch {}
+  }
   const items = pick.files.map((f, i) => ({ role: i === 0 ? 'model' : null, repo, path: f.path, size: f.size }));
   if (mmproj && (vision !== false)) items.push({ role: 'mmproj', repo, path: mmproj.path, size: mmproj.size });
   const shortName = name || repo.split('/')[1].replace(/-GGUF$/i, '').replace(/[-_]/g, ' ');
@@ -733,4 +757,4 @@ async function addFound(items, readGguf) {
   return added;
 }
 
-module.exports = { keepPackModels, list, get, add, remove, start, cancel, active, planCatalog, planGguf, ggufOptions, search, trending, trendType, paramsOf, importFile, tree, findOnPC, findChat, addFound, tidyImported, inUse, setUse, chatFile, looksUncensored, liquidOwn, keepDirs, packLeft, repair, registerStarter };
+module.exports = { keepPackModels, list, get, add, remove, start, cancel, active, planCatalog, planGguf, ggufOptions, search, trending, trendType, paramsOf, importFile, tree, findOnPC, findChat, addFound, tidyImported, inUse, setUse, chatFile, looksUncensored, liquidOwn, keepDirs, packLeft, repair, registerStarter, pickAdaptiveQuant };

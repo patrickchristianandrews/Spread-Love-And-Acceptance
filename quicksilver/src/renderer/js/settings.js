@@ -215,6 +215,7 @@ function chatSetHTML() {
       <div class="field"><label for="c-max">Longest answer (tokens)</label><input id="c-max" type="number" min="256" max="65536" step="256" value="${p.maxTokens}"></div>
     </div>
     <div class="field"><label for="c-gpu">Graphics card use</label><select id="c-gpu"><option value="auto" ${p.gpu !== 0 ? 'selected' : ''}>Automatic (recommended)</option><option value="0" ${p.gpu === 0 ? 'selected' : ''}>Processor only (most compatible)</option></select><span class="help">Choose "Processor only" if models fail to load or crash on your graphics card.</span></div>
+    <div class="field"><label for="c-quant">Model quality (quantization)</label><select id="c-quant"><option value="adaptive" ${(S.config?.quantFit ?? 'adaptive') === 'adaptive' ? 'selected' : ''}>Adaptive — best quality your graphics card can run (recommended)</option><option value="balanced" ${S.config?.quantFit === 'balanced' ? 'selected' : ''}>Balanced — always the standard Q4 size</option></select><span class="help">Adaptive downloads a higher-quality version of a model (more bits per weight) when it fits entirely on your graphics card, and the standard balanced size otherwise. Applies to models you download from now on.</span></div>
     <label class="row"><input type="checkbox" id="c-autoskill" ${p.autoSkills !== false ? 'checked' : ''}> <span><b>⚡ Just ask</b> <span class="help">Asking for a picture, a video, a photo edit, music, a spoken version, a document, a chart or an app makes it straight away, with no skill to pick. Turn off to choose skills yourself (the / menu and the suggestions stay).</span></span></label>
     <div class="field"><label for="c-keep">Keep models loaded</label><select id="c-keep">${[['auto', 'Automatic (longer on PCs with more memory)'], [20, '20 minutes after last use'], [60, '1 hour'], [240, '4 hours'], [0, 'Until I close Quicksilver']].map(([v, l]) => `<option value="${v}" ${String(S.config?.keepLoaded ?? 'auto') === String(v) ? 'selected' : ''}>${l}</option>`).join('')}</select><span class="help">A model that's still loaded answers right away; one that was unloaded to free memory has to load again from disk first. Longer keeps chats quick but holds on to memory.</span></div>
     <div><button class="btn primary" id="c-save">Save</button></div>
@@ -233,7 +234,7 @@ function bindChatSet() {
     });
     save();
     const keep = $('#c-keep').value;
-    call('config:set', { keepLoaded: keep === 'auto' ? null : Number(keep) }).then((c) => { S.config = c; }).catch(() => {});
+    call('config:set', { keepLoaded: keep === 'auto' ? null : Number(keep), quantFit: $('#c-quant')?.value === 'balanced' ? 'balanced' : 'adaptive' }).then((c) => { S.config = c; }).catch(() => {});
     toast('Saved.');
   });
 }
