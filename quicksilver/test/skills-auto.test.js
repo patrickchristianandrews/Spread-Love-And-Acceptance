@@ -64,7 +64,8 @@ const CASES = [
   ['make a 4k ultra detailed cinematic wide-angle picture of a cat', [], 'make-image'],
   ['gimme a picture of a cat', [], 'make-image'],
   ['make me a cat picture', [], 'make-image'],
-  ['show me some pictures of mountains at dawn', [], 'make-image'],
+  ['show me some pictures of mountains at dawn', [], null], // "show me pictures of X" = find real ones on the web, not generate
+  ['make me a picture of mountains at dawn', [], 'make-image'], // an explicit "make" still generates
   ['a video of a dog running on a beach', [], 'make-video'],
   ['I need a business plan for a bakery', [], 'business-plan'],
   ['build me a todo app in react', [], 'build-app'],

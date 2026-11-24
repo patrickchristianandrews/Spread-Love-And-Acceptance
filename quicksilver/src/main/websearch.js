@@ -236,7 +236,7 @@ async function ddgImages(q, count = 8, safe = 'on') {
   return (j.results || []).slice(0, count * 3).map((x) => ({ title: x.title || q, thumb: x.thumbnail, full: x.image, page: x.url, source: host(x.url), license: '', creator: '', width: Number(x.width) || undefined, height: Number(x.height) || undefined }));
 }
 
-async function images(query, { count = 8, safe = 'on' } = {}) {
+async function images(query, { count = 8, safe = 'on', skip = 0 } = {}) {
   const q = String(query || '').trim();
   if (!q) throw new Error('Say what pictures to look for.');
   const on = safe !== 'off'; // follow the chat / Settings safe-search setting (default on for pictures)
@@ -273,7 +273,7 @@ async function images(query, { count = 8, safe = 'on' } = {}) {
   const fs = require('node:fs'); const path = require('node:path'); const crypto = require('node:crypto');
   const dir = path.join(store.dir('tmp'), 'web-images'); fs.mkdirSync(dir, { recursive: true });
   const out = [];
-  await Promise.all(found.slice(0, count + 4).map(async (x) => {
+  await Promise.all(found.slice(Math.max(0, skip), Math.max(0, skip) + count + 4).map(async (x) => {
     try {
       if (!/^https:\/\//.test(x.thumb)) return;
       const r = await fetch(x.thumb, { headers: { 'User-Agent': UA }, signal: AbortSignal.timeout(12000), redirect: 'follow' });

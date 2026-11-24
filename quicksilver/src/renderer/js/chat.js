@@ -928,28 +928,43 @@ async function generate(chat, rerollMsg, withTarget, opts = {}) {
   // Pictures and videos from the web are shown INSTANTLY: fetched and captioned right here, with no
   // web search and no model answer afterwards — the model "thinking" to write an intro was the delay.
   // The model is only used if the search comes back empty, so it can say so briefly.
-  const picsAsk = !skill && !opts.fix && lastUser?.text && !S.config?.offline && S.config?.web?.provider !== 'none'
-    && typeof WEB_IMAGE !== 'undefined' && WEB_IMAGE.test(lastUser.text)
-    && !/\b(make|create|generate|draw|paint|render|design|imagine|cartoon|anime)\b/i.test(lastUser.text);
-  const vidsAsk = !picsAsk && !skill && !opts.fix && lastUser?.text && !S.config?.offline && S.config?.web?.provider !== 'none'
-    && WEB_VIDEO_Q.test(lastUser.text) && !/\b(make|create|generate|animate)\b/i.test(lastUser.text);
+  // A short follow-up to a picture/video answer ("more", "another", "different ones", "of them")
+  // continues the SAME search, so the conversation flows — and "more" skips ahead to new results.
+  const base = !skill && !opts.fix && lastUser?.text && !S.config?.offline && S.config?.web?.provider !== 'none';
+  const lastShowedWeb = (kind) => { const m = [...chat.messages].slice(0, upTo).reverse().find((x) => x.role === 'assistant'); const a0 = m?.alts?.[m.altIndex]; return a0 && (a0.toolCalls || []).some((tc) => new RegExp(`\\[\\[web-${kind}:`).test(String(tc.result || ''))); };
+  const moreAsk = base && lastUser.text.trim().length < 48 && /^\s*(more|another|again|some more|a few more|show me more|and (some )?more|more (pictures?|pics|photos?|images?|videos?|clips?)|different( ones)?|other( ones)?|keep going|next)\b/i.test(lastUser.text.trim());
+  const refAsk = base && /\b(pictures?|pics|photos?|images?|videos?|clips?)\b[^.?!\n]{0,12}\bof\s+(it|them|those|these|that|him|her)\b/i.test(lastUser.text);
+  const mentionsVid = /\bvideos?\b|\bclips?\b/i.test(lastUser?.text || '');
+  const picsFollowUp = base && (moreAsk || refAsk) && !mentionsVid && lastShowedWeb('images');
+  const vidsFollowUp = base && (moreAsk || refAsk) && mentionsVid && lastShowedWeb('videos');
+  const picsAsk = (base && typeof WEB_IMAGE !== 'undefined' && WEB_IMAGE.test(lastUser.text)
+    && !/\b(make|create|generate|draw|paint|render|design|imagine|cartoon|anime)\b/i.test(lastUser.text)) || picsFollowUp;
+  const vidsAsk = !picsAsk && ((base && WEB_VIDEO_Q.test(lastUser.text) && !/\b(make|create|generate|animate)\b/i.test(lastUser.text)) || vidsFollowUp);
   if (picsAsk || vidsAsk) {
+    const follow = picsFollowUp || vidsFollowUp;
+    // The query: a fresh request starts a new subject; a follow-up continues the remembered one.
+    let queryText = lastUser.text;
+    if (follow) { queryText = chat.mediaQuery || ([...chat.messages].slice(0, upTo).reverse().find((m) => m.role === 'user' && m !== lastUser && m.text && (picsAsk ? WEB_IMAGE.test(m.text) : WEB_VIDEO_Q.test(m.text)))?.text) || lastUser.text; }
+    else { chat.mediaQuery = lastUser.text; chat.mediaSkip = 0; }
+    if (follow && moreAsk) chat.mediaSkip = (chat.mediaSkip || 0) + 8; // skip ahead so "more" is new
+    const skip = follow ? (chat.mediaSkip || 0) : 0;
     alt.status = picsAsk ? 'Finding pictures…' : 'Finding videos…'; paintStreaming(chat, msg);
-    const subject = (lastUser.text.match(/\b(?:of|for|showing|about|with)\s+([^.?!\n]{2,60})/i)?.[1] || '')
+    const subject = (queryText.match(/\b(?:of|for|showing|about|with)\s+([^.?!\n]{2,60})/i)?.[1] || '')
       .replace(/\b(on|from|off|across|in)\s+(the\s+)?(web|internet|online|google|youtube)\b[\s\S]*$/i, '')
       .replace(/\b(please|right now|now)\b[\s\S]*$/i, '').replace(/[,.;:]+$/, '').trim();
     try {
       const items = picsAsk
-        ? await qs.call('web:images', lastUser.text, { safeSearch: safeSearchValue(), count: 8 })
-        : await qs.call('web:videos', lastUser.text, { safeSearch: safeSearchValue(), count: 8 });
+        ? await qs.call('web:images', queryText, { safeSearch: safeSearchValue(), count: 8, skip })
+        : await qs.call('web:videos', queryText, { safeSearch: safeSearchValue(), count: 8 });
       if (pending?.requestId !== requestId) return;
       if (items && items.length) {
         (alt.toolCalls ||= []).push(picsAsk
           ? { id: 'autoimg', name: 'image_search', source: 'Pictures from the web', status: 'done', result: `Showing ${items.length} pictures from the web.\n[[web-images:${JSON.stringify(items)}]]` }
           : { id: 'autovid', name: 'video_search', source: 'Videos from the web', status: 'done', result: `Showing ${items.length} videos from the web.\n[[web-videos:${JSON.stringify(items)}]]` });
+        const more = follow && moreAsk ? 'more ' : '';
         alt.text = picsAsk
-          ? `Here ${items.length === 1 ? 'is a picture' : `are ${items.length} pictures`} from the web${subject ? ` of ${subject}` : ''}:`
-          : `Here ${items.length === 1 ? 'is a video' : `are ${items.length} videos`} from the web${subject ? ` about ${subject}` : ''} — click one to watch:`;
+          ? `Here ${items.length === 1 ? `is ${more ? 'another' : 'a'} picture` : `are ${items.length} ${more}pictures`} from the web${subject ? ` of ${subject}` : ''}:`
+          : `Here ${items.length === 1 ? `is ${more ? 'another' : 'a'} video` : `are ${items.length} ${more}videos`} from the web${subject ? ` about ${subject}` : ''} — click one to watch:`;
         alt.autoWeb = true;
       } else {
         alt.text = picsAsk ? "I couldn't pull up any pictures for that just now. Try again in a moment, or reword it." : "I couldn't pull up any videos for that just now. Try again in a moment, or reword it.";
