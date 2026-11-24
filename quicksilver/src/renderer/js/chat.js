@@ -743,7 +743,7 @@ async function gatherSources(chat, a, query, force = {}) {
 }
 
 // How answers should look: easy to scan, warm and direct.
-const ANSWER_STYLE = 'How to write answers: write like a thoughtful expert talking to a smart friend. Start with the direct answer in the first sentence; no openers like "Great question!" and no restating the question. Prefer clear, well-built paragraphs with varied sentence length; use a numbered list only for real steps, bullets only for genuinely list-like items, and a Markdown table only for comparisons. Use a few ## headings only for long answers. Bold sparingly, for the one or two things that matter most. Avoid stock phrases ("delve", "it\'s important to note", "in today\'s world", "in conclusion", "I hope this helps") and emoji unless the user uses them. Code goes in fenced blocks with the right language. Use the currency, units and spelling the user uses (for example £ and UK spelling if they write that way). Check any arithmetic before you state a result. Keep short answers short, and never repeat yourself. ' + DIRECT_RULES;
+const ANSWER_STYLE = 'How to write answers: write like a thoughtful expert talking to a smart friend. Start with the direct answer in the first sentence; no openers like "Great question!" and no restating the question. Prefer clear, well-built paragraphs with varied sentence length; use a numbered list only for real steps, bullets only for genuinely list-like items, and a Markdown table only for comparisons. Use a few ## headings only for long answers. Bold sparingly, for the one or two things that matter most. Avoid stock phrases ("delve", "it\'s important to note", "in today\'s world", "in conclusion", "I hope this helps") and emoji unless the user uses them. Code goes in fenced blocks with the right language. Use the currency, units and spelling the user uses (for example £ and UK spelling if they write that way). Check any arithmetic before you state a result. Keep short answers short, and never repeat yourself. The user may type fast, with typos, slang, abbreviations or broken grammar: work out what they mean and answer that, following the conversation so far for anything they refer to loosely ("it", "that", "the other one"); never correct their spelling or grammar unless they ask, and if the meaning is genuinely unclear, give the most likely answer and offer a quick check rather than stalling. ' + DIRECT_RULES;
 
 // Speed: the system prompt stays exactly the same for the whole chat, so the model keeps the
 // conversation it has already read in memory and only reads the new message. Everything that
@@ -876,6 +876,9 @@ async function generate(chat, rerollMsg, withTarget, opts = {}) {
 
   const p = S.data.prefs;
   const lastUser = [...chat.messages.slice(0, upTo)].reverse().find((m) => m.role === 'user');
+  // Tidy slang / typos for intent detection only (weather, pictures, videos, web). The real message
+  // the model sees is untouched; this just helps a roughly-typed request still route correctly.
+  const nText = typeof normMsg === 'function' ? normMsg(lastUser?.text || '') : (lastUser?.text || '');
   if (!chat.private) await prepareMemory(lastUser?.text || '').catch(() => {});
   if (pending?.requestId !== requestId) return; // stopped while getting ready
   const skill = lastUser?.skillId ? skillById(lastUser.skillId) : null;
@@ -886,12 +889,12 @@ async function generate(chat, rerollMsg, withTarget, opts = {}) {
   // conditions. Any weather-dominant question takes this path: show the card + a summary built from
   // the real numbers, and if the live lookup fails, say so honestly rather than guessing.
   const weatherAsk = !skill && !opts.fix && lastUser?.text && !S.config?.offline && S.config?.web?.provider !== 'none'
-    && WEATHER_Q.test(lastUser.text)
-    && !/\b(why|how does|how do|explain|history|historical|climate change|global warming|compare|caused?|average|record|dataset|trend|data set)\b/i.test(lastUser.text);
+    && WEATHER_Q.test(nText)
+    && !/\b(why|how does|how do|explain|history|historical|climate change|global warming|compare|caused?|average|record|dataset|trend|data set)\b/i.test(nText);
   if (weatherAsk) {
     alt.status = 'Checking the forecast…'; paintStreaming(chat, msg);
     try {
-      const wx = await qs.call('web:weather', lastUser.text, { units: preferredUnits(), place: homeLocation() });
+      const wx = await qs.call('web:weather', nText, { units: preferredUnits(), place: homeLocation() });
       if (pending?.requestId !== requestId) return;
       if (wx && wx.current) {
         (alt.toolCalls ||= []).push({ id: 'autowx', name: 'weather', source: 'Live weather', status: 'done', result: `Current forecast for ${wx.place}.\n[[weather:${JSON.stringify(wx)}]]` });
@@ -932,20 +935,20 @@ async function generate(chat, rerollMsg, withTarget, opts = {}) {
   // continues the SAME search, so the conversation flows — and "more" skips ahead to new results.
   const base = !skill && !opts.fix && lastUser?.text && !S.config?.offline && S.config?.web?.provider !== 'none';
   const lastShowedWeb = (kind) => { const m = [...chat.messages].slice(0, upTo).reverse().find((x) => x.role === 'assistant'); const a0 = m?.alts?.[m.altIndex]; return a0 && (a0.toolCalls || []).some((tc) => new RegExp(`\\[\\[web-${kind}:`).test(String(tc.result || ''))); };
-  const moreAsk = base && lastUser.text.trim().length < 48 && /^\s*(more|another|again|some more|a few more|show me more|and (some )?more|more (pictures?|pics|photos?|images?|videos?|clips?)|different( ones)?|other( ones)?|keep going|next)\b/i.test(lastUser.text.trim());
-  const refAsk = base && /\b(pictures?|pics|photos?|images?|videos?|clips?)\b[^.?!\n]{0,12}\bof\s+(it|them|those|these|that|him|her)\b/i.test(lastUser.text);
-  const mentionsVid = /\bvideos?\b|\bclips?\b/i.test(lastUser?.text || '');
+  const moreAsk = base && nText.length < 48 && /^\s*(more|another|again|some more|a few more|show me more|and (some )?more|more (pictures?|pics|photos?|images?|videos?|clips?)|different( ones)?|other( ones)?|keep going|next)\b/i.test(nText);
+  const refAsk = base && /\b(pictures?|pics|photos?|images?|videos?|clips?)\b[^.?!\n]{0,12}\bof\s+(it|them|those|these|that|him|her)\b/i.test(nText);
+  const mentionsVid = /\bvideos?\b|\bclips?\b/i.test(nText);
   const picsFollowUp = base && (moreAsk || refAsk) && !mentionsVid && lastShowedWeb('images');
   const vidsFollowUp = base && (moreAsk || refAsk) && mentionsVid && lastShowedWeb('videos');
-  const picsAsk = (base && typeof WEB_IMAGE !== 'undefined' && WEB_IMAGE.test(lastUser.text)
-    && !/\b(make|create|generate|draw|paint|render|design|imagine|cartoon|anime)\b/i.test(lastUser.text)) || picsFollowUp;
-  const vidsAsk = !picsAsk && ((base && WEB_VIDEO_Q.test(lastUser.text) && !/\b(make|create|generate|animate)\b/i.test(lastUser.text)) || vidsFollowUp);
+  const picsAsk = (base && typeof WEB_IMAGE !== 'undefined' && WEB_IMAGE.test(nText)
+    && !/\b(make|create|generate|draw|paint|render|design|imagine|cartoon|anime)\b/i.test(nText)) || picsFollowUp;
+  const vidsAsk = !picsAsk && ((base && WEB_VIDEO_Q.test(nText) && !/\b(make|create|generate|animate)\b/i.test(nText)) || vidsFollowUp);
   if (picsAsk || vidsAsk) {
     const follow = picsFollowUp || vidsFollowUp;
     // The query: a fresh request starts a new subject; a follow-up continues the remembered one.
-    let queryText = lastUser.text;
-    if (follow) { queryText = chat.mediaQuery || ([...chat.messages].slice(0, upTo).reverse().find((m) => m.role === 'user' && m !== lastUser && m.text && (picsAsk ? WEB_IMAGE.test(m.text) : WEB_VIDEO_Q.test(m.text)))?.text) || lastUser.text; }
-    else { chat.mediaQuery = lastUser.text; chat.mediaSkip = 0; }
+    let queryText = nText;
+    if (follow) { queryText = chat.mediaQuery || ([...chat.messages].slice(0, upTo).reverse().find((m) => m.role === 'user' && m !== lastUser && m.text && (picsAsk ? WEB_IMAGE.test(m.text) : WEB_VIDEO_Q.test(m.text)))?.text) || nText; }
+    else { chat.mediaQuery = nText; chat.mediaSkip = 0; }
     if (follow && moreAsk) chat.mediaSkip = (chat.mediaSkip || 0) + 8; // skip ahead so "more" is new
     const skip = follow ? (chat.mediaSkip || 0) : 0;
     alt.status = picsAsk ? 'Finding pictures…' : 'Finding videos…'; paintStreaming(chat, msg);
@@ -1021,11 +1024,11 @@ async function generate(chat, rerollMsg, withTarget, opts = {}) {
   // Weather that slipped past the fast-path (an analytical "why/history" weather question) still gets
   // its live card here so the model can discuss it with the real numbers in hand.
   const wantWx = !skill && lastUser?.text && !S.config?.offline
-    && S.config?.web?.provider !== 'none' && WEATHER_Q.test(lastUser.text);
+    && S.config?.web?.provider !== 'none' && WEATHER_Q.test(nText);
   if (wantWx) {
     try {
       alt.status = 'Checking the forecast…'; paintStreaming(chat, msg);
-      const wx = await qs.call('web:weather', lastUser.text, { units: preferredUnits(), place: homeLocation() });
+      const wx = await qs.call('web:weather', nText, { units: preferredUnits(), place: homeLocation() });
       if (pending?.requestId !== requestId) return;
       if (wx && wx.current) {
         (alt.toolCalls ||= []).push({ id: 'autowx', name: 'weather', source: 'Live weather', status: 'done', result: `Current forecast for ${wx.place}.\n[[weather:${JSON.stringify(wx)}]]` });

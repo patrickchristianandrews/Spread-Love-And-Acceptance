@@ -1,12 +1,16 @@
 ### Download
 
-**Quicksilver-Web-Setup-2.23.7.exe** (below, about 200 MB, with a matching `.sha256`) is the installer. It's small and quick to download. The first time Quicksilver opens, its setup screen downloads the whole Liquid Edition before the app starts — the three abliterated chat models (Qwen3.5 4B Brain, Gemma 3 12B Closer, Mistral Nemo 12B Muse), Lustify for pictures, Wan 2.2 for video, and the search models: about 38 GB in all — and the app opens once it's done. Keep about 45 GB free on the drive you install to. If the download stops, close and reopen Quicksilver and it picks up where it left off.
+**Quicksilver-Web-Setup-2.23.8.exe** (below, about 200 MB, with a matching `.sha256`) is the installer. It's small and quick to download. The first time Quicksilver opens, its setup screen downloads the whole Liquid Edition before the app starts — the three abliterated chat models (Qwen3.5 4B Brain, Gemma 3 12B Closer, Mistral Nemo 12B Muse), Lustify for pictures, Wan 2.2 for video, and the search models: about 38 GB in all — and the app opens once it's done. Keep about 45 GB free on the drive you install to. If the download stops, close and reopen Quicksilver and it picks up where it left off.
 
 (A full offline package — the installer with all ~38 GB of models already beside it, so it needs no internet from the first minute — is built for tagged releases and lives as the **Quicksilver-Windows-installer** build artifact on those build runs, for anyone who wants to install with no download.)
 
 Updating from 2.19 or 2.20: nothing extra to download; your chats, settings and models are kept.
 
 Updating from 2.18: the Liquid Edition now includes its Closer and its picture and video makers, and Quicksilver does not open until all of them are installed. After the update the setup screen downloads what is missing (about 38 GB) before the app starts. Your chats, settings and the models you already have are kept.
+
+### New in 2.23.8
+
+- **Understands messy, fast typing.** Quicksilver now tidies slang, txt-speak and common typos before working out what you want, so a roughly-typed request still does the right thing — "gimme sum pics of dogs", "shw me a vid", "wuts the wether" all route correctly. Your actual message is left exactly as you wrote it; this only helps the app understand your intent, and the model is also guided to follow loose references ("it", "that", "the other one") and answer what you mean without nitpicking spelling.
 
 ### New in 2.23.7
 

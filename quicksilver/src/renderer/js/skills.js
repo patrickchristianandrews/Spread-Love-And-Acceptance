@@ -55,6 +55,28 @@ const SUMS = /\b(probabilit|chance|odds|calculate|how many|how much|expected val
 // A question about how to do something is answered, not carried out ("how do I make a logo?").
 const JUST_ASKING = /^\s*(how|what|why|when|where|who|which|is|are|was|were|does|do|did|should|would it|can i|could i|may i|am i)\b/i;
 const ABOUT_WORDS = /\b(prompt for|describe|explain|caption|what(?:'s| is) (in|on)|analy[sz]e|read the text|review of|write a review|summar)\w*/i;
+// Normalise messy input for INTENT DETECTION ONLY (never shown to the user, never sent to the model
+// as-is): expand common slang, txt-speak and contractions, and fix a few intent-related misspellings,
+// so a quickly-typed or broken message still routes to the right thing. The user's real message is
+// left exactly as they wrote it.
+const INTENT_FIXES = [
+  [/\bgimme\b/g, 'give me'], [/\blemme\b/g, 'let me'], [/\bwanna\b/g, 'want to'], [/\bgonna\b/g, 'going to'],
+  [/\btryna\b/g, 'trying to'], [/\bgotta\b/g, 'got to'], [/\bkinda\b/g, 'kind of'], [/\bsorta\b/g, 'sort of'],
+  [/\b(cuz|cos|bcos|becoz|bcz)\b/g, 'because'], [/\bthru\b/g, 'through'], [/\btho\b/g, 'though'], [/\bw\/\s*/g, 'with '],
+  [/\b(pls|plz|plss|pleace|plese)\b/g, 'please'], [/\bthru\b/g, 'through'], [/\bur\b/g, 'your'], [/\byr\b/g, 'your'],
+  [/\b(pix|pics)\b/g, 'pictures'], [/\bpic\b/g, 'picture'], [/\bvids\b/g, 'videos'], [/\bvid\b/g, 'video'],
+  [/\binfo\b/g, 'information'], [/\bppl\b/g, 'people'], [/\bsum\b/g, 'some'], [/\bwut\b|\bwot\b|\bwat\b/g, 'what'],
+  // intent-relevant misspellings
+  [/\bwe(a)?ther\b/g, 'weather'], [/\bwheather\b/g, 'weather'], [/\bweter\b/g, 'weather'], [/\bforcast\b/g, 'forecast'],
+  [/\bpicutre\b|\bpictuer\b|\bpicure\b|\bpictur\b/g, 'picture'], [/\bvidio\b|\bviedo\b|\bvideio\b/g, 'video'],
+  [/\bserch\b|\bseach\b|\bsearh\b/g, 'search'], [/\bshw\b|\bshoe me\b/g, 'show'], [/\bgogle\b|\bgooogle\b/g, 'google'],
+  [/\bdefinate\b/g, 'definite'], [/\brecieve\b/g, 'receive'],
+];
+function normMsg(text) {
+  let t = ` ${String(text || '').toLowerCase()} `;
+  for (const [re, rep] of INTENT_FIXES) t = t.replace(re, rep);
+  return t.replace(/\s+/g, ' ').trim();
+}
 // A request to FIND an existing picture on the web (not generate one) — handled by the web image
 // search tool, so skill routing must not hand it to the picture maker.
 const WEB_IMAGE = /\b(photos?|pictures?|images?|pics)\b[^.?!\n]{0,24}\b(online|on\s+the\s+(web|internet)|from\s+the\s+(web|internet)|off\s+(the\s+)?(web|internet)|on\s+google)\b|\b(online|on\s+the\s+web|on\s+the\s+internet|from\s+the\s+web|from\s+the\s+internet|google\s+image)\b[^.?!\n]{0,24}\b(photos?|pictures?|images?|pics)\b|\b(find|search|look\s?up|look\s+for|pull\s+up|google|show(\s+me)?|lemme\s+see|let\s+me\s+see|see|view|get\s+me)\b[^.?!\n]{0,30}\b(photos?|pictures?|pics|images?)\b\s+of\b|\b(find|search|look\s?up|look\s+for|pull\s+up|google)\b[^.?!\n]{0,30}\b(photos?|pictures?|pics|images?)\b|\b(real|actual|genuine|existing)\s+(life\s+)?(photos?|pictures?|images?|pics)\b|\bwhat\s+(does|do|did|would)\s+.{1,40}\s+(really\s+)?look\s+like\b/i;
@@ -85,7 +107,9 @@ function askedFor(t, skill) {
 }
 function autoSkillFor(text, atts = [], chat = null) {
   if (S.data.prefs.autoSkills === false) return null;
-  const t = String(text || '').trim();
+  // Tidy slang / typos first so a roughly-typed request still routes (intent only; the real message
+  // is untouched).
+  const t = normMsg(String(text || '').trim());
   if (t.length < 6 || t.length > 1500) return null;
   const off = new Set(chat?.dismissed || []);
   const pick = (s) => (s && !off.has(s.id) ? s : null);
