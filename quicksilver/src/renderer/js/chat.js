@@ -710,6 +710,15 @@ function webWanted(chat, a, query, force = {}) {
   return auto ? 'auto' : '';
 }
 
+// Deep research: a handful of complementary searches so even a small model can synthesize a real,
+// grounded answer (the app does the searching instead of relying on the model to call tools well).
+function deepQueries(q) {
+  const base = String(q || '').trim().replace(/[?]+$/, '');
+  if (!base) return [];
+  const year = new Date().getFullYear();
+  const vars = [base, `${base} ${year}`, `${base} explained in detail`, `${base} comparison review analysis`, `${base} criticism problems limitations`, `${base} latest news update`];
+  return [...new Set(vars.map((v) => v.trim()).filter(Boolean))].slice(0, 6);
+}
 async function gatherSources(chat, a, query, force = {}) {
   const out = [];
   // A knowledge model searches its own knowledge bases (and reports them back as it answers).
@@ -734,7 +743,17 @@ async function gatherSources(chat, a, query, force = {}) {
     if (ENCYCLOPEDIC_Q.test(query) && !FRESH_Q.test(query)) {
       try { const w = await qs.call('web:wiki', query); if (w && w.text) { out.push({ title: w.title, url: w.url, text: w.text }); out.wiki = true; solid = true; } } catch {}
     }
-    if (!solid) {
+    if (!solid && force.deep) {
+      // Deep research: several complementary searches + a Wikipedia grounding, de-duplicated by URL.
+      out.deep = true;
+      const seen = new Set();
+      const qs2 = deepQueries(query);
+      for (let i = 0; i < qs2.length; i += 1) {
+        try { const ws = await webSearch(qs2[i]); for (const r of ws.results) { const u = r.url || `${r.title}`; if (seen.has(u)) continue; seen.add(u); out.push({ title: r.title, url: r.url, text: r.text || r.snippet }); } if (i === 0) out.webMeta = ws.meta; } catch {}
+        if (out.length - before >= 16) break; // enough to synthesize from
+      }
+      try { if (!FRESH_Q.test(query)) { const w = await qs.call('web:wiki', query); if (w?.text && !seen.has(w.url)) { out.push({ title: w.title, url: w.url, text: w.text }); } } } catch {}
+    } else if (!solid) {
       try { const ws = await webSearch(query); for (const r of ws.results) out.push({ title: r.title, url: r.url, text: r.text || r.snippet }); out.webMeta = ws.meta; for (const w of ws.meta?.warnings || []) toast(`Web search: ${w}`, 9000); } catch (err) { toast(`Web search: ${err.message}`, 6000); }
     }
     if (out.length === before) out.webEmpty = true; // searched, found nothing: the answer must say so
@@ -984,7 +1003,7 @@ async function generate(chat, rerollMsg, withTarget, opts = {}) {
     return;
   }
   const force = skill?.tools || {};
-  if ((chat.library ?? a.library) || webWanted(chat, a, lastUser?.text || '', force) || force.knowledge) { alt.status = 'Searching sources…'; paintStreaming(chat, msg); }
+  if ((chat.library ?? a.library) || webWanted(chat, a, lastUser?.text || '', force) || force.knowledge) { alt.status = force.deep ? '🔭 Researching across several sources…' : 'Searching sources…'; paintStreaming(chat, msg); }
   // Load the model at the same time as the search runs, instead of one after the other.
   if (!target.startsWith('api:') && !cloudAnswers()) qs.call('models:warm', target, { contextSize: ctxOf(a), gpu: p.gpu }).catch(() => {});
   // Small background jobs (suggestions, titles, memory notes) step aside for the new question.
