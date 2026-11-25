@@ -1731,3 +1731,13 @@ code.sel { user-select: all; background: var(--soft); padding: 1px 6px; border-r
 .sc-ic { font-size: 1.05rem; line-height: 1.3; width: 20px; text-align: center; flex: none; }
 .sc-detail { margin-top: 1px; }
 .sc-fix { color: #e0416a; }
+
+/* Conversation mode */
+.convo-btn.on { color: #fff; background: var(--accent, #4338ca); }
+.convo-banner { position: fixed; left: 50%; bottom: 84px; transform: translateX(-50%); z-index: 60; display: flex; align-items: center; gap: 8px; padding: 8px 14px; border-radius: 999px; background: var(--panel-2, #1b1d2a); border: 1px solid var(--line); box-shadow: 0 6px 24px rgba(0,0,0,.3); font-size: .9rem; cursor: pointer; }
+.convo-banner .convo-dot { width: 9px; height: 9px; border-radius: 50%; background: #e0416a; animation: convo-pulse 1s ease-in-out infinite; }
+.convo-banner.listening .convo-dot { background: #37d67a; }
+.convo-banner.speaking .convo-dot { background: #5ee0ec; }
+.convo-banner.thinking .convo-dot { background: #f5b73d; }
+.convo-banner .convo-stop { opacity: .65; margin-left: 4px; }
+@keyframes convo-pulse { 0%,100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.5); opacity: .5; } }

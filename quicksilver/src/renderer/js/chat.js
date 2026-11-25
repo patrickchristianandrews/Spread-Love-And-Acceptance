@@ -140,6 +140,7 @@ views.chat = {
             <label class="pill-select small make-pick ${makeOf(chat) !== 'auto' ? 'on' : ''}" title="What a message makes. Auto decides from your words (ask for a picture and you get one). Answer: always a written answer. Picture or Video: every message makes one."><span class="pill-emoji">${MAKES[makeOf(chat)][0]}</span><select id="pick-make" aria-label="What to make">${Object.entries(MAKES).map(([k, m]) => `<option value="${k}" ${k === makeOf(chat) ? 'selected' : ''}>${m[1]}</option>`).join('')}</select>${icon('chevron', 14)}</label>
             <button class="chip-tog improve-btn" id="improve-btn" title="Fix my prompt: rewrites what you typed so it's clear and complete (spelling too), for a better answer. You can edit it before sending." aria-label="Fix my prompt">${icon('sparkle', 16)}<span>Fix my prompt</span></button>
             <button class="icon-btn mic-btn ${voiceRec?.chatId === chat.id ? 'rec' : ''}" id="mic-btn" title="Voice typing: click and speak (Ctrl+Space)" aria-label="Voice typing">${icon('mic')}</button>
+            <button class="icon-btn convo-btn ${typeof convoMode !== 'undefined' && convoMode ? 'on' : ''}" id="convo-btn" title="Conversation mode: talk back and forth hands-free — speak, hear the answer, speak again. Press Esc to stop." aria-label="Conversation mode">💬</button>
             <span class="bar-sep"></span>
             ${chip('tog-lib', 'book', 'Library', lib, 'Search your knowledge bases and cite them')}
             ${chip('tog-fact', 'shield', 'Double-check', fact, 'After each answer, a second model checks it claim by claim')}
@@ -514,6 +515,7 @@ function bindChat() {
   input.addEventListener('paste', (e) => { const files = [...e.clipboardData.files]; if (files.length) { e.preventDefault(); addFiles(chat, files); } });
   bindDocPanel(chat);
   $('#mic-btn').addEventListener('click', () => toggleVoice(chat));
+  $('#convo-btn')?.addEventListener('click', () => toggleConvo(chat));
   $('#improve-btn').addEventListener('click', () => improvePromptBox(chat));
   $('#opts-btn').addEventListener('click', (e) => composerOptions(chat, e.currentTarget));
   $('#add-api-chip')?.addEventListener('click', () => { go({ view: 'apis' }); });

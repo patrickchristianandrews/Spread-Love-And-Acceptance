@@ -162,7 +162,8 @@ function insertSpoken(chat, text) {
   const next = `${cur}${cur && !/\s$/.test(cur) ? ' ' : ''}${text}`;
   chat.draft = next; save();
   if (input) { input.value = next; input.dispatchEvent(new Event('input')); input.focus(); }
-  if (S.data.prefs.voiceHandsFree && live) { voiceSentFrom = chat.id; $('#send')?.click(); }
+  if ((S.data.prefs.voiceHandsFree || convoMode) && live) { voiceSentFrom = chat.id; $('#send')?.click(); if (convoMode) convoBanner('thinking'); }
+  else if (convoMode && live && !text.trim()) { setTimeout(() => { if (convoMode) startListening(chat); }, 300); } // heard nothing: keep listening
 }
 qs.onChat(({ ev }) => {
   // An answer that was stopped or failed is not read aloud, now or after the next one.
@@ -173,7 +174,11 @@ qs.onChat(({ ev }) => {
     if (pending || !chat) return;
     voiceSentFrom = null;
     const m = [...chat.messages].reverse().find((x) => x.role === 'assistant');
-    if (m && msgText(m)) speak(msgText(m), { id: m.id });
+    if (m && msgText(m)) {
+      if (convoMode) convoBanner('speaking');
+      // In conversation mode, re-open the mic as soon as the answer finishes being read aloud.
+      speak(msgText(m), { id: m.id, onEnd: () => { if (convoMode && !pending) { const c = chatById(convoChatId); if (c) { convoBanner('listening'); startListening(c); } } } });
+    } else if (convoMode && !pending) { const c = chatById(convoChatId); if (c) { convoBanner('listening'); startListening(c); } }
   }, 250);
 });
 
@@ -183,8 +188,36 @@ document.addEventListener('keydown', (e) => {
     const chat = chatById(S.route.id);
     if (chat) toggleVoice(chat);
   }
+  if (e.key === 'Escape' && convoMode) { stopConvo(); return; }
   if (e.key === 'Escape' && speakingId) stopSpeaking();
 });
+
+// ---------- hands-free conversation (talk back and forth) ----------
+let convoMode = false; let convoChatId = null;
+function toggleConvo(chat) { if (convoMode) { stopConvo(); return; } startConvo(chat); }
+async function startConvo(chat) {
+  let st; try { st = await qs.call('voice:status'); } catch (err) { toast(err.message); return; }
+  if (!st.ready) { voiceSetup(st, () => startConvo(chatById(chat.id) || chat)); return; }
+  convoMode = true; convoChatId = chat.id;
+  const b = $('#convo-btn'); if (b) b.classList.add('on');
+  convoBanner('listening');
+  startListening(chat);
+}
+function stopConvo() {
+  convoMode = false; convoChatId = null;
+  if (voiceRec) voiceRec.stop();
+  stopSpeaking();
+  const b = $('#convo-btn'); if (b) b.classList.remove('on');
+  convoBannerHide();
+}
+function convoBanner(state) {
+  let el = document.getElementById('convo-banner');
+  if (!el) { el = document.createElement('div'); el.id = 'convo-banner'; document.body.appendChild(el); el.addEventListener('click', () => stopConvo()); }
+  const label = { listening: '🎙️ Listening… speak now', thinking: '💭 Thinking…', speaking: '🔊 Speaking…' }[state] || '🎙️ Conversation';
+  el.className = `convo-banner ${state || ''}`;
+  el.innerHTML = `<span class="convo-dot"></span><b>Conversation</b> · ${esc(label)} <span class="convo-stop">✕ stop (Esc)</span>`;
+}
+function convoBannerHide() { document.getElementById('convo-banner')?.remove(); }
 
 // Settings → Voice.
 function voiceSetHTML() {
@@ -194,7 +227,8 @@ function voiceSetHTML() {
     <div class="card"><h3>${icon('mic', 18)} Voice typing</h3><p class="small muted" style="margin:6px 0 10px">Click the mic in any chat (or press Ctrl+Space) and speak. Speech is turned into text on this PC with Whisper.</p>
       <div id="vt-status" class="small">Checking…</div>
       <label class="row" style="margin-top:10px"><input type="checkbox" id="v-auto" ${p.voiceAutoStop !== false ? 'checked' : ''}> <span><b>Stop listening when I pause</b> <span class="help">otherwise click the mic again to finish</span></span></label>
-      <label class="row"><input type="checkbox" id="v-hands" ${p.voiceHandsFree ? 'checked' : ''}> <span><b>Hands-free conversation</b> <span class="help">sends what you said straight away and reads the answer back</span></span></label></div>
+      <label class="row"><input type="checkbox" id="v-hands" ${p.voiceHandsFree ? 'checked' : ''}> <span><b>Hands-free</b> <span class="help">sends what you said straight away and reads the answer back</span></span></label>
+      <p class="small muted" style="margin:8px 0 0">💬 <b>Conversation mode:</b> press the 💬 button in any chat to talk back and forth hands-free — speak, hear the answer, then it listens again automatically. Press Esc (or the floating ✕) to stop.</p></div>
     <div class="card"><h3>${icon('volume', 18)} Reading aloud</h3><p class="small muted" style="margin:6px 0 10px">Press Listen under any answer. Uses the voices installed in Windows; the "Natural" ones sound best (Windows Settings → Time & language → Speech).</p>
       <div class="grid2"><div class="field"><label for="v-voice">Voice</label><select id="v-voice"><option value="">Automatic</option>${voices.map((v) => `<option ${v.name === p.voiceName ? 'selected' : ''}>${esc(v.name)}</option>`).join('')}</select></div>
       <div class="field"><label for="v-rate">Speed: <span id="v-rate-v">${Number(p.voiceRate || 1).toFixed(2)}×</span></label><input id="v-rate" type="range" min="0.6" max="1.8" step="0.05" value="${p.voiceRate || 1}"></div></div>
