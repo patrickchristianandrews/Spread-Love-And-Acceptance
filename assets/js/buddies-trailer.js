@@ -69,7 +69,7 @@
         lines.forEach(function (L) {
           var at = t0 + LEAD + L.lt, key = P.clipKey(L.b.say, L.b.text), has = !!e.map[key];
           if (has) { ev.push({ t: at, k: 'sample', id: e.id + '/' + key, off: 0, len: L.d, vol: 1 }); voice.push([at, at + L.d]); }
-          caps.push([at, at + L.d + 0.35, NAMES[L.b.say] || L.b.say, L.b.text]);
+          caps.push([at, at + L.d + 0.35, NAMES[L.b.say] || L.b.say, L.b.text, L.b.say !== 'narrator']); // [4]: the line is in a speech bubble
         });
         acts.forEach(function (A) {
           if (A.b.act !== 'laugh') return; var at = t0 + LEAD + A.lt;
@@ -304,7 +304,7 @@
   }
   function capAt(t) { if (!TL) return null; var c = null; TL.caps.forEach(function (k) { if (t >= k[0] && t < k[1]) c = k; }); return c; }
   function drawCaption(g, t, scale) {
-    var c = capAt(t); if (!c) return;
+    var c = capAt(t); if (!c || c[4]) return; // a character's line is already in her speech bubble: one caption, not two
     var txt = (c[2] === '♪' ? '♪ ' + c[3] + ' ♪' : c[2] + ': ' + c[3]);
     font(g, '600', 15, 'Lora, Georgia, serif'); var w = Math.min(VW - 30, g.measureText(txt).width + 30);
     rr(g, VW / 2 - w / 2, VH - 44, w, 30, 15, 'rgba(20,14,34,.82)'); g.fillStyle = '#FFF8EE'; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText(txt, VW / 2, VH - 29, VW - 44);
