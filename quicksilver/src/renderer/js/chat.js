@@ -977,7 +977,7 @@ async function generate(chat, rerollMsg, withTarget, opts = {}) {
     try {
       const items = picsAsk
         ? await qs.call('web:images', queryText, { safeSearch: safeSearchValue(), count: 8, skip })
-        : await qs.call('web:videos', queryText, { safeSearch: safeSearchValue(), count: 8 });
+        : await qs.call('web:videos', queryText, { safeSearch: safeSearchValue(), count: 8, skip });
       if (pending?.requestId !== requestId) return;
       if (items && items.length) {
         (alt.toolCalls ||= []).push(picsAsk

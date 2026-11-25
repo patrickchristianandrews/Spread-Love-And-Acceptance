@@ -305,7 +305,7 @@ async function images(query, { count = 8, safe = 'on', skip = 0 } = {}) {
 // Returns metadata only — no large downloads — with a watch link, an embed URL and a thumbnail.
 const INVIDIOUS = ['https://invidious.jing.rocks', 'https://inv.nadeko.net', 'https://invidious.nerdvpn.de', 'https://yewtu.be'];
 const PIPED = ['https://pipedapi.kavin.rocks', 'https://pipedapi.adminforge.de'];
-async function videos(query, { count = 8, safe = 'on' } = {}) {
+async function videos(query, { count = 8, safe = 'on', skip = 0 } = {}) {
   const q = String(query || '').trim();
   if (!q) throw new Error('Say what videos to look for.');
   const on = safe !== 'off'; // follow the chat / Settings safe-search setting (default on)
@@ -357,7 +357,7 @@ async function videos(query, { count = 8, safe = 'on' } = {}) {
   const fs = require('node:fs'); const path = require('node:path'); const crypto = require('node:crypto');
   const dir = path.join(store.dir('tmp'), 'web-images'); fs.mkdirSync(dir, { recursive: true });
   const out = [];
-  await Promise.all(found.slice(0, count + 4).map(async (x) => {
+  await Promise.all(found.slice(Math.max(0, skip), Math.max(0, skip) + count + 4).map(async (x) => {
     let src = '';
     try {
       if (/^https:\/\//.test(x.thumb || '')) {

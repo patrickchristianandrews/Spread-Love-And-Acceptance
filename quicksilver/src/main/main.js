@@ -621,7 +621,7 @@ handle('kb:search', async (q, k, ids) => { const r = await knowledge.search(q, {
 // resolved parameters come back with the results.
 handle('web:search', async (q, opts = {}) => { const r = await websearch.search(q, { safe: opts?.safeSearch }); return { results: [...r], meta: r.meta }; });
 handle('web:images', async (q, opts = {}) => { const list = await websearch.images(String(q || ''), { count: Math.max(1, Math.min(12, Number(opts?.count) || 6)), safe: opts?.safeSearch || 'on', skip: Math.max(0, Math.min(60, Number(opts?.skip) || 0)) }); return list.map((x) => ({ title: x.title, source: x.source, page: x.page, full: x.full, src: `qsmedia://w/${x.file}` })); });
-handle('web:videos', async (q, opts = {}) => { const list = await websearch.videos(String(q || ''), { count: Math.max(1, Math.min(12, Number(opts?.count) || 6)), safe: opts?.safeSearch || 'on' }); return list.map((x) => ({ title: x.title, source: x.source, page: x.page, duration: x.duration, author: x.author, src: x.src, embed: x.embed })); });
+handle('web:videos', async (q, opts = {}) => { const list = await websearch.videos(String(q || ''), { count: Math.max(1, Math.min(12, Number(opts?.count) || 6)), safe: opts?.safeSearch || 'on', skip: Math.max(0, Math.min(60, Number(opts?.skip) || 0)) }); return list.map((x) => ({ title: x.title, source: x.source, page: x.page, duration: x.duration, author: x.author, src: x.src, embed: x.embed })); });
 // Live weather — Open-Meteo (keyless, free, no sign-up). Returns a structured forecast
 // the chat renders as a visual card: current conditions, an hourly strip and a 7-day row.
 handle('web:weather', async (q, opts = {}) => {

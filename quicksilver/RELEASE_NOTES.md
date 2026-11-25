@@ -1,12 +1,17 @@
 ### Download
 
-**Quicksilver-Web-Setup-2.23.9.exe** (below, about 200 MB, with a matching `.sha256`) is the installer. It's small and quick to download. The first time Quicksilver opens, its setup screen downloads the whole Liquid Edition before the app starts — the three abliterated chat models (Qwen3.5 4B Brain, Gemma 3 12B Closer, Mistral Nemo 12B Muse), Lustify for pictures, Wan 2.2 for video, and the search models: about 38 GB in all — and the app opens once it's done. Keep about 45 GB free on the drive you install to. If the download stops, close and reopen Quicksilver and it picks up where it left off.
+**Quicksilver-Web-Setup-2.24.0.exe** (below, about 200 MB, with a matching `.sha256`) is the installer. It's small and quick to download. The first time Quicksilver opens, its setup screen downloads the whole Liquid Edition before the app starts — the three abliterated chat models (Qwen3.5 4B Brain, Gemma 3 12B Closer, Mistral Nemo 12B Muse), Lustify for pictures, Wan 2.2 for video, and the search models: about 38 GB in all — and the app opens once it's done. Keep about 45 GB free on the drive you install to. If the download stops, close and reopen Quicksilver and it picks up where it left off.
 
 (A full offline package — the installer with all ~38 GB of models already beside it, so it needs no internet from the first minute — is built for tagged releases and lives as the **Quicksilver-Windows-installer** build artifact on those build runs, for anyone who wants to install with no download.)
 
 Updating from 2.19 or 2.20: nothing extra to download; your chats, settings and models are kept.
 
 Updating from 2.18: the Liquid Edition now includes its Closer and its picture and video makers, and Quicksilver does not open until all of them are installed. After the update the setup screen downloads what is missing (about 38 GB) before the app starts. Your chats, settings and the models you already have are kept.
+
+### New in 2.24.0
+
+- **"Does everything work?" button.** Settings → API connections has a new one-press check that runs through the web features (search, pictures, videos, weather, quick facts), your installed models and any connected cloud AIs, and shows each as ✅ working or ⚠️ with a plain fix — so you never have to wonder whether something is set up right.
+- **"More" works for videos too.** Like pictures, a follow-up of "more" or "another" after a video answer now pages ahead to new videos on the same subject instead of repeating the same ones.
 
 ### New in 2.23.9
 
