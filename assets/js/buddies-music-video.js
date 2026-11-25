@@ -398,7 +398,8 @@
       var pose = c.pose || 'run', ph = c.ph || 0, wag = (c.tailBase || 0) + Math.sin(t * 11 * (c.wagS || 1) + (c.id === 'tidbit' ? 0 : 2)) * (c.wagA == null ? 0.6 : c.wagA);
       if (c.sy) g.scale(1, c.sy);
       if (c.fit === 'royal' && P.cape) { g.save(); g.rotate(pose === 'sit' ? -0.42 : pose === 'bow' ? 0.3 : 0); g.translate(0, pose === 'lie' ? 10 : 0); P.cape(g, L, t * 1000, FITCOL.royal[c.id], true); g.restore(); }
-      P.draw(g, L, pose, ph, wag, !!c.blink, t * 1000, c.tilt || 0, HEADFITS[c.fit] ? { hat: true } : {});   // a head costume: her own purple or pink item moves to her neck
+      var sing = c.sing ? talkAmt(t, c.id === 'tidbit' ? 0 : 1.3) * c.sing : 0;   // singing: her own painted mouth opens and closes
+      P.draw(g, L, pose, ph, wag, !!c.blink, t * 1000, c.tilt || 0, HEADFITS[c.fit] ? { hat: true, talk: sing } : { talk: sing });   // a head costume: her own purple or pink item moves to her neck
       bodyFit(g, c, L, pose, t);
       var lean = L.build === 'lean', BY = lean ? -21 : -18.5;
       var hx = pose === 'lie' ? 19 : pose === 'sit' ? 18 : pose === 'bow' ? 22 : 21, hy = pose === 'lie' ? -19 : pose === 'sit' ? -38 : pose === 'bow' ? -14 : BY - 12;

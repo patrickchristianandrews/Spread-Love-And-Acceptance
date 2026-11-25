@@ -366,7 +366,7 @@
   }
   function frame(dog, pose, ph) {
     var M = S.meta;
-    if (pose === 'run' && S.moving[dog]) { var q = Math.floor((((ph % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2)) / (Math.PI / 2)) % 4; return { img: S.walk, f: M.walk[dog * 4 + q], fh: M.wh }; }
+    if (pose === 'run' && S.moving[dog]) { var q = Math.floor((((ph % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2)) / (Math.PI * 2 / WN)) % WN; return { img: S.walk, f: M.walk[dog * WN + q], fh: M.wh }; }
     // 'front': looking straight out at us (the books' title and calm pages); 'back': walking away
     var ang = pose === 'front' ? 0 : pose === 'back' ? 4 : pose === 'lie' || pose === 'bow' ? 2 : 1;
     var f = M.poses.filter(function (x) { return x.dog === dog && x.ang === ang; })[0];
@@ -405,7 +405,12 @@
     var rot = (tilt || 0) * 0.45 + (pose === 'bow' ? 0.16 : 0) + (pose === 'wiggle' ? Math.sin((t || 0) / 95) * 0.07 : 0);
     if (rot) { ctx.translate(0, -18); ctx.rotate(rot); ctx.translate(0, 18); }
     ctx.scale(K, K * sy);
-    ctx.drawImage(fr.img, sx, sy0, fw, fr.fh, -p.cx, -p.fy, fw, fr.fh);
+    // talking: the same drawing with its jaw dropped (made ahead of time by tools/pups3/make_talk.py), never drawn on top
+    var lvl = tk < 0.18 ? 0 : tk < 0.42 ? 1 : tk < 0.68 ? 2 : 3, mouthy = fr.img === S.walk || f.ang === 1 || f.ang === 2;
+    var tsheet = !lvl || !mouthy ? null : fr.img === S.walk ? S.walkTalk : S.posesTalk, simg = tsheet || fr.img, soff = tsheet ? (lvl - 1) * fr.img.height : 0;
+    // walking: a gentle rise and fall with each step, so the stride flows
+    if (fr.img === S.walk && !(window.TOLPups || {}).reduced) ctx.translate(0, -0.9 * Math.abs(Math.sin(ph)));
+    ctx.drawImage(simg, sx, sy0 + soff, fw, fr.fh, -p.cx, -p.fy, fw, fr.fh);
     // remember exactly how this drawing went on the page, so clothes can be fitted to her body shape (fitBody below)
     S.last[dog] = { m: ctx.getTransform(), img: fr.img, sx: sx, sy: sy0, fw: fw, fh: fr.fh, dx: -p.cx, dy: -p.fy, f: f };
     var P = window.TOLPups || {}, clk = P.clock || 0, B = S.blend[dog] || (S.blend[dog] = {}), kind = fr.img === S.walk ? 'w' : 'p' + f.ang;
@@ -413,7 +418,7 @@
     else if (kind !== B.kind) { B.from = { fr: B.fr, at: clk }; B.kind = kind; }
     if (!P.quiet) { B.fr = fr; B.T = clk; B.shot = P.shot; }
     // no blending between walk frames or poses: two drawings on top of each other read as a double face and extra legs
-    if (still && blink && S.shut) ctx.drawImage(S.shut, sx, sy0, fw, fr.fh, -p.cx, -p.fy, fw, fr.fh);   // eyes closed (poses-shut.webp)
+    if (still && blink && S.shut && !lvl) ctx.drawImage(S.shut, sx, sy0, fw, fr.fh, -p.cx, -p.fy, fw, fr.fh);   // (not mid-word: the shut drawing has a shut mouth)   // eyes closed (poses-shut.webp)
     // no moving jaw while talking: redrawing part of the painted muzzle smeared and doubled the face. The speech bubble and
     // the little bounce on the stressed syllables show who is talking.
     // the outfit, at the head of this drawing
@@ -464,7 +469,9 @@
     ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.drawImage(FIT, 0, 0); ctx.restore();
   }
   function head(whoName, pose, opts) { var L = P.looks[whoName === 'sugarfoot' || whoName === 'sf' ? 'drop' : 'collar']; var h = headPos(L, pose === 'stand' ? 'run' : pose, 0); return { x: h.x, y: h.y }; }
+  var WALK12 = [{"r":0,"c":0,"x0":7,"x1":121,"y0":23,"y1":106,"hx":93.23,"hy":41.95,"dog":0},{"r":0,"c":1,"x0":7,"x1":121,"y0":23,"y1":106,"hx":93.22,"hy":42.14,"dog":0},{"r":0,"c":2,"x0":15,"x1":121,"y0":23,"y1":107,"hx":93.21,"hy":42.33,"dog":0},{"r":0,"c":3,"x0":15,"x1":121,"y0":23,"y1":107,"hx":93.19,"hy":42.52,"dog":0},{"r":0,"c":4,"x0":15,"x1":121,"y0":23,"y1":108,"hx":93.18,"hy":42.5,"dog":0},{"r":0,"c":5,"x0":14,"x1":121,"y0":23,"y1":107,"hx":93.17,"hy":42.48,"dog":0},{"r":0,"c":6,"x0":14,"x1":121,"y0":23,"y1":107,"hx":93.16,"hy":42.46,"dog":0},{"r":0,"c":7,"x0":14,"x1":121,"y0":23,"y1":107,"hx":93.23,"hy":42.56,"dog":0},{"r":0,"c":8,"x0":15,"x1":121,"y0":24,"y1":107,"hx":93.31,"hy":42.67,"dog":0},{"r":0,"c":9,"x0":15,"x1":121,"y0":24,"y1":107,"hx":93.38,"hy":42.78,"dog":0},{"r":0,"c":10,"x0":15,"x1":121,"y0":24,"y1":107,"hx":93.33,"hy":42.5,"dog":0},{"r":0,"c":11,"x0":6,"x1":121,"y0":22,"y1":107,"hx":93.28,"hy":42.22,"dog":0},{"r":1,"c":0,"x0":7,"x1":121,"y0":21,"y1":110,"hx":92.94,"hy":40.86,"dog":1},{"r":1,"c":1,"x0":7,"x1":121,"y0":21,"y1":110,"hx":92.91,"hy":41.02,"dog":1},{"r":1,"c":2,"x0":13,"x1":121,"y0":21,"y1":112,"hx":92.88,"hy":41.17,"dog":1},{"r":1,"c":3,"x0":13,"x1":121,"y0":21,"y1":112,"hx":92.85,"hy":41.33,"dog":1},{"r":1,"c":4,"x0":13,"x1":121,"y0":21,"y1":112,"hx":92.92,"hy":41.34,"dog":1},{"r":1,"c":5,"x0":12,"x1":121,"y0":21,"y1":111,"hx":93.0,"hy":41.34,"dog":1},{"r":1,"c":6,"x0":12,"x1":121,"y0":21,"y1":111,"hx":93.07,"hy":41.35,"dog":1},{"r":1,"c":7,"x0":12,"x1":121,"y0":21,"y1":111,"hx":93.07,"hy":41.35,"dog":1},{"r":1,"c":8,"x0":13,"x1":121,"y0":21,"y1":111,"hx":93.07,"hy":41.35,"dog":1},{"r":1,"c":9,"x0":13,"x1":121,"y0":21,"y1":111,"hx":93.07,"hy":41.35,"dog":1},{"r":1,"c":10,"x0":13,"x1":121,"y0":21,"y1":111,"hx":93.03,"hy":41.19,"dog":1},{"r":1,"c":11,"x0":7,"x1":121,"y0":21,"y1":110,"hx":92.98,"hy":41.02,"dog":1}], WN = 12;   // twelve drawings a stride (tools/pups3/make_walk12.py), their boxes and heads
   function install(walk, poses) {
+    META.walk = WALK12;
     S = { walk: walk, poses: poses, meta: META, moving: [false, false], lastPh: {}, blend: {}, last: {} };
     P.draw = function (c, L, pose, ph, wag, blink, t, tilt, opts) { draw(c, L, pose === 'stand' ? 'run' : pose, ph, wag, blink, t, tilt, opts); };
     P.headPos = function (L, pose, ph) { return headPos(L, pose === 'stand' ? 'run' : pose, ph); };
@@ -474,5 +481,5 @@
     if (typeof document !== 'undefined') return new Promise(function (res, rej) { var im = new Image(); im.onload = function () { res(im); }; im.onerror = rej; im.src = BASE + name; });
     return fetch(BASE + name).then(function (r) { return r.blob(); }).then(function (b) { return createImageBitmap(b); });   // in a worker
   }
-  P.ready = Promise.all([load('walk.webp'), load('poses.webp'), load('poses-shut.webp').catch(function () { return null; })]).then(function (s) { install(s[0], s[1]); S.shut = s[2]; }).catch(function () {});
+  P.ready = Promise.all([load('walk12.webp'), load('poses.webp'), load('poses-shut.webp').catch(function () { return null; }), load('walk12-talk.webp').catch(function () { return null; }), load('poses-talk.webp').catch(function () { return null; })]).then(function (s) { install(s[0], s[1]); S.shut = s[2]; S.walkTalk = s[3]; S.posesTalk = s[4]; }).catch(function () {});
 })();

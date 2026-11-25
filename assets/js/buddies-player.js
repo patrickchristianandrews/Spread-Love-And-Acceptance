@@ -2541,7 +2541,8 @@
       var r = P.rec; if (!r || !cv.width) return; var RW = r.canvas.width, RH = r.canvas.height, k = Math.min(RW / cv.width, RH / cv.height), w = cv.width * k, h = cv.height * k;
       r.g.fillStyle = '#1B1629'; r.g.fillRect(0, 0, RW, RH); r.g.drawImage(cv, (RW - w) / 2, (RH - h) / 2, w, h);
       var txt = lineEl.textContent, who = whoEl.textContent;
-      if (r.o.captions && txt) { // captions in the picture, like the stream view
+      var bub = P.stage && P.stage.bubble && !P.stage.bubble.wait;   // a character's line is already in her speech bubble: one caption, not two
+      if (r.o.captions && txt && !bub) { // captions in the picture (the narrator's lines, which have no bubble)
         var g2 = r.g, fs = Math.round(RH * 0.034), pad = fs * 0.55; g2.save(); g2.font = '500 ' + fs + 'px Lora, Georgia, serif';
         var words = txt.split(' '), lines = [], cur2 = '', maxW = RW * 0.7;
         words.forEach(function (wd) { var tt = cur2 ? cur2 + ' ' + wd : wd; if (g2.measureText(tt).width > maxW && cur2) { lines.push(cur2); cur2 = wd; } else cur2 = tt; }); if (cur2) lines.push(cur2);
