@@ -96,8 +96,10 @@
     if (t < 68.7) return 1; if (t < 69.2) return 1 - eio((t - 68.7) / 0.5); if (t < 69.8) return 0; if (t < 70.35) return eio((t - 69.8) / 0.55);
     if (t < 90.7) return 1; return 1 - eio((t - 90.7) / 1.3);
   }
-  function riserL(t) { if (PLAN) return pStage(t, 'risers'); return eio(ramp(t, 16.95, 17.7)) * (1 - eio(ramp(t, 23.3, 23.9))); }
-  function riserR(t) { if (PLAN) return pStage(t, 'risers'); return eio(ramp(t, 8.75, 9.45)) * (1 - eio(ramp(t, 16.25, 16.9))); }
+  // the side risers only in a made-up show (PLAN): in the theme song the singer of each verse is the one in the light,
+  // and her pal cheers from the floor beside her (up on a lit riser, the pal looked like the star)
+  function riserL(t) { if (PLAN) return pStage(t, 'risers'); return 0; }
+  function riserR(t) { if (PLAN) return pStage(t, 'risers'); return 0; }
   function bandUp(t) { if (PLAN) return PLAN._band ? eio(ramp(t, 2.4, 4.2)) : 0; return eio(ramp(t, 24.34, 26.2)); }
   function splitAmt(t) { if (PLAN) return pStage(t, 'split'); return eio(ramp(t, 52.5, 53.5)) * (1 - eio(ramp(t, 59.04, 60.1))); }
   function turnUp(t) { if (PLAN) return pStage(t, 'turntable'); return eio(ramp(t, 59.7, 60.5)) * (1 - eio(ramp(t, 63.9, 64.6))); }
@@ -523,8 +525,8 @@
           if (t >= 13.25 && t < 14.0) { var su = (t - 13.25) / 0.75; c.face = Math.cos(TAU * sio(su)); c.lift = 10 * bump(su); c.pose = 'wiggle'; }
           else if (t >= 14.0 && t < 14.95) { var zz = (t - 14.0) / 0.95; c.x += Math.sin(TAU * zz * 1.5) * 170 * R; c.face = Math.cos(TAU * zz * 1.5) >= 0 ? 1 : -1; c.moving = true; c.ph = t * 30; c.zoom = 1; }
           else if (t >= 14.95 && t < 16.3) { c.tilt = -0.32 * sio((t - 14.95) / 0.4); c.face = 1; c.lift = t > 15.75 ? 30 * R * bump((t - 15.75) / 0.6) : 0; c.eyes = t > 15.75 ? 'happy' : null; }
-        } else { // up on her riser, cheering her pal on
-          c.lift += riserR(t) * 84; c.face = -1; c.pose = 'wiggle'; c.lift += bounce(t, 6 * R); c.tilt = 0.1 * Math.sin(t * 3);
+        } else { // to the side on the floor, a step upstage, cheering her pal on
+          c.z = (c.z || 0) + 0.45 * sio(ramp(t, 8.94, 9.6)) * (1 - sio(ramp(t, 16.0, 16.6))); c.lift += riserR(t) * 84; c.face = -1; c.pose = 'wiggle'; c.lift += bounce(t, 6 * R); c.tilt = 0.1 * Math.sin(t * 3);
           if (t > 15.75 && t < 16.3) c.eyes = 'happy';
         }
         return c;
@@ -536,7 +538,8 @@
           else if (t < 20.43) { c.face = -1; c.pose = 'wiggle'; }
           if (t >= 20.43 && t < 22.42) { var br = 0.5 - 0.5 * Math.cos(TAU * (t - 20.43) / 1.99); c.sy = 1 + 0.05 * br; c.eyes = 'calm'; c.wagA = 0.15; c.face = 1; c.pose = 'sit'; c.glow = win(t, 20.43, 22.42, 0.4, 0.4); }
           if (t >= 22.42) { var hq = (t - 22.42) / 0.95; c.lift = 22 * R * bump(hq % 1); c.face = hq < 1 ? 1 : -1; c.eyes = 'happy'; }
-        } else {
+        } else { // to the side on the floor, a step upstage, cheering her pal on
+          c.z = (c.z || 0) + 0.45 * sio(ramp(t, 16.6, 17.3)) * (1 - sio(ramp(t, 23.6, 24.3)));
           c.lift += riserL(t) * 84;
           if (t >= 16.95 && t < 20.43) { c.face = 1; c.pose = 'wiggle'; c.lift += bounce(t, 5 * R); }
           if (t >= 20.43 && t < 22.42) { c.face = 1; c.pose = 'sit'; c.eyes = 'calm'; }
