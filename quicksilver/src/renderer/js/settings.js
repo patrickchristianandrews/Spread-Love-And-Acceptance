@@ -85,7 +85,7 @@ function apisSetHTML() {
       <div class="small muted">${(x.models || []).length ? `${x.models.length} model${x.models.length === 1 ? '' : 's'}${x.models[0] ? `: ${esc(x.models.slice(0, 3).join(', '))}${x.models.length > 3 ? '…' : ''}` : ''}` : 'pictures, video or voice'}${x.hasKey || x.noKey ? '' : ' · <span style="color:var(--danger)">no key saved</span>'}</div></div>`;
   return `<div class="stack-v">
     <p class="lede" style="margin:0">Cloud AIs and services you connected with an API key: they answer, check, search or make pictures when Quicksilver uses them. Keys are stored encrypted on this PC.</p>
-    <div class="row"><button class="btn primary" id="set-api-add">＋ Connect a cloud AI or service</button><button class="btn" id="set-api-dir">📒 API directory (what each costs, free plans)</button><button class="btn" id="set-api-health" ${chat.length ? '' : 'disabled'}>🩺 Check connections</button></div>
+    <div class="row"><button class="btn primary" id="set-api-add">＋ Connect a cloud AI or service</button><button class="btn" id="set-api-dir">📒 API directory (what each costs, free plans)</button><button class="btn" id="set-api-health" ${chat.length ? '' : 'disabled'}>🩺 Check connections</button><button class="btn" data-selfcheck>✅ Does everything work?</button></div>
     <div id="set-api-health-out"></div>
     <div class="card set-card"><h3 style="margin-top:0">How Quicksilver uses them</h3>
       <label class="row"><input type="checkbox" id="set-cloud-hard" ${p.cloudHard ? 'checked' : ''} ${chat.length ? '' : 'disabled'}><span><b>Cloud AI for hard questions</b> <span class="help">hard questions go to your best connected cloud AI (the Liquid Edition uses an uncensored one such as Venice first)</span></span></label>
@@ -360,3 +360,41 @@ function bindAccounts() {
   $('#hf-del')?.addEventListener('click', async () => { await call('secret:set', 'huggingface', ''); S.config = await call('config:get'); render(); });
   $('#to-apis').addEventListener('click', (e) => { e.preventDefault(); go({ view: 'apis' }); });
 }
+
+// "Does everything work?" — one honest check of the web features, your models and connected
+// services, each with a ✅/⚠️ and a plain fix. Uses the same calls the features themselves use.
+const SELF_CHECKS = [
+  { id: 'online', name: 'Online', run: async () => (S.config?.offline ? { ok: false, detail: 'Quicksilver is in Offline mode', fix: 'Switch to Online at the top of the chat to use the web.' } : { ok: true, detail: 'Connected' }) },
+  { id: 'web', name: 'Web search', run: async () => { const r = await webSearch('today world news'); const n = r.results?.length || 0; return n ? { ok: true, detail: `${n} results` } : { ok: false, detail: 'No results came back', fix: 'Pick a web provider in Settings → Web (SearXNG is free and keyless).' }; } },
+  { id: 'pics', name: 'Pictures from the web', run: async () => { const x = await qs.call('web:images', 'a golden retriever', { count: 4, safeSearch: safeSearchValue() }); return x.length ? { ok: true, detail: `${x.length} pictures shown` } : { ok: false, detail: 'No pictures downloaded', fix: 'Check Settings → Web; some image hosts may be busy — try again.' }; } },
+  { id: 'vids', name: 'Videos from the web', run: async () => { const x = await qs.call('web:videos', 'music video', { count: 4, safeSearch: safeSearchValue() }); return x.length ? { ok: true, detail: `${x.length} videos found` } : { ok: false, detail: 'No videos found', fix: 'The open video sources may be busy — try again, or set a SearXNG URL in Settings → Web.' }; } },
+  { id: 'weather', name: 'Weather', run: async () => { const w = await qs.call('web:weather', (homeLocation() || 'London'), { units: preferredUnits(), place: homeLocation() }); return w?.current ? { ok: true, detail: `${w.place}: ${w.current.temp}${w.unit}` } : { ok: false, detail: 'No forecast', fix: 'Set your city in Settings → Web → Home location.' }; } },
+  { id: 'wiki', name: 'Quick facts (Wikipedia)', run: async () => { const w = await qs.call('web:wiki', 'Eiffel Tower'); return w?.text ? { ok: true, detail: 'Working' } : { ok: false, detail: 'No summary', fix: 'Needs the web — check you are Online.' }; } },
+  { id: 'models', name: 'Models on this PC', run: async () => { const m = await qs.call('models:list'); const list = (m.installed || []).filter((x) => x.kind !== 'image' && x.kind !== 'video' && x.kind !== 'audio'); return list.length ? { ok: true, detail: `${list.length} chat model${list.length > 1 ? 's' : ''} ready` } : { ok: false, detail: 'No chat model installed', fix: 'Install one from the Models page.' }; } },
+  { id: 'apis', name: 'Connected cloud AIs', run: async () => { const p = S.providers || []; return p.length ? { ok: true, detail: `${p.length} connected: ${p.map((x) => x.name || x.preset).slice(0, 4).join(', ')}` } : { ok: true, detail: 'None — running fully on this PC (optional)' }; } },
+];
+function selfCheckModal() {
+  const b = openModal(`<h2>✅ Does everything work?</h2>
+    <p class="small muted" style="margin:2px 0 10px">A quick, honest check of the web features, your models and any connected services. Each shows what it found, or how to fix it.</p>
+    <div id="sc-list" class="sc-list">${SELF_CHECKS.map((c) => `<div class="sc-row" id="sc-${c.id}"><span class="sc-ic">⏳</span><div class="grow"><b>${esc(c.name)}</b><div class="sc-detail small muted">Checking…</div></div></div>`).join('')}</div>
+    <div class="sc-summary small muted" id="sc-summary" style="margin-top:8px"></div>
+    <div class="modal-actions"><button class="btn" data-close>Close</button><button class="btn primary" id="sc-rerun">Run again</button></div>`, { wide: true });
+  b.querySelector('#sc-rerun').addEventListener('click', () => runSelfCheck(b));
+  runSelfCheck(b);
+}
+async function runSelfCheck(root) {
+  const rerun = root.querySelector('#sc-rerun'); if (rerun) rerun.disabled = true;
+  let okCount = 0; let done = 0;
+  for (const c of SELF_CHECKS) { const row = root.querySelector(`#sc-${c.id}`); if (row) { row.querySelector('.sc-ic').textContent = '⏳'; row.querySelector('.sc-detail').textContent = 'Checking…'; } }
+  await Promise.all(SELF_CHECKS.map(async (c) => {
+    let r; try { r = await c.run(); } catch (e) { r = { ok: false, detail: String(e?.message || e).slice(0, 120), fix: 'Try again in a moment.' }; }
+    done += 1; if (r.ok) okCount += 1;
+    const row = root.querySelector(`#sc-${c.id}`); if (!row) return;
+    row.querySelector('.sc-ic').textContent = r.ok ? '✅' : '⚠️';
+    row.classList.toggle('sc-bad', !r.ok);
+    row.querySelector('.sc-detail').innerHTML = `${esc(r.detail || '')}${!r.ok && r.fix ? ` <span class="sc-fix">→ ${esc(r.fix)}</span>` : ''}`;
+  }));
+  const sum = root.querySelector('#sc-summary'); if (sum) sum.textContent = okCount === SELF_CHECKS.length ? '🎉 Everything checks out.' : `${okCount} of ${SELF_CHECKS.length} working — see the ⚠️ items above for the fix.`;
+  if (rerun) rerun.disabled = false;
+}
+document.addEventListener('click', (e) => { if (e.target.closest('[data-selfcheck]')) { e.preventDefault(); selfCheckModal(); } });

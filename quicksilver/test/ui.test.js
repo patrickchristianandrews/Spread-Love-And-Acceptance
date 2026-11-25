@@ -1345,6 +1345,13 @@ function redPng(size = 64) {
   await win.waitForSelector('#modal #api-dir .ad-row:has-text("Google Gemini")');
   await win.click('#modal [data-close]');
   await shot(win, '05b-api-free');
+  // Self-check: "does everything work?" lists each feature with a status.
+  await win.evaluate(() => selfCheckModal());
+  await win.waitForSelector('#modal #sc-list .sc-row');
+  assert.ok(await win.locator('#modal #sc-list .sc-row').count() >= 6, 'self-check lists the features to test');
+  assert.ok(await win.locator('#modal #sc-list .sc-row:has-text("Web search")').count() === 1, 'web search is one of the checks');
+  await win.click('#modal [data-close]');
+  console.log('✓ self-check: "does everything work?" lists the web features, models and connections');
   // Web Finder: plain-language dork builder + OSINT knowledge base and tools.
   await win.evaluate(() => go({ view: 'finder' }));
   await win.waitForSelector('#wf-build');
