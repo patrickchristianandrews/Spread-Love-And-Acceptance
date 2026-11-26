@@ -169,11 +169,43 @@ L[BOXSET['id']] = {
 }
 
 
+# listing26: the store words now live in tools/book/listing_copy.py (shared with the kids and adult coloring packages)
+import listing_copy as LC  # noqa: E402
+for _bid in ('book-1-know-yourself-kindly', 'book-2-heal-and-steady', 'book-3-understanding-each-other', 'book-4-share-the-load'):
+    L[_bid].update(LC.SERIES[_bid])
+for _bid in ('workbook', WB_BW['id']):
+    L[_bid].update({k: v for k, v in LC.SERIES['workbook'].items()})
+    L[_bid]['inside'] = L['workbook' if _bid == 'workbook' else _bid]['inside']
+L[POCKET['id']].update(LC.SERIES['pocket'])
+L[BOXSET['id']].update(LC.SERIES['boxset'])
+
+
 def esc(s):
     return s.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
 
 
 def description(item, d, kind='book'):
+    """listing26: the moment the book is about, what is inside, and what makes it different from books like it"""
+    h = '<p><b>%s</b></p>' % esc(d['hook'])
+    h += ''.join('<p>%s</p>' % esc(p) for p in d['body'])
+    h += '<p><b>%s</b></p><ul>%s</ul>' % ('Inside this book' if kind == 'book' else 'Inside', ''.join('<li>%s</li>' % esc(x) for x in d['inside']))
+    diff = list(d.get('different', []))
+    if kind == 'book':
+        diff += LC.SERIES_DIFFERENT
+    if diff:
+        h += '<p><b>What makes %s different</b></p><ul>%s</ul>' % ('this book' if kind in ('book', 'pocket', 'workbook') else 'this collection', ''.join('<li>%s</li>' % esc(x) for x in diff))
+    if kind == 'book':
+        h += '<p><b>Part of a series.</b> %s is a series of four books that each stand on their own, plus a workbook with every form and a pocket guide. Read them in any order.</p>' % esc(SERIES)
+    elif kind == 'pocket':
+        h += '<p>No page labels or diagnoses anyone, and the situations are made up from common patterns.</p>'
+        h += '<p><b>Part of a series.</b> This pocket guide goes with the %s books, or on its own.</p>' % esc(SERIES)
+    elif kind == 'workbook':
+        h += '<p><b>Part of a series.</b> The companion workbook to the %s books.</p>' % esc(SERIES)
+    h += '<p><i>%s general education, not therapy or a diagnosis.</i></p>' % ('These books are' if kind == 'boxset' else 'This book is')
+    return h
+
+
+def _old_description(item, d, kind='book'):
     h = '<p><b>%s</b></p>' % esc(d['hook'])
     h += ''.join('<p>%s</p>' % esc(p) for p in d['body'])
     h += '<p><b>%s</b></p><ul>%s</ul>' % ('Inside this book' if kind == 'book' else 'Inside', ''.join('<li>%s</li>' % esc(x) for x in d['inside']))

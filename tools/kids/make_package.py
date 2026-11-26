@@ -113,6 +113,14 @@ TAGS = {
     'coloring-older': ['Color a calm minute.', 'Detailed scenes, patterns and a calm prompt on every page.', 'A screen-free break for ages 8 to 12.'],
 }
 KINDLE = {'picture-book': 4.99, 'chapter-book': 4.99}
+# listing26: the store words now live in tools/book/listing_copy.py (one place for every title's description, keywords and categories)
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'book'))
+import listing_copy as LC  # noqa: E402
+for _k, _v in LC.KIDS.items():
+    DESC[_k] = _v['html']
+    KEYWORDS[_k] = _v['kw']
+    if 'cats' in _v:
+        CATS[_k] = _v['cats']
 
 
 def names(t):

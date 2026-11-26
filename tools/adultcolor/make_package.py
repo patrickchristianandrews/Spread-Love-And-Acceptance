@@ -35,6 +35,9 @@ KEYWORDS = [
     'colored pencils gel pens fine markers',
     'gift for moms dads grandparents hobby',
 ]
+sys.path.insert(0, os.path.join(ROOT, 'tools', 'book'))
+import listing_copy as LC  # noqa: E402
+KEYWORDS = LC.ADULT['kw']   # listing26
 TAGS = ['Forty designs, no timer, no wrong colors.', 'A blank page behind every design.', 'Mandalas, gardens and quiet scenes.']
 CATS = [
     ('Crafts, Hobbies & Home > Crafts & Hobbies > Coloring Books for Grown-Ups', 'Arts & Photography > Drawing > Coloring Books for Grown-Ups'),
@@ -50,25 +53,9 @@ def counts():
 
 
 def description(pages):
+    """listing26: the store words live in tools/book/listing_copy.py"""
     c = counts()
-    return (
-        '<p><b>Forty original designs to color at your own pace, with no timer and no wrong colors.</b></p>'
-        '<p>Color and Breathe is an adult coloring book for anyone who wants something pleasant to do with their hands. Pick a mandala built from exact, layered rings of petals and paisleys, a wreath of leaves, a rainy window with a mug of tea, a lighthouse at dusk, a night sky of constellations, or a few quiet words to fill in. Some pages are intricate and some are simple, so you can choose the one that matches your mood.</p>'
-        '<p><b>What is inside</b></p>'
-        '<ul>'
-        '<li>%d mandalas, each built from layered rings</li>'
-        '<li>%d botanical pages: wreaths, ferns, wildflowers, a garden gate, herbs, a bouquet and lavender</li>'
-        '<li>%d quiet scenes: a reading nook, a tea table, a kitchen shelf, a porch at dusk, a greenhouse, a stone bridge and more</li>'
-        '<li>%d pattern pages to fill with woven fields and tiles</li>'
-        '<li>%d calm word pages: Breathe, Enough, Soft, Begin again and Room for everyone</li>'
-        '<li>Two pups, Tidbit and Sugarfoot, hide in a few of the pictures</li>'
-        '<li>A color test page, a short note on how to use the book and two lines to jot down your favorites</li>'
-        '</ul>'
-        '<p><b>Made for your pens</b></p>'
-        '<p>Clean, fine lines with plenty of open areas, for colored pencils, gel pens and fine markers. Every design is printed on one side of the page only, with a blank page behind it, so markers will not bleed through to the next one.</p>'
-        '<p>%d pages, 8.5 × 11 inches, black-and-white interior. This book is a pastime. It is not therapy and not a diagnosis.</p>'
-        '<p>Part of the Spread Love &amp; Acceptance series of calm, kind books.</p>'
-    ) % (c['mandala'], c['botanical'], c['scene'], c['pattern'], c['word'], pages)
+    return LC.ADULT['html'] % dict(mandala=c['mandala'], botanical=c['botanical'], scene=c['scene'], pattern=c['pattern'], word=c['word'], pages=pages)
 
 
 def listing(info):

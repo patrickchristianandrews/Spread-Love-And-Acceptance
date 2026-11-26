@@ -81,13 +81,14 @@ th { text-align: left; background: #F2EBDD; } td, th { border: 1px solid #DDD3BF
 <ol>
 <li>Go to <b>kdp.amazon.com</b> and sign in with an Amazon account (or create one). Use your legal name.</li>
 <li>Finish the <b>Account</b> page: your author/publisher name, your address, your <b>bank account</b> for royalties and the <b>tax interview</b> (W-9 for US persons). KDP will not publish until these are done.</li>
-<li>Unzip the three packages. Each has a listing file (<b>kids-listing-kdp.pdf</b>, <b>adultcolor-listing-kdp.pdf</b>, <b>listing-kdp.md</b> with <b>Amazon-KDP-step-by-step</b> for the series) with every field for every title.</li>
+<li>Open <b>Amazon-listings-all-titles.pdf</b> (in every package). It has each title&rsquo;s description, 7 keywords and 3 categories in one place, ready to paste, and explains how they help shoppers find the books.</li>
+<li>Unzip the three packages. Each also has its own listing file (<b>kids-listing-kdp.pdf</b>, <b>adultcolor-listing-kdp.pdf</b>, <b>listing-kdp.md</b> with <b>Amazon-KDP-step-by-step</b> for the series) with every field for every title.</li>
 </ol>
 
 <h2>2. For each title (the same every time)</h2>
 <ol>
 <li>Bookshelf, <b>+ Create</b>, <b>Paperback</b>.</li>
-<li><b>Details:</b> language English; title and subtitle <b>exactly as in the table below</b> (KDP checks them against the cover); series name and number; author <b>Patrick Christian Andrews</b>; description (paste the HTML block from the listing file); the 7 keywords; the categories; the reading ages for the kids titles; &ldquo;No&rdquo; to sexually explicit content.</li>
+<li><b>Details:</b> language English; title and subtitle <b>exactly as in the table below</b> (KDP checks them against the cover); series name and number; author <b>Patrick Christian Andrews</b>; description (paste the HTML block from Amazon-listings-all-titles.pdf); the 7 keywords; the 3 categories; the reading ages for the kids titles; &ldquo;No&rdquo; to sexually explicit content.</li>
 <li><b>Content:</b> choose <b>Get a free KDP ISBN</b>; set ink and paper, trim and bleed exactly as in the table; matte cover; upload the <b>interior PDF</b> and the <b>cover PDF</b> from that title&rsquo;s folder; open the <b>Print Previewer</b> and check every page. Answer the <b>AI questions</b> truthfully (see the box below).</li>
 <li><b>Rights &amp; Pricing:</b> all territories; the list price in the table for Amazon.com, then let KDP fill in the other marketplaces; <b>Expanded Distribution off</b>. Check the printing cost KDP shows against the listing file.</li>
 <li><b>Order a proof copy.</b> When it arrives, check the color, the edges, the spine and the barcode corner. Then <b>Publish</b>. Review usually takes up to 72 hours.</li>
