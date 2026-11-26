@@ -777,9 +777,9 @@
   function wxFetch(lat, lon) {
     if (wxBusy || !window.fetch) return; wxBusy = true;
     var f = /^en-US/i.test(navigator.language || '') ? 'fahrenheit' : 'celsius';
-    fetch('https://api.open-meteo.com/v1/forecast?latitude=' + lat + '&longitude=' + lon + '&current=temperature_2m,weather_code&temperature_unit=' + f).then(function (r) { return r.ok ? r.json() : null; }).then(function (j) {
+    fetch('https://api.open-meteo.com/v1/forecast?latitude=' + lat + '&longitude=' + lon + '&current=temperature_2m,weather_code&timezone=auto&temperature_unit=' + f).then(function (r) { return r.ok ? r.json() : null; }).then(function (j) {
       wxBusy = false; if (!j || !j.current) return; var k = wxKind(j.current.weather_code);
-      var d = { kind: k[0], text: k[1], icon: k[2], deg: Math.round(j.current.temperature_2m) };
+      var d = { kind: k[0], text: k[1], icon: k[2], deg: Math.round(j.current.temperature_2m), tz: j.timezone || '' };
       try { localStorage.setItem(wxKey, JSON.stringify({ lat: lat, lon: lon, at: Date.now(), d: d })); } catch (e) {}
       var fresh = !WX; wxApply(d); if (fresh && typeof castWx === 'function') castWx();
     }).catch(function () { wxBusy = false; });
@@ -792,9 +792,11 @@
     if (wxEl) wxEl.textContent = '📍 Finding the weather…';
     navigator.geolocation.getCurrentPosition(function (pos) { wxFetch(Math.round(pos.coords.latitude * 10) / 10, Math.round(pos.coords.longitude * 10) / 10); }, function () { if (wxEl) wxEl.textContent = '📍 Location was not shared. Tap to try again'; }, { timeout: 8000, maximumAge: 3600000 });
   }
+  // the hour where you are: your own time zone when the location is on (a TV may not know it), else this device's clock
+  function localHour() { if (window.TOLCamLoc && TOLCamLoc.spot()) return TOLCamLoc.hour(); var n = new Date(); return n.getHours() + n.getMinutes() / 60; }
   function showTime() {
     if (!timeEl || !isOpen) return;
-    try { timeEl.textContent = new Date().toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }); } catch (e) { timeEl.textContent = ''; }
+    try { timeEl.textContent = window.TOLCamLoc && TOLCamLoc.spot() ? TOLCamLoc.time() : new Date().toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }); } catch (e) { timeEl.textContent = ''; }   // with the location on: your own time zone, even on a TV
   }
   function whereText() { var ph = phaseOf(hour); return 'Pal cam · ' + (EVENT && EVENT.special ? EVENT.name + ' · ' : '') + ph.charAt(0).toUpperCase() + ph.slice(1) + ' at ' + setting.name; }
   function toSetting(st) {
@@ -813,7 +815,7 @@
     if (a === MOVIE && MB.prev) { var back = MB.prev; MB.prev = null; MB.last = clock; toSetting(back); } // the movie's over: back outside
     else if (wantPlace && !MB.prev) { // time for a new place: the pals just go there, and the music and sounds carry on
       wantPlace = false; var ns = pickSetting();
-      if (ns && ns.id !== setting.id && ns.id !== 'theater') { var nw = new Date(); hour = nw.getHours() + nw.getMinutes() / 60; toSetting(ns); }
+      if (ns && ns.id !== setting.id && ns.id !== 'theater') { hour = localHour(); toSetting(ns); }
     }
     else if (adDue(a)) { AD.last = clock; AD.dur = 58500 * SPEED; startTravel(AD, {}); return; }
     else if (movieBreakDue(a)) {
@@ -1644,7 +1646,7 @@
   }
   function finishOpen(opts) {
     motionMode();
-    var now = new Date(); hour = opts.hour != null ? +opts.hour : now.getHours() + now.getMinutes() / 60;
+    hour = opts.hour != null ? +opts.hour : localHour();
     setting = pickSetting(opts.setting);
     if (MUS()) MUS().scene(setting.id, hour); syncMusBtn(); ambSync();
     ambient = []; parts = []; bubbles = []; outgoing = null; trick = null; comboLeft = 0; bgKey = ''; clock = 0; stats.maxOut = 0;

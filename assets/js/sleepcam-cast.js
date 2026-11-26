@@ -25,6 +25,8 @@
       function tick(id, v) { var el = $(id); if (el && v != null) el.checked = v === '1' || v === 'true'; }
       // the dimmer is a saved choice, not on the start screen: carry it over
       if (q.has('dim')) { try { var p = JSON.parse(localStorage.getItem('tol-sleepcam-v1') || '{}') || {}; p.dim = q.get('dim') === '1'; localStorage.setItem('tol-sleepcam-v1', JSON.stringify(p)); } catch (e) {} }
+      // the weather and time where the person is: their phone sends its rounded spot (a TV can't ask where it is)
+      if (q.has('lat') && q.has('lon') && window.TOLCamLoc) TOLCamLoc.use(+q.get('lat'), +q.get('lon'));
       var go = $('spc-go');
       // the choices go on just before Start (the page resets the sound box on its own when it finishes loading)
       if (go) setTimeout(function () {
@@ -59,7 +61,9 @@
       var store = {};
       KEYS.forEach(function (k) { try { var v = localStorage.getItem(k); if (v != null) store[k] = v; } catch (e) {} });
       var dim = '1'; try { dim = (JSON.parse(localStorage.getItem('tol-sleepcam-v1') || '{}') || {}).dim === false ? '0' : '1'; } catch (e) {}
-      return { mode: 'sleep', opts: { timer: radio('spc-timer', '0'), sound: box('spc-sound-opt', '1'), snore: box('spc-snore-opt', '1'), dim: dim }, store: store };
+      var m = { mode: 'sleep', opts: { timer: radio('spc-timer', '0'), sound: box('spc-sound-opt', '1'), snore: box('spc-snore-opt', '1'), dim: dim }, store: store };
+      var sp = window.TOLCamLoc && TOLCamLoc.spot(); if (sp) m.wx = sp;   // only with the location turned on: the rounded spot, for the weather and time
+      return m;
     }
     function tvName(ses) { try { return ses.getCastDevice().friendlyName; } catch (e) { return 'your TV'; } }
     // send "sleep" until the TV says it got it (a few tries: the TV may still be loading the first time)
@@ -94,6 +98,8 @@
       try { var p = ctx.requestSession(); if (p && p.catch) p.catch(function () {}); } catch (e) {}
     });
     setTimeout(function () { if (!castReady) noCast(); }, 6000);
+    // the location turned on (or off) while the TV is showing the sleep room: send the room again, with it
+    window.addEventListener('tol-camloc', function () { var ses = ctx && want && ctx.getCurrentSession(); if (ses) sendSleep(ses); });
     var prev = window.__onGCastApiAvailable;
     window.__onGCastApiAvailable = function (ok) {
       if (typeof prev === 'function') try { prev(ok); } catch (e) {}

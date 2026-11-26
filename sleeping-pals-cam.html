@@ -28,6 +28,8 @@
   .spc-k { margin: 0; font: 600 .78rem/1 Lora, Georgia, serif; letter-spacing: .14em; text-transform: uppercase; color: var(--soft); }
   .spc-start h1 { margin: 0; font: 600 clamp(1.7rem, 1.2rem + 2.4vw, 2.7rem)/1.15 Fraunces, Georgia, serif; }
   .spc-start p { margin: 0; max-width: 32rem; font-size: 1.05rem; line-height: 1.55; color: var(--soft); }
+  .spc-room { box-sizing: border-box; width: 100%; max-width: 34rem; display: flex; flex-direction: column; align-items: center; gap: 1rem; margin-top: .4rem; }
+  .spc-room h2 { margin: .6rem 0 0; font: 600 1.2rem/1.3 Fraunces, Georgia, serif; }
   #spc-preview { width: min(100%, 36rem); aspect-ratio: 16 / 9; height: auto; border-radius: 18px; display: block; background: #0D0B16; box-shadow: 0 10px 40px rgba(0,0,0,.35); }
   .spc-opts { display: grid; gap: .8rem; width: min(100%, 36rem); text-align: left; }
   .spc-opts fieldset { margin: 0; padding: .55rem .8rem .7rem; border: 1px solid var(--line); border-radius: 16px; }
@@ -87,6 +89,7 @@
   @media (prefers-reduced-motion: reduce) { .spc-ctl, .spc-hint { transition: none; } }
 </style>
 <link rel="stylesheet" href="/assets/css/sleepcam.css">
+<link rel="stylesheet" href="/assets/css/cam-location.css">
 <!-- seo:start -->
 <link rel="canonical" href="https://spreadloveandacceptance.com/sleeping-pals-cam.html">
 <link rel="alternate" hreflang="en-us" href="https://spreadloveandacceptance.com/sleeping-pals-cam.html">
@@ -145,24 +148,6 @@
   <p class="spc-k">Bedtime</p>
   <h1>Sleeping Pals Cam</h1>
   <p>Tidbit and Sugarfoot, fast asleep. Soft snores, a few floating z’s, and now and then a funny little midnight moment. Add your own fur babies, and mix the soft sounds that help you sleep.</p>
-  <canvas id="spc-preview" role="img" aria-label="Tidbit and Sugarfoot asleep on a rug in a dim room at night, with little z's floating up"></canvas>
-  <div class="spc-opts">
-    <fieldset>
-      <legend>Sleep timer</legend>
-      <div class="spc-row">
-        <label><input type="radio" name="spc-timer" value="0">Off</label>
-        <label><input type="radio" name="spc-timer" value="15">15 min</label>
-        <label><input type="radio" name="spc-timer" value="30">30 min</label>
-        <label><input type="radio" name="spc-timer" value="60">60 min</label>
-      </div>
-    </fieldset>
-    <div class="spc-checks">
-      <label class="spc-check"><input type="checkbox" id="spc-sound-opt" checked>Play sound</label>
-      <label class="spc-check"><input type="checkbox" id="spc-snore-opt" checked>Soft snoring</label>
-    </div>
-    <p class="spc-note" id="spc-sound-note" hidden>Your site settings have sounds off (Quiet mode or the sound switch), so this starts silent. Tick Play sound if you want to hear the pups and your fur babies. That choice stays on this page only.</p>
-    <div class="spc-panels" id="spc-panels"></div>
-  </div>
   <button type="button" class="spc-go" id="spc-go">Start the Sleeping Pals Cam</button>
   <button type="button" class="spc-cast" id="spc-cast" hidden><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" aria-hidden="true"><path d="M3 8V6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-6"/><path d="M3 12a8 8 0 0 1 8 8M3 16a4 4 0 0 1 4 4"/><circle cx="3.5" cy="19.5" r=".6" fill="currentColor"/></svg><span>Cast to your TV</span></button>
   <p class="spc-cast-state" id="spc-cast-state" aria-live="polite"></p>
@@ -177,6 +162,39 @@
       <li><b>The Cast button above</b> needs the TV and your phone or computer on the same Wi-Fi. If the TV still doesn’t show up, restart the Chromecast and try again in a few minutes.</li>
     </ul>
   </details>
+  <section class="cam-watch" aria-labelledby="cam-watch-h">
+    <h2 id="cam-watch-h">Watch on a phone, tablet or TV</h2>
+    <ul>
+      <li><b>Phone or tablet:</b> press <b>Start the Sleeping Pals Cam</b>. It fills the screen. Turn it sideways for the widest view. To leave it on all night, plug it in and turn off auto-lock (on an iPhone or iPad: Settings, Display &amp; Brightness, Auto-Lock, Never; on Android: Settings, Display, Screen timeout).</li>
+      <li><b>TV:</b> press <b>Cast to your TV</b> to send it to a Chromecast or Google TV on the same Wi-Fi, or use one of the other live ways above (AirPlay, Smart View, or the TV’s own web browser). Once it’s playing on the TV, you can close this page or lock your phone. The TV keeps going.</li>
+      <li><b>Computer:</b> press <b>Start the Sleeping Pals Cam</b> and it goes full screen. Press <b>Esc</b> to come back here.</li>
+    </ul>
+    <h2>Weather and time where you are (optional)</h2>
+    <p>Turn on location and the window shows your real weather (clouds, rain or snow), with the time and temperature softly in the corner, on this screen and on your TV.</p>
+    <div data-camloc="The Sleeping Pals Cam"></div>
+  </section>
+  <section class="spc-room" aria-labelledby="spc-room-h">
+    <h2 id="spc-room-h">Your sleep room</h2>
+    <p>Choose these first, then press Start above. The Cast button sends them to your TV too.</p>
+    <canvas id="spc-preview" role="img" aria-label="Tidbit and Sugarfoot asleep on a rug in a dim room at night, with little z's floating up"></canvas>
+    <div class="spc-opts">
+      <fieldset>
+        <legend>Sleep timer</legend>
+        <div class="spc-row">
+          <label><input type="radio" name="spc-timer" value="0">Off</label>
+          <label><input type="radio" name="spc-timer" value="15">15 min</label>
+          <label><input type="radio" name="spc-timer" value="30">30 min</label>
+          <label><input type="radio" name="spc-timer" value="60">60 min</label>
+        </div>
+      </fieldset>
+      <div class="spc-checks">
+        <label class="spc-check"><input type="checkbox" id="spc-sound-opt" checked>Play sound</label>
+        <label class="spc-check"><input type="checkbox" id="spc-snore-opt" checked>Soft snoring</label>
+      </div>
+      <p class="spc-note" id="spc-sound-note" hidden>Your site settings have sounds off (Quiet mode or the sound switch), so this starts silent. Tick Play sound if you want to hear the pups and your fur babies. That choice stays on this page only.</p>
+      <div class="spc-panels" id="spc-panels"></div>
+    </div>
+  </section>
   <p>The sound starts very softly and stays low. When the timer ends, it fades out slowly and the room goes dark. On a TV it fades out the same way, and the TV stays on a dark screen until you stop casting.</p>
   <p class="spc-links"><a href="/pal-cam-tv.html">The daytime Pal Cam</a> <a href="/frequency-buddies.html">Frequency Buddies</a> <a href="/">Back to the site</a></p>
 </main>
@@ -195,6 +213,7 @@
   <p class="spc-hint" aria-live="polite"></p>
   <div class="spc-sheet" id="spc-sheet" role="region" aria-label="Fur babies and sleep sounds" hidden><div class="spc-sheet-in"></div></div>
 </div>
+<script src="/assets/js/cam-location.js"></script>
 <script src="/assets/js/pups.js"></script>
 <script src="/assets/js/pals-cam-sleep.js"></script>
 <script src="/assets/js/sleepcam-pets.js"></script>

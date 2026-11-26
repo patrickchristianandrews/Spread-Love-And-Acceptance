@@ -24,6 +24,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Lora:wght@400;600&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/cam-location.css">
 <style>
   html, body { margin: 0; height: 100%; background: #4A3F63; color: #FFF8EE; font-family: Lora, Georgia, serif; }
   .tv-start { box-sizing: border-box; min-height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1rem; padding: 2rem 16px; text-align: center; }
@@ -151,6 +152,17 @@
       <li><b>The Cast button above</b> needs the TV and your phone or computer on the same Wi-Fi. If the TV still doesn’t show up, restart the Chromecast and try again in a few minutes.</li>
     </ul>
   </details>
+  <section class="cam-watch" aria-labelledby="cam-watch-h">
+    <h2 id="cam-watch-h">Watch on a phone, tablet or TV</h2>
+    <ul>
+      <li><b>Phone or tablet:</b> press <b>Start Pal Cam TV</b>. It fills the screen. Turn it sideways for the widest view. To leave it on all day, plug it in and turn off auto-lock (on an iPhone or iPad: Settings, Display &amp; Brightness, Auto-Lock, Never; on Android: Settings, Display, Screen timeout).</li>
+      <li><b>TV:</b> press <b>Cast to your TV</b> to send it to a Chromecast or Google TV on the same Wi-Fi, or use one of the other live ways above (AirPlay, Smart View, or the TV’s own web browser). Once it’s playing on the TV, you can close this page or lock your phone. The TV keeps going.</li>
+      <li><b>Computer:</b> press <b>Start Pal Cam TV</b> and it goes full screen. Press <b>Esc</b> to come back here.</li>
+    </ul>
+    <h2>Weather and time where you are (optional)</h2>
+    <p>Turn on location and the pals’ sky and light follow your real weather and time of day, with the time and temperature in the corner, on this screen and on your TV.</p>
+    <div data-camloc="Pal Cam"></div>
+  </section>
   <ul>
     <li><b>Sound starts on:</b> soft barks, little chimes, playful game sounds (coins, cards, dice and a small bell), and quiet sounds of the place, like birds or waves. Gentle music plays too. Press M or tap Music to turn it off.</li>
     <li>On a phone or tablet, buttons for <b>Sound</b>, <b>Captions</b>, <b>Music</b> and <b>Exit</b> stay at the top of the screen.</li>
@@ -163,6 +175,7 @@
   <p><a href="/">Back to the site</a></p>
 </main>
 <div class="tv-hint" id="tv-hint" aria-live="polite"></div>
+<script src="/assets/js/cam-location.js"></script>
 <script src="/assets/js/pups.js"></script>
 <script src="/assets/js/pals-cam-acts.js"></script>
 <script src="/assets/js/pals-cam-more.js"></script>
@@ -318,13 +331,14 @@
   // person's own sleep room copied over first (their fur babies, sound mixes and choices) so it looks like theirs
   function toSleep(d) {
     wantSleep = true;
-    var o = d.opts || {}, st = d.store || {}, key = JSON.stringify([o, st]);
+    var o = d.opts || {}, st = d.store || {}, key = JSON.stringify([o, st, d.wx || null]);
     if (sleepFrame && key === sleepKey) return; // the same room again (the phone resends until the TV answers)
     sleepKey = key;
     Object.keys(st).forEach(function (k) { if (/^tol-sleepcam-(v1|pets-v1|mixes-v1)$/.test(k) && typeof st[k] === 'string' && st[k].length < 60000) { try { localStorage.setItem(k, st[k]); } catch (e) {} } });
     if (on) end();
     var qs = new URLSearchParams({ receiver: '1' });
     ['timer', 'sound', 'snore', 'dim'].forEach(function (k) { if (o[k] != null) qs.set(k, String(o[k]).slice(0, 4)); });
+    if (d.wx && isFinite(+d.wx.lat) && isFinite(+d.wx.lon)) { qs.set('lat', String(Math.round(+d.wx.lat * 10) / 10)); qs.set('lon', String(Math.round(+d.wx.lon * 10) / 10)); }
     if (sleepFrame) sleepFrame.remove();
     sleepFrame = document.createElement('iframe');
     sleepFrame.title = 'Sleeping Pals Cam'; sleepFrame.allow = 'autoplay; fullscreen; screen-wake-lock';
@@ -407,6 +421,12 @@
       ctx.requestSession().catch(function () {});
     });
     setTimeout(function () { if (!castReady) noCast(); }, 6000);
+    // the location turned on from this screen while the TV shows the daytime cam: send the rounded spot to the TV too
+    window.addEventListener('tol-camloc', function () {
+      var ses = castReady && ctx && ctx.getCurrentSession(), sp = wxSpot(); if (!ses || !sp || videoMode || !wantDay) return;
+      try { var p = ses.sendMessage(NS, { mode: 'wx', wx: sp }); if (p && p.catch) p.catch(function () {}); } catch (e) {}
+      syncWxBtn(); castState.textContent = 'The weather and time are on the TV now. You can close this page. The TV keeps going.';
+    });
     window.__onGCastApiAvailable = function (ok) {
       if (!ok || !window.cast || !cast.framework) { noCast(); return; }
       castReady = true; ctx = cast.framework.CastContext.getInstance();

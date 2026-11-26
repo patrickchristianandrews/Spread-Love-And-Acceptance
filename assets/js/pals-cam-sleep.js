@@ -435,8 +435,9 @@
       case 'kick': {
         // a dream: on her side, paws paddling, a muffled little "boof", and a dream bubble with a ball in it
         var on = sio(seg(u, 0.2, 0.9)) * (1 - sio(seg(u, 5, 5.8)));
-        // still lying down, but her legs run in place (squashed low, nose down) while she dreams
-        p.side = on > 0.5; p.pose = on > 0.5 ? 'run' : 'lie'; p.ph = u * (S.calm ? 8 : 13); p.sy = on > 0.5 ? 0.74 : 1; p.rot = on > 0.5 ? 0.08 * p.face : 0; p.lift = on > 0.5 ? -3 : 0;
+        // she stays lying down (never up on her legs): little dream twitches run through her while she dreams
+        p.pose = 'lie'; var tw = on * (S.calm ? 0.5 : 1);
+        p.rot = tw * (0.035 * Math.sin(u * 23) + 0.02 * Math.sin(u * 37)) * p.face; p.lift = tw * Math.abs(Math.sin(u * 17)) * 0.9;
         S.bubble = on > 0.3 ? { who: p.id, a: on, t: u } : null;
         if (u > 2.2 && once(ev, 'w')) SFX.woof(p.id);
         if (u > 3.6 && Math.random() < 0.5 && once(ev, 'w2')) SFX.woof(p.id);
@@ -496,6 +497,41 @@
     m.globalCompositeOperation = 'destination-out'; m.beginPath(); m.arc(32, 17, 16, 0, TAU); m.fill();
     return (MOON = c);
   }
+  // the real weather outside the window, when the location is turned on (cam-location.js): clouds over the moon, soft
+  // rain on the glass, or slow snow. Gentle and slow, and slower still with reduced motion.
+  function wxNow() { var L = window.TOLCamLoc; return L && L.spot() ? L.data() : null; }
+  function windowWeather(T, wx, wy, ww, wh) {
+    var d = wxNow(); if (!d) return;
+    var sp = S.calm ? 0.35 : 1;
+    if (d.kind === 'clouds' || d.kind === 'rain' || d.kind === 'storm' || d.kind === 'snow') {
+      var dark = d.kind === 'clouds' ? 0.55 : 0.75;
+      [[0.62, 0.3, 30], [0.3, 0.42, 26], [0.86, 0.5, 22]].forEach(function (c, i) {
+        var x = wx + ((c[0] * ww + T * 1.6 * sp * (i + 1)) % (ww + 60)) - 30, y = wy + c[1] * wh;
+        g.fillStyle = 'rgba(70,74,104,' + dark + ')';
+        g.beginPath(); g.ellipse(x, y, c[2], c[2] * 0.42, 0, 0, TAU); g.ellipse(x - c[2] * 0.5, y + 4, c[2] * 0.6, c[2] * 0.32, 0, 0, TAU); g.ellipse(x + c[2] * 0.55, y + 3, c[2] * 0.62, c[2] * 0.34, 0, 0, TAU); g.fill();
+      });
+    }
+    if (d.kind === 'rain' || d.kind === 'storm') {
+      g.strokeStyle = 'rgba(190,205,255,.35)'; g.lineWidth = 0.9;
+      for (var i = 0; i < 26; i++) {
+        var rx = wx + ((i * 37.3) % ww), ry = wy + (((i * 53.1) + T * 70 * sp) % (wh + 12)) - 6;
+        g.beginPath(); g.moveTo(rx, ry); g.lineTo(rx - 1.5, ry + 7); g.stroke();
+      }
+    }
+    if (d.kind === 'snow') {
+      for (var k = 0; k < 22; k++) {
+        var sx = wx + ((k * 41.7 + Math.sin(T * 0.6 * sp + k) * 4) % ww), sy = wy + (((k * 29.3) + T * 9 * sp) % (wh + 6)) - 3;
+        circ(g, sx, sy, k % 3 ? 0.9 : 1.3, 'rgba(250,250,255,.8)');
+      }
+    }
+  }
+  // the time and weather where you are, small and soft in the corner (only with the location on)
+  function drawLocal(br) {
+    var d = wxNow(); if (!d || !window.TOLCamLoc) return;
+    var txt = TOLCamLoc.time() + '  ·  ' + d.icon + ' ' + d.deg + '° ' + d.text, fs = Math.round(Math.max(12, Math.min(22, W / DPR / 48)) * DPR);
+    g.save(); g.font = '500 ' + fs + 'px Lora, Georgia, serif'; g.textBaseline = 'bottom'; g.textAlign = 'left';
+    g.fillStyle = 'rgba(232,224,255,' + (0.55 * br).toFixed(3) + ')'; g.fillText(txt, fs * 1.1, H - fs * 0.9); g.restore();
+  }
   function drawRoom(T) {
     var cx = S.cx, x0 = geo.x0, x1 = geo.x1, y0 = geo.y0, y1 = geo.y1;
     // wall
@@ -513,6 +549,7 @@
     [[12, 14], [30, 40], [20, 64], [44, 18], [78, 58], [84, 12], [56, 70]].forEach(function (s, i) {
       var tw = S.calm ? 0.75 : 0.6 + 0.3 * Math.sin(T * 0.35 + i * 1.9); circ(g, wx + s[0], wy + s[1], i % 3 ? 0.8 : 1.15, 'rgba(255,250,235,' + tw.toFixed(2) + ')');
     });
+    windowWeather(T, wx, wy, ww, wh);
     g.restore();
     g.fillStyle = '#3A3150'; g.fillRect(wx + ww / 2 - 1.5, wy, 3, wh); g.fillRect(wx, wy + wh / 2 - 1.5, ww, 3);
     // curtains
@@ -567,7 +604,11 @@
     g.restore();
   }
   // where her head is, for the z's and the dream bubble
-  function headOf(p) { var s = PS; return { x: p.x + 19 * s * p.face, y: G + 8 + p.y - p.lift - 21 * s }; }
+  function headOf(p) {
+    var s = PS, P = window.TOLPups, h = P && P.headPos && P.looks ? P.headPos(P.looks[p.look], p.pose, p.ph) : null;
+    if (h) return { x: p.x + h.x * s * p.face, y: G + 8 + p.y - p.lift + h.y * s };
+    return { x: p.x + 19 * s * p.face, y: G + 8 + p.y - p.lift - 21 * s };
+  }
   function drawZs(T, dt) {
     var calm = S.calm;
     ['tidbit', 'sugarfoot'].forEach(function (id) {
@@ -632,6 +673,7 @@
     var br = brightness(T);
     g.setTransform(1, 0, 0, 1, 0, 0);
     if (br < 0.999) { g.fillStyle = 'rgba(4,3,8,' + (1 - br).toFixed(3) + ')'; g.fillRect(0, 0, W, H); }
+    if (br > 0.2) drawLocal(br);
   }
   function resize() {
     if (!cv) return;

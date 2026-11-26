@@ -368,6 +368,7 @@
     var M = S.meta;
     if (pose === 'run' && S.moving[dog]) { var q = Math.floor((((ph % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2)) / (Math.PI * 2 / WN)) % WN; return { img: S.walk, f: M.walk[dog * WN + q], fh: M.wh }; }
     // 'front': looking straight out at us (the books' title and calm pages); 'back': walking away
+    if (pose === 'lie' && S.lie) return { img: S.lie, f: LIE[dog], fh: LH, fw: LW, lie: true };
     var ang = pose === 'front' ? 0 : pose === 'back' ? 4 : pose === 'lie' || pose === 'bow' ? 2 : 1;
     var f = M.poses.filter(function (x) { return x.dog === dog && x.ang === ang; })[0];
     return { img: S.poses, f: f, fh: M.fh };
@@ -379,23 +380,25 @@
     var w = Math.max(0, Math.min(1, (fr - 0.35) / 0.65)); w = w * w * (3 - 2 * w);
     return { fr: { img: S.walk, f: M.walk[dog * 4 + (q + 1) % 4], fh: M.wh }, w: w };
   }
-  function blit(ctx, fr) { var p = place(fr), fw = S.meta.fw; ctx.drawImage(fr.img, fr.f.c * fw, fr.f.r * fr.fh, fw, fr.fh, -p.cx, -p.fy, fw, fr.fh); }
+  function blit(ctx, fr) { var p = place(fr), fw = fr.fw || S.meta.fw; ctx.drawImage(fr.img, fr.f.c * fw, fr.f.r * fr.fh, fw, fr.fh, -p.cx, -p.fy, fw, fr.fh); }
   function place(fr) { var f = fr.f; return { cx: (f.x0 + f.x1) / 2, fy: f.y1 }; }
   function headPos(L, pose, ph) {
     var dog = L.collar ? 0 : 1, fr = frame(dog, pose, ph), p = place(fr), f = fr.f;
-    var sy = pose === 'lie' ? 0.72 : 1;
+    var sy = pose === 'lie' && !fr.lie ? 0.72 : 1;
     return { x: (f.hx - p.cx) * K, y: (f.hy - p.fy) * K * sy, r: 0 };
   }
   function draw(ctx, L, pose, ph, wag, blink, t, tilt, o) {
     var dog = L.collar ? 0 : 1;
     // walking or standing still: the stride phase only moves while the pup walks
     var key = dog + ':' + pose; if (S.lastPh[key] != null) S.moving[dog] = Math.abs(ph - S.lastPh[key]) > 1e-4; S.lastPh[key] = ph;
-    var fr = frame(dog, pose, ph), f = fr.f, p = place(fr), fw = S.meta.fw;
+    var fr = frame(dog, pose, ph);
+    if (fr.lie && !blink) fr.f = LIE[2 + dog];   // lying awake: the same drawing with her eyes open
+    var f = fr.f, p = place(fr), fw = fr.fw || S.meta.fw, squash = pose === 'lie' && !fr.lie ? 0.72 : 1;
     var col = f.c, row = f.r, sx = col * fw, sy0 = row * fr.fh;
     // life: breathing, a slow sway of the weight from paw to paw, a happy wiggle with the tail, and a little bounce on
     // the stressed syllables while talking
     var tt = (t || 0) / 1000, tk = o && o.talk > 0 ? Math.min(1, o.talk) : 0, still = fr.img !== S.walk;
-    var breathe = 1 + 0.02 * Math.sin(tt * 1.9 + dog * 1.7) + 0.03 * tk, sy = (pose === 'lie' ? 0.72 : 1) * breathe;
+    var breathe = 1 + 0.02 * Math.sin(tt * 1.9 + dog * 1.7) + 0.03 * tk, sy = squash * breathe;
     ctx.save();
     if (still && !(window.TOLPups || {}).reduced) {
       ctx.rotate(0.016 * Math.sin(tt * 1.25 + dog * 2.1));
@@ -418,13 +421,15 @@
     else if (kind !== B.kind) { B.from = { fr: B.fr, at: clk }; B.kind = kind; }
     if (!P.quiet) { B.fr = fr; B.T = clk; B.shot = P.shot; }
     // no blending between walk frames or poses: two drawings on top of each other read as a double face and extra legs
-    if (still && blink && S.shut && !lvl) ctx.drawImage(S.shut, sx, sy0, fw, fr.fh, -p.cx, -p.fy, fw, fr.fh);   // (not mid-word: the shut drawing has a shut mouth)   // eyes closed (poses-shut.webp)
+    if (still && blink && S.shut && !lvl && !fr.lie) ctx.drawImage(S.shut, sx, sy0, fw, fr.fh, -p.cx, -p.fy, fw, fr.fh);   // (not mid-word: the shut drawing has a shut mouth)   // eyes closed (poses-shut.webp)
     // no moving jaw while talking: redrawing part of the painted muzzle smeared and doubled the face. The speech bubble and
     // the little bounce on the stressed syllables show who is talking.
     // the outfit, at the head of this drawing
     if (!(o && o.noOutfit)) {
       var who = dog ? 'sugarfoot' : 'tidbit', wear = (o && o.outfit) || outfit(who, o);
-      ctx.save(); ctx.translate(f.hx - p.cx, f.hy - p.fy); ctx.scale(1 / K, 1 / K); ctx.scale(1.18, 1.18 / sy * (pose === 'lie' ? 0.72 : 1));
+      ctx.save(); ctx.translate(f.hx - p.cx, f.hy - p.fy); ctx.scale(1 / K, 1 / K); ctx.scale(1.18, 1.18 / sy * squash);
+      // lying: her head is tipped down onto her paws, so what she wears tips with it
+      if (fr.lie) { ctx.rotate(0.29); if (wear === 'bandana' || wear === 'necklace') { ctx.translate(-6, -3); ctx.scale(0.82, 0.82); } }   // the collar tucks in under her chin
       wearItem(ctx, wear, WEAR[who], pose === 'lie' ? 0 : 3);
       ctx.restore();
     }
@@ -470,6 +475,9 @@
   }
   function head(whoName, pose, opts) { var L = P.looks[whoName === 'sugarfoot' || whoName === 'sf' ? 'drop' : 'collar']; var h = headPos(L, pose === 'stand' ? 'run' : pose, 0); return { x: h.x, y: h.y }; }
   var WALK12 = [{"r":0,"c":0,"x0":7,"x1":121,"y0":23,"y1":106,"hx":93.23,"hy":41.95,"dog":0},{"r":0,"c":1,"x0":7,"x1":121,"y0":23,"y1":106,"hx":93.22,"hy":42.14,"dog":0},{"r":0,"c":2,"x0":15,"x1":121,"y0":23,"y1":107,"hx":93.21,"hy":42.33,"dog":0},{"r":0,"c":3,"x0":15,"x1":121,"y0":23,"y1":107,"hx":93.19,"hy":42.52,"dog":0},{"r":0,"c":4,"x0":15,"x1":121,"y0":23,"y1":108,"hx":93.18,"hy":42.5,"dog":0},{"r":0,"c":5,"x0":14,"x1":121,"y0":23,"y1":107,"hx":93.17,"hy":42.48,"dog":0},{"r":0,"c":6,"x0":14,"x1":121,"y0":23,"y1":107,"hx":93.16,"hy":42.46,"dog":0},{"r":0,"c":7,"x0":14,"x1":121,"y0":23,"y1":107,"hx":93.23,"hy":42.56,"dog":0},{"r":0,"c":8,"x0":15,"x1":121,"y0":24,"y1":107,"hx":93.31,"hy":42.67,"dog":0},{"r":0,"c":9,"x0":15,"x1":121,"y0":24,"y1":107,"hx":93.38,"hy":42.78,"dog":0},{"r":0,"c":10,"x0":15,"x1":121,"y0":24,"y1":107,"hx":93.33,"hy":42.5,"dog":0},{"r":0,"c":11,"x0":6,"x1":121,"y0":22,"y1":107,"hx":93.28,"hy":42.22,"dog":0},{"r":1,"c":0,"x0":7,"x1":121,"y0":21,"y1":110,"hx":92.94,"hy":40.86,"dog":1},{"r":1,"c":1,"x0":7,"x1":121,"y0":21,"y1":110,"hx":92.91,"hy":41.02,"dog":1},{"r":1,"c":2,"x0":13,"x1":121,"y0":21,"y1":112,"hx":92.88,"hy":41.17,"dog":1},{"r":1,"c":3,"x0":13,"x1":121,"y0":21,"y1":112,"hx":92.85,"hy":41.33,"dog":1},{"r":1,"c":4,"x0":13,"x1":121,"y0":21,"y1":112,"hx":92.92,"hy":41.34,"dog":1},{"r":1,"c":5,"x0":12,"x1":121,"y0":21,"y1":111,"hx":93.0,"hy":41.34,"dog":1},{"r":1,"c":6,"x0":12,"x1":121,"y0":21,"y1":111,"hx":93.07,"hy":41.35,"dog":1},{"r":1,"c":7,"x0":12,"x1":121,"y0":21,"y1":111,"hx":93.07,"hy":41.35,"dog":1},{"r":1,"c":8,"x0":13,"x1":121,"y0":21,"y1":111,"hx":93.07,"hy":41.35,"dog":1},{"r":1,"c":9,"x0":13,"x1":121,"y0":21,"y1":111,"hx":93.07,"hy":41.35,"dog":1},{"r":1,"c":10,"x0":13,"x1":121,"y0":21,"y1":111,"hx":93.03,"hy":41.19,"dog":1},{"r":1,"c":11,"x0":7,"x1":121,"y0":21,"y1":110,"hx":92.98,"hy":41.02,"dog":1}], WN = 12;   // twelve drawings a stride (tools/pups3/make_walk12.py), their boxes and heads
+  // lying down asleep: a real lying drawing (tools/pups3/make_lie.py), not the standing one squashed. Row 0 has the eyes
+  // shut, row 1 open; Tidbit left, Sugarfoot right; each cell is LW x LH
+  var LIE = [{"r":0,"c":0,"x0":21,"x1":154,"y0":41,"y1":92,"hx":118.97,"hy":58.19,"dog":0,"eyes":"shut"},{"r":0,"c":1,"x0":17,"x1":158,"y0":40,"y1":92,"hx":119.33,"hy":60.61,"dog":1,"eyes":"shut"},{"r":1,"c":0,"x0":21,"x1":154,"y0":41,"y1":92,"hx":119.04,"hy":58.21,"dog":0,"eyes":"open"},{"r":1,"c":1,"x0":17,"x1":158,"y0":40,"y1":92,"hx":119.08,"hy":60.65,"dog":1,"eyes":"open"}], LW = 176, LH = 96;
   function install(walk, poses) {
     META.walk = WALK12;
     S = { walk: walk, poses: poses, meta: META, moving: [false, false], lastPh: {}, blend: {}, last: {} };
@@ -481,5 +489,5 @@
     if (typeof document !== 'undefined') return new Promise(function (res, rej) { var im = new Image(); im.onload = function () { res(im); }; im.onerror = rej; im.src = BASE + name; });
     return fetch(BASE + name).then(function (r) { return r.blob(); }).then(function (b) { return createImageBitmap(b); });   // in a worker
   }
-  P.ready = Promise.all([load('walk12.webp'), load('poses.webp'), load('poses-shut.webp').catch(function () { return null; }), load('walk12-talk.webp').catch(function () { return null; }), load('poses-talk.webp').catch(function () { return null; })]).then(function (s) { install(s[0], s[1]); S.shut = s[2]; S.walkTalk = s[3]; S.posesTalk = s[4]; }).catch(function () {});
+  P.ready = Promise.all([load('walk12.webp'), load('poses.webp'), load('poses-shut.webp').catch(function () { return null; }), load('walk12-talk.webp').catch(function () { return null; }), load('poses-talk.webp').catch(function () { return null; }), load('lie.webp').catch(function () { return null; })]).then(function (s) { install(s[0], s[1]); S.shut = s[2]; S.walkTalk = s[3]; S.posesTalk = s[4]; S.lie = s[5]; }).catch(function () {});
 })();
