@@ -65,6 +65,31 @@
     } catch (err) { done(false); }
   });
 
+  // listing26: "Read it on iPad, Android or Kindle" under each book. The file downloads as usual, and a few lines
+  // under the buttons say how to open it on that device (the email step comes first, the same as every download).
+  var HOW = {
+    ipad: {
+      epub: 'Saved to your iPad. Open the <b>Files</b> app, go to <b>Downloads</b> and tap the book. Tap the Share button (the square with the arrow) and choose <b>Books</b>. It stays in Apple Books, which remembers your page. Tap <b>Aa</b> to change the text size.',
+      pdf: 'Saved to your iPad. Open the <b>Files</b> app, go to <b>Downloads</b> and tap the book. To keep it with your books, tap Share and choose <b>Books</b>. To color on a page, open it in Files and tap the pen (Markup).'
+    },
+    android: {
+      epub: 'Saved to your Downloads. Open it with <b>Google Play Books</b> (free on the Play Store): tap the file, then choose Play Books. It remembers your page, and <b>Aa</b> changes the text size.',
+      pdf: 'Saved to your Downloads. Open it with <b>Google Play Books</b> or any PDF app. To color on a page, use a free PDF app with a pen tool, such as Adobe Acrobat Reader or Xodo.'
+    },
+    kindle: {
+      epub: 'To send it to your Kindle: on a computer or phone, go to <b>amazon.com/sendtokindle</b>, sign in with your Amazon account and drop this file in. In a few minutes it appears on your Kindle and in the Kindle app, under Library.',
+      pdf: 'To send it to your Kindle: go to <b>amazon.com/sendtokindle</b>, sign in with your Amazon account and drop this file in. It shows each page as printed, so it looks best on a Kindle tablet or the Kindle app on a phone or tablet.'
+    }
+  };
+  Array.prototype.forEach.call(document.querySelectorAll('.bk-dl-devlink'), function (a) {
+    a.addEventListener('click', function () {
+      if (!unlocked()) return;
+      var how = a.closest('.bk-dl-dev'); how = how && how.nextElementSibling;
+      var t = HOW[a.getAttribute('data-dev')]; if (!how || !t) return;
+      how.innerHTML = t[a.getAttribute('data-kind') === 'pdf' ? 'pdf' : 'epub']; how.hidden = false;
+    });
+  });
+
   // arriving at download.html#whole (a collection, folded away under "Everything in one PDF"): open it there
   function toHash() {
     var id = ''; try { id = decodeURIComponent(location.hash.slice(1)); } catch (e) {}
